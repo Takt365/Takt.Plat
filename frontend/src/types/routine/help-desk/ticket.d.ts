@@ -49,17 +49,17 @@ export interface Ticket extends CompanyDtoBase {
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+   * 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
    */
   urgency: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+   * 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
    */
   impact: number;
 
@@ -229,17 +229,17 @@ export interface TicketQuery extends TaktPagedQuery {
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+   * 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
    */
   urgency?: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+   * 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
    */
   impact?: number;
 
@@ -433,17 +433,17 @@ export interface TicketCreate {
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+   * 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
    */
   urgency: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+   * 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
    */
   impact: number;
 
@@ -646,17 +646,17 @@ export interface TicketTemplate {
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+   * 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
    */
   urgency?: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+   * 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
    */
   impact?: number;
 
@@ -820,17 +820,17 @@ export interface TicketImport {
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+   * 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
    */
   urgency?: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+   * 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
    */
   impact?: number;
 
@@ -984,17 +984,17 @@ export interface TicketExport {
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+   * 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
    */
   urgency: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+   * 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
    */
   impact: number;
 

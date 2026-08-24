@@ -48,12 +48,12 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? PurchaseGroup { get; set; }
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     [SugarColumn(ColumnName = "is_fixed", ColumnDescription = "固定", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsFixed { get; set; } = 0;
     /// <summary>
-    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     [SugarColumn(ColumnName = "is_blocked", ColumnDescription = "冻结", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBlocked { get; set; } = 0;
@@ -98,12 +98,12 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
+    /// 排序号（回填）（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "source_status", ColumnDescription = "货源清单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SourceStatus { get; set; } = 1;

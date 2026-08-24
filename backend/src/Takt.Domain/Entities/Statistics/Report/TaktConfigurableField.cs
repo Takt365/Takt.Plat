@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.Statistics.Report;
 public class TaktConfigurableField : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联报表主表 ID（主子表关系）
+    /// 关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "configurable_id", ColumnDescription = "报表主表ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -55,19 +55,19 @@ public class TaktConfigurableField : TaktCompanyEntityBase
     public string? OutputAlias { get; set; }
 
     /// <summary>
-    /// 聚合函数（无分组时为 None）
+    /// 聚合函数（字典 sys_configurable_aggregate_func；0=无 1=COUNT 2=SUM 3=AVG 4=MIN 5=MAX）
     /// </summary>
     [SugarColumn(ColumnName = "aggregate_func", ColumnDescription = "聚合函数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AggregateFunc { get; set; } = 0;
 
     /// <summary>
-    /// 是否输出（0=隐藏 1=显示）
+    /// 是否输出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_visible", ColumnDescription = "是否输出", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsVisible { get; set; } = 1;
 
     /// <summary>
-    /// 排序号（SELECT 列顺序）
+    /// 排序号（回填）（SELECT 列顺序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

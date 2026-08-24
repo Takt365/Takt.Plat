@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/source-ec/components -->
 <!-- 文件名称：source-ec-form.vue -->
-<!-- 功能描述：设变来源主表实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：设变来源明细列表维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,12 +10,11 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form source-ec-form flex flex-col min-h-0"
+    class="takt-generated-form source-ec-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
-    :disabled="loading || readOnly"
   >
     <a-tabs
       v-model:active-key="activeTab"
@@ -23,61 +22,74 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.no')"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sourceEcCode')"
                 name="sourceEcCode"
               >
                 <a-input
                   v-model:value="formState.sourceEcCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.no') })"
+                  :placeholder="pi.ph('sourceEcCode')"
                   show-count
                   :maxlength="6"
                   allow-clear
+                  :disabled="!!formData?.sourceEcId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcemodel')"
+                :label="pi.label('sourceModel')"
                 name="sourceModel"
               >
                 <a-input
                   v-model:value="formState.sourceModel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcemodel') })"
+                  :placeholder="pi.ph('sourceModel')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcetitle')"
+                :label="pi.label('sourceTitle')"
                 name="sourceTitle"
               >
                 <a-input
                   v-model:value="formState.sourceTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetitle') })"
+                  :placeholder="pi.ph('sourceTitle')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -86,12 +98,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcestatus')"
+                :label="pi.label('sourceStatus')"
                 name="sourceStatus"
               >
                 <a-input
                   v-model:value="formState.sourceStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcestatus') })"
+                  :placeholder="pi.ph('sourceStatus')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -100,12 +112,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourceissuedate')"
+                :label="pi.label('sourceIssueDate')"
                 name="sourceIssueDate"
               >
                 <a-date-picker
                   v-model:value="formState.sourceIssueDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourceissuedate') })"
+                  :placeholder="pi.ph('sourceIssueDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -113,12 +125,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcetcjowner')"
+                :label="pi.label('sourceTcjOwner')"
                 name="sourceTcjOwner"
               >
                 <a-input
                   v-model:value="formState.sourceTcjOwner"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetcjowner') })"
+                  :placeholder="pi.ph('sourceTcjOwner')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -127,12 +139,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcetcjdependency')"
+                :label="pi.label('sourceTcjDependency')"
                 name="sourceTcjDependency"
               >
                 <a-input
                   v-model:value="formState.sourceTcjDependency"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetcjdependency') })"
+                  :placeholder="pi.ph('sourceTcjDependency')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -141,28 +153,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.meeting')"
+                :label="pi.label('sourceEcMeeting')"
                 name="sourceEcMeeting"
               >
                 <a-input
                   v-model:value="formState.sourceEcMeeting"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.meeting') })"
+                  :placeholder="pi.ph('sourceEcMeeting')"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sourceec.sourceppCode')"
-                name="sourcePpCode"
-              >
-                <a-input
-                  v-model:value="formState.sourcePpCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceppCode') })"
-                  show-count
-                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
@@ -172,33 +170,49 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcetechnicalnoticeCode')"
+                :label="pi.label('sourcePpCode')"
+                name="sourcePpCode"
+              >
+                <a-input
+                  v-model:value="formState.sourcePpCode"
+                  :placeholder="pi.ph('sourcePpCode')"
+                  show-count
+                  :maxlength="10"
+                  allow-clear
+                  :disabled="!!formData?.sourceEcId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sourceTechnicalNoticeCode')"
                 name="sourceTechnicalNoticeCode"
               >
                 <a-input
                   v-model:value="formState.sourceTechnicalNoticeCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetechnicalnoticeCode') })"
+                  :placeholder="pi.ph('sourceTechnicalNoticeCode')"
                   show-count
                   :maxlength="10"
                   allow-clear
+                  :disabled="!!formData?.sourceEcId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourceimplementation')"
+                :label="pi.label('sourceImplementation')"
                 name="sourceImplementation"
               >
                 <a-input
                   v-model:value="formState.sourceImplementation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceimplementation') })"
+                  :placeholder="pi.ph('sourceImplementation')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -207,12 +221,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcemainchangereason')"
+                :label="pi.label('sourceMainChangeReason')"
                 name="sourceMainChangeReason"
               >
                 <a-input
                   v-model:value="formState.sourceMainChangeReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcemainchangereason') })"
+                  :placeholder="pi.ph('sourceMainChangeReason')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -221,12 +235,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcesecondarychangereason')"
+                :label="pi.label('sourceSecondaryChangeReason')"
                 name="sourceSecondaryChangeReason"
               >
                 <a-input
                   v-model:value="formState.sourceSecondaryChangeReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcesecondarychangereason') })"
+                  :placeholder="pi.ph('sourceSecondaryChangeReason')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -235,12 +249,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcesafetyregulation')"
+                :label="pi.label('sourceSafetyRegulation')"
                 name="sourceSafetyRegulation"
               >
                 <a-input
                   v-model:value="formState.sourceSafetyRegulation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcesafetyregulation') })"
+                  :placeholder="pi.ph('sourceSafetyRegulation')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -249,12 +263,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourceprogressstatus')"
+                :label="pi.label('sourceProgressStatus')"
                 name="sourceProgressStatus"
               >
                 <a-input
                   v-model:value="formState.sourceProgressStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceprogressstatus') })"
+                  :placeholder="pi.ph('sourceProgressStatus')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -263,12 +277,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourceserialnumbercontrol')"
+                :label="pi.label('sourceSerialNumberControl')"
                 name="sourceSerialNumberControl"
               >
                 <a-input
                   v-model:value="formState.sourceSerialNumberControl"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceserialnumbercontrol') })"
+                  :placeholder="pi.ph('sourceSerialNumberControl')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -277,12 +291,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcecustomerapproval')"
+                :label="pi.label('sourceCustomerApproval')"
                 name="sourceCustomerApproval"
               >
                 <a-input
                   v-model:value="formState.sourceCustomerApproval"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcecustomerapproval') })"
+                  :placeholder="pi.ph('sourceCustomerApproval')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -291,26 +305,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourceservicemanualrevision')"
+                :label="pi.label('sourceServiceManualRevision')"
                 name="sourceServiceManualRevision"
               >
                 <a-input
                   v-model:value="formState.sourceServiceManualRevision"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceservicemanualrevision') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sourceec.sourceusermanualrevision')"
-                name="sourceUserManualRevision"
-              >
-                <a-input
-                  v-model:value="formState.sourceUserManualRevision"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceusermanualrevision') })"
+                  :placeholder="pi.ph('sourceServiceManualRevision')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -322,99 +322,113 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.sourcepromotionmanualrevision')"
+                :label="pi.label('sourceUserManualRevision')"
+                name="sourceUserManualRevision"
+              >
+                <a-input
+                  v-model:value="formState.sourceUserManualRevision"
+                  :placeholder="pi.ph('sourceUserManualRevision')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('sourcePromotionManualRevision')"
                 name="sourcePromotionManualRevision"
               >
                 <a-input
                   v-model:value="formState.sourcePromotionManualRevision"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcepromotionmanualrevision') })"
+                  :placeholder="pi.ph('sourcePromotionManualRevision')"
                   show-count
                   :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.sourcestandarddocumentrevision')"
+                :label="pi.label('sourceStandardDocumentRevision')"
                 name="sourceStandardDocumentRevision"
               >
                 <a-input
                   v-model:value="formState.sourceStandardDocumentRevision"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcestandarddocumentrevision') })"
+                  :placeholder="pi.ph('sourceStandardDocumentRevision')"
                   show-count
                   :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.sourceinformationrelease')"
+                :label="pi.label('sourceInformationRelease')"
                 name="sourceInformationRelease"
               >
                 <a-input
                   v-model:value="formState.sourceInformationRelease"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceinformationrelease') })"
+                  :placeholder="pi.ph('sourceInformationRelease')"
                   show-count
                   :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.sourcecostchange')"
+                :label="pi.label('sourceCostChange')"
                 name="sourceCostChange"
               >
                 <a-input
                   v-model:value="formState.sourceCostChange"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcecostchange') })"
+                  :placeholder="pi.ph('sourceCostChange')"
                   show-count
                   :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.sourceunitcost')"
+                :label="pi.label('sourceUnitCost')"
                 name="sourceUnitCost"
               >
                 <a-input-number
                   v-model:value="formState.sourceUnitCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceunitcost') })"
+                  :placeholder="pi.ph('sourceUnitCost')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.sourcemoldmodificationcost')"
+                :label="pi.label('sourceMoldModificationCost')"
                 name="sourceMoldModificationCost"
               >
                 <a-input-number
                   v-model:value="formState.sourceMoldModificationCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcemoldmodificationcost') })"
+                  :placeholder="pi.ph('sourceMoldModificationCost')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.sourcerelateddrawing')"
+                :label="pi.label('sourceRelatedDrawing')"
                 name="sourceRelatedDrawing"
               >
                 <a-input
                   v-model:value="formState.sourceRelatedDrawing"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcerelateddrawing') })"
+                  :placeholder="pi.ph('sourceRelatedDrawing')"
                   show-count
                   :maxlength="210"
                   allow-clear
@@ -423,13 +437,90 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.sourceec.content')"
+                :label="pi.label('sourceEcContent')"
                 name="sourceEcContent"
               >
-                <a-textarea
+                <takt-rich-editor
                   v-model:value="formState.sourceEcContent"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceec.content') })"
-                  :rows="10"
+                  :placeholder="pi.ph('sourceEcContent')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('remark')"
+                name="remark"
+              >
+                <a-textarea
+                  v-model:value="formState.remark"
+                  :placeholder="pi.ph('remark')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -442,43 +533,68 @@
       ref="sourceEcDetailTableRef"
       v-model="childSourceEcDetailRows"
       :columns="sourceEcDetailFormColumns"
-      :title="t('entity.sourceecdetail._self')"
-      :add-button-entity="t('entity.sourceecdetail._self')"
+      :title="sourceEcDetailPi.self()"
+      :add-button-entity="sourceEcDetailPi.self()"
       id-field="sourceEcDetailId"
-      :default-row="createEmptySourceEcDetailRow"
-      :disabled="loading || readOnly"
+      :default-row="createDefaultSourceEcDetailRow"
+      :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
+      class="w-full min-w-0"
     >
-      <template #cell-SourceCompatibility="{ record }">
+      <template #cell-sourceCompatibility="{ record }">
         <TaktSelect
-          v-model:value="record.SourceCompatibility"
+          v-model:value="record.sourceCompatibility"
           dict-type="logistics_ec_source_compatibility"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sourceEcDetailPi.ph('sourceCompatibility')"
+          :disabled="loading"
           allow-clear
-          :disabled="loading || readOnly"
         />
       </template>
       <template #cell-sourceDistinction="{ record }">
         <TaktSelect
           v-model:value="record.sourceDistinction"
           dict-type="logistics_ec_source_distinction"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sourceEcDetailPi.ph('sourceDistinction')"
+          :disabled="loading"
           allow-clear
-          :disabled="loading || readOnly"
+        />
+      </template>
+      <template #cell-sourceInstruction="{ record }">
+        <TaktSelect
+          v-model:value="record.sourceInstruction"
+          dict-type="logistics_ec_source_instruction"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sourceEcDetailPi.ph('sourceInstruction')"
+          :disabled="loading"
+          allow-clear
         />
       </template>
       <template #cell-sourceLegacyPartDisposition="{ record }">
         <TaktSelect
           v-model:value="record.sourceLegacyPartDisposition"
           dict-type="logistics_ec_legacy_part_disposition"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sourceEcDetailPi.ph('sourceLegacyPartDisposition')"
+          :disabled="loading"
           allow-clear
-          :disabled="loading || readOnly"
         />
       </template>
-      <template #cell-SourceInstruction="{ record }">
+      <template #cell-isObsolete="{ record }">
         <TaktSelect
-          v-model:value="record.SourceInstruction"
-          dict-type="logistics_ec_source_instruction"
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sourceEcDetailPi.ph('isObsolete')"
+          :disabled="loading"
           allow-clear
-          :disabled="loading || readOnly"
         />
       </template>
     </TaktEditableTable>
@@ -487,69 +603,72 @@
 
 <script setup lang="ts">
 /**
- * 设变来源主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 设变来源明细列表维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/source-ec/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSourceEcI18n } from '../composables/use-source-ec-i18n'
+
+/** 实体字段 i18n */
+const pi = useSourceEcI18n()
+
 import type { SourceEcCreate } from '@/types/logistics/manufacturing/engineering-change/source-ec'
-import {
-  buildSourceEcDetailEditableColumns,
-  createEmptySourceEcDetailRow,
-} from '../composables/use-source-ec-detail-fields'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
-/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
-interface Props {
-  formData?: Partial<SourceEcCreate & { sourceEcId?: string }> | null
-  /** 父级提交 loading，禁用表单项 */
-  loading?: boolean
-  /** 详情只读模式（禁用全部字段） */
-  readOnly?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  formData: null,
-  loading: false,
-  readOnly: false,
-})
-
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","sourceEcCode","sourceModel","sourceTitle","sourceStatus","sourceIssueDate","sourceTcjOwner","sourceTcjDependency","sourceEcMeeting","sourcePpCode","sourceTechnicalNoticeCode","sourceImplementation","sourceMainChangeReason","sourceSecondaryChangeReason","sourceSafetyRegulation","sourceProgressStatus","sourceSerialNumberControl","sourceCustomerApproval","sourceServiceManualRevision","sourceUserManualRevision","sourcePromotionManualRevision","sourceStandardDocumentRevision","sourceInformationRelease","sourceCostChange","sourceUnitCost","sourceMoldModificationCost","sourceRelatedDrawing","sourceEcContent"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","sourceEcCode","sourceModel","sourceTitle","sourceStatus","sourceIssueDate","sourceTcjOwner","sourceTcjDependency","sourceEcMeeting","sourcePpCode","sourceTechnicalNoticeCode","sourceImplementation","sourceMainChangeReason","sourceSecondaryChangeReason","sourceSafetyRegulation","sourceProgressStatus","sourceSerialNumberControl","sourceCustomerApproval","sourceServiceManualRevision","sourceUserManualRevision","sourcePromotionManualRevision","sourceStandardDocumentRevision","sourceInformationRelease","sourceCostChange","sourceUnitCost","sourceMoldModificationCost","sourceRelatedDrawing","sourceEcContent","extField","remark"]
+
+
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useSourceEcDetailI18n } from '../composables/use-source-ec-detail-i18n'
+
+const sourceEcDetailPi = useSourceEcDetailI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childSourceEcDetailRows = ref<Record<string, unknown>[]>([])
 const sourceEcDetailTableRef = ref<{
@@ -558,28 +677,190 @@ const sourceEcDetailTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
-/** 子表 sourceEcDetail 可编辑列（与 source-ec-detail.d.ts 16 个业务字段对齐） */
-const sourceEcDetailFormColumns = computed(() => buildSourceEcDetailEditableColumns(t, props.readOnly))
+/** 是否已持久化的子表行 */
+function isPersistedSourceEcDetailRow(row: Record<string, unknown>): boolean {
+  const id = row.sourceEcDetailId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextSourceEcDetailLineNumber(): number {
+  const rows = sourceEcDetailTableRef.value?.getRows?.() ?? childSourceEcDetailRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
+/** 子表 sourceEcDetail 可编辑列 */
+const sourceEcDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
+  {
+    key: 'lineNumber',
+    title: sourceEcDetailPi.label('lineNumber'),
+    width: 140,
+  },
+  {
+    key: 'sourceFinishedProduct',
+    title: sourceEcDetailPi.label('sourceFinishedProduct'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'sourceParentPart',
+    title: sourceEcDetailPi.label('sourceParentPart'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'sourceLegacyPartCode',
+    title: sourceEcDetailPi.label('sourceLegacyPartCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceLegacyPartCode'),
+  },
+  {
+    key: 'sourceLegacyPartName',
+    title: sourceEcDetailPi.label('sourceLegacyPartName'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceLegacyPartName'),
+  },
+  {
+    key: 'sourceLegacyUsage',
+    title: sourceEcDetailPi.label('sourceLegacyUsage'),
+    width: 140,
+  },
+  {
+    key: 'sourceLegacyMountingPosition',
+    title: sourceEcDetailPi.label('sourceLegacyMountingPosition'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceLegacyMountingPosition'),
+  },
+  {
+    key: 'sourceReplacementPartCode',
+    title: sourceEcDetailPi.label('sourceReplacementPartCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceReplacementPartCode'),
+  },
+  {
+    key: 'sourceReplacementPartName',
+    title: sourceEcDetailPi.label('sourceReplacementPartName'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceReplacementPartName'),
+  },
+  {
+    key: 'sourceReplacementUsage',
+    title: sourceEcDetailPi.label('sourceReplacementUsage'),
+    width: 140,
+  },
+  {
+    key: 'sourceReplacementMountingPosition',
+    title: sourceEcDetailPi.label('sourceReplacementMountingPosition'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceReplacementMountingPosition'),
+  },
+  {
+    key: 'sourceBomCode',
+    title: sourceEcDetailPi.label('sourceBomCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceBomCode'),
+  },
+  {
+    key: 'sourceCompatibility',
+    title: sourceEcDetailPi.label('sourceCompatibility'),
+    width: 140,
+  },
+  {
+    key: 'sourceDistinction',
+    title: sourceEcDetailPi.label('sourceDistinction'),
+    width: 140,
+  },
+  {
+    key: 'sourceInstruction',
+    title: sourceEcDetailPi.label('sourceInstruction'),
+    width: 140,
+  },
+  {
+    key: 'sourceLegacyPartDisposition',
+    title: sourceEcDetailPi.label('sourceLegacyPartDisposition'),
+    width: 140,
+  },
+  {
+    key: 'sourceBomEffectiveDate',
+    title: sourceEcDetailPi.label('sourceBomEffectiveDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: sourceEcDetailPi.label('isObsolete'),
+    width: 140,
+  },
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SourceEcCreate & { sourceEcId?: string }> | null | undefined) {
-  childSourceEcDetailRows.value = ((val as any)?.sourceEcDetails ?? []) as Record<string, unknown>[]
+  const rows_sourceEcDetail = ((val as any)?.sourceEcDetails ?? []) as Record<string, unknown>[]
+  childSourceEcDetailRows.value = rows_sourceEcDetail
+}
+
+function createDefaultSourceEcDetailRow(): Record<string, unknown> {
+  return {
+    lineNumber: allocateNextSourceEcDetailLineNumber(),
+    sourceFinishedProduct: '',
+    sourceParentPart: '',
+    sourceLegacyPartCode: '',
+    sourceLegacyPartName: '',
+    sourceLegacyUsage: 0,
+    sourceLegacyMountingPosition: '',
+    sourceReplacementPartCode: '',
+    sourceReplacementPartName: '',
+    sourceReplacementUsage: 0,
+    sourceReplacementMountingPosition: '',
+    sourceBomCode: '',
+    sourceCompatibility: '',
+    sourceDistinction: '',
+    sourceInstruction: '',
+    sourceLegacyPartDisposition: '',
+    sourceBomEffectiveDate: '',
+    isObsolete: 0,
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.sourceEcId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    sourceEcDetails: sourceEcDetailTableRef.value?.getRows?.() ?? childSourceEcDetailRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      sourceEcId: masterId,
-    })),
+    sourceEcDetails: sourceEcDetailTableRef.value?.getRows?.() ?? childSourceEcDetailRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        sourceEcId: masterId,
+      }
+      if (isUpdate && isPersistedSourceEcDetailRow(row)) {
+        normalized.sourceEcDetailId = row.sourceEcDetailId
+      } else {
+        delete normalized.sourceEcDetailId
+      }
+      return normalized
+    }),
   }
 }
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
+interface Props {
+  formData?: Partial<SourceEcCreate & { sourceEcId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
+  loading?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  formData: null,
+  loading: false,
+})
 
 /** a-form 实例 ref */
 const formRef = ref()
@@ -589,6 +870,14 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 sourceEcId 才视为编辑） */
 watch(
@@ -617,10 +906,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.sourceEcId
-    if (isCreate) {
+    if (!props.formData?.sourceEcId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -631,46 +919,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   sourceEcCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceec.no') }),
+      message: pi.ph('sourceEcCode'),
       trigger: 'blur'
     }
   ],
   sourceModel: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcemodel') }),
+      message: pi.ph('sourceModel'),
       trigger: 'blur'
     }
   ],
   sourceTitle: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetitle') }),
+      message: pi.ph('sourceTitle'),
       trigger: 'blur'
     }
   ],
   sourceStatus: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcestatus') }),
+      message: pi.ph('sourceStatus'),
       trigger: 'blur'
     }
   ],
   sourceIssueDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourceissuedate') }),
+      message: pi.ph('sourceIssueDate'),
       trigger: 'change'
     }
   ],
   sourceUnitCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourceunitcost') }))
+        return Promise.reject(pi.ph('sourceUnitCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourceunitcost') }))
+        return Promise.reject(pi.ph('sourceUnitCost'))
       }
       return Promise.resolve()
     },
@@ -679,11 +967,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   sourceMoldModificationCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourcemoldmodificationcost') }))
+        return Promise.reject(pi.ph('sourceMoldModificationCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourcemoldmodificationcost') }))
+        return Promise.reject(pi.ph('sourceMoldModificationCost'))
       }
       return Promise.resolve()
     },
@@ -692,7 +980,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   sourceEcContent: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceec.content') }),
+      message: pi.ph('sourceEcContent'),
       trigger: 'blur'
     }
   ],
@@ -710,13 +998,33 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('sourceUnitCost' in payload) {
     const rawsourceUnitCost = payload.sourceUnitCost
-    payload.sourceUnitCost = typeof rawsourceUnitCost === 'number' ? rawsourceUnitCost : Number(rawsourceUnitCost)
+    if (rawsourceUnitCost === undefined || rawsourceUnitCost === null || rawsourceUnitCost === '') {
+      delete payload.sourceUnitCost
+    } else {
+      const numsourceUnitCost = typeof rawsourceUnitCost === 'number' ? rawsourceUnitCost : Number(rawsourceUnitCost)
+      if (Number.isFinite(numsourceUnitCost)) payload.sourceUnitCost = numsourceUnitCost
+      else delete payload.sourceUnitCost
+    }
   }
   if ('sourceMoldModificationCost' in payload) {
     const rawsourceMoldModificationCost = payload.sourceMoldModificationCost
-    payload.sourceMoldModificationCost = typeof rawsourceMoldModificationCost === 'number' ? rawsourceMoldModificationCost : Number(rawsourceMoldModificationCost)
+    if (rawsourceMoldModificationCost === undefined || rawsourceMoldModificationCost === null || rawsourceMoldModificationCost === '') {
+      delete payload.sourceMoldModificationCost
+    } else {
+      const numsourceMoldModificationCost = typeof rawsourceMoldModificationCost === 'number' ? rawsourceMoldModificationCost : Number(rawsourceMoldModificationCost)
+      if (Number.isFinite(numsourceMoldModificationCost)) payload.sourceMoldModificationCost = numsourceMoldModificationCost
+      else delete payload.sourceMoldModificationCost
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.sourceEcId) {
+    payload.sourceEcId = props.formData.sourceEcId
+  }
   return payload
 }
 

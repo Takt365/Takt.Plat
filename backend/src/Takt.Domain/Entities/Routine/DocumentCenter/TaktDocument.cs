@@ -30,7 +30,7 @@ namespace Takt.Domain.Entities.Routine.DocumentCenter;
 public class TaktDocument : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 文档编码（租户+公司内唯一）
+    /// 文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）
     /// </summary>
     [SugarColumn(ColumnName = "document_code", ColumnDescription = "文档编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string DocumentCode { get; set; } = string.Empty;
@@ -70,36 +70,15 @@ public class TaktDocument : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "document_tags", ColumnDescription = "标签", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? DocumentTags { get; set; }
     /// <summary>
-    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    [SugarColumn(ColumnName = "file_id", ColumnDescription = "当前文件ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FileId { get; set; }
-    /// <summary>
-    /// 当前文件名称
-    /// </summary>
-    [SugarColumn(ColumnName = "file_name", ColumnDescription = "当前文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? FileName { get; set; }
     /// <summary>
-    /// 当前文件路径
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
     /// </summary>
-    [SugarColumn(ColumnName = "file_path", ColumnDescription = "当前文件路径", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? FilePath { get; set; }
-    /// <summary>
-    /// 当前文件大小（字节）
-    /// </summary>
-    [SugarColumn(ColumnName = "file_size", ColumnDescription = "当前文件大小", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
-    public long FileSize { get; set; } = 0;
-    /// <summary>
-    /// 当前文件类型（MIME）
-    /// </summary>
-    [SugarColumn(ColumnName = "file_type", ColumnDescription = "当前文件类型", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? FileType { get; set; }
-    /// <summary>
-    /// 当前文件扩展名
-    /// </summary>
-    [SugarColumn(ColumnName = "file_extension", ColumnDescription = "当前文件扩展名", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
-    public string? FileExtension { get; set; }
+    [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    public string? AccessUrl { get; set; }
     /// <summary>
     /// 生效时间
     /// </summary>
@@ -122,23 +101,23 @@ public class TaktDocument : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PublisherId { get; set; }
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "publisher_name", ColumnDescription = "发布人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string PublisherName { get; set; } = string.Empty;
     /// <summary>
-    /// 归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 归属部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "归属部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 归属部门名称
+    /// 归属部门名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "归属部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "document_is_top", ColumnDescription = "置顶", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DocumentIsTop { get; set; } = 0;
@@ -148,27 +127,22 @@ public class TaktDocument : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "document_view_count", ColumnDescription = "浏览次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DocumentViewCount { get; set; } = 0;
     /// <summary>
-    /// 下载次数
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
     /// </summary>
-    [SugarColumn(ColumnName = "download_count", ColumnDescription = "下载次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int DownloadCount { get; set; } = 0;
+    [SugarColumn(ColumnName = "target_scope", ColumnDescription = "目标范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int TargetScope { get; set; } = 0;
     /// <summary>
-    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
-    /// </summary>
-    [SugarColumn(ColumnName = "target_scope", ColumnDescription = "目标范围", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "all")]
-    public string TargetScope { get; set; } = "all";
-    /// <summary>
-    /// 目标部门编码（多个用逗号分隔）
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
     /// </summary>
     [SugarColumn(ColumnName = "target_departments", ColumnDescription = "目标部门编码", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? TargetDepartments { get; set; }
     /// <summary>
-    /// 目标用户 ID（多个用逗号分隔）
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
     /// </summary>
-    [SugarColumn(ColumnName = "target_users", ColumnDescription = "目标用户ID", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    [SugarColumn(ColumnName = "target_users", ColumnDescription = "目标用户名", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? TargetUsers { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

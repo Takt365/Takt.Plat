@@ -46,12 +46,12 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
     /// </summary>
     public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+    /// 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
     /// </summary>
     public string DeptCode { get; set; } = string.Empty;
 
@@ -81,7 +81,7 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+    /// 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
     /// </summary>
     public string ResetPeriod { get; set; } = string.Empty;
 
@@ -101,7 +101,7 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string? Separator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -111,7 +111,7 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string? NumberingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int NumberingStatus { get; set; } = 0;
 
@@ -158,12 +158,12 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
     /// </summary>
     public string? DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+    /// 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -193,7 +193,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+    /// 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
     /// </summary>
     public string? ResetPeriod { get; set; } = string.Empty;
 
@@ -213,7 +213,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? Separator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -223,7 +223,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? NumberingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? NumberingStatus { get; set; }
 
@@ -291,15 +291,15 @@ public class TaktNumberingCreateDto
     public string RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
     /// </summary>
-    [Required(ErrorMessage = "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）不能为空")]
+    [Required(ErrorMessage = "单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）不能为空")]
     public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+    /// 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
     /// </summary>
-    [Required(ErrorMessage = "部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）不能为空")]
+    [Required(ErrorMessage = "部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）不能为空")]
     public string DeptCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -328,9 +328,9 @@ public class TaktNumberingCreateDto
     public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+    /// 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
     /// </summary>
-    [Required(ErrorMessage = "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）不能为空")]
+    [Required(ErrorMessage = "重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily）不能为空")]
     public string ResetPeriod { get; set; } = string.Empty;
 
     /// <summary>
@@ -350,7 +350,7 @@ public class TaktNumberingCreateDto
     public string? Separator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -360,7 +360,7 @@ public class TaktNumberingCreateDto
     public string? NumberingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int NumberingStatus { get; set; } = 0;
 
@@ -414,9 +414,9 @@ public class TaktNumberingStatusDto
     public long NumberingId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；1=启用 0=禁用）不能为空")]
     public int NumberingStatus { get; set; } = 0;
 }
 
@@ -460,12 +460,12 @@ public class TaktNumberingTemplateDto
     public string? RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
     /// </summary>
     public string? DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+    /// 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -495,7 +495,7 @@ public class TaktNumberingTemplateDto
     public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+    /// 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
     /// </summary>
     public string? ResetPeriod { get; set; } = string.Empty;
 
@@ -515,7 +515,7 @@ public class TaktNumberingTemplateDto
     public string? Separator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -525,7 +525,7 @@ public class TaktNumberingTemplateDto
     public string? NumberingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? NumberingStatus { get; set; }
 
@@ -578,12 +578,12 @@ public class TaktNumberingImportDto
     public string? RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
     /// </summary>
     public string? DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+    /// 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -613,7 +613,7 @@ public class TaktNumberingImportDto
     public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+    /// 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
     /// </summary>
     public string? ResetPeriod { get; set; } = string.Empty;
 
@@ -633,7 +633,7 @@ public class TaktNumberingImportDto
     public string? Separator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -643,7 +643,7 @@ public class TaktNumberingImportDto
     public string? NumberingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? NumberingStatus { get; set; }
 
@@ -657,6 +657,42 @@ public class TaktNumberingImportDto
     /// </summary>
     public string? Remark { get; set; }
 
+}
+
+// ========================================
+// 预览取号 DTO
+// ========================================
+
+/// <summary>
+/// 预览下一个业务编码查询参数
+/// </summary>
+public class TaktNumberingPreviewQueryDto
+{
+    /// <summary>
+    /// 规则编码（TaktNumbering.RuleCode）
+    /// </summary>
+    public string RuleCode { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 预览下一个业务编码结果（不占用流水号）
+/// </summary>
+public class TaktNumberingPreviewDto
+{
+    /// <summary>
+    /// 规则编码
+    /// </summary>
+    public string RuleCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 预览业务编码
+    /// </summary>
+    public string BusinessCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 预览流水号
+    /// </summary>
+    public int CurrentSequence { get; set; }
 }
 
 // ========================================
@@ -691,12 +727,12 @@ public class TaktNumberingExportDto
     public string RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
     /// </summary>
     public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+    /// 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
     /// </summary>
     public string DeptCode { get; set; } = string.Empty;
 
@@ -726,7 +762,7 @@ public class TaktNumberingExportDto
     public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+    /// 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
     /// </summary>
     public string ResetPeriod { get; set; } = string.Empty;
 
@@ -746,7 +782,7 @@ public class TaktNumberingExportDto
     public string? Separator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -756,7 +792,7 @@ public class TaktNumberingExportDto
     public string? NumberingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int NumberingStatus { get; set; } = 0;
 

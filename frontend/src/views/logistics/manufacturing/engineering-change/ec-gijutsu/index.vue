@@ -2,59 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：设变管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：设变技术课管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <div class="flex items-center gap-2 flex-wrap">
-      <a-button
-        v-permission="'logistics:manufacturing:engineering:change:gijutsu:create'"
-        class="takt-button-import shrink-0"
-        @click="handleOpenSourceEcInput"
-      >
-        <template #icon>
-          <RiDownloadLine class="takt-remix-icon" />
-        </template>
-        {{ t('logistics.manufacturing.engineering-change.ec-gijutsu.page.sourceEcInput.openButton') }}
-      </a-button>
-      <TaktToolsBar
-        class="flex-1 min-w-0"
-        update-permission="logistics:manufacturing:engineering:change:gijutsu:update"
-        export-permission="logistics:manufacturing:engineering:change:gijutsu:export"
-        :show-create="false"
-        :show-update="true"
-        :show-delete="false"
-        :show-import="false"
-        :show-export="true"
-        :show-expand="false"
-        :show-advanced-query="true"
-        :show-column-setting="true"
-        :show-fullscreen="true"
-        :show-refresh="true"
-        :update-disabled="updateDisabled"
-        :update-loading="loading"
-        :refresh-loading="loading"
-        @update="handleUpdate"
-        @export="handleExport"
-        @advanced-query="handleAdvancedQuery"
-        @column-setting="handleColumnSetting"
-        @refresh="handleRefresh"
-      />
-    </div>
-
     <!-- 左主右从 -->
     <TaktMasterDetailTableLr
       v-model:master-current="currentPage"
@@ -64,10 +18,12 @@
       :master-columns="columns"
       :master-data-source="dataSource"
       :master-loading="loading"
-      :master-row-key="getEcId"
+      :master-row-key="getEcGijutsuId"
       :master-row-selection="rowSelection"
       master-id-column-key="ecGijutsuId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -75,20 +31,65 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="logistics:manufacturing:engineering:change:gijutsu:create"
+      update-permission="logistics:manufacturing:engineering:change:gijutsu:update"
+      delete-permission="logistics:manufacturing:engineering:change:gijutsu:delete"
+      import-permission="logistics:manufacturing:engineering:change:gijutsu:import"
+      export-permission="logistics:manufacturing:engineering:change:gijutsu:export"
+      :show-create="true"
+      :show-update="true"
+      :show-delete="true"
+      :show-import="true"
+      :show-export="true"
+      :show-expand="false"
+      :show-advanced-query="true"
+      :show-column-setting="true"
+      :show-fullscreen="true"
+      :show-refresh="true"
+      :create-disabled="false"
+      :create-loading="loading"
+      :update-disabled="updateDisabled"
+      :update-loading="loading"
+      :delete-disabled="deleteDisabled"
+      :delete-loading="loading"
+      :refresh-loading="loading"
+      @create="handleCreate"
+      @update="handleUpdate"
+      @delete="handleDelete"
+      @import="handleImport"
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
+      @column-setting="handleColumnSetting"
+      @refresh="handleRefresh"
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'changeStatus'">
-          <TaktDictTag dict-type="logistics_ec_status" :value="getEcField(record, 'changeStatus')" />
-        </template>
-        <template v-else-if="column.key === 'ecDistinction'">
-          <TaktDictTag dict-type="logistics_ec_distinction_category" :value="getEcField(record, 'ecDistinction')" />
+        <template v-if="column.key === 'ecDistinction'">
+          <TaktDictTag
+            :value="getEcGijutsuDictValue(record, 'ecDistinction')"
+            dict-type="logistics_ec_distinction_category"
+          />
         </template>
         <template v-else-if="column.key === 'ecStatus'">
-          <TaktDictTag dict-type="logistics_ec_gijutsu_status" :value="getEcField(record, 'ecStatus')" />
+          <TaktDictTag
+            :value="getEcGijutsuDictValue(record, 'ecStatus')"
+            dict-type="logistics_ec_gijutsu_status"
+          />
         </template>
       </template>
       <template #detail>
-        <EcSubPanels
-          ref="ecSubPanelsRef"
+        <EcDetailPanel
+          ref="ecDetailPanelRef"
           class="h-full min-h-0 flex-1"
         />
       </template>
@@ -104,12 +105,11 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <EcForm
-        :key="formData?.ecGijutsuId ?? (sourceImportMode ? 'source-import' : 'create')"
+      <EcGijutsuForm
+        :key="formData?.ecGijutsuId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
-        :source-import-mode="sourceImportMode"
       />
     </TaktModal>
     <!-- 高级查询抽屉 -->
@@ -117,28 +117,27 @@
       v-model:open="advancedQueryVisible"
       v-model:visible-field-keys="visibleQueryFieldKeys"
       :fields="queryFieldsMeta"
-      :storage-key="'takt-query-fields-logistics-manufacturing-engineering-change-ec'"
+      :storage-key="'takt-query-fields-logistics-manufacturing-engineering-change-ec-gijutsu'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('common.page.entity.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecCode')">
-      <a-form-item :label="t('entity.ec.no')">
+      <a-form-item :label="pi.queryLabel('ecCode')">
         <a-input
           v-model:value="advancedQueryForm.ecCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.no') })"
+          :placeholder="pi.queryPh('ecCode', 'required')"
           show-count
           :maxlength="10"
           allow-clear
@@ -146,41 +145,39 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecIssueDateStart')">
-      <a-form-item :label="t('entity.ec.issuedatestart')">
+      <a-form-item :label="pi.queryLabel('ecIssueDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecIssueDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.issuedatestart') })"
+          :placeholder="pi.queryPh('ecIssueDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecIssueDateEnd')">
-      <a-form-item :label="t('entity.ec.issuedateend')">
+      <a-form-item :label="pi.queryLabel('ecIssueDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecIssueDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.issuedateend') })"
+          :placeholder="pi.queryPh('ecIssueDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeStatus')">
-      <a-form-item :label="t('entity.ec.changestatus')">
-        <TaktSelect
+      <a-form-item :label="pi.queryLabel('changeStatus')">
+        <a-input-number
           v-model:value="advancedQueryForm.changeStatus"
-          dict-type="logistics_ec_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.changestatus') })"
-          allow-clear
-          class="w-full"
+          :placeholder="pi.queryPh('changeStatus', 'required')"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecTitle')">
-      <a-form-item :label="t('entity.ec.title')">
+      <a-form-item :label="pi.queryLabel('ecTitle')">
         <a-input
           v-model:value="advancedQueryForm.ecTitle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.title') })"
+          :placeholder="pi.queryPh('ecTitle', 'required')"
           show-count
           :maxlength="500"
           allow-clear
@@ -188,82 +185,79 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecContent')">
-      <a-form-item :label="t('entity.ec.content')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('ecContent')">
+        <a-textarea
           v-model:value="advancedQueryForm.ecContent"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.content') })"
-          show-count
-          :maxlength="20"
+          :placeholder="pi.queryPh('ecContent', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecLeader')">
-      <a-form-item :label="t('entity.ec.leader')">
+      <a-form-item :label="pi.queryLabel('ecLeader')">
         <TaktSelect
           v-model:value="advancedQueryForm.ecLeader"
           api-url="TaktEmployees/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.leader') })"
+          :placeholder="pi.queryPh('ecLeader', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecLossAmount')">
-      <a-form-item :label="t('entity.ec.lossamount')">
+      <a-form-item :label="pi.queryLabel('ecLossAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.ecLossAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.lossamount') })"
+          :placeholder="pi.queryPh('ecLossAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecDistinction')">
-      <a-form-item :label="t('entity.ec.distinction')">
+      <a-form-item :label="pi.queryLabel('ecDistinction')">
         <TaktSelect
           v-model:value="advancedQueryForm.ecDistinction"
           dict-type="logistics_ec_distinction_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.distinction') })"
+          :placeholder="pi.queryPh('ecDistinction', 'select')"
           allow-clear
-          class="w-full"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecEntryDateStart')">
-      <a-form-item :label="t('entity.ec.entrydatestart')">
+      <a-form-item :label="pi.queryLabel('ecEntryDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecEntryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.entrydatestart') })"
+          :placeholder="pi.queryPh('ecEntryDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecEntryDateEnd')">
-      <a-form-item :label="t('entity.ec.entrydateend')">
+      <a-form-item :label="pi.queryLabel('ecEntryDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecEntryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.entrydateend') })"
+          :placeholder="pi.queryPh('ecEntryDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecStatus')">
-      <a-form-item :label="t('entity.ec.status')">
+      <a-form-item :label="pi.queryLabel('ecStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.ecStatus"
           dict-type="logistics_ec_gijutsu_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.status') })"
+          :placeholder="pi.queryPh('ecStatus', 'select')"
           allow-clear
-          class="w-full"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -271,10 +265,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -296,7 +290,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -310,10 +304,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -324,32 +318,18 @@
       </template>
     </TaktQueryDrawer>
 
-    <!-- 来源设变录入 -->
-    <TaktModal
-      v-model:open="sourceEcInputVisible"
-      :title="t('logistics.manufacturing.engineering-change.ec-gijutsu.page.sourceEcInput.title')"
-      width="960px"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleSourceEcInputCancel"
-    >
-      <SourceEcInput
-        v-if="sourceEcInputVisible"
-        ref="sourceEcInputRef"
-        @draft-ready="handleSourceEcDraftReady"
-      />
-    </TaktModal>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ec._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.ec._self"
+        v-if="importVisible"
+        :entity-i18n-key="ECGIJUTSU_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -368,7 +348,7 @@
       :id-column-key="'ecGijutsuId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -377,7 +357,7 @@
 
 <script setup lang="ts">
 /**
- * 设变管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 设变技术课管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu
  */
 import { ref, computed, onMounted } from 'vue'
@@ -386,16 +366,27 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import EcForm from './components/ec-form.vue'
-import EcSubPanels from './components/ec-sub-panels.vue'
-import SourceEcInput from './components/source-ec-input.vue'
-import { provideEcMasterContext } from './composables/use-ec-master-context'
+import EcGijutsuForm from './components/ec-gijutsu-form.vue'
+import EcDetailPanel from './components/ec-detail-panel.vue'
+import { provideEcGijutsuMasterContext, type EcGijutsuRowRecord } from './composables/use-ec-gijutsu-master-context'
 import { getEcGijutsuList, getEcGijutsuById, createEcGijutsu, updateEcGijutsu, deleteEcGijutsuById, deleteEcGijutsuBatch, getEcGijutsuTemplate, importEcGijutsu, exportEcGijutsu, updateEcGijutsuStatus } from '@/api/logistics/manufacturing/engineering-change/ec-gijutsu'
-import { getEmployeeOptions } from '@/api/human-resource/personnel/employee'
-import type { EcGijutsu, EcGijutsuFormData, EcGijutsuQuery } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu'
+import type { EcGijutsu, EcGijutsuQuery } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiDownloadLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useEcGijutsuI18n,
+  ECGIJUTSU_LIST_FIELDS,
+  ECGIJUTSU_QUERY_STRING_FIELDS,
+  ECGIJUTSU_QUERY_FIELDS,
+  ECGIJUTSU_SELF_I18N_KEY,
+} from './composables/use-ec-gijutsu-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useEcGijutsuI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -403,7 +394,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEcGijutsu')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ec._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -419,9 +410,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<EcGijutsu | null>(null)
+const selectedRow = ref<EcGijutsuRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<EcGijutsu[]>([])
+const selectedRows = ref<EcGijutsuRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -430,9 +421,7 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<EcGijutsuFormData | null>(null)
-/** 来源设变导入草稿模式（明细只读，附件上传后 create 落库） */
-const sourceImportMode = ref(false)
+const formData = ref<Partial<EcGijutsu> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
@@ -440,55 +429,64 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of ECGIJUTSU_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.changeStatus !== undefined && form.changeStatus !== null) {
+    return true
+  }
+  if (form.ecLossAmount !== undefined && form.ecLossAmount !== null) {
+    return true
+  }
+  if (form.ecDistinction !== undefined && form.ecDistinction !== null) {
+    return true
+  }
+  if (form.ecStatus !== undefined && form.ecStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(ECGIJUTSU_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof ECGIJUTSU_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    changeStatus: undefined as number | undefined,
+    ecLossAmount: undefined as number | undefined,
+    ecDistinction: undefined as number | undefined,
+    ecStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  ecCode: '',
-  ecIssueDateStart: '',
-  ecIssueDateEnd: '',
-  changeStatus: undefined as number | undefined,
-  ecTitle: '',
-  ecContent: '',
-  ecLeader: '',
-  ecLossAmount: undefined as number | undefined,
-  ecDistinction: undefined as number | undefined,
-  ecEntryDateStart: '',
-  ecEntryDateEnd: '',
-  ecStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('common.page.entity.plantcode') },
-  { key: 'ecCode', label: t('entity.ec.no') },
-  { key: 'ecIssueDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
-  { key: 'ecIssueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
-  { key: 'changeStatus', label: t('entity.ec.changestatus') },
-  { key: 'ecTitle', label: t('entity.ec.title') },
-  { key: 'ecContent', label: t('entity.ec.content') },
-  { key: 'ecLeader', label: t('entity.ec.leader') },
-  { key: 'ecLossAmount', label: t('entity.ec.lossamount') },
-  { key: 'ecDistinction', label: t('entity.ec.distinction') },
-  { key: 'ecEntryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ec.entrydate')) },
-  { key: 'ecEntryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ec.entrydate')) },
-  { key: 'ecStatus', label: t('entity.ec.status') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  ECGIJUTSU_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
 /** 导入对话框是否打开 */
 const importVisible = ref(false)
-/** 来源设变录入弹窗是否打开 */
-const sourceEcInputVisible = ref(false)
-/** 来源设变录入组件 ref */
-const sourceEcInputRef = ref()
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
@@ -498,12 +496,14 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
-const { selectedMasterRow } = provideEcMasterContext()
-const ecSubPanelsRef = ref<InstanceType<typeof EcSubPanels> | null>(null)
+const { selectedMasterRow } = provideEcGijutsuMasterContext()
+const ecDetailPanelRef = ref<InstanceType<typeof EcDetailPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {EcGijutsuQuery} 查询 DTO
  */
@@ -524,47 +524,38 @@ function buildListQuery(overrides?: Partial<EcGijutsuQuery>): EcGijutsuQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('ecCode', form.ecCode)
-  assignTrimmed('ecIssueDateStart', form.ecIssueDateStart)
-  assignTrimmed('ecIssueDateEnd', form.ecIssueDateEnd)
+  for (const key of ECGIJUTSU_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.changeStatus !== undefined && form.changeStatus !== null) {
     query.changeStatus = form.changeStatus
   }
-  assignTrimmed('ecTitle', form.ecTitle)
-  assignTrimmed('ecContent', form.ecContent)
-  assignTrimmed('ecLeader', form.ecLeader)
   if (form.ecLossAmount !== undefined && form.ecLossAmount !== null) {
     query.ecLossAmount = form.ecLossAmount
   }
   if (form.ecDistinction !== undefined && form.ecDistinction !== null) {
     query.ecDistinction = form.ecDistinction
   }
-  assignTrimmed('ecEntryDateStart', form.ecEntryDateStart)
-  assignTrimmed('ecEntryDateEnd', form.ecEntryDateEnd)
   if (form.ecStatus !== undefined && form.ecStatus !== null) {
     query.ecStatus = form.ecStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
-  void loadEmployeeLabelMap()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: EcGijutsu | null) {
+function syncMasterSelection(record: EcGijutsuRowRecord | null) {
   selectedMasterRow.value = record
-  selectedMasterKey.value = record ? getEcId(record) : ''
+  selectedMasterKey.value = record ? getEcGijutsuId(record) : ''
 }
 
 /**
@@ -572,8 +563,8 @@ function syncMasterSelection(record: EcGijutsu | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as EcGijutsu
-  const key = getEcId(row)
+  const row = record as unknown as EcGijutsuRowRecord
+  const key = getEcGijutsuId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
   selectedRow.value = row
@@ -590,14 +581,14 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadEcDetail(record: EcGijutsu): Promise<EcGijutsu | null> {
-  const id = getEcId(record)
+async function loadEcGijutsuDetail(record: EcGijutsuRowRecord): Promise<EcGijutsu | null> {
+  const id = getEcGijutsuId(record)
   if (!id) {
     return null
   }
   try {
     const detail = await getEcGijutsuById(id)
-    const index = dataSource.value.findIndex((row) => getEcId(row) === id)
+    const index = dataSource.value.findIndex((row) => getEcGijutsuId(row) === id)
     if (index !== -1) {
       dataSource.value[index] = { ...dataSource.value[index], ...detail } as EcGijutsu
     }
@@ -618,86 +609,73 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecGijutsuId') ?? ''
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecGijutsuId') ?? ''
   },
   {
-    title: t('common.page.entity.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.ec.no'),
+    title: pi.label('ecCode'),
     dataIndex: 'ecCode',
     key: 'ecCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    sorter: (a: EcGijutsu, b: EcGijutsu) =>
-      String(getEcField(a, 'ecCode') ?? '').localeCompare(String(getEcField(b, 'ecCode') ?? '')),
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecCode') ?? ''
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecCode') ?? ''
   },
   {
-    title: t('entity.ec.issuedate'),
+    title: pi.label('ecIssueDate'),
     dataIndex: 'ecIssueDate',
     key: 'ecIssueDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    sorter: (a: EcGijutsu, b: EcGijutsu) =>
-      new Date(String(getEcField(a, 'ecIssueDate') ?? 0)).getTime()
-      - new Date(String(getEcField(b, 'ecIssueDate') ?? 0)).getTime(),
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecIssueDate') ?? ''
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecIssueDate') ?? ''
   },
   {
-    title: t('entity.ec.changestatus'),
+    title: pi.label('changeStatus'),
     dataIndex: 'changeStatus',
     key: 'changeStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'changeStatus') ?? ''
   },
   {
-    title: t('entity.ec.title'),
+    title: pi.label('ecTitle'),
     dataIndex: 'ecTitle',
     key: 'ecTitle',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecTitle') ?? ''
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecTitle') ?? ''
   },
   {
-    title: t('entity.ec.content'),
+    title: pi.label('ecContent'),
     dataIndex: 'ecContent',
     key: 'ecContent',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecContent') ?? ''
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecContent') ?? ''
   },
   {
-    title: t('entity.ec.leader'),
+    title: pi.label('ecLeader'),
     dataIndex: 'ecLeader',
     key: 'ecLeader',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => formatEcLeader(record)
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecLeader') ?? ''
   },
   {
-    title: t('entity.ec.lossamount'),
+    title: pi.label('ecLossAmount'),
     dataIndex: 'ecLossAmount',
     key: 'ecLossAmount',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecLossAmount') ?? ''
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecLossAmount') ?? ''
   },
   {
-    title: t('entity.ec.distinction'),
+    title: pi.label('ecDistinction'),
     dataIndex: 'ecDistinction',
     key: 'ecDistinction',
     width: 120,
@@ -705,16 +683,16 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.ec.entrydate'),
+    title: pi.label('ecEntryDate'),
     dataIndex: 'ecEntryDate',
     key: 'ecEntryDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecEntryDate') ?? ''
+    customRender: ({ record }: { record: any }) => getEcGijutsuField(record, 'ecEntryDate') ?? ''
   },
   {
-    title: t('entity.ec.status'),
+    title: pi.label('ecStatus'),
     dataIndex: 'ecStatus',
     key: 'ecStatus',
     width: 120,
@@ -729,7 +707,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:engineering:change:gijutsu:update',
-        onClick: (record: EcGijutsu) => handleEdit(record)
+        onClick: (record: EcGijutsuRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -737,56 +715,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
-        onClick: (record: EcGijutsu) => handleDeleteOne(record)
+        onClick: (record: EcGijutsuRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getEcId = (record: any): string => record?.[entityIdName] ?? ''
+const getEcGijutsuId = (record: EcGijutsuRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
-const getEcField = (record: any, field: string): any => record?.[field]
-
-/** 员工 Id → 姓名（EcLeader 列表展示） */
-const employeeLabelById = ref<Record<string, string>>({})
-
-/** 预加载员工选项，供负责人列 Id 转姓名 */
-async function loadEmployeeLabelMap() {
-  try {
-    const list = await getEmployeeOptions()
-    const map: Record<string, string> = {}
-    for (const item of list ?? []) {
-      if (item.dictValue != null && String(item.dictValue) !== '') {
-        map[String(item.dictValue)] = String(item.dictLabel ?? item.dictValue)
-      }
-    }
-    employeeLabelById.value = map
-  } catch {
-    employeeLabelById.value = {}
-  }
-}
-
+const getEcGijutsuField = (record: any, field: string): any => record?.[field]
 /**
- * 格式化负责人列：员工 Id 显示姓名，历史姓名原样回退
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
- * @returns 展示文案
+ * @param field 字段名
  */
-function formatEcLeader(record: any): string {
-  const raw = getEcField(record, 'ecLeader')
-  if (raw == null || raw === '') return ''
-  const key = String(raw)
-  return employeeLabelById.value[key] ?? key
+const getEcGijutsuDictValue = (
+  record: EcGijutsuRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: EcGijutsu[]) => {
+  onChange: (keys: (string | number)[], rows: EcGijutsuRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -796,16 +762,16 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: EcGijutsu, selected: boolean) => {
+  onSelect: (record: EcGijutsuRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (selectedRow.value && getEcId(selectedRow.value) === getEcId(record)) {
+    } else if (selectedRow.value && getEcGijutsuId(selectedRow.value) === getEcGijutsuId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: EcGijutsu[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EcGijutsuRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -815,6 +781,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getEcGijutsuList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -865,19 +836,17 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ec._self') })
-  sourceImportMode.value = false
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: EcGijutsu) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ec._self') })
-  sourceImportMode.value = false
+async function handleEdit(record: EcGijutsuRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
-    const detail = await loadEcDetail(record)
+    const detail = await loadEcGijutsuDetail(record)
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -890,7 +859,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ec._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -899,11 +868,7 @@ async function handleFormSubmit() {
   if (!refInst?.validate) return
   try {
     await refInst.validate()
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : undefined
-    if (msg) {
-      message.warning(msg)
-    }
+  } catch {
     return
   }
   formLoading.value = true
@@ -912,17 +877,16 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEcGijutsu(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.ec._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createEcGijutsu(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.ec._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
-    sourceImportMode.value = false
   nextTick(() => formRef.value?.resetFields())
     if (selectedMasterKey.value) {
-  ecSubPanelsRef.value?.reload?.()
+  ecDetailPanelRef.value?.reload?.()
     }
     loadData()
   } finally {
@@ -934,7 +898,6 @@ async function handleFormSubmit() {
 function handleFormCancel() {
   formVisible.value = false
   formData.value = null
-  sourceImportMode.value = false
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
@@ -942,45 +905,28 @@ function handleImport() {
   importVisible.value = true
 }
 
-/** 打开来源设变录入弹窗 */
-function handleOpenSourceEcInput() {
-  sourceEcInputVisible.value = true
-}
-
-/** 关闭来源设变录入弹窗 */
-function handleSourceEcInputCancel() {
-  sourceEcInputVisible.value = false
-  nextTick(() => sourceEcInputRef.value?.resetFields?.())
-}
-
-/**
- * 来源设变草稿就绪：关闭来源弹窗，打开 ec-form 补全后保存
- * @param draft 创建草稿 DTO
- */
-function handleSourceEcDraftReady(draft: EcGijutsuFormData) {
-  sourceEcInputVisible.value = false
-  nextTick(() => sourceEcInputRef.value?.resetFields?.())
-  sourceImportMode.value = true
-  formTitle.value = t('logistics.manufacturing.engineering-change.ec-gijutsu.page.sourceEcInput.formTitle')
-  formData.value = { ...draft }
-  formVisible.value = true
-}
-
-/** 打开导入对话框 */
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getEcGijutsuTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEcGijutsu(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEcGijutsu(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    ecDetailPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -991,6 +937,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportEcGijutsu(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1014,24 +963,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ec._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[EcGijutsu] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.ec._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: EcGijutsu) {
+async function handleDeleteOne(record: EcGijutsuRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.ec._self'), name: t('common.tip.this.target', { target: t('entity.ec._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEcGijutsuById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.ec._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1043,18 +992,18 @@ async function handleDeleteOne(record: EcGijutsu) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.ec._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.ec._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEcGijutsuBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ec._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null

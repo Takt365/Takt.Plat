@@ -224,7 +224,7 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
         {
             throw new TaktBusinessException("流程实例不存在");
         }
-        entity.InstanceStatus = dto.InstanceStatus;
+        entity.InstanceStatus = (int)dto.InstanceStatus;
         await _flowInstanceRepository.UpdateAsync(entity);
         return await GetFlowInstanceByIdAsync(dto.FlowInstanceId) ?? throw new TaktBusinessException("流程实例不存在");
     }
@@ -482,28 +482,28 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
         Expression<Func<TaktFlowInstance, bool>> runningPredicate = x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
-            && x.InstanceStatus == TaktFlowInstanceStatus.Running
+            && x.InstanceStatus == (int)TaktFlowInstanceStatus.Running
             && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
                 || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
         var monthRunningCount = await _flowInstanceRepository.CountAsync(runningPredicate);
         Expression<Func<TaktFlowInstance, bool>> completedPredicate = x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
-            && x.InstanceStatus == TaktFlowInstanceStatus.Completed
+            && x.InstanceStatus == (int)TaktFlowInstanceStatus.Completed
             && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
                 || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
         var monthCompletedCount = await _flowInstanceRepository.CountAsync(completedPredicate);
         Expression<Func<TaktFlowInstance, bool>> rejectedPredicate = x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
-            && x.InstanceStatus == TaktFlowInstanceStatus.Rejected
+            && x.InstanceStatus == (int)TaktFlowInstanceStatus.Rejected
             && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
                 || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
         var monthRejectedCount = await _flowInstanceRepository.CountAsync(rejectedPredicate);
         Expression<Func<TaktFlowInstance, bool>> terminatedPredicate = x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
-            && x.InstanceStatus == TaktFlowInstanceStatus.Terminated
+            && x.InstanceStatus == (int)TaktFlowInstanceStatus.Terminated
             && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
                 || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
         var monthTerminatedCount = await _flowInstanceRepository.CountAsync(terminatedPredicate);
@@ -596,7 +596,7 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
 
         if (queryDto?.InstanceStatus.HasValue == true)
         {
-            exp = exp.And(x => x.InstanceStatus == queryDto.InstanceStatus);
+            exp = exp.And(x => x.InstanceStatus == (int)queryDto.InstanceStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CurrentActivityId))

@@ -59,12 +59,12 @@ export interface SopRevision extends CompanyDtoBase {
   ecnId?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no，0=否，1=是）
    */
   isLocked?: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no，0=否，1=是）
    */
   forceLeaderAck?: number;
 
@@ -132,12 +132,12 @@ export interface SopRevisionExport {
   ecnId?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no，0=否，1=是）
    */
   isLocked: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no，0=否，1=是）
    */
   forceLeaderAck: number;
 

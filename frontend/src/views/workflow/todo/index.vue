@@ -192,7 +192,7 @@
       <a-form-item :label="t('entity.flowtask.taskname')">
         <a-input v-model:value="advancedQueryForm.taskName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowinstance.startusername')">
+      <a-form-item :label="t('entity.flowinstance.startUserName')">
         <a-input v-model:value="advancedQueryForm.startUserName" allow-clear />
       </a-form-item>
       <a-form-item :label="t('entity.flowinstance.starttime')">
@@ -296,7 +296,7 @@ const columns = computed<TableColumnsType>(() => [
   { title: t('entity.flowinstance.processname'), dataIndex: 'processName', key: 'processName', width: 120, resizable: true, ellipsis: true },
   { title: t('entity.flowinstance.processtitle'), dataIndex: 'processTitle', key: 'processTitle', ellipsis: true, resizable: true },
   { title: t('entity.flowtask.taskname'), dataIndex: 'taskName', key: 'taskName', width: 100, resizable: true, ellipsis: true },
-  { title: t('entity.flowinstance.startusername'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true, ellipsis: true },
+  { title: t('entity.flowinstance.startUserName'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true, ellipsis: true },
   { title: t('entity.flowinstance.starttime'), dataIndex: 'startTime', key: 'startTime', width: 170, resizable: true },
   CreateActionColumn<FlowTodoItem>({
     width: 148,

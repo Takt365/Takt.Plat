@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceOrderValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerServiceOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCustomerServiceOrder 生成，请按需审阅）
 // 
@@ -36,10 +36,10 @@ public class TaktCustomerServiceOrderCreateValidator : AbstractValidator<TaktCus
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.ClientId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.ClientId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ServiceOrderCode)
             .NotEmpty().WithMessage("服务订单编码不能为空")
@@ -47,7 +47,7 @@ public class TaktCustomerServiceOrderCreateValidator : AbstractValidator<TaktCus
         RuleFor(x => x.ClientId)
             .GreaterThanOrEqualTo(0).WithMessage("客户端ID不能为负数");
         RuleFor(x => x.ClientCode)
-            .NotEmpty().WithMessage("客户端编码不能为空")
+            .NotEmpty().WithMessage("客户端编码不能为空").When(x => x.ClientId <= 0)
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
         RuleFor(x => x.ClientName1)
             .NotEmpty().WithMessage("客户端名称不能为空")
@@ -89,10 +89,10 @@ public class TaktCustomerServiceOrderUpdateValidator : AbstractValidator<TaktCus
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.ClientId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.ClientId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ServiceOrderCode)
             .NotEmpty().WithMessage("服务订单编码不能为空")
@@ -100,7 +100,7 @@ public class TaktCustomerServiceOrderUpdateValidator : AbstractValidator<TaktCus
         RuleFor(x => x.ClientId)
             .GreaterThanOrEqualTo(0).WithMessage("客户端ID不能为负数");
         RuleFor(x => x.ClientCode)
-            .NotEmpty().WithMessage("客户端编码不能为空")
+            .NotEmpty().WithMessage("客户端编码不能为空").When(x => x.ClientId <= 0)
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
         RuleFor(x => x.ClientName1)
             .NotEmpty().WithMessage("客户端名称不能为空")

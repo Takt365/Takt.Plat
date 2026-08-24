@@ -10,8 +10,9 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import { getBomMaterialCostAnalysisMaterialTypeOptions } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
+import { getBomCostOptionMaterialTypeOptions } from '@/api/logistics/manufacturing/bom/cost-option'
 import type { TaktSelectOption } from '@/types/common'
+import { resolveBomCostOptionPeriod } from './bom-cost-option-params'
 
 /** 分析栏默认优先选中的物料类型 */
 export const BOM_ANALYSIS_PREFERRED_MATERIAL_TYPE = 'FERT'
@@ -46,18 +47,27 @@ export function pickDefaultBomMaterialType(
 }
 
 /**
- * 按工厂拉取本表物料类型全量选项，并计算默认选中值（先列表、再默认 FERT）
+ * 按工厂+期间拉取本表物料类型全量选项，并计算默认选中值（先列表、再默认 FERT）
  * @param {string | undefined | null} plantCode 工厂
+ * @param { [string, string] | null | undefined } [periodRange] 年月区间
+ * @param {string | null | undefined} [costingMonth] 单月（优先于区间）
  * @returns {Promise<{ options: TaktSelectOption[]; defaultType: string | undefined }>} 选项与默认值
  */
 export async function loadBomMaterialTypeOptionsWithDefault(
   plantCode: string | undefined | null,
+  periodRange?: [string, string] | null,
+  costingMonth?: string | null,
 ): Promise<{ options: TaktSelectOption[]; defaultType: string | undefined }> {
   const plant = plantCode?.trim()
-  if (!plant) {
+  const period = resolveBomCostOptionPeriod(periodRange, costingMonth)
+  if (!plant || !period) {
     return { options: [], defaultType: undefined }
   }
-  const options = (await getBomMaterialCostAnalysisMaterialTypeOptions(plant)) ?? []
+  const options = (await getBomCostOptionMaterialTypeOptions({
+    plantCode: plant,
+    periodStart: period.periodStart,
+    periodEnd: period.periodEnd,
+  })) ?? []
   return {
     options,
     defaultType: pickDefaultBomMaterialType(options),

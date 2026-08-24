@@ -639,7 +639,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.companyStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('companyStatus')"
                 />
               </a-form-item>

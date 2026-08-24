@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendaI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceAgenda 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,13 +154,13 @@ public class TaktConferenceAgendaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceagenda.presenterid", "zh-HK", "主讲人ID_hk", "主讲人/汇报人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.conferenceagenda.presentername
-            new TranslationSeedItem("entity.conferenceagenda.presentername", "en-US", "主讲人姓名_us", "主讲人姓名（议程项）"),
+            new TranslationSeedItem("entity.conferenceagenda.presentername", "en-US", "主讲人姓名_us", "主讲人姓名（冗余字段，便于查询）"),
             // entity.conferenceagenda.presentername
-            new TranslationSeedItem("entity.conferenceagenda.presentername", "ja-JP", "主讲人姓名_jp", "主讲人姓名（议程项）"),
+            new TranslationSeedItem("entity.conferenceagenda.presentername", "ja-JP", "主讲人姓名_jp", "主讲人姓名（冗余字段，便于查询）"),
             // entity.conferenceagenda.presentername
-            new TranslationSeedItem("entity.conferenceagenda.presentername", "zh-CN", "主讲人姓名", "主讲人姓名（议程项）"),
+            new TranslationSeedItem("entity.conferenceagenda.presentername", "zh-CN", "主讲人姓名", "主讲人姓名（冗余字段，便于查询）"),
             // entity.conferenceagenda.presentername
-            new TranslationSeedItem("entity.conferenceagenda.presentername", "zh-HK", "主讲人姓名_hk", "主讲人姓名（议程项）"),
+            new TranslationSeedItem("entity.conferenceagenda.presentername", "zh-HK", "主讲人姓名_hk", "主讲人姓名（冗余字段，便于查询）"),
 
             // entity.conferenceagenda.plannedstarttime
             new TranslationSeedItem("entity.conferenceagenda.plannedstarttime", "en-US", "计划开始时间_us", "计划开始时间（议程项）"),
@@ -190,13 +190,13 @@ public class TaktConferenceAgendaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceagenda.recorderid", "zh-HK", "记录人ID_hk", "记录人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.conferenceagenda.recordername
-            new TranslationSeedItem("entity.conferenceagenda.recordername", "en-US", "记录人姓名_us", "记录人姓名（会议纪要）"),
+            new TranslationSeedItem("entity.conferenceagenda.recordername", "en-US", "记录人姓名_us", "记录人姓名（冗余字段，便于查询）"),
             // entity.conferenceagenda.recordername
-            new TranslationSeedItem("entity.conferenceagenda.recordername", "ja-JP", "记录人姓名_jp", "记录人姓名（会议纪要）"),
+            new TranslationSeedItem("entity.conferenceagenda.recordername", "ja-JP", "记录人姓名_jp", "记录人姓名（冗余字段，便于查询）"),
             // entity.conferenceagenda.recordername
-            new TranslationSeedItem("entity.conferenceagenda.recordername", "zh-CN", "记录人姓名", "记录人姓名（会议纪要）"),
+            new TranslationSeedItem("entity.conferenceagenda.recordername", "zh-CN", "记录人姓名", "记录人姓名（冗余字段，便于查询）"),
             // entity.conferenceagenda.recordername
-            new TranslationSeedItem("entity.conferenceagenda.recordername", "zh-HK", "记录人姓名_hk", "记录人姓名（会议纪要）"),
+            new TranslationSeedItem("entity.conferenceagenda.recordername", "zh-HK", "记录人姓名_hk", "记录人姓名（冗余字段，便于查询）"),
 
             // entity.conferenceagenda.attachments
             new TranslationSeedItem("entity.conferenceagenda.attachments", "en-US", "附件JSON_us", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
@@ -208,13 +208,13 @@ public class TaktConferenceAgendaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceagenda.attachments", "zh-HK", "附件JSON_hk", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
 
             // entity.conferenceagenda.isobsolete
-            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.conferenceagenda.isobsolete
-            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.conferenceagenda.isobsolete
-            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.conferenceagenda.isobsolete
-            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.conferenceagenda.conference
             new TranslationSeedItem("entity.conferenceagenda.conference", "en-US", "会议_us", "会议（主表）"),

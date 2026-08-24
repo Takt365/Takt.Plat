@@ -76,7 +76,7 @@ export interface CostCenter extends CompanyDtoBase {
    */
   sortOrder: number;
   /**
-   * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus: number;
 }
@@ -190,7 +190,7 @@ export interface CostCenterQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus?: number;
 
@@ -302,7 +302,7 @@ export interface CostCenterCreate {
   plantCode: string;
 
   /**
-   * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus: number;
 
@@ -346,7 +346,7 @@ export interface CostCenterStatus {
   costCenterId: string;
 
   /**
-   * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus: number;
 
@@ -449,7 +449,7 @@ export interface CostCenterTemplate {
   plantCode?: string;
 
   /**
-   * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus?: number;
 
@@ -551,7 +551,7 @@ export interface CostCenterImport {
   plantCode?: string;
 
   /**
-   * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus?: number;
 
@@ -650,7 +650,7 @@ export interface CostCenterExport {
   sortOrder: number;
 
   /**
-   * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus: number;
 

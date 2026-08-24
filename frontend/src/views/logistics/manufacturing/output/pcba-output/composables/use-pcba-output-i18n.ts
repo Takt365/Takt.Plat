@@ -20,7 +20,6 @@ export const PCBAOUTPUT_SELF_I18N_KEY = buildEntitySelfI18nKey(PCBAOUTPUT_ENTITY
 
 /** 列表业务列（不含主键） */
 export const PCBAOUTPUT_LIST_FIELDS = [
-  'plantCode',
   'prodCategory',
   'prodDate',
   'prodOrderType',
@@ -36,7 +35,6 @@ export const PCBAOUTPUT_LIST_FIELDS = [
 export const PCBAOUTPUT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
   cultureCode: 'optional',
   plantCode: 'optional',
   prodCategory: 'select',

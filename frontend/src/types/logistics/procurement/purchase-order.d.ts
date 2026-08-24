@@ -146,7 +146,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   orderStatus?: number;
 
@@ -319,7 +319,7 @@ export interface PurchaseOrderExport {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   orderStatus: number;
 

@@ -100,7 +100,7 @@ export interface PurchasePlan extends ApprovalDtoBase {
   convertedAmount?: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
+   * 计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）
    */
   planStatus?: number;
 
@@ -223,7 +223,7 @@ export interface PurchasePlanExport {
   convertedAmount: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
+   * 计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）
    */
   planStatus: number;
 

@@ -244,7 +244,7 @@ export interface Company extends TenantDtoBase {
   sortOrder: number;
 
   /**
-   * 公司状态（字典 sys_normal_disable_status）
+   * 公司状态（字典 sys_normal_disable）
    */
   companyStatus: number;
 
@@ -499,7 +499,7 @@ export interface CompanyQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 公司状态（字典 sys_normal_disable_status）
+   * 公司状态（字典 sys_normal_disable）
    */
   companyStatus?: number;
 
@@ -758,7 +758,7 @@ export interface CompanyCreate {
   financialManagementArea: string;
 
   /**
-   * 公司状态（字典 sys_normal_disable_status）
+   * 公司状态（字典 sys_normal_disable）
    */
   companyStatus: number;
 
@@ -812,7 +812,7 @@ export interface CompanyStatus {
   companyId: string;
 
   /**
-   * 公司状态（字典 sys_normal_disable_status）
+   * 公司状态（字典 sys_normal_disable）
    */
   companyStatus: number;
 
@@ -1070,7 +1070,7 @@ export interface CompanyTemplate {
   financialManagementArea?: string;
 
   /**
-   * 公司状态（字典 sys_normal_disable_status）
+   * 公司状态（字典 sys_normal_disable）
    */
   companyStatus?: number;
 
@@ -1329,7 +1329,7 @@ export interface CompanyImport {
   financialManagementArea?: string;
 
   /**
-   * 公司状态（字典 sys_normal_disable_status）
+   * 公司状态（字典 sys_normal_disable）
    */
   companyStatus?: number;
 
@@ -1593,7 +1593,7 @@ export interface CompanyExport {
   sortOrder: number;
 
   /**
-   * 公司状态（字典 sys_normal_disable_status）
+   * 公司状态（字典 sys_normal_disable）
    */
   companyStatus: number;
 

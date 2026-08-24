@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktAdminDivisionDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AdminDivision 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAdminDivision 生成，请按需审阅）
 // 
@@ -22,13 +22,12 @@ namespace Takt.Application.Dtos.Foundation;
 // ========================================
 
 /// <summary>
-/// 行政区划实体（租户级共享；世界通用六级树） 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type） 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤
+/// 行政区划实体（租户级共享；世界通用六级树） 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type） 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// 对应前端 TaktAdminDivisionDto
-/// 继承 TaktTenantCoreDtoBase（组合 4）
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
 public class TaktAdminDivisionDto : TaktTenantCoreDtoBase
 {
-
     /// <summary>
     /// AdminDivisionID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -68,7 +67,7 @@ public class TaktAdminDivisionDto : TaktTenantCoreDtoBase
     public string DivisionPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（字典 sys_yes_no_type）
+    /// 是否叶子节点（字典 sys_yes_no）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
@@ -88,17 +87,17 @@ public class TaktAdminDivisionDto : TaktTenantCoreDtoBase
     public string PhoneCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；内置项禁止删除）
+    /// 内置（字典 sys_yes_no；内置项禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
     public int DivisionStatus { get; set; } = 0;
 
@@ -115,9 +114,9 @@ public class TaktAdminDivisionDto : TaktTenantCoreDtoBase
 public class TaktAdminDivisionTreeDto : TaktAdminDivisionDto
 {
     /// <summary>
-    /// 子节点
+    /// 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
     /// </summary>
-    public List<TaktAdminDivisionTreeDto> Children { get; set; } = new();
+    public List<TaktAdminDivisionTreeDto>? Children { get; set; }
 }
 
 // ========================================
@@ -134,6 +133,7 @@ public class TaktAdminDivisionQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -166,7 +166,7 @@ public class TaktAdminDivisionQueryDto : TaktPagedQuery
     public string? DivisionPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（字典 sys_yes_no_type）
+    /// 是否叶子节点（字典 sys_yes_no）
     /// </summary>
     public int? IsLeaf { get; set; }
 
@@ -186,17 +186,17 @@ public class TaktAdminDivisionQueryDto : TaktPagedQuery
     public string? PhoneCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；内置项禁止删除）
+    /// 内置（字典 sys_yes_no；内置项禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
     public int? DivisionStatus { get; set; }
 
@@ -269,6 +269,7 @@ public class TaktAdminDivisionCreateDto
     /// 邮政编码（可选；部分国家区划关联邮编）
     /// </summary>
     public string? PostalCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
@@ -282,12 +283,12 @@ public class TaktAdminDivisionCreateDto
     public string PhoneCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；内置项禁止删除）
+    /// 内置（字典 sys_yes_no；内置项禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
     public int DivisionStatus { get; set; } = 0;
 
@@ -341,9 +342,9 @@ public class TaktAdminDivisionStatusDto
     public long AdminDivisionId { get; set; }
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "区划状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "区划状态（字典 sys_normal_disable）不能为空")]
     public int DivisionStatus { get; set; } = 0;
 }
 
@@ -365,9 +366,9 @@ public class TaktAdminDivisionSortDto
     public long AdminDivisionId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -384,6 +385,7 @@ public class TaktAdminDivisionTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -426,12 +428,12 @@ public class TaktAdminDivisionTemplateDto
     public string? PhoneCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；内置项禁止删除）
+    /// 内置（字典 sys_yes_no；内置项禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
     public int? DivisionStatus { get; set; }
 
@@ -456,6 +458,7 @@ public class TaktAdminDivisionImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -498,12 +501,12 @@ public class TaktAdminDivisionImportDto
     public string? PhoneCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；内置项禁止删除）
+    /// 内置（字典 sys_yes_no；内置项禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
     public int? DivisionStatus { get; set; }
 
@@ -567,7 +570,7 @@ public class TaktAdminDivisionExportDto
     public string DivisionPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（字典 sys_yes_no_type）
+    /// 是否叶子节点（字典 sys_yes_no）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
@@ -587,17 +590,17 @@ public class TaktAdminDivisionExportDto
     public string PhoneCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；内置项禁止删除）
+    /// 内置（字典 sys_yes_no；内置项禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
     public int DivisionStatus { get; set; } = 0;
 

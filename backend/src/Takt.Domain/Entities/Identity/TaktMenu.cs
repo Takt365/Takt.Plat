@@ -62,7 +62,7 @@ public class TaktMenu : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "menu_path", ColumnDescription = "菜单路径", ColumnDataType = "varchar", Length = 500, IsNullable = false, DefaultValue = "")]
     public string MenuPath { get; set; } = string.Empty;
     /// <summary>
-    /// 是否叶子节点（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否叶子节点（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_leaf", ColumnDescription = "是否叶子节点", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsLeaf { get; set; } = 0;
@@ -87,7 +87,7 @@ public class TaktMenu : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "component_path", ColumnDescription = "组件路径", ColumnDataType = "varchar", Length = 200, IsNullable = false, DefaultValue = "")]
     public string ComponentPath { get; set; } = string.Empty;
     /// <summary>
-    /// 是否外部链接（字典 sys_yes_no_type）
+    /// 是否外部链接（字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "is_external", ColumnDescription = "是否外部链接", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsExternal { get; set; } = 0;
@@ -97,17 +97,17 @@ public class TaktMenu : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "external_url", ColumnDescription = "外部链接地址", ColumnDataType = "varchar", Length = 500, IsNullable = false, DefaultValue = "")]
     public string ExternalUrl { get; set; } = string.Empty;
     /// <summary>
-    /// 是否缓存（字典 sys_yes_no_type；前端 keep-alive）
+    /// 是否缓存（字典 sys_yes_no；前端 keep-alive）
     /// </summary>
     [SugarColumn(ColumnName = "is_cached", ColumnDescription = "是否缓存", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsCached { get; set; } = 0;
     /// <summary>
-    /// 是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）
+    /// 是否显示（字典 sys_yes_no；0=隐藏，1=显示）
     /// </summary>
     [SugarColumn(ColumnName = "is_visible", ColumnDescription = "是否显示", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsVisible { get; set; } = 1;
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子菜单为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
@@ -117,12 +117,12 @@ public class TaktMenu : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "menu_description", ColumnDescription = "菜单描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = false, DefaultValue = "")]
     public string MenuDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 排序号（同级菜单排序）
+    /// 排序号（回填）（同级菜单排序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "menu_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int MenuStatus { get; set; } = 1;

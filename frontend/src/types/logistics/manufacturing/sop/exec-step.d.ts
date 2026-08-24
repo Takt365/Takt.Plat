@@ -79,7 +79,7 @@ export interface SopExecStep extends CompanyDtoBase {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+   * 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
    */
   blockNextStep: number;
 
@@ -174,7 +174,7 @@ export interface SopExecStepQuery extends TaktPagedQuery {
   confirmedAtEnd?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+   * 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
    */
   blockNextStep?: number;
 
@@ -268,7 +268,7 @@ export interface SopExecStepCreate {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+   * 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
    */
   blockNextStep: number;
 
@@ -367,7 +367,7 @@ export interface SopExecStepTemplate {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+   * 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
    */
   blockNextStep?: number;
 
@@ -451,7 +451,7 @@ export interface SopExecStepImport {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+   * 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
    */
   blockNextStep?: number;
 
@@ -530,7 +530,7 @@ export interface SopExecStepExport {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+   * 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
    */
   blockNextStep: number;
 

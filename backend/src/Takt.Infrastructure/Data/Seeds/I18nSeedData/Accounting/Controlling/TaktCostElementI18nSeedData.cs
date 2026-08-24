@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostElementI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostElement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,22 +163,22 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costelement.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.costelement.sortorder
-            new TranslationSeedItem("entity.costelement.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.costelement.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.costelement.sortorder
-            new TranslationSeedItem("entity.costelement.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.costelement.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.costelement.sortorder
-            new TranslationSeedItem("entity.costelement.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.costelement.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.costelement.sortorder
-            new TranslationSeedItem("entity.costelement.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.costelement.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "en-US", "成本要素状态_us", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.costelement.status", "en-US", "成本要素状态_us", "成本要素状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "ja-JP", "成本要素状态_jp", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.costelement.status", "ja-JP", "成本要素状态_jp", "成本要素状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "zh-CN", "成本要素状态", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.costelement.status", "zh-CN", "成本要素状态", "成本要素状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "zh-HK", "成本要素状态_hk", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.costelement.status", "zh-HK", "成本要素状态_hk", "成本要素状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

@@ -25,9 +25,9 @@ namespace Takt.Domain.Entities.Accounting.Controlling;
 [SugarIndex("ix_cost_center_parent", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ParentId), OrderByType.Asc, false)]
 public class TaktCostCenter : TaktCompanyEntityBase
 {    /// <summary>
-    /// 成本中心编码（4位，租户+公司内唯一）
+    /// 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "成本中心编码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
+    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "成本中心编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string CostCenterCode { get; set; } = string.Empty;
     /// <summary>
     /// 成本中心名称
@@ -45,22 +45,22 @@ public class TaktCostCenter : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "cost_center_type", ColumnDescription = "成本中心类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CostCenterType { get; set; }
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "manager_id", ColumnDescription = "负责人ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? ManagerId { get; set; }
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
     [SugarColumn(ColumnName = "manager_name", ColumnDescription = "负责人姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ManagerName { get; set; }
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "所属部门ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "所属部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
@@ -80,12 +80,12 @@ public class TaktCostCenter : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "cost_center_status", ColumnDescription = "成本中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CostCenterStatus { get; set; } = 1;

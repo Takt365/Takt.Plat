@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/organization/dept -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：部门实体 代表组织架构中的部门树表管理页（左树懒加载+virtual，右表 list 分页），由 generate-vue-tree-from-api.cjs 自动生成 -->
+<!-- 功能描述：部门实体 代表组织架构中的部门树表管理页（仅 tree API；右表选中后展示子孙），由 generate-vue-tree-from-api.cjs 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -29,7 +29,7 @@
       <TaktTreeLeftToolsBar
         v-model:expanded="treeExpanded"
         :loading="loading"
-        @search="reloadLeftTreeRoots"
+        @search="loadData"
       />
       <TaktTreeRightToolsBar
         create-permission="human:resource:organization:dept:create"
@@ -66,7 +66,7 @@
       />
     </div>
 
-    <!-- 左树右表（大数据：左侧懒加载+virtual，右侧服务端分页） -->
+    <!-- 左树右表：左导航树；右表仅在选中后展示该节点全部子孙树 -->
     <div class="human-resource-organization-dept-tree-table-wrap">
       <TaktTreeLeftTable
         v-model:expanded-keys="treeExpandedKeys"
@@ -77,34 +77,37 @@
         :loading="loading"
         :virtual="true"
         :draggable="true"
-        :load-data="handleLeftTreeLoadData"
+        :accordion="false"
+        :expand-action="false"
+        :load-data="useLazyTree ? handleLeftTreeLoadData : undefined"
         @tree-select="handleTreeSelect"
         @tree-drop="handleTreeDrop"
       />
       <TaktTreeRightTable
         entity-scope="company"
-        v-model:current="tableCurrentPage"
-        v-model:page-size="tablePageSize"
         :columns="columns"
         :visible-column-keys="visibleColumnKeys"
         :id-column-key="'deptId'"
         :action-column-key="'action'"
         table-mode="tree"
-        :data-source="tableDataSource"
+        :data-source="tableFilteredTree"
+        v-model:expanded-row-keys="tableExpandedRowKeys"
+        :load-children="useLazyTree ? handleRightTreeLoadChildren : undefined"
         :loading="listLoading"
         :row-key="getDeptId"
         :stripe="true"
         :row-selection="rowSelection"
-        :show-pagination="true"
-        :total="tableTotal"
         :virtual="true"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
       >
         <!-- 自定义列渲染 -->
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'deptName'">
-            <span>{{ getDeptField(record, 'deptName') }}</span>
+          <template v-if="column.key === 'deptName1'">
+            <span>{{ getDeptField(record, 'deptName1') }}</span>
+          </template>
+          <template v-else-if="column.key === 'deptName2'">
+            <span>{{ getDeptField(record, 'deptName2') }}</span>
           </template>
         <template v-else-if="column.key === 'deptStatus'">
           <a-switch
@@ -116,7 +119,7 @@
           <template v-else-if="column.key === 'isLeaf'">
             <TaktDictTag
               :value="getDeptDictValue(record, 'isLeaf')"
-              dict-type="sys_yes_no_type"
+              dict-type="sys_yes_no"
             />
           </template>
           <template v-else-if="column.key === 'costCategory'">
@@ -128,7 +131,7 @@
           <template v-else-if="column.key === 'isBuiltIn'">
             <TaktDictTag
               :value="getDeptDictValue(record, 'isBuiltIn')"
-              dict-type="sys_yes_no_type"
+              dict-type="sys_yes_no"
             />
           </template>
         </template>
@@ -205,13 +208,24 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="pi.queryLabel('deptName')">
+      <div v-show="isFieldVisible('deptName1')">
+      <a-form-item :label="pi.queryLabel('deptName1')">
         <a-input
-          v-model:value="advancedQueryForm.deptName"
-          :placeholder="pi.queryPh('deptName', 'required')"
+          v-model:value="advancedQueryForm.deptName1"
+          :placeholder="pi.queryPh('deptName1', 'required')"
           show-count
-          :maxlength="100"
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('deptName2')">
+      <a-form-item :label="pi.queryLabel('deptName2')">
+        <a-input
+          v-model:value="advancedQueryForm.deptName2"
+          :placeholder="pi.queryPh('deptName2', 'required')"
+          show-count
+          :maxlength="70"
           allow-clear
         />
       </a-form-item>
@@ -250,7 +264,7 @@
       <a-form-item :label="pi.queryLabel('isLeaf')">
         <TaktSelect
           v-model:value="advancedQueryForm.isLeaf"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isLeaf', 'select')"
           allow-clear
         />
@@ -262,7 +276,7 @@
           v-model:value="advancedQueryForm.isoCode"
           :placeholder="pi.queryPh('isoCode', 'required')"
           show-count
-          :maxlength="3"
+          :maxlength="6"
           allow-clear
         />
       </a-form-item>
@@ -345,7 +359,7 @@
       <a-form-item :label="pi.queryLabel('isBuiltIn')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBuiltIn', 'select')"
           allow-clear
         />
@@ -365,7 +379,7 @@
       <a-form-item :label="pi.queryLabel('deptStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.deptStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('deptStatus', 'select')"
           allow-clear
         />
@@ -475,15 +489,23 @@
 
 <script setup lang="ts">
 /**
- * 部门实体 代表组织架构中的部门树表管理页 · 大数据：左侧懒加载+virtual，右侧 getXxxList 服务端分页（参照 admin-division/index.vue）
+ * 部门实体 代表组织架构中的部门树表管理页 · 左树选中后右表展示该节点+直接子级（更深展开懒加载）；默认右表为空
  * @module views/human-resource/organization/dept
  */
-import { ref, computed, watch, watchEffect, onMounted } from 'vue'
+import { ref, computed, watch, watchEffect, onMounted, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import {
+  filterTaktTreeTableNodes,
+  collectTaktTreeTableExpandableKeys,
+  expandTaktLazyTreeFully,
+  runWithTaktTreeLoadConcurrency,
+  taktTreeExpandedKeysEqual,
+  taktTreeTableNodeKey,
+  type TaktTreeTableNode,
+} from '@/utils/takt-tree-table'
 import { useTableRefresh } from '@/composables/use-table-refresh'
 import {
   mapLazyTreeNodes,
@@ -492,7 +514,7 @@ import {
   type TaktLazyTreeNode,
 } from '@/composables/use-lazy-tree'
 import DeptForm from './components/dept-form.vue'
-import { getDeptList, getDeptTree, getDeptById, createDept, updateDept, deleteDeptById, deleteDeptBatch, getDeptTemplate, importDept, exportDept, updateDeptStatus, updateDeptSort } from '@/api/human-resource/organization/dept'
+import { getDeptTree, getDeptById, createDept, updateDept, deleteDeptById, deleteDeptBatch, getDeptTemplate, importDept, exportDept, updateDeptStatus, updateDeptSort } from '@/api/human-resource/organization/dept'
 import type { Dept, DeptTree, DeptUpdate } from '@/types/human-resource/organization/dept'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -518,37 +540,35 @@ const { t } = useI18n()
 const userStore = useUserStore()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktDept')
-/** 右侧列表快捷查询占位文案 */
+/** 右侧树表快捷查询占位文案 */
 const tableSearchPlaceholder = computed(() =>
   t('common.page.form.placeholder.search', {
-    keyword: [pi.label('deptName'), pi.label('deptCode')].join(' / '),
+    keyword: [pi.label('deptName1'), pi.label('deptCode')].join(' / '),
   })
 )
 
 /** 左侧树关键字（仅过滤已加载节点，不重复请求 API） */
 const treeQueryKeyword = ref('')
-/** 右侧列表快捷查询关键字 */
+/** 右侧树表快捷查询关键字 */
 const queryKeyword = ref('')
 /** 左侧树工具栏「展开/收缩」状态（仅已加载层） */
 const treeExpanded = ref(false)
 /** 左侧树当前展开的节点 key 列表 */
 const treeExpandedKeys = ref<(string | number)[]>([])
-/** 右侧表格展开状态（预留） */
+/** 右侧树表工具栏「全部展开/收缩」 */
 const tableExpanded = ref(false)
-/** 右侧列表当前页码（服务端分页） */
-const tableCurrentPage = ref(getTaktDefaultPageIndex())
-/** 右侧列表每页条数 */
-const tablePageSize = ref(getTaktDefaultPageSize())
+/** 右侧 a-table 树表当前展开行 key */
+const tableExpandedRowKeys = ref<(string | number)[]>([])
+/** 达到阈值后左右树均按 parentId 一层懒加载 */
+const useLazyTree = ref(true)
 /** 左侧树 loading */
 const loading = ref(false)
-/** 右侧列表 loading */
+/** 右侧树 loading */
 const listLoading = ref(false)
-/** 左侧 a-tree 懒加载数据（仅已展开路径） */
+/** 左侧 a-tree 数据（懒加载仅已展开路径；低于阈值时为全量树） */
 const entityTreeData = ref<TaktLazyTreeNode[]>([])
-/** 右侧列表数据源（服务端分页，当前父级直接子节点） */
-const tableDataSource = ref<Dept[]>([])
-/** 右侧列表总行数 */
-const tableTotal = ref(0)
+/** 右侧树表数据源（带 children / _hasChildren，组件内拍平 virtual） */
+const tableTreeData = ref<Record<string, unknown>[]>([])
 /** 左侧树当前选中的节点 key 列表 */
 const selectedTreeKeys = ref<(string | number)[]>([])
 /** 工具栏单选时当前行（编辑/删除） */
@@ -638,10 +658,49 @@ const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'deptId'
 /** 树节点标题字段名（左侧树 title） */
-const treeTitleField = 'deptName'
+const treeTitleField = 'deptName1'
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
+
+/** 右侧查询条件过滤（仅影响表格展示，不重建左侧树） */
+function matchesDeptRightQuery(record: Record<string, unknown>): boolean {
+  const kw = queryKeyword.value.trim()
+  if (kw) {
+    const k = kw.toLowerCase()
+    if (
+      !String(record.deptName1 ?? '').toLowerCase().includes(k)
+      && !String(record.deptName2 ?? '').toLowerCase().includes(k)
+      && !String(record.deptCode ?? '').toLowerCase().includes(k)
+    ) return false
+  }
+  if (advancedQueryForm.value.cultureCode && !String(record.cultureCode ?? '').includes(String(advancedQueryForm.value.cultureCode))) return false
+  if (advancedQueryForm.value.plantCode && !String(record.plantCode ?? '').includes(String(advancedQueryForm.value.plantCode))) return false
+  if (advancedQueryForm.value.deptCode && !String(record.deptCode ?? '').includes(String(advancedQueryForm.value.deptCode))) return false
+  if (advancedQueryForm.value.deptShortName && !String(record.deptShortName ?? '').includes(String(advancedQueryForm.value.deptShortName))) return false
+  if (advancedQueryForm.value.deptName1 && !String(record.deptName1 ?? '').includes(String(advancedQueryForm.value.deptName1))) return false
+  if (advancedQueryForm.value.deptName2 && !String(record.deptName2 ?? '').includes(String(advancedQueryForm.value.deptName2))) return false
+  if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
+  if (advancedQueryForm.value.level !== undefined && record.level !== advancedQueryForm.value.level) return false
+  if (advancedQueryForm.value.deptPath && !String(record.deptPath ?? '').includes(String(advancedQueryForm.value.deptPath))) return false
+  if (advancedQueryForm.value.isLeaf !== undefined && record.isLeaf !== advancedQueryForm.value.isLeaf) return false
+  if (advancedQueryForm.value.isoCode && !String(record.isoCode ?? '').includes(String(advancedQueryForm.value.isoCode))) return false
+  if (advancedQueryForm.value.costCenterCode && !String(record.costCenterCode ?? '').includes(String(advancedQueryForm.value.costCenterCode))) return false
+  if (advancedQueryForm.value.costCategory !== undefined && record.costCategory !== advancedQueryForm.value.costCategory) return false
+  if (advancedQueryForm.value.headUserId && !String(record.headUserId ?? '').includes(String(advancedQueryForm.value.headUserId))) return false
+  if (advancedQueryForm.value.headUserName && !String(record.headUserName ?? '').includes(String(advancedQueryForm.value.headUserName))) return false
+  if (advancedQueryForm.value.phone && !String(record.phone ?? '').includes(String(advancedQueryForm.value.phone))) return false
+  if (advancedQueryForm.value.email && !String(record.email ?? '').includes(String(advancedQueryForm.value.email))) return false
+  if (advancedQueryForm.value.location && !String(record.location ?? '').includes(String(advancedQueryForm.value.location))) return false
+  if (advancedQueryForm.value.isBuiltIn !== undefined && record.isBuiltIn !== advancedQueryForm.value.isBuiltIn) return false
+  if (advancedQueryForm.value.deptDescription && !String(record.deptDescription ?? '').includes(String(advancedQueryForm.value.deptDescription))) return false
+  if (advancedQueryForm.value.deptStatus !== undefined && record.deptStatus !== advancedQueryForm.value.deptStatus) return false
+  if (advancedQueryForm.value.createdAtStart && !String(record.createdAtStart ?? '').includes(String(advancedQueryForm.value.createdAtStart))) return false
+  if (advancedQueryForm.value.createdAtEnd && !String(record.createdAtEnd ?? '').includes(String(advancedQueryForm.value.createdAtEnd))) return false
+  if (advancedQueryForm.value.extField && !String(record.extField ?? '').includes(String(advancedQueryForm.value.extField))) return false
+  if (advancedQueryForm.value.remark && !String(record.remark ?? '').includes(String(advancedQueryForm.value.remark))) return false
+  return true
+}
 
 /**
  * 将树 API 一层 DTO 映射为左侧懒加载节点
@@ -650,8 +709,27 @@ const dictDataStore = useDictDataStore()
 function mapDeptLazyNodes(rows: DeptTree[]): TaktLazyTreeNode[] {
   return mapLazyTreeNodes(rows, {
     getKey: (n) => String(n.deptId ?? ''),
-    getTitle: (n) => String(n.deptName || n.deptCode || n.deptId || ''),
+    getTitle: (n) => String(n.deptName1 || n.deptCode || n.deptId || ''),
     isLeaf: (n) => taktIsLeafFlag((n as { isLeaf?: unknown }).isLeaf),
+  })
+}
+
+/**
+ * 将一层 DTO 映射为右侧树表节点（未加载子级用 _hasChildren 显示展开箭头）
+ * @param rows 一层子节点
+ */
+function mapDeptRightTreeNodes(rows: DeptTree[]): Record<string, unknown>[] {
+  return (rows ?? []).map((row) => {
+    const rec = row as Record<string, unknown>
+    const id = String(rec.deptId ?? '')
+    const rawChildren = Array.isArray(rec.children) ? rec.children as DeptTree[] : []
+    const children = rawChildren.length > 0 ? mapDeptRightTreeNodes(rawChildren) : undefined
+    return {
+      ...rec,
+      key: id,
+      children,
+      _hasChildren: (children != null && children.length > 0) || !taktIsLeafFlag(rec.isLeaf),
+    }
   })
 }
 
@@ -692,109 +770,119 @@ const filteredTreeData = computed(() =>
 )
 
 /**
- * 收集已加载且有子节点的 key（展开全部仅作用于已加载层）
+ * 收集左侧可展开 key（含尚未拉子的非叶子，供工具栏一次展开逐层 loadData）
  * @param nodes 树节点
  */
 function collectTreeExpandableKeys(nodes: Array<Record<string, unknown>>): (string | number)[] {
-  if (!nodes?.length) return []
-  const keys: (string | number)[] = []
-  for (const node of nodes) {
-    const rawKey = node.key ?? node.deptId ?? node.id
-    if (rawKey == null) continue
-    const key: string | number =
-      typeof rawKey === 'string' || typeof rawKey === 'number' ? rawKey : String(rawKey)
-    const children = (node.children as Array<Record<string, unknown>> | undefined) ?? []
-    if (children.length > 0) {
-      keys.push(key)
-      keys.push(...collectTreeExpandableKeys(children))
-    }
-  }
-  return keys
+  return collectTaktTreeTableExpandableKeys(
+    nodes,
+    (node) => taktTreeTableNodeKey(node, 'deptId'),
+    { includeUnloaded: true },
+  )
 }
 
 /**
- * 当前右侧列表的父级 ID（左侧选中；未选中则为根 0）
- * @returns {string} parentId
+ * 展开态下把「当前树中全部可展开节点」写入 expandedKeys（子节点 load 完后会再触发，直至拉齐）
  */
-function getRightListParentId(): string {
+function applyLeftTreeExpandKeys() {
+  const next = collectTreeExpandableKeys(filteredTreeData.value)
+  if (taktTreeExpandedKeysEqual(treeExpandedKeys.value, next)) return
+  treeExpandedKeys.value = next
+}
+
+/**
+ * 当前左侧选中节点 Id；未选中返回 null（右表必须为空）
+ * @returns {string | null} 选中节点 Id
+ */
+function getSelectedTreeNodeId(): string | null {
   const keys = selectedTreeKeys.value
   if (keys.length > 0 && keys[keys.length - 1] != null) {
     return String(keys[keys.length - 1])
   }
-  return '0'
+  return null
+}
+
+/** 从树 API 响应中取出一层节点 */
+function unwrapDeptTree(res: unknown): DeptTree[] {
+  const resAny = res as { data?: DeptTree[]; Data?: DeptTree[] }
+  if (Array.isArray(res)) return res as DeptTree[]
+  return resAny?.data ?? resAny?.Data ?? []
 }
 
 /**
- * 组装右侧列表查询参数（服务端分页）
- * @returns 查询 DTO
+ * 加载右侧树：仅 tree API；未选中则空；选中则该节点 + 直接子级一层（更深靠展开懒加载）
  */
-function buildRightListQuery() {
-  const aq = advancedQueryForm.value
-  return {
-    pageIndex: tableCurrentPage.value,
-    pageSize: tablePageSize.value,
-    parentId: aq.parentId ? aq.parentId : getRightListParentId(),
-    keyWords: queryKeyword.value.trim() || undefined,
-    cultureCode: aq.cultureCode || undefined,
-    plantCode: aq.plantCode || undefined,
-    deptCode: aq.deptCode || undefined,
-    deptShortName: aq.deptShortName || undefined,
-    deptName: aq.deptName || undefined,
-    level: aq.level,
-    deptPath: aq.deptPath || undefined,
-    isLeaf: aq.isLeaf,
-    isoCode: aq.isoCode || undefined,
-    costCenterCode: aq.costCenterCode || undefined,
-    costCategory: aq.costCategory,
-    headUserId: aq.headUserId || undefined,
-    headUserName: aq.headUserName || undefined,
-    phone: aq.phone || undefined,
-    email: aq.email || undefined,
-    location: aq.location || undefined,
-    isBuiltIn: aq.isBuiltIn,
-    deptDescription: aq.deptDescription || undefined,
-    deptStatus: aq.deptStatus,
-    createdAtStart: aq.createdAtStart || undefined,
-    createdAtEnd: aq.createdAtEnd || undefined,
-    extField: aq.extField || undefined,
-    remark: aq.remark || undefined,
+async function loadRightTree() {
+  const selectedId = getSelectedTreeNodeId()
+  if (!selectedId) {
+    tableTreeData.value = []
+    tableExpandedRowKeys.value = []
+    tableExpanded.value = false
+    return
   }
-}
-
-/**
- * 加载右侧列表（服务端分页：当前父级直接子节点）
- */
-async function loadRightList() {
   listLoading.value = true
   try {
-    const res = await getDeptList(buildRightListQuery())
-    const resAny = res as { data?: Dept[]; Data?: Dept[]; items?: Dept[]; total?: number; Total?: number }
-    const items = Array.isArray(res?.data)
-      ? res.data
-      : Array.isArray(resAny?.Data)
-        ? resAny.Data
-        : Array.isArray(resAny?.items)
-          ? resAny.items
-          : []
-    tableDataSource.value = items
-    tableTotal.value = Number(res?.total ?? resAny?.Total ?? items.length) || 0
+    const detail = await getDeptById(selectedId) as Record<string, unknown>
+    const childRows = unwrapDeptTree(await getDeptTree(selectedId, true))
+    const mappedChildren = mapDeptRightTreeNodes(childRows)
+    const children = mappedChildren.length > 0 ? mappedChildren : undefined
+    const root: Record<string, unknown> = {
+      ...detail,
+      key: selectedId,
+      children,
+      _hasChildren: (children?.length ?? 0) > 0 || !taktIsLeafFlag(detail.isLeaf),
+    }
+    tableTreeData.value = [root]
+    // 选中仅加载一层：取消「全部展开」任务；不触发全量子树请求（更深靠行内懒加载 / 工具栏）
+    rightExpandEpoch += 1
+    if (tableExpanded.value) {
+      tableExpanded.value = false
+      await nextTick()
+    }
+    tableExpandedRowKeys.value =
+      (children?.length ?? 0) > 0 || root._hasChildren === true ? [selectedId] : []
   } catch (error: unknown) {
-    logger.error('[Dept] 加载列表失败', undefined, error)
+    logger.error('[Dept] 加载右侧树失败', undefined, error)
     message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
-    tableDataSource.value = []
-    tableTotal.value = 0
+    tableTreeData.value = []
   } finally {
     listLoading.value = false
   }
 }
 
 /**
- * 加载左侧树根节点（parentId=0，一层）
+ * 按父级 Id 拉取并合并右侧一层子节点
+ * @param parentId 父节点 Id
+ */
+async function loadRightChildrenByParentId(parentId: string) {
+  if (!parentId) return
+  const trees = unwrapDeptTree(await getDeptTree(parentId, true))
+  const children = mapDeptRightTreeNodes(trees)
+  tableTreeData.value = mergeLoadedChildren(
+    tableTreeData.value as TaktLazyTreeNode[],
+    parentId,
+    children as TaktLazyTreeNode[],
+    { keyField: 'deptId' },
+  )
+}
+
+/**
+ * 右侧树展开：再拉一层子节点（懒加载，并发受限）
+ * @param record 当前行
+ */
+async function handleRightTreeLoadChildren(record: Record<string, unknown>) {
+  const id = getDeptId(record)
+  if (!id) return
+  await runWithTaktTreeLoadConcurrency(async () => {
+    await loadRightChildrenByParentId(id)
+  })
+}
+
+/**
+ * 加载左侧树根节点（仅 GET tree?parentId=0，一层）
  */
 async function reloadLeftTreeRoots() {
-  const res = await getDeptTree('0', true)
-  const resAny = res as { data?: DeptTree[]; Data?: DeptTree[] }
-  const trees: DeptTree[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
+  const trees = unwrapDeptTree(await getDeptTree('0', true))
   entityTreeData.value = mapDeptLazyNodes(trees)
   treeExpandedKeys.value = []
   treeExpanded.value = false
@@ -809,9 +897,7 @@ async function reloadLeftTreeChildren(parentKey: string) {
     await reloadLeftTreeRoots()
     return
   }
-  const res = await getDeptTree(parentKey, true)
-  const resAny = res as { data?: DeptTree[]; Data?: DeptTree[] }
-  const trees: DeptTree[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
+  const trees = unwrapDeptTree(await getDeptTree(parentKey, true))
   const children = mapDeptLazyNodes(trees)
   entityTreeData.value = mergeLoadedChildren(
     entityTreeData.value,
@@ -821,7 +907,24 @@ async function reloadLeftTreeChildren(parentKey: string) {
 }
 
 /**
- * 左侧树懒加载子节点
+ * 按父级 Id 拉取并合并左侧一层子节点
+ * @param parentId 父节点 Id
+ * @returns {Promise<TaktLazyTreeNode[]>} 子节点
+ */
+async function loadLeftChildrenByParentId(parentId: string): Promise<TaktLazyTreeNode[]> {
+  if (!parentId) return []
+  const trees = unwrapDeptTree(await getDeptTree(parentId, true))
+  const children = mapDeptLazyNodes(trees)
+  entityTreeData.value = mergeLoadedChildren(
+    entityTreeData.value,
+    parentId,
+    children,
+  ) as TaktLazyTreeNode[]
+  return children
+}
+
+/**
+ * 左侧树懒加载子节点（Ant Design loadData；并发受限）
  * @param treeNode Ant Design Tree 节点
  */
 async function handleLeftTreeLoadData(treeNode: Record<string, unknown>) {
@@ -829,17 +932,79 @@ async function handleLeftTreeLoadData(treeNode: Record<string, unknown>) {
   const key = dataRef.key ?? treeNode.key
   if (key == null) return
   if (Array.isArray(dataRef.children) && dataRef.children.length > 0) return
-  const res = await getDeptTree(String(key), true)
-  const resAny = res as { data?: DeptTree[]; Data?: DeptTree[] }
-  const trees: DeptTree[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
-  const children = mapDeptLazyNodes(trees)
-  dataRef.children = children
-  entityTreeData.value = mergeLoadedChildren(
-    entityTreeData.value,
-    String(key),
-    children,
-  ) as TaktLazyTreeNode[]
+  await runWithTaktTreeLoadConcurrency(async () => {
+    dataRef.children = await loadLeftChildrenByParentId(String(key))
+  })
 }
+
+/** 右侧展示树：未选中为空；选中后为该节点+直接子级（仅 tree API） */
+const tableDisplayTree = computed(() => {
+  if (!getSelectedTreeNodeId()) return []
+  return tableTreeData.value
+})
+
+/** 右侧过滤后的树（保留 children，供组件按展开路径拍平） */
+const tableFilteredTree = computed(() =>
+  filterTaktTreeTableNodes(tableDisplayTree.value, matchesDeptRightQuery)
+)
+
+/**
+ * 同步右侧树表 expandable keys（展开态；含未加载非叶子）
+ */
+function applyDeptTableExpandState() {
+  if (!tableExpanded.value) {
+    tableExpandedRowKeys.value = []
+    return
+  }
+  const next = collectTaktTreeTableExpandableKeys(
+    tableFilteredTree.value,
+    (node) => taktTreeTableNodeKey(node, 'deptId'),
+    { includeUnloaded: true },
+  )
+  if (!taktTreeExpandedKeysEqual(tableExpandedRowKeys.value, next)) {
+    tableExpandedRowKeys.value = next
+  }
+}
+
+/** 右侧工具栏展开任务世代 */
+let rightExpandEpoch = 0
+
+/**
+ * 右侧一次全部展开：仅工具栏触发；按层拉齐当前右表子树（选中节点不会自动走此路径）
+ */
+async function expandRightTreeFully() {
+  const epoch = (rightExpandEpoch += 1)
+  await expandTaktLazyTreeFully({
+    getNodes: () => tableFilteredTree.value as TaktTreeTableNode[],
+    getKey: (node) => taktTreeTableNodeKey(node, 'deptId'),
+    setExpandedKeys: (keys) => {
+      if (epoch !== rightExpandEpoch) return
+      if (!taktTreeExpandedKeysEqual(tableExpandedRowKeys.value, keys)) {
+        tableExpandedRowKeys.value = keys
+      }
+    },
+    loadChildren: async (parentId) => {
+      await loadRightChildrenByParentId(parentId)
+    },
+    isActive: () => tableExpanded.value && epoch === rightExpandEpoch,
+  })
+}
+
+/** 右侧工具栏展开/收缩：展开才全量拉齐；选中节点不经过此 watch */
+watch(tableExpanded, async (expanded) => {
+  if (!expanded) {
+    rightExpandEpoch += 1
+    tableExpandedRowKeys.value = []
+    return
+  }
+  await expandRightTreeFully()
+})
+
+watch(tableFilteredTree, () => {
+  if (tableExpanded.value) {
+    applyDeptTableExpandState()
+  }
+})
 
 /**
  * 将详情 DTO 映射为更新载荷（树拖拽改 parentId/sortOrder 等场景）
@@ -859,7 +1024,8 @@ function buildDeptUpdateDto(
     plantCode: dept.plantCode,
     deptCode: dept.deptCode,
     deptShortName: dept.deptShortName,
-    deptName: dept.deptName,
+    deptName1: dept.deptName1,
+    deptName2: dept.deptName2,
     parentId: overrides.parentId,
     isoCode: dept.isoCode,
     costCenterCode: dept.costCenterCode,
@@ -926,44 +1092,54 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
   }
 }
 
+/** 左侧工具栏展开任务世代（收缩或再次展开时作废上一次全量展开） */
+let leftExpandEpoch = 0
+
 /** 左侧树关键字搜索（仅过滤已加载节点） */
 const handleTreeQuerySearch = () => {
   if (treeExpanded.value) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
+    applyLeftTreeExpandKeys()
   }
 }
 
-/** 左侧展开/收缩：仅展开已加载节点 */
-watch(treeExpanded, (expanded) => {
-  if (expanded) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
-  } else {
+/** 左侧工具栏展开/收缩：一次展开主动按层拉齐全部非叶子（不再依赖多次点击） */
+watch(treeExpanded, async (expanded) => {
+  if (!expanded) {
+    leftExpandEpoch += 1
     treeExpandedKeys.value = []
+    return
   }
+  const epoch = (leftExpandEpoch += 1)
+  await nextTick()
+  if (epoch !== leftExpandEpoch || !treeExpanded.value) return
+  await expandTaktLazyTreeFully({
+    getNodes: () => filteredTreeData.value as TaktTreeTableNode[],
+    getKey: (node) => taktTreeTableNodeKey(node, 'deptId'),
+    setExpandedKeys: (keys) => {
+      if (epoch !== leftExpandEpoch) return
+      if (!taktTreeExpandedKeysEqual(treeExpandedKeys.value, keys)) {
+        treeExpandedKeys.value = keys
+      }
+    },
+    loadChildren: async (parentId) => {
+      await loadLeftChildrenByParentId(parentId)
+    },
+    isActive: () => treeExpanded.value && epoch === leftExpandEpoch,
+  })
 })
 
-/** 过滤后的左侧树变化且处于展开态时，同步 expandable keys */
+/** 三角展开 loadData 后：若工具栏仍为展开态，补齐 expandable keys */
 watch(filteredTreeData, () => {
   if (treeExpanded.value) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
+    applyLeftTreeExpandKeys()
   }
 })
 
-/** 左侧树选中：刷新右侧列表（服务端 parentId） */
+/** 左侧树选中：右表展示该节点+直接子级；取消选中则右表清空 */
 const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   selectedTreeKeys.value = selectedKeys
-  const firstPage = getTaktDefaultPageIndex()
-  if (tableCurrentPage.value === firstPage) {
-    void loadRightList()
-  } else {
-    tableCurrentPage.value = firstPage
-  }
+  void loadRightTree()
 }
-
-/** 服务端分页：页码/每页条数变化时重新拉列表 */
-watch([tableCurrentPage, tablePageSize], () => {
-  void loadRightList()
-})
 
 /** 表格行记录（实体 DTO 或 ant-design-vue 模板 loose record） */
 type DeptRowRecord = Dept | Record<string, unknown>
@@ -1043,10 +1219,18 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getDeptField(record, 'deptShortName') ?? ''
   },
   {
-    title: pi.label('deptName'),
-    dataIndex: 'deptName',
-    key: 'deptName',
+    title: pi.label('deptName1'),
+    dataIndex: 'deptName1',
+    key: 'deptName1',
     width: 160,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('deptName2'),
+    dataIndex: 'deptName2',
+    key: 'deptName2',
+    width: 200,
     resizable: true,
     ellipsis: true,
   },
@@ -1221,32 +1405,35 @@ const rowSelection = computed(() => ({
   },
 }))
 
-/** 加载根树 + 右侧列表（初始化 / 租户切换） */
+/** 加载左树：仅 GET …/tree?parentId=0；默认不选中、右表为空（禁止走 list） */
 async function loadData() {
   loading.value = true
   try {
+    useLazyTree.value = true
+    selectedTreeKeys.value = []
+    tableTreeData.value = []
+    tableExpandedRowKeys.value = []
+    tableExpanded.value = false
     await reloadLeftTreeRoots()
-    await loadRightList()
   } catch (error: unknown) {
     logger.error('[Dept] 加载树数据失败', undefined, error)
     message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
     entityTreeData.value = []
-    tableDataSource.value = []
-    tableTotal.value = 0
+    tableTreeData.value = []
   } finally {
     loading.value = false
   }
 }
 
 /**
- * CRUD / 状态变更后局部刷新：当前父级子节点 + 右侧列表
+ * CRUD / 状态变更后：刷新左树当前层 + 按选中重载右表（仅 tree）
  */
 async function refreshAfterMutation() {
   loading.value = true
   try {
-    const parentKey = getRightListParentId()
-    await reloadLeftTreeChildren(parentKey)
-    await loadRightList()
+    const selectedId = getSelectedTreeNodeId()
+    await reloadLeftTreeChildren(selectedId ?? '0')
+    await loadRightTree()
   } catch (error: unknown) {
     logger.error('[Dept] 刷新失败', undefined, error)
     message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
@@ -1255,26 +1442,13 @@ async function refreshAfterMutation() {
   }
 }
 
-/** 右侧查询（服务端） */
-const handleSearch = () => {
-  const firstPage = getTaktDefaultPageIndex()
-  if (tableCurrentPage.value === firstPage) {
-    void loadRightList()
-  } else {
-    tableCurrentPage.value = firstPage
-  }
-}
+/** 右侧查询（客户端过滤已加载树节点） */
+const handleSearch = () => {}
 
-/** 右侧重置并重新查询 */
+/** 右侧重置（客户端过滤，不重建树） */
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
-  const firstPage = getTaktDefaultPageIndex()
-  if (tableCurrentPage.value === firstPage) {
-    void loadRightList()
-  } else {
-    tableCurrentPage.value = firstPage
-  }
 }
 
 
@@ -1462,15 +1636,9 @@ function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
-/** 高级查询提交：关闭抽屉并重新拉右侧列表 */
+/** 高级查询提交：关闭抽屉，客户端过滤右侧树 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  const firstPage = getTaktDefaultPageIndex()
-  if (tableCurrentPage.value === firstPage) {
-    void loadRightList()
-  } else {
-    tableCurrentPage.value = firstPage
-  }
 }
 
 /** 重置高级查询表单（不自动查询） */
@@ -1498,14 +1666,13 @@ function handleRefresh() {
   void loadData()
 }
 
-/** 表格 change / 列宽拖拽占位（树表分页在 TaktTreeRightTable 内） */
+/** 表格 change / 列宽拖拽占位 */
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉树+列表 */
-onMounted(async () => {
-  await ensureTaktPaginationConfigAsync()
+/** 页面挂载：仅拉左树根（tree API）；右表待选中 */
+onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
   void loadData()
 })

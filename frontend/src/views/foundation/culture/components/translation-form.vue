@@ -21,23 +21,11 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('relatedPlant')"
-                name="relatedPlant"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('relatedPlant')"
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('i18nKey')"
@@ -105,6 +93,30 @@
           </a-row>
         </div>
       </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
     </a-tabs>
   </a-form>
 </template>
@@ -125,15 +137,30 @@ const pi = useTranslationI18n()
 import type { TranslationCreate } from '@/types/foundation/translation'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+
+/**
+ * 上下文隔离字段：仅租户（TaktTenantCoreEntityBase，无工厂/无语言隔离）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["relatedPlant","i18nKey","translationText","resourceGroup","resourceType","contextNote"]
+const formFields = ["tenantCode","i18nKey","translationText","resourceGroup","resourceType","contextNote"]
 
 
 
@@ -144,12 +171,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（回填 cultureId；翻译为 TenantCore，无工厂隔离） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -177,6 +207,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -185,21 +216,25 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => tenantStore.tenantCode,
+  () => {
+    if (!props.formData?.translationId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  relatedPlant: [
-    {
-      required: true,
-      message: pi.ph('relatedPlant'),
-      trigger: 'change'
-    }
-  ],
   i18nKey: [
     {
       required: true,
@@ -236,11 +271,24 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 cultureId） */
+/** 映射为 Create/Update DTO（外键 cultureId；租户由上下文注入） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (props.formData?.translationId) {
+    payload.translationId = props.formData.translationId
+  }
   payload.cultureId = props.masterId
+  payload.tenantCode = tenantStore.tenantCode
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCode != null && masterCode !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCode
+    }
+  }
+  delete payload.relatedPlant
+  delete payload.plantCode
   return payload
 }
 
@@ -251,6 +299,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.translationId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

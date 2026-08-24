@@ -74,13 +74,13 @@
         <template v-else-if="column.key === 'messageGroup'">
           <TaktDictTag
             :value="getMessageField(record, 'messageGroup')"
-            dict-type="sys_message_group_category"
+            dict-type="sys_message_group"
           />
         </template>
         <template v-else-if="column.key === 'isCc'">
           <TaktDictTag
             :value="getMessageField(record, 'isCc')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'readStatus'">
@@ -132,19 +132,19 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('fromUserName')">
-      <a-form-item :label="t('entity.message.fromusername')">
+      <a-form-item :label="t('entity.message.fromUserName')">
         <a-input
           v-model:value="advancedQueryForm.fromUserName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromusername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromUserName') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('toUserName')">
-      <a-form-item :label="t('entity.message.tousername')">
+      <a-form-item :label="t('entity.message.toUserName')">
         <a-input
           v-model:value="advancedQueryForm.toUserName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.tousername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.toUserName') })"
           allow-clear
         />
       </a-form-item>
@@ -163,7 +163,7 @@
       <a-form-item :label="t('entity.message.group')">
         <TaktSelect
           v-model:value="advancedQueryForm.messageGroup"
-          dict-type="sys_message_group_category"
+          dict-type="sys_message_group"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.group') })"
           allow-clear
         />
@@ -397,8 +397,8 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'fromUserName', label: t('entity.message.fromusername') },
-  { key: 'toUserName', label: t('entity.message.tousername') },
+  { key: 'fromUserName', label: t('entity.message.fromUserName') },
+  { key: 'toUserName', label: t('entity.message.toUserName') },
   { key: 'messageType', label: t('entity.message.type') },
   { key: 'messageGroup', label: t('entity.message.group') },
   { key: 'messageTitle', label: t('entity.message.title') },
@@ -461,7 +461,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMessageField(record, 'messageId') ?? ''
   },
   {
-    title: t('entity.message.fromusername'),
+    title: t('entity.message.fromUserName'),
     dataIndex: 'fromUserName',
     key: 'fromUserName',
     width: 120,
@@ -470,7 +470,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMessageField(record, 'fromUserName') ?? ''
   },
   {
-    title: t('entity.message.tousername'),
+    title: t('entity.message.toUserName'),
     dataIndex: 'toUserName',
     key: 'toUserName',
     width: 120,

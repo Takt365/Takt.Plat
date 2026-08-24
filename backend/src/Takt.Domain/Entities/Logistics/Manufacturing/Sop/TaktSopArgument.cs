@@ -59,7 +59,7 @@ public class TaktSopArgument : TaktCompanyEntityBase
     public decimal ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否超差（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_out_of_range", ColumnDescription = "是否超差", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsOutOfRange { get; set; } = 0;

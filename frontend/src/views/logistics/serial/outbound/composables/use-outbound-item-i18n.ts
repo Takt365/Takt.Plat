@@ -27,22 +27,40 @@ export const SERIALOUTBOUNDITEM_LIST_FIELDS = [
   'referenceInboundId',
   'referenceInboundCode',
   'referenceInboundLineNumber',
-  'outbound',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const SERIALOUTBOUNDITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'outboundId',
+  'outboundCode',
+  'lineNumber',
+  'outboundSerialCode',
+  'referenceInboundId',
+  'referenceInboundCode',
+  'referenceInboundLineNumber',
+  'isObsolete',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const SERIALOUTBOUNDITEM_SUMMARY_SUM_FIELDS = [
+  'referenceInboundLineNumber',
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SERIALOUTBOUNDITEM_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  outboundId: 'select',
-  outboundCode: 'required',
+  cultureCode: 'optional',
+  outboundCode: 'optional',
   lineNumber: 'select',
   outboundSerialCode: 'required',
   referenceInboundId: 'select',
   referenceInboundCode: 'select',
   referenceInboundLineNumber: 'select',
-  extField: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -50,7 +68,6 @@ export type SerialOutboundItemField = keyof typeof SERIALOUTBOUNDITEM_PLACEHOLDE
 
 /** 高级查询可 trim 的字符串字段 */
 export const SERIALOUTBOUNDITEM_QUERY_STRING_FIELDS = [
-  'outboundId',
   'outboundCode',
   'outboundSerialCode',
   'referenceInboundId',
@@ -63,13 +80,14 @@ export const SERIALOUTBOUNDITEM_QUERY_STRING_FIELDS = [
 
 export type SerialOutboundItemQueryField =
   | (typeof SERIALOUTBOUNDITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'referenceInboundLineNumber'
+  | 'lineNumber' | 'referenceInboundLineNumber' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SERIALOUTBOUNDITEM_QUERY_FIELDS: readonly SerialOutboundItemQueryField[] = [
   ...SERIALOUTBOUNDITEM_QUERY_STRING_FIELDS,
   'lineNumber',
   'referenceInboundLineNumber',
+  'isObsolete',
 ]
 
 /**

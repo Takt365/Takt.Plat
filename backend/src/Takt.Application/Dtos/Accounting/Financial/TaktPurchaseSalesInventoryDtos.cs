@@ -137,7 +137,7 @@ public class TaktPurchaseSalesInventoryDto : TaktCompanyDtoBase
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -279,7 +279,7 @@ public class TaktPurchaseSalesInventoryQueryDto : TaktPagedQuery
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -529,7 +529,7 @@ public class TaktPurchaseSalesInventorySortDto
     public long PurchaseSalesInventoryId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -951,7 +951,7 @@ public class TaktPurchaseSalesInventoryExportDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

@@ -263,12 +263,12 @@ public class TaktPlant : TaktTenantCultureEntityBase
     [SugarColumn(ColumnName = "related_company", ColumnDescription = "关联公司", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string RelatedCompany { get; set; } = string.Empty;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "plant_status", ColumnDescription = "工厂状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PlantStatus { get; set; } = 1;

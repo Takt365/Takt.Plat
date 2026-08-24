@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktDictI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典项国际化翻译种子（dict.* 键，与 TaktDictDataSeedData I18nKey 对齐）
 // 
@@ -7520,23 +7520,23 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.mds.product.category.pad
             ("dict.logistics.mds.product.category.pad", "zh-HK", "PAD_hk", "销售预测产品类别.PAD"),
 
-            // dict.logistics.inventory.provision.scope.item
-            ("dict.logistics.inventory.provision.scope.item", "en-US", "按单个存货项目_us", "存货跌价计提范围.按单个存货项目"),
-            // dict.logistics.inventory.provision.scope.item
-            ("dict.logistics.inventory.provision.scope.item", "ja-JP", "按单个存货项目_jp", "存货跌价计提范围.按单个存货项目"),
-            // dict.logistics.inventory.provision.scope.item
-            ("dict.logistics.inventory.provision.scope.item", "zh-CN", "按单个存货项目", "存货跌价计提范围.按单个存货项目"),
-            // dict.logistics.inventory.provision.scope.item
-            ("dict.logistics.inventory.provision.scope.item", "zh-HK", "按单个存货项目_hk", "存货跌价计提范围.按单个存货项目"),
+            // dict.logistics.inventory.reserve.scope.item
+            ("dict.logistics.inventory.reserve.scope.item", "en-US", "按单个存货项目_us", "存货跌价计提范围.按单个存货项目"),
+            // dict.logistics.inventory.reserve.scope.item
+            ("dict.logistics.inventory.reserve.scope.item", "ja-JP", "按单个存货项目_jp", "存货跌价计提范围.按单个存货项目"),
+            // dict.logistics.inventory.reserve.scope.item
+            ("dict.logistics.inventory.reserve.scope.item", "zh-CN", "按单个存货项目", "存货跌价计提范围.按单个存货项目"),
+            // dict.logistics.inventory.reserve.scope.item
+            ("dict.logistics.inventory.reserve.scope.item", "zh-HK", "按单个存货项目_hk", "存货跌价计提范围.按单个存货项目"),
 
-            // dict.logistics.inventory.provision.scope.category
-            ("dict.logistics.inventory.provision.scope.category", "en-US", "按存货类别_us", "存货跌价计提范围.按存货类别"),
-            // dict.logistics.inventory.provision.scope.category
-            ("dict.logistics.inventory.provision.scope.category", "ja-JP", "按存货类别_jp", "存货跌价计提范围.按存货类别"),
-            // dict.logistics.inventory.provision.scope.category
-            ("dict.logistics.inventory.provision.scope.category", "zh-CN", "按存货类别", "存货跌价计提范围.按存货类别"),
-            // dict.logistics.inventory.provision.scope.category
-            ("dict.logistics.inventory.provision.scope.category", "zh-HK", "按存货类别_hk", "存货跌价计提范围.按存货类别"),
+            // dict.logistics.inventory.reserve.scope.category
+            ("dict.logistics.inventory.reserve.scope.category", "en-US", "按存货类别_us", "存货跌价计提范围.按存货类别"),
+            // dict.logistics.inventory.reserve.scope.category
+            ("dict.logistics.inventory.reserve.scope.category", "ja-JP", "按存货类别_jp", "存货跌价计提范围.按存货类别"),
+            // dict.logistics.inventory.reserve.scope.category
+            ("dict.logistics.inventory.reserve.scope.category", "zh-CN", "按存货类别", "存货跌价计提范围.按存货类别"),
+            // dict.logistics.inventory.reserve.scope.category
+            ("dict.logistics.inventory.reserve.scope.category", "zh-HK", "按存货类别_hk", "存货跌价计提范围.按存货类别"),
 
             // dict.logistics.inbound.type.0
             ("dict.logistics.inbound.type.0", "en-US", "采购入库_us", "入库类型.采购入库"),
@@ -18501,13 +18501,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.flow.status.1", "zh-HK", "已完成_hk", "流程状态.已完成"),
 
             // dict.sys.flow.status.2
-            ("dict.sys.flow.status.2", "en-US", "已终止_us", "流程状态.已终止"),
+            ("dict.sys.flow.status.2", "en-US", "已驳回_us", "流程状态.已驳回"),
             // dict.sys.flow.status.2
-            ("dict.sys.flow.status.2", "ja-JP", "已终止_jp", "流程状态.已终止"),
+            ("dict.sys.flow.status.2", "ja-JP", "已驳回_jp", "流程状态.已驳回"),
             // dict.sys.flow.status.2
-            ("dict.sys.flow.status.2", "zh-CN", "已终止", "流程状态.已终止"),
+            ("dict.sys.flow.status.2", "zh-CN", "已驳回", "流程状态.已驳回"),
             // dict.sys.flow.status.2
-            ("dict.sys.flow.status.2", "zh-HK", "已终止_hk", "流程状态.已终止"),
+            ("dict.sys.flow.status.2", "zh-HK", "已驳回_hk", "流程状态.已驳回"),
 
             // dict.sys.flow.status.3
             ("dict.sys.flow.status.3", "en-US", "已挂起_us", "流程状态.已挂起"),
@@ -18519,13 +18519,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.flow.status.3", "zh-HK", "已挂起_hk", "流程状态.已挂起"),
 
             // dict.sys.flow.status.4
-            ("dict.sys.flow.status.4", "en-US", "已撤回_us", "流程状态.已撤回"),
+            ("dict.sys.flow.status.4", "en-US", "已终止_us", "流程状态.已终止"),
             // dict.sys.flow.status.4
-            ("dict.sys.flow.status.4", "ja-JP", "已撤回_jp", "流程状态.已撤回"),
+            ("dict.sys.flow.status.4", "ja-JP", "已终止_jp", "流程状态.已终止"),
             // dict.sys.flow.status.4
-            ("dict.sys.flow.status.4", "zh-CN", "已撤回", "流程状态.已撤回"),
+            ("dict.sys.flow.status.4", "zh-CN", "已终止", "流程状态.已终止"),
             // dict.sys.flow.status.4
-            ("dict.sys.flow.status.4", "zh-HK", "已撤回_hk", "流程状态.已撤回"),
+            ("dict.sys.flow.status.4", "zh-HK", "已终止_hk", "流程状态.已终止"),
 
             // dict.sys.flow.status.5
             ("dict.sys.flow.status.5", "en-US", "草稿_us", "流程状态.草稿"),
@@ -18535,6 +18535,240 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.flow.status.5", "zh-CN", "草稿", "流程状态.草稿"),
             // dict.sys.flow.status.5
             ("dict.sys.flow.status.5", "zh-HK", "草稿_hk", "流程状态.草稿"),
+
+            // dict.sys.flow.add.sign.type.sequential
+            ("dict.sys.flow.add.sign.type.sequential", "en-US", "顺序加签_us", "加签方式.顺序加签"),
+            // dict.sys.flow.add.sign.type.sequential
+            ("dict.sys.flow.add.sign.type.sequential", "ja-JP", "顺序加签_jp", "加签方式.顺序加签"),
+            // dict.sys.flow.add.sign.type.sequential
+            ("dict.sys.flow.add.sign.type.sequential", "zh-CN", "顺序加签", "加签方式.顺序加签"),
+            // dict.sys.flow.add.sign.type.sequential
+            ("dict.sys.flow.add.sign.type.sequential", "zh-HK", "顺序加签_hk", "加签方式.顺序加签"),
+
+            // dict.sys.flow.add.sign.type.all
+            ("dict.sys.flow.add.sign.type.all", "en-US", "会签加签_us", "加签方式.会签加签"),
+            // dict.sys.flow.add.sign.type.all
+            ("dict.sys.flow.add.sign.type.all", "ja-JP", "会签加签_jp", "加签方式.会签加签"),
+            // dict.sys.flow.add.sign.type.all
+            ("dict.sys.flow.add.sign.type.all", "zh-CN", "会签加签", "加签方式.会签加签"),
+            // dict.sys.flow.add.sign.type.all
+            ("dict.sys.flow.add.sign.type.all", "zh-HK", "会签加签_hk", "加签方式.会签加签"),
+
+            // dict.sys.flow.add.sign.type.one
+            ("dict.sys.flow.add.sign.type.one", "en-US", "或签加签_us", "加签方式.或签加签"),
+            // dict.sys.flow.add.sign.type.one
+            ("dict.sys.flow.add.sign.type.one", "ja-JP", "或签加签_jp", "加签方式.或签加签"),
+            // dict.sys.flow.add.sign.type.one
+            ("dict.sys.flow.add.sign.type.one", "zh-CN", "或签加签", "加签方式.或签加签"),
+            // dict.sys.flow.add.sign.type.one
+            ("dict.sys.flow.add.sign.type.one", "zh-HK", "或签加签_hk", "加签方式.或签加签"),
+
+            // dict.sys.flow.suspension.state.1
+            ("dict.sys.flow.suspension.state.1", "en-US", "激活_us", "流程定义挂起状态.激活"),
+            // dict.sys.flow.suspension.state.1
+            ("dict.sys.flow.suspension.state.1", "ja-JP", "激活_jp", "流程定义挂起状态.激活"),
+            // dict.sys.flow.suspension.state.1
+            ("dict.sys.flow.suspension.state.1", "zh-CN", "激活", "流程定义挂起状态.激活"),
+            // dict.sys.flow.suspension.state.1
+            ("dict.sys.flow.suspension.state.1", "zh-HK", "激活_hk", "流程定义挂起状态.激活"),
+
+            // dict.sys.flow.suspension.state.2
+            ("dict.sys.flow.suspension.state.2", "en-US", "挂起_us", "流程定义挂起状态.挂起"),
+            // dict.sys.flow.suspension.state.2
+            ("dict.sys.flow.suspension.state.2", "ja-JP", "挂起_jp", "流程定义挂起状态.挂起"),
+            // dict.sys.flow.suspension.state.2
+            ("dict.sys.flow.suspension.state.2", "zh-CN", "挂起", "流程定义挂起状态.挂起"),
+            // dict.sys.flow.suspension.state.2
+            ("dict.sys.flow.suspension.state.2", "zh-HK", "挂起_hk", "流程定义挂起状态.挂起"),
+
+            // dict.sys.flow.task.status.0
+            ("dict.sys.flow.task.status.0", "en-US", "待办_us", "流程任务状态.待办"),
+            // dict.sys.flow.task.status.0
+            ("dict.sys.flow.task.status.0", "ja-JP", "待办_jp", "流程任务状态.待办"),
+            // dict.sys.flow.task.status.0
+            ("dict.sys.flow.task.status.0", "zh-CN", "待办", "流程任务状态.待办"),
+            // dict.sys.flow.task.status.0
+            ("dict.sys.flow.task.status.0", "zh-HK", "待办_hk", "流程任务状态.待办"),
+
+            // dict.sys.flow.task.status.1
+            ("dict.sys.flow.task.status.1", "en-US", "已完成_us", "流程任务状态.已完成"),
+            // dict.sys.flow.task.status.1
+            ("dict.sys.flow.task.status.1", "ja-JP", "已完成_jp", "流程任务状态.已完成"),
+            // dict.sys.flow.task.status.1
+            ("dict.sys.flow.task.status.1", "zh-CN", "已完成", "流程任务状态.已完成"),
+            // dict.sys.flow.task.status.1
+            ("dict.sys.flow.task.status.1", "zh-HK", "已完成_hk", "流程任务状态.已完成"),
+
+            // dict.sys.flow.task.status.2
+            ("dict.sys.flow.task.status.2", "en-US", "已取消_us", "流程任务状态.已取消"),
+            // dict.sys.flow.task.status.2
+            ("dict.sys.flow.task.status.2", "ja-JP", "已取消_jp", "流程任务状态.已取消"),
+            // dict.sys.flow.task.status.2
+            ("dict.sys.flow.task.status.2", "zh-CN", "已取消", "流程任务状态.已取消"),
+            // dict.sys.flow.task.status.2
+            ("dict.sys.flow.task.status.2", "zh-HK", "已取消_hk", "流程任务状态.已取消"),
+
+            // dict.sys.flow.sign.type.1
+            ("dict.sys.flow.sign.type.1", "en-US", "或签_us", "会签类型.或签"),
+            // dict.sys.flow.sign.type.1
+            ("dict.sys.flow.sign.type.1", "ja-JP", "或签_jp", "会签类型.或签"),
+            // dict.sys.flow.sign.type.1
+            ("dict.sys.flow.sign.type.1", "zh-CN", "或签", "会签类型.或签"),
+            // dict.sys.flow.sign.type.1
+            ("dict.sys.flow.sign.type.1", "zh-HK", "或签_hk", "会签类型.或签"),
+
+            // dict.sys.flow.sign.type.2
+            ("dict.sys.flow.sign.type.2", "en-US", "会签_us", "会签类型.会签"),
+            // dict.sys.flow.sign.type.2
+            ("dict.sys.flow.sign.type.2", "ja-JP", "会签_jp", "会签类型.会签"),
+            // dict.sys.flow.sign.type.2
+            ("dict.sys.flow.sign.type.2", "zh-CN", "会签", "会签类型.会签"),
+            // dict.sys.flow.sign.type.2
+            ("dict.sys.flow.sign.type.2", "zh-HK", "会签_hk", "会签类型.会签"),
+
+            // dict.sys.flow.action.type.0
+            ("dict.sys.flow.action.type.0", "en-US", "发起_us", "流程动作类型.发起"),
+            // dict.sys.flow.action.type.0
+            ("dict.sys.flow.action.type.0", "ja-JP", "发起_jp", "流程动作类型.发起"),
+            // dict.sys.flow.action.type.0
+            ("dict.sys.flow.action.type.0", "zh-CN", "发起", "流程动作类型.发起"),
+            // dict.sys.flow.action.type.0
+            ("dict.sys.flow.action.type.0", "zh-HK", "发起_hk", "流程动作类型.发起"),
+
+            // dict.sys.flow.action.type.1
+            ("dict.sys.flow.action.type.1", "en-US", "通过_us", "流程动作类型.通过"),
+            // dict.sys.flow.action.type.1
+            ("dict.sys.flow.action.type.1", "ja-JP", "通过_jp", "流程动作类型.通过"),
+            // dict.sys.flow.action.type.1
+            ("dict.sys.flow.action.type.1", "zh-CN", "通过", "流程动作类型.通过"),
+            // dict.sys.flow.action.type.1
+            ("dict.sys.flow.action.type.1", "zh-HK", "通过_hk", "流程动作类型.通过"),
+
+            // dict.sys.flow.action.type.2
+            ("dict.sys.flow.action.type.2", "en-US", "驳回_us", "流程动作类型.驳回"),
+            // dict.sys.flow.action.type.2
+            ("dict.sys.flow.action.type.2", "ja-JP", "驳回_jp", "流程动作类型.驳回"),
+            // dict.sys.flow.action.type.2
+            ("dict.sys.flow.action.type.2", "zh-CN", "驳回", "流程动作类型.驳回"),
+            // dict.sys.flow.action.type.2
+            ("dict.sys.flow.action.type.2", "zh-HK", "驳回_hk", "流程动作类型.驳回"),
+
+            // dict.sys.flow.action.type.3
+            ("dict.sys.flow.action.type.3", "en-US", "撤回_us", "流程动作类型.撤回"),
+            // dict.sys.flow.action.type.3
+            ("dict.sys.flow.action.type.3", "ja-JP", "撤回_jp", "流程动作类型.撤回"),
+            // dict.sys.flow.action.type.3
+            ("dict.sys.flow.action.type.3", "zh-CN", "撤回", "流程动作类型.撤回"),
+            // dict.sys.flow.action.type.3
+            ("dict.sys.flow.action.type.3", "zh-HK", "撤回_hk", "流程动作类型.撤回"),
+
+            // dict.sys.flow.action.type.4
+            ("dict.sys.flow.action.type.4", "en-US", "转办_us", "流程动作类型.转办"),
+            // dict.sys.flow.action.type.4
+            ("dict.sys.flow.action.type.4", "ja-JP", "转办_jp", "流程动作类型.转办"),
+            // dict.sys.flow.action.type.4
+            ("dict.sys.flow.action.type.4", "zh-CN", "转办", "流程动作类型.转办"),
+            // dict.sys.flow.action.type.4
+            ("dict.sys.flow.action.type.4", "zh-HK", "转办_hk", "流程动作类型.转办"),
+
+            // dict.sys.flow.action.type.5
+            ("dict.sys.flow.action.type.5", "en-US", "加签_us", "流程动作类型.加签"),
+            // dict.sys.flow.action.type.5
+            ("dict.sys.flow.action.type.5", "ja-JP", "加签_jp", "流程动作类型.加签"),
+            // dict.sys.flow.action.type.5
+            ("dict.sys.flow.action.type.5", "zh-CN", "加签", "流程动作类型.加签"),
+            // dict.sys.flow.action.type.5
+            ("dict.sys.flow.action.type.5", "zh-HK", "加签_hk", "流程动作类型.加签"),
+
+            // dict.sys.flow.action.type.6
+            ("dict.sys.flow.action.type.6", "en-US", "减签_us", "流程动作类型.减签"),
+            // dict.sys.flow.action.type.6
+            ("dict.sys.flow.action.type.6", "ja-JP", "减签_jp", "流程动作类型.减签"),
+            // dict.sys.flow.action.type.6
+            ("dict.sys.flow.action.type.6", "zh-CN", "减签", "流程动作类型.减签"),
+            // dict.sys.flow.action.type.6
+            ("dict.sys.flow.action.type.6", "zh-HK", "减签_hk", "流程动作类型.减签"),
+
+            // dict.sys.flow.action.type.7
+            ("dict.sys.flow.action.type.7", "en-US", "挂起_us", "流程动作类型.挂起"),
+            // dict.sys.flow.action.type.7
+            ("dict.sys.flow.action.type.7", "ja-JP", "挂起_jp", "流程动作类型.挂起"),
+            // dict.sys.flow.action.type.7
+            ("dict.sys.flow.action.type.7", "zh-CN", "挂起", "流程动作类型.挂起"),
+            // dict.sys.flow.action.type.7
+            ("dict.sys.flow.action.type.7", "zh-HK", "挂起_hk", "流程动作类型.挂起"),
+
+            // dict.sys.flow.action.type.8
+            ("dict.sys.flow.action.type.8", "en-US", "恢复_us", "流程动作类型.恢复"),
+            // dict.sys.flow.action.type.8
+            ("dict.sys.flow.action.type.8", "ja-JP", "恢复_jp", "流程动作类型.恢复"),
+            // dict.sys.flow.action.type.8
+            ("dict.sys.flow.action.type.8", "zh-CN", "恢复", "流程动作类型.恢复"),
+            // dict.sys.flow.action.type.8
+            ("dict.sys.flow.action.type.8", "zh-HK", "恢复_hk", "流程动作类型.恢复"),
+
+            // dict.sys.flow.action.type.9
+            ("dict.sys.flow.action.type.9", "en-US", "终止_us", "流程动作类型.终止"),
+            // dict.sys.flow.action.type.9
+            ("dict.sys.flow.action.type.9", "ja-JP", "终止_jp", "流程动作类型.终止"),
+            // dict.sys.flow.action.type.9
+            ("dict.sys.flow.action.type.9", "zh-CN", "终止", "流程动作类型.终止"),
+            // dict.sys.flow.action.type.9
+            ("dict.sys.flow.action.type.9", "zh-HK", "终止_hk", "流程动作类型.终止"),
+
+            // dict.sys.flow.action.type.10
+            ("dict.sys.flow.action.type.10", "en-US", "抄送_us", "流程动作类型.抄送"),
+            // dict.sys.flow.action.type.10
+            ("dict.sys.flow.action.type.10", "ja-JP", "抄送_jp", "流程动作类型.抄送"),
+            // dict.sys.flow.action.type.10
+            ("dict.sys.flow.action.type.10", "zh-CN", "抄送", "流程动作类型.抄送"),
+            // dict.sys.flow.action.type.10
+            ("dict.sys.flow.action.type.10", "zh-HK", "抄送_hk", "流程动作类型.抄送"),
+
+            // dict.sys.flow.variable.type.0
+            ("dict.sys.flow.variable.type.0", "en-US", "字符串_us", "流程变量类型.字符串"),
+            // dict.sys.flow.variable.type.0
+            ("dict.sys.flow.variable.type.0", "ja-JP", "字符串_jp", "流程变量类型.字符串"),
+            // dict.sys.flow.variable.type.0
+            ("dict.sys.flow.variable.type.0", "zh-CN", "字符串", "流程变量类型.字符串"),
+            // dict.sys.flow.variable.type.0
+            ("dict.sys.flow.variable.type.0", "zh-HK", "字符串_hk", "流程变量类型.字符串"),
+
+            // dict.sys.flow.variable.type.1
+            ("dict.sys.flow.variable.type.1", "en-US", "长整型_us", "流程变量类型.长整型"),
+            // dict.sys.flow.variable.type.1
+            ("dict.sys.flow.variable.type.1", "ja-JP", "长整型_jp", "流程变量类型.长整型"),
+            // dict.sys.flow.variable.type.1
+            ("dict.sys.flow.variable.type.1", "zh-CN", "长整型", "流程变量类型.长整型"),
+            // dict.sys.flow.variable.type.1
+            ("dict.sys.flow.variable.type.1", "zh-HK", "长整型_hk", "流程变量类型.长整型"),
+
+            // dict.sys.flow.variable.type.2
+            ("dict.sys.flow.variable.type.2", "en-US", "双精度_us", "流程变量类型.双精度"),
+            // dict.sys.flow.variable.type.2
+            ("dict.sys.flow.variable.type.2", "ja-JP", "双精度_jp", "流程变量类型.双精度"),
+            // dict.sys.flow.variable.type.2
+            ("dict.sys.flow.variable.type.2", "zh-CN", "双精度", "流程变量类型.双精度"),
+            // dict.sys.flow.variable.type.2
+            ("dict.sys.flow.variable.type.2", "zh-HK", "双精度_hk", "流程变量类型.双精度"),
+
+            // dict.sys.flow.variable.type.3
+            ("dict.sys.flow.variable.type.3", "en-US", "布尔_us", "流程变量类型.布尔"),
+            // dict.sys.flow.variable.type.3
+            ("dict.sys.flow.variable.type.3", "ja-JP", "布尔_jp", "流程变量类型.布尔"),
+            // dict.sys.flow.variable.type.3
+            ("dict.sys.flow.variable.type.3", "zh-CN", "布尔", "流程变量类型.布尔"),
+            // dict.sys.flow.variable.type.3
+            ("dict.sys.flow.variable.type.3", "zh-HK", "布尔_hk", "流程变量类型.布尔"),
+
+            // dict.sys.flow.variable.type.4
+            ("dict.sys.flow.variable.type.4", "en-US", "JSON_us", "流程变量类型.JSON"),
+            // dict.sys.flow.variable.type.4
+            ("dict.sys.flow.variable.type.4", "ja-JP", "JSON_jp", "流程变量类型.JSON"),
+            // dict.sys.flow.variable.type.4
+            ("dict.sys.flow.variable.type.4", "zh-CN", "JSON", "流程变量类型.JSON"),
+            // dict.sys.flow.variable.type.4
+            ("dict.sys.flow.variable.type.4", "zh-HK", "JSON_hk", "流程变量类型.JSON"),
 
             // dict.sys.form.category.0
             ("dict.sys.form.category.0", "en-US", "通用表单_us", "表单分类.通用表单"),
@@ -20498,41 +20732,32 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.priority.level.category.4
             ("dict.sys.priority.level.category.4", "zh-HK", "低_hk", "优先级.低"),
 
-            // dict.sys.publish.scope.type.0
-            ("dict.sys.publish.scope.type.0", "en-US", "全部_us", "发布范围.全部"),
-            // dict.sys.publish.scope.type.0
-            ("dict.sys.publish.scope.type.0", "ja-JP", "全部_jp", "发布范围.全部"),
-            // dict.sys.publish.scope.type.0
-            ("dict.sys.publish.scope.type.0", "zh-CN", "全部", "发布范围.全部"),
-            // dict.sys.publish.scope.type.0
-            ("dict.sys.publish.scope.type.0", "zh-HK", "全部_hk", "发布范围.全部"),
+            // dict.sys.publish.scope.0
+            ("dict.sys.publish.scope.0", "en-US", "全部_us", "发布范围.全部"),
+            // dict.sys.publish.scope.0
+            ("dict.sys.publish.scope.0", "ja-JP", "全部_jp", "发布范围.全部"),
+            // dict.sys.publish.scope.0
+            ("dict.sys.publish.scope.0", "zh-CN", "全部", "发布范围.全部"),
+            // dict.sys.publish.scope.0
+            ("dict.sys.publish.scope.0", "zh-HK", "全部_hk", "发布范围.全部"),
 
-            // dict.sys.publish.scope.type.1
-            ("dict.sys.publish.scope.type.1", "en-US", "指定部门_us", "发布范围.指定部门"),
-            // dict.sys.publish.scope.type.1
-            ("dict.sys.publish.scope.type.1", "ja-JP", "指定部门_jp", "发布范围.指定部门"),
-            // dict.sys.publish.scope.type.1
-            ("dict.sys.publish.scope.type.1", "zh-CN", "指定部门", "发布范围.指定部门"),
-            // dict.sys.publish.scope.type.1
-            ("dict.sys.publish.scope.type.1", "zh-HK", "指定部门_hk", "发布范围.指定部门"),
+            // dict.sys.publish.scope.1
+            ("dict.sys.publish.scope.1", "en-US", "指定部门_us", "发布范围.指定部门"),
+            // dict.sys.publish.scope.1
+            ("dict.sys.publish.scope.1", "ja-JP", "指定部门_jp", "发布范围.指定部门"),
+            // dict.sys.publish.scope.1
+            ("dict.sys.publish.scope.1", "zh-CN", "指定部门", "发布范围.指定部门"),
+            // dict.sys.publish.scope.1
+            ("dict.sys.publish.scope.1", "zh-HK", "指定部门_hk", "发布范围.指定部门"),
 
-            // dict.sys.publish.scope.type.2
-            ("dict.sys.publish.scope.type.2", "en-US", "指定用户_us", "发布范围.指定用户"),
-            // dict.sys.publish.scope.type.2
-            ("dict.sys.publish.scope.type.2", "ja-JP", "指定用户_jp", "发布范围.指定用户"),
-            // dict.sys.publish.scope.type.2
-            ("dict.sys.publish.scope.type.2", "zh-CN", "指定用户", "发布范围.指定用户"),
-            // dict.sys.publish.scope.type.2
-            ("dict.sys.publish.scope.type.2", "zh-HK", "指定用户_hk", "发布范围.指定用户"),
-
-            // dict.sys.publish.scope.type.3
-            ("dict.sys.publish.scope.type.3", "en-US", "指定角色_us", "发布范围.指定角色"),
-            // dict.sys.publish.scope.type.3
-            ("dict.sys.publish.scope.type.3", "ja-JP", "指定角色_jp", "发布范围.指定角色"),
-            // dict.sys.publish.scope.type.3
-            ("dict.sys.publish.scope.type.3", "zh-CN", "指定角色", "发布范围.指定角色"),
-            // dict.sys.publish.scope.type.3
-            ("dict.sys.publish.scope.type.3", "zh-HK", "指定角色_hk", "发布范围.指定角色"),
+            // dict.sys.publish.scope.2
+            ("dict.sys.publish.scope.2", "en-US", "指定用户_us", "发布范围.指定用户"),
+            // dict.sys.publish.scope.2
+            ("dict.sys.publish.scope.2", "ja-JP", "指定用户_jp", "发布范围.指定用户"),
+            // dict.sys.publish.scope.2
+            ("dict.sys.publish.scope.2", "zh-CN", "指定用户", "发布范围.指定用户"),
+            // dict.sys.publish.scope.2
+            ("dict.sys.publish.scope.2", "zh-HK", "指定用户_hk", "发布范围.指定用户"),
 
             // dict.sys.read.status.0
             ("dict.sys.read.status.0", "en-US", "未读_us", "读取状态.未读"),
@@ -20553,49 +20778,40 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.read.status.1", "zh-HK", "已读_hk", "读取状态.已读"),
 
             // dict.sys.reset.period.config.none
-            ("dict.sys.reset.period.config.none", "en-US", "不重置_us", "重置周期.不重置"),
+            ("dict.sys.reset.period.config.none", "en-US", "不重置_us", "重置周期.None"),
             // dict.sys.reset.period.config.none
-            ("dict.sys.reset.period.config.none", "ja-JP", "不重置_jp", "重置周期.不重置"),
+            ("dict.sys.reset.period.config.none", "ja-JP", "不重置_jp", "重置周期.None"),
             // dict.sys.reset.period.config.none
-            ("dict.sys.reset.period.config.none", "zh-CN", "不重置", "重置周期.不重置"),
+            ("dict.sys.reset.period.config.none", "zh-CN", "不重置", "重置周期.None"),
             // dict.sys.reset.period.config.none
-            ("dict.sys.reset.period.config.none", "zh-HK", "不重置_hk", "重置周期.不重置"),
+            ("dict.sys.reset.period.config.none", "zh-HK", "不重置_hk", "重置周期.None"),
 
-            // dict.sys.reset.period.config.year
-            ("dict.sys.reset.period.config.year", "en-US", "按年_us", "重置周期.按年"),
-            // dict.sys.reset.period.config.year
-            ("dict.sys.reset.period.config.year", "ja-JP", "按年_jp", "重置周期.按年"),
-            // dict.sys.reset.period.config.year
-            ("dict.sys.reset.period.config.year", "zh-CN", "按年", "重置周期.按年"),
-            // dict.sys.reset.period.config.year
-            ("dict.sys.reset.period.config.year", "zh-HK", "按年_hk", "重置周期.按年"),
+            // dict.sys.reset.period.config.annually
+            ("dict.sys.reset.period.config.annually", "en-US", "按年_us", "重置周期.Annually"),
+            // dict.sys.reset.period.config.annually
+            ("dict.sys.reset.period.config.annually", "ja-JP", "按年_jp", "重置周期.Annually"),
+            // dict.sys.reset.period.config.annually
+            ("dict.sys.reset.period.config.annually", "zh-CN", "按年", "重置周期.Annually"),
+            // dict.sys.reset.period.config.annually
+            ("dict.sys.reset.period.config.annually", "zh-HK", "按年_hk", "重置周期.Annually"),
 
-            // dict.sys.reset.period.config.month
-            ("dict.sys.reset.period.config.month", "en-US", "按月_us", "重置周期.按月"),
-            // dict.sys.reset.period.config.month
-            ("dict.sys.reset.period.config.month", "ja-JP", "按月_jp", "重置周期.按月"),
-            // dict.sys.reset.period.config.month
-            ("dict.sys.reset.period.config.month", "zh-CN", "按月", "重置周期.按月"),
-            // dict.sys.reset.period.config.month
-            ("dict.sys.reset.period.config.month", "zh-HK", "按月_hk", "重置周期.按月"),
+            // dict.sys.reset.period.config.monthly
+            ("dict.sys.reset.period.config.monthly", "en-US", "按月_us", "重置周期.Monthly"),
+            // dict.sys.reset.period.config.monthly
+            ("dict.sys.reset.period.config.monthly", "ja-JP", "按月_jp", "重置周期.Monthly"),
+            // dict.sys.reset.period.config.monthly
+            ("dict.sys.reset.period.config.monthly", "zh-CN", "按月", "重置周期.Monthly"),
+            // dict.sys.reset.period.config.monthly
+            ("dict.sys.reset.period.config.monthly", "zh-HK", "按月_hk", "重置周期.Monthly"),
 
-            // dict.sys.reset.period.config.day
-            ("dict.sys.reset.period.config.day", "en-US", "按日_us", "重置周期.按日"),
-            // dict.sys.reset.period.config.day
-            ("dict.sys.reset.period.config.day", "ja-JP", "按日_jp", "重置周期.按日"),
-            // dict.sys.reset.period.config.day
-            ("dict.sys.reset.period.config.day", "zh-CN", "按日", "重置周期.按日"),
-            // dict.sys.reset.period.config.day
-            ("dict.sys.reset.period.config.day", "zh-HK", "按日_hk", "重置周期.按日"),
-
-            // dict.sys.reset.period.config.hour
-            ("dict.sys.reset.period.config.hour", "en-US", "按时_us", "重置周期.按时"),
-            // dict.sys.reset.period.config.hour
-            ("dict.sys.reset.period.config.hour", "ja-JP", "按时_jp", "重置周期.按时"),
-            // dict.sys.reset.period.config.hour
-            ("dict.sys.reset.period.config.hour", "zh-CN", "按时", "重置周期.按时"),
-            // dict.sys.reset.period.config.hour
-            ("dict.sys.reset.period.config.hour", "zh-HK", "按时_hk", "重置周期.按时"),
+            // dict.sys.reset.period.config.daily
+            ("dict.sys.reset.period.config.daily", "en-US", "按日_us", "重置周期.Daily"),
+            // dict.sys.reset.period.config.daily
+            ("dict.sys.reset.period.config.daily", "ja-JP", "按日_jp", "重置周期.Daily"),
+            // dict.sys.reset.period.config.daily
+            ("dict.sys.reset.period.config.daily", "zh-CN", "按日", "重置周期.Daily"),
+            // dict.sys.reset.period.config.daily
+            ("dict.sys.reset.period.config.daily", "zh-HK", "按日_hk", "重置周期.Daily"),
 
             // dict.sys.resource.type.frontend
             ("dict.sys.resource.type.frontend", "en-US", "前端_us", "资源类型.前端（frontend）"),
@@ -20884,105 +21100,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.word.category.5", "zh-CN", "辱骂歧视", "敏感词词性类别.辱骂歧视"),
             // dict.sys.word.category.5
             ("dict.sys.word.category.5", "zh-HK", "辱骂歧视_hk", "敏感词词性类别.辱骂歧视"),
-
-            // dict.sys.numbering.dept.code.r
-            ("dict.sys.numbering.dept.code.r", "en-US", "总务部_us", "编码规则部门短码.总务部.D0100"),
-            // dict.sys.numbering.dept.code.r
-            ("dict.sys.numbering.dept.code.r", "ja-JP", "总务部_jp", "编码规则部门短码.总务部.D0100"),
-            // dict.sys.numbering.dept.code.r
-            ("dict.sys.numbering.dept.code.r", "zh-CN", "总务部", "编码规则部门短码.总务部.D0100"),
-            // dict.sys.numbering.dept.code.r
-            ("dict.sys.numbering.dept.code.r", "zh-HK", "总务部_hk", "编码规则部门短码.总务部.D0100"),
-
-            // dict.sys.numbering.dept.code.f
-            ("dict.sys.numbering.dept.code.f", "en-US", "财务部_us", "编码规则部门短码.财务部.D0200"),
-            // dict.sys.numbering.dept.code.f
-            ("dict.sys.numbering.dept.code.f", "ja-JP", "财务部_jp", "编码规则部门短码.财务部.D0200"),
-            // dict.sys.numbering.dept.code.f
-            ("dict.sys.numbering.dept.code.f", "zh-CN", "财务部", "编码规则部门短码.财务部.D0200"),
-            // dict.sys.numbering.dept.code.f
-            ("dict.sys.numbering.dept.code.f", "zh-HK", "财务部_hk", "编码规则部门短码.财务部.D0200"),
-
-            // dict.sys.numbering.dept.code.d
-            ("dict.sys.numbering.dept.code.d", "en-US", "IT部_us", "编码规则部门短码.IT部.D0300"),
-            // dict.sys.numbering.dept.code.d
-            ("dict.sys.numbering.dept.code.d", "ja-JP", "IT部_jp", "编码规则部门短码.IT部.D0300"),
-            // dict.sys.numbering.dept.code.d
-            ("dict.sys.numbering.dept.code.d", "zh-CN", "IT部", "编码规则部门短码.IT部.D0300"),
-            // dict.sys.numbering.dept.code.d
-            ("dict.sys.numbering.dept.code.d", "zh-HK", "IT部_hk", "编码规则部门短码.IT部.D0300"),
-
-            // dict.sys.numbering.dept.code.m
-            ("dict.sys.numbering.dept.code.m", "en-US", "文管中心_us", "编码规则部门短码.文管中心.D0410"),
-            // dict.sys.numbering.dept.code.m
-            ("dict.sys.numbering.dept.code.m", "ja-JP", "文管中心_jp", "编码规则部门短码.文管中心.D0410"),
-            // dict.sys.numbering.dept.code.m
-            ("dict.sys.numbering.dept.code.m", "zh-CN", "文管中心", "编码规则部门短码.文管中心.D0410"),
-            // dict.sys.numbering.dept.code.m
-            ("dict.sys.numbering.dept.code.m", "zh-HK", "文管中心_hk", "编码规则部门短码.文管中心.D0410"),
-
-            // dict.sys.numbering.dept.code.s
-            ("dict.sys.numbering.dept.code.s", "en-US", "生管课_us", "编码规则部门短码.生管课.D0420"),
-            // dict.sys.numbering.dept.code.s
-            ("dict.sys.numbering.dept.code.s", "ja-JP", "生管课_jp", "编码规则部门短码.生管课.D0420"),
-            // dict.sys.numbering.dept.code.s
-            ("dict.sys.numbering.dept.code.s", "zh-CN", "生管课", "编码规则部门短码.生管课.D0420"),
-            // dict.sys.numbering.dept.code.s
-            ("dict.sys.numbering.dept.code.s", "zh-HK", "生管课_hk", "编码规则部门短码.生管课.D0420"),
-
-            // dict.sys.numbering.dept.code.b
-            ("dict.sys.numbering.dept.code.b", "en-US", "部管课_us", "编码规则部门短码.部管课.D0430"),
-            // dict.sys.numbering.dept.code.b
-            ("dict.sys.numbering.dept.code.b", "ja-JP", "部管课_jp", "编码规则部门短码.部管课.D0430"),
-            // dict.sys.numbering.dept.code.b
-            ("dict.sys.numbering.dept.code.b", "zh-CN", "部管课", "编码规则部门短码.部管课.D0430"),
-            // dict.sys.numbering.dept.code.b
-            ("dict.sys.numbering.dept.code.b", "zh-HK", "部管课_hk", "编码规则部门短码.部管课.D0430"),
-
-            // dict.sys.numbering.dept.code.c
-            ("dict.sys.numbering.dept.code.c", "en-US", "资材部_us", "编码规则部门短码.资材部.D0500"),
-            // dict.sys.numbering.dept.code.c
-            ("dict.sys.numbering.dept.code.c", "ja-JP", "资材部_jp", "编码规则部门短码.资材部.D0500"),
-            // dict.sys.numbering.dept.code.c
-            ("dict.sys.numbering.dept.code.c", "zh-CN", "资材部", "编码规则部门短码.资材部.D0500"),
-            // dict.sys.numbering.dept.code.c
-            ("dict.sys.numbering.dept.code.c", "zh-HK", "资材部_hk", "编码规则部门短码.资材部.D0500"),
-
-            // dict.sys.numbering.dept.code.z
-            ("dict.sys.numbering.dept.code.z", "en-US", "制造部_us", "编码规则部门短码.制造部.D0600"),
-            // dict.sys.numbering.dept.code.z
-            ("dict.sys.numbering.dept.code.z", "ja-JP", "制造部_jp", "编码规则部门短码.制造部.D0600"),
-            // dict.sys.numbering.dept.code.z
-            ("dict.sys.numbering.dept.code.z", "zh-CN", "制造部", "编码规则部门短码.制造部.D0600"),
-            // dict.sys.numbering.dept.code.z
-            ("dict.sys.numbering.dept.code.z", "zh-HK", "制造部_hk", "编码规则部门短码.制造部.D0600"),
-
-            // dict.sys.numbering.dept.code.p
-            ("dict.sys.numbering.dept.code.p", "en-US", "制技部_us", "编码规则部门短码.制技部.D0630"),
-            // dict.sys.numbering.dept.code.p
-            ("dict.sys.numbering.dept.code.p", "ja-JP", "制技部_jp", "编码规则部门短码.制技部.D0630"),
-            // dict.sys.numbering.dept.code.p
-            ("dict.sys.numbering.dept.code.p", "zh-CN", "制技部", "编码规则部门短码.制技部.D0630"),
-            // dict.sys.numbering.dept.code.p
-            ("dict.sys.numbering.dept.code.p", "zh-HK", "制技部_hk", "编码规则部门短码.制技部.D0630"),
-
-            // dict.sys.numbering.dept.code.t
-            ("dict.sys.numbering.dept.code.t", "en-US", "技术部_us", "编码规则部门短码.技术部.D0700"),
-            // dict.sys.numbering.dept.code.t
-            ("dict.sys.numbering.dept.code.t", "ja-JP", "技术部_jp", "编码规则部门短码.技术部.D0700"),
-            // dict.sys.numbering.dept.code.t
-            ("dict.sys.numbering.dept.code.t", "zh-CN", "技术部", "编码规则部门短码.技术部.D0700"),
-            // dict.sys.numbering.dept.code.t
-            ("dict.sys.numbering.dept.code.t", "zh-HK", "技术部_hk", "编码规则部门短码.技术部.D0700"),
-
-            // dict.sys.numbering.dept.code.q
-            ("dict.sys.numbering.dept.code.q", "en-US", "品保部_us", "编码规则部门短码.品保部.D0800"),
-            // dict.sys.numbering.dept.code.q
-            ("dict.sys.numbering.dept.code.q", "ja-JP", "品保部_jp", "编码规则部门短码.品保部.D0800"),
-            // dict.sys.numbering.dept.code.q
-            ("dict.sys.numbering.dept.code.q", "zh-CN", "品保部", "编码规则部门短码.品保部.D0800"),
-            // dict.sys.numbering.dept.code.q
-            ("dict.sys.numbering.dept.code.q", "zh-HK", "品保部_hk", "编码规则部门短码.品保部.D0800"),
 
             // dict.sys.word.filter.level.category.1
             ("dict.sys.word.filter.level.category.1", "en-US", "低_us", "敏感词过滤等级.低"),
@@ -25708,6 +25825,249 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.quartz.task.status.1", "zh-CN", "暂停", "Quartz任务状态.暂停"),
             // dict.sys.quartz.task.status.1
             ("dict.sys.quartz.task.status.1", "zh-HK", "暂停_hk", "Quartz任务状态.暂停"),
+
+            // dict.sys.job.run.status.0
+            ("dict.sys.job.run.status.0", "en-US", "进行中_us", "作业运行状态.进行中"),
+            // dict.sys.job.run.status.0
+            ("dict.sys.job.run.status.0", "ja-JP", "进行中_jp", "作业运行状态.进行中"),
+            // dict.sys.job.run.status.0
+            ("dict.sys.job.run.status.0", "zh-CN", "进行中", "作业运行状态.进行中"),
+            // dict.sys.job.run.status.0
+            ("dict.sys.job.run.status.0", "zh-HK", "进行中_hk", "作业运行状态.进行中"),
+
+            // dict.sys.job.run.status.1
+            ("dict.sys.job.run.status.1", "en-US", "成功_us", "作业运行状态.成功"),
+            // dict.sys.job.run.status.1
+            ("dict.sys.job.run.status.1", "ja-JP", "成功_jp", "作业运行状态.成功"),
+            // dict.sys.job.run.status.1
+            ("dict.sys.job.run.status.1", "zh-CN", "成功", "作业运行状态.成功"),
+            // dict.sys.job.run.status.1
+            ("dict.sys.job.run.status.1", "zh-HK", "成功_hk", "作业运行状态.成功"),
+
+            // dict.sys.job.run.status.2
+            ("dict.sys.job.run.status.2", "en-US", "失败_us", "作业运行状态.失败"),
+            // dict.sys.job.run.status.2
+            ("dict.sys.job.run.status.2", "ja-JP", "失败_jp", "作业运行状态.失败"),
+            // dict.sys.job.run.status.2
+            ("dict.sys.job.run.status.2", "zh-CN", "失败", "作业运行状态.失败"),
+            // dict.sys.job.run.status.2
+            ("dict.sys.job.run.status.2", "zh-HK", "失败_hk", "作业运行状态.失败"),
+
+            // dict.sys.success.fail.status.0
+            ("dict.sys.success.fail.status.0", "en-US", "失败_us", "成功失败状态.失败"),
+            // dict.sys.success.fail.status.0
+            ("dict.sys.success.fail.status.0", "ja-JP", "失败_jp", "成功失败状态.失败"),
+            // dict.sys.success.fail.status.0
+            ("dict.sys.success.fail.status.0", "zh-CN", "失败", "成功失败状态.失败"),
+            // dict.sys.success.fail.status.0
+            ("dict.sys.success.fail.status.0", "zh-HK", "失败_hk", "成功失败状态.失败"),
+
+            // dict.sys.success.fail.status.1
+            ("dict.sys.success.fail.status.1", "en-US", "成功_us", "成功失败状态.成功"),
+            // dict.sys.success.fail.status.1
+            ("dict.sys.success.fail.status.1", "ja-JP", "成功_jp", "成功失败状态.成功"),
+            // dict.sys.success.fail.status.1
+            ("dict.sys.success.fail.status.1", "zh-CN", "成功", "成功失败状态.成功"),
+            // dict.sys.success.fail.status.1
+            ("dict.sys.success.fail.status.1", "zh-HK", "成功_hk", "成功失败状态.成功"),
+
+            // dict.sys.tracking.level.1
+            ("dict.sys.tracking.level.1", "en-US", "警告_us", "追踪级别.警告"),
+            // dict.sys.tracking.level.1
+            ("dict.sys.tracking.level.1", "ja-JP", "警告_jp", "追踪级别.警告"),
+            // dict.sys.tracking.level.1
+            ("dict.sys.tracking.level.1", "zh-CN", "警告", "追踪级别.警告"),
+            // dict.sys.tracking.level.1
+            ("dict.sys.tracking.level.1", "zh-HK", "警告_hk", "追踪级别.警告"),
+
+            // dict.sys.tracking.level.2
+            ("dict.sys.tracking.level.2", "en-US", "错误_us", "追踪级别.错误"),
+            // dict.sys.tracking.level.2
+            ("dict.sys.tracking.level.2", "ja-JP", "错误_jp", "追踪级别.错误"),
+            // dict.sys.tracking.level.2
+            ("dict.sys.tracking.level.2", "zh-CN", "错误", "追踪级别.错误"),
+            // dict.sys.tracking.level.2
+            ("dict.sys.tracking.level.2", "zh-HK", "错误_hk", "追踪级别.错误"),
+
+            // dict.sys.backup.sync.mode.1
+            ("dict.sys.backup.sync.mode.1", "en-US", "完整_us", "备份同步模式.完整"),
+            // dict.sys.backup.sync.mode.1
+            ("dict.sys.backup.sync.mode.1", "ja-JP", "完整_jp", "备份同步模式.完整"),
+            // dict.sys.backup.sync.mode.1
+            ("dict.sys.backup.sync.mode.1", "zh-CN", "完整", "备份同步模式.完整"),
+            // dict.sys.backup.sync.mode.1
+            ("dict.sys.backup.sync.mode.1", "zh-HK", "完整_hk", "备份同步模式.完整"),
+
+            // dict.sys.backup.sync.mode.2
+            ("dict.sys.backup.sync.mode.2", "en-US", "增量_us", "备份同步模式.增量"),
+            // dict.sys.backup.sync.mode.2
+            ("dict.sys.backup.sync.mode.2", "ja-JP", "增量_jp", "备份同步模式.增量"),
+            // dict.sys.backup.sync.mode.2
+            ("dict.sys.backup.sync.mode.2", "zh-CN", "增量", "备份同步模式.增量"),
+            // dict.sys.backup.sync.mode.2
+            ("dict.sys.backup.sync.mode.2", "zh-HK", "增量_hk", "备份同步模式.增量"),
+
+            // dict.sys.backup.execute.mode.1
+            ("dict.sys.backup.execute.mode.1", "en-US", "立即_us", "备份执行方式.立即"),
+            // dict.sys.backup.execute.mode.1
+            ("dict.sys.backup.execute.mode.1", "ja-JP", "立即_jp", "备份执行方式.立即"),
+            // dict.sys.backup.execute.mode.1
+            ("dict.sys.backup.execute.mode.1", "zh-CN", "立即", "备份执行方式.立即"),
+            // dict.sys.backup.execute.mode.1
+            ("dict.sys.backup.execute.mode.1", "zh-HK", "立即_hk", "备份执行方式.立即"),
+
+            // dict.sys.backup.execute.mode.2
+            ("dict.sys.backup.execute.mode.2", "en-US", "后台_us", "备份执行方式.后台"),
+            // dict.sys.backup.execute.mode.2
+            ("dict.sys.backup.execute.mode.2", "ja-JP", "后台_jp", "备份执行方式.后台"),
+            // dict.sys.backup.execute.mode.2
+            ("dict.sys.backup.execute.mode.2", "zh-CN", "后台", "备份执行方式.后台"),
+            // dict.sys.backup.execute.mode.2
+            ("dict.sys.backup.execute.mode.2", "zh-HK", "后台_hk", "备份执行方式.后台"),
+
+            // dict.sys.backup.path.type.0
+            ("dict.sys.backup.path.type.0", "en-US", "无_us", "备份路径类型.无"),
+            // dict.sys.backup.path.type.0
+            ("dict.sys.backup.path.type.0", "ja-JP", "无_jp", "备份路径类型.无"),
+            // dict.sys.backup.path.type.0
+            ("dict.sys.backup.path.type.0", "zh-CN", "无", "备份路径类型.无"),
+            // dict.sys.backup.path.type.0
+            ("dict.sys.backup.path.type.0", "zh-HK", "无_hk", "备份路径类型.无"),
+
+            // dict.sys.backup.path.type.1
+            ("dict.sys.backup.path.type.1", "en-US", "本地_us", "备份路径类型.本地"),
+            // dict.sys.backup.path.type.1
+            ("dict.sys.backup.path.type.1", "ja-JP", "本地_jp", "备份路径类型.本地"),
+            // dict.sys.backup.path.type.1
+            ("dict.sys.backup.path.type.1", "zh-CN", "本地", "备份路径类型.本地"),
+            // dict.sys.backup.path.type.1
+            ("dict.sys.backup.path.type.1", "zh-HK", "本地_hk", "备份路径类型.本地"),
+
+            // dict.sys.backup.path.type.2
+            ("dict.sys.backup.path.type.2", "en-US", "网络_us", "备份路径类型.网络"),
+            // dict.sys.backup.path.type.2
+            ("dict.sys.backup.path.type.2", "ja-JP", "网络_jp", "备份路径类型.网络"),
+            // dict.sys.backup.path.type.2
+            ("dict.sys.backup.path.type.2", "zh-CN", "网络", "备份路径类型.网络"),
+            // dict.sys.backup.path.type.2
+            ("dict.sys.backup.path.type.2", "zh-HK", "网络_hk", "备份路径类型.网络"),
+
+            // dict.sys.backup.path.type.3
+            ("dict.sys.backup.path.type.3", "en-US", "FTP_us", "备份路径类型.FTP"),
+            // dict.sys.backup.path.type.3
+            ("dict.sys.backup.path.type.3", "ja-JP", "FTP_jp", "备份路径类型.FTP"),
+            // dict.sys.backup.path.type.3
+            ("dict.sys.backup.path.type.3", "zh-CN", "FTP", "备份路径类型.FTP"),
+            // dict.sys.backup.path.type.3
+            ("dict.sys.backup.path.type.3", "zh-HK", "FTP_hk", "备份路径类型.FTP"),
+
+            // dict.sys.configurable.join.type.1
+            ("dict.sys.configurable.join.type.1", "en-US", "内连接_us", "报表关联类型.内连接"),
+            // dict.sys.configurable.join.type.1
+            ("dict.sys.configurable.join.type.1", "ja-JP", "内连接_jp", "报表关联类型.内连接"),
+            // dict.sys.configurable.join.type.1
+            ("dict.sys.configurable.join.type.1", "zh-CN", "内连接", "报表关联类型.内连接"),
+            // dict.sys.configurable.join.type.1
+            ("dict.sys.configurable.join.type.1", "zh-HK", "内连接_hk", "报表关联类型.内连接"),
+
+            // dict.sys.configurable.join.type.2
+            ("dict.sys.configurable.join.type.2", "en-US", "左连接_us", "报表关联类型.左连接"),
+            // dict.sys.configurable.join.type.2
+            ("dict.sys.configurable.join.type.2", "ja-JP", "左连接_jp", "报表关联类型.左连接"),
+            // dict.sys.configurable.join.type.2
+            ("dict.sys.configurable.join.type.2", "zh-CN", "左连接", "报表关联类型.左连接"),
+            // dict.sys.configurable.join.type.2
+            ("dict.sys.configurable.join.type.2", "zh-HK", "左连接_hk", "报表关联类型.左连接"),
+
+            // dict.sys.configurable.join.type.3
+            ("dict.sys.configurable.join.type.3", "en-US", "右连接_us", "报表关联类型.右连接"),
+            // dict.sys.configurable.join.type.3
+            ("dict.sys.configurable.join.type.3", "ja-JP", "右连接_jp", "报表关联类型.右连接"),
+            // dict.sys.configurable.join.type.3
+            ("dict.sys.configurable.join.type.3", "zh-CN", "右连接", "报表关联类型.右连接"),
+            // dict.sys.configurable.join.type.3
+            ("dict.sys.configurable.join.type.3", "zh-HK", "右连接_hk", "报表关联类型.右连接"),
+
+            // dict.sys.configurable.join.type.4
+            ("dict.sys.configurable.join.type.4", "en-US", "全连接_us", "报表关联类型.全连接"),
+            // dict.sys.configurable.join.type.4
+            ("dict.sys.configurable.join.type.4", "ja-JP", "全连接_jp", "报表关联类型.全连接"),
+            // dict.sys.configurable.join.type.4
+            ("dict.sys.configurable.join.type.4", "zh-CN", "全连接", "报表关联类型.全连接"),
+            // dict.sys.configurable.join.type.4
+            ("dict.sys.configurable.join.type.4", "zh-HK", "全连接_hk", "报表关联类型.全连接"),
+
+            // dict.sys.configurable.aggregate.func.0
+            ("dict.sys.configurable.aggregate.func.0", "en-US", "无_us", "报表聚合函数.无"),
+            // dict.sys.configurable.aggregate.func.0
+            ("dict.sys.configurable.aggregate.func.0", "ja-JP", "无_jp", "报表聚合函数.无"),
+            // dict.sys.configurable.aggregate.func.0
+            ("dict.sys.configurable.aggregate.func.0", "zh-CN", "无", "报表聚合函数.无"),
+            // dict.sys.configurable.aggregate.func.0
+            ("dict.sys.configurable.aggregate.func.0", "zh-HK", "无_hk", "报表聚合函数.无"),
+
+            // dict.sys.configurable.aggregate.func.1
+            ("dict.sys.configurable.aggregate.func.1", "en-US", "COUNT_us", "报表聚合函数.COUNT"),
+            // dict.sys.configurable.aggregate.func.1
+            ("dict.sys.configurable.aggregate.func.1", "ja-JP", "COUNT_jp", "报表聚合函数.COUNT"),
+            // dict.sys.configurable.aggregate.func.1
+            ("dict.sys.configurable.aggregate.func.1", "zh-CN", "COUNT", "报表聚合函数.COUNT"),
+            // dict.sys.configurable.aggregate.func.1
+            ("dict.sys.configurable.aggregate.func.1", "zh-HK", "COUNT_hk", "报表聚合函数.COUNT"),
+
+            // dict.sys.configurable.aggregate.func.2
+            ("dict.sys.configurable.aggregate.func.2", "en-US", "SUM_us", "报表聚合函数.SUM"),
+            // dict.sys.configurable.aggregate.func.2
+            ("dict.sys.configurable.aggregate.func.2", "ja-JP", "SUM_jp", "报表聚合函数.SUM"),
+            // dict.sys.configurable.aggregate.func.2
+            ("dict.sys.configurable.aggregate.func.2", "zh-CN", "SUM", "报表聚合函数.SUM"),
+            // dict.sys.configurable.aggregate.func.2
+            ("dict.sys.configurable.aggregate.func.2", "zh-HK", "SUM_hk", "报表聚合函数.SUM"),
+
+            // dict.sys.configurable.aggregate.func.3
+            ("dict.sys.configurable.aggregate.func.3", "en-US", "AVG_us", "报表聚合函数.AVG"),
+            // dict.sys.configurable.aggregate.func.3
+            ("dict.sys.configurable.aggregate.func.3", "ja-JP", "AVG_jp", "报表聚合函数.AVG"),
+            // dict.sys.configurable.aggregate.func.3
+            ("dict.sys.configurable.aggregate.func.3", "zh-CN", "AVG", "报表聚合函数.AVG"),
+            // dict.sys.configurable.aggregate.func.3
+            ("dict.sys.configurable.aggregate.func.3", "zh-HK", "AVG_hk", "报表聚合函数.AVG"),
+
+            // dict.sys.configurable.aggregate.func.4
+            ("dict.sys.configurable.aggregate.func.4", "en-US", "MIN_us", "报表聚合函数.MIN"),
+            // dict.sys.configurable.aggregate.func.4
+            ("dict.sys.configurable.aggregate.func.4", "ja-JP", "MIN_jp", "报表聚合函数.MIN"),
+            // dict.sys.configurable.aggregate.func.4
+            ("dict.sys.configurable.aggregate.func.4", "zh-CN", "MIN", "报表聚合函数.MIN"),
+            // dict.sys.configurable.aggregate.func.4
+            ("dict.sys.configurable.aggregate.func.4", "zh-HK", "MIN_hk", "报表聚合函数.MIN"),
+
+            // dict.sys.configurable.aggregate.func.5
+            ("dict.sys.configurable.aggregate.func.5", "en-US", "MAX_us", "报表聚合函数.MAX"),
+            // dict.sys.configurable.aggregate.func.5
+            ("dict.sys.configurable.aggregate.func.5", "ja-JP", "MAX_jp", "报表聚合函数.MAX"),
+            // dict.sys.configurable.aggregate.func.5
+            ("dict.sys.configurable.aggregate.func.5", "zh-CN", "MAX", "报表聚合函数.MAX"),
+            // dict.sys.configurable.aggregate.func.5
+            ("dict.sys.configurable.aggregate.func.5", "zh-HK", "MAX_hk", "报表聚合函数.MAX"),
+
+            // dict.sys.configurable.sort.direction.1
+            ("dict.sys.configurable.sort.direction.1", "en-US", "升序_us", "报表排序方向.升序"),
+            // dict.sys.configurable.sort.direction.1
+            ("dict.sys.configurable.sort.direction.1", "ja-JP", "升序_jp", "报表排序方向.升序"),
+            // dict.sys.configurable.sort.direction.1
+            ("dict.sys.configurable.sort.direction.1", "zh-CN", "升序", "报表排序方向.升序"),
+            // dict.sys.configurable.sort.direction.1
+            ("dict.sys.configurable.sort.direction.1", "zh-HK", "升序_hk", "报表排序方向.升序"),
+
+            // dict.sys.configurable.sort.direction.2
+            ("dict.sys.configurable.sort.direction.2", "en-US", "降序_us", "报表排序方向.降序"),
+            // dict.sys.configurable.sort.direction.2
+            ("dict.sys.configurable.sort.direction.2", "ja-JP", "降序_jp", "报表排序方向.降序"),
+            // dict.sys.configurable.sort.direction.2
+            ("dict.sys.configurable.sort.direction.2", "zh-CN", "降序", "报表排序方向.降序"),
+            // dict.sys.configurable.sort.direction.2
+            ("dict.sys.configurable.sort.direction.2", "zh-HK", "降序_hk", "报表排序方向.降序"),
         };
     }
 

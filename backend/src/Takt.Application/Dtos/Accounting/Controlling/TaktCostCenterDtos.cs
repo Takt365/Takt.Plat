@@ -94,12 +94,12 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int CostCenterStatus { get; set; } = 0;
 }
@@ -115,9 +115,9 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
 public class TaktCostCenterTreeDto : TaktCostCenterDto
 {
     /// <summary>
-    /// 子节点
+    /// 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
     /// </summary>
-    public List<TaktCostCenterTreeDto> Children { get; set; } = new();
+    public List<TaktCostCenterTreeDto>? Children { get; set; }
 }
 
 // ========================================
@@ -219,12 +219,12 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? CostCenterStatus { get; set; }
 
@@ -341,7 +341,7 @@ public class TaktCostCenterCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int CostCenterStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
@@ -393,9 +393,9 @@ public class TaktCostCenterStatusDto
     public long CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int CostCenterStatus { get; set; } = 0;
 }
 
@@ -417,7 +417,7 @@ public class TaktCostCenterSortDto
     public long CostCenterId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -511,7 +511,7 @@ public class TaktCostCenterTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? CostCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
@@ -610,7 +610,7 @@ public class TaktCostCenterImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? CostCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
@@ -709,12 +709,12 @@ public class TaktCostCenterExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int CostCenterStatus { get; set; } = 0;
 

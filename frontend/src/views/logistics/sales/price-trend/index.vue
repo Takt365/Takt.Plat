@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/price-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：销售价格月推移（工厂×物料×客户×月份转置表） -->
+<!-- 功能描述：销售价格推移（工厂×物料×客户×月份转置；机种推移见 model-trend） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -19,19 +19,6 @@
       @search="handleSearch"
       @reset="handleReset"
     />
-    <a-tabs
-      v-model:activeKey="activeTab"
-      class="sales-price-trend-tabs mb-1 shrink-0"
-    >
-      <a-tab-pane
-        key="price"
-        :tab="t(`${localePrefix}.tabs.price`)"
-      />
-      <a-tab-pane
-        key="model"
-        :tab="t(`${localePrefix}.tabs.model`)"
-      />
-    </a-tabs>
     <TaktToolsBar
       :show-create="false"
       :show-update="false"
@@ -57,7 +44,6 @@
       v-model:has-rows="hasRows"
       class="min-h-0 flex-1"
       :trend-filter="trendFilter"
-      :active-tab="activeTab"
       :plant-code="plantCode"
       :period-range="periodRange"
       :customer-code="customerCode"
@@ -69,7 +55,7 @@
 
 <script setup lang="ts">
 /**
- * 销售价格月推移转置分析
+ * 销售价格推移（仅物料价格；机种见独立菜单）
  */
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
@@ -91,8 +77,6 @@ const { t } = useI18n()
 const localePrefix = 'logistics.sales.price-trend.page'
 const tenantStore = useTenantStore()
 
-/** 当前 Tab：price=销售价格推移；model=机种价格推移 */
-const activeTab = ref<'price' | 'model'>('price')
 /** 工厂 */
 const plantCode = ref<string | undefined>()
 /** 期间年月 */

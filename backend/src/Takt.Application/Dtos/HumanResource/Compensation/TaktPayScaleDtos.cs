@@ -37,12 +37,12 @@ public class TaktPayScaleDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
 
@@ -109,12 +109,12 @@ public class TaktPayScaleQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ScaleStatus { get; set; }
 
@@ -203,7 +203,7 @@ public class TaktPayScaleCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
 
@@ -257,9 +257,9 @@ public class TaktPayScaleStatusDto
     public long PayScaleId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int ScaleStatus { get; set; } = 0;
 }
 
@@ -281,7 +281,7 @@ public class TaktPayScaleSortDto
     public long PayScaleId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -347,7 +347,7 @@ public class TaktPayScaleTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ScaleStatus { get; set; }
 
@@ -420,7 +420,7 @@ public class TaktPayScaleImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ScaleStatus { get; set; }
 
@@ -493,12 +493,12 @@ public class TaktPayScaleExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
 

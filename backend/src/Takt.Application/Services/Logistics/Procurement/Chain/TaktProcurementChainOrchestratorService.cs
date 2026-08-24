@@ -463,9 +463,8 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             CountersignTitle = $"采购询价审批-{inquiry.PurchaseInquiryCode}",
             ApplicationReason = inquiry.InquiryReason,
             CountersignStatus = 0,
-            CountersignDetails = items.Select(item => new TaktCountersignDetailUpdateDto
+            CountersignDetails = items.Select(item => new TaktCountersignDetailCreateDto
             {
-                CountersignDetailId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
                 ItemName = item.MaterialDescription,
@@ -509,9 +508,8 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             CountersignTitle = $"采购申请审批-{request.PurchaseRequestCode}",
             ApplicationReason = request.RequestReason,
             CountersignStatus = 0,
-            CountersignDetails = items.Select(item => new TaktCountersignDetailUpdateDto
+            CountersignDetails = items.Select(item => new TaktCountersignDetailCreateDto
             {
-                CountersignDetailId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
                 ItemName = item.MaterialDescription,
@@ -554,9 +552,8 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             CountersignTitle = $"费用报销审批-{expense.ExpenseCode}",
             ApplicationReason = expense.ApplicationReason,
             CountersignStatus = 0,
-            CountersignDetails = details.Select(detail => new TaktCountersignDetailUpdateDto
+            CountersignDetails = details.Select(detail => new TaktCountersignDetailCreateDto
             {
-                CountersignDetailId = 0,
                 LineNumber = detail.LineNumber,
                 AllocationCategory = detail.AllocationCategory,
                 ItemName = detail.ItemName,

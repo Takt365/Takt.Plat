@@ -11,7 +11,7 @@
 // ========================================
 
 /**
- * 树表 index.vue：ref/computed 状态块（大数据懒加载左树 + 右侧 list 分页）
+ * 树表 index.vue：ref/computed 状态块（左右均为树表：超阈值懒加载+virtual，无分页）
  * @param {string} entityPascal
  * @param {object} options
  */
@@ -51,7 +51,7 @@ ${needsUserStore ? `/** 用户上下文（companyDefaultCulture 等） */
 const userStore = useUserStore()
 ` : ''}${needsExcelNames ? `/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('${entityClassName}')
-` : ''}/** 右侧列表快捷查询占位文案 */
+` : ''}/** 右侧树表快捷查询占位文案 */
 const tableSearchPlaceholder = computed(() =>
   t('common.page.form.placeholder.search', {
     keyword: [${searchFieldLabelExprs}].join(' / '),
@@ -60,28 +60,26 @@ const tableSearchPlaceholder = computed(() =>
 
 /** 左侧树关键字（仅过滤已加载节点，不重复请求 API） */
 const treeQueryKeyword = ref('')
-/** 右侧列表快捷查询关键字 */
+/** 右侧树表快捷查询关键字 */
 const queryKeyword = ref('')
 /** 左侧树工具栏「展开/收缩」状态（仅已加载层） */
 const treeExpanded = ref(false)
 /** 左侧树当前展开的节点 key 列表 */
 const treeExpandedKeys = ref<(string | number)[]>([])
-/** 右侧表格展开状态（预留） */
+/** 右侧树表工具栏「全部展开/收缩」 */
 const tableExpanded = ref(false)
-/** 右侧列表当前页码（服务端分页） */
-const tableCurrentPage = ref(getTaktDefaultPageIndex())
-/** 右侧列表每页条数 */
-const tablePageSize = ref(getTaktDefaultPageSize())
+/** 右侧 a-table 树表当前展开行 key */
+const tableExpandedRowKeys = ref<(string | number)[]>([])
+/** 达到阈值后左右树均按 parentId 一层懒加载 */
+const useLazyTree = ref(true)
 /** 左侧树 loading */
 const loading = ref(false)
-/** 右侧列表 loading */
+/** 右侧树 loading */
 const listLoading = ref(false)
-/** 左侧 a-tree 懒加载数据（仅已展开路径） */
+/** 左侧 a-tree 数据（懒加载仅已展开路径；低于阈值时为全量树） */
 const entityTreeData = ref<TaktLazyTreeNode[]>([])
-/** 右侧列表数据源（服务端分页，当前父级直接子节点） */
-const tableDataSource = ref<${entityPascal}[]>([])
-/** 右侧列表总行数 */
-const tableTotal = ref(0)
+/** 右侧树表数据源（带 children / _hasChildren，组件内拍平 virtual） */
+const tableTreeData = ref<Record<string, unknown>[]>([])
 /** 左侧树当前选中的节点 key 列表 */
 const selectedTreeKeys = ref<(string | number)[]>([])
 /** 工具栏单选时当前行（编辑/删除） */

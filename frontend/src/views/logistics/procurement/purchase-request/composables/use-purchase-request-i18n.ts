@@ -20,7 +20,6 @@ export const PURCHASEREQUEST_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASEREQU
 
 /** 列表业务列（不含主键） */
 export const PURCHASEREQUEST_LIST_FIELDS = [
-  'plantCode',
   'purchaseRequestCode',
   'purchaseInquiryId',
   'purchaseInquiryCode',
@@ -37,7 +36,7 @@ export const PURCHASEREQUEST_LIST_FIELDS = [
   'supplierCode',
   'supplierName1',
   'currencyCode',
-  'taxRate',
+  'taxCode',
   'taxAmount',
   'totalQuantity',
   'totalAmount',
@@ -46,41 +45,12 @@ export const PURCHASEREQUEST_LIST_FIELDS = [
   'requestReason',
   'requestStatus',
   'convertedStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEREQUEST_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  purchaseRequestCode: 'required',
-  purchaseInquiryId: 'optional',
-  purchaseInquiryCode: 'optional',
-  purchasePlanId: 'optional',
-  purchasePlanCode: 'optional',
-  chainScheme: 'select',
-  poDecision: 'optional',
-  countersignId: 'optional',
-  countersignCode: 'optional',
-  requestDate: 'select',
-  requiredArrivalDate: 'optional',
-  requestId: 'optional',
-  requestBy: 'required',
-  supplierCode: 'select',
-  supplierName1: 'required',
-  currencyCode: 'select',
-  taxRate: 'select',
-  taxAmount: 'select',
-  totalQuantity: 'select',
-  totalAmount: 'select',
-  convertedQuantity: 'select',
-  convertedAmount: 'select',
-  requestReason: 'optional',
-  requestStatus: 'select',
-  convertedStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -88,56 +58,13 @@ export type PurchaseRequestField = keyof typeof PURCHASEREQUEST_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEREQUEST_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'purchaseRequestCode',
-  'purchaseInquiryId',
-  'purchaseInquiryCode',
-  'purchasePlanId',
-  'purchasePlanCode',
-  'countersignId',
-  'countersignCode',
-  'requestDateStart',
-  'requestDateEnd',
-  'requiredArrivalDateStart',
-  'requiredArrivalDateEnd',
-  'requestId',
-  'requestBy',
-  'supplierCode',
-  'supplierName1',
-  'currencyCode',
-  'requestReason',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchaseRequestQuery)[]
 
-export type PurchaseRequestQueryField =
-  | (typeof PURCHASEREQUEST_QUERY_STRING_FIELDS)[number]
-  | 'chainScheme' | 'poDecision' | 'taxRate' | 'taxAmount' | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'requestStatus' | 'convertedStatus' | 'approvalStatus'
+export type PurchaseRequestQueryField = (typeof PURCHASEREQUEST_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEREQUEST_QUERY_FIELDS: readonly PurchaseRequestQueryField[] = [
-  ...PURCHASEREQUEST_QUERY_STRING_FIELDS,
-  'chainScheme',
-  'poDecision',
-  'taxRate',
-  'taxAmount',
-  'totalQuantity',
-  'totalAmount',
-  'convertedQuantity',
-  'convertedAmount',
-  'requestStatus',
-  'convertedStatus',
-  'approvalStatus',
-]
+export const PURCHASEREQUEST_QUERY_FIELDS: readonly PurchaseRequestQueryField[] = [...PURCHASEREQUEST_QUERY_STRING_FIELDS]
 
 /**
  * Takt采购申请实体字段 i18n：index / purchase-request-form 统一入口

@@ -97,8 +97,7 @@ FROM (
       R.[updated_at] AS [updated_at],
       TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
       R.[deleted_at] AS [deleted_at],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
-      R.[created_at] AS [created_at]
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted]
     FROM [{{SourceDatabase}}].[dbo].[takt_foundation_admin_division] R
     LEFT JOIN [{{SourceDatabase}}].[dbo].[takt_foundation_admin_division] P
       ON P.[id] = R.[parent_id]

@@ -42,7 +42,7 @@ public class TaktLoginRequestDto
     /// <summary>
     /// 用户名（8位）
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 密码（RSA PKCS#1 密文 Base64；signin 有 LoginTicket 时可省略）
@@ -93,7 +93,7 @@ public class TaktSessionVerifyPasswordRequestDto
     /// <summary>
     /// 用户名
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 密码（RSA PKCS#1 密文 Base64）
@@ -155,7 +155,7 @@ public class TaktLoginTicketPayload
     /// <summary>
     /// 用户名
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -191,12 +191,12 @@ public class TaktLoginResponseDto
     /// <summary>
     /// 用户名
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 昵称
     /// </summary>
-    public string? Nickname { get; set; }
+    public string? NickName { get; set; }
 
     /// <summary>
     /// 租户编码
@@ -272,12 +272,12 @@ public class TaktUserInfoResponseDto
     /// <summary>
     /// 用户名
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 昵称
     /// </summary>
-    public string? Nickname { get; set; }
+    public string? NickName { get; set; }
 
     /// <summary>
     /// 用户类型

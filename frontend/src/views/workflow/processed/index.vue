@@ -48,9 +48,10 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'instanceStatus'">
-          <a-tag :color="statusColor((record as FlowInstanceListItem).instanceStatus)">
-            {{ statusText((record as FlowInstanceListItem).instanceStatus) }}
-          </a-tag>
+          <TaktDictTag
+            :value="(record as FlowInstanceListItem).instanceStatus"
+            dict-type="sys_flow_status"
+          />
         </template>
       </template>
     </TaktSingleTable>
@@ -97,7 +98,7 @@
       <a-form-item :label="t('entity.flowinstance.currentactivityname')">
         <a-input v-model:value="advancedQueryForm.taskName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowinstance.startusername')">
+      <a-form-item :label="t('entity.flowinstance.startUserName')">
         <a-input v-model:value="advancedQueryForm.startUserName" allow-clear />
       </a-form-item>
       <a-form-item :label="t('entity.flowinstance.starttime')">
@@ -179,7 +180,7 @@ const columns = computed<TableColumnsType>(() => [
   { title: t('entity.flowinstance.processname'), dataIndex: 'processName', key: 'processName', width: 120, resizable: true, ellipsis: true },
   { title: t('entity.flowinstance.processtitle'), dataIndex: 'processTitle', key: 'processTitle', ellipsis: true, resizable: true },
   { title: t('entity.flowinstance.instancestatus'), dataIndex: 'instanceStatus', key: 'instanceStatus', width: 90 },
-  { title: t('entity.flowinstance.startusername'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true },
+  { title: t('entity.flowinstance.startUserName'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true },
   { title: t('entity.flowinstance.starttime'), dataIndex: 'startTime', key: 'startTime', width: 170, resizable: true },
   CreateActionColumn<FlowInstanceListItem>({
     width: 80,
@@ -220,17 +221,6 @@ function buildFlowTodoQuery(): FlowTodoQuery {
   if (startTimeRange.value?.[0]) query.startTimeStart = startTimeRange.value[0]
   if (startTimeRange.value?.[1]) query.startTimeEnd = startTimeRange.value[1]
   return query
-}
-
-/** 实例状态码转展示文案 */
-function statusText(s: number) {
-  return t(`workflow.instance.page.status.${s}`) || t('workflow.instance.page.status.unknown')
-}
-
-/** 实例状态对应 Tag 颜色 */
-function statusColor(s: number) {
-  const m: Record<number, string> = { 0: 'processing', 1: 'success', 2: 'error', 3: 'warning', 4: 'default' }
-  return m[s] ?? 'default'
 }
 
 /** 将 a-table bodyCell 的 record 断言为 FlowInstanceListItem */

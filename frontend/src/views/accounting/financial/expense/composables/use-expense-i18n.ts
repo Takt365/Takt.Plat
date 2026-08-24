@@ -20,56 +20,13 @@ export const EXPENSE_SELF_I18N_KEY = buildEntitySelfI18nKey(EXPENSE_ENTITY_SLUG)
 
 /** 列表业务列（不含主键） */
 export const EXPENSE_LIST_FIELDS = [
-  'expenseCode',
-  'expenseTitle',
-  'expenseType',
-  'supplierCode',
-  'supplierName1',
-  'applicantBy',
-  'applicationDept',
-  'costBearerDept',
-  'costCenter',
-  'countersignId',
-  'countersignName',
-  'purchaseOrderCode',
-  'purchaseRequestCode',
-  'expenseAmount',
-  'taxRate',
-  'taxAmount',
-  'expenseDate',
-  'applicationReason',
-  'attachments',
-  'plantCode',
   'expenseStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const EXPENSE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  expenseCode: 'required',
-  expenseTitle: 'required',
-  expenseType: 'select',
-  supplierCode: 'optional',
-  supplierName1: 'optional',
-  applicantBy: 'select',
-  applicationDept: 'optional',
-  costBearerDept: 'optional',
-  costCenter: 'optional',
-  countersignId: 'optional',
-  purchaseOrderCode: 'optional',
-  purchaseRequestCode: 'optional',
-  expenseAmount: 'select',
-  taxRate: 'select',
-  taxAmount: 'select',
-  expenseDate: 'select',
-  applicationReason: 'optional',
-  attachments: 'optional',
-  plantCode: 'select',
-  expenseStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -77,49 +34,13 @@ export type ExpenseField = keyof typeof EXPENSE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const EXPENSE_QUERY_STRING_FIELDS = [
-  'expenseCode',
-  'expenseTitle',
-  'supplierCode',
-  'supplierName1',
-  'applicantBy',
-  'applicationDept',
-  'costBearerDept',
-  'costCenter',
-  'countersignId',
-  'purchaseOrderCode',
-  'purchaseRequestCode',
-  'expenseDateStart',
-  'expenseDateEnd',
-  'applicationReason',
-  'attachments',
-  'plantCode',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ExpenseQuery)[]
 
-export type ExpenseQueryField =
-  | (typeof EXPENSE_QUERY_STRING_FIELDS)[number]
-  | 'expenseType' | 'expenseAmount' | 'taxRate' | 'taxAmount' | 'expenseStatus' | 'approvalStatus'
+export type ExpenseQueryField = (typeof EXPENSE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const EXPENSE_QUERY_FIELDS: readonly ExpenseQueryField[] = [
-  ...EXPENSE_QUERY_STRING_FIELDS,
-  'expenseType',
-  'expenseAmount',
-  'taxRate',
-  'taxAmount',
-  'expenseStatus',
-  'approvalStatus',
-]
+export const EXPENSE_QUERY_FIELDS: readonly ExpenseQueryField[] = [...EXPENSE_QUERY_STRING_FIELDS]
 
 /**
  * 费用单实体字段 i18n：index / expense-form 统一入口

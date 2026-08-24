@@ -22,7 +22,6 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 /// 职责：每次归档执行的完整结果（源/目标/数量/状态/起止/错误等）。
 /// 与业务「执行配置」分离：表级归档配置见 TaktTableArchive（仅配置，不落结果明细）。
 /// ArchiveKind 区分场景（table.year / file / attachment）；业务专用扩展走 ExtField。
-/// RunStatus：0=进行中 1=成功 2=失败。
 /// </remarks>
 [SugarTable("takt_statistics_logging_archive_log", "归档日志表")]
 [SugarIndex("ix_archive_log_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -81,7 +80,7 @@ public class TaktArchiveLog : TaktCompanyEntityBase
     public int DeletedCount { get; set; } = 0;
 
     /// <summary>
-    /// 运行状态（0=进行中 1=成功 2=失败）
+    /// 运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）
     /// </summary>
     [SugarColumn(ColumnName = "run_status", ColumnDescription = "运行状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int RunStatus { get; set; } = 0;

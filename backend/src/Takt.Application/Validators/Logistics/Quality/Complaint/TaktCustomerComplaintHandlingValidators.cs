@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintHandlingValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaintHandling 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCustomerComplaintHandling 生成，请按需审阅）
 // 
@@ -36,10 +36,10 @@ public class TaktCustomerComplaintHandlingCreateValidator : AbstractValidator<Ta
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.ComplaintId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.ComplaintId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ComplaintHandlingCode)
             .NotEmpty().WithMessage("客诉处理记录编码不能为空")
@@ -47,7 +47,7 @@ public class TaktCustomerComplaintHandlingCreateValidator : AbstractValidator<Ta
         RuleFor(x => x.ComplaintId)
             .GreaterThanOrEqualTo(0).WithMessage("客诉 ID不能为负数");
         RuleFor(x => x.ComplaintCode)
-            .NotEmpty().WithMessage("客诉单号不能为空")
+            .NotEmpty().WithMessage("客诉单号不能为空").When(x => x.ComplaintId <= 0)
             .MaximumLength(20).WithMessage("客诉单号长度不能超过20个字符");
         RuleFor(x => x.ComplaintItemId)
             .GreaterThanOrEqualTo(0).WithMessage("客诉明细 ID不能为负数");
@@ -84,10 +84,10 @@ public class TaktCustomerComplaintHandlingUpdateValidator : AbstractValidator<Ta
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.ComplaintId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.ComplaintId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ComplaintHandlingCode)
             .NotEmpty().WithMessage("客诉处理记录编码不能为空")
@@ -95,7 +95,7 @@ public class TaktCustomerComplaintHandlingUpdateValidator : AbstractValidator<Ta
         RuleFor(x => x.ComplaintId)
             .GreaterThanOrEqualTo(0).WithMessage("客诉 ID不能为负数");
         RuleFor(x => x.ComplaintCode)
-            .NotEmpty().WithMessage("客诉单号不能为空")
+            .NotEmpty().WithMessage("客诉单号不能为空").When(x => x.ComplaintId <= 0)
             .MaximumLength(20).WithMessage("客诉单号长度不能超过20个字符");
         RuleFor(x => x.ComplaintItemId)
             .GreaterThanOrEqualTo(0).WithMessage("客诉明细 ID不能为负数");

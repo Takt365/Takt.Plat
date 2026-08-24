@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePlanItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -280,13 +280,13 @@ public class TaktPurchasePlanItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseplanitem.referencesuppliername1", "zh-HK", "参考供货商名称1_hk", "参考供货商名称"),
 
             // entity.purchaseplanitem.isobsolete
-            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.purchaseplanitem.isobsolete
-            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.purchaseplanitem.isobsolete
-            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.purchaseplanitem.isobsolete
-            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.purchaseplanitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
         };
     }
 

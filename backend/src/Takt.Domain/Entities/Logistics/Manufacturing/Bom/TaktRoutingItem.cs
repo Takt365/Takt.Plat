@@ -105,13 +105,13 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public decimal TeardownMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type：0=否，1=是）
+    /// 检验（字典 sys_yes_no：0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_inspection", ColumnDescription = "检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsInspection { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
@@ -135,7 +135,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public string? ExtJson { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Code.Generator
 // 文件名称：TaktGenTableColumnDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：GenTableColumn 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktGenTableColumn 生成，请按需审阅）
 // 
@@ -87,52 +87,52 @@ public class TaktGenTableColumnDto : TaktTenantCoreDtoBase
     public int DecimalDigits { get; set; } = 0;
 
     /// <summary>
-    /// 主键（字典 sys_yes_no_type；0=否 1=是）
+    /// 主键（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsPk { get; set; } = 0;
 
     /// <summary>
-    /// 自增（字典 sys_yes_no_type；0=否 1=是）
+    /// 自增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsIncrement { get; set; } = 0;
 
     /// <summary>
-    /// 必填（字典 sys_yes_no_type；0=否 1=是）
+    /// 必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// 新增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsCreate { get; set; } = 0;
 
     /// <summary>
-    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// 更新（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUpdate { get; set; } = 0;
 
     /// <summary>
-    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// 查重（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUnique { get; set; } = 0;
 
     /// <summary>
-    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// 列表（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsList { get; set; } = 0;
 
     /// <summary>
-    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// 导出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsExport { get; set; } = 0;
 
     /// <summary>
-    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
     public int IsSort { get; set; } = 0;
 
     /// <summary>
-    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// 查询（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsQuery { get; set; } = 0;
 
@@ -221,52 +221,52 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public int? DecimalDigits { get; set; }
 
     /// <summary>
-    /// 主键（字典 sys_yes_no_type；0=否 1=是）
+    /// 主键（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsPk { get; set; }
 
     /// <summary>
-    /// 自增（字典 sys_yes_no_type；0=否 1=是）
+    /// 自增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsIncrement { get; set; }
 
     /// <summary>
-    /// 必填（字典 sys_yes_no_type；0=否 1=是）
+    /// 必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// 新增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsCreate { get; set; }
 
     /// <summary>
-    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// 更新（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUpdate { get; set; }
 
     /// <summary>
-    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// 查重（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUnique { get; set; }
 
     /// <summary>
-    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// 列表（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsList { get; set; }
 
     /// <summary>
-    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// 导出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsExport { get; set; }
 
     /// <summary>
-    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
     public int? IsSort { get; set; }
 
     /// <summary>
-    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// 查询（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsQuery { get; set; }
 
@@ -371,52 +371,52 @@ public class TaktGenTableColumnCreateDto
     public int DecimalDigits { get; set; } = 0;
 
     /// <summary>
-    /// 主键（字典 sys_yes_no_type；0=否 1=是）
+    /// 主键（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsPk { get; set; } = 0;
 
     /// <summary>
-    /// 自增（字典 sys_yes_no_type；0=否 1=是）
+    /// 自增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsIncrement { get; set; } = 0;
 
     /// <summary>
-    /// 必填（字典 sys_yes_no_type；0=否 1=是）
+    /// 必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// 新增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsCreate { get; set; } = 0;
 
     /// <summary>
-    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// 更新（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUpdate { get; set; } = 0;
 
     /// <summary>
-    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// 查重（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUnique { get; set; } = 0;
 
     /// <summary>
-    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// 列表（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsList { get; set; } = 0;
 
     /// <summary>
-    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// 导出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsExport { get; set; } = 0;
 
     /// <summary>
-    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
     public int IsSort { get; set; } = 0;
 
     /// <summary>
-    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// 查询（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsQuery { get; set; } = 0;
 
@@ -530,52 +530,52 @@ public class TaktGenTableColumnTemplateDto
     public int? DecimalDigits { get; set; }
 
     /// <summary>
-    /// 主键（字典 sys_yes_no_type；0=否 1=是）
+    /// 主键（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsPk { get; set; }
 
     /// <summary>
-    /// 自增（字典 sys_yes_no_type；0=否 1=是）
+    /// 自增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsIncrement { get; set; }
 
     /// <summary>
-    /// 必填（字典 sys_yes_no_type；0=否 1=是）
+    /// 必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// 新增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsCreate { get; set; }
 
     /// <summary>
-    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// 更新（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUpdate { get; set; }
 
     /// <summary>
-    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// 查重（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUnique { get; set; }
 
     /// <summary>
-    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// 列表（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsList { get; set; }
 
     /// <summary>
-    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// 导出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsExport { get; set; }
 
     /// <summary>
-    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
     public int? IsSort { get; set; }
 
     /// <summary>
-    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// 查询（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsQuery { get; set; }
 
@@ -663,52 +663,52 @@ public class TaktGenTableColumnImportDto
     public int? DecimalDigits { get; set; }
 
     /// <summary>
-    /// 主键（字典 sys_yes_no_type；0=否 1=是）
+    /// 主键（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsPk { get; set; }
 
     /// <summary>
-    /// 自增（字典 sys_yes_no_type；0=否 1=是）
+    /// 自增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsIncrement { get; set; }
 
     /// <summary>
-    /// 必填（字典 sys_yes_no_type；0=否 1=是）
+    /// 必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// 新增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsCreate { get; set; }
 
     /// <summary>
-    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// 更新（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUpdate { get; set; }
 
     /// <summary>
-    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// 查重（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUnique { get; set; }
 
     /// <summary>
-    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// 列表（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsList { get; set; }
 
     /// <summary>
-    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// 导出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsExport { get; set; }
 
     /// <summary>
-    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
     public int? IsSort { get; set; }
 
     /// <summary>
-    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// 查询（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsQuery { get; set; }
 
@@ -802,52 +802,52 @@ public class TaktGenTableColumnExportDto
     public int DecimalDigits { get; set; } = 0;
 
     /// <summary>
-    /// 主键（字典 sys_yes_no_type；0=否 1=是）
+    /// 主键（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsPk { get; set; } = 0;
 
     /// <summary>
-    /// 自增（字典 sys_yes_no_type；0=否 1=是）
+    /// 自增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsIncrement { get; set; } = 0;
 
     /// <summary>
-    /// 必填（字典 sys_yes_no_type；0=否 1=是）
+    /// 必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// 新增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsCreate { get; set; } = 0;
 
     /// <summary>
-    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// 更新（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUpdate { get; set; } = 0;
 
     /// <summary>
-    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// 查重（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUnique { get; set; } = 0;
 
     /// <summary>
-    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// 列表（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsList { get; set; } = 0;
 
     /// <summary>
-    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// 导出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsExport { get; set; } = 0;
 
     /// <summary>
-    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
     public int IsSort { get; set; } = 0;
 
     /// <summary>
-    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// 查询（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsQuery { get; set; } = 0;
 

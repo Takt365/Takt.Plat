@@ -41,7 +41,6 @@ TaktKnowledge [TaktCompanyEntityBase] Routine/HelpDesk/TaktKnowledge.cs
 TaktSelfService [TaktCompanyEntityBase] Routine/HelpDesk/TaktSelfService.cs
 TaktTicketCategoryAssign [TaktCompanyEntityBase] Routine/HelpDesk/TaktTicketCategoryAssign.cs
 TaktTicketReply [TaktCompanyEntityBase] Routine/HelpDesk/TaktTicketReply.cs
-TaktNewsAttachment [TaktCompanyEntityBase] Routine/NewsCenter/TaktNewsAttachment.cs
 TaktNewsComment [TaktApprovalEntityBase] Routine/NewsCenter/TaktNewsComment.cs
 TaktNewsShare [TaktCompanyEntityBase] Routine/NewsCenter/TaktNewsShare.cs
 TaktVisitorCompanion [TaktCompanyEntityBase] Routine/VisitorCenter/TaktVisitorCompanion.cs

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktAdminDivisionService.cs
-// 创建时间：2026-08-06
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：行政区划应用服务实现
 // 
@@ -133,8 +133,7 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
     }
 
     /// <summary>
-    /// 获取行政区划树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）。
-    /// 根层为国家（ParentId=0），子级按 ParentId 递归；排序 CountryCode、SortOrder。
+    /// 获取行政区划树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
@@ -146,12 +145,11 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
             : (x => x.TenantCode == CurrentTenantCode && x.ParentId == parentId && x.DivisionStatus == 1);
         var list = await _adminDivisionRepository.GetListAsync(predicate);
         return list
-            .OrderBy(x => x.CountryCode)
-            .ThenBy(x => x.SortOrder)
+            .OrderBy(x => x.SortOrder)
             .Select(item =>
             {
                 var treeDto = item.Adapt<TaktAdminDivisionTreeDto>();
-                treeDto.Children = new List<TaktAdminDivisionTreeDto>();
+                treeDto.Children = null;
                 return treeDto;
             })
             .ToList();
@@ -451,13 +449,13 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
 
         if (queryDto?.ParentId.HasValue == true)
         {
-            var parentId = queryDto.ParentId;
+            var parentId = queryDto.ParentId.Value;
             exp = exp.And(x => x.ParentId == parentId);
         }
 
         if (queryDto?.Level.HasValue == true)
         {
-            var level = queryDto.Level;
+            var level = queryDto.Level.Value;
             exp = exp.And(x => x.Level == level);
         }
 
@@ -469,7 +467,7 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
 
         if (queryDto?.IsLeaf.HasValue == true)
         {
-            var isLeaf = queryDto.IsLeaf;
+            var isLeaf = queryDto.IsLeaf.Value;
             exp = exp.And(x => x.IsLeaf == isLeaf);
         }
 
@@ -493,19 +491,19 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            var isBuiltIn = queryDto.IsBuiltIn;
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
             exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.DivisionStatus.HasValue == true)
         {
-            var divisionStatus = queryDto.DivisionStatus;
+            var divisionStatus = queryDto.DivisionStatus.Value;
             exp = exp.And(x => x.DivisionStatus == divisionStatus);
         }
 
@@ -523,16 +521,15 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-
 
         return exp.ToExpression();
     }

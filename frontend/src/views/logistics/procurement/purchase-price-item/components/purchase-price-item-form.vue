@@ -16,74 +16,11 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="purchase-price-item-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="pi.ph('remark')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 scaleQuantities -->
     <TaktEditableTable
       ref="purchasePriceScaleQuantityTableRef"
@@ -97,19 +34,7 @@
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
-    >
-      <template #cell-isObsolete="{ record }">
-        <TaktSelect
-          v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchasePriceScaleQuantityPi.ph('isObsolete')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-    </TaktEditableTable>
+    >    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -118,7 +43,7 @@
  * Takt采购价格明细实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/procurement/purchase-price-item/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { usePurchasePriceItemI18n } from '../composables/use-purchase-price-item-i18n'
@@ -127,56 +52,17 @@ import { usePurchasePriceItemI18n } from '../composables/use-purchase-price-item
 const pi = usePurchasePriceItemI18n()
 
 import type { PurchasePriceItemCreate } from '@/types/logistics/procurement/purchase-price-item'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-  if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
-}
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","purchasePriceId","purchasePriceCode","purchasePriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrencyCode","calculationType","price","untaxedPrice","taxIncludedPrice","taxAmount","conditionCurrencyCode","priceUnit","unitOfMeasure","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","isObsolete","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { usePurchasePriceScaleQuantityI18n } from '../composables/use-purchase-price-scale-quantity-i18n'
 
 const purchasePriceScaleQuantityPi = usePurchasePriceScaleQuantityI18n()
-
-/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
-function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
-  return triggerNode?.ownerDocument?.body ?? document.body
-}
 
 const childPurchasePriceScaleQuantityRows = ref<Record<string, unknown>[]>([])
 const purchasePriceScaleQuantityTableRef = ref<{
@@ -187,52 +73,8 @@ const purchasePriceScaleQuantityTableRef = ref<{
 
 /** 子表 purchasePriceScaleQuantity 可编辑列 */
 const purchasePriceScaleQuantityFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'purchasePriceCode',
-    title: purchasePriceScaleQuantityPi.label('purchasePriceCode'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'purchasePriceSeq',
-    title: purchasePriceScaleQuantityPi.label('purchasePriceSeq'),
-    width: 140,
-  },
-  {
-    key: 'purchaseScaleSeq',
-    title: purchasePriceScaleQuantityPi.label('purchaseScaleSeq'),
-    width: 140,
-  },
-  {
-    key: 'scaleQuantity',
-    title: purchasePriceScaleQuantityPi.label('scaleQuantity'),
-    width: 140,
-  },
-  {
-    key: 'price',
-    title: purchasePriceScaleQuantityPi.label('price'),
-    width: 140,
-  },
-  {
-    key: 'untaxedPrice',
-    title: purchasePriceScaleQuantityPi.label('untaxedPrice'),
-    width: 140,
-  },
-  {
-    key: 'taxIncludedPrice',
-    title: purchasePriceScaleQuantityPi.label('taxIncludedPrice'),
-    width: 140,
-  },
-  {
-    key: 'taxAmount',
-    title: purchasePriceScaleQuantityPi.label('taxAmount'),
-    width: 140,
-  },
-  {
-    key: 'isObsolete',
-    title: purchasePriceScaleQuantityPi.label('isObsolete'),
-    width: 140,
-  }])
+,
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PurchasePriceItemCreate & { purchasePriceItemId?: string }> | null | undefined) {
@@ -242,15 +84,7 @@ function syncChildRowsFromFormData(val: Partial<PurchasePriceItemCreate & { purc
 
 function createDefaultPurchasePriceScaleQuantityRow(): Record<string, unknown> {
   return {
-    purchasePriceCode: '',
-    purchasePriceSeq: 0,
-    purchaseScaleSeq: 0,
-    scaleQuantity: 0,
-    price: 0,
-    untaxedPrice: 0,
-    taxIncludedPrice: 0,
-    taxAmount: 0,
-    isObsolete: 0,
+
   }
 }
 
@@ -286,29 +120,11 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  priceType: "PB00",
-  scaleType: "A",
-  scaleBasis: "C",
-  scaleCurrencyCode: "CNY",
-  calculationType: "A",
-  conditionCurrencyCode: "CNY",
-  priceUnit: 1000
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 purchasePriceItemId 才视为编辑） */
 watch(
@@ -335,217 +151,9 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.purchasePriceItemId
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  purchasePriceId: [
-    {
-      required: true,
-      message: pi.ph('purchasePriceId'),
-      trigger: 'change'
-    }
-  ],
-  purchasePriceCode: [
-    {
-      required: true,
-      message: pi.ph('purchasePriceCode'),
-      trigger: 'blur'
-    }
-  ],
-  purchasePriceSeq: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('purchasePriceSeq'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('purchasePriceSeq'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  priceType: [
-    {
-      required: true,
-      message: pi.ph('priceType'),
-      trigger: 'change'
-    }
-  ],
-  scaleQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('scaleQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('scaleQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  scaleValue: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('scaleValue'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('scaleValue'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  calculationType: [
-    {
-      required: true,
-      message: pi.ph('calculationType'),
-      trigger: 'change'
-    }
-  ],
-  price: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('price'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('price'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  untaxedPrice: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('untaxedPrice'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('untaxedPrice'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxIncludedPrice: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxIncludedPrice'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxIncludedPrice'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  conditionCurrencyCode: [
-    {
-      required: true,
-      message: pi.ph('conditionCurrencyCode'),
-      trigger: 'change'
-    }
-  ],
-  priceUnit: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('priceUnit'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('priceUnit'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  unitOfMeasure: [
-    {
-      required: true,
-      message: pi.ph('unitOfMeasure'),
-      trigger: 'change'
-    }
-  ],
-  minOrderQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('minOrderQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('minOrderQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  roundingValue: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('roundingValue'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('roundingValue'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  plannedDeliveryTimeDays: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('plannedDeliveryTimeDays'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('plannedDeliveryTimeDays'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  isObsolete: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('isObsolete'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('isObsolete'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -558,55 +166,11 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('purchasePriceSeq' in payload) {
-    const rawpurchasePriceSeq = payload.purchasePriceSeq
-    payload.purchasePriceSeq = typeof rawpurchasePriceSeq === 'number' ? rawpurchasePriceSeq : Number(rawpurchasePriceSeq)
-  }
-  if ('scaleQuantity' in payload) {
-    const rawscaleQuantity = payload.scaleQuantity
-    payload.scaleQuantity = typeof rawscaleQuantity === 'number' ? rawscaleQuantity : Number(rawscaleQuantity)
-  }
-  if ('scaleValue' in payload) {
-    const rawscaleValue = payload.scaleValue
-    payload.scaleValue = typeof rawscaleValue === 'number' ? rawscaleValue : Number(rawscaleValue)
-  }
-  if ('price' in payload) {
-    const rawprice = payload.price
-    payload.price = typeof rawprice === 'number' ? rawprice : Number(rawprice)
-  }
-  if ('untaxedPrice' in payload) {
-    const rawuntaxedPrice = payload.untaxedPrice
-    payload.untaxedPrice = typeof rawuntaxedPrice === 'number' ? rawuntaxedPrice : Number(rawuntaxedPrice)
-  }
-  if ('taxIncludedPrice' in payload) {
-    const rawtaxIncludedPrice = payload.taxIncludedPrice
-    payload.taxIncludedPrice = typeof rawtaxIncludedPrice === 'number' ? rawtaxIncludedPrice : Number(rawtaxIncludedPrice)
-  }
-  if ('taxAmount' in payload) {
-    const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
-  }
-  if ('priceUnit' in payload) {
-    const rawpriceUnit = payload.priceUnit
-    payload.priceUnit = typeof rawpriceUnit === 'number' ? rawpriceUnit : Number(rawpriceUnit)
-  }
-  if ('minOrderQuantity' in payload) {
-    const rawminOrderQuantity = payload.minOrderQuantity
-    payload.minOrderQuantity = typeof rawminOrderQuantity === 'number' ? rawminOrderQuantity : Number(rawminOrderQuantity)
-  }
-  if ('roundingValue' in payload) {
-    const rawroundingValue = payload.roundingValue
-    payload.roundingValue = typeof rawroundingValue === 'number' ? rawroundingValue : Number(rawroundingValue)
-  }
-  if ('plannedDeliveryTimeDays' in payload) {
-    const rawplannedDeliveryTimeDays = payload.plannedDeliveryTimeDays
-    payload.plannedDeliveryTimeDays = typeof rawplannedDeliveryTimeDays === 'number' ? rawplannedDeliveryTimeDays : Number(rawplannedDeliveryTimeDays)
-  }
-  if ('isObsolete' in payload) {
-    const rawisObsolete = payload.isObsolete
-    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.purchasePriceItemId) {
+    payload.purchasePriceItemId = props.formData.purchasePriceItemId
+  }
   return payload
 }
 
@@ -620,19 +184,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.purchasePriceItemId)
   childPurchasePriceScaleQuantityRows.value = []
   purchasePriceScaleQuantityTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

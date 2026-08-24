@@ -48,7 +48,7 @@ function printAllUsage() {
 
 按顺序执行三模板 Vue 生成（各脚本仅处理匹配模板，其余自动跳过）:
   1. generate-vue-crud-from-api.cjs     单表 CRUD
-  2. generate-vue-tree-from-api.cjs     树表 TREE（懒加载+virtual + list 分页）
+  2. generate-vue-tree-from-api.cjs     树表 TREE（仅 tree API，禁止 list 探测）
   3. generate-vue-master-detail-from-api.cjs  主子表 Master-Detail
 
 参数:

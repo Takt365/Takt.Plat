@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
 // 文件名称：TaktEmployeeDelegationsController.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工代理关系控制器
 // 
@@ -41,7 +41,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:list", "员工代理关系列表")]
+    [TaktPermission("human:resource:personnel:employee:list", "员工代理关系列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeDelegationListAsync([FromQuery] TaktEmployeeDelegationQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工代理关系ID</param>
     /// <returns>员工代理关系DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:query", "员工代理关系详情")]
+    [TaktPermission("human:resource:personnel:employee:query", "员工代理关系详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeDelegationByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// 获取员工代理关系选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:query", "员工代理关系选项")]
+    [TaktPermission("human:resource:personnel:employee:query", "员工代理关系选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeDelegationOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工代理关系DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:create", "创建员工代理关系")]
+    [TaktPermission("human:resource:personnel:employee:create", "创建员工代理关系")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeDelegationAsync([FromBody] TaktEmployeeDelegationCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// <param name="id">员工代理关系ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工代理关系DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:update", "更新员工代理关系")]
+    [TaktPermission("human:resource:personnel:employee:update", "更新员工代理关系")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeDelegationAsync(long id, [FromBody] TaktEmployeeDelegationUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工代理关系ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:delete", "删除员工代理关系")]
+    [TaktPermission("human:resource:personnel:employee:delete", "删除员工代理关系")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeDelegationByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:delete", "批量删除员工代理关系")]
+    [TaktPermission("human:resource:personnel:employee:delete", "批量删除员工代理关系")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeDelegationBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:import", "获取员工代理关系导入模板")]
+    [TaktPermission("human:resource:personnel:employee:import", "获取员工代理关系导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeDelegationTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:import", "导入员工代理关系")]
+    [TaktPermission("human:resource:personnel:employee:import", "导入员工代理关系")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeDelegationAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// 导出员工代理关系
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employee:delegation:export", "导出员工代理关系")]
+    [TaktPermission("human:resource:personnel:employee:export", "导出员工代理关系")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeDelegationAsync([FromQuery] TaktEmployeeDelegationQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

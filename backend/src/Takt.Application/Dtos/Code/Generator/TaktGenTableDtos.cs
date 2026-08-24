@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Code.Generator
 // 文件名称：TaktGenTableDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：GenTable 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktGenTable 生成，请按需审阅）
 // 
@@ -76,7 +76,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public string? TreeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
+    /// 库表标识（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int InDatabase { get; set; } = 0;
 
@@ -161,7 +161,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public string? ControllerClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// 仓储层（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsRepository { get; set; } = 0;
 
@@ -201,7 +201,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public string GenPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成菜单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenMenu { get; set; } = 0;
 
@@ -217,7 +217,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public string? ParentMenuName { get; set; }
 
     /// <summary>
-    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成翻译（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenTranslation { get; set; } = 0;
 
@@ -247,7 +247,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public int FrontBtnStyle { get; set; } = 0;
 
     /// <summary>
-    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否生成（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenCode { get; set; } = 0;
 
@@ -257,7 +257,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public int GenCodeCount { get; set; } = 0;
 
     /// <summary>
-    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// 使用tabs（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUseTabs { get; set; } = 0;
 
@@ -283,7 +283,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public List<TaktGenTableColumnDto>? Columns { get; set; }
 
     /// <summary>
-    /// 子表列最大行号（含软删；供前端新增列时递增）
+    /// 子表列配置最大行号（含已作废行，供前端续编行号）
     /// </summary>
     public int MaxGenTableColumnLineNumber { get; set; }
 
@@ -345,7 +345,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? TreeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
+    /// 库表标识（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? InDatabase { get; set; }
 
@@ -430,7 +430,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? ControllerClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// 仓储层（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsRepository { get; set; }
 
@@ -470,7 +470,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? GenPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成菜单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenMenu { get; set; }
 
@@ -481,7 +481,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public long? ParentMenuId { get; set; }
 
     /// <summary>
-    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成翻译（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenTranslation { get; set; }
 
@@ -511,7 +511,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public int? FrontBtnStyle { get; set; }
 
     /// <summary>
-    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否生成（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenCode { get; set; }
 
@@ -521,7 +521,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public int? GenCodeCount { get; set; }
 
     /// <summary>
-    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// 使用tabs（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUseTabs { get; set; }
 
@@ -618,7 +618,7 @@ public class TaktGenTableCreateDto
     public string? TreeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
+    /// 库表标识（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int InDatabase { get; set; } = 0;
 
@@ -707,7 +707,7 @@ public class TaktGenTableCreateDto
     public string? ControllerClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// 仓储层（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsRepository { get; set; } = 0;
 
@@ -748,7 +748,7 @@ public class TaktGenTableCreateDto
     public string GenPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成菜单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenMenu { get; set; } = 0;
 
@@ -759,7 +759,7 @@ public class TaktGenTableCreateDto
     public long ParentMenuId { get; set; }
 
     /// <summary>
-    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成翻译（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenTranslation { get; set; } = 0;
 
@@ -791,7 +791,7 @@ public class TaktGenTableCreateDto
     public int FrontBtnStyle { get; set; } = 0;
 
     /// <summary>
-    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否生成（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenCode { get; set; } = 0;
 
@@ -801,7 +801,7 @@ public class TaktGenTableCreateDto
     public int GenCodeCount { get; set; } = 0;
 
     /// <summary>
-    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// 使用tabs（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUseTabs { get; set; } = 0;
 
@@ -918,7 +918,7 @@ public class TaktGenTableTemplateDto
     public string? TreeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
+    /// 库表标识（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? InDatabase { get; set; }
 
@@ -1003,7 +1003,7 @@ public class TaktGenTableTemplateDto
     public string? ControllerClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// 仓储层（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsRepository { get; set; }
 
@@ -1043,7 +1043,7 @@ public class TaktGenTableTemplateDto
     public string? GenPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成菜单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenMenu { get; set; }
 
@@ -1054,7 +1054,7 @@ public class TaktGenTableTemplateDto
     public long? ParentMenuId { get; set; }
 
     /// <summary>
-    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成翻译（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenTranslation { get; set; }
 
@@ -1084,7 +1084,7 @@ public class TaktGenTableTemplateDto
     public int? FrontBtnStyle { get; set; }
 
     /// <summary>
-    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否生成（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenCode { get; set; }
 
@@ -1094,7 +1094,7 @@ public class TaktGenTableTemplateDto
     public int? GenCodeCount { get; set; }
 
     /// <summary>
-    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// 使用tabs（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUseTabs { get; set; }
 
@@ -1181,7 +1181,7 @@ public class TaktGenTableImportDto
     public string? TreeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
+    /// 库表标识（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? InDatabase { get; set; }
 
@@ -1266,7 +1266,7 @@ public class TaktGenTableImportDto
     public string? ControllerClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// 仓储层（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsRepository { get; set; }
 
@@ -1306,7 +1306,7 @@ public class TaktGenTableImportDto
     public string? GenPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成菜单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenMenu { get; set; }
 
@@ -1317,7 +1317,7 @@ public class TaktGenTableImportDto
     public long? ParentMenuId { get; set; }
 
     /// <summary>
-    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成翻译（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenTranslation { get; set; }
 
@@ -1347,7 +1347,7 @@ public class TaktGenTableImportDto
     public int? FrontBtnStyle { get; set; }
 
     /// <summary>
-    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否生成（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsGenCode { get; set; }
 
@@ -1357,7 +1357,7 @@ public class TaktGenTableImportDto
     public int? GenCodeCount { get; set; }
 
     /// <summary>
-    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// 使用tabs（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsUseTabs { get; set; }
 
@@ -1450,7 +1450,7 @@ public class TaktGenTableExportDto
     public string? TreeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
+    /// 库表标识（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int InDatabase { get; set; } = 0;
 
@@ -1535,7 +1535,7 @@ public class TaktGenTableExportDto
     public string? ControllerClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// 仓储层（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsRepository { get; set; } = 0;
 
@@ -1575,7 +1575,7 @@ public class TaktGenTableExportDto
     public string GenPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成菜单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenMenu { get; set; } = 0;
 
@@ -1586,7 +1586,7 @@ public class TaktGenTableExportDto
     public long ParentMenuId { get; set; }
 
     /// <summary>
-    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成翻译（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenTranslation { get; set; } = 0;
 
@@ -1616,7 +1616,7 @@ public class TaktGenTableExportDto
     public int FrontBtnStyle { get; set; } = 0;
 
     /// <summary>
-    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否生成（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsGenCode { get; set; } = 0;
 
@@ -1626,7 +1626,7 @@ public class TaktGenTableExportDto
     public int GenCodeCount { get; set; } = 0;
 
     /// <summary>
-    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// 使用tabs（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsUseTabs { get; set; } = 0;
 

@@ -10,12 +10,10 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using System.Globalization;
 using System.Linq.Expressions;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
 using Takt.Application.Services.Foundation;
-using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
@@ -23,7 +21,6 @@ using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
@@ -46,7 +43,6 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     private readonly ITaktCompanyRepository<TaktBomMaterialCostItem> _bomMaterialCostItemRepository;
     private readonly ITaktCompanyRepository<TaktBomMaterialCost> _bomMaterialCostRepository;
     private readonly ITaktCompanyRepository<TaktMaterialMovingPrice> _materialMovingPriceRepository;
-    private readonly ITaktTenantRepository<TaktCompany> _companyRepository;
 
     /// <summary>
     /// 构造函数
@@ -54,14 +50,12 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     /// <param name="bomMaterialCostItemRepository">BOM 成本明细仓储</param>
     /// <param name="bomMaterialCostRepository">BOM 成本汇总仓储</param>
     /// <param name="materialMovingPriceRepository">移动价格仓储</param>
-    /// <param name="companyRepository">公司仓储（RelatedPlant）</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktBomMaterialZeroPriceService(
         ITaktCompanyRepository<TaktBomMaterialCostItem> bomMaterialCostItemRepository,
         ITaktCompanyRepository<TaktBomMaterialCost> bomMaterialCostRepository,
         ITaktCompanyRepository<TaktMaterialMovingPrice> materialMovingPriceRepository,
-        ITaktTenantRepository<TaktCompany> companyRepository,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -69,84 +63,6 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         _bomMaterialCostItemRepository = bomMaterialCostItemRepository;
         _bomMaterialCostRepository = bomMaterialCostRepository;
         _materialMovingPriceRepository = materialMovingPriceRepository;
-        _companyRepository = companyRepository;
-    }
-
-    /// <summary>
-    /// 查询栏工厂选项：当前公司 RelatedPlant ∩ 成本主表 PlantCode
-    /// </summary>
-    /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomMaterialZeroPricePlantOptionsAsync()
-    {
-        EnsureThreeLayerContext();
-        var companies = await _companyRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode);
-        var relatedPlant = companies
-            .Select(c => c.RelatedPlant?.Trim() ?? string.Empty)
-            .FirstOrDefault(p => !string.IsNullOrEmpty(p))
-            ?? string.Empty;
-        if (string.IsNullOrEmpty(relatedPlant))
-        {
-            return new List<TaktSelectOption>();
-        }
-        var costPlants = await _bomMaterialCostRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == relatedPlant);
-        if (costPlants.Count == 0)
-        {
-            return new List<TaktSelectOption>();
-        }
-        return new List<TaktSelectOption>
-        {
-            new()
-            {
-                DictValue = relatedPlant,
-                DictLabel = relatedPlant,
-            },
-        };
-    }
-
-    /// <summary>
-    /// 查询栏机种选项：工厂 + 核算月 + MaterialType=FERT 下去重 ModelCode
-    /// </summary>
-    /// <param name="queryDto">工厂 + FocusPeriod</param>
-    /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomMaterialZeroPriceModelOptionsAsync(
-        TaktBomMaterialZeroPriceModelOptionsQueryDto queryDto)
-    {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.PlantCode);
-        EnsureThreeLayerContext();
-        var periodKey = queryDto.FocusPeriod?.Trim() ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(periodKey)
-            || !DateTime.TryParseExact(
-                periodKey,
-                "yyyy-MM",
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out _))
-        {
-            return new List<TaktSelectOption>();
-        }
-        var plant = queryDto.PlantCode.Trim();
-        var fertType = TaktBomMaterialCostItemLineCostHelper.FertMaterialTypeCode;
-        var headers = await _bomMaterialCostRepository.GetListAsync(x =>
-            x.TenantCode == CurrentTenantCode
-            && x.CompanyCode == CurrentCompanyCode
-            && x.PlantCode == plant
-            && x.CostingPeriod == periodKey
-            && x.MaterialType == fertType
-            && x.ModelCode != null
-            && x.ModelCode != "");
-        return headers
-            .Select(h => h.ModelCode!.Trim())
-            .Where(c => !string.IsNullOrWhiteSpace(c))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(c => c, StringComparer.Ordinal)
-            .Select(code => new TaktSelectOption { DictValue = code, DictLabel = code })
-            .ToList();
     }
 
     /// <summary>

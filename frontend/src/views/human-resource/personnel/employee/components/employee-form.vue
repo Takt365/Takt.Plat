@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee/components -->
 <!-- 文件名称：employee-form.vue -->
-<!-- 功能描述：员工实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：员工实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form employee-form flex flex-col min-h-0 overflow-visible"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,18 +27,301 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.form.numberingRule')"
+                name="numberingRuleCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.numberingRuleCode"
+                  api-url="TaktNumberings/options"
+                  :api-params="{ documentType: '员工档案' }"
+                  :placeholder="t('common.page.form.placeholder.selectonly')"
+                  :disabled="!!formData?.employeeId || loading"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('employeeCode')"
+                name="employeeCode"
+              >
+                <a-input
+                  v-model:value="formState.employeeCode"
+                  :placeholder="t('common.page.form.numberingCodePreview')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('employeeName')"
+                name="employeeName"
+              >
+                <a-input
+                  v-model:value="formState.employeeName"
+                  :placeholder="pi.ph('employeeName')"
+                  show-count
+                  :maxlength="80"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('gender')"
+                name="gender"
+              >
+                <TaktSelect
+                  v-model:value="formState.gender"
+                  dict-type="sys_user_gender_category"
+                  :placeholder="pi.ph('gender')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('birthDate')"
+                name="birthDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.birthDate"
+                  :placeholder="pi.ph('birthDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('idCardCode')"
+                name="idCardCode"
+              >
+                <a-input
+                  v-model:value="formState.idCardCode"
+                  :placeholder="pi.ph('idCardCode')"
+                  show-count
+                  :maxlength="18"
+                  allow-clear
+                  :disabled="!!formData?.employeeId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('mobile')"
+                name="mobile"
+              >
+                <a-input
+                  v-model:value="formState.mobile"
+                  :placeholder="pi.ph('mobile')"
+                  show-count
+                  :maxlength="11"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('email')"
+                name="email"
+              >
+                <a-input
+                  v-model:value="formState.email"
+                  :placeholder="pi.ph('email')"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('nativePlace')"
+                name="nativePlace"
+              >
+                <TaktSelect
+                  v-model:value="formState.nativePlace"
+                  dict-type="hr_native_place_code"
+                  :placeholder="pi.ph('nativePlace')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('ethnicity')"
+                name="ethnicity"
+              >
+                <TaktSelect
+                  v-model:value="formState.ethnicity"
+                  dict-type="hr_ethnic_code"
+                  :placeholder="pi.ph('ethnicity')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('politicalAffiliation')"
+                name="politicalAffiliation"
+              >
+                <TaktSelect
+                  v-model:value="formState.politicalAffiliation"
+                  dict-type="hr_political_affiliation"
+                  :placeholder="pi.ph('politicalAffiliation')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('maritalStatus')"
+                name="maritalStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.maritalStatus"
+                  dict-type="hr_marital_status"
+                  :placeholder="pi.ph('maritalStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('employeeStatus')"
+                name="employeeStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.employeeStatus"
+                  dict-type="hr_employee_status"
+                  :placeholder="pi.ph('employeeStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('isBuiltIn')"
+                name="isBuiltIn"
+              >
+                <TaktSelect
+                  v-model:value="formState.isBuiltIn"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isBuiltIn')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('avatar')"
+                name="avatar"
+              >
+                <a-input
+                  v-model:value="formState.avatar"
+                  :placeholder="pi.ph('avatar')"
+                  show-count
+                  :maxlength="500"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('employeeDeptIds')"
+                name="employeeDeptIds"
+              >
+                <a-input
+                  v-model:value="formState.employeeDeptIds"
+                  :placeholder="pi.ph('employeeDeptIds')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('employeePostIds')"
+                name="employeePostIds"
+              >
+                <a-input
+                  v-model:value="formState.employeePostIds"
+                  :placeholder="pi.ph('employeePostIds')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -84,82 +367,12 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <!-- 下：子表 employeeAddresses -->
-    <TaktEditableTable
-      ref="employeeAddressTableRef"
-      v-model="childEmployeeAddressRows"
-      :columns="employeeAddressFormColumns"
-      :title="employeeAddressPi.self()"
-      :add-button-entity="employeeAddressPi.self()"
-      id-field="employeeAddressId"
-      :default-row="createDefaultEmployeeAddressRow"
-      :disabled="loading"
-      :enable-vertical-scroll="false"
-      section-border
-      class="w-full min-w-0"
-    >
-      <template #cell-addressType="{ record }">
-        <TaktSelect
-          v-model:value="record.addressType"
-          dict-type="hr_employee_address_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="employeeAddressPi.ph('addressType')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-country="{ record }">
-        <TaktSelect
-          v-model:value="record.country"
-          dict-type="sys_country_code"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="employeeAddressPi.ph('country')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-province="{ record }">
-        <TaktSelect
-          v-model:value="record.province"
-          api-url="TaktAdminDivisions/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="employeeAddressPi.queryPh('province', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-city="{ record }">
-        <TaktSelect
-          v-model:value="record.city"
-          api-url="TaktAdminDivisions/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="employeeAddressPi.queryPh('city', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-district="{ record }">
-        <TaktSelect
-          v-model:value="record.district"
-          api-url="TaktAdminDivisions/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="employeeAddressPi.queryPh('district', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-    </TaktEditableTable>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 员工实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 员工实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -169,150 +382,49 @@ import { useEmployeeI18n } from '../composables/use-employee-i18n'
 
 /** 实体字段 i18n */
 const pi = useEmployeeI18n()
-
 import type { EmployeeCreate } from '@/types/human-resource/personnel/employee'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useTaktFormNumbering } from '@/composables/use-takt-form-numbering'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","employeeCode","employeeName","gender","birthDate","idCardCode","mobile","email","nativePlace","ethnicity","politicalAffiliation","maritalStatus","employeeStatus","isBuiltIn","avatar","employeeDeptIds","employeePostIds","extField","remark"]
 
-import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-import { useEmployeeAddressI18n } from '../composables/use-employee-address-i18n'
-
-const employeeAddressPi = useEmployeeAddressI18n()
-
-/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
-function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
-  return triggerNode?.ownerDocument?.body ?? document.body
-}
-
-const childEmployeeAddressRows = ref<Record<string, unknown>[]>([])
-const employeeAddressTableRef = ref<{
-  getRows: () => Record<string, unknown>[]
-  validate: () => Promise<unknown>
-  resetRows: () => void
-} | null>(null)
-
-/** 子表 employeeAddress 可编辑列 */
-const employeeAddressFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'employeeName',
-    title: employeeAddressPi.label('employeeName'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'addressType',
-    title: employeeAddressPi.label('addressType'),
-    width: 140,
-  },
-  {
-    key: 'country',
-    title: employeeAddressPi.label('country'),
-    width: 140,
-  },
-  {
-    key: 'province',
-    title: employeeAddressPi.label('province'),
-    width: 140,
-  },
-  {
-    key: 'city',
-    title: employeeAddressPi.label('city'),
-    width: 140,
-  },
-  {
-    key: 'district',
-    title: employeeAddressPi.label('district'),
-    width: 140,
-  },
-  {
-    key: 'address1',
-    title: employeeAddressPi.label('address1'),
-    editor: 'textarea',
-    rows: 1,
-    placeholder: employeeAddressPi.ph('address1'),
-    width: 180,
-  },
-  {
-    key: 'address2',
-    title: employeeAddressPi.label('address2'),
-    editor: 'textarea',
-    rows: 1,
-    placeholder: employeeAddressPi.ph('address2'),
-    width: 180,
-  }])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<EmployeeCreate & { employeeId?: string }> | null | undefined) {
-  const rows_employeeAddress = ((val as any)?.employeeAddresses ?? []) as Record<string, unknown>[]
-  childEmployeeAddressRows.value = rows_employeeAddress
-}
-
-function createDefaultEmployeeAddressRow(): Record<string, unknown> {
-  return {
-    employeeName: '',
-    addressType: 0,
-    country: '',
-    province: '',
-    city: '',
-    district: '',
-    address1: '',
-    address2: '',
-  }
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  const masterId = props.formData?.employeeId ?? ''
-  const isUpdate = Boolean(masterId)
-  return {
-    ...formState,
-    employeeAddresses: employeeAddressTableRef.value?.getRows?.() ?? childEmployeeAddressRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      employeeId: masterId,
-    })),
-  }
-}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -355,10 +467,9 @@ watch(
     if (val?.employeeId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).employeeAddresses
+
       applyScopeDefaults(next)
       Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -375,24 +486,49 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.employeeId
-    if (isCreate) {
+    if (!props.formData?.employeeId) {
       applyScopeDefaults(formState, true)
     }
   },
 )
 
+/** 是否编辑态 */
+const isEditMode = computed(() => !!props.formData?.employeeId)
+
+useTaktFormNumbering({
+  formState,
+  isEdit: isEditMode,
+  businessCodeField: 'employeeCode',
+})
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  employeeCode: [
-    {
-      required: true,
-      message: pi.ph('employeeCode'),
-      trigger: 'blur'
-    }
-  ],
+  numberingRuleCode: [{
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingRuleRequired'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],
+  employeeCode: [{
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingCodePreview'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],
   employeeName: [
     {
       required: true,
@@ -511,38 +647,82 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
-  await employeeAddressTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = buildSubmitPayload() as Record<string, unknown>
+  const payload = { ...formState }
   if ('gender' in payload) {
     const rawgender = payload.gender
-    payload.gender = typeof rawgender === 'number' ? rawgender : Number(rawgender)
+    if (rawgender === undefined || rawgender === null || rawgender === '') {
+      delete payload.gender
+    } else {
+      const numgender = typeof rawgender === 'number' ? rawgender : Number(rawgender)
+      if (Number.isFinite(numgender)) payload.gender = numgender
+      else delete payload.gender
+    }
   }
   if ('ethnicity' in payload) {
     const rawethnicity = payload.ethnicity
-    payload.ethnicity = typeof rawethnicity === 'number' ? rawethnicity : Number(rawethnicity)
+    if (rawethnicity === undefined || rawethnicity === null || rawethnicity === '') {
+      delete payload.ethnicity
+    } else {
+      const numethnicity = typeof rawethnicity === 'number' ? rawethnicity : Number(rawethnicity)
+      if (Number.isFinite(numethnicity)) payload.ethnicity = numethnicity
+      else delete payload.ethnicity
+    }
   }
   if ('politicalAffiliation' in payload) {
     const rawpoliticalAffiliation = payload.politicalAffiliation
-    payload.politicalAffiliation = typeof rawpoliticalAffiliation === 'number' ? rawpoliticalAffiliation : Number(rawpoliticalAffiliation)
+    if (rawpoliticalAffiliation === undefined || rawpoliticalAffiliation === null || rawpoliticalAffiliation === '') {
+      delete payload.politicalAffiliation
+    } else {
+      const numpoliticalAffiliation = typeof rawpoliticalAffiliation === 'number' ? rawpoliticalAffiliation : Number(rawpoliticalAffiliation)
+      if (Number.isFinite(numpoliticalAffiliation)) payload.politicalAffiliation = numpoliticalAffiliation
+      else delete payload.politicalAffiliation
+    }
   }
   if ('maritalStatus' in payload) {
     const rawmaritalStatus = payload.maritalStatus
-    payload.maritalStatus = typeof rawmaritalStatus === 'number' ? rawmaritalStatus : Number(rawmaritalStatus)
+    if (rawmaritalStatus === undefined || rawmaritalStatus === null || rawmaritalStatus === '') {
+      delete payload.maritalStatus
+    } else {
+      const nummaritalStatus = typeof rawmaritalStatus === 'number' ? rawmaritalStatus : Number(rawmaritalStatus)
+      if (Number.isFinite(nummaritalStatus)) payload.maritalStatus = nummaritalStatus
+      else delete payload.maritalStatus
+    }
   }
   if ('employeeStatus' in payload) {
     const rawemployeeStatus = payload.employeeStatus
-    payload.employeeStatus = typeof rawemployeeStatus === 'number' ? rawemployeeStatus : Number(rawemployeeStatus)
+    if (rawemployeeStatus === undefined || rawemployeeStatus === null || rawemployeeStatus === '') {
+      delete payload.employeeStatus
+    } else {
+      const numemployeeStatus = typeof rawemployeeStatus === 'number' ? rawemployeeStatus : Number(rawemployeeStatus)
+      if (Number.isFinite(numemployeeStatus)) payload.employeeStatus = numemployeeStatus
+      else delete payload.employeeStatus
+    }
   }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn
-    payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+    if (rawisBuiltIn === undefined || rawisBuiltIn === null || rawisBuiltIn === '') {
+      delete payload.isBuiltIn
+    } else {
+      const numisBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+      if (Number.isFinite(numisBuiltIn)) payload.isBuiltIn = numisBuiltIn
+      else delete payload.isBuiltIn
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.employeeId) {
+    payload.employeeId = props.formData.employeeId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 
@@ -554,8 +734,7 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.employeeId)
-  childEmployeeAddressRows.value = []
-  employeeAddressTableRef.value?.resetRows?.()
+
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

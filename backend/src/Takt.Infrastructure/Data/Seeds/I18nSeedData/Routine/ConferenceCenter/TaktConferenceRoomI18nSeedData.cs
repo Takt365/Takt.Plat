@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceRoomI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceRoom 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,13 +154,13 @@ public class TaktConferenceRoomI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceroom.facilities", "zh-HK", "设施说明_hk", "设施说明（投影、视频会议设备等）"),
 
             // entity.conferenceroom.sortorder
-            new TranslationSeedItem("entity.conferenceroom.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.conferenceroom.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.conferenceroom.sortorder
-            new TranslationSeedItem("entity.conferenceroom.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.conferenceroom.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.conferenceroom.sortorder
-            new TranslationSeedItem("entity.conferenceroom.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.conferenceroom.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.conferenceroom.sortorder
-            new TranslationSeedItem("entity.conferenceroom.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.conferenceroom.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.conferenceroom.roomstatus
             new TranslationSeedItem("entity.conferenceroom.roomstatus", "en-US", "会议室状态_us", "会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）"),

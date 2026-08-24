@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceOfSupply 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,22 +127,22 @@ public class TaktSourceOfSupplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "zh-HK", "采购组_hk", "采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
 
             // entity.sourceofsupply.isfixed
-            new TranslationSeedItem("entity.sourceofsupply.isfixed", "en-US", "固定_us", "固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isfixed", "en-US", "固定_us", "固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
             // entity.sourceofsupply.isfixed
-            new TranslationSeedItem("entity.sourceofsupply.isfixed", "ja-JP", "固定_jp", "固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isfixed", "ja-JP", "固定_jp", "固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
             // entity.sourceofsupply.isfixed
-            new TranslationSeedItem("entity.sourceofsupply.isfixed", "zh-CN", "固定", "固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isfixed", "zh-CN", "固定", "固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
             // entity.sourceofsupply.isfixed
-            new TranslationSeedItem("entity.sourceofsupply.isfixed", "zh-HK", "固定_hk", "固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isfixed", "zh-HK", "固定_hk", "固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
 
             // entity.sourceofsupply.isblocked
-            new TranslationSeedItem("entity.sourceofsupply.isblocked", "en-US", "冻结_us", "冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isblocked", "en-US", "冻结_us", "冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）"),
             // entity.sourceofsupply.isblocked
-            new TranslationSeedItem("entity.sourceofsupply.isblocked", "ja-JP", "冻结_jp", "冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isblocked", "ja-JP", "冻结_jp", "冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）"),
             // entity.sourceofsupply.isblocked
-            new TranslationSeedItem("entity.sourceofsupply.isblocked", "zh-CN", "冻结", "冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isblocked", "zh-CN", "冻结", "冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）"),
             // entity.sourceofsupply.isblocked
-            new TranslationSeedItem("entity.sourceofsupply.isblocked", "zh-HK", "冻结_hk", "冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）"),
+            new TranslationSeedItem("entity.sourceofsupply.isblocked", "zh-HK", "冻结_hk", "冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）"),
 
             // entity.sourceofsupply.purchaseunit
             new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "en-US", "采购单位_us", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
@@ -217,22 +217,22 @@ public class TaktSourceOfSupplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceofsupply.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.sourceofsupply.sortorder
-            new TranslationSeedItem("entity.sourceofsupply.sortorder", "en-US", "排序号_us", "排序号（越小越靠前；同物料多货源清单时的优先级）"),
+            new TranslationSeedItem("entity.sourceofsupply.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前；同物料多货源清单时的优先级）"),
             // entity.sourceofsupply.sortorder
-            new TranslationSeedItem("entity.sourceofsupply.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前；同物料多货源清单时的优先级）"),
+            new TranslationSeedItem("entity.sourceofsupply.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前；同物料多货源清单时的优先级）"),
             // entity.sourceofsupply.sortorder
-            new TranslationSeedItem("entity.sourceofsupply.sortorder", "zh-CN", "排序号", "排序号（越小越靠前；同物料多货源清单时的优先级）"),
+            new TranslationSeedItem("entity.sourceofsupply.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前；同物料多货源清单时的优先级）"),
             // entity.sourceofsupply.sortorder
-            new TranslationSeedItem("entity.sourceofsupply.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前；同物料多货源清单时的优先级）"),
+            new TranslationSeedItem("entity.sourceofsupply.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前；同物料多货源清单时的优先级）"),
 
             // entity.sourceofsupply.sourcestatus
-            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "en-US", "货源清单状态_us", "货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "en-US", "货源清单状态_us", "货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.sourceofsupply.sourcestatus
-            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "ja-JP", "货源清单状态_jp", "货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "ja-JP", "货源清单状态_jp", "货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.sourceofsupply.sourcestatus
-            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "zh-CN", "货源清单状态", "货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "zh-CN", "货源清单状态", "货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.sourceofsupply.sourcestatus
-            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "zh-HK", "货源清单状态_hk", "货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.sourceofsupply.sourcestatus", "zh-HK", "货源清单状态_hk", "货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

@@ -204,7 +204,7 @@ const columns = computed<TableColumnsType>(() => [
     key: 'isPhantom',
     width: 80,
     customRender: ({ record }: { record: BillOfMaterialExplosionLine }) =>
-      h(TaktDictTag, { dictType: 'sys_yes_no_type', value: record.isPhantom }),
+      h(TaktDictTag, { dictType: 'sys_yes_no', value: record.isPhantom }),
   },
   {
     title: t('logistics.manufacturing.bom.bill-of-material.page.explosion.column.hasChildBom'),
@@ -212,7 +212,7 @@ const columns = computed<TableColumnsType>(() => [
     key: 'hasChildBom',
     width: 90,
     customRender: ({ record }: { record: BillOfMaterialExplosionLine }) =>
-      h(TaktDictTag, { dictType: 'sys_yes_no_type', value: record.hasChildBom }),
+      h(TaktDictTag, { dictType: 'sys_yes_no', value: record.hasChildBom }),
   },
   {
     title: t('logistics.manufacturing.bom.bill-of-material.page.explosion.column.isCircular'),
@@ -220,7 +220,7 @@ const columns = computed<TableColumnsType>(() => [
     key: 'isCircular',
     width: 90,
     customRender: ({ record }: { record: BillOfMaterialExplosionLine }) =>
-      h(TaktDictTag, { dictType: 'sys_yes_no_type', value: record.isCircular }),
+      h(TaktDictTag, { dictType: 'sys_yes_no', value: record.isCircular }),
   }])
 
 /**

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeAddressI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeAddress 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -179,6 +179,15 @@ public class TaktEmployeeAddressI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeaddress.address2", "zh-CN", "地址2", "地址2（详细地址行2）"),
             // entity.employeeaddress.address2
             new TranslationSeedItem("entity.employeeaddress.address2", "zh-HK", "地址2_hk", "地址2（详细地址行2）"),
+
+            // entity.employeeaddress.employee
+            new TranslationSeedItem("entity.employeeaddress.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeeaddress.employee
+            new TranslationSeedItem("entity.employeeaddress.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeeaddress.employee
+            new TranslationSeedItem("entity.employeeaddress.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeeaddress.employee
+            new TranslationSeedItem("entity.employeeaddress.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

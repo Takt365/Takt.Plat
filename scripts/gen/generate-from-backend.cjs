@@ -1548,16 +1548,17 @@ function processDtos(entityPrefix = null) {
       } else if (file.endsWith('.cs') && file.includes('Dto')) {
         const sourceFileBase = file.replace('.cs', '');
 
-        if (shouldExcludeDtoSourceBase(sourceFileBase)) {
-          console.log(`⏭️  跳过手工维护 DTO（前端）: ${file}`);
-          return;
-        }
-
+        // 单实体模式：先按前缀过滤，避免把全库手工模块误打成「跳过」日志
         if (entityPrefix) {
           const expectedFileName = `Takt${entityPrefix}Dtos`;
           if (sourceFileBase !== expectedFileName) {
             return;
           }
+        }
+
+        if (shouldExcludeDtoSourceBase(sourceFileBase)) {
+          console.log(`⏭️  跳过手工维护 DTO（前端）: ${file}`);
+          return;
         }
 
         const dtos = parseDtoFile(fullPath);
@@ -1646,13 +1647,13 @@ function processControllers(entityPrefix = null) {
       } else if (file.endsWith('Controller.cs')) {
         const controllerName = file.replace('.cs', ''); // 例：TaktUsersController
 
-        if (shouldExcludeController(controllerName)) {
-          console.log(`⏭️  跳过手工维护控制器（前端）: ${file}`);
+        // 单实体模式：先按前缀过滤，避免把全库手工模块（Holiday/Auth/…）误打成「跳过」日志
+        if (entityPrefix && !matchControllerForEntityPrefix(controllerName, entityPrefix)) {
           return;
         }
 
-        // 如果指定了实体前缀，仅匹配复数控制器 Takt{Entity}sController
-        if (entityPrefix && !matchControllerForEntityPrefix(controllerName, entityPrefix)) {
+        if (shouldExcludeController(controllerName)) {
+          console.log(`⏭️  跳过手工维护控制器（前端）: ${file}`);
           return;
         }
         

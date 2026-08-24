@@ -75,7 +75,7 @@
         <template v-if="column.key === 'priority'">
           <TaktDictTag
             :value="getCustomerServiceRequestDictValue(record, 'priority')"
-            dict-type="sys_priority_level_category"
+            dict-type="sys_priority_level"
           />
         </template>
       </template>
@@ -131,11 +131,10 @@
       </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="pi.queryPh('plantCode', 'required')"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -268,7 +267,7 @@
       <a-form-item :label="pi.queryLabel('priority')">
         <TaktSelect
           v-model:value="advancedQueryForm.priority"
-          dict-type="sys_priority_level_category"
+          dict-type="sys_priority_level"
           :placeholder="pi.queryPh('priority', 'select')"
           allow-clear
         />

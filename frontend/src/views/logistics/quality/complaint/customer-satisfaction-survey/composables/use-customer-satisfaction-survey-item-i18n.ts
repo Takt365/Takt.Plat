@@ -20,7 +20,6 @@ export const CUSTOMERSATISFACTIONSURVEYITEM_SELF_I18N_KEY = buildEntitySelfI18nK
 
 /** 列表业务列（不含主键） */
 export const CUSTOMERSATISFACTIONSURVEYITEM_LIST_FIELDS = [
-  'surveyId',
   'customerSatisfactionSurveyCode',
   'lineNumber',
   'categoryType',
@@ -34,11 +33,11 @@ export const CUSTOMERSATISFACTIONSURVEYITEM_LIST_FIELDS = [
   'followUpAction',
   'followUpStatus',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const CUSTOMERSATISFACTIONSURVEYITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'surveyId',
   'customerSatisfactionSurveyCode',
   'lineNumber',
   'categoryType',
@@ -67,23 +66,7 @@ export const CUSTOMERSATISFACTIONSURVEYITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const CUSTOMERSATISFACTIONSURVEYITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  surveyId: 'select',
-  lineNumber: 'select',
-  categoryType: 'select',
-  itemName: 'required',
-  itemDescription: 'optional',
-  weight: 'select',
-  score: 'optional',
-  satisfactionLevel: 'optional',
-  customerFeedback: 'optional',
-  improvementSuggestion: 'optional',
-  followUpAction: 'optional',
-  followUpStatus: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -91,33 +74,13 @@ export type CustomerSatisfactionSurveyItemField = keyof typeof CUSTOMERSATISFACT
 
 /** 高级查询可 trim 的字符串字段 */
 export const CUSTOMERSATISFACTIONSURVEYITEM_QUERY_STRING_FIELDS = [
-  'surveyId',
-  'itemName',
-  'itemDescription',
-  'customerFeedback',
-  'improvementSuggestion',
-  'followUpAction',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof CustomerSatisfactionSurveyItemQuery)[]
 
-export type CustomerSatisfactionSurveyItemQueryField =
-  | (typeof CUSTOMERSATISFACTIONSURVEYITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'categoryType' | 'weight' | 'score' | 'satisfactionLevel' | 'followUpStatus' | 'isObsolete'
+export type CustomerSatisfactionSurveyItemQueryField = (typeof CUSTOMERSATISFACTIONSURVEYITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const CUSTOMERSATISFACTIONSURVEYITEM_QUERY_FIELDS: readonly CustomerSatisfactionSurveyItemQueryField[] = [
-  ...CUSTOMERSATISFACTIONSURVEYITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'categoryType',
-  'weight',
-  'score',
-  'satisfactionLevel',
-  'followUpStatus',
-  'isObsolete',
-]
+export const CUSTOMERSATISFACTIONSURVEYITEM_QUERY_FIELDS: readonly CustomerSatisfactionSurveyItemQueryField[] = [...CUSTOMERSATISFACTIONSURVEYITEM_QUERY_STRING_FIELDS]
 
 /**
  * CustomerSatisfactionSurveyItem字段 i18n：index / customer-satisfaction-survey-item-form 统一入口

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePrice 生成，请按需审阅）
 // 
@@ -35,7 +35,6 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePriceId { get; set; }
 
-
     /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
@@ -57,7 +56,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string MaterialDescription { get; set; } = string.Empty;
 
@@ -72,7 +71,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -136,7 +135,7 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -171,7 +170,7 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -186,7 +185,7 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -277,9 +276,8 @@ public class TaktPurchasePriceCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -307,9 +305,9 @@ public class TaktPurchasePriceCreateDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
-    [Required(ErrorMessage = "物料描述（回填：随物料）不能为空")]
+    [Required(ErrorMessage = "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）不能为空")]
     public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
@@ -323,7 +321,7 @@ public class TaktPurchasePriceCreateDto
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -425,7 +423,7 @@ public class TaktPurchasePriceTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -450,7 +448,7 @@ public class TaktPurchasePriceTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -465,7 +463,7 @@ public class TaktPurchasePriceTemplateDto
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -538,7 +536,7 @@ public class TaktPurchasePriceImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -563,7 +561,7 @@ public class TaktPurchasePriceImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -578,7 +576,7 @@ public class TaktPurchasePriceImportDto
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -657,6 +655,11 @@ public class TaktPurchasePriceExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string PurchasePriceCode { get; set; } = string.Empty;
@@ -677,7 +680,7 @@ public class TaktPurchasePriceExportDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string MaterialDescription { get; set; } = string.Empty;
 
@@ -692,7 +695,7 @@ public class TaktPurchasePriceExportDto
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 

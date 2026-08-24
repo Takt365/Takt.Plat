@@ -34,7 +34,7 @@ public class TaktTranslation : TaktTenantCoreEntityBase
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// 区域文化编码（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "mul")]
     public string CultureCode { get; set; } = "mul";
@@ -52,7 +52,7 @@ public class TaktTranslation : TaktTenantCoreEntityBase
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 资源分组（选项 TaktMenus/tree-options,DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "resource_group", ColumnDescription = "资源分组", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string ResourceGroup { get; set; } = string.Empty;

@@ -106,7 +106,7 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int Concurrent { get; set; } = 0;
 
@@ -248,7 +248,7 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? Concurrent { get; set; }
 
@@ -431,7 +431,7 @@ public class TaktQuartzTaskCreateDto
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int Concurrent { get; set; } = 0;
 
@@ -641,7 +641,7 @@ public class TaktQuartzTaskTemplateDto
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? Concurrent { get; set; }
 
@@ -788,7 +788,7 @@ public class TaktQuartzTaskImportDto
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? Concurrent { get; set; }
 
@@ -936,7 +936,7 @@ public class TaktQuartzTaskExportDto
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int Concurrent { get; set; } = 0;
 

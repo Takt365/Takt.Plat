@@ -79,7 +79,7 @@ export interface SopDoc extends ApprovalDtoBase {
   defaultLang: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+   * 状态（字典 sys_normal_disable，0=停用，1=正常）
    */
   sopStatus: number;
 
@@ -154,7 +154,7 @@ export interface SopDocQuery extends TaktPagedQuery {
   defaultLang?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+   * 状态（字典 sys_normal_disable，0=停用，1=正常）
    */
   sopStatus?: number;
 
@@ -278,7 +278,7 @@ export interface SopDocCreate {
   defaultLang: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+   * 状态（字典 sys_normal_disable，0=停用，1=正常）
    */
   sopStatus: number;
 
@@ -327,7 +327,7 @@ export interface SopDocStatus {
   sopDocId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+   * 状态（字典 sys_normal_disable，0=停用，1=正常）
    */
   sopStatus: number;
 
@@ -386,7 +386,7 @@ export interface SopDocTemplate {
   defaultLang?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+   * 状态（字典 sys_normal_disable，0=停用，1=正常）
    */
   sopStatus?: number;
 
@@ -460,7 +460,7 @@ export interface SopDocImport {
   defaultLang?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+   * 状态（字典 sys_normal_disable，0=停用，1=正常）
    */
   sopStatus?: number;
 
@@ -524,7 +524,7 @@ export interface SopDocExport {
   defaultLang: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+   * 状态（字典 sys_normal_disable，0=停用，1=正常）
    */
   sopStatus: number;
 

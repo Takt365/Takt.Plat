@@ -69,7 +69,7 @@ public class TaktSopDoc : TaktApprovalEntityBase
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "sop_status", ColumnDescription = "文档状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SopStatus { get; set; } = 1;

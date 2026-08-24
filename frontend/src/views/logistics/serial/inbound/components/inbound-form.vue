@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form inbound-form flex flex-col min-h-0"
+    class="takt-generated-form inbound-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,32 +27,20 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.serialInboundId"
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('inboundCode')"
                 name="inboundCode"
@@ -61,12 +49,13 @@
                   v-model:value="formState.inboundCode"
                   :placeholder="pi.ph('inboundCode')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="10"
                   allow-clear
+                  :disabled="!!formData?.serialInboundId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('inboundDate')"
                 name="inboundDate"
@@ -79,7 +68,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('inboundType')"
                 name="inboundType"
@@ -91,7 +80,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('warehouseCode')"
                 name="warehouseCode"
@@ -104,7 +93,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('locationCode')"
                 name="locationCode"
@@ -117,7 +106,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('totalQuantity')"
                 name="totalQuantity"
@@ -139,6 +128,33 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -194,8 +210,22 @@
       id-field="serialInboundItemId"
       :default-row="createDefaultSerialInboundItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="serialInboundItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -222,24 +252,24 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
@@ -248,12 +278,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","inboundCode","inboundDate","inboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","inboundCode","inboundDate","inboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useSerialInboundItemI18n } from '../composables/use-inbound-item-i18n'
 
 const serialInboundItemPi = useSerialInboundItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childSerialInboundItemRows = ref<Record<string, unknown>[]>([])
 const serialInboundItemTableRef = ref<{
@@ -262,77 +299,76 @@ const serialInboundItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedSerialInboundItemRow(row: Record<string, unknown>): boolean {
+  const id = row.serialInboundItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextSerialInboundItemLineNumber(): number {
+  const rows = serialInboundItemTableRef.value?.getRows?.() ?? childSerialInboundItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 serialInboundItem 可编辑列 */
 const serialInboundItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    key: 'inboundId',
-    title: serialInboundItemPi.label('inboundId'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'inboundCode',
-    title: serialInboundItemPi.label('inboundCode'),
-    editor: 'input',
-    width: 140,
-  },
-  {
     key: 'lineNumber',
     title: serialInboundItemPi.label('lineNumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    width: 140,
   },
   {
     key: 'inboundSerialCode',
     title: serialInboundItemPi.label('inboundSerialCode'),
     editor: 'input',
-    width: 140, required: true, unique: true,
-  },
-  {
-    key: 'extField',
-    title: serialInboundItemPi.label('extField'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.extfield'),
     width: 140,
   },
   {
-    key: 'remark',
-    title: serialInboundItemPi.label('remark'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: serialInboundItemPi.ph('remark'),
+    key: 'isObsolete',
+    title: serialInboundItemPi.label('isObsolete'),
     width: 140,
-  }])
+  },
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SerialInboundCreate & { serialInboundId?: string }> | null | undefined) {
-  childSerialInboundItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_serialInboundItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childSerialInboundItemRows.value = rows_serialInboundItem
 }
 
 function createDefaultSerialInboundItemRow(): Record<string, unknown> {
   return {
-    inboundId: '',
-    inboundCode: '',
-    lineNumber: (childSerialInboundItemRows.value.length + 1) * 10,
+    lineNumber: allocateNextSerialInboundItemLineNumber(),
     inboundSerialCode: '',
-    extField: '',
-    remark: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.serialInboundId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: serialInboundItemTableRef.value?.getRows?.() ?? childSerialInboundItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      serialInboundId: masterId,
-    })),
+    items: serialInboundItemTableRef.value?.getRows?.() ?? childSerialInboundItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        inboundId: masterId,
+      }
+      if (isUpdate && isPersistedSerialInboundItemRow(row)) {
+        normalized.serialInboundItemId = row.serialInboundItemId
+      } else {
+        delete normalized.serialInboundItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -399,8 +435,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.serialInboundId
-    if (isCreate) {
+    if (!props.formData?.serialInboundId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -408,13 +443,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   inboundCode: [
     {
       required: true,
@@ -483,13 +511,29 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('inboundType' in payload) {
     const rawinboundType = payload.inboundType
-    payload.inboundType = typeof rawinboundType === 'number' ? rawinboundType : Number(rawinboundType)
+    if (rawinboundType === undefined || rawinboundType === null || rawinboundType === '') {
+      delete payload.inboundType
+    } else {
+      const numinboundType = typeof rawinboundType === 'number' ? rawinboundType : Number(rawinboundType)
+      if (Number.isFinite(numinboundType)) payload.inboundType = numinboundType
+      else delete payload.inboundType
+    }
   }
   if ('totalQuantity' in payload) {
     const rawtotalQuantity = payload.totalQuantity
-    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+    if (rawtotalQuantity === undefined || rawtotalQuantity === null || rawtotalQuantity === '') {
+      delete payload.totalQuantity
+    } else {
+      const numtotalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+      if (Number.isFinite(numtotalQuantity)) payload.totalQuantity = numtotalQuantity
+      else delete payload.totalQuantity
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.serialInboundId) {
+    payload.serialInboundId = props.formData.serialInboundId
+  }
   return payload
 }
 

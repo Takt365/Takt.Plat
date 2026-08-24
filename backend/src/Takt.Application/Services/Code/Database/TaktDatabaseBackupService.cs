@@ -326,7 +326,7 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         {
             Host = dto.Host.Trim(),
             Port = dto.Port is > 0 ? dto.Port.Value : 21,
-            Username = dto.UserName.Trim(),
+            UserName = dto.UserName.Trim(),
             Password = password,
             Timeout = 60,
         };
@@ -465,7 +465,7 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         {
             Host = dto.Host.Trim(),
             Port = dto.Port is > 0 ? dto.Port.Value : 21,
-            Username = dto.UserName.Trim(),
+            UserName = dto.UserName.Trim(),
             Password = password,
             Timeout = 60,
         };

@@ -32,6 +32,7 @@ export const TAKT_TABLE_CELL_ELLIPSIS_INNER_CLASS = 'takt-table-cell-ellipsis-in
 export type TaktTableScrollLayout =
   | 'page'
   | 'treeRight'
+  | 'treeLeft'
   | 'masterDetailLr'
   | 'masterDetailTbMaster'
   | 'masterDetailTbDetail'
@@ -191,6 +192,31 @@ export function computeMasterDetailLrSharedScrollYPx(
 }
 
 /**
+ * 从已撑满父级的容器实测纵向滚动高度（左树整视口 / 右表扣除表头）
+ * @param hostEl 左树 viewport 或右表 __body
+ * @param options.subtractTableHeader 为 true 时扣除 .ant-table-header（右表）
+ * @returns {number} a-tree.height / a-table scroll.y（px）
+ */
+export function measureFillHeightScrollYPx(
+  hostEl: HTMLElement | null | undefined,
+  options: { subtractTableHeader?: boolean } = {},
+): number {
+  if (hostEl == null || hostEl.clientHeight <= 0) {
+    return TAKT_TABLE_SCROLL_Y_MIN;
+  }
+  let next = hostEl.clientHeight;
+  if (options.subtractTableHeader === true) {
+    const headerEl = hostEl.querySelector('.ant-table-header') as HTMLElement | null;
+    const headerHeight =
+      headerEl != null && headerEl.offsetHeight > 0
+        ? headerEl.offsetHeight
+        : TAKT_TABLE_HEADER_FALLBACK_PX;
+    next -= headerHeight;
+  }
+  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.floor(next));
+}
+
+/**
  * 按布局场景与视口高度计算 scroll.y（像素，Ant Design Table 推荐写法）
  * @param layout 表格所在布局场景
  * @param viewportHeight 视口高度；缺省为 window.innerHeight
@@ -217,7 +243,7 @@ export function computeTableScrollYPx(
       raw = TAKT_EDITABLE_TABLE_DEFAULT_SCROLL_Y;
       break;
     default:
-      // innerHeight 减去固定 header/footer 与列表页壳，与 calc(100vh - 300px) 语义一致
+      // page / treeRight / treeLeft：同一垂直带，innerHeight 减 header/footer/页壳
       raw = vh - TAKT_TABLE_VIEWPORT_CHROME_RESERVE;
       break;
   }

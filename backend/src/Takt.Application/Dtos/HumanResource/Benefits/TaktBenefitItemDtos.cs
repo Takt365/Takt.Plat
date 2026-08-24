@@ -37,12 +37,12 @@ public class TaktBenefitItemDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -119,7 +119,7 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     public decimal? EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no_type）
+    /// 是否强制福利（字典 sys_yes_no）
     /// </summary>
     public int? IsMandatory { get; set; }
 
@@ -129,12 +129,12 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -232,7 +232,7 @@ public class TaktBenefitItemCreateDto
     public decimal EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no_type）
+    /// 是否强制福利（字典 sys_yes_no）
     /// </summary>
     public int IsMandatory { get; set; } = 0;
 
@@ -243,7 +243,7 @@ public class TaktBenefitItemCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -297,9 +297,9 @@ public class TaktBenefitItemStatusDto
     public long BenefitItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int ItemStatus { get; set; } = 0;
 }
 
@@ -321,7 +321,7 @@ public class TaktBenefitItemSortDto
     public long BenefitItemId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -397,7 +397,7 @@ public class TaktBenefitItemTemplateDto
     public decimal? EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no_type）
+    /// 是否强制福利（字典 sys_yes_no）
     /// </summary>
     public int? IsMandatory { get; set; }
 
@@ -407,7 +407,7 @@ public class TaktBenefitItemTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -490,7 +490,7 @@ public class TaktBenefitItemImportDto
     public decimal? EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no_type）
+    /// 是否强制福利（字典 sys_yes_no）
     /// </summary>
     public int? IsMandatory { get; set; }
 
@@ -500,7 +500,7 @@ public class TaktBenefitItemImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -583,7 +583,7 @@ public class TaktBenefitItemExportDto
     public decimal EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no_type）
+    /// 是否强制福利（字典 sys_yes_no）
     /// </summary>
     public int IsMandatory { get; set; } = 0;
 
@@ -593,12 +593,12 @@ public class TaktBenefitItemExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 

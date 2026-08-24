@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktMaterialRequirementsPlanningItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialRequirementsPlanningItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -253,13 +253,13 @@ public class TaktMaterialRequirementsPlanningItemI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.materialrequirementsplanningitem.procurementtype", "zh-HK", "供应类型_hk", "供应类型（字典 logistics_procurement_type；0=自制，1=外购，2=委外）"),
 
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是）"),
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是）"),
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是）"),
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是）"),
         };
     }
 

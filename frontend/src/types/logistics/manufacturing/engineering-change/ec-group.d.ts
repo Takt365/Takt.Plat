@@ -60,7 +60,7 @@ export interface EcGroup extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -70,7 +70,7 @@ export interface EcGroup extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -130,7 +130,7 @@ export interface EcGroupQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -140,7 +140,7 @@ export interface EcGroupQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -227,12 +227,12 @@ export interface EcGroupCreate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -276,7 +276,7 @@ export interface EcGroupStatus {
   ecGroupId: string;
 
   /**
-   * 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -354,12 +354,12 @@ export interface EcGroupTemplate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -436,12 +436,12 @@ export interface EcGroupImport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -510,7 +510,7 @@ export interface EcGroupExport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -520,7 +520,7 @@ export interface EcGroupExport {
   sortOrder: number;
 
   /**
-   * 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 

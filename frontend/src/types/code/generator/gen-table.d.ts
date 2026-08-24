@@ -69,7 +69,7 @@ export interface GenTable extends TenantCoreDtoBase {
   treeName?: string;
 
   /**
-   * 库表标识（字典 sys_yes_no_type；0=否 1=是）
+   * 库表标识（字典 sys_yes_no；0=否 1=是）
    */
   inDatabase: number;
 
@@ -154,7 +154,7 @@ export interface GenTable extends TenantCoreDtoBase {
   controllerClassName?: string;
 
   /**
-   * 仓储层（字典 sys_yes_no_type；0=否 1=是）
+   * 仓储层（字典 sys_yes_no；0=否 1=是）
    */
   isRepository: number;
 
@@ -194,7 +194,7 @@ export interface GenTable extends TenantCoreDtoBase {
   genPath: string;
 
   /**
-   * 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+   * 生成菜单（字典 sys_yes_no；0=否 1=是）
    */
   isGenMenu: number;
 
@@ -209,7 +209,7 @@ export interface GenTable extends TenantCoreDtoBase {
   parentMenuName?: string;
 
   /**
-   * 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+   * 生成翻译（字典 sys_yes_no；0=否 1=是）
    */
   isGenTranslation: number;
 
@@ -239,7 +239,7 @@ export interface GenTable extends TenantCoreDtoBase {
   frontBtnStyle: number;
 
   /**
-   * 是否生成（字典 sys_yes_no_type；0=否 1=是）
+   * 是否生成（字典 sys_yes_no；0=否 1=是）
    */
   isGenCode: number;
 
@@ -249,7 +249,7 @@ export interface GenTable extends TenantCoreDtoBase {
   genCodeCount: number;
 
   /**
-   * 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+   * 使用tabs（字典 sys_yes_no；0=否 1=是）
    */
   isUseTabs: number;
 
@@ -329,7 +329,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   treeName?: string;
 
   /**
-   * 库表标识（字典 sys_yes_no_type；0=否 1=是）
+   * 库表标识（字典 sys_yes_no；0=否 1=是）
    */
   inDatabase?: number;
 
@@ -414,7 +414,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   controllerClassName?: string;
 
   /**
-   * 仓储层（字典 sys_yes_no_type；0=否 1=是）
+   * 仓储层（字典 sys_yes_no；0=否 1=是）
    */
   isRepository?: number;
 
@@ -454,7 +454,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   genPath?: string;
 
   /**
-   * 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+   * 生成菜单（字典 sys_yes_no；0=否 1=是）
    */
   isGenMenu?: number;
 
@@ -464,7 +464,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   parentMenuId?: string;
 
   /**
-   * 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+   * 生成翻译（字典 sys_yes_no；0=否 1=是）
    */
   isGenTranslation?: number;
 
@@ -494,7 +494,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   frontBtnStyle?: number;
 
   /**
-   * 是否生成（字典 sys_yes_no_type；0=否 1=是）
+   * 是否生成（字典 sys_yes_no；0=否 1=是）
    */
   isGenCode?: number;
 
@@ -504,7 +504,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   genCodeCount?: number;
 
   /**
-   * 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+   * 使用tabs（字典 sys_yes_no；0=否 1=是）
    */
   isUseTabs?: number;
 
@@ -598,7 +598,7 @@ export interface GenTableCreate {
   treeName?: string;
 
   /**
-   * 库表标识（字典 sys_yes_no_type；0=否 1=是）
+   * 库表标识（字典 sys_yes_no；0=否 1=是）
    */
   inDatabase: number;
 
@@ -683,7 +683,7 @@ export interface GenTableCreate {
   controllerClassName?: string;
 
   /**
-   * 仓储层（字典 sys_yes_no_type；0=否 1=是）
+   * 仓储层（字典 sys_yes_no；0=否 1=是）
    */
   isRepository: number;
 
@@ -723,7 +723,7 @@ export interface GenTableCreate {
   genPath: string;
 
   /**
-   * 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+   * 生成菜单（字典 sys_yes_no；0=否 1=是）
    */
   isGenMenu: number;
 
@@ -733,7 +733,7 @@ export interface GenTableCreate {
   parentMenuId: string;
 
   /**
-   * 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+   * 生成翻译（字典 sys_yes_no；0=否 1=是）
    */
   isGenTranslation: number;
 
@@ -763,7 +763,7 @@ export interface GenTableCreate {
   frontBtnStyle: number;
 
   /**
-   * 是否生成（字典 sys_yes_no_type；0=否 1=是）
+   * 是否生成（字典 sys_yes_no；0=否 1=是）
    */
   isGenCode: number;
 
@@ -773,7 +773,7 @@ export interface GenTableCreate {
   genCodeCount: number;
 
   /**
-   * 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+   * 使用tabs（字典 sys_yes_no；0=否 1=是）
    */
   isUseTabs: number;
 
@@ -882,7 +882,7 @@ export interface GenTableTemplate {
   treeName?: string;
 
   /**
-   * 库表标识（字典 sys_yes_no_type；0=否 1=是）
+   * 库表标识（字典 sys_yes_no；0=否 1=是）
    */
   inDatabase?: number;
 
@@ -967,7 +967,7 @@ export interface GenTableTemplate {
   controllerClassName?: string;
 
   /**
-   * 仓储层（字典 sys_yes_no_type；0=否 1=是）
+   * 仓储层（字典 sys_yes_no；0=否 1=是）
    */
   isRepository?: number;
 
@@ -1007,7 +1007,7 @@ export interface GenTableTemplate {
   genPath?: string;
 
   /**
-   * 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+   * 生成菜单（字典 sys_yes_no；0=否 1=是）
    */
   isGenMenu?: number;
 
@@ -1017,7 +1017,7 @@ export interface GenTableTemplate {
   parentMenuId?: string;
 
   /**
-   * 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+   * 生成翻译（字典 sys_yes_no；0=否 1=是）
    */
   isGenTranslation?: number;
 
@@ -1047,7 +1047,7 @@ export interface GenTableTemplate {
   frontBtnStyle?: number;
 
   /**
-   * 是否生成（字典 sys_yes_no_type；0=否 1=是）
+   * 是否生成（字典 sys_yes_no；0=否 1=是）
    */
   isGenCode?: number;
 
@@ -1057,7 +1057,7 @@ export interface GenTableTemplate {
   genCodeCount?: number;
 
   /**
-   * 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+   * 使用tabs（字典 sys_yes_no；0=否 1=是）
    */
   isUseTabs?: number;
 
@@ -1146,7 +1146,7 @@ export interface GenTableImport {
   treeName?: string;
 
   /**
-   * 库表标识（字典 sys_yes_no_type；0=否 1=是）
+   * 库表标识（字典 sys_yes_no；0=否 1=是）
    */
   inDatabase?: number;
 
@@ -1231,7 +1231,7 @@ export interface GenTableImport {
   controllerClassName?: string;
 
   /**
-   * 仓储层（字典 sys_yes_no_type；0=否 1=是）
+   * 仓储层（字典 sys_yes_no；0=否 1=是）
    */
   isRepository?: number;
 
@@ -1271,7 +1271,7 @@ export interface GenTableImport {
   genPath?: string;
 
   /**
-   * 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+   * 生成菜单（字典 sys_yes_no；0=否 1=是）
    */
   isGenMenu?: number;
 
@@ -1281,7 +1281,7 @@ export interface GenTableImport {
   parentMenuId?: string;
 
   /**
-   * 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+   * 生成翻译（字典 sys_yes_no；0=否 1=是）
    */
   isGenTranslation?: number;
 
@@ -1311,7 +1311,7 @@ export interface GenTableImport {
   frontBtnStyle?: number;
 
   /**
-   * 是否生成（字典 sys_yes_no_type；0=否 1=是）
+   * 是否生成（字典 sys_yes_no；0=否 1=是）
    */
   isGenCode?: number;
 
@@ -1321,7 +1321,7 @@ export interface GenTableImport {
   genCodeCount?: number;
 
   /**
-   * 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+   * 使用tabs（字典 sys_yes_no；0=否 1=是）
    */
   isUseTabs?: number;
 
@@ -1410,7 +1410,7 @@ export interface GenTableExport {
   treeName?: string;
 
   /**
-   * 库表标识（字典 sys_yes_no_type；0=否 1=是）
+   * 库表标识（字典 sys_yes_no；0=否 1=是）
    */
   inDatabase: number;
 
@@ -1495,7 +1495,7 @@ export interface GenTableExport {
   controllerClassName?: string;
 
   /**
-   * 仓储层（字典 sys_yes_no_type；0=否 1=是）
+   * 仓储层（字典 sys_yes_no；0=否 1=是）
    */
   isRepository: number;
 
@@ -1535,7 +1535,7 @@ export interface GenTableExport {
   genPath: string;
 
   /**
-   * 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+   * 生成菜单（字典 sys_yes_no；0=否 1=是）
    */
   isGenMenu: number;
 
@@ -1545,7 +1545,7 @@ export interface GenTableExport {
   parentMenuId: string;
 
   /**
-   * 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+   * 生成翻译（字典 sys_yes_no；0=否 1=是）
    */
   isGenTranslation: number;
 
@@ -1575,7 +1575,7 @@ export interface GenTableExport {
   frontBtnStyle: number;
 
   /**
-   * 是否生成（字典 sys_yes_no_type；0=否 1=是）
+   * 是否生成（字典 sys_yes_no；0=否 1=是）
    */
   isGenCode: number;
 
@@ -1585,7 +1585,7 @@ export interface GenTableExport {
   genCodeCount: number;
 
   /**
-   * 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+   * 使用tabs（字典 sys_yes_no；0=否 1=是）
    */
   isUseTabs: number;
 

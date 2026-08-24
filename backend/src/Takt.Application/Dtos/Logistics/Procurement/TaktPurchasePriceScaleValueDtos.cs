@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScaleValueDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePriceScaleValue 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePriceScaleValue 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Procurement;
 // ========================================
 
 /// <summary>
-/// Takt采购价格价值等级实体（；主子表：TaktPurchasePriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
+/// Takt采购价格价值等级实体（主子表：TaktPurchasePriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
 /// 对应前端 TaktPurchasePriceScaleValueDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -47,12 +47,12 @@ public class TaktPurchasePriceScaleValueDto : TaktCompanyDtoBase
     public string? PurchasePriceItemName { get; set; }
 
     /// <summary>
-    /// 定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）
+    /// 定价记录号（冗余：与明细 PurchasePriceCode 一致）
     /// </summary>
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
+    /// 定价序号（冗余：与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int PurchasePriceSeq { get; set; } = 0;
 
@@ -87,7 +87,7 @@ public class TaktPurchasePriceScaleValueDto : TaktCompanyDtoBase
     public decimal TaxAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -109,7 +109,7 @@ public class TaktPurchasePriceScaleValueQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -118,11 +118,11 @@ public class TaktPurchasePriceScaleValueQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
@@ -130,12 +130,12 @@ public class TaktPurchasePriceScaleValueQueryDto : TaktPagedQuery
     public long? PurchasePriceItemId { get; set; }
 
     /// <summary>
-    /// 定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）
+    /// 定价记录号（冗余：与明细 PurchasePriceCode 一致）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
+    /// 定价序号（冗余：与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int? PurchasePriceSeq { get; set; }
 
@@ -170,7 +170,7 @@ public class TaktPurchasePriceScaleValueQueryDto : TaktPagedQuery
     public decimal? TaxAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -219,11 +219,11 @@ public class TaktPurchasePriceScaleValueCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
@@ -231,13 +231,13 @@ public class TaktPurchasePriceScaleValueCreateDto
     public long PurchasePriceItemId { get; set; }
 
     /// <summary>
-    /// 定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）
+    /// 定价记录号（冗余：与明细 PurchasePriceCode 一致）
     /// </summary>
-    [Required(ErrorMessage = "定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）不能为空")]
+    [Required(ErrorMessage = "定价记录号（冗余：与明细 PurchasePriceCode 一致）不能为空")]
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
+    /// 定价序号（冗余：与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int PurchasePriceSeq { get; set; } = 0;
 
@@ -272,7 +272,7 @@ public class TaktPurchasePriceScaleValueCreateDto
     public decimal TaxAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -326,7 +326,7 @@ public class TaktPurchasePriceScaleValueObsoleteDto
     public long PurchasePriceScaleValueId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -355,11 +355,11 @@ public class TaktPurchasePriceScaleValueTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
@@ -367,12 +367,12 @@ public class TaktPurchasePriceScaleValueTemplateDto
     public long? PurchasePriceItemId { get; set; }
 
     /// <summary>
-    /// 定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）
+    /// 定价记录号（冗余：与明细 PurchasePriceCode 一致）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
+    /// 定价序号（冗余：与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int? PurchasePriceSeq { get; set; }
 
@@ -407,7 +407,7 @@ public class TaktPurchasePriceScaleValueTemplateDto
     public decimal? TaxAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -443,11 +443,11 @@ public class TaktPurchasePriceScaleValueImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
@@ -455,12 +455,12 @@ public class TaktPurchasePriceScaleValueImportDto
     public long? PurchasePriceItemId { get; set; }
 
     /// <summary>
-    /// 定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）
+    /// 定价记录号（冗余：与明细 PurchasePriceCode 一致）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
+    /// 定价序号（冗余：与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int? PurchasePriceSeq { get; set; }
 
@@ -495,7 +495,7 @@ public class TaktPurchasePriceScaleValueImportDto
     public decimal? TaxAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -533,18 +533,28 @@ public class TaktPurchasePriceScaleValueExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePriceItemId { get; set; }
 
     /// <summary>
-    /// 定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）
+    /// 定价记录号（冗余：与明细 PurchasePriceCode 一致）
     /// </summary>
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
+    /// 定价序号（冗余：与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int PurchasePriceSeq { get; set; } = 0;
 
@@ -579,7 +589,7 @@ public class TaktPurchasePriceScaleValueExportDto
     public decimal TaxAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

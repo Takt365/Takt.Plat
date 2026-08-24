@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktTranslationI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTranslation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktTranslationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.translation.text", "zh-HK", "翻译文本_hk", "翻译文本（该语言下的显示文本）"),
 
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "en-US", "资源分组_us", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "en-US", "资源分组_us", "资源分组（选项 TaktMenus/tree-options,DictValue=Id）"),
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "ja-JP", "资源分组_jp", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "ja-JP", "资源分组_jp", "资源分组（选项 TaktMenus/tree-options,DictValue=Id）"),
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "zh-CN", "资源分组", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "zh-CN", "资源分组", "资源分组（选项 TaktMenus/tree-options,DictValue=Id）"),
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "zh-HK", "资源分组_hk", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "zh-HK", "资源分组_hk", "资源分组（选项 TaktMenus/tree-options,DictValue=Id）"),
 
             // entity.translation.resourcetype
             new TranslationSeedItem("entity.translation.resourcetype", "en-US", "资源类别_us", "资源类别（字典 sys_resource_type；frontend=前端 backend=后端）"),

@@ -2,15 +2,12 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：ec-detail-panel.vue -->
-<!-- 功能描述：设变主表实体右侧明细 ecDetail 独立 CRUD（按主表选中 ecId 分页） -->
+<!-- 功能描述：设变技术课主表实体右侧明细 ecDetail 独立 CRUD（按主表选中 ecGijutsuId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
 <template>
   <div class="ec-detail-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.ecdetail._self') }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -19,26 +16,45 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
+      create-permission="logistics:manufacturing:engineering:change:gijutsu:create"
+      update-permission="logistics:manufacturing:engineering:change:gijutsu:update"
+      delete-permission="logistics:manufacturing:engineering:change:gijutsu:delete"
+      import-permission="logistics:manufacturing:engineering:change:gijutsu:import"
       export-permission="logistics:manufacturing:engineering:change:gijutsu:export"
-      :show-create="false"
-      :show-update="false"
-      :show-delete="false"
-      :show-import="false"
-      :show-export="true"
+      :show-create="true"
+      :show-update="true"
+      :show-delete="true"
       :show-expand="false"
       :show-refresh="true"
-      :show-advanced-query="true"
+
+      :show-import="true"
+      :show-export="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
+      :import-disabled="!hasMasterSelection"
       :export-disabled="!hasMasterSelection"
+      :import-loading="loading"
       :export-loading="loading"
-      :refresh-loading="loading"
+      @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
+      :create-disabled="!hasMasterSelection"
+      :update-disabled="updateDisabled"
+      :delete-disabled="deleteDisabled"
+      :create-loading="loading"
+      :update-loading="loading"
+      :delete-loading="loading"
+      :refresh-loading="loading"
+      @create="handleCreate"
+      @update="handleUpdate"
+      @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="ec-detail-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="ec-detail-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -46,6 +62,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getEcDetailId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -56,12 +73,28 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -74,364 +107,24 @@
       <EcDetailForm
         ref="formRef"
         :form-data="formData"
-        :master-id="masterEcId"
+        :master-id="masterEcGijutsuId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-manufacturing-engineering-change-ec-ec-detail"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('ecCode')">
-      <a-form-item :label="t('entity.ecdetail.ecCode')">
-        <a-input
-          v-model:value="advancedQueryForm.ecCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecCode') })"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="t('entity.ecdetail.linenumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.linenumber') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecModel')">
-      <a-form-item :label="t('entity.ecdetail.ecmodel')">
-        <a-input
-          v-model:value="advancedQueryForm.ecModel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecmodel') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecBomItem')">
-      <a-form-item :label="t('entity.ecdetail.ecbomitem')">
-        <a-input
-          v-model:value="advancedQueryForm.ecBomItem"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecbomitem') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecBomItemText')">
-      <a-form-item :label="t('entity.ecdetail.ecbomitemtext')">
-        <a-input
-          v-model:value="advancedQueryForm.ecBomItemText"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecbomitemtext') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecBomSubItem')">
-      <a-form-item :label="t('entity.ecdetail.ecbomsubitem')">
-        <a-input
-          v-model:value="advancedQueryForm.ecBomSubItem"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecbomsubitem') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecBomSubItemText')">
-      <a-form-item :label="t('entity.ecdetail.ecbomsubitemtext')">
-        <a-input
-          v-model:value="advancedQueryForm.ecBomSubItemText"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecbomsubitemtext') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isEndOfLine')">
-      <a-form-item :label="t('entity.ecdetail.isendofline')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isEndOfLine"
-          dict-type="logistics_material_eol_status"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.isendofline') })"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecOldItem')">
-      <a-form-item :label="t('entity.ecdetail.ecolditem')">
-        <a-input
-          v-model:value="advancedQueryForm.ecOldItem"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecolditem') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecOldText')">
-      <a-form-item :label="t('entity.ecdetail.ecoldtext')">
-        <a-input
-          v-model:value="advancedQueryForm.ecOldText"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecoldtext') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecOldUsage')">
-      <a-form-item :label="t('entity.ecdetail.ecoldusage')">
-        <a-input-number
-          v-model:value="advancedQueryForm.ecOldUsage"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecoldusage') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecOldPosition')">
-      <a-form-item :label="t('entity.ecdetail.ecoldposition')">
-        <a-input
-          v-model:value="advancedQueryForm.ecOldPosition"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecoldposition') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecOldStock')">
-      <a-form-item :label="t('entity.ecdetail.ecoldstock')">
-        <a-input-number
-          v-model:value="advancedQueryForm.ecOldStock"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecoldstock') })"
-          :min="0"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecOldWarehouse')">
-      <a-form-item :label="t('entity.ecdetail.ecoldwarehouse')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.ecOldWarehouse"
-          api-url="TaktWarehouses/options"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecoldwarehouse') })"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isOldProcurement')">
-      <a-form-item :label="t('entity.ecdetail.isoldprocurement')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isOldProcurement"
-          dict-type="sys_yes_no"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.isoldprocurement') })"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isOldCheck')">
-      <a-form-item :label="t('entity.ecdetail.isoldcheck')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isOldCheck"
-          dict-type="sys_yes_no"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.isoldcheck') })"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecNewItem')">
-      <a-form-item :label="t('entity.ecdetail.ecnewitem')">
-        <a-input
-          v-model:value="advancedQueryForm.ecNewItem"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewitem') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecNewText')">
-      <a-form-item :label="t('entity.ecdetail.ecnewtext')">
-        <a-input
-          v-model:value="advancedQueryForm.ecNewText"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewtext') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecNewUsage')">
-      <a-form-item :label="t('entity.ecdetail.ecnewusage')">
-        <a-input-number
-          v-model:value="advancedQueryForm.ecNewUsage"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewusage') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecNewPosition')">
-      <a-form-item :label="t('entity.ecdetail.ecnewposition')">
-        <a-input
-          v-model:value="advancedQueryForm.ecNewPosition"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewposition') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecNewStock')">
-      <a-form-item :label="t('entity.ecdetail.ecnewstock')">
-        <a-input-number
-          v-model:value="advancedQueryForm.ecNewStock"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecnewstock') })"
-          :min="0"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecNewWarehouse')">
-      <a-form-item :label="t('entity.ecdetail.ecnewwarehouse')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.ecNewWarehouse"
-          api-url="TaktWarehouses/options"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecnewwarehouse') })"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isNewProcurement')">
-      <a-form-item :label="t('entity.ecdetail.isnewprocurement')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isNewProcurement"
-          dict-type="sys_yes_no"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.isnewprocurement') })"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isNewCheck')">
-      <a-form-item :label="t('entity.ecdetail.isnewcheck')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isNewCheck"
-          dict-type="sys_yes_no"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.isnewcheck') })"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecBomDateStart')">
-      <a-form-item :label="t('entity.ecdetail.ecbomdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.ecBomDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecbomdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecBomDateEnd')">
-      <a-form-item :label="t('entity.ecdetail.ecbomdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.ecBomDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecbomdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ecdetail._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.ecdetail._self"
+        v-if="importVisible"
+        :entity-i18n-key="ECDETAIL_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -447,8 +140,9 @@
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       id-column-key="ecDetailId"
+      action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -457,20 +151,30 @@
 
 <script setup lang="ts">
 /**
- * 设变子表 ecDetail 右栏面板
+ * 设变技术课子表 ecDetail 右栏面板
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu/components
  */
-import { ref, computed, watch, h } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
+import { CreateActionColumn } from '@/components/business/takt-action-column/index'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import EcDetailForm from './ec-detail-form.vue'
-import { useEcMasterContext } from '../composables/use-ec-master-context'
+import { useEcGijutsuMasterContext } from '../composables/use-ec-gijutsu-master-context'
 import {
   getEcDetailList,
   getEcDetailById,
@@ -484,17 +188,64 @@ import {
 } from '@/api/logistics/manufacturing/engineering-change/ec-detail'
 import type { EcDetail, EcDetailQuery } from '@/types/logistics/manufacturing/engineering-change/ec-detail'
 
+import {
+  useEcDetailI18n,
+  ECDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS,
+  ECDETAIL_SUMMARY_SUM_FIELDS,
+  ECDETAIL_QUERY_STRING_FIELDS,
+  ECDETAIL_QUERY_FIELDS,
+  ECDETAIL_SELF_I18N_KEY,
+} from '../composables/use-ec-detail-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useEcDetailI18n()
+
 const { t } = useI18n()
-const { selectedMasterRow } = useEcMasterContext()
+const { selectedMasterRow } = useEcGijutsuMasterContext()
 
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktEcDetail')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ecdetail._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<EcDetail[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -509,128 +260,9 @@ const formData = ref<Partial<EcDetail>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  ecCode: '',
-  lineNumber: undefined as number | undefined,
-  ecModel: '',
-  ecBomItem: '',
-  ecBomItemText: '',
-  ecBomSubItem: '',
-  ecBomSubItemText: '',
-  ecOldItem: '',
-  ecOldText: '',
-  ecOldUsage: undefined as number | undefined,
-  ecOldPosition: '',
-  ecOldStock: undefined as number | undefined,
-  ecOldWarehouse: '',
-  isOldProcurement: undefined as number | undefined,
-  isOldCheck: undefined as number | undefined,
-  ecNewItem: '',
-  ecNewText: '',
-  ecNewUsage: undefined as number | undefined,
-  ecNewPosition: '',
-  ecNewStock: undefined as number | undefined,
-  ecNewWarehouse: '',
-  isNewProcurement: undefined as number | undefined,
-  isNewCheck: undefined as number | undefined,
-  isEndOfLine: '',
-  ecBomDateStart: '',
-  ecBomDateEnd: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'ecCode', label: t('entity.ecdetail.ecCode') },
-  { key: 'lineNumber', label: t('entity.ecdetail.linenumber') },
-  { key: 'ecModel', label: t('entity.ecdetail.ecmodel') },
-  { key: 'ecBomItem', label: t('entity.ecdetail.ecbomitem') },
-  { key: 'ecBomItemText', label: t('entity.ecdetail.ecbomitemtext') },
-  { key: 'ecBomSubItem', label: t('entity.ecdetail.ecbomsubitem') },
-  { key: 'ecBomSubItemText', label: t('entity.ecdetail.ecbomsubitemtext') },
-  { key: 'isEndOfLine', label: t('entity.ecdetail.isendofline') },
-  { key: 'ecOldItem', label: t('entity.ecdetail.ecolditem') },
-  { key: 'ecOldText', label: t('entity.ecdetail.ecoldtext') },
-  { key: 'ecOldUsage', label: t('entity.ecdetail.ecoldusage') },
-  { key: 'ecOldPosition', label: t('entity.ecdetail.ecoldposition') },
-  { key: 'ecOldStock', label: t('entity.ecdetail.ecoldstock') },
-  { key: 'ecOldWarehouse', label: t('entity.ecdetail.ecoldwarehouse') },
-  { key: 'isOldProcurement', label: t('entity.ecdetail.isoldprocurement') },
-  { key: 'isOldCheck', label: t('entity.ecdetail.isoldcheck') },
-  { key: 'ecNewItem', label: t('entity.ecdetail.ecnewitem') },
-  { key: 'ecNewText', label: t('entity.ecdetail.ecnewtext') },
-  { key: 'ecNewUsage', label: t('entity.ecdetail.ecnewusage') },
-  { key: 'ecNewPosition', label: t('entity.ecdetail.ecnewposition') },
-  { key: 'ecNewStock', label: t('entity.ecdetail.ecnewstock') },
-  { key: 'ecNewWarehouse', label: t('entity.ecdetail.ecnewwarehouse') },
-  { key: 'isNewProcurement', label: t('entity.ecdetail.isnewprocurement') },
-  { key: 'isNewCheck', label: t('entity.ecdetail.isnewcheck') },
-  { key: 'ecBomDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ecdetail.ecbomdate')) },
-  { key: 'ecBomDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ecdetail.ecbomdate')) },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  ecCode: '',
-  lineNumber: undefined as number | undefined,
-  ecModel: '',
-  ecBomItem: '',
-  ecBomItemText: '',
-  ecBomSubItem: '',
-  ecBomSubItemText: '',
-  ecOldItem: '',
-  ecOldText: '',
-  ecOldUsage: undefined as number | undefined,
-  ecOldPosition: '',
-  ecOldStock: undefined as number | undefined,
-  ecOldWarehouse: '',
-  isOldProcurement: undefined as number | undefined,
-  isOldCheck: undefined as number | undefined,
-  ecNewItem: '',
-  ecNewText: '',
-  ecNewUsage: undefined as number | undefined,
-  ecNewPosition: '',
-  ecNewStock: undefined as number | undefined,
-  ecNewWarehouse: '',
-  isNewProcurement: undefined as number | undefined,
-  isNewCheck: undefined as number | undefined,
-  isEndOfLine: '',
-  ecBomDateStart: '',
-  ecBomDateEnd: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
-}
 const columnSettingVisible = ref(false)
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...ECDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -641,13 +273,16 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...ECDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
 const entityIdName = 'ecDetailId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.ecGijutsuId)
-const masterEcId = computed(() => selectedMasterRow.value?.ecGijutsuId ?? '')
+const masterEcGijutsuId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['ecGijutsuId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterEcGijutsuId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -672,7 +307,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcDetailField(record, 'ecDetailId') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecCode'),
+    title: pi.label('ecCode'),
     dataIndex: 'ecCode',
     key: 'ecCode',
     width: 120,
@@ -682,7 +317,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcDetailField(record, 'ecCode') ?? ''),
   },
   {
-    title: t('entity.ecdetail.linenumber'),
+    title: pi.label('lineNumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 120,
@@ -692,7 +327,17 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcDetailField(record, 'lineNumber') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecmodel'),
+    title: pi.label('ecBomLineCode'),
+    dataIndex: 'ecBomLineCode',
+    key: 'ecBomLineCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecBomLineCode') ?? ''),
+  },
+  {
+    title: pi.label('ecModel'),
     dataIndex: 'ecModel',
     key: 'ecModel',
     width: 120,
@@ -702,7 +347,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcDetailField(record, 'ecModel') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecbomitem'),
+    title: pi.label('ecBomItem'),
     dataIndex: 'ecBomItem',
     key: 'ecBomItem',
     width: 120,
@@ -712,17 +357,17 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcDetailField(record, 'ecBomItem') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecbomitemtext'),
+    title: pi.label('ecBomItemText'),
     dataIndex: 'ecBomItemText',
     key: 'ecBomItemText',
-    width: 160,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcDetail }) =>
       String(getEcDetailField(record, 'ecBomItemText') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecbomsubitem'),
+    title: pi.label('ecBomSubItem'),
     dataIndex: 'ecBomSubItem',
     key: 'ecBomSubItem',
     width: 120,
@@ -732,36 +377,346 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcDetailField(record, 'ecBomSubItem') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecbomsubitemtext'),
+    title: pi.label('ecBomSubItemText'),
     dataIndex: 'ecBomSubItemText',
     key: 'ecBomSubItemText',
-    width: 160,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcDetail }) =>
       String(getEcDetailField(record, 'ecBomSubItemText') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecoldstock'),
+    title: pi.label('isEndOfLine'),
+    dataIndex: 'isEndOfLine',
+    key: 'isEndOfLine',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'isEndOfLine') ?? ''),
+  },
+  {
+    title: pi.label('ecOldItem'),
+    dataIndex: 'ecOldItem',
+    key: 'ecOldItem',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecOldItem') ?? ''),
+  },
+  {
+    title: pi.label('ecOldText'),
+    dataIndex: 'ecOldText',
+    key: 'ecOldText',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecOldText') ?? ''),
+  },
+  {
+    title: pi.label('ecOldUsage'),
+    dataIndex: 'ecOldUsage',
+    key: 'ecOldUsage',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecOldUsage') ?? ''),
+  },
+  {
+    title: pi.label('ecOldPosition'),
+    dataIndex: 'ecOldPosition',
+    key: 'ecOldPosition',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecOldPosition') ?? ''),
+  },
+  {
+    title: pi.label('ecOldStock'),
     dataIndex: 'ecOldStock',
     key: 'ecOldStock',
-    width: 100,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcDetail }) =>
       String(getEcDetailField(record, 'ecOldStock') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecnewstock'),
+    title: pi.label('ecOldWarehouse'),
+    dataIndex: 'ecOldWarehouse',
+    key: 'ecOldWarehouse',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecOldWarehouse') ?? ''),
+  },
+  {
+    title: pi.label('isOldProcurement'),
+    dataIndex: 'isOldProcurement',
+    key: 'isOldProcurement',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'isOldProcurement') ?? ''),
+  },
+  {
+    title: pi.label('isOldCheck'),
+    dataIndex: 'isOldCheck',
+    key: 'isOldCheck',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'isOldCheck') ?? ''),
+  },
+  {
+    title: pi.label('ecNewItem'),
+    dataIndex: 'ecNewItem',
+    key: 'ecNewItem',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecNewItem') ?? ''),
+  },
+  {
+    title: pi.label('ecNewText'),
+    dataIndex: 'ecNewText',
+    key: 'ecNewText',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecNewText') ?? ''),
+  },
+  {
+    title: pi.label('ecNewUsage'),
+    dataIndex: 'ecNewUsage',
+    key: 'ecNewUsage',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecNewUsage') ?? ''),
+  },
+  {
+    title: pi.label('ecNewPosition'),
+    dataIndex: 'ecNewPosition',
+    key: 'ecNewPosition',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecNewPosition') ?? ''),
+  },
+  {
+    title: pi.label('ecNewStock'),
     dataIndex: 'ecNewStock',
     key: 'ecNewStock',
-    width: 100,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcDetail }) =>
       String(getEcDetailField(record, 'ecNewStock') ?? ''),
-  }])
+  },
+  {
+    title: pi.label('ecNewWarehouse'),
+    dataIndex: 'ecNewWarehouse',
+    key: 'ecNewWarehouse',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecNewWarehouse') ?? ''),
+  },
+  {
+    title: pi.label('isNewProcurement'),
+    dataIndex: 'isNewProcurement',
+    key: 'isNewProcurement',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'isNewProcurement') ?? ''),
+  },
+  {
+    title: pi.label('isNewCheck'),
+    dataIndex: 'isNewCheck',
+    key: 'isNewCheck',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'isNewCheck') ?? ''),
+  },
+  {
+    title: pi.label('ecBomDate'),
+    dataIndex: 'ecBomDate',
+    key: 'ecBomDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecBomDate') ?? ''),
+  },
+  {
+    title: pi.label('ecIsCompatible'),
+    dataIndex: 'ecIsCompatible',
+    key: 'ecIsCompatible',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecIsCompatible') ?? ''),
+  },
+  {
+    title: pi.label('ecSecondDistinction'),
+    dataIndex: 'ecSecondDistinction',
+    key: 'ecSecondDistinction',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecSecondDistinction') ?? ''),
+  },
+  {
+    title: pi.label('ecInstruction'),
+    dataIndex: 'ecInstruction',
+    key: 'ecInstruction',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecInstruction') ?? ''),
+  },
+  {
+    title: pi.label('ecLegacyPartDisposition'),
+    dataIndex: 'ecLegacyPartDisposition',
+    key: 'ecLegacyPartDisposition',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'ecLegacyPartDisposition') ?? ''),
+  },
+  {
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'isObsolete') ?? ''),
+  },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcDetail }) =>
+      String(getEcDetailField(record, 'remark') ?? ''),
+  },
+  CreateActionColumn({
+    actions: [
+      {
+        key: 'update',
+        label: t('common.page.button.edit'),
+        shape: 'plain',
+        icon: RiEditLine,
+        permission: 'logistics:manufacturing:engineering:change:gijutsu:update',
+        onClick: (record: EcDetail) => void handleEdit(record),
+      },
+      {
+        key: 'delete',
+        label: t('common.page.button.delete'),
+        shape: 'plain',
+        icon: RiDeleteBinLine,
+        permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
+        onClick: (record: EcDetail) => void handleDeleteOne(record),
+      },
+    ],
+  }),
+])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'ecDetailId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(ECDETAIL_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    ECDETAIL_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof ECDETAIL_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of ECDETAIL_SUMMARY_SUM_FIELDS) {
+      const num = Number(getEcDetailField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: EcDetail[]) => {
@@ -800,7 +755,7 @@ function onClickRow(record: EcDetail) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {EcDetailQuery} 查询 DTO
  */
@@ -810,7 +765,7 @@ function buildListQuery(overrides?: Partial<EcDetailQuery>): EcDetailQuery {
   const query: EcDetailQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    ecId: masterEcId.value,
+    ecGijutsuId: masterEcGijutsuId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -822,56 +777,9 @@ function buildListQuery(overrides?: Partial<EcDetailQuery>): EcDetailQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('ecCode', form.ecCode)
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
+  for (const key of ECDETAIL_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('ecModel', form.ecModel)
-  assignTrimmed('ecBomItem', form.ecBomItem)
-  assignTrimmed('ecBomItemText', form.ecBomItemText)
-  assignTrimmed('ecBomSubItem', form.ecBomSubItem)
-  assignTrimmed('ecBomSubItemText', form.ecBomSubItemText)
-  if (form.isEndOfLine !== undefined && form.isEndOfLine !== null && String(form.isEndOfLine).trim() !== '') {
-    query.isEndOfLine = Number(form.isEndOfLine)
-  }
-  assignTrimmed('ecOldItem', form.ecOldItem)
-  assignTrimmed('ecOldText', form.ecOldText)
-  if (form.ecOldUsage !== undefined && form.ecOldUsage !== null) {
-    query.ecOldUsage = form.ecOldUsage
-  }
-  assignTrimmed('ecOldPosition', form.ecOldPosition)
-  if (form.ecOldStock !== undefined && form.ecOldStock !== null) {
-    query.ecOldStock = form.ecOldStock
-  }
-  assignTrimmed('ecOldWarehouse', form.ecOldWarehouse)
-  if (form.isOldProcurement !== undefined && form.isOldProcurement !== null) {
-    query.isOldProcurement = form.isOldProcurement
-  }
-  if (form.isOldCheck !== undefined && form.isOldCheck !== null) {
-    query.isOldCheck = form.isOldCheck
-  }
-  assignTrimmed('ecNewItem', form.ecNewItem)
-  assignTrimmed('ecNewText', form.ecNewText)
-  if (form.ecNewUsage !== undefined && form.ecNewUsage !== null) {
-    query.ecNewUsage = form.ecNewUsage
-  }
-  assignTrimmed('ecNewPosition', form.ecNewPosition)
-  if (form.ecNewStock !== undefined && form.ecNewStock !== null) {
-    query.ecNewStock = form.ecNewStock
-  }
-  assignTrimmed('ecNewWarehouse', form.ecNewWarehouse)
-  if (form.isNewProcurement !== undefined && form.isNewProcurement !== null) {
-    query.isNewProcurement = form.isNewProcurement
-  }
-  if (form.isNewCheck !== undefined && form.isNewCheck !== null) {
-    query.isNewCheck = form.isNewCheck
-  }
-  assignTrimmed('ecBomDateStart', form.ecBomDateStart)
-  assignTrimmed('ecBomDateEnd', form.ecBomDateEnd)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 
@@ -905,12 +813,42 @@ function reload() {
 }
 
 /** 主表选中变更时自动加载子表 */
-watch(masterEcId, () => {
+watch(masterEcGijutsuId, () => {
   reload()
 })
 
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
+
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
 
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
@@ -928,13 +866,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ecdetail._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: EcDetail) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ecdetail._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getEcDetailById(getEcDetailId(record))
@@ -951,7 +889,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.ecdetail._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -970,10 +908,10 @@ async function handleFormSubmit() {
     const id = formData.value?.ecDetailId
     if (id) {
       await updateEcDetail(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.ecdetail._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createEcDetail(payload)
-      message.success(t('common.feedback.created', { target: t('entity.ecdetail._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -990,14 +928,14 @@ async function handleDeleteOne(record: EcDetail) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.ecdetail._self'),
-      name: t('common.tip.this.target', { target: t('entity.ecdetail._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEcDetailById(getEcDetailId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.ecdetail._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1007,14 +945,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.ecdetail._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.ecdetail._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -1022,7 +960,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getEcDetailId(r)).filter(Boolean)
       await deleteEcDetailBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ecdetail._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1032,35 +970,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getEcDetailTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEcDetail(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEcDetail(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }
@@ -1071,6 +1010,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportEcDetail(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1094,10 +1036,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ecdetail._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.ecdetail._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

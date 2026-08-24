@@ -49,23 +49,23 @@ async function fetchHolidayThemeAsync(
 /**
  * 构建登录预览上下文键（租户 + 用户名）
  * @param tenantCode 租户编码
- * @param username 用户名
+ * @param userName 用户名
  */
-function buildLoginPreviewKey(tenantCode: string, username: string): string {
-  return `${tenantCode.trim()}|${username.trim()}`;
+function buildLoginPreviewKey(tenantCode: string, userName: string): string {
+  return `${tenantCode.trim()}|${userName.trim()}`;
 }
 
 /**
  * 登录预览上下文是否仍有效（防竞态覆盖）
  * @param seq 请求序号
  * @param tenantCode 租户编码
- * @param username 用户名
+ * @param userName 用户名
  * @param previewKey 预览上下文键
  */
 function isPreviewContextValid(
   seq: number,
   tenantCode: string,
-  username: string,
+  userName: string,
   previewKey: string,
 ): boolean {
   if (seq !== loginPreviewSyncSeq) {
@@ -77,7 +77,7 @@ function isPreviewContextValid(
     return false;
   }
 
-  return buildLoginPreviewKey(tenantCode, username) === previewKey;
+  return buildLoginPreviewKey(tenantCode, userName) === previewKey;
 }
 
 /**
@@ -88,7 +88,7 @@ export const useUserStore = defineStore('user', () => {
   const refreshToken = ref<string>(localStorage.getItem(TAKT_REFRESH_TOKEN_STORAGE_KEY) || '');
   const tokenExpiresAt = ref<number>(Number(localStorage.getItem(TAKT_TOKEN_EXPIRES_STORAGE_KEY) || 0));
   const userId = ref<string>('');
-  const username = ref<string>('');
+  const userName = ref<string>('');
   /** 当前登录用户类型（来自 GET /me，字典 sys_user_type） */
   const userType = ref<number>(0);
   const permissions = ref<string[]>([]);
@@ -134,7 +134,7 @@ export const useUserStore = defineStore('user', () => {
   function setUserProfile(profile: UserInfoResponse) {
     const normalized = normalizeUserInfoProfile(profile);
     userId.value = String(normalized.userId);
-    username.value = normalized.username;
+    userName.value = normalized.userName;
     userType.value = normalized.userType ?? 0;
     permissions.value = normalized.permissions ?? [];
     roles.value = normalized.roles ?? [];
@@ -192,13 +192,13 @@ export const useUserStore = defineStore('user', () => {
   function setLoginInfo(data: {
     token: string;
     userId: string;
-    username: string;
+    userName: string;
     permissions: string[];
     roles: string[];
   }) {
     token.value = data.token;
     userId.value = data.userId;
-    username.value = data.username;
+    userName.value = data.userName;
     permissions.value = data.permissions;
     roles.value = data.roles;
     profileLoaded.value = true;
@@ -212,7 +212,7 @@ export const useUserStore = defineStore('user', () => {
     refreshToken.value = '';
     tokenExpiresAt.value = 0;
     userId.value = '';
-    username.value = '';
+    userName.value = '';
     userType.value = 0;
     permissions.value = [];
     roles.value = [];
@@ -250,17 +250,17 @@ export const useUserStore = defineStore('user', () => {
    * 登录页预览：租户已校验后，按「租户+用户名」解析默认公司与用户 CultureCode，再按「租户+公司」拉取当日假日。
    * 界面语言由 {@link useLocaleStore.applyLoginUserLocale} 写入（浏览器与默认不一致时优先浏览器，须在租户语言列表内）；用户手动切换后不会被覆盖。
    * @param tenantCode 已校验的租户编码
-   * @param username 登录用户名
+   * @param userName 登录用户名
    * @param previewKey 预览上下文键（租户+用户名）
    * @returns {Promise<LoginPreviewLocale | null>} 预览解析结果；上下文失效时返回 null
    */
   async function syncLoginPreviewAsync(
     tenantCode: string,
-    username: string,
+    userName: string,
     previewKey?: string,
   ): Promise<LoginPreviewLocale | null> {
     const trimmedTenant = tenantCode.trim();
-    const trimmedUser = username.trim();
+    const trimmedUser = userName.trim();
     if (!trimmedTenant || !trimmedUser) {
       return null;
     }
@@ -291,7 +291,7 @@ export const useUserStore = defineStore('user', () => {
     if (cultureCode) {
       useLocaleStore().applyLoginUserLocale(cultureCode, {
         tenantCode: trimmedTenant,
-        username: trimmedUser,
+        userName: trimmedUser,
         companyCode,
         previewKey: expectedKey,
       });
@@ -344,7 +344,7 @@ export const useUserStore = defineStore('user', () => {
     refreshToken,
     tokenExpiresAt,
     userId,
-    username,
+    userName,
     userType,
     permissions,
     roles,

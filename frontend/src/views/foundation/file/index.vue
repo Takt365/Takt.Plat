@@ -298,7 +298,7 @@
       <a-form-item :label="t('entity.file.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.fileStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.file.status') })"
           allow-clear
         />
@@ -308,7 +308,7 @@
       <a-form-item :label="t('entity.file.ispublic')">
         <TaktSelect
           v-model:value="advancedQueryForm.isPublic"
-          dict-type="sys_is_public_type"
+          dict-type="sys_public_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.file.ispublic') })"
           allow-clear
         />
@@ -887,7 +887,7 @@ async function handleDownloadFile(record: File) {
 }
 
 /**
- * 表格行内切换文件状态（sys_normal_disable_status：1=启用，0=禁用；2=锁定不可切换）
+ * 表格行内切换文件状态（sys_normal_disable：1=启用，0=禁用；2=锁定不可切换）
  * @param record 当前行
  * @param checked 开关是否选中（启用）
  */
@@ -911,7 +911,7 @@ async function handleFileStatusChange(record: File, checked: boolean) {
 }
 
 /**
- * 表格行内切换公开（sys_is_public_type：0=公开，1=私有）
+ * 表格行内切换公开（sys_public_type：0=公开，1=私有）
  * @param record 当前行
  * @param checked 开关是否选中（公开）
  */

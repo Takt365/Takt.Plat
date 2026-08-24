@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableJoinI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurableJoin 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktConfigurableJoinI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurablejoin._self", "zh-HK", "自定义报表多表关联定义信息_hk", "实体名称"),
 
             // entity.configurablejoin.configurableid
-            new TranslationSeedItem("entity.configurablejoin.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablejoin.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurablejoin.configurableid
-            new TranslationSeedItem("entity.configurablejoin.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablejoin.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurablejoin.configurableid
-            new TranslationSeedItem("entity.configurablejoin.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablejoin.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurablejoin.configurableid
-            new TranslationSeedItem("entity.configurablejoin.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablejoin.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
 
             // entity.configurablejoin.jointype
-            new TranslationSeedItem("entity.configurablejoin.jointype", "en-US", "关联类型_us", "关联类型（内/左/右/全连接）"),
+            new TranslationSeedItem("entity.configurablejoin.jointype", "en-US", "关联类型_us", "关联类型（字典 sys_configurable_join_type；1=内连接 2=左连接 3=右连接 4=全连接）"),
             // entity.configurablejoin.jointype
-            new TranslationSeedItem("entity.configurablejoin.jointype", "ja-JP", "关联类型_jp", "关联类型（内/左/右/全连接）"),
+            new TranslationSeedItem("entity.configurablejoin.jointype", "ja-JP", "关联类型_jp", "关联类型（字典 sys_configurable_join_type；1=内连接 2=左连接 3=右连接 4=全连接）"),
             // entity.configurablejoin.jointype
-            new TranslationSeedItem("entity.configurablejoin.jointype", "zh-CN", "关联类型", "关联类型（内/左/右/全连接）"),
+            new TranslationSeedItem("entity.configurablejoin.jointype", "zh-CN", "关联类型", "关联类型（字典 sys_configurable_join_type；1=内连接 2=左连接 3=右连接 4=全连接）"),
             // entity.configurablejoin.jointype
-            new TranslationSeedItem("entity.configurablejoin.jointype", "zh-HK", "关联类型_hk", "关联类型（内/左/右/全连接）"),
+            new TranslationSeedItem("entity.configurablejoin.jointype", "zh-HK", "关联类型_hk", "关联类型（字典 sys_configurable_join_type；1=内连接 2=左连接 3=右连接 4=全连接）"),
 
             // entity.configurablejoin.leftsourcealias
             new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "en-US", "左表别名_us", "左表数据源别名"),
@@ -145,13 +145,13 @@ public class TaktConfigurableJoinI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "zh-HK", "右表关联列_hk", "右表关联列名"),
 
             // entity.configurablejoin.sortorder
-            new TranslationSeedItem("entity.configurablejoin.sortorder", "en-US", "排序号_us", "排序号（JOIN 应用顺序）"),
+            new TranslationSeedItem("entity.configurablejoin.sortorder", "en-US", "排序号_us", "排序号（回填）（JOIN 应用顺序）"),
             // entity.configurablejoin.sortorder
-            new TranslationSeedItem("entity.configurablejoin.sortorder", "ja-JP", "排序号_jp", "排序号（JOIN 应用顺序）"),
+            new TranslationSeedItem("entity.configurablejoin.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（JOIN 应用顺序）"),
             // entity.configurablejoin.sortorder
-            new TranslationSeedItem("entity.configurablejoin.sortorder", "zh-CN", "排序号", "排序号（JOIN 应用顺序）"),
+            new TranslationSeedItem("entity.configurablejoin.sortorder", "zh-CN", "排序号", "排序号（回填）（JOIN 应用顺序）"),
             // entity.configurablejoin.sortorder
-            new TranslationSeedItem("entity.configurablejoin.sortorder", "zh-HK", "排序号_hk", "排序号（JOIN 应用顺序）"),
+            new TranslationSeedItem("entity.configurablejoin.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（JOIN 应用顺序）"),
 
             // entity.configurablejoin.configurable
             new TranslationSeedItem("entity.configurablejoin.configurable", "en-US", "关联的报表主表_us", "关联的报表主表"),

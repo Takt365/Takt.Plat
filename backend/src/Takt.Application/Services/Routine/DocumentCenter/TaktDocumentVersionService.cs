@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.DocumentCenter
 // 文件名称：TaktDocumentVersionService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文管文档版本应用服务实现
 // 
@@ -31,6 +31,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
 {
     private readonly ITaktCompanyRepository<TaktDocumentVersion> _documentVersionRepository;
     private readonly ITaktApprovalRepository<TaktDocument> _documentRepository;
+    private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
@@ -38,12 +39,14 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     /// </summary>
     /// <param name="documentVersionRepository">文管文档版本仓储</param>
     /// <param name="documentRepository">文管中心仓储</param>
+    /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktDocumentVersionService(
         ITaktCompanyRepository<TaktDocumentVersion> documentVersionRepository,
         ITaktApprovalRepository<TaktDocument> documentRepository,
+        ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -51,16 +54,25 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     {
         _documentVersionRepository = documentVersionRepository;
         _documentRepository = documentRepository;
+        _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取文管文档版本列表（分页）
+    /// 获取文管文档版本列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktDocumentVersionDto>> GetDocumentVersionListAsync(TaktDocumentVersionQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktDocumentVersionDto>.Create(
+                new List<TaktDocumentVersionDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _documentVersionRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -97,12 +109,12 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
         EnsureThreeLayerContext();
         var list = await _documentVersionRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.FileName ?? string.Empty,
+            x => x.VersionNote ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.FileName ?? e.Id.ToString(),
+            DictValue = e.VersionNote ?? string.Empty,
+            DictLabel = e.VersionNote ?? string.Empty,
         }).ToList();
     }
 
@@ -114,6 +126,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     public async Task<TaktDocumentVersionDto> CreateDocumentVersionAsync(TaktDocumentVersionCreateDto dto)
     {
         var entity = dto.Adapt<TaktDocumentVersion>();
+        entity.IsObsolete = 0;
         await StampDocumentVersionDocumentAsync(entity, dto);
         var isUnique_ix_document_version_unique = await _uniqueValidator.IsUniqueAsync(
             _documentVersionRepository,
@@ -122,6 +135,14 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
         if (!isUnique_ix_document_version_unique)
         {
             throw new TaktBusinessException("文管文档版本的DocumentId、VersionNo已存在");
+        }
+        if (entity.LineNumber <= 0)
+        {
+            var maxLine = await _documentVersionRepository.GetMaxIntAsync(
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DocumentId == entity.DocumentId,
+                x => x.LineNumber);
+            var businessCode = entity.DocumentId.ToString();
+            entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _documentVersionRepository.CreateAsync(entity);
         return await GetDocumentVersionByIdAsync(entity.Id) ?? entity.Adapt<TaktDocumentVersionDto>();
@@ -162,11 +183,21 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     /// <returns>任务</returns>
     public async Task DeleteDocumentVersionByIdAsync(long id)
     {
-        var deleted = await _documentVersionRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _documentVersionRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("文管文档版本不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("文管文档版本不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("文管文档版本已作废");
+        }
+        entity.IsObsolete = 1;
+        await _documentVersionRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -185,6 +216,27 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
         {
             await DeleteDocumentVersionByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新文管文档版本作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktDocumentVersionDto> UpdateDocumentVersionObsoleteAsync(TaktDocumentVersionObsoleteDto dto)
+    {
+        var entity = await _documentVersionRepository.GetByIdAsync(dto.DocumentVersionId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("文管文档版本不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("文管文档版本不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _documentVersionRepository.UpdateAsync(entity);
+        return await GetDocumentVersionByIdAsync(dto.DocumentVersionId) ?? throw new TaktBusinessException("文管文档版本不存在");
     }
 
     /// <summary>
@@ -238,6 +290,14 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
                 {
                     throw new TaktBusinessException("文管文档版本的DocumentId、VersionNo已存在");
                 }
+                if (entity.LineNumber <= 0)
+                {
+                    var maxLine = await _documentVersionRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DocumentId == entity.DocumentId,
+                        x => x.LineNumber);
+                    var businessCode = entity.DocumentId.ToString();
+                    entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+                }
                 await _documentVersionRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -259,7 +319,15 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportDocumentVersionAsync(TaktDocumentVersionQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktDocumentVersionQueryDto());
+        var queryDto = query ?? new TaktDocumentVersionQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktDocumentVersionExportDto>(),
+                sheetName ?? "文管文档版本数据",
+                fileName ?? "文管文档版本导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _documentVersionRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -297,6 +365,22 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
             throw new TaktBusinessException("文管中心不存在");
         }
         entity.DocumentId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -311,125 +395,192 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     {
         var exp = Expressionable.Create<TaktDocumentVersion>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (queryDto?.IsObsolete.HasValue == true)
         {
-            var keywords = queryDto.KeyWords;
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
+        {
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.DocumentId).Contains(keywords)
-                || SqlFunc.ToString(x.VersionNo).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.VersionNote != null && x.VersionNote.Contains(keywords))
-                || SqlFunc.ToString(x.FileId).Contains(keywords)
-                || (x.FileName != null && x.FileName.Contains(keywords))
-                || (x.FilePath != null && x.FilePath.Contains(keywords))
-                || SqlFunc.ToString(x.FileSize).Contains(keywords)
-                || (x.FileType != null && x.FileType.Contains(keywords))
-                || (x.FileExtension != null && x.FileExtension.Contains(keywords))
-                || SqlFunc.ToString(x.RevisedBy).Contains(keywords)
                 || (x.RevisedByName != null && x.RevisedByName.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.RevisedAt).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.DocumentId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.DocumentId == queryDto.DocumentId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.VersionNo.HasValue == true)
-        {
-            exp = exp.And(x => x.VersionNo == queryDto.VersionNo);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.VersionNote))
-        {
-            exp = exp.And(x => x.VersionNote != null && x.VersionNote.Contains(queryDto.VersionNote));
-        }
-
-        if (queryDto?.FileId.HasValue == true)
-        {
-            exp = exp.And(x => x.FileId == queryDto.FileId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FileName))
-        {
-            exp = exp.And(x => x.FileName != null && x.FileName.Contains(queryDto.FileName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FilePath))
-        {
-            exp = exp.And(x => x.FilePath != null && x.FilePath.Contains(queryDto.FilePath));
-        }
-
-        if (queryDto?.FileSize.HasValue == true)
-        {
-            exp = exp.And(x => x.FileSize == queryDto.FileSize);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FileType))
-        {
-            exp = exp.And(x => x.FileType != null && x.FileType.Contains(queryDto.FileType));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FileExtension))
-        {
-            exp = exp.And(x => x.FileExtension != null && x.FileExtension.Contains(queryDto.FileExtension));
-        }
-
-        if (queryDto?.RevisedBy.HasValue == true)
-        {
-            exp = exp.And(x => x.RevisedBy == queryDto.RevisedBy);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RevisedByName))
-        {
-            exp = exp.And(x => x.RevisedByName != null && x.RevisedByName.Contains(queryDto.RevisedByName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.RevisedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.RevisedAt >= queryDto.RevisedAtStart);
-        }
-
-        if (queryDto?.RevisedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.RevisedAt <= queryDto.RevisedAtEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.DocumentId.HasValue == true)
+        {
+            var documentId = queryDto.DocumentId.Value;
+            exp = exp.And(x => x.DocumentId == documentId);
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.VersionNo.HasValue == true)
+        {
+            var versionNo = queryDto.VersionNo.Value;
+            exp = exp.And(x => x.VersionNo == versionNo);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.VersionNote))
+        {
+            var versionNote = queryDto.VersionNote;
+            exp = exp.And(x => x.VersionNote != null && x.VersionNote.Contains(versionNote));
+        }
+
+        if (queryDto?.FileId.HasValue == true)
+        {
+            var fileId = queryDto.FileId.Value;
+            exp = exp.And(x => x.FileId == fileId);
+        }
+
+        if (queryDto?.RevisedBy.HasValue == true)
+        {
+            var revisedBy = queryDto.RevisedBy.Value;
+            exp = exp.And(x => x.RevisedBy == revisedBy);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RevisedByName))
+        {
+            var revisedByName = queryDto.RevisedByName;
+            exp = exp.And(x => x.RevisedByName != null && x.RevisedByName.Contains(revisedByName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.RevisedAtStart.HasValue == true)
+        {
+            var revisedAtStart = queryDto.RevisedAtStart.Value;
+            exp = exp.And(x => x.RevisedAt >= revisedAtStart);
+        }
+
+        if (queryDto?.RevisedAtEnd.HasValue == true)
+        {
+            var revisedAtEnd = queryDto.RevisedAtEnd.Value;
+            exp = exp.And(x => x.RevisedAt <= revisedAtEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktDocumentVersionQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.DocumentId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.VersionNo.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.VersionNote))
+        {
+            return true;
+        }
+        if (queryDto.FileId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RevisedBy.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RevisedByName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RevisedAtStart.HasValue || queryDto.RevisedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

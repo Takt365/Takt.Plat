@@ -246,12 +246,12 @@ public class TaktCompanyDto : TaktTenantDtoBase
     public string FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
     public int CompanyStatus { get; set; } = 0;
 
@@ -503,12 +503,12 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     public string? FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
     public int? CompanyStatus { get; set; }
 
@@ -803,7 +803,7 @@ public class TaktCompanyCreateDto
     public string FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
     public int CompanyStatus { get; set; } = 0;
 
@@ -867,9 +867,9 @@ public class TaktCompanyStatusDto
     public long CompanyId { get; set; }
 
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "公司状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "公司状态（字典 sys_normal_disable）不能为空")]
     public int CompanyStatus { get; set; } = 0;
 }
 
@@ -891,7 +891,7 @@ public class TaktCompanySortDto
     public long CompanyId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -1132,7 +1132,7 @@ public class TaktCompanyTemplateDto
     public string? FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
     public int? CompanyStatus { get; set; }
 
@@ -1389,7 +1389,7 @@ public class TaktCompanyImportDto
     public string? FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
     public int? CompanyStatus { get; set; }
 
@@ -1652,12 +1652,12 @@ public class TaktCompanyExportDto
     public string FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
     public int CompanyStatus { get; set; } = 0;
 

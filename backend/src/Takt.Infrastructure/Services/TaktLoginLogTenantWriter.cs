@@ -81,9 +81,9 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
         using var seedContext = new TaktSeedContext(_configuration, trimmedTenant);
         entity.TenantCode = trimmedTenant;
         entity.CompanyCode = entity.CompanyCode.Trim();
-        entity.Username = string.IsNullOrWhiteSpace(entity.Username)
+        entity.UserName = string.IsNullOrWhiteSpace(entity.UserName)
             ? TaktConstants.AuditUserName.Unknown
-            : entity.Username.Trim().ToLowerInvariant();
+            : entity.UserName.Trim().ToLowerInvariant();
         entity.ApplyCreate(operatorUserId);
 
         return await TaktPrimaryKeyInsertHelper.InsertEntityReturnInt64Async(
@@ -98,14 +98,14 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="username">用户名（小写）</param>
+    /// <param name="UserName">用户名（小写）</param>
     /// <param name="logoutAt">登出时间</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>更新的记录数</returns>
     public async Task<int> CloseOpenLoginSessionAsync(
         string tenantCode,
         string? companyCode,
-        string username,
+        string UserName,
         DateTime logoutAt,
         long? operatorUserId = null,
         CancellationToken cancellationToken = default)
@@ -113,7 +113,7 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
         var openLogs = await LoadOpenLoginSessionLogsAsync(
             tenantCode,
             companyCode,
-            username,
+            UserName,
             cancellationToken);
         if (openLogs.Count == 0)
         {
@@ -142,7 +142,7 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
     /// <param name="userId">用户 ID</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>用户名；不存在时返回 null</returns>
-    public async Task<string?> ResolveUsernameByUserIdAsync(
+    public async Task<string?> ResolveUserNameByUserIdAsync(
         string tenantCode,
         long userId,
         CancellationToken cancellationToken = default)
@@ -161,11 +161,11 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
         try
         {
             using var seedContext = new TaktSeedContext(_configuration, trimmedTenant);
-            var username = await seedContext.Query<TaktUser>()
+            var UserName = await seedContext.Query<TaktUser>()
                 .Where(u => u.TenantCode == trimmedTenant && u.Id == userId && u.IsDeleted == 0)
-                .Select(u => u.Username)
+                .Select(u => u.UserName)
                 .FirstAsync(cancellationToken);
-            return string.IsNullOrWhiteSpace(username) ? null : username.Trim().ToLowerInvariant();
+            return string.IsNullOrWhiteSpace(UserName) ? null : UserName.Trim().ToLowerInvariant();
         }
         catch (Exception ex)
         {
@@ -261,20 +261,20 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="username">用户名（小写）</param>
+    /// <param name="UserName">用户名（小写）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>待更新的登录日志列表</returns>
     private async Task<List<TaktLoginLog>> LoadOpenLoginSessionLogsAsync(
         string tenantCode,
         string? companyCode,
-        string username,
+        string UserName,
         CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(username);
+        ArgumentException.ThrowIfNullOrWhiteSpace(UserName);
 
         var trimmedTenant = tenantCode.Trim();
-        var trimmedUsername = username.Trim().ToLowerInvariant();
+        var trimmedUserName = UserName.Trim().ToLowerInvariant();
         if (!IsTenantDatabaseConfigured(trimmedTenant))
         {
             return [];
@@ -284,7 +284,7 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
         var allOpenLogs = await seedContext.Query<TaktLoginLog>()
             .Where(x =>
                 x.TenantCode == trimmedTenant
-                && x.Username == trimmedUsername
+                && x.UserName == trimmedUserName
                 && x.IsDeleted == 0
                 && x.LogoutAt == null
                 && x.LoginResult == TaktConstants.LoginResult.Success

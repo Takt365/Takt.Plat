@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Organization
 // 文件名称：TaktDeptsController.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：部门控制器
 // 
@@ -92,6 +92,26 @@ public class TaktDeptsController : TaktControllerBase
         try
         {
             var result = await _deptService.GetDeptTreeOptionsAsync(parentId);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取部门 ISO 编码树形选项列表（懒加载：DictValue=IsoCode）
+    /// </summary>
+    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>
+    /// <returns>树形选项</returns>
+    [TaktPermission("human:resource:organization:dept:query", "部门ISO树形选项")]
+    [HttpGet("iso-tree-options")]
+    public async Task<IActionResult> GetDeptIsoTreeOptionsAsync([FromQuery] long parentId = 0)
+    {
+        try
+        {
+            var result = await _deptService.GetDeptIsoTreeOptionsAsync(parentId);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

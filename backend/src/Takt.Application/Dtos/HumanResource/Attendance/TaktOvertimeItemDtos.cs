@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktOvertimeItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：OvertimeItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOvertimeItem 生成，请按需审阅）
 // 
@@ -52,7 +52,7 @@ public class TaktOvertimeItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -83,7 +83,7 @@ public class TaktOvertimeItemDto : TaktCompanyDtoBase
     public decimal? ActualHours { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -111,7 +111,7 @@ public class TaktOvertimeItemQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -120,11 +120,11 @@ public class TaktOvertimeItemQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
@@ -137,7 +137,7 @@ public class TaktOvertimeItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -178,7 +178,7 @@ public class TaktOvertimeItemQueryDto : TaktPagedQuery
     public decimal? ActualHours { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -227,12 +227,11 @@ public class TaktOvertimeItemCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
@@ -245,7 +244,7 @@ public class TaktOvertimeItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -253,7 +252,6 @@ public class TaktOvertimeItemCreateDto
     /// <summary>
     /// 员工姓名
     /// </summary>
-    [Required(ErrorMessage = "员工姓名不能为空")]
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
@@ -277,7 +275,7 @@ public class TaktOvertimeItemCreateDto
     public decimal? ActualHours { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -331,7 +329,7 @@ public class TaktOvertimeItemObsoleteDto
     public long OvertimeItemId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -360,11 +358,11 @@ public class TaktOvertimeItemTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
@@ -377,7 +375,7 @@ public class TaktOvertimeItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -408,7 +406,7 @@ public class TaktOvertimeItemTemplateDto
     public decimal? ActualHours { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -444,12 +442,11 @@ public class TaktOvertimeItemImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
@@ -462,7 +459,7 @@ public class TaktOvertimeItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -493,7 +490,7 @@ public class TaktOvertimeItemImportDto
     public decimal? ActualHours { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -531,6 +528,16 @@ public class TaktOvertimeItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -542,7 +549,7 @@ public class TaktOvertimeItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -573,7 +580,7 @@ public class TaktOvertimeItemExportDto
     public decimal? ActualHours { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

@@ -22,6 +22,15 @@
       label-align="right"
     >
       <a-form-item
+        :label="t('common.page.entity.tenantcode')"
+        name="tenantCode"
+      >
+        <a-input
+          v-model:value="formState.tenantCode"
+          disabled
+        />
+      </a-form-item>
+      <a-form-item
         :label="t('entity.culture.code')"
         name="cultureCode"
       >
@@ -59,7 +68,7 @@
       >
         <TaktSelect
           v-model:value="formState.isDefault"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           allow-clear
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.culture.isdefault') })"
           :disabled="props.loading"
@@ -90,10 +99,11 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 const SYS_CULTURE_CODE_DICT = 'sys_culture_code'
 
-type CultureFormState = Omit<CultureCreate, 'icon' | 'remark' | 'tenantCode' | 'translationList' | 'ExtField' | 'sortOrder'> & {
+type CultureFormState = Omit<CultureCreate, 'icon' | 'remark' | 'translationList' | 'ExtField' | 'sortOrder'> & {
   cultureId?: string
   icon: string
   remark: string
+  tenantCode: string
 }
 
 interface Props {
@@ -135,6 +145,7 @@ const formRules = computed<Record<string, Rule[]>>(() => ({
  */
 function createEmptyFormState(): CultureFormState {
   return {
+    tenantCode: tenantStore.tenantCode || '',
     cultureCode: '',
     nativeName: '',
     icon: '',
@@ -151,6 +162,7 @@ function applyFormData(data: Culture | null | undefined) {
   if (data) {
     Object.assign(formState, {
       cultureId: data.cultureId,
+      tenantCode: data.tenantCode || tenantStore.tenantCode || '',
       cultureCode: data.cultureCode || '',
       nativeName: data.nativeName || '',
       icon: data.icon || '',

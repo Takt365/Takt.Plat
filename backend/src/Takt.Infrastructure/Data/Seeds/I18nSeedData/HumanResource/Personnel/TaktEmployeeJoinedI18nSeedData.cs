@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeJoined 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -233,6 +233,24 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeejoined.directmanagername", "zh-CN", "直属上级姓名", "直属上级姓名"),
             // entity.employeejoined.directmanagername
             new TranslationSeedItem("entity.employeejoined.directmanagername", "zh-HK", "直属上级姓名_hk", "直属上级姓名"),
+
+            // entity.employeejoined.employee
+            new TranslationSeedItem("entity.employeejoined.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeejoined.employee
+            new TranslationSeedItem("entity.employeejoined.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeejoined.employee
+            new TranslationSeedItem("entity.employeejoined.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeejoined.employee
+            new TranslationSeedItem("entity.employeejoined.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
+
+            // entity.employeejoined.directmanager
+            new TranslationSeedItem("entity.employeejoined.directmanager", "en-US", "直属上级员工_us", "直属上级员工（多对一）"),
+            // entity.employeejoined.directmanager
+            new TranslationSeedItem("entity.employeejoined.directmanager", "ja-JP", "直属上级员工_jp", "直属上级员工（多对一）"),
+            // entity.employeejoined.directmanager
+            new TranslationSeedItem("entity.employeejoined.directmanager", "zh-CN", "直属上级员工", "直属上级员工（多对一）"),
+            // entity.employeejoined.directmanager
+            new TranslationSeedItem("entity.employeejoined.directmanager", "zh-HK", "直属上级员工_hk", "直属上级员工（多对一）"),
         };
     }
 

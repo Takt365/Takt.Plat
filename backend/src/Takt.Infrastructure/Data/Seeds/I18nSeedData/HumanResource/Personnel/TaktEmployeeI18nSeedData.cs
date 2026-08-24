@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employee._self", "zh-HK", "员工信息_hk", "实体名称"),
 
             // entity.employee.code
-            new TranslationSeedItem("entity.employee.code", "en-US", "员工编码_us", "员工编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.employee.code", "en-US", "员工编码_us", "员工编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 员工编码规则生成并展示，非手输；单据类型菜单：员工档案）"),
             // entity.employee.code
-            new TranslationSeedItem("entity.employee.code", "ja-JP", "员工编码_jp", "员工编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.employee.code", "ja-JP", "员工编码_jp", "员工编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 员工编码规则生成并展示，非手输；单据类型菜单：员工档案）"),
             // entity.employee.code
-            new TranslationSeedItem("entity.employee.code", "zh-CN", "员工编码", "员工编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.employee.code", "zh-CN", "员工编码", "员工编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 员工编码规则生成并展示，非手输；单据类型菜单：员工档案）"),
             // entity.employee.code
-            new TranslationSeedItem("entity.employee.code", "zh-HK", "员工编码_hk", "员工编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.employee.code", "zh-HK", "员工编码_hk", "员工编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 员工编码规则生成并展示，非手输；单据类型菜单：员工档案）"),
 
             // entity.employee.name
             new TranslationSeedItem("entity.employee.name", "en-US", "姓名_us", "姓名"),
@@ -199,13 +199,13 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employee.status", "zh-HK", "员工状态_hk", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
 
             // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+            new TranslationSeedItem("entity.employee.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）"),
             // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+            new TranslationSeedItem("entity.employee.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）"),
             // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+            new TranslationSeedItem("entity.employee.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）"),
             // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+            new TranslationSeedItem("entity.employee.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）"),
 
             // entity.employee.avatar
             new TranslationSeedItem("entity.employee.avatar", "en-US", "头像URL_us", "头像URL（展示用；档案附件明细见 EmployeeAttachments）"),
@@ -332,6 +332,15 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employee.attachments", "zh-CN", "档案附件", "档案附件"),
             // entity.employee.attachments
             new TranslationSeedItem("entity.employee.attachments", "zh-HK", "档案附件_hk", "档案附件"),
+
+            // entity.employee.delegations
+            new TranslationSeedItem("entity.employee.delegations", "en-US", "员工代理_us", "员工代理（被代理人视角；外键 OriginalEmployeeId）"),
+            // entity.employee.delegations
+            new TranslationSeedItem("entity.employee.delegations", "ja-JP", "员工代理_jp", "员工代理（被代理人视角；外键 OriginalEmployeeId）"),
+            // entity.employee.delegations
+            new TranslationSeedItem("entity.employee.delegations", "zh-CN", "员工代理", "员工代理（被代理人视角；外键 OriginalEmployeeId）"),
+            // entity.employee.delegations
+            new TranslationSeedItem("entity.employee.delegations", "zh-HK", "员工代理_hk", "员工代理（被代理人视角；外键 OriginalEmployeeId）"),
         };
     }
 

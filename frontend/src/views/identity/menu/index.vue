@@ -73,38 +73,30 @@
         :tree-field-names="{ title: 'title', key: 'key', children: 'children' }"
         :tree-width-ratio="0.2"
         :loading="loading"
-        :virtual="false"
+        :virtual="true"
         :draggable="true"
         @tree-select="handleTreeSelect"
         @tree-drop="handleMenuTreeDrop"
       />
       <TaktTreeRightTable
         entity-scope="tenant"
-        v-model:current="tableCurrentPage"
-        v-model:page-size="tablePageSize"
         :columns="columns"
         :visible-column-keys="visibleColumnKeys"
         :id-column-key="'menuId'"
         :action-column-key="'action'"
         table-mode="tree"
-        :data-source="paginatedFlatTableRows"
+        :data-source="tableFilteredTree"
+        v-model:expanded-row-keys="tableExpandedRowKeys"
         :loading="loading"
         :row-key="getMenuId"
         :stripe="true"
         :row-selection="rowSelection"
-        :show-pagination="true"
-        :total="tableFlatTotal"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'menuName'">
-            <span
-              class="inline-block"
-              :style="{ paddingLeft: `${(record._treeDepth ?? 0) * 16}px` }"
-            >
-              {{ getMenuField(record, 'menuName') }}
-            </span>
+            {{ getMenuField(record, 'menuName') }}
           </template>
           <template v-else-if="column.key === 'icon'">
             <span
@@ -204,7 +196,7 @@
       <a-form-item :label="t('entity.menu.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.menuStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.status') })"
           allow-clear
         />
@@ -253,7 +245,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import type { TreeDataItem } from 'ant-design-vue/es/tree'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
@@ -267,7 +259,11 @@ import type { TreeDropPayload } from '@/components/business/takt-tree-left-table
 import { taktExcelEntityNames } from '@/utils/naming'
 import { RiEditLine, RiDeleteBinLine, RiUserSettingsLine } from '@remixicon/vue'
 import { TaktMenuType } from '@/utils/common'
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import {
+  collectTaktTreeTableExpandableKeys,
+  filterTaktTreeTableNodes,
+  taktTreeTableNodeKey,
+} from '@/utils/takt-tree-table'
 
 const { t } = useI18n()
 const menuExcelNames = taktExcelEntityNames('TaktMenu')
@@ -278,11 +274,10 @@ const treeQueryKeyword = ref('')
 const treeExpanded = ref(false)
 /** 左侧树当前展开的节点 key 列表（受控传给 TaktTreeTable） */
 const treeExpandedKeys = ref<(string | number)[]>([])
-/** 右侧树表行展开状态：true=全部展开，false=全部折叠（扁平列表下仅保留工具栏状态） */
+/** 右侧树表工具栏「全部展开/收缩」 */
 const tableExpanded = ref(false)
-/** 右侧扁平列表分页 */
-const tableCurrentPage = ref(getTaktDefaultPageIndex())
-const tablePageSize = ref(getTaktDefaultPageSize())
+/** 右侧 a-table 树表当前展开行 key（与 row-key / menuId 一致） */
+const tableExpandedRowKeys = ref<(string | number)[]>([])
 const loading = ref(false)
 /** 左侧导航树数据源（getMenuTree 全量，不受右侧查询影响） */
 const navFullTableTree = ref<any[]>([])
@@ -291,8 +286,6 @@ const fullTableTree = ref<any[]>([])
 /** 左侧树数据（由 navFullTableTree 派生） */
 const menuTreeData = ref<TreeDataItem[]>([])
 const selectedTreeKeys = ref<(string | number)[]>([])
-const currentPage = ref(getTaktDefaultPageIndex())
-const total = ref(0)
 const selectedRow = ref<Menu | null>(null)
 const selectedRows = ref<Menu[]>([])
 const selectedRowKeys = ref<(string | number)[]>([])
@@ -437,41 +430,17 @@ watch(filteredMenuTreeData, () => {
   }
 })
 
-/**
- * 将树表数据深度优先拍平（供右侧分页展示）
- * @param nodes 树节点
- * @param depth 层级缩进
- */
-function flattenMenuTableRows(nodes: any[], depth = 0): any[] {
-  if (!nodes?.length) return []
-  const rows: any[] = []
-  for (const node of nodes) {
-    const childList = node.children as any[] | undefined
-    const { children: _children, ...rest } = node
-    rows.push({ ...rest, _treeDepth: depth })
-    if (childList?.length) {
-      rows.push(...flattenMenuTableRows(childList, depth + 1))
-    }
-  }
-  return rows
-}
-
 const getMenuField = (record: any, field: string): any => record?.[field]
 
-/** 右侧树表数据：选中左侧任意节点时显示该节点（含子级）；未选中时显示整棵树 */
+/** 右侧树表数据：仅当左侧选中节点时显示该节点（含全部子孙）；默认左树不选中、右表为空 */
 const tableTreeData = computed(() => {
   const tree = fullTableTree.value
   if (!tree?.length) return []
   const keys = selectedTreeKeys.value
-  if (keys.length > 0) {
-    const activeKey = keys[keys.length - 1]
-    if (activeKey === undefined) return tree
-    const sub = getSubtree(tree, activeKey)
-    if (sub.length > 0) {
-      return sub
-    }
-  }
-  return tree
+  if (keys.length === 0) return []
+  const activeKey = keys[keys.length - 1]
+  if (activeKey === undefined) return []
+  return getSubtree(tree, activeKey)
 })
 
 /** 右侧查询条件过滤（仅影响表格展示，不替换 fullTableTree） */
@@ -491,27 +460,30 @@ function matchesMenuRightQuery(record: Record<string, unknown>): boolean {
   return true
 }
 
-/** 右侧拍平后的全部行（先左侧子树，再右侧查询过滤） */
-const tableFlatRows = computed(() =>
-  flattenMenuTableRows(tableTreeData.value).filter(matchesMenuRightQuery)
+/** 右侧过滤后的树（保留 children，供 a-table 展开/收缩） */
+const tableFilteredTree = computed(() =>
+  filterTaktTreeTableNodes(tableTreeData.value, matchesMenuRightQuery)
 )
 
-/** 右侧拍平总行数（分页 total） */
-const tableFlatTotal = computed(() => tableFlatRows.value.length)
+/**
+ * 同步右侧树表全部展开/收缩
+ * @returns {void}
+ */
+function applyMenuTableExpandState() {
+  tableExpandedRowKeys.value = tableExpanded.value
+    ? collectTaktTreeTableExpandableKeys(tableFilteredTree.value, (node) =>
+        taktTreeTableNodeKey(node, 'menuId'),
+      )
+    : []
+}
 
-/** 当前页行数据 */
-const paginatedFlatTableRows = computed(() => {
-  const start = (tableCurrentPage.value - 1) * tablePageSize.value
-  return tableFlatRows.value.slice(start, start + tablePageSize.value)
-})
-
-watch(tableTreeData, () => {
-  tableCurrentPage.value = 1
+watch(tableExpanded, applyMenuTableExpandState)
+watch(tableFilteredTree, () => {
+  if (tableExpanded.value) applyMenuTableExpandState()
 })
 
 const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   selectedTreeKeys.value = selectedKeys
-  tableCurrentPage.value = 1
 }
 
 /** 从树结构中查找节点 key 的父级 key 与在同级中的序号（用于 parentId / sortOrder） */
@@ -627,10 +599,6 @@ const loadMenuTree = async (): Promise<MenuTree[]> => {
     treeExpandedKeys.value = getAllParentKeys(filteredMenuTreeData.value)
   }
   return trees
-}
-
-const applyRightTableQuery = () => {
-  tableCurrentPage.value = 1
 }
 
 onMounted(() => {
@@ -817,7 +785,6 @@ const loadData = async () => {
     menuTreeData.value = []
     navFullTableTree.value = []
     fullTableTree.value = []
-    total.value = 0
   } finally {
     loading.value = false
   }
@@ -826,18 +793,13 @@ const loadData = async () => {
 /** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
 useTableRefresh(loadData)
 
-/** 右侧查询（不影响左侧树与 fullTableTree） */
-const handleSearch = () => {
-  currentPage.value = 1
-  applyRightTableQuery()
-}
+/** 右侧查询（不影响左侧树与 fullTableTree；过滤为 computed） */
+const handleSearch = () => {}
 
 /** 右侧重置（不影响左侧树） */
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = emptyMenuAdvancedQueryForm()
-  currentPage.value = 1
-  applyRightTableQuery()
 }
 
 const handleTableChange = (_pagination: any, _filters: any, sorter: any) => {
@@ -1005,8 +967,6 @@ const handleExport = async () => {
 
 const handleAdvancedQuery = () => { advancedQueryVisible.value = true }
 const handleAdvancedQuerySubmit = () => {
-  currentPage.value = 1
-  applyRightTableQuery()
   advancedQueryVisible.value = false
 }
 const handleAdvancedQueryReset = () => {
@@ -1029,6 +989,8 @@ const handleRefresh = () => { handleSearch() }
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 .menu-query-row {
@@ -1038,6 +1000,7 @@ const handleRefresh = () => { handleSearch() }
   width: 100%;
   flex-wrap: nowrap;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .menu-toolbar-row {
@@ -1047,14 +1010,17 @@ const handleRefresh = () => { handleSearch() }
   width: 100%;
   flex-wrap: nowrap;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .menu-tree-table-wrap {
   flex: 1;
-  min-height: 400px;
+  min-height: 0;
   display: flex;
   flex-direction: row;
   min-width: 0;
+  overflow: hidden;
+  align-items: stretch;
 }
 
 </style>

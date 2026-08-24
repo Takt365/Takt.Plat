@@ -20,7 +20,6 @@ export const PURCHASEINVOICE_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASEINVO
 
 /** 列表业务列（不含主键） */
 export const PURCHASEINVOICE_LIST_FIELDS = [
-  'purchaseInvoiceCode',
   'fiscalYear',
   'documentType',
   'documentDate',
@@ -46,42 +45,12 @@ export const PURCHASEINVOICE_LIST_FIELDS = [
   'exchangeRateDate',
   'transactionCode',
   'postedBy',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEINVOICE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  purchaseInvoiceCode: 'required',
-  fiscalYear: 'required',
-  documentType: 'optional',
-  documentDate: 'select',
-  postingDate: 'select',
-  transactionEventType: 'optional',
-  referenceCode: 'optional',
-  supplierCode: 'select',
-  currencyCode: 'select',
-  exchangeRate: 'optional',
-  grossAmount: 'select',
-  vatAmount: 'optional',
-  taxJurisdictionCode: 'optional',
-  cashDiscountDays1: 'optional',
-  invoiceFlag: 'optional',
-  headerText: 'optional',
-  reversalDocumentCode: 'optional',
-  reversalFiscalYear: 'optional',
-  taxCode: 'optional',
-  supplyingCountry: 'optional',
-  taxExchangeRate: 'optional',
-  baselineDate: 'optional',
-  enteredBy: 'optional',
-  exchangeRateDate: 'optional',
-  transactionCode: 'optional',
-  postedBy: 'optional',
-  extField: 'optional',
-  remark: 'optional',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -89,50 +58,13 @@ export type PurchaseInvoiceField = keyof typeof PURCHASEINVOICE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEINVOICE_QUERY_STRING_FIELDS = [
-  'purchaseInvoiceCode',
-  'fiscalYear',
-  'documentType',
-  'documentDateStart',
-  'documentDateEnd',
-  'postingDateStart',
-  'postingDateEnd',
-  'transactionEventType',
-  'referenceCode',
-  'supplierCode',
-  'currencyCode',
-  'taxJurisdictionCode',
-  'invoiceFlag',
-  'headerText',
-  'reversalDocumentCode',
-  'reversalFiscalYear',
-  'taxCode',
-  'supplyingCountry',
-  'baselineDateStart',
-  'baselineDateEnd',
-  'enteredBy',
-  'exchangeRateDateStart',
-  'exchangeRateDateEnd',
-  'transactionCode',
-  'postedBy',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchaseInvoiceQuery)[]
 
-export type PurchaseInvoiceQueryField =
-  | (typeof PURCHASEINVOICE_QUERY_STRING_FIELDS)[number]
-  | 'exchangeRate' | 'grossAmount' | 'vatAmount' | 'cashDiscountDays1' | 'taxExchangeRate'
+export type PurchaseInvoiceQueryField = (typeof PURCHASEINVOICE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEINVOICE_QUERY_FIELDS: readonly PurchaseInvoiceQueryField[] = [
-  ...PURCHASEINVOICE_QUERY_STRING_FIELDS,
-  'exchangeRate',
-  'grossAmount',
-  'vatAmount',
-  'cashDiscountDays1',
-  'taxExchangeRate',
-]
+export const PURCHASEINVOICE_QUERY_FIELDS: readonly PurchaseInvoiceQueryField[] = [...PURCHASEINVOICE_QUERY_STRING_FIELDS]
 
 /**
  * Takt采购发票主表实体字段 i18n：index / purchase-invoice-form 统一入口

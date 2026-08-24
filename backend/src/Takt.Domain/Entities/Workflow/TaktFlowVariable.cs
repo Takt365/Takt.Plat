@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Workflow;
 
@@ -25,12 +24,12 @@ namespace Takt.Domain.Entities.Workflow;
 public class TaktFlowVariable : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = false)]
     public long InstanceId { get; set; }
     /// <summary>
-    /// 任务 ID（任务级变量时填写）
+    /// 任务 ID（选项 TaktFlowTasks/options；DictValue=Id；任务级变量时填写）
     /// </summary>
     [SugarColumn(ColumnName = "task_id", ColumnDescription = "任务ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? TaskId { get; set; }
@@ -40,10 +39,10 @@ public class TaktFlowVariable : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "variable_name", ColumnDescription = "变量名", ColumnDataType = "varchar", Length = 128, IsNullable = false)]
     public string VariableName { get; set; } = string.Empty;
     /// <summary>
-    /// 变量类型
+    /// 变量类型（字典 sys_flow_variable_type；0=字符串 1=长整型 2=双精度 3=布尔 4=JSON）
     /// </summary>
     [SugarColumn(ColumnName = "variable_type", ColumnDescription = "变量类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktFlowVariableType VariableType { get; set; } = TaktFlowVariableType.String;
+    public int VariableType { get; set; } = 0;
     /// <summary>
     /// 文本值（JSON 变量存此列）
     /// </summary>

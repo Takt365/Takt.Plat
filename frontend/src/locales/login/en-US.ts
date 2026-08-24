@@ -44,13 +44,13 @@ export default {
           placeholder: "Enter tenant code",
         },
       },
-      username: {
-        label: "Username",
-        placeholder: "Enter username",
+      userName: {
+        label: "UserName",
+        placeholder: "Enter UserName",
         or: {
           email: {
-            label: "Username or email",
-            placeholder: "Enter username or email",
+            label: "UserName or email",
+            placeholder: "Enter UserName or email",
           },
         },
       },
@@ -76,16 +76,16 @@ export default {
         required: "Please enter tenant code",
         invalid: "Tenant code must be 3 digits",
       },
-      username: {
-        required: "Please enter username",
-        invalid: "Invalid username format",
+      userName: {
+        required: "Please enter UserName",
+        invalid: "Invalid UserName format",
         or: {
           email: {
-            required: "Please enter username or email",
-            invalid: "Invalid username or email format",
+            required: "Please enter UserName or email",
+            invalid: "Invalid UserName or email format",
             too: {
-              short: "Username or email must be at least {min} characters",
-              long: "Username or email must not exceed {max} characters",
+              short: "UserName or email must be at least {min} characters",
+              long: "UserName or email must not exceed {max} characters",
             },
           },
         },
@@ -133,7 +133,7 @@ export default {
     message: {
       fail: "Login failed",
       credentials: {
-        incorrect: "Incorrect username or password",
+        incorrect: "Incorrect UserName or password",
       },
       account: {
         locked: "This account is locked. Please try again later",

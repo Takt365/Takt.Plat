@@ -36,6 +36,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -44,11 +45,10 @@
                 :label="pi.label('cultureCode')"
                 name="cultureCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
                   :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -124,7 +124,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.safetyPopupRequired"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('safetyPopupRequired')"
                 />
               </a-form-item>
@@ -158,11 +158,10 @@
                 :label="pi.label('companyCode')"
                 name="companyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
                   :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -226,28 +225,6 @@
       section-border
       class="w-full min-w-0"
     >
-      <template #cell-plantCode="{ record }">
-        <TaktSelect
-          v-model:value="record.plantCode"
-          api-url="TaktPlants/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="sopStepMediaPi.queryPh('plantCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-stepId="{ record }">
-        <TaktSelect
-          v-model:value="record.stepId"
-          api-url="TaktSopSteps/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="sopStepMediaPi.queryPh('stepId', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
       <template #cell-mediaType="{ record }">
         <TaktSelect
           v-model:value="record.mediaType"
@@ -286,25 +263,31 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -335,16 +318,6 @@ const sopStepMediaTableRef = ref<{
 /** 子表 sopStepMedia 可编辑列 */
 const sopStepMediaFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    key: 'plantCode',
-    title: sopStepMediaPi.label('plantCode'),
-    width: 140,
-  },
-  {
-    key: 'stepId',
-    title: sopStepMediaPi.label('stepId'),
-    width: 140,
-  },
-  {
     key: 'mediaType',
     title: sopStepMediaPi.label('mediaType'),
     width: 140,
@@ -371,8 +344,6 @@ function syncChildRowsFromFormData(val: Partial<SopStepCreate & { sopStepId?: st
 
 function createDefaultSopStepMediaRow(): Record<string, unknown> {
   return {
-    plantCode: '',
-    stepId: '',
     mediaType: 0,
     fileUrl: '',
     fileExt: '',
@@ -390,7 +361,7 @@ function buildSubmitPayload() {
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      sopStepId: masterId,
+      stepId: masterId,
     })),
   }
 }
@@ -451,10 +422,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.sopStepId
-    if (isCreate) {
+    if (!props.formData?.sopStepId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -462,13 +432,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   contentId: [
     {
       required: true,
@@ -523,13 +486,33 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('stepNo' in payload) {
     const rawstepNo = payload.stepNo
-    payload.stepNo = typeof rawstepNo === 'number' ? rawstepNo : Number(rawstepNo)
+    if (rawstepNo === undefined || rawstepNo === null || rawstepNo === '') {
+      delete payload.stepNo
+    } else {
+      const numstepNo = typeof rawstepNo === 'number' ? rawstepNo : Number(rawstepNo)
+      if (Number.isFinite(numstepNo)) payload.stepNo = numstepNo
+      else delete payload.stepNo
+    }
   }
   if ('safetyPopupRequired' in payload) {
     const rawsafetyPopupRequired = payload.safetyPopupRequired
-    payload.safetyPopupRequired = typeof rawsafetyPopupRequired === 'number' ? rawsafetyPopupRequired : Number(rawsafetyPopupRequired)
+    if (rawsafetyPopupRequired === undefined || rawsafetyPopupRequired === null || rawsafetyPopupRequired === '') {
+      delete payload.safetyPopupRequired
+    } else {
+      const numsafetyPopupRequired = typeof rawsafetyPopupRequired === 'number' ? rawsafetyPopupRequired : Number(rawsafetyPopupRequired)
+      if (Number.isFinite(numsafetyPopupRequired)) payload.safetyPopupRequired = numsafetyPopupRequired
+      else delete payload.safetyPopupRequired
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.sopStepId) {
+    payload.sopStepId = props.formData.sopStepId
+  }
   return payload
 }
 

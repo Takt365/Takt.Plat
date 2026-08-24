@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mds
 // 文件名称：TaktMasterDemandScheduleLineService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：主需求计划MDS行应用服务实现
 // 
@@ -30,37 +30,45 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Mds;
 public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterDemandScheduleLineService
 {
     private readonly ITaktCompanyRepository<TaktMasterDemandScheduleLine> _masterDemandScheduleLineRepository;
-    private readonly ITaktUniqueValidator _uniqueValidator;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
+    private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="masterDemandScheduleLineRepository">主需求计划MDS行仓储</param>
-    /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
+    /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktMasterDemandScheduleLineService(
         ITaktCompanyRepository<TaktMasterDemandScheduleLine> masterDemandScheduleLineRepository,
-        ITaktUniqueValidator uniqueValidator,
         ITaktLineNumberGenerator lineNumberGenerator,
+        ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _masterDemandScheduleLineRepository = masterDemandScheduleLineRepository;
-        _uniqueValidator = uniqueValidator;
         _lineNumberGenerator = lineNumberGenerator;
+        _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取主需求计划MDS行列表（分页）
+    /// 获取主需求计划MDS行列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktMasterDemandScheduleLineDto>> GetMasterDemandScheduleLineListAsync(TaktMasterDemandScheduleLineQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktMasterDemandScheduleLineDto>.Create(
+                new List<TaktMasterDemandScheduleLineDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _masterDemandScheduleLineRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -96,13 +104,13 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
     {
         EnsureThreeLayerContext();
         var list = await _masterDemandScheduleLineRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.MdsCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MdsCode ?? e.Id.ToString(),
+            DictValue = e.MdsCode,
+            DictLabel = e.MdsCode,
         }).ToList();
     }
 
@@ -115,25 +123,32 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
     {
         var entity = dto.Adapt<TaktMasterDemandScheduleLine>();
         entity.IsObsolete = 0;
-        var isUnique_ix_takt_logistics_manufacturing_planning_mds_line_bucket_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_bucket_unique = await _uniqueValidator.IsUniqueAsync(
             _masterDemandScheduleLineRepository,
             x => x.MasterDemandScheduleId == entity.MasterDemandScheduleId
                 && x.MaterialCode == entity.MaterialCode
                 && x.BucketStart == entity.BucketStart
                 && x.DemandSourceType == entity.DemandSourceType);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_mds_line_bucket_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_bucket_unique)
         {
             throw new TaktBusinessException("主需求计划MDS行的MasterDemandScheduleId、MaterialCode、BucketStart、DemandSourceType已存在");
         }
-        await EnsureMasterDemandScheduleLineNumberAsync(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_mds_line_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_line_unique = await _uniqueValidator.IsUniqueAsync(
             _masterDemandScheduleLineRepository,
             x => x.MasterDemandScheduleId == entity.MasterDemandScheduleId
                 && x.LineNumber == entity.LineNumber
                 && x.MaterialCode == entity.MaterialCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_mds_line_line_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_line_unique)
         {
             throw new TaktBusinessException("主需求计划MDS行的MasterDemandScheduleId、LineNumber、MaterialCode已存在");
+        }
+        if (entity.LineNumber <= 0)
+        {
+            var maxLine = await _masterDemandScheduleLineRepository.GetMaxIntAsync(
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MasterDemandScheduleId == entity.MasterDemandScheduleId,
+                x => x.LineNumber);
+            var businessCode = entity.MasterDemandScheduleId.ToString();
+            entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _masterDemandScheduleLineRepository.CreateAsync(entity);
         return await GetMasterDemandScheduleLineByIdAsync(entity.Id) ?? entity.Adapt<TaktMasterDemandScheduleLineDto>();
@@ -153,25 +168,24 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
             throw new TaktBusinessException("主需求计划MDS行不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_mds_line_bucket_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_bucket_unique = await _uniqueValidator.IsUniqueAsync(
             _masterDemandScheduleLineRepository,
             x => x.MasterDemandScheduleId == entity.MasterDemandScheduleId
                 && x.MaterialCode == entity.MaterialCode
                 && x.BucketStart == entity.BucketStart
                 && x.DemandSourceType == entity.DemandSourceType,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_mds_line_bucket_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_bucket_unique)
         {
             throw new TaktBusinessException("主需求计划MDS行的MasterDemandScheduleId、MaterialCode、BucketStart、DemandSourceType已存在");
         }
-        await EnsureMasterDemandScheduleLineNumberAsync(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_mds_line_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_line_unique = await _uniqueValidator.IsUniqueAsync(
             _masterDemandScheduleLineRepository,
             x => x.MasterDemandScheduleId == entity.MasterDemandScheduleId
                 && x.LineNumber == entity.LineNumber
                 && x.MaterialCode == entity.MaterialCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_mds_line_line_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_line_unique)
         {
             throw new TaktBusinessException("主需求计划MDS行的MasterDemandScheduleId、LineNumber、MaterialCode已存在");
         }
@@ -186,11 +200,21 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
     /// <returns>任务</returns>
     public async Task DeleteMasterDemandScheduleLineByIdAsync(long id)
     {
-        var deleted = await _masterDemandScheduleLineRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _masterDemandScheduleLineRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("主需求计划MDS行不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("主需求计划MDS行不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("主需求计划MDS行已作废");
+        }
+        entity.IsObsolete = 1;
+        await _masterDemandScheduleLineRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -209,6 +233,27 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
         {
             await DeleteMasterDemandScheduleLineByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新主需求计划MDS行作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktMasterDemandScheduleLineDto> UpdateMasterDemandScheduleLineObsoleteAsync(TaktMasterDemandScheduleLineObsoleteDto dto)
+    {
+        var entity = await _masterDemandScheduleLineRepository.GetByIdAsync(dto.MasterDemandScheduleLineId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("主需求计划MDS行不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("主需求计划MDS行不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _masterDemandScheduleLineRepository.UpdateAsync(entity);
+        return await GetMasterDemandScheduleLineByIdAsync(dto.MasterDemandScheduleLineId) ?? throw new TaktBusinessException("主需求计划MDS行不存在");
     }
 
     /// <summary>
@@ -252,15 +297,32 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（MasterDemandScheduleId、MaterialCode、BucketStart、DemandSourceType）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_planning_mds_line_bucket_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_bucket_unique = await _uniqueValidator.IsUniqueAsync(
                     _masterDemandScheduleLineRepository,
                     x => x.MasterDemandScheduleId == entity.MasterDemandScheduleId
                         && x.MaterialCode == entity.MaterialCode
                         && x.BucketStart == entity.BucketStart
                         && x.DemandSourceType == entity.DemandSourceType);
-                if (!isUnique_ix_takt_logistics_manufacturing_planning_mds_line_bucket_unique)
+                if (!isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_bucket_unique)
                 {
                     throw new TaktBusinessException("主需求计划MDS行的MasterDemandScheduleId、MaterialCode、BucketStart、DemandSourceType已存在");
+                }
+                var isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    _masterDemandScheduleLineRepository,
+                    x => x.MasterDemandScheduleId == entity.MasterDemandScheduleId
+                        && x.LineNumber == entity.LineNumber
+                        && x.MaterialCode == entity.MaterialCode);
+                if (!isUnique_ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_line_unique)
+                {
+                    throw new TaktBusinessException("主需求计划MDS行的MasterDemandScheduleId、LineNumber、MaterialCode已存在");
+                }
+                if (entity.LineNumber <= 0)
+                {
+                    var maxLine = await _masterDemandScheduleLineRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MasterDemandScheduleId == entity.MasterDemandScheduleId,
+                        x => x.LineNumber);
+                    var businessCode = entity.MasterDemandScheduleId.ToString();
+                    entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _masterDemandScheduleLineRepository.CreateAsync(entity);
                 success += 1;
@@ -283,7 +345,15 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMasterDemandScheduleLineAsync(TaktMasterDemandScheduleLineQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktMasterDemandScheduleLineQueryDto());
+        var queryDto = query ?? new TaktMasterDemandScheduleLineQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktMasterDemandScheduleLineExportDto>(),
+                sheetName ?? "主需求计划MDS行数据",
+                fileName ?? "主需求计划MDS行导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _masterDemandScheduleLineRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -304,26 +374,6 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
     // ========================================
 
     /// <summary>
-    /// 未传行号时按主表编码生成下一行号
-    /// </summary>
-    /// <param name="entity">MDS 行实体</param>
-    /// <returns>任务</returns>
-    private async Task EnsureMasterDemandScheduleLineNumberAsync(TaktMasterDemandScheduleLine entity)
-    {
-        if (entity.LineNumber > 0)
-        {
-            return;
-        }
-        var maxLine = await _masterDemandScheduleLineRepository.GetMaxIntAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.MasterDemandScheduleId == entity.MasterDemandScheduleId,
-            x => x.LineNumber);
-        var businessCode = !string.IsNullOrWhiteSpace(entity.MdsCode) ? entity.MdsCode : entity.MasterDemandScheduleId.ToString();
-        entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
-    }
-
-    /// <summary>
     /// 构建主需求计划MDS行查询表达式
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
@@ -332,143 +382,249 @@ public class TaktMasterDemandScheduleLineService : TaktServiceBase, ITaktMasterD
     {
         var exp = Expressionable.Create<TaktMasterDemandScheduleLine>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
-        {
-            var keywords = queryDto.KeyWords;
-            exp = exp.And(x =>
-                SqlFunc.ToString(x.MasterDemandScheduleId).Contains(keywords)
-                || (x.MdsCode != null && x.MdsCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.DemandSourceType).Contains(keywords)
-                || SqlFunc.ToString(x.SalesOrderId).Contains(keywords)
-                || SqlFunc.ToString(x.SalesOrderLineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.SalesForecastId).Contains(keywords)
-                || SqlFunc.ToString(x.SalesForecastLineNumber).Contains(keywords)
-                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || SqlFunc.ToString(x.DemandQuantity).Contains(keywords)
-                || (x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
-                || (x.ExtField != null && x.ExtField.Contains(keywords))
-                || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.IsObsolete).Contains(keywords)
-                || SqlFunc.ToString(x.BucketStart).Contains(keywords)
-                || SqlFunc.ToString(x.BucketEnd).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
-            );
-        }
-
-        if (queryDto?.MasterDemandScheduleId.HasValue == true)
-        {
-            exp = exp.And(x => x.MasterDemandScheduleId == queryDto.MasterDemandScheduleId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MdsCode))
-        {
-            exp = exp.And(x => x.MdsCode != null && x.MdsCode.Contains(queryDto.MdsCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.DemandSourceType.HasValue == true)
-        {
-            exp = exp.And(x => x.DemandSourceType == queryDto.DemandSourceType);
-        }
-
-        if (queryDto?.SalesOrderId.HasValue == true)
-        {
-            exp = exp.And(x => x.SalesOrderId == queryDto.SalesOrderId);
-        }
-
-        if (queryDto?.SalesOrderLineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.SalesOrderLineNumber == queryDto.SalesOrderLineNumber);
-        }
-
-        if (queryDto?.SalesForecastId.HasValue == true)
-        {
-            exp = exp.And(x => x.SalesForecastId == queryDto.SalesForecastId);
-        }
-
-        if (queryDto?.SalesForecastLineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.SalesForecastLineNumber == queryDto.SalesForecastLineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
-        {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
-        }
-
-        if (queryDto?.DemandQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.DemandQuantity == queryDto.DemandQuantity);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.UnitOfMeasure))
-        {
-            exp = exp.And(x => x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(queryDto.UnitOfMeasure));
-        }
-
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
         if (queryDto?.IsObsolete.HasValue == true)
         {
             exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
         }
-
-        if (queryDto?.BucketStartStart.HasValue == true)
+        else
         {
-            exp = exp.And(x => x.BucketStart >= queryDto.BucketStartStart);
+            exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (queryDto?.BucketStartEnd.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            exp = exp.And(x => x.BucketStart <= queryDto.BucketStartEnd);
+            var keywords = queryDto.KeyWords!.Trim();
+            exp = exp.And(x =>
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.MdsCode != null && x.MdsCode.Contains(keywords))
+                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
+            );
         }
 
-        if (queryDto?.BucketEndStart.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.BucketEnd >= queryDto.BucketEndStart);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.BucketEndEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.BucketEnd <= queryDto.BucketEndEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.MasterDemandScheduleId.HasValue == true)
+        {
+            var masterDemandScheduleId = queryDto.MasterDemandScheduleId.Value;
+            exp = exp.And(x => x.MasterDemandScheduleId == masterDemandScheduleId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MdsCode))
+        {
+            var mdsCode = queryDto.MdsCode;
+            exp = exp.And(x => x.MdsCode != null && x.MdsCode.Contains(mdsCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.DemandSourceType.HasValue == true)
+        {
+            var demandSourceType = queryDto.DemandSourceType.Value;
+            exp = exp.And(x => x.DemandSourceType == demandSourceType);
+        }
+
+        if (queryDto?.SalesOrderId.HasValue == true)
+        {
+            var salesOrderId = queryDto.SalesOrderId.Value;
+            exp = exp.And(x => x.SalesOrderId == salesOrderId);
+        }
+
+        if (queryDto?.SalesOrderLineNumber.HasValue == true)
+        {
+            var salesOrderLineNumber = queryDto.SalesOrderLineNumber.Value;
+            exp = exp.And(x => x.SalesOrderLineNumber == salesOrderLineNumber);
+        }
+
+        if (queryDto?.SalesForecastId.HasValue == true)
+        {
+            var salesForecastId = queryDto.SalesForecastId.Value;
+            exp = exp.And(x => x.SalesForecastId == salesForecastId);
+        }
+
+        if (queryDto?.SalesForecastLineNumber.HasValue == true)
+        {
+            var salesForecastLineNumber = queryDto.SalesForecastLineNumber.Value;
+            exp = exp.And(x => x.SalesForecastLineNumber == salesForecastLineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
+        {
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
+        }
+
+        if (queryDto?.DemandQuantity.HasValue == true)
+        {
+            var demandQuantity = queryDto.DemandQuantity.Value;
+            exp = exp.And(x => x.DemandQuantity == demandQuantity);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UnitOfMeasure))
+        {
+            var unitOfMeasure = queryDto.UnitOfMeasure;
+            exp = exp.And(x => x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(unitOfMeasure));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.BucketStartStart.HasValue == true)
+        {
+            var bucketStartStart = queryDto.BucketStartStart.Value;
+            exp = exp.And(x => x.BucketStart >= bucketStartStart);
+        }
+
+        if (queryDto?.BucketStartEnd.HasValue == true)
+        {
+            var bucketStartEnd = queryDto.BucketStartEnd.Value;
+            exp = exp.And(x => x.BucketStart <= bucketStartEnd);
+        }
+
+        if (queryDto?.BucketEndStart.HasValue == true)
+        {
+            var bucketEndStart = queryDto.BucketEndStart.Value;
+            exp = exp.And(x => x.BucketEnd >= bucketEndStart);
+        }
+
+        if (queryDto?.BucketEndEnd.HasValue == true)
+        {
+            var bucketEndEnd = queryDto.BucketEndEnd.Value;
+            exp = exp.And(x => x.BucketEnd <= bucketEndEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktMasterDemandScheduleLineQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.MasterDemandScheduleId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MdsCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DemandSourceType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SalesOrderId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SalesOrderLineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SalesForecastId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SalesForecastLineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (queryDto.DemandQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UnitOfMeasure))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BucketStartStart.HasValue || queryDto.BucketStartEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BucketEndStart.HasValue || queryDto.BucketEndEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

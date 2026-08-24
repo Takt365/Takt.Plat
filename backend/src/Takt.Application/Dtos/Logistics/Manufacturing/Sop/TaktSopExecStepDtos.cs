@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecStepDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopExecStep 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopExecStep 生成，请按需审阅）
 // 
@@ -89,7 +89,7 @@ public class TaktSopExecStepDto : TaktCompanyDtoBase
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int BlockNextStep { get; set; } = 0;
 
@@ -117,7 +117,7 @@ public class TaktSopExecStepQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -190,7 +190,7 @@ public class TaktSopExecStepQueryDto : TaktPagedQuery
     public DateTime? ConfirmedAtEnd { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? BlockNextStep { get; set; }
 
@@ -288,7 +288,7 @@ public class TaktSopExecStepCreateDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int BlockNextStep { get; set; } = 0;
 
@@ -397,7 +397,7 @@ public class TaktSopExecStepTemplateDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? BlockNextStep { get; set; }
 
@@ -482,7 +482,7 @@ public class TaktSopExecStepImportDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? BlockNextStep { get; set; }
 
@@ -523,6 +523,11 @@ public class TaktSopExecStepExportDto
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
@@ -568,7 +573,7 @@ public class TaktSopExecStepExportDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int BlockNextStep { get; set; } = 0;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcGijutsu 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcGijutsu 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcGijutsuId { get; set; }
-
 
     /// <summary>
     /// 设变单号（唯一）
@@ -122,7 +121,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -132,7 +131,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -242,9 +241,8 @@ public class TaktEcGijutsuCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -304,12 +302,12 @@ public class TaktEcGijutsuCreateDto
     /// <summary>
     /// 设变明细列表（技术阶段一：③，BOM/料号变更行）（子表，级联保存）
     /// </summary>
-    public List<TaktEcDetailUpdateDto>? EcDetails { get; set; }
+    public List<TaktEcDetailCreateDto>? EcDetails { get; set; }
 
     /// <summary>
     /// 设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）（子表，级联保存）
     /// </summary>
-    public List<TaktEcAttachmentUpdateDto>? Attachments { get; set; }
+    public List<TaktEcAttachmentCreateDto>? Attachments { get; set; }
 
     /// <summary>
     /// 设变通知列表（技术阶段一：④，发行通知至各部门）（子表，级联保存）
@@ -412,7 +410,7 @@ public class TaktEcGijutsuTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -514,7 +512,7 @@ public class TaktEcGijutsuImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -617,9 +615,14 @@ public class TaktEcGijutsuExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变单号（唯一）

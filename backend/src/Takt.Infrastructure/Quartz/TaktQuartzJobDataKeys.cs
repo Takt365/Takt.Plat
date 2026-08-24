@@ -80,7 +80,7 @@ public static class TaktQuartzJobDataKeys
     /// <summary>
     /// 触发用户
     /// </summary>
-    public const string UserName = "UserName";
+    public const string UserName = "user_name";
 
     /// <summary>
     /// 是否手动立即触发（1=是，允许暂停态任务执行）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopRevisionI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopRevision 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,22 +136,22 @@ public class TaktSopRevisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.soprevision.ecnid", "zh-HK", "ECN主表ID_hk", "关联 ECN 主表 ID（选项 TaktEcs/options；DictValue=Id）"),
 
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "en-US", "是否锁定_us", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "en-US", "是否锁定_us", "是否锁定（字典 sys_yes_no；0=否，1=是）"),
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "ja-JP", "是否锁定_jp", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "ja-JP", "是否锁定_jp", "是否锁定（字典 sys_yes_no；0=否，1=是）"),
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "zh-CN", "是否锁定", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "zh-CN", "是否锁定", "是否锁定（字典 sys_yes_no；0=否，1=是）"),
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "zh-HK", "是否锁定_hk", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "zh-HK", "是否锁定_hk", "是否锁定（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "en-US", "是否强制班组长确认_us", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "en-US", "是否强制班组长确认_us", "是否强制班组长确认（字典 sys_yes_no；0=否，1=是）"),
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "ja-JP", "是否强制班组长确认_jp", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "ja-JP", "是否强制班组长确认_jp", "是否强制班组长确认（字典 sys_yes_no；0=否，1=是）"),
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-CN", "是否强制班组长确认", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-CN", "是否强制班组长确认", "是否强制班组长确认（字典 sys_yes_no；0=否，1=是）"),
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-HK", "是否强制班组长确认_hk", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-HK", "是否强制班组长确认_hk", "是否强制班组长确认（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.soprevision.revisionstatus
             new TranslationSeedItem("entity.soprevision.revisionstatus", "en-US", "版本状态_us", "版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）"),

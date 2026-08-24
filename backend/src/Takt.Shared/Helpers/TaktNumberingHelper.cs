@@ -56,25 +56,25 @@ public static class TaktNumberingHelper
     }
 
     /// <summary>
-    /// 归一化重置周期（兼容 daily/monthly/yearly）
+    /// 归一化重置周期（字典 sys_reset_period：None|Annually|Monthly|Daily；兼容 legacy）
     /// </summary>
     /// <param name="resetPeriod">重置周期</param>
-    /// <returns>标准值 none/day/month/year/hour</returns>
+    /// <returns>标准值 None/Annually/Monthly/Daily</returns>
     public static string NormalizeResetPeriod(string? resetPeriod)
     {
         if (string.IsNullOrWhiteSpace(resetPeriod))
         {
-            return "none";
+            return "None";
         }
         return resetPeriod.Trim().ToLowerInvariant() switch
         {
-            "daily" => "day",
-            "monthly" => "month",
-            "yearly" => "year",
-            "hourly" => "hour",
-            "minutely" => "hour",
-            "minute" => "hour",
-            _ => resetPeriod.Trim().ToLowerInvariant(),
+            "none" => "None",
+            "annually" or "year" or "yearly" => "Annually",
+            "monthly" or "month" => "Monthly",
+            "daily" or "day" => "Daily",
+            // 已废弃 hour：按日重置
+            "hour" or "hourly" or "minutely" or "minute" => "Daily",
+            _ => resetPeriod.Trim(),
         };
     }
 
@@ -109,18 +109,19 @@ public static class TaktNumberingHelper
     /// <returns>是否支持该日期格式</returns>
     public static bool TryResolveRequiredResetPeriod(string? dateFormat, out string resetPeriod)
     {
-        resetPeriod = "none";
+        resetPeriod = "None";
         var formatKey = NormalizeSupportedDateFormat(dateFormat);
         if (formatKey == null)
         {
-            return Assign("none", out resetPeriod);
+            return Assign("None", out resetPeriod);
         }
         return formatKey switch
         {
-            "yyyy" => Assign("year", out resetPeriod),
-            "yyyyMM" => Assign("month", out resetPeriod),
-            "yyyyMMdd" => Assign("day", out resetPeriod),
-            "yyyyMMddHH" => Assign("hour", out resetPeriod),
+            "yyyy" => Assign("Annually", out resetPeriod),
+            "yyyyMM" => Assign("Monthly", out resetPeriod),
+            "yyyyMMdd" => Assign("Daily", out resetPeriod),
+            // 年月日时无独立 Hour 字典项，按日重置
+            "yyyyMMddHH" => Assign("Daily", out resetPeriod),
             _ => false,
         };
     }
@@ -156,10 +157,10 @@ public static class TaktNumberingHelper
     }
 
     /// <summary>
-    /// 归一化业务领域（兼容旧版数字 document_type 种子）
+    /// 归一化单据类型：菜单 Id（全数字）原样返回；兼容旧版数字领域码 → 领域名（遗留数据）
     /// </summary>
-    /// <param name="documentType">业务领域或旧版数字</param>
-    /// <returns>标准领域文本</returns>
+    /// <param name="documentType">菜单 Id、业务领域或旧版数字</param>
+    /// <returns>标准 DocumentType（优先菜单 Id）</returns>
     public static string NormalizeDocumentType(string? documentType)
     {
         if (string.IsNullOrWhiteSpace(documentType))
@@ -167,6 +168,11 @@ public static class TaktNumberingHelper
             return string.Empty;
         }
         var trimmed = documentType.Trim();
+        // 菜单 Id（雪花/长数字）不作旧版领域映射
+        if (trimmed.Length > 2 && trimmed.All(char.IsDigit))
+        {
+            return trimmed;
+        }
         if (int.TryParse(trimmed, out var legacyCode))
         {
             return legacyCode switch
@@ -246,7 +252,7 @@ public static class TaktNumberingHelper
         }
         if (string.IsNullOrWhiteSpace(rule.ResetPeriod))
         {
-            rule.ResetPeriod = "none";
+            rule.ResetPeriod = "None";
         }
         if (string.Equals(rule.DateFormat?.Trim(), "none", StringComparison.OrdinalIgnoreCase))
         {
@@ -459,7 +465,7 @@ public static class TaktNumberingHelper
 
     private static bool ShouldResetSequence(string resetPeriod, DateTime? lastUpdatedAt, DateTime now)
     {
-        var period = resetPeriod?.Trim().ToLowerInvariant() ?? "none";
+        var period = NormalizeResetPeriod(resetPeriod).ToLowerInvariant();
         if (period == "none" || !lastUpdatedAt.HasValue)
         {
             return false;
@@ -467,13 +473,9 @@ public static class TaktNumberingHelper
         var last = lastUpdatedAt.Value;
         return period switch
         {
-            "day" or "daily" => last.Date < now.Date,
-            "month" or "monthly" => last.Year < now.Year || (last.Year == now.Year && last.Month < now.Month),
-            "year" or "yearly" => last.Year < now.Year,
-            "hour" or "hourly" => last.Year != now.Year
-                || last.Month != now.Month
-                || last.Day != now.Day
-                || last.Hour != now.Hour,
+            "daily" or "day" => last.Date < now.Date,
+            "monthly" or "month" => last.Year < now.Year || (last.Year == now.Year && last.Month < now.Month),
+            "annually" or "year" or "yearly" => last.Year < now.Year,
             _ => false,
         };
     }

@@ -20,7 +20,6 @@ export const MASTERDEMANDSCHEDULELINE_SELF_I18N_KEY = buildEntitySelfI18nKey(MAS
 
 /** 列表业务列（不含主键） */
 export const MASTERDEMANDSCHEDULELINE_LIST_FIELDS = [
-  'masterDemandScheduleId',
   'mdsCode',
   'demandSourceType',
   'salesOrderId',
@@ -32,11 +31,11 @@ export const MASTERDEMANDSCHEDULELINE_LIST_FIELDS = [
   'bucketEnd',
   'demandQuantity',
   'unitOfMeasure',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const MASTERDEMANDSCHEDULELINE_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'masterDemandScheduleId',
   'mdsCode',
   'demandSourceType',
   'salesOrderId',
@@ -61,21 +60,7 @@ export const MASTERDEMANDSCHEDULELINE_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const MASTERDEMANDSCHEDULELINE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  mdsCode: 'required',
-  demandSourceType: 'select',
-  salesOrderId: 'optional',
-  salesOrderLineNumber: 'optional',
-  salesForecastId: 'optional',
-  salesForecastLineNumber: 'optional',
-  materialCode: 'select',
-  bucketStart: 'select',
-  bucketEnd: 'select',
-  demandQuantity: 'select',
-  unitOfMeasure: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -83,33 +68,13 @@ export type MasterDemandScheduleLineField = keyof typeof MASTERDEMANDSCHEDULELIN
 
 /** 高级查询可 trim 的字符串字段 */
 export const MASTERDEMANDSCHEDULELINE_QUERY_STRING_FIELDS = [
-  'mdsCode',
-  'salesOrderId',
-  'salesForecastId',
-  'materialCode',
-  'bucketStartStart',
-  'bucketStartEnd',
-  'bucketEndStart',
-  'bucketEndEnd',
-  'unitOfMeasure',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof MasterDemandScheduleLineQuery)[]
 
-export type MasterDemandScheduleLineQueryField =
-  | (typeof MASTERDEMANDSCHEDULELINE_QUERY_STRING_FIELDS)[number]
-  | 'demandSourceType' | 'salesOrderLineNumber' | 'salesForecastLineNumber' | 'demandQuantity'
+export type MasterDemandScheduleLineQueryField = (typeof MASTERDEMANDSCHEDULELINE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const MASTERDEMANDSCHEDULELINE_QUERY_FIELDS: readonly MasterDemandScheduleLineQueryField[] = [
-  ...MASTERDEMANDSCHEDULELINE_QUERY_STRING_FIELDS,
-  'demandSourceType',
-  'salesOrderLineNumber',
-  'salesForecastLineNumber',
-  'demandQuantity',
-]
+export const MASTERDEMANDSCHEDULELINE_QUERY_FIELDS: readonly MasterDemandScheduleLineQueryField[] = [...MASTERDEMANDSCHEDULELINE_QUERY_STRING_FIELDS]
 
 /**
  * MasterDemandScheduleLine字段 i18n：index / master-demand-schedule-line-form 统一入口

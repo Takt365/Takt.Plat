@@ -141,492 +141,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('billingDocumentCode')">
-      <a-form-item :label="pi.queryLabel('billingDocumentCode')">
-        <a-input
-          v-model:value="advancedQueryForm.billingDocumentCode"
-          :placeholder="pi.queryPh('billingDocumentCode', 'required')"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('billingType')">
-      <a-form-item :label="pi.queryLabel('billingType')">
-        <a-input
-          v-model:value="advancedQueryForm.billingType"
-          :placeholder="pi.queryPh('billingType', 'required')"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('billingCategory')">
-      <a-form-item :label="pi.queryLabel('billingCategory')">
-        <a-input
-          v-model:value="advancedQueryForm.billingCategory"
-          :placeholder="pi.queryPh('billingCategory', 'required')"
-          show-count
-          :maxlength="1"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('documentCategory')">
-      <a-form-item :label="pi.queryLabel('documentCategory')">
-        <a-input
-          v-model:value="advancedQueryForm.documentCategory"
-          :placeholder="pi.queryPh('documentCategory', 'required')"
-          show-count
-          :maxlength="1"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="pi.queryLabel('currencyCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('currencyCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('salesOrganization')">
-      <a-form-item :label="pi.queryLabel('salesOrganization')">
-        <a-input
-          v-model:value="advancedQueryForm.salesOrganization"
-          :placeholder="pi.queryPh('salesOrganization', 'required')"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('distributionChannel')">
-      <a-form-item :label="pi.queryLabel('distributionChannel')">
-        <a-input
-          v-model:value="advancedQueryForm.distributionChannel"
-          :placeholder="pi.queryPh('distributionChannel', 'required')"
-          show-count
-          :maxlength="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('pricingProcedure')">
-      <a-form-item :label="pi.queryLabel('pricingProcedure')">
-        <a-input
-          v-model:value="advancedQueryForm.pricingProcedure"
-          :placeholder="pi.queryPh('pricingProcedure', 'required')"
-          show-count
-          :maxlength="6"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('conditionCode')">
-      <a-form-item :label="pi.queryLabel('conditionCode')">
-        <a-input
-          v-model:value="advancedQueryForm.conditionCode"
-          :placeholder="pi.queryPh('conditionCode', 'required')"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('shippingConditions')">
-      <a-form-item :label="pi.queryLabel('shippingConditions')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.shippingConditions"
-          dict-type="logistics_shipping_conditions"
-          :placeholder="pi.queryPh('shippingConditions', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('billingDateStart')">
-      <a-form-item :label="pi.queryLabel('billingDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.billingDateStart"
-          :placeholder="pi.queryPh('billingDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('billingDateEnd')">
-      <a-form-item :label="pi.queryLabel('billingDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.billingDateEnd"
-          :placeholder="pi.queryPh('billingDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerGroup')">
-      <a-form-item :label="pi.queryLabel('customerGroup')">
-        <a-input
-          v-model:value="advancedQueryForm.customerGroup"
-          :placeholder="pi.queryPh('customerGroup', 'required')"
-          show-count
-          :maxlength="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('incoterms1')">
-      <a-form-item :label="pi.queryLabel('incoterms1')">
-        <a-input
-          v-model:value="advancedQueryForm.incoterms1"
-          :placeholder="pi.queryPh('incoterms1', 'required')"
-          show-count
-          :maxlength="3"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('incoterms2')">
-      <a-form-item :label="pi.queryLabel('incoterms2')">
-        <a-input
-          v-model:value="advancedQueryForm.incoterms2"
-          :placeholder="pi.queryPh('incoterms2', 'required')"
-          show-count
-          :maxlength="28"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postingStatus')">
-      <a-form-item :label="pi.queryLabel('postingStatus')">
-        <a-input
-          v-model:value="advancedQueryForm.postingStatus"
-          :placeholder="pi.queryPh('postingStatus', 'required')"
-          show-count
-          :maxlength="1"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('accountingExchangeRate')">
-      <a-form-item :label="pi.queryLabel('accountingExchangeRate')">
-        <a-input-number
-          v-model:value="advancedQueryForm.accountingExchangeRate"
-          :placeholder="pi.queryPh('accountingExchangeRate', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('paymentTerms')">
-      <a-form-item :label="pi.queryLabel('paymentTerms')">
-        <a-input
-          v-model:value="advancedQueryForm.paymentTerms"
-          :placeholder="pi.queryPh('paymentTerms', 'required')"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('accountAssignmentGroup')">
-      <a-form-item :label="pi.queryLabel('accountAssignmentGroup')">
-        <a-input
-          v-model:value="advancedQueryForm.accountAssignmentGroup"
-          :placeholder="pi.queryPh('accountAssignmentGroup', 'required')"
-          show-count
-          :maxlength="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('countryCode')">
-      <a-form-item :label="pi.queryLabel('countryCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.countryCode"
-          dict-type="sys_country_code"
-          :placeholder="pi.queryPh('countryCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('netAmount')">
-      <a-form-item :label="pi.queryLabel('netAmount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.netAmount"
-          :placeholder="pi.queryPh('netAmount', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('payerCode')">
-      <a-form-item :label="pi.queryLabel('payerCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.payerCode"
-          api-url="TaktCustomers/options"
-          :placeholder="pi.queryPh('payerCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="pi.queryLabel('customerCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.customerCode"
-          api-url="TaktCustomers/options"
-          :placeholder="pi.queryPh('customerCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('statisticsCurrencyCode')">
-      <a-form-item :label="pi.queryLabel('statisticsCurrencyCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.statisticsCurrencyCode"
-          dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('statisticsCurrencyCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('foreignTradeCode')">
-      <a-form-item :label="pi.queryLabel('foreignTradeCode')">
-        <a-input
-          v-model:value="advancedQueryForm.foreignTradeCode"
-          :placeholder="pi.queryPh('foreignTradeCode', 'required')"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('cancelledBillingDocument')">
-      <a-form-item :label="pi.queryLabel('cancelledBillingDocument')">
-        <a-input
-          v-model:value="advancedQueryForm.cancelledBillingDocument"
-          :placeholder="pi.queryPh('cancelledBillingDocument', 'required')"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('invoiceListType')">
-      <a-form-item :label="pi.queryLabel('invoiceListType')">
-        <a-input
-          v-model:value="advancedQueryForm.invoiceListType"
-          :placeholder="pi.queryPh('invoiceListType', 'required')"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('division')">
-      <a-form-item :label="pi.queryLabel('division')">
-        <a-input
-          v-model:value="advancedQueryForm.division"
-          :placeholder="pi.queryPh('division', 'required')"
-          show-count
-          :maxlength="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('hierarchyTypePricing')">
-      <a-form-item :label="pi.queryLabel('hierarchyTypePricing')">
-        <a-input
-          v-model:value="advancedQueryForm.hierarchyTypePricing"
-          :placeholder="pi.queryPh('hierarchyTypePricing', 'required')"
-          show-count
-          :maxlength="1"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('tradingPartner')">
-      <a-form-item :label="pi.queryLabel('tradingPartner')">
-        <a-input
-          v-model:value="advancedQueryForm.tradingPartner"
-          :placeholder="pi.queryPh('tradingPartner', 'required')"
-          show-count
-          :maxlength="6"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taxDepartureCountry')">
-      <a-form-item :label="pi.queryLabel('taxDepartureCountry')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.taxDepartureCountry"
-          dict-type="sys_country_code"
-          :placeholder="pi.queryPh('taxDepartureCountry', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('organizationSalesTaxNumber')">
-      <a-form-item :label="pi.queryLabel('organizationSalesTaxNumber')">
-        <a-input
-          v-model:value="advancedQueryForm.organizationSalesTaxNumber"
-          :placeholder="pi.queryPh('organizationSalesTaxNumber', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('countrySalesTaxNumber')">
-      <a-form-item :label="pi.queryLabel('countrySalesTaxNumber')">
-        <a-input
-          v-model:value="advancedQueryForm.countrySalesTaxNumber"
-          :placeholder="pi.queryPh('countrySalesTaxNumber', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('referenceCode')">
-      <a-form-item :label="pi.queryLabel('referenceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.referenceCode"
-          :placeholder="pi.queryPh('referenceCode', 'required')"
-          show-count
-          :maxlength="16"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('cancelledFlag')">
-      <a-form-item :label="pi.queryLabel('cancelledFlag')">
-        <a-input
-          v-model:value="advancedQueryForm.cancelledFlag"
-          :placeholder="pi.queryPh('cancelledFlag', 'required')"
-          show-count
-          :maxlength="1"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('exchangeRateDateStart')">
-      <a-form-item :label="pi.queryLabel('exchangeRateDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.exchangeRateDateStart"
-          :placeholder="pi.queryPh('exchangeRateDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('exchangeRateDateEnd')">
-      <a-form-item :label="pi.queryLabel('exchangeRateDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.exchangeRateDateEnd"
-          :placeholder="pi.queryPh('exchangeRateDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('paymentReference')">
-      <a-form-item :label="pi.queryLabel('paymentReference')">
-        <a-input
-          v-model:value="advancedQueryForm.paymentReference"
-          :placeholder="pi.queryPh('paymentReference', 'required')"
-          show-count
-          :maxlength="30"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('reversalReason')">
-      <a-form-item :label="pi.queryLabel('reversalReason')">
-        <a-input
-          v-model:value="advancedQueryForm.reversalReason"
-          :placeholder="pi.queryPh('reversalReason', 'required')"
-          show-count
-          :maxlength="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postedBy')">
-      <a-form-item :label="pi.queryLabel('postedBy')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.postedBy"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('postedBy', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -687,7 +202,7 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   useSalesInvoiceI18n,
@@ -756,12 +271,7 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
-  if (form.accountingExchangeRate !== undefined && form.accountingExchangeRate !== null) {
-    return true
-  }
-  if (form.netAmount !== undefined && form.netAmount !== null) {
-    return true
-  }
+
   return false
 }
 
@@ -776,8 +286,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    accountingExchangeRate: undefined as number | undefined,
-    netAmount: undefined as number | undefined,  }
+  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -831,12 +340,6 @@ function buildListQuery(overrides?: Partial<SalesInvoiceQuery>): SalesInvoiceQue
   for (const key of SALESINVOICE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.accountingExchangeRate !== undefined && form.accountingExchangeRate !== null) {
-    query.accountingExchangeRate = form.accountingExchangeRate
-  }
-  if (form.netAmount !== undefined && form.netAmount !== null) {
-    query.netAmount = form.netAmount
-  }
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
@@ -845,6 +348,7 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -907,15 +411,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     fixed: 'left',
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'salesInvoiceId') ?? ''
-  },
-  {
-    title: pi.label('billingDocumentCode'),
-    dataIndex: 'billingDocumentCode',
-    key: 'billingDocumentCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'billingDocumentCode') ?? ''
   },
   {
     title: pi.label('billingType'),
@@ -1245,6 +740,15 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'postedBy') ?? ''
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'remark') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -1292,6 +796,8 @@ const getSalesInvoiceDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1356,50 +862,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  billingDocumentCode: '',
-  billingType: '',
-  billingCategory: '',
-  documentCategory: '',
-  currencyCode: '',
-  salesOrganization: '',
-  distributionChannel: '',
-  pricingProcedure: '',
-  conditionCode: '',
-  shippingConditions: '',
-  billingDateStart: '',
-  billingDateEnd: '',
-  customerGroup: '',
-  incoterms1: '',
-  incoterms2: '',
-  postingStatus: '',
-  accountingExchangeRate: undefined as number | undefined,
-  paymentTerms: '',
-  accountAssignmentGroup: '',
-  countryCode: '',
-  netAmount: undefined as number | undefined,
-  payerCode: '',
-  customerCode: '',
-  statisticsCurrencyCode: '',
-  foreignTradeCode: '',
-  cancelledBillingDocument: '',
-  invoiceListType: '',
-  division: '',
-  hierarchyTypePricing: '',
-  tradingPartner: '',
-  taxDepartureCountry: '',
-  organizationSalesTaxNumber: '',
-  countrySalesTaxNumber: '',
-  referenceCode: '',
-  cancelledFlag: '',
-  exchangeRateDateStart: '',
-  exchangeRateDateEnd: '',
-  paymentReference: '',
-  reversalReason: '',
-  postedBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1597,50 +1060,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  billingDocumentCode: '',
-  billingType: '',
-  billingCategory: '',
-  documentCategory: '',
-  currencyCode: '',
-  salesOrganization: '',
-  distributionChannel: '',
-  pricingProcedure: '',
-  conditionCode: '',
-  shippingConditions: '',
-  billingDateStart: '',
-  billingDateEnd: '',
-  customerGroup: '',
-  incoterms1: '',
-  incoterms2: '',
-  postingStatus: '',
-  accountingExchangeRate: undefined as number | undefined,
-  paymentTerms: '',
-  accountAssignmentGroup: '',
-  countryCode: '',
-  netAmount: undefined as number | undefined,
-  payerCode: '',
-  customerCode: '',
-  statisticsCurrencyCode: '',
-  foreignTradeCode: '',
-  cancelledBillingDocument: '',
-  invoiceListType: '',
-  division: '',
-  hierarchyTypePricing: '',
-  tradingPartner: '',
-  taxDepartureCountry: '',
-  organizationSalesTaxNumber: '',
-  countrySalesTaxNumber: '',
-  referenceCode: '',
-  cancelledFlag: '',
-  exchangeRateDateStart: '',
-  exchangeRateDateEnd: '',
-  paymentReference: '',
-  reversalReason: '',
-  postedBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

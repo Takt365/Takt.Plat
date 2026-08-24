@@ -16,74 +16,11 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="sales-forecast-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="pi.ph('remark')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="salesForecastItemTableRef"
@@ -97,30 +34,7 @@
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
-    >
-      <template #cell-fiscalYear="{ record }">
-        <TaktSelect
-          v-model:value="record.fiscalYear"
-          api-url="TaktFinancialPeriods/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesForecastItemPi.queryPh('fiscalYear', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-isObsolete="{ record }">
-        <TaktSelect
-          v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesForecastItemPi.ph('isObsolete')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-    </TaktEditableTable>
+    >    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -129,7 +43,7 @@
  * Takt销售预测实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/mds/sales-forecast/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useSalesForecastI18n } from '../composables/use-sales-forecast-i18n'
@@ -138,57 +52,17 @@ import { useSalesForecastI18n } from '../composables/use-sales-forecast-i18n'
 const pi = useSalesForecastI18n()
 
 import type { SalesForecastCreate } from '@/types/logistics/manufacturing/mds/sales-forecast'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-  if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
-}
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","salesForecastCode","planDate","receiveDate","receiveVersionNo","salesProduct","productCategoryCode","profitCenterCode","modelCode","materialCode","materialDescription","customerCode","customerName1","plannerId","planBy","totalQuantity","totalAmount","convertedQuantity","convertedAmount","planStatus","convertedStatus","planDescription","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useSalesForecastItemI18n } from '../composables/use-sales-forecast-item-i18n'
 
 const salesForecastItemPi = useSalesForecastItemI18n()
-
-/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
-function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
-  return triggerNode?.ownerDocument?.body ?? document.body
-}
 
 const childSalesForecastItemRows = ref<Record<string, unknown>[]>([])
 const salesForecastItemTableRef = ref<{
@@ -197,73 +71,10 @@ const salesForecastItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
-/** 是否已持久化的子表行 */
-function isPersistedSalesForecastItemRow(row: Record<string, unknown>): boolean {
-  const id = row.salesForecastItemId
-  if (id == null || id === '') {
-    return false
-  }
-  return String(id) !== '0'
-}
-
-/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
-function allocateNextSalesForecastItemLineNumber(): number {
-  const rows = salesForecastItemTableRef.value?.getRows?.() ?? childSalesForecastItemRows.value
-  return resolveNextDetailLineNumber(0, rows)
-}
-
 /** 子表 salesForecastItem 可编辑列 */
 const salesForecastItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'lineNumber',
-    title: salesForecastItemPi.label('lineNumber'),
-    width: 140,
-  },
-  {
-    key: 'fiscalYear',
-    title: salesForecastItemPi.label('fiscalYear'),
-    width: 140,
-  },
-  {
-    key: 'planMonth',
-    title: salesForecastItemPi.label('planMonth'),
-    width: 140,
-  },
-  {
-    key: 'planQuantity001',
-    title: salesForecastItemPi.label('planQuantity001'),
-    width: 140,
-  },
-  {
-    key: 'planQuantity002',
-    title: salesForecastItemPi.label('planQuantity002'),
-    width: 140,
-  },
-  {
-    key: 'planQuantityDelta',
-    title: salesForecastItemPi.label('planQuantityDelta'),
-    width: 140,
-  },
-  {
-    key: 'convertedQuantity',
-    title: salesForecastItemPi.label('convertedQuantity'),
-    width: 140,
-  },
-  {
-    key: 'estimatedUnitPrice',
-    title: salesForecastItemPi.label('estimatedUnitPrice'),
-    width: 140,
-  },
-  {
-    key: 'estimatedAmount',
-    title: salesForecastItemPi.label('estimatedAmount'),
-    width: 140,
-  },
-  {
-    key: 'isObsolete',
-    title: salesForecastItemPi.label('isObsolete'),
-    width: 140,
-  }])
+,
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesForecastCreate & { salesForecastId?: string }> | null | undefined) {
@@ -273,16 +84,7 @@ function syncChildRowsFromFormData(val: Partial<SalesForecastCreate & { salesFor
 
 function createDefaultSalesForecastItemRow(): Record<string, unknown> {
   return {
-    lineNumber: allocateNextSalesForecastItemLineNumber(),
-    fiscalYear: '',
-    planMonth: 0,
-    planQuantity001: 0,
-    planQuantity002: 0,
-    planQuantityDelta: 0,
-    convertedQuantity: 0,
-    estimatedUnitPrice: 0,
-    estimatedAmount: 0,
-    isObsolete: 0,
+
   }
 }
 
@@ -292,21 +94,13 @@ function buildSubmitPayload() {
   const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: salesForecastItemTableRef.value?.getRows?.() ?? childSalesForecastItemRows.value.map((row) => {
-      const normalized = {
-        ...row,
-        tenantCode: tenantStore.tenantCode,
-        companyCode: tenantStore.companyCode,
-        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        salesForecastId: masterId,
-      }
-      if (isUpdate && isPersistedSalesForecastItemRow(row)) {
-        normalized.salesForecastItemId = row.salesForecastItemId
-      } else {
-        delete normalized.salesForecastItemId
-      }
-      return normalized
-    }),
+    items: salesForecastItemTableRef.value?.getRows?.() ?? childSalesForecastItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+      salesForecastId: masterId,
+    })),
   }
 }
 
@@ -326,25 +120,11 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  receiveVersionNo: 1,
-  planStatus: 1,
-  convertedStatus: 0
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 salesForecastId 才视为编辑） */
 watch(
@@ -371,162 +151,9 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.salesForecastId
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  salesForecastCode: [
-    {
-      required: true,
-      message: pi.ph('salesForecastCode'),
-      trigger: 'blur'
-    }
-  ],
-  planDate: [
-    {
-      required: true,
-      message: pi.ph('planDate'),
-      trigger: 'change'
-    }
-  ],
-  receiveDate: [
-    {
-      required: true,
-      message: pi.ph('receiveDate'),
-      trigger: 'change'
-    }
-  ],
-  receiveVersionNo: [
-    {
-      required: true,
-      type: 'number',
-      min: 1,
-      message: pi.ph('receiveVersionNo'),
-      trigger: 'change'
-    }
-  ],
-  salesProduct: [
-    {
-      required: true,
-      message: pi.ph('salesProduct'),
-      trigger: 'blur'
-    }
-  ],
-  productCategoryCode: [
-    {
-      required: true,
-      message: pi.ph('productCategoryCode'),
-      trigger: 'change'
-    }
-  ],
-  materialCode: [
-    {
-      required: true,
-      message: pi.ph('materialCode'),
-      trigger: 'change'
-    }
-  ],
-  planBy: [
-    {
-      required: true,
-      message: pi.ph('planBy'),
-      trigger: 'change'
-    }
-  ],
-  totalQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  convertedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('convertedQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('convertedQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  convertedAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('convertedAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('convertedAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  planStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('planStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('planStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  convertedStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('convertedStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('convertedStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -539,31 +166,11 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('totalQuantity' in payload) {
-    const rawtotalQuantity = payload.totalQuantity
-    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
-  }
-  if ('totalAmount' in payload) {
-    const rawtotalAmount = payload.totalAmount
-    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
-  }
-  if ('convertedQuantity' in payload) {
-    const rawconvertedQuantity = payload.convertedQuantity
-    payload.convertedQuantity = typeof rawconvertedQuantity === 'number' ? rawconvertedQuantity : Number(rawconvertedQuantity)
-  }
-  if ('convertedAmount' in payload) {
-    const rawconvertedAmount = payload.convertedAmount
-    payload.convertedAmount = typeof rawconvertedAmount === 'number' ? rawconvertedAmount : Number(rawconvertedAmount)
-  }
-  if ('planStatus' in payload) {
-    const rawplanStatus = payload.planStatus
-    payload.planStatus = typeof rawplanStatus === 'number' ? rawplanStatus : Number(rawplanStatus)
-  }
-  if ('convertedStatus' in payload) {
-    const rawconvertedStatus = payload.convertedStatus
-    payload.convertedStatus = typeof rawconvertedStatus === 'number' ? rawconvertedStatus : Number(rawconvertedStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.salesForecastId) {
+    payload.salesForecastId = props.formData.salesForecastId
+  }
   return payload
 }
 
@@ -577,19 +184,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesForecastId)
   childSalesForecastItemRows.value = []
   salesForecastItemTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

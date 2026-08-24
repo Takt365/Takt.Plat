@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：group.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,11 +29,6 @@ export interface DefectGroup extends CompanyDtoBase {
   defectGroupId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
    * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
    */
   defectCategory: number;
@@ -54,7 +49,7 @@ export interface DefectGroup extends CompanyDtoBase {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -74,17 +69,17 @@ export interface DefectGroup extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -104,12 +99,17 @@ export interface DefectGroupQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -134,7 +134,7 @@ export interface DefectGroupQuery extends TaktPagedQuery {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -149,17 +149,17 @@ export interface DefectGroupQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder?: number;
 
   /**
-   * 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -203,15 +203,12 @@ export interface DefectGroupCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode: string
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -236,7 +233,7 @@ export interface DefectGroupCreate {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -251,12 +248,12 @@ export interface DefectGroupCreate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -300,7 +297,7 @@ export interface DefectGroupStatus {
   defectGroupId: string;
 
   /**
-   * 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -319,7 +316,7 @@ export interface DefectGroupSort {
   defectGroupId: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
@@ -343,7 +340,12 @@ export interface DefectGroupTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -368,7 +370,7 @@ export interface DefectGroupTemplate {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -383,12 +385,12 @@ export interface DefectGroupTemplate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -422,15 +424,12 @@ export interface DefectGroupImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode?: string
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -455,7 +454,7 @@ export interface DefectGroupImport {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -470,12 +469,12 @@ export interface DefectGroupImport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -509,9 +508,14 @@ export interface DefectGroupExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
@@ -534,7 +538,7 @@ export interface DefectGroupExport {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -549,17 +553,17 @@ export interface DefectGroupExport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 

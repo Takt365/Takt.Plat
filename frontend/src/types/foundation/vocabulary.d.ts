@@ -39,7 +39,7 @@ export interface Vocabulary extends TenantCoreDtoBase {
   wordCategory: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
    */
   filterLevel: number;
 
@@ -49,7 +49,7 @@ export interface Vocabulary extends TenantCoreDtoBase {
   replaceText: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   vocabularyStatus: number;
 
@@ -78,7 +78,7 @@ export interface VocabularyQuery extends TaktPagedQuery {
   wordCategory?: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
    */
   filterLevel?: number;
 
@@ -88,7 +88,7 @@ export interface VocabularyQuery extends TaktPagedQuery {
   replaceText?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   vocabularyStatus?: number;
 
@@ -136,7 +136,7 @@ export interface VocabularyCreate {
   wordCategory: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
    */
   filterLevel: number;
 
@@ -146,7 +146,7 @@ export interface VocabularyCreate {
   replaceText: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   vocabularyStatus: number;
 
@@ -188,7 +188,7 @@ export interface VocabularyStatus {
   vocabularyId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   vocabularyStatus: number;
 
@@ -216,7 +216,7 @@ export interface VocabularyTemplate {
   wordCategory?: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
    */
   filterLevel?: number;
 
@@ -226,7 +226,7 @@ export interface VocabularyTemplate {
   replaceText?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   vocabularyStatus?: number;
 
@@ -264,7 +264,7 @@ export interface VocabularyImport {
   wordCategory?: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
    */
   filterLevel?: number;
 
@@ -274,7 +274,7 @@ export interface VocabularyImport {
   replaceText?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   vocabularyStatus?: number;
 
@@ -312,7 +312,7 @@ export interface VocabularyExport {
   wordCategory: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
    */
   filterLevel: number;
 
@@ -322,7 +322,7 @@ export interface VocabularyExport {
   replaceText: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   vocabularyStatus: number;
 

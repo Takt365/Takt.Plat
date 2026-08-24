@@ -51,7 +51,7 @@ public class TaktRoleDto : TaktTenantCoreDtoBase
     public int DataScope { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -61,12 +61,12 @@ public class TaktRoleDto : TaktTenantCoreDtoBase
     public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int RoleStatus { get; set; } = 0;
 
@@ -126,7 +126,7 @@ public class TaktRoleQueryDto : TaktPagedQuery
     public int? DataScope { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -136,12 +136,12 @@ public class TaktRoleQueryDto : TaktPagedQuery
     public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? RoleStatus { get; set; }
 
@@ -197,7 +197,7 @@ public class TaktRoleCreateDto
     public int DataScope { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -207,7 +207,7 @@ public class TaktRoleCreateDto
     public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int RoleStatus { get; set; } = 0;
 
@@ -276,9 +276,9 @@ public class TaktRoleStatusDto
     public long RoleId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int RoleStatus { get; set; } = 0;
 }
 
@@ -300,7 +300,7 @@ public class TaktRoleBuiltInDto
     public long RoleId { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否）
+    /// 内置（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     [Required(ErrorMessage = "内置不能为空")]
     public int IsBuiltIn { get; set; } = 0;
@@ -324,7 +324,7 @@ public class TaktRoleSortDto
     public long RoleId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -359,7 +359,7 @@ public class TaktRoleTemplateDto
     public int? DataScope { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -369,7 +369,7 @@ public class TaktRoleTemplateDto
     public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? RoleStatus { get; set; }
 
@@ -425,7 +425,7 @@ public class TaktRoleImportDto
     public int? DataScope { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -435,7 +435,7 @@ public class TaktRoleImportDto
     public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? RoleStatus { get; set; }
 
@@ -498,7 +498,7 @@ public class TaktRoleExportDto
     public int DataScope { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -508,12 +508,12 @@ public class TaktRoleExportDto
     public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int RoleStatus { get; set; } = 0;
 

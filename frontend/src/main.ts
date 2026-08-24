@@ -14,6 +14,8 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Antd from 'ant-design-vue';
 import FcDesigner from '@form-create/antd-designer';
+import { useUmoEditor } from '@umoteam/editor';
+import '@umoteam/editor/style';
 import App from './App.vue';
 import router from './router';
 import i18n from './locales';
@@ -83,6 +85,7 @@ app.use(i18n);
 app.use(Antd);
 app.use(FcDesigner);
 app.use(FcDesigner.formCreate);
+app.use(useUmoEditor, {});
 
 registerTaktEventHandlers();
 initTaktIdleSession();

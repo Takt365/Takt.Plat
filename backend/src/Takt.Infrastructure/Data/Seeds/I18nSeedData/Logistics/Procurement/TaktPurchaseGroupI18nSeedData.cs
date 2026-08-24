@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,31 +145,31 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasegroup.contactemail", "zh-HK", "联系邮箱_hk", "联系邮箱"),
 
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
 
             // entity.purchasegroup.sortorder
-            new TranslationSeedItem("entity.purchasegroup.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.purchasegroup.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.purchasegroup.sortorder
-            new TranslationSeedItem("entity.purchasegroup.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.purchasegroup.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.purchasegroup.sortorder
-            new TranslationSeedItem("entity.purchasegroup.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.purchasegroup.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.purchasegroup.sortorder
-            new TranslationSeedItem("entity.purchasegroup.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.purchasegroup.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.purchasegroup.groupstatus
-            new TranslationSeedItem("entity.purchasegroup.groupstatus", "en-US", "采购组状态_us", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "en-US", "采购组状态_us", "采购组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.purchasegroup.groupstatus
-            new TranslationSeedItem("entity.purchasegroup.groupstatus", "ja-JP", "采购组状态_jp", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "ja-JP", "采购组状态_jp", "采购组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.purchasegroup.groupstatus
-            new TranslationSeedItem("entity.purchasegroup.groupstatus", "zh-CN", "采购组状态", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "zh-CN", "采购组状态", "采购组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.purchasegroup.groupstatus
-            new TranslationSeedItem("entity.purchasegroup.groupstatus", "zh-HK", "采购组状态_hk", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "zh-HK", "采购组状态_hk", "采购组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

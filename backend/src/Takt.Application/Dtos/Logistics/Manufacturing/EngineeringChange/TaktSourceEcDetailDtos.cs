@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceEcDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSourceEcDetail 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 // ========================================
 
 /// <summary>
-/// 设变来源主表
+/// 设变来源子表
 /// 对应前端 TaktSourceEcDetailDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,7 +36,7 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     public long SourceEcDetailId { get; set; }
 
     /// <summary>
-    /// 主ID
+    /// 主ID（选项 TaktSourceEcs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SourceEcId { get; set; }
@@ -45,6 +45,16 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     /// 主名称（填充字段）
     /// </summary>
     public string? SourceEcName { get; set; }
+
+    /// <summary>
+    /// 设变号码（冗余字段，便于查询）
+    /// </summary>
+    public string SourceEcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 完成品
@@ -127,6 +137,11 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     public DateTime? SourceBomEffectiveDate { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 设变来源主表
     /// （主表：TaktSourceEc）
     /// </summary>
@@ -150,7 +165,7 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -159,16 +174,26 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 主ID
+    /// 主ID（选项 TaktSourceEcs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SourceEcId { get; set; }
+
+    /// <summary>
+    /// 设变号码（冗余字段，便于查询）
+    /// </summary>
+    public string? SourceEcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 完成品
@@ -256,6 +281,11 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public DateTime? SourceBomEffectiveDateEnd { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -300,16 +330,26 @@ public class TaktSourceEcDetailCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 主ID
+    /// 主ID（选项 TaktSourceEcs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SourceEcId { get; set; }
+
+    /// <summary>
+    /// 设变号码（冗余字段，便于查询）
+    /// </summary>
+    public string SourceEcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 完成品
@@ -394,6 +434,11 @@ public class TaktSourceEcDetailCreateDto
     public DateTime? SourceBomEffectiveDate { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -426,6 +471,29 @@ public class TaktSourceEcDetailUpdateDto : TaktSourceEcDetailCreateDto
 }
 
 // ========================================
+// SourceEcDetail 作废 DTO
+// ========================================
+
+/// <summary>
+/// SourceEcDetail 作废/撤销作废 DTO
+/// </summary>
+public class TaktSourceEcDetailObsoleteDto
+{
+    /// <summary>
+    /// SourceEcDetailID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SourceEcDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -449,16 +517,26 @@ public class TaktSourceEcDetailTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 主ID
+    /// 主ID（选项 TaktSourceEcs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SourceEcId { get; set; }
+
+    /// <summary>
+    /// 设变号码（冗余字段，便于查询）
+    /// </summary>
+    public string? SourceEcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 完成品
@@ -539,6 +617,11 @@ public class TaktSourceEcDetailTemplateDto
     /// BOM生效日期
     /// </summary>
     public DateTime? SourceBomEffectiveDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -572,16 +655,26 @@ public class TaktSourceEcDetailImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 主ID
+    /// 主ID（选项 TaktSourceEcs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SourceEcId { get; set; }
+
+    /// <summary>
+    /// 设变号码（冗余字段，便于查询）
+    /// </summary>
+    public string? SourceEcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 完成品
@@ -662,6 +755,11 @@ public class TaktSourceEcDetailImportDto
     /// BOM生效日期
     /// </summary>
     public DateTime? SourceBomEffectiveDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -697,10 +795,30 @@ public class TaktSourceEcDetailExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主ID（选项 TaktSourceEcs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SourceEcId { get; set; }
+
+    /// <summary>
+    /// 设变号码（冗余字段，便于查询）
+    /// </summary>
+    public string SourceEcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 完成品
@@ -781,6 +899,11 @@ public class TaktSourceEcDetailExportDto
     /// BOM生效日期
     /// </summary>
     public DateTime? SourceBomEffectiveDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

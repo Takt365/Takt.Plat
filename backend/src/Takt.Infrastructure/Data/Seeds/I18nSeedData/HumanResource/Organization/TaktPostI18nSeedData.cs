@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktPostI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.post.name", "zh-HK", "岗位名称_hk", "岗位名称"),
 
             // entity.post.deptid
-            new TranslationSeedItem("entity.post.deptid", "en-US", "所属部门ID_us", "所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.post.deptid", "en-US", "所属部门ID_us", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
             // entity.post.deptid
-            new TranslationSeedItem("entity.post.deptid", "ja-JP", "所属部门ID_jp", "所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.post.deptid", "ja-JP", "所属部门ID_jp", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
             // entity.post.deptid
-            new TranslationSeedItem("entity.post.deptid", "zh-CN", "所属部门ID", "所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.post.deptid", "zh-CN", "所属部门ID", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
             // entity.post.deptid
-            new TranslationSeedItem("entity.post.deptid", "zh-HK", "所属部门ID_hk", "所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.post.deptid", "zh-HK", "所属部门ID_hk", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
 
             // entity.post.deptname
             new TranslationSeedItem("entity.post.deptname", "en-US", "所属部门名称_us", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
@@ -136,13 +136,13 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.post.category", "zh-HK", "岗位类别_hk", "岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）"),
 
             // entity.post.level
-            new TranslationSeedItem("entity.post.level", "en-US", "岗位职级_us", "岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
+            new TranslationSeedItem("entity.post.level", "en-US", "岗位职级_us", "岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
             // entity.post.level
-            new TranslationSeedItem("entity.post.level", "ja-JP", "岗位职级_jp", "岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
+            new TranslationSeedItem("entity.post.level", "ja-JP", "岗位职级_jp", "岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
             // entity.post.level
-            new TranslationSeedItem("entity.post.level", "zh-CN", "岗位职级", "岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
+            new TranslationSeedItem("entity.post.level", "zh-CN", "岗位职级", "岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
             // entity.post.level
-            new TranslationSeedItem("entity.post.level", "zh-HK", "岗位职级_hk", "岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
+            new TranslationSeedItem("entity.post.level", "zh-HK", "岗位职级_hk", "岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）"),
 
             // entity.post.headcount
             new TranslationSeedItem("entity.post.headcount", "en-US", "编制人数_us", "编制人数"),
@@ -217,13 +217,13 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.post.salarymax", "zh-HK", "薪资范围（最高）_hk", "薪资范围（最高）"),
 
             // entity.post.isbuiltin
-            new TranslationSeedItem("entity.post.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）"),
+            new TranslationSeedItem("entity.post.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）"),
             // entity.post.isbuiltin
-            new TranslationSeedItem("entity.post.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）"),
+            new TranslationSeedItem("entity.post.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）"),
             // entity.post.isbuiltin
-            new TranslationSeedItem("entity.post.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）"),
+            new TranslationSeedItem("entity.post.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）"),
             // entity.post.isbuiltin
-            new TranslationSeedItem("entity.post.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）"),
+            new TranslationSeedItem("entity.post.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）"),
 
             // entity.post.description
             new TranslationSeedItem("entity.post.description", "en-US", "岗位描述_us", "岗位描述"),
@@ -235,22 +235,22 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.post.description", "zh-HK", "岗位描述_hk", "岗位描述"),
 
             // entity.post.sortorder
-            new TranslationSeedItem("entity.post.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.post.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.post.sortorder
-            new TranslationSeedItem("entity.post.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.post.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.post.sortorder
-            new TranslationSeedItem("entity.post.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.post.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.post.sortorder
-            new TranslationSeedItem("entity.post.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.post.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.post.status
-            new TranslationSeedItem("entity.post.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.post.status", "en-US", "状态_us", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.post.status
-            new TranslationSeedItem("entity.post.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.post.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.post.status
-            new TranslationSeedItem("entity.post.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.post.status", "zh-CN", "状态", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.post.status
-            new TranslationSeedItem("entity.post.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.post.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
 
             // entity.post.employeeposts
             new TranslationSeedItem("entity.post.employeeposts", "en-US", "员工岗位关联_us", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),

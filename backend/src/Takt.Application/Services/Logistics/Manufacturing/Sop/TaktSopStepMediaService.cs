@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepMediaService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP工步多媒体应用服务实现
 // 
@@ -317,6 +317,22 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
             throw new TaktBusinessException("SOP工步不存在");
         }
         entity.StepId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -358,13 +374,13 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
 
         if (queryDto?.StepId.HasValue == true)
         {
-            var stepId = queryDto.StepId;
+            var stepId = queryDto.StepId.Value;
             exp = exp.And(x => x.StepId == stepId);
         }
 
         if (queryDto?.MediaType.HasValue == true)
         {
-            var mediaType = queryDto.MediaType;
+            var mediaType = queryDto.MediaType.Value;
             exp = exp.And(x => x.MediaType == mediaType);
         }
 
@@ -382,7 +398,7 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
@@ -400,13 +416,13 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

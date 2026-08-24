@@ -4,7 +4,7 @@
 // 文件名称：TaktNumberingSeedData.cs
 // 创建时间：2026-06-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：内置业务编码规则种子（日常/财务/后勤等模块；按 Database:CompanyCodes 各公司写入）
+// 功能描述：内置业务编码规则种子（基础/日常/人事/财务/后勤等模块；按 Database:CompanyCodes 各公司写入）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Entities.Identity;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;
@@ -34,10 +35,38 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         "segments:CompanyCode,PrefixCode,DateSequence";
     private const string SegmentsCompanyNoDate =
         "segments:CompanyCode,PrefixCode,Sequence";
+    private const string SegmentsGenderEmployeeCode =
+        "segments:PrefixCode,Sequence";
     private const string DefaultSeparator = "-";
-    private const string DomainRoutine = "Routine";
-    private const string DomainAccounting = "Accounting";
-    private const string DomainLogistics = "Logistics";
+
+    // DocumentType 存 TaktMenu.MenuName（表单 tree-options?valueBy=name）；模板用 MenuCode，种子时解析
+    private const string MenuQuartzTask = "FOUNDATION_QUARTZ_TASK";
+    private const string MenuFile = "FOUNDATION_FILE";
+    private const string MenuEmployee = "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE";
+    private const string MenuAnnouncement = "ROUTINE_ANNOUNCEMENT";
+    private const string MenuConference = "ROUTINE_CONFERENCE_CENTER";
+    private const string MenuDocument = "ROUTINE_DOCUMENT_CENTER_DOCUMENT";
+    private const string MenuNews = "ROUTINE_NEWS_CENTER_NEWS";
+    private const string MenuHelpDeskTicket = "ROUTINE_HELP_DESK_TICKET";
+    private const string MenuConfigurableReport = "STATISTICS_REPORT_CONFIGURABLE";
+    private const string MenuFlowForm = "WORKFLOW_FORM";
+    private const string MenuAsset = "ACCOUNTING_FINANCIAL_ASSET";
+    private const string MenuServiceContract = "LOGISTICS_CUSTOMER_SERVICE_CONTRACT";
+    private const string MenuServiceOrder = "LOGISTICS_CUSTOMER_SERVICE_ORDER";
+    private const string MenuServiceRequest = "LOGISTICS_CUSTOMER_SERVICE_REQUEST";
+    private const string MenuServiceTicket = "LOGISTICS_CUSTOMER_SERVICE_TICKET";
+    private const string MenuEquipment = "LOGISTICS_MAINTENANCE_EQUIPMENT";
+    private const string MenuSalesInvoice = "LOGISTICS_SALES_INVOICE";
+    private const string MenuSalesOrder = "LOGISTICS_SALES_ORDER";
+    private const string MenuSalesPrice = "LOGISTICS_SALES_PRICE";
+    private const string MenuSalesQuotation = "LOGISTICS_SALES_QUOTATION";
+    private const string MenuPurchaseOrder = "LOGISTICS_PROCUREMENT_PURCHASE_ORDER";
+    private const string MenuPurchasePrice = "LOGISTICS_PROCUREMENT_PURCHASE_PRICE";
+    private const string MenuPurchaseRequest = "LOGISTICS_PROCUREMENT_PURCHASE_REQUEST";
+    private const string MenuSupplier = "LOGISTICS_PROCUREMENT_SUPPLIER";
+    private const string MenuVendor = "LOGISTICS_PROCUREMENT_VENDOR";
+    private const string MenuClient = "LOGISTICS_SALES_CLIENT";
+    private const string MenuCustomer = "LOGISTICS_SALES_CUSTOMER";
 
     // 与字典 sys_numbering_dept_code 的 DictValue 一致
     private const string IsoR = "R"; // 总务部 D0100
@@ -73,6 +102,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         var database = configuration.RequireDatabase();
         var repository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktNumbering>>();
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
+        var menuRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktMenu>>();
         var companies = await companyRepository.GetListAsync(
             c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         if (companies == null || companies.Count == 0)
@@ -89,6 +119,11 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             TaktLogger.Warning("租户 {TenantCode} 未找到 Database:CompanyCodes 对应的公司，跳过编码规则种子", tenantCode);
             return (0, 0);
         }
+        var menus = await menuRepository.GetListAsync(m => m.TenantCode == tenantCode && m.IsDeleted == 0);
+        var menuNameByCode = (menus ?? [])
+            .Where(m => !string.IsNullOrWhiteSpace(m.MenuCode) && !string.IsNullOrWhiteSpace(m.MenuName))
+            .GroupBy(m => m.MenuCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.First().MenuName.Trim(), StringComparer.OrdinalIgnoreCase);
         var templates = GetBuiltInRuleTemplates();
         var insertCount = 0;
         var updateCount = 0;
@@ -97,13 +132,23 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         {
             foreach (var template in templates)
             {
+                if (!menuNameByCode.TryGetValue(template.MenuCode, out var documentType)
+                    || string.IsNullOrWhiteSpace(documentType))
+                {
+                    TaktLogger.Warning(
+                        "编码规则 {RuleCode} 跳过：未找到菜单 MenuCode={MenuCode}（DocumentType 须为对应菜单 MenuName）",
+                        template.RuleCode,
+                        template.MenuCode);
+                    continue;
+                }
                 var (_, inserted, updated) = await CreateOrUpdateNumberingAsync(
                     repository,
                     tenantCode,
                     company.CompanyCode,
                     database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode,
-                    template);
+                    template,
+                    documentType);
                 insertCount += inserted;
                 updateCount += updated;
             }
@@ -124,223 +169,559 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         return
         [
             new NumberingSeedTemplate(
-                "RT-ANN",
+                "FD-TASK",
+                "任务编码",
+                MenuQuartzTask,
+                IsoD,
+                "TASK",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：定时任务 TaktQuartzTask.TaskCode"),
+            new NumberingSeedTemplate(
+                "FD-FDOC",
+                "文档文件编码",
+                MenuFile,
+                IsoD,
+                "FDOC",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFile.FileCode；MIME→FileCategory.Document(0)"),
+            new NumberingSeedTemplate(
+                "FD-FIMG",
+                "图片文件编码",
+                MenuFile,
+                IsoD,
+                "FIMG",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFile.FileCode；MIME image/*→FileCategory.Image(1)"),
+            new NumberingSeedTemplate(
+                "FD-FVID",
+                "视频文件编码",
+                MenuFile,
+                IsoD,
+                "FVID",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFile.FileCode；MIME video/*→FileCategory.Video(2)"),
+            new NumberingSeedTemplate(
+                "FD-FAUD",
+                "音频文件编码",
+                MenuFile,
+                IsoD,
+                "FAUD",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFile.FileCode；MIME audio/*→FileCategory.Audio(3)"),
+            new NumberingSeedTemplate(
+                "FD-FARC",
+                "压缩包文件编码",
+                MenuFile,
+                IsoD,
+                "FARC",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFile.FileCode；MIME zip/rar/7z 等→FileCategory.Archive(4)"),
+            new NumberingSeedTemplate(
+                "FD-FOTH",
+                "其他文件编码",
+                MenuFile,
+                IsoD,
+                "FOTH",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFile.FileCode；未匹配 MIME→FileCategory.Other(5)"),
+            new NumberingSeedTemplate(
+                "HR-EMPM",
+                "男员工编码",
+                MenuEmployee,
+                IsoR,
+                "M",
+                "none",
+                "None",
+                SegmentsGenderEmployeeCode,
+                "内置：TaktEmployee.EmployeeCode；Gender=1男（字典 sys_user_gender_category）",
+                SequenceLength: 5,
+                Separator: string.Empty),
+            new NumberingSeedTemplate(
+                "HR-EMPF",
+                "女员工编码",
+                MenuEmployee,
+                IsoR,
+                "F",
+                "none",
+                "None",
+                SegmentsGenderEmployeeCode,
+                "内置：TaktEmployee.EmployeeCode；Gender=2女（字典 sys_user_gender_category）",
+                SequenceLength: 5,
+                Separator: string.Empty),
+            new NumberingSeedTemplate(
+                "HR-EMPU",
+                "未知性别员工编码",
+                MenuEmployee,
+                IsoR,
+                "U",
+                "none",
+                "None",
+                SegmentsGenderEmployeeCode,
+                "内置：TaktEmployee.EmployeeCode；Gender=0未知（字典 sys_user_gender_category）",
+                SequenceLength: 5,
+                Separator: string.Empty),
+            new NumberingSeedTemplate(
+                "RT-ANN1",
+                "紧急通知编码",
+                MenuAnnouncement,
+                IsoR,
+                "URGN",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=1（字典 sys_announcement_category）"),
+            new NumberingSeedTemplate(
+                "RT-ANN2",
                 "公告编码",
-                DomainRoutine,
+                MenuAnnouncement,
                 IsoR,
-                "ANN",
+                "ANNC",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsWithDepartment,
-                "内置：公告通知模块（公告编码）"),
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=2（字典 sys_announcement_category）"),
             new NumberingSeedTemplate(
-                "RT-NOT",
+                "RT-ANN3",
                 "通知编码",
-                DomainRoutine,
+                MenuAnnouncement,
                 IsoR,
-                "NOT",
+                "NOTF",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsWithDepartment,
-                "内置：公告通知模块（通知编码）"),
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=3（字典 sys_announcement_category）"),
             new NumberingSeedTemplate(
-                "RT-CONF",
-                "会议编码",
-                DomainRoutine,
+                "RT-ANN4",
+                "决议编码",
+                MenuAnnouncement,
                 IsoR,
-                "CONF",
+                "RESL",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsWithDepartment,
-                "内置：会议中心 TaktConference.ConferenceCode"),
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=4（字典 sys_announcement_category）"),
             new NumberingSeedTemplate(
-                "RT-NEWS",
-                "新闻编码",
-                DomainRoutine,
+                "RT-ANN5",
+                "活动编码",
+                MenuAnnouncement,
                 IsoR,
-                "NEWS",
+                "ACTV",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsWithDepartment,
-                "内置：新闻中心 TaktNews.NewsCode"),
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=5（字典 sys_announcement_category）"),
+            new NumberingSeedTemplate(
+                "RT-ANN6",
+                "安全通告编码",
+                MenuAnnouncement,
+                IsoR,
+                "SAFE",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=6（字典 sys_announcement_category）"),
+            new NumberingSeedTemplate(
+                "RT-ANN7",
+                "运维通知编码",
+                MenuAnnouncement,
+                IsoR,
+                "OPSN",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=7（字典 sys_announcement_category）"),
+            new NumberingSeedTemplate(
+                "RT-ANN8",
+                "系统公告编码",
+                MenuAnnouncement,
+                IsoR,
+                "SYSA",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktAnnouncement.AnnouncementCode；AnnouncementType=8（字典 sys_announcement_category）"),
+            new NumberingSeedTemplate(
+                "RT-CONF0",
+                "内部会议编码",
+                MenuConference,
+                IsoR,
+                "INTN",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktConference.ConferenceCode；ConferenceType=0（字典 routine_conference_type）"),
+            new NumberingSeedTemplate(
+                "RT-CONF1",
+                "外部会议编码",
+                MenuConference,
+                IsoR,
+                "EXTR",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktConference.ConferenceCode；ConferenceType=1（字典 routine_conference_type）"),
+            new NumberingSeedTemplate(
+                "RT-CONF2",
+                "视频会议编码",
+                MenuConference,
+                IsoR,
+                "VIDO",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktConference.ConferenceCode；ConferenceType=2（字典 routine_conference_type）"),
+            new NumberingSeedTemplate(
+                "RT-CONF3",
+                "混合会议编码",
+                MenuConference,
+                IsoR,
+                "HYBR",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktConference.ConferenceCode；ConferenceType=3（字典 routine_conference_type）"),
+            new NumberingSeedTemplate(
+                "RT-DOC0",
+                "制度文档编码",
+                MenuDocument,
+                IsoR,
+                "REGL",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktDocument.DocumentCode；DocumentCategory=0（字典 routine_document_category）"),
+            new NumberingSeedTemplate(
+                "RT-DOC1",
+                "流程文档编码",
+                MenuDocument,
+                IsoR,
+                "PROC",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktDocument.DocumentCode；DocumentCategory=1（字典 routine_document_category）"),
+            new NumberingSeedTemplate(
+                "RT-DOC2",
+                "模板文档编码",
+                MenuDocument,
+                IsoR,
+                "TMPL",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktDocument.DocumentCode；DocumentCategory=2（字典 routine_document_category）"),
+            new NumberingSeedTemplate(
+                "RT-DOC3",
+                "规范文档编码",
+                MenuDocument,
+                IsoR,
+                "SPEC",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktDocument.DocumentCode；DocumentCategory=3（字典 routine_document_category）"),
+            new NumberingSeedTemplate(
+                "RT-DOC4",
+                "其他文档编码",
+                MenuDocument,
+                IsoR,
+                "DOOT",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktDocument.DocumentCode；DocumentCategory=4（字典 routine_document_category）"),
+            new NumberingSeedTemplate(
+                "RT-NEWS0",
+                "公司新闻编码",
+                MenuNews,
+                IsoR,
+                "CORP",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktNews.NewsCode；NewsCategory=0（字典 sys_news_type）"),
+            new NumberingSeedTemplate(
+                "RT-NEWS1",
+                "行业动态编码",
+                MenuNews,
+                IsoR,
+                "INDY",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktNews.NewsCode；NewsCategory=1（字典 sys_news_type）"),
+            new NumberingSeedTemplate(
+                "RT-NEWS2",
+                "技术分享编码",
+                MenuNews,
+                IsoR,
+                "TECH",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktNews.NewsCode；NewsCategory=2（字典 sys_news_type）"),
+            new NumberingSeedTemplate(
+                "RT-NEWS3",
+                "产品发布编码",
+                MenuNews,
+                IsoR,
+                "PROD",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktNews.NewsCode；NewsCategory=3（字典 sys_news_type）"),
+            new NumberingSeedTemplate(
+                "RT-NEWS4",
+                "活动资讯编码",
+                MenuNews,
+                IsoR,
+                "EVNT",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktNews.NewsCode；NewsCategory=4（字典 sys_news_type）"),
+            new NumberingSeedTemplate(
+                "RT-NEWS5",
+                "其他新闻编码",
+                MenuNews,
+                IsoR,
+                "NWOT",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktNews.NewsCode；NewsCategory=5（字典 sys_news_type）"),
             new NumberingSeedTemplate(
                 "HD-TICKET",
                 "工单编码",
-                DomainRoutine,
+                MenuHelpDeskTicket,
                 IsoD,
                 "TKT",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsWithDepartment,
                 "内置：服务台 TaktTicket.TicketCode"),
             new NumberingSeedTemplate(
+                "ST-RPT",
+                "自定义报表编码",
+                MenuConfigurableReport,
+                IsoD,
+                "RPT",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktConfigurable.ReportCode；前端表单选择编码规则后取号"),
+            new NumberingSeedTemplate(
+                "WF-FORM0",
+                "通用表单编码",
+                MenuFlowForm,
+                IsoD,
+                "FRMG",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFlowForm.FormCode；FormCategory=0（字典 sys_form_category）"),
+            new NumberingSeedTemplate(
+                "WF-FORM1",
+                "业务表单编码",
+                MenuFlowForm,
+                IsoD,
+                "FRMB",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFlowForm.FormCode；FormCategory=1（字典 sys_form_category）"),
+            new NumberingSeedTemplate(
+                "WF-FORM2",
+                "系统表单编码",
+                MenuFlowForm,
+                IsoD,
+                "FRMS",
+                "yyyy",
+                "Annually",
+                SegmentsWithDepartment,
+                "内置：TaktFlowForm.FormCode；FormCategory=2（字典 sys_form_category）"),
+            new NumberingSeedTemplate(
                 "AC-ASSET",
                 "资产编码",
-                DomainAccounting,
+                MenuAsset,
                 IsoF,
                 "AST",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsWithDepartment,
                 "内置：财务资产 TaktAsset.AssetCode"),
             new NumberingSeedTemplate(
                 "LG-SVC-CON",
                 "服务合同编码",
-                DomainLogistics,
+                MenuServiceContract,
                 IsoB,
                 "SVCN",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktCustomerServiceContract.ServiceContractCode"),
             new NumberingSeedTemplate(
                 "LG-SVC-ORD",
                 "服务订单编码",
-                DomainLogistics,
+                MenuServiceOrder,
                 IsoB,
                 "SVCO",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktCustomerServiceOrder.ServiceOrderCode"),
             new NumberingSeedTemplate(
                 "LG-SVC-REQ",
                 "服务请求单号",
-                DomainLogistics,
+                MenuServiceRequest,
                 IsoB,
                 "SVCR",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktCustomerServiceRequest.ServiceRequestCode"),
             new NumberingSeedTemplate(
                 "LG-SVC-TKT",
                 "服务工单编码",
-                DomainLogistics,
+                MenuServiceTicket,
                 IsoB,
                 "SVCT",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktCustomerServiceTicket.ServiceTicketCode"),
             new NumberingSeedTemplate(
                 "LG-EQP",
                 "设备编码",
-                DomainLogistics,
+                MenuEquipment,
                 IsoZ,
                 "EQP",
                 "none",
-                "none",
+                "None",
                 SegmentsWithDepartment,
                 "内置：TaktEquipment.EquipCode"),
             new NumberingSeedTemplate(
                 "LG-SLS-INV",
                 "销售发票编码",
-                DomainLogistics,
+                MenuSalesInvoice,
                 IsoS,
                 "SINV",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktSalesInvoice.AccountingDocumentCode"),
             new NumberingSeedTemplate(
                 "LG-SLS-ORD",
                 "销售订单编码",
-                DomainLogistics,
+                MenuSalesOrder,
                 IsoS,
                 "SORD",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktSalesOrder.SalesOrderCode"),
             new NumberingSeedTemplate(
                 "LG-SLS-PRC",
                 "销售价格编码",
-                DomainLogistics,
+                MenuSalesPrice,
                 IsoS,
                 "SPRC",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktSalesPrice.SalesPriceCode"),
             new NumberingSeedTemplate(
                 "LG-SLS-QUO",
                 "销售报价编码",
-                DomainLogistics,
+                MenuSalesQuotation,
                 IsoS,
                 "SQUO",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktSalesQuotation.SalesQuotationCode"),
             new NumberingSeedTemplate(
                 "LG-PUR-ORD",
                 "采购订单编码",
-                DomainLogistics,
+                MenuPurchaseOrder,
                 IsoC,
                 "PUR",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktPurchaseOrder.PurchaseOrderCode"),
             new NumberingSeedTemplate(
                 "LG-PUR-PRC",
                 "采购价格编码",
-                DomainLogistics,
+                MenuPurchasePrice,
                 IsoC,
                 "PRC",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktPurchasePrice.PurchasePriceCode"),
             new NumberingSeedTemplate(
                 "LG-PUR-REQ",
                 "采购申请编码",
-                DomainLogistics,
+                MenuPurchaseRequest,
                 IsoC,
                 "REQ",
                 "yyyy",
-                "year",
+                "Annually",
                 SegmentsCompanyLevel,
                 "内置：TaktPurchaseRequest.PurchaseRequestCode"),
             new NumberingSeedTemplate(
                 "LG-SUP",
                 "供货商编码",
-                DomainLogistics,
+                MenuSupplier,
                 IsoC,
                 "SUP",
                 "none",
-                "none",
+                "None",
                 SegmentsCompanyNoDate,
                 "内置：TaktSupplier.SupplierCode"),
             new NumberingSeedTemplate(
                 "LG-VND",
                 "经销商编码",
-                DomainLogistics,
+                MenuVendor,
                 IsoC,
                 "VND",
                 "none",
-                "none",
+                "None",
                 SegmentsCompanyNoDate,
                 "内置：TaktVendor.VendorCode"),
             new NumberingSeedTemplate(
                 "LG-CLT",
                 "客户端编码",
-                DomainLogistics,
+                MenuClient,
                 IsoB,
                 "CLT",
                 "none",
-                "none",
+                "None",
                 SegmentsCompanyNoDate,
                 "内置：TaktClient.ClientCode"),
             new NumberingSeedTemplate(
                 "LG-CUS",
                 "客户编码",
-                DomainLogistics,
+                MenuCustomer,
                 IsoB,
                 "CUS",
                 "none",
-                "none",
+                "None",
                 SegmentsCompanyNoDate,
                 "内置：TaktCustomer.CustomerCode"),
         ];
@@ -352,7 +733,10 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     /// <param name="repository">编码规则仓储</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
+    /// <param name="plantCode">工厂编码</param>
+    /// <param name="cultureCode">区域文化</param>
     /// <param name="template">规则模板</param>
+    /// <param name="documentType">单据类型（已解析的 TaktMenu.MenuName）</param>
     /// <returns>实体与插入/更新计数</returns>
     private static async Task<(TaktNumbering Rule, int InsertCount, int UpdateCount)> CreateOrUpdateNumberingAsync(
         ITaktCompanySeedRepository<TaktNumbering> repository,
@@ -360,7 +744,8 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         string companyCode,
         string plantCode,
         string cultureCode,
-        NumberingSeedTemplate template)
+        NumberingSeedTemplate template,
+        string documentType)
     {
         var entity = await repository.FirstAsync(x =>
             x.TenantCode == tenantCode
@@ -374,7 +759,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 CompanyCode = companyCode,
                 RuleCode = template.RuleCode,
                 RuleName = template.RuleName,
-                DocumentType = template.DocumentType,
+                DocumentType = documentType,
                 DeptCode = template.DeptCode,
                 PrefixCode = template.PrefixCode,
                 DateFormat = template.DateFormat,
@@ -398,7 +783,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             return (entity, 1, 0);
         }
         entity.RuleName = template.RuleName;
-        entity.DocumentType = template.DocumentType;
+        entity.DocumentType = documentType;
         entity.DeptCode = template.DeptCode;
         entity.PrefixCode = template.PrefixCode;
         entity.DateFormat = template.DateFormat;
@@ -452,7 +837,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             entity.DateFormat = TaktNumberingHelper.NormalizeSupportedDateFormat(entity.DateFormat);
         }
         entity.ResetPeriod = TaktNumberingHelper.ResolveRequiredResetPeriod(entity.DateFormat);
-        entity.DocumentType = TaktNumberingHelper.NormalizeDocumentType(entity.DocumentType);
+        // DocumentType 已为菜单名称，勿再走旧版领域码 NormalizeDocumentType
     }
 
     /// <summary>
@@ -633,7 +1018,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     /// </summary>
     /// <param name="RuleCode">规则编码</param>
     /// <param name="RuleName">规则名称</param>
-    /// <param name="DocumentType">单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）</param>
+    /// <param name="MenuCode">关联菜单 MenuCode（种子解析为 TaktMenu.MenuName 写入 DocumentType）</param>
     /// <param name="DeptCode">部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）</param>
     /// <param name="PrefixCode">前缀编码</param>
     /// <param name="DateFormat">日期格式</param>
@@ -647,7 +1032,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     private sealed record NumberingSeedTemplate(
         string RuleCode,
         string RuleName,
-        string DocumentType,
+        string MenuCode,
         string DeptCode,
         string PrefixCode,
         string DateFormat,

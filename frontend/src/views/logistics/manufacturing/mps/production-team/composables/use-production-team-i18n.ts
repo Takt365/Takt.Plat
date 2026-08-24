@@ -20,29 +20,18 @@ export const PRODUCTIONTEAM_SELF_I18N_KEY = buildEntitySelfI18nKey(PRODUCTIONTEA
 
 /** 列表业务列（不含主键） */
 export const PRODUCTIONTEAM_LIST_FIELDS = [
-  'plantCode',
   'teamCode',
   'teamName',
   'teamCategory',
   'teamLeaderName',
   'shiftNo',
   'teamStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PRODUCTIONTEAM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  teamCode: 'required',
-  teamName: 'required',
-  teamCategory: 'select',
-  teamLeaderName: 'optional',
-  shiftNo: 'select',
-  teamStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -50,27 +39,13 @@ export type ProductionTeamField = keyof typeof PRODUCTIONTEAM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PRODUCTIONTEAM_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'teamCode',
-  'teamName',
-  'teamCategory',
-  'teamLeaderName',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ProductionTeamQuery)[]
 
-export type ProductionTeamQueryField =
-  | (typeof PRODUCTIONTEAM_QUERY_STRING_FIELDS)[number]
-  | 'shiftNo' | 'teamStatus'
+export type ProductionTeamQueryField = (typeof PRODUCTIONTEAM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PRODUCTIONTEAM_QUERY_FIELDS: readonly ProductionTeamQueryField[] = [
-  ...PRODUCTIONTEAM_QUERY_STRING_FIELDS,
-  'shiftNo',
-  'teamStatus',
-]
+export const PRODUCTIONTEAM_QUERY_FIELDS: readonly ProductionTeamQueryField[] = [...PRODUCTIONTEAM_QUERY_STRING_FIELDS]
 
 /**
  * 生产班组实体字段 i18n：index / production-team-form 统一入口

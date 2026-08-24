@@ -36,7 +36,20 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.routingId"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -145,7 +158,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('expiryDate')"
                 name="expiryDate"
@@ -158,16 +181,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('routingDescription')"
@@ -209,25 +222,10 @@
                 :label="pi.label('companyCode')"
                 name="companyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
                   :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('cultureCode')"
-                name="cultureCode"
-              >
-                <a-input
-                  v-model:value="formState.cultureCode"
-                  :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -338,7 +336,7 @@
       <template #cell-isInspection="{ record }">
         <TaktSelect
           v-model:value="record.isInspection"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemPi.ph('isInspection')"
@@ -360,7 +358,7 @@
       <template #cell-isObsolete="{ record }">
         <TaktSelect
           v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemPi.ph('isObsolete')"
@@ -395,30 +393,32 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
@@ -669,10 +669,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.routingId
-    if (isCreate) {
+    if (!props.formData?.routingId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -680,13 +679,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   workCenter: [
     {
       required: true,
@@ -762,13 +754,33 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('purpose' in payload) {
     const rawpurpose = payload.purpose
-    payload.purpose = typeof rawpurpose === 'number' ? rawpurpose : Number(rawpurpose)
+    if (rawpurpose === undefined || rawpurpose === null || rawpurpose === '') {
+      delete payload.purpose
+    } else {
+      const numpurpose = typeof rawpurpose === 'number' ? rawpurpose : Number(rawpurpose)
+      if (Number.isFinite(numpurpose)) payload.purpose = numpurpose
+      else delete payload.purpose
+    }
   }
   if ('routingStatus' in payload) {
     const rawroutingStatus = payload.routingStatus
-    payload.routingStatus = typeof rawroutingStatus === 'number' ? rawroutingStatus : Number(rawroutingStatus)
+    if (rawroutingStatus === undefined || rawroutingStatus === null || rawroutingStatus === '') {
+      delete payload.routingStatus
+    } else {
+      const numroutingStatus = typeof rawroutingStatus === 'number' ? rawroutingStatus : Number(rawroutingStatus)
+      if (Number.isFinite(numroutingStatus)) payload.routingStatus = numroutingStatus
+      else delete payload.routingStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.routingId) {
+    payload.routingId = props.formData.routingId
+  }
   return payload
 }
 

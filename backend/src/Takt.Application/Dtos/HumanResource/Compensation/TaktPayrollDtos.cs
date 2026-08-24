@@ -37,7 +37,7 @@ public class TaktPayrollDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int PayrollStatus { get; set; } = 0;
 
@@ -120,7 +120,7 @@ public class TaktPayrollQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? PayrollStatus { get; set; }
 
@@ -215,7 +215,7 @@ public class TaktPayrollCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int PayrollStatus { get; set; } = 0;
 
@@ -269,9 +269,9 @@ public class TaktPayrollStatusDto
     public long PayrollId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int PayrollStatus { get; set; } = 0;
 }
 
@@ -341,7 +341,7 @@ public class TaktPayrollTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? PayrollStatus { get; set; }
 
@@ -420,7 +420,7 @@ public class TaktPayrollImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? PayrollStatus { get; set; }
 
@@ -499,7 +499,7 @@ public class TaktPayrollExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int PayrollStatus { get; set; } = 0;
 

@@ -19,10 +19,9 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 /// 差异日志实体（AOP 审计）
 /// </summary>
 /// <remarks>
-/// 记录库表数据变更的<strong>旧值与新值</strong>：<see cref="BeforeData"/>、<see cref="AfterData"/>，
-/// 以及字段级差异 <see cref="DiffData"/>（在 <c>OnDiffLogEvent</c> 内对比 BeforeData/AfterData 的 Columns 得到，见 SqlSugar 差异日志文档）。
-/// 与 <see cref="TaktOperLog"/> 区分：差异日志面向持久化层变更，不替代 HTTP 操作入参日志。
-/// 数据隔离：租户 + 公司（<see cref="TaktCompanyEntityBase"/>），与 <see cref="TaktLoginLog"/> 一致。
+/// 记录库表数据变更的旧值与新值：BeforeData、AfterData，以及字段级差异 DiffData（在 OnDiffLogEvent 内对比 BeforeData/AfterData 的 Columns 得到）。
+/// 与 TaktOperLog 区分：差异日志面向持久化层变更，不替代 HTTP 操作入参日志。
+/// 数据隔离：租户 + 公司（TaktCompanyEntityBase），与 TaktLoginLog 一致。
 /// </remarks>
 [SugarTable("takt_statistics_logging_delta_log", "差异日志表")]
 [SugarIndex("ix_delta_log_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -42,7 +41,7 @@ public class TaktDeltaLog : TaktCompanyEntityBase
     public string UserName { get; set; } = TaktConstants.AuditUserName.Unknown;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）
+    /// 操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）
     /// </summary>
     [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.OperType.Unknown)]
     public string OperType { get; set; } = TaktConstants.OperType.Unknown;
@@ -103,19 +102,19 @@ public class TaktDeltaLog : TaktCompanyEntityBase
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
+    /// 浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）
     /// </summary>
     [SugarColumn(ColumnName = "browser", ColumnDescription = "浏览器", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.BrowserType.Unknown)]
     public string Browser { get; set; } = TaktConstants.BrowserType.Unknown;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
+    /// 操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）
     /// </summary>
     [SugarColumn(ColumnName = "os", ColumnDescription = "操作系统", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.OperatingSystem.Unknown)]
     public string Os { get; set; } = TaktConstants.OperatingSystem.Unknown;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
+    /// 登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）
     /// </summary>
     [SugarColumn(ColumnName = "device_type", ColumnDescription = "登录设备", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.DeviceType.Unknown)]
     public string DeviceType { get; set; } = TaktConstants.DeviceType.Unknown;

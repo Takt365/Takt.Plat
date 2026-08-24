@@ -54,7 +54,12 @@ const MANUAL_DTO_ENTITY_SHORT_NAMES = new Set([
  * OneToMany 从实体、但业务上为「独立菜单 CRUD」的明细（非主表内嵌级联）
  * - Vue：不因 masterDetailChildRegistry 跳过；主表 master-detail 规划会 filterStandaloneMenuChildren
  * - DTO/服务：主表 Create/Update/Fill/Save **不**再级联该子表（子表自行 generate-all）
- * 例：QuartzLog；ManufacturerMaterial（Vendor+Supplier）；SellerMaterial（Customer+Client）
+ * - 权限：buildPermissionBase 不继承主表前缀（各子表独立 Permission）
+ * 例：QuartzLog；ManufacturerMaterial（Vendor+Supplier）；SellerMaterial（Customer+Client）；
+ *     NewsCenter 六张从表（NewsComment / NewsCommentLike / NewsFavorite / NewsLike / NewsRead / NewsShare；无附件实体）
+ *     — DTO 不级联；Vue 子导航主子见 generate-vue-common（masterPascal==='News'，同 Employee）
+ * ⚠️ HumanResource/Personnel 的 EmployeeAddress 等为真正主子表，由 TaktEmployee 级联；
+ *    Vue 特例见 generate-vue-common（masterPascal==='Employee'），不得列入本 STANDALONE 集合
  */
 const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
   'QuartzLog',
@@ -63,6 +68,12 @@ const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
   'CustomerServiceTicket',
   'ManufacturerMaterial',
   'SellerMaterial',
+  'NewsComment',
+  'NewsCommentLike',
+  'NewsFavorite',
+  'NewsLike',
+  'NewsRead',
+  'NewsShare',
 ]);
 
 /**
@@ -126,11 +137,33 @@ function entityShortFromDtoFileName(dtoFileName) {
 }
 
 /**
+ * 含大量手工商业务方法的应用服务实体（禁止 generate-services / generate-controllers 覆盖）
+ * 扫描阶段仍须能定位 ITaktXxxService；跳过逻辑在 process 阶段（与 generate-services-from-dtos 一致）
+ * 附加 API 放同目录 *Extra*.cs 或本服务手工商文件；流水线仅生成标准 CRUD 时请勿列入本表
+ * BillOfMaterial：BOM 展开 Explosion；DictData：CreateDictSnapshotAsync / GetDataDictAllAsync；
+ * Configurable：运行时查询；EcGijutsu / AssyOutput：来源导入扩展；FlowInstance：实例统计
+ */
+const MANUAL_SERVICE_ENTITY_SHORT_NAMES = new Set([
+  'BillOfMaterial',
+  'GenTable',
+  'User',
+  'DictData',
+  'Configurable',
+  'EcGijutsu',
+  'AssyOutput',
+  'FlowInstance',
+]);
+
+/**
  * @param {string} entityName
  * @returns {boolean}
  */
 function shouldExcludeStandaloneService(entityName) {
-  return MANUAL_STANDALONE_SERVICE_ENTITY_NAMES.has(entityName);
+  if (MANUAL_STANDALONE_SERVICE_ENTITY_NAMES.has(entityName)) {
+    return true;
+  }
+  const short = entityName?.startsWith('Takt') ? entityName.slice(4) : entityName;
+  return MANUAL_SERVICE_ENTITY_SHORT_NAMES.has(short);
 }
 
 /**
@@ -208,6 +241,7 @@ module.exports = {
   RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
   MANUAL_STANDALONE_SERVICE_ENTITY_NAMES,
   MANUAL_DTO_ENTITY_SHORT_NAMES,
+  MANUAL_SERVICE_ENTITY_SHORT_NAMES,
   STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES,
   isRbacJunctionEntity,
   isManualDtoEntity,

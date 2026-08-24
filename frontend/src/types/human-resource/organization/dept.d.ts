@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/organization
 // 文件名称：dept.d.ts
-// 创建时间：2026-08-21
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/organization 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,14 +34,19 @@ export interface Dept extends CompanyDtoBase {
   deptCode: string;
 
   /**
-   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+   * 部门简称（与 ISO 编码一致，长度 6）
    */
   deptShortName: string;
 
   /**
-   * 部门名称
+   * 部门名称1
    */
-  deptName: string;
+  deptName1: string;
+
+  /**
+   * 部门名称2
+   */
+  deptName2: string;
 
   /**
    * 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -59,12 +64,12 @@ export interface Dept extends CompanyDtoBase {
   deptPath: string;
 
   /**
-   * 叶子节点（字典 sys_yes_no_type；0=否 1=是）
+   * 叶子节点（字典 sys_yes_no；0=否 1=是）
    */
   isLeaf: number;
 
   /**
-   * ISO 编码
+   * ISO 编码（与部门简称一致，长度 6）
    */
   isoCode: string;
 
@@ -84,7 +89,7 @@ export interface Dept extends CompanyDtoBase {
   headUserId: string;
 
   /**
-   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
    */
   headUserName: string;
 
@@ -104,7 +109,7 @@ export interface Dept extends CompanyDtoBase {
   location: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
    */
   isBuiltIn: number;
 
@@ -114,14 +119,24 @@ export interface Dept extends CompanyDtoBase {
   deptDescription: string;
 
   /**
-   * 排序号（同级部门排序）
+   * 排序号（回填）（同级部门排序）
    */
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   deptStatus: number;
+
+  /**
+   * 角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept） （RBAC：TaktRoleDept）
+   */
+  roleDepts?: RoleDept[];
+
+  /**
+   * 员工部门关联（RBAC，表 takt_human_resource_organization_employeedept） （RBAC：TaktEmployeeDept）
+   */
+  employeeDepts?: EmployeeDept[];
 
 }
 
@@ -134,9 +149,9 @@ export interface Dept extends CompanyDtoBase {
  */
 export interface DeptTree extends Dept {
   /**
-   * 子节点
+   * 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
    */
-  children: DeptTree[];
+  children?: DeptTree[];
 
 }
 
@@ -174,14 +189,19 @@ export interface DeptQuery extends TaktPagedQuery {
   deptCode?: string;
 
   /**
-   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+   * 部门简称（与 ISO 编码一致，长度 6）
    */
   deptShortName?: string;
 
   /**
-   * 部门名称
+   * 部门名称1
    */
-  deptName?: string;
+  deptName1?: string;
+
+  /**
+   * 部门名称2
+   */
+  deptName2?: string;
 
   /**
    * 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -199,12 +219,12 @@ export interface DeptQuery extends TaktPagedQuery {
   deptPath?: string;
 
   /**
-   * 叶子节点（字典 sys_yes_no_type；0=否 1=是）
+   * 叶子节点（字典 sys_yes_no；0=否 1=是）
    */
   isLeaf?: number;
 
   /**
-   * ISO 编码
+   * ISO 编码（与部门简称一致，长度 6）
    */
   isoCode?: string;
 
@@ -224,7 +244,7 @@ export interface DeptQuery extends TaktPagedQuery {
   headUserId?: string;
 
   /**
-   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
    */
   headUserName?: string;
 
@@ -244,7 +264,7 @@ export interface DeptQuery extends TaktPagedQuery {
   location?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
    */
   isBuiltIn?: number;
 
@@ -254,12 +274,12 @@ export interface DeptQuery extends TaktPagedQuery {
   deptDescription?: string;
 
   /**
-   * 排序号（同级部门排序）
+   * 排序号（回填）（同级部门排序）
    */
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   deptStatus?: number;
 
@@ -318,14 +338,19 @@ export interface DeptCreate {
   deptCode: string;
 
   /**
-   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+   * 部门简称（与 ISO 编码一致，长度 6）
    */
   deptShortName: string;
 
   /**
-   * 部门名称
+   * 部门名称1
    */
-  deptName: string;
+  deptName1: string;
+
+  /**
+   * 部门名称2
+   */
+  deptName2: string;
 
   /**
    * 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -333,7 +358,7 @@ export interface DeptCreate {
   parentId: string;
 
   /**
-   * ISO 编码
+   * ISO 编码（与部门简称一致，长度 6）
    */
   isoCode: string;
 
@@ -353,7 +378,7 @@ export interface DeptCreate {
   headUserId: string;
 
   /**
-   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
    */
   headUserName: string;
 
@@ -373,7 +398,7 @@ export interface DeptCreate {
   location: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
    */
   isBuiltIn: number;
 
@@ -383,7 +408,7 @@ export interface DeptCreate {
   deptDescription: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   deptStatus: number;
 
@@ -437,7 +462,7 @@ export interface DeptStatus {
   deptId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   deptStatus: number;
 
@@ -456,9 +481,28 @@ export interface DeptSort {
   deptId: string;
 
   /**
-   * 排序号（同级部门排序）
+   * 排序号（回填）（同级部门排序）
    */
   sortOrder: number;
+
+}
+
+
+/**
+ * Dept 内置更新 DTO
+ * 对应前端 DeptBuiltIn
+ * @description 对应后端 TaktDeptBuiltInDto
+ */
+export interface DeptBuiltIn {
+  /**
+   * DeptID
+   */
+  deptId: string;
+
+  /**
+   * 内置（字典 sys_yes_no；1=是，0=否）
+   */
+  isBuiltIn: number;
 
 }
 
@@ -495,14 +539,19 @@ export interface DeptTemplate {
   deptCode?: string;
 
   /**
-   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+   * 部门简称（与 ISO 编码一致，长度 6）
    */
   deptShortName?: string;
 
   /**
-   * 部门名称
+   * 部门名称1
    */
-  deptName?: string;
+  deptName1?: string;
+
+  /**
+   * 部门名称2
+   */
+  deptName2?: string;
 
   /**
    * 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -510,7 +559,7 @@ export interface DeptTemplate {
   parentId?: string;
 
   /**
-   * ISO 编码
+   * ISO 编码（与部门简称一致，长度 6）
    */
   isoCode?: string;
 
@@ -530,7 +579,7 @@ export interface DeptTemplate {
   headUserId?: string;
 
   /**
-   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
    */
   headUserName?: string;
 
@@ -550,7 +599,7 @@ export interface DeptTemplate {
   location?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
    */
   isBuiltIn?: number;
 
@@ -560,7 +609,7 @@ export interface DeptTemplate {
   deptDescription?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   deptStatus?: number;
 
@@ -619,14 +668,19 @@ export interface DeptImport {
   deptCode?: string;
 
   /**
-   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+   * 部门简称（与 ISO 编码一致，长度 6）
    */
   deptShortName?: string;
 
   /**
-   * 部门名称
+   * 部门名称1
    */
-  deptName?: string;
+  deptName1?: string;
+
+  /**
+   * 部门名称2
+   */
+  deptName2?: string;
 
   /**
    * 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -634,7 +688,7 @@ export interface DeptImport {
   parentId?: string;
 
   /**
-   * ISO 编码
+   * ISO 编码（与部门简称一致，长度 6）
    */
   isoCode?: string;
 
@@ -654,7 +708,7 @@ export interface DeptImport {
   headUserId?: string;
 
   /**
-   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
    */
   headUserName?: string;
 
@@ -674,7 +728,7 @@ export interface DeptImport {
   location?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
    */
   isBuiltIn?: number;
 
@@ -684,7 +738,7 @@ export interface DeptImport {
   deptDescription?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   deptStatus?: number;
 
@@ -743,14 +797,19 @@ export interface DeptExport {
   deptCode: string;
 
   /**
-   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+   * 部门简称（与 ISO 编码一致，长度 6）
    */
   deptShortName: string;
 
   /**
-   * 部门名称
+   * 部门名称1
    */
-  deptName: string;
+  deptName1: string;
+
+  /**
+   * 部门名称2
+   */
+  deptName2: string;
 
   /**
    * 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -768,12 +827,12 @@ export interface DeptExport {
   deptPath: string;
 
   /**
-   * 叶子节点（字典 sys_yes_no_type；0=否 1=是）
+   * 叶子节点（字典 sys_yes_no；0=否 1=是）
    */
   isLeaf: number;
 
   /**
-   * ISO 编码
+   * ISO 编码（与部门简称一致，长度 6）
    */
   isoCode: string;
 
@@ -793,7 +852,7 @@ export interface DeptExport {
   headUserId: string;
 
   /**
-   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+   * 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
    */
   headUserName: string;
 
@@ -813,7 +872,7 @@ export interface DeptExport {
   location: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
    */
   isBuiltIn: number;
 
@@ -823,12 +882,12 @@ export interface DeptExport {
   deptDescription: string;
 
   /**
-   * 排序号（同级部门排序）
+   * 排序号（回填）（同级部门排序）
    */
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   deptStatus: number;
 

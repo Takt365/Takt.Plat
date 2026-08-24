@@ -74,7 +74,7 @@ export interface QualityGroup extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -84,7 +84,7 @@ export interface QualityGroup extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 质量组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 质量组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -149,7 +149,7 @@ export interface QualityGroupQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -159,7 +159,7 @@ export interface QualityGroupQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 质量组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 质量组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -251,12 +251,12 @@ export interface QualityGroupCreate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 质量组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 质量组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -300,7 +300,7 @@ export interface QualityGroupStatus {
   qualityGroupId: string;
 
   /**
-   * 质量组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 质量组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -383,12 +383,12 @@ export interface QualityGroupTemplate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 质量组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 质量组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -470,12 +470,12 @@ export interface QualityGroupImport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 质量组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 质量组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -549,7 +549,7 @@ export interface QualityGroupExport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -559,7 +559,7 @@ export interface QualityGroupExport {
   sortOrder: number;
 
   /**
-   * 质量组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 质量组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 

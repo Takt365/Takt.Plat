@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Employee 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployee 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Application.Dtos.HumanResource.Organization;
 
 namespace Takt.Application.Dtos.HumanResource.Personnel;
 
@@ -58,7 +59,7 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     /// <summary>
     /// 身份证号（人事档案必填）
     /// </summary>
-    public string IdCardNo { get; set; } = string.Empty;
+    public string IdCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码（人事档案必填）
@@ -96,7 +97,7 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     public int EmployeeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -107,13 +108,13 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）
-    /// （子表：TaktEmployeeDept）
+    /// （RBAC：TaktEmployeeDept）
     /// </summary>
     public List<TaktEmployeeDeptDto>? EmployeeDepts { get; set; }
 
     /// <summary>
     /// 员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）
-    /// （子表：TaktEmployeePost）
+    /// （RBAC：TaktEmployeePost）
     /// </summary>
     public List<TaktEmployeePostDto>? EmployeePosts { get; set; }
 
@@ -183,6 +184,12 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     /// </summary>
     public List<TaktEmployeeAttachmentDto>? EmployeeAttachments { get; set; }
 
+    /// <summary>
+    /// 员工代理（被代理人视角；外键 OriginalEmployeeId）
+    /// （子表：TaktEmployeeDelegation）
+    /// </summary>
+    public List<TaktEmployeeDelegationDto>? EmployeeDelegations { get; set; }
+
 }
 
 // ========================================
@@ -201,7 +208,7 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -210,11 +217,11 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工编码（租户+公司内唯一）
     /// </summary>
@@ -243,7 +250,7 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     /// <summary>
     /// 身份证号（人事档案必填）
     /// </summary>
-    public string? IdCardNo { get; set; } = string.Empty;
+    public string? IdCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码（人事档案必填）
@@ -281,7 +288,7 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public int? EmployeeStatus { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -309,11 +316,6 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 身份证号（人事档案必填）
-    /// </summary>
-    public string IdCardCode { get; set; } = string.Empty;
 }
 
 // ========================================
@@ -340,17 +342,21 @@ public class TaktEmployeeCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工编码（租户+公司内唯一）
     /// </summary>
     [Required(ErrorMessage = "员工编码（租户+公司内唯一）不能为空")]
     public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 编码规则编码（表单选性别后自动取号；对应 TaktNumbering.RuleCode；不落库）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
 
     /// <summary>
     /// 姓名
@@ -372,7 +378,7 @@ public class TaktEmployeeCreateDto
     /// 身份证号（人事档案必填）
     /// </summary>
     [Required(ErrorMessage = "身份证号（人事档案必填）不能为空")]
-    public string IdCardNo { get; set; } = string.Empty;
+    public string IdCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码（人事档案必填）
@@ -412,7 +418,7 @@ public class TaktEmployeeCreateDto
     public int EmployeeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -485,6 +491,11 @@ public class TaktEmployeeCreateDto
     /// 档案附件（子表，级联保存）
     /// </summary>
     public List<TaktEmployeeAttachmentCreateDto>? EmployeeAttachments { get; set; }
+
+    /// <summary>
+    /// 员工代理（被代理人视角；外键 OriginalEmployeeId）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeDelegationCreateDto>? EmployeeDelegations { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -571,6 +582,11 @@ public class TaktEmployeeUpdateDto : TaktEmployeeCreateDto
     /// </summary>
     public new List<TaktEmployeeAttachmentUpdateDto>? EmployeeAttachments { get; set; }
 
+    /// <summary>
+    /// 员工代理（被代理人视角；外键 OriginalEmployeeId）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeDelegationUpdateDto>? EmployeeDelegations { get; set; }
+
 }
 
 // ========================================
@@ -621,11 +637,11 @@ public class TaktEmployeeTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工编码（租户+公司内唯一）
     /// </summary>
@@ -649,7 +665,7 @@ public class TaktEmployeeTemplateDto
     /// <summary>
     /// 身份证号（人事档案必填）
     /// </summary>
-    public string? IdCardNo { get; set; } = string.Empty;
+    public string? IdCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码（人事档案必填）
@@ -687,7 +703,7 @@ public class TaktEmployeeTemplateDto
     public int? EmployeeStatus { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -760,6 +776,11 @@ public class TaktEmployeeTemplateDto
     /// 档案附件（子表，级联保存）
     /// </summary>
     public List<TaktEmployeeAttachmentCreateDto>? EmployeeAttachments { get; set; }
+
+    /// <summary>
+    /// 员工代理（被代理人视角；外键 OriginalEmployeeId）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeDelegationCreateDto>? EmployeeDelegations { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -793,12 +814,11 @@ public class TaktEmployeeImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工编码（租户+公司内唯一）
     /// </summary>
@@ -822,7 +842,7 @@ public class TaktEmployeeImportDto
     /// <summary>
     /// 身份证号（人事档案必填）
     /// </summary>
-    public string? IdCardNo { get; set; } = string.Empty;
+    public string? IdCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码（人事档案必填）
@@ -860,7 +880,7 @@ public class TaktEmployeeImportDto
     public int? EmployeeStatus { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -933,6 +953,11 @@ public class TaktEmployeeImportDto
     /// 档案附件（子表，级联保存）
     /// </summary>
     public List<TaktEmployeeAttachmentCreateDto>? EmployeeAttachments { get; set; }
+
+    /// <summary>
+    /// 员工代理（被代理人视角；外键 OriginalEmployeeId）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeDelegationCreateDto>? EmployeeDelegations { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -968,6 +993,16 @@ public class TaktEmployeeExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 员工编码（租户+公司内唯一）
     /// </summary>
     public string EmployeeCode { get; set; } = string.Empty;
@@ -990,7 +1025,7 @@ public class TaktEmployeeExportDto
     /// <summary>
     /// 身份证号（人事档案必填）
     /// </summary>
-    public string IdCardNo { get; set; } = string.Empty;
+    public string IdCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码（人事档案必填）
@@ -1028,7 +1063,7 @@ public class TaktEmployeeExportDto
     public int EmployeeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 

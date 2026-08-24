@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktProfitCenterI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProfitCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,40 +118,40 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitcenter.parentid", "zh-HK", "父级ID_hk", "父级 ID"),
 
             // entity.profitcenter.managerid
-            new TranslationSeedItem("entity.profitcenter.managerid", "en-US", "负责人ID_us", "负责人用户 ID"),
+            new TranslationSeedItem("entity.profitcenter.managerid", "en-US", "负责人ID_us", "负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.profitcenter.managerid
-            new TranslationSeedItem("entity.profitcenter.managerid", "ja-JP", "负责人ID_jp", "负责人用户 ID"),
+            new TranslationSeedItem("entity.profitcenter.managerid", "ja-JP", "负责人ID_jp", "负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.profitcenter.managerid
-            new TranslationSeedItem("entity.profitcenter.managerid", "zh-CN", "负责人ID", "负责人用户 ID"),
+            new TranslationSeedItem("entity.profitcenter.managerid", "zh-CN", "负责人ID", "负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.profitcenter.managerid
-            new TranslationSeedItem("entity.profitcenter.managerid", "zh-HK", "负责人ID_hk", "负责人用户 ID"),
+            new TranslationSeedItem("entity.profitcenter.managerid", "zh-HK", "负责人ID_hk", "负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
 
             // entity.profitcenter.managername
-            new TranslationSeedItem("entity.profitcenter.managername", "en-US", "负责人姓名_us", "负责人姓名"),
+            new TranslationSeedItem("entity.profitcenter.managername", "en-US", "负责人姓名_us", "负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）"),
             // entity.profitcenter.managername
-            new TranslationSeedItem("entity.profitcenter.managername", "ja-JP", "负责人姓名_jp", "负责人姓名"),
+            new TranslationSeedItem("entity.profitcenter.managername", "ja-JP", "负责人姓名_jp", "负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）"),
             // entity.profitcenter.managername
-            new TranslationSeedItem("entity.profitcenter.managername", "zh-CN", "负责人姓名", "负责人姓名"),
+            new TranslationSeedItem("entity.profitcenter.managername", "zh-CN", "负责人姓名", "负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）"),
             // entity.profitcenter.managername
-            new TranslationSeedItem("entity.profitcenter.managername", "zh-HK", "负责人姓名_hk", "负责人姓名"),
+            new TranslationSeedItem("entity.profitcenter.managername", "zh-HK", "负责人姓名_hk", "负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）"),
 
             // entity.profitcenter.deptid
-            new TranslationSeedItem("entity.profitcenter.deptid", "en-US", "所属部门ID_us", "所属部门 ID"),
+            new TranslationSeedItem("entity.profitcenter.deptid", "en-US", "所属部门ID_us", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
             // entity.profitcenter.deptid
-            new TranslationSeedItem("entity.profitcenter.deptid", "ja-JP", "所属部门ID_jp", "所属部门 ID"),
+            new TranslationSeedItem("entity.profitcenter.deptid", "ja-JP", "所属部门ID_jp", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
             // entity.profitcenter.deptid
-            new TranslationSeedItem("entity.profitcenter.deptid", "zh-CN", "所属部门ID", "所属部门 ID"),
+            new TranslationSeedItem("entity.profitcenter.deptid", "zh-CN", "所属部门ID", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
             // entity.profitcenter.deptid
-            new TranslationSeedItem("entity.profitcenter.deptid", "zh-HK", "所属部门ID_hk", "所属部门 ID"),
+            new TranslationSeedItem("entity.profitcenter.deptid", "zh-HK", "所属部门ID_hk", "所属部门（选项 TaktDepts/tree-options,DictValue=Id）"),
 
             // entity.profitcenter.deptname
-            new TranslationSeedItem("entity.profitcenter.deptname", "en-US", "所属部门名称_us", "所属部门名称"),
+            new TranslationSeedItem("entity.profitcenter.deptname", "en-US", "所属部门名称_us", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
             // entity.profitcenter.deptname
-            new TranslationSeedItem("entity.profitcenter.deptname", "ja-JP", "所属部门名称_jp", "所属部门名称"),
+            new TranslationSeedItem("entity.profitcenter.deptname", "ja-JP", "所属部门名称_jp", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
             // entity.profitcenter.deptname
-            new TranslationSeedItem("entity.profitcenter.deptname", "zh-CN", "所属部门名称", "所属部门名称"),
+            new TranslationSeedItem("entity.profitcenter.deptname", "zh-CN", "所属部门名称", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
             // entity.profitcenter.deptname
-            new TranslationSeedItem("entity.profitcenter.deptname", "zh-HK", "所属部门名称_hk", "所属部门名称"),
+            new TranslationSeedItem("entity.profitcenter.deptname", "zh-HK", "所属部门名称_hk", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
 
             // entity.profitcenter.level
             new TranslationSeedItem("entity.profitcenter.level", "en-US", "利润中心层级_us", "利润中心层级"),
@@ -181,22 +181,22 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitcenter.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.profitcenter.sortorder
-            new TranslationSeedItem("entity.profitcenter.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.profitcenter.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.profitcenter.sortorder
-            new TranslationSeedItem("entity.profitcenter.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.profitcenter.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.profitcenter.sortorder
-            new TranslationSeedItem("entity.profitcenter.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.profitcenter.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.profitcenter.sortorder
-            new TranslationSeedItem("entity.profitcenter.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.profitcenter.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "en-US", "利润中心状态_us", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.profitcenter.status", "en-US", "利润中心状态_us", "利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "ja-JP", "利润中心状态_jp", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.profitcenter.status", "ja-JP", "利润中心状态_jp", "利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "zh-CN", "利润中心状态", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.profitcenter.status", "zh-CN", "利润中心状态", "利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "zh-HK", "利润中心状态_hk", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.profitcenter.status", "zh-HK", "利润中心状态_hk", "利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

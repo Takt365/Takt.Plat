@@ -28,12 +28,12 @@ public static class TaktSequenceDefaults
     public const int LineNumberStep = 10;
 
     /// <summary>
-    /// 排序号默认起始值（currentMax 为 0 时）
+    /// 排序号（回填）默认起始值（currentMax 为 0 时）
     /// </summary>
     public const int SortOrderDefaultStart = 1;
 
     /// <summary>
-    /// 排序号递增步长
+    /// 排序号（回填）递增步长
     /// </summary>
     public const int SortOrderStep = 1;
 }

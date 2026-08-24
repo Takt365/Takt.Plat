@@ -82,7 +82,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
     public int Priority { get; set; } = 3;

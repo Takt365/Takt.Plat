@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktMaterialDocumentItemValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialDocumentItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMaterialDocumentItem 生成，请按需审阅）
 // 
@@ -36,15 +36,15 @@ public class TaktMaterialDocumentItemCreateValidator : AbstractValidator<TaktMat
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.MaterialDocumentId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.MaterialDocumentId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MaterialDocumentId)
             .GreaterThanOrEqualTo(0).WithMessage("物料凭证ID不能为负数");
         RuleFor(x => x.MaterialDocumentCode)
-            .NotEmpty().WithMessage("物料凭证不能为空")
+            .NotEmpty().WithMessage("物料凭证不能为空").When(x => x.MaterialDocumentId <= 0)
             .MaximumLength(10).WithMessage("物料凭证长度不能超过10个字符");
         RuleFor(x => x.MovementType)
             .NotEmpty().WithMessage("移动类型不能为空")
@@ -82,15 +82,15 @@ public class TaktMaterialDocumentItemUpdateValidator : AbstractValidator<TaktMat
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.MaterialDocumentId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.MaterialDocumentId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MaterialDocumentId)
             .GreaterThanOrEqualTo(0).WithMessage("物料凭证ID不能为负数");
         RuleFor(x => x.MaterialDocumentCode)
-            .NotEmpty().WithMessage("物料凭证不能为空")
+            .NotEmpty().WithMessage("物料凭证不能为空").When(x => x.MaterialDocumentId <= 0)
             .MaximumLength(10).WithMessage("物料凭证长度不能超过10个字符");
         RuleFor(x => x.MovementType)
             .NotEmpty().WithMessage("移动类型不能为空")

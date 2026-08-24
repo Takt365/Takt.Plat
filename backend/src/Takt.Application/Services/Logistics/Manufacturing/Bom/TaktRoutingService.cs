@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线主应用服务实现
 // 
@@ -404,6 +404,11 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
             {
                 var childDto = itemsForSave[i];
                 childDto.RoutingId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.RoutingCode = entity.RoutingCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -541,7 +546,7 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
 
         if (queryDto?.Purpose.HasValue == true)
         {
-            var purpose = queryDto.Purpose;
+            var purpose = queryDto.Purpose.Value;
             exp = exp.And(x => x.Purpose == purpose);
         }
 
@@ -559,7 +564,7 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
 
         if (queryDto?.RoutingStatus.HasValue == true)
         {
-            var routingStatus = queryDto.RoutingStatus;
+            var routingStatus = queryDto.RoutingStatus.Value;
             exp = exp.And(x => x.RoutingStatus == routingStatus);
         }
 
@@ -583,37 +588,37 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
 
         if (queryDto?.EffectiveDateStart.HasValue == true)
         {
-            var effectiveDateStart = queryDto.EffectiveDateStart;
+            var effectiveDateStart = queryDto.EffectiveDateStart.Value;
             exp = exp.And(x => x.EffectiveDate >= effectiveDateStart);
         }
 
         if (queryDto?.EffectiveDateEnd.HasValue == true)
         {
-            var effectiveDateEnd = queryDto.EffectiveDateEnd;
+            var effectiveDateEnd = queryDto.EffectiveDateEnd.Value;
             exp = exp.And(x => x.EffectiveDate <= effectiveDateEnd);
         }
 
         if (queryDto?.ExpiryDateStart.HasValue == true)
         {
-            var expiryDateStart = queryDto.ExpiryDateStart;
+            var expiryDateStart = queryDto.ExpiryDateStart.Value;
             exp = exp.And(x => x.ExpiryDate >= expiryDateStart);
         }
 
         if (queryDto?.ExpiryDateEnd.HasValue == true)
         {
-            var expiryDateEnd = queryDto.ExpiryDateEnd;
+            var expiryDateEnd = queryDto.ExpiryDateEnd.Value;
             exp = exp.And(x => x.ExpiryDate <= expiryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

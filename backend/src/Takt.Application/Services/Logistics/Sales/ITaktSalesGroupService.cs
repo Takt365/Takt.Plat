@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：ITaktSalesGroupService.cs
-// 创建时间：2026-07-08
+// 创建时间：2026-08-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售组主数据应用服务接口
 // 
@@ -76,6 +76,13 @@ public interface ITaktSalesGroupService
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktSalesGroupDto> UpdateSalesGroupStatusAsync(TaktSalesGroupStatusDto dto);
+
+    /// <summary>
+    /// 更新销售组主数据内置
+    /// </summary>
+    /// <param name="dto">内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktSalesGroupDto> UpdateSalesGroupBuiltInAsync(TaktSalesGroupBuiltInDto dto);
 
     /// <summary>
     /// 更新销售组主数据排序

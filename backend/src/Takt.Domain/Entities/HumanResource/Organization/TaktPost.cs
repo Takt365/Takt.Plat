@@ -35,7 +35,7 @@ public class TaktPost : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "post_name", ColumnDescription = "岗位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string PostName { get; set; } = string.Empty;
     /// <summary>
-    /// 所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "所属部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
@@ -50,7 +50,7 @@ public class TaktPost : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "post_category", ColumnDescription = "岗位类别", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "TEC")]
     public string PostCategory { get; set; } = "TEC";
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     [SugarColumn(ColumnName = "post_level", ColumnDescription = "岗位职级", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "P1")]
     public string PostLevel { get; set; } = "P1";
@@ -95,7 +95,7 @@ public class TaktPost : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "salary_max", ColumnDescription = "薪资范围（最高）", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = true)]
     public decimal? SalaryMax { get; set; }
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
@@ -105,12 +105,12 @@ public class TaktPost : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "post_description", ColumnDescription = "岗位描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? PostDescription { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "post_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PostStatus { get; set; } = 1;

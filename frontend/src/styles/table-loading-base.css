@@ -1,0 +1,74 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：table-loading-base.css
+ * 创建时间：2026-08-21
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：表格 loading 指示器居中（覆盖 Ant Design Spin 默认 max-height:400px 导致偏上）
+ *
+ * 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+/**
+ * a-table :loading 的 Spin 嵌套层须撑满表格容器，指示器才能相对可视区域垂直居中
+ */
+.takt-single-table .ant-spin-nested-loading,
+.takt-tree-right-table .ant-spin-nested-loading,
+.takt-editable-table .ant-spin-nested-loading,
+.takt-master-detail-table-lr .ant-spin-nested-loading,
+.takt-master-detail-table-tb .ant-spin-nested-loading {
+  height: 100%;
+}
+
+.takt-single-table .ant-spin-nested-loading > div > .ant-spin-container,
+.takt-tree-right-table .ant-spin-nested-loading > div > .ant-spin-container,
+.takt-editable-table .ant-spin-nested-loading > div > .ant-spin-container,
+.takt-master-detail-table-lr .ant-spin-nested-loading > div > .ant-spin-container,
+.takt-master-detail-table-tb .ant-spin-nested-loading > div > .ant-spin-container {
+  height: 100%;
+}
+
+/**
+ * 取消 Spin 默认 max-height:400px；用 flex 在覆盖层内水平+垂直居中
+ * （含 tip 文案时同样居中）
+ */
+.takt-single-table .ant-spin-nested-loading > div > .ant-spin,
+.takt-tree-right-table .ant-spin-nested-loading > div > .ant-spin,
+.takt-editable-table .ant-spin-nested-loading > div > .ant-spin,
+.takt-master-detail-table-lr .ant-spin-nested-loading > div > .ant-spin,
+.takt-master-detail-table-tb .ant-spin-nested-loading > div > .ant-spin {
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.takt-single-table .ant-spin-nested-loading > div > .ant-spin .ant-spin-dot,
+.takt-tree-right-table .ant-spin-nested-loading > div > .ant-spin .ant-spin-dot,
+.takt-editable-table .ant-spin-nested-loading > div > .ant-spin .ant-spin-dot,
+.takt-master-detail-table-lr .ant-spin-nested-loading > div > .ant-spin .ant-spin-dot,
+.takt-master-detail-table-tb .ant-spin-nested-loading > div > .ant-spin .ant-spin-dot {
+  position: static;
+  margin: 0;
+}
+
+.takt-single-table .ant-spin-nested-loading > div > .ant-spin .ant-spin-text,
+.takt-tree-right-table .ant-spin-nested-loading > div > .ant-spin .ant-spin-text,
+.takt-editable-table .ant-spin-nested-loading > div > .ant-spin .ant-spin-text,
+.takt-master-detail-table-lr .ant-spin-nested-loading > div > .ant-spin .ant-spin-text,
+.takt-master-detail-table-tb .ant-spin-nested-loading > div > .ant-spin .ant-spin-text {
+  position: static;
+  padding-top: 8px;
+  text-shadow: none;
+}
+
+/**
+ * 左树自定义 loading 遮罩（非 a-table Spin）：保持绝对定位 + flex 居中
+ */
+.takt-tree-left-table__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

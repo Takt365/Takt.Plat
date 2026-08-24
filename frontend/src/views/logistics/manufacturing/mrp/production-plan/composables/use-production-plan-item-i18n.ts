@@ -20,7 +20,6 @@ export const PRODUCTIONPLANITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(PRODUCTIO
 
 /** 列表业务列（不含主键） */
 export const PRODUCTIONPLANITEM_LIST_FIELDS = [
-  'productionPlanId',
   'productionPlanCode',
   'lineNumber',
   'salesForecastId',
@@ -40,11 +39,11 @@ export const PRODUCTIONPLANITEM_LIST_FIELDS = [
   'estimatedUnitCost',
   'estimatedAmount',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PRODUCTIONPLANITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'productionPlanId',
   'productionPlanCode',
   'lineNumber',
   'salesForecastId',
@@ -79,28 +78,7 @@ export const PRODUCTIONPLANITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PRODUCTIONPLANITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  salesForecastId: 'optional',
-  salesForecastCode: 'optional',
-  salesForecastLineNumber: 'optional',
-  materialRequirementsPlanningItemId: 'optional',
-  materialCode: 'select',
-  materialDescription: 'required',
-  materialSpecification: 'optional',
-  modelCode: 'optional',
-  modelName: 'optional',
-  planUnit: 'select',
-  planQuantity: 'select',
-  plannedStartDate: 'optional',
-  plannedEndDate: 'optional',
-  convertedQuantity: 'select',
-  estimatedUnitCost: 'select',
-  estimatedAmount: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -108,41 +86,13 @@ export type ProductionPlanItemField = keyof typeof PRODUCTIONPLANITEM_PLACEHOLDE
 
 /** 高级查询可 trim 的字符串字段 */
 export const PRODUCTIONPLANITEM_QUERY_STRING_FIELDS = [
-  'productionPlanCode',
-  'salesForecastId',
-  'salesForecastCode',
-  'materialRequirementsPlanningItemId',
-  'materialCode',
-  'materialDescription',
-  'materialSpecification',
-  'modelCode',
-  'modelName',
-  'planUnit',
-  'plannedStartDateStart',
-  'plannedStartDateEnd',
-  'plannedEndDateStart',
-  'plannedEndDateEnd',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ProductionPlanItemQuery)[]
 
-export type ProductionPlanItemQueryField =
-  | (typeof PRODUCTIONPLANITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'salesForecastLineNumber' | 'planQuantity' | 'convertedQuantity' | 'estimatedUnitCost' | 'estimatedAmount' | 'isObsolete'
+export type ProductionPlanItemQueryField = (typeof PRODUCTIONPLANITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PRODUCTIONPLANITEM_QUERY_FIELDS: readonly ProductionPlanItemQueryField[] = [
-  ...PRODUCTIONPLANITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'salesForecastLineNumber',
-  'planQuantity',
-  'convertedQuantity',
-  'estimatedUnitCost',
-  'estimatedAmount',
-  'isObsolete',
-]
+export const PRODUCTIONPLANITEM_QUERY_FIELDS: readonly ProductionPlanItemQueryField[] = [...PRODUCTIONPLANITEM_QUERY_STRING_FIELDS]
 
 /**
  * ProductionPlanItem字段 i18n：index / production-plan-item-form 统一入口

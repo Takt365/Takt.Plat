@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktSettingDtos.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Setting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSetting 生成，请按需审阅）
 // 
@@ -58,37 +58,37 @@ public class TaktSettingDto : TaktCompanyDtoBase
     /// <summary>
     /// 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
-    public string SettingGroup { get; set; } = "frontend";
+    public string SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    public string ValueType { get; set; } = "input";
+    public string ValueType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 只读（字典 sys_yes_no_type；0=否 1=是）
+    /// 只读（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 加密（字典 sys_yes_no_type；0=否 1=是）
+    /// 加密（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    public int SettingStatus { get; set; } = 1;
+    public int SettingStatus { get; set; } = 0;
 
 }
 
@@ -108,7 +108,7 @@ public class TaktSettingQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -117,11 +117,11 @@ public class TaktSettingQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 设置键（唯一索引：租户+公司内唯一，见 ix_setting_key_unique；如 system.siteName, upload.maxSize）
     /// </summary>
@@ -145,35 +145,35 @@ public class TaktSettingQueryDto : TaktPagedQuery
     /// <summary>
     /// 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
-    public string? SettingGroup { get; set; }
+    public string? SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    public string? ValueType { get; set; }
+    public string? ValueType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 只读（字典 sys_yes_no_type；0=否 1=是）
+    /// 只读（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsReadonly { get; set; }
 
     /// <summary>
-    /// 加密（字典 sys_yes_no_type；0=否 1=是）
+    /// 加密（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsEncrypted { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? SettingStatus { get; set; }
 
@@ -222,12 +222,11 @@ public class TaktSettingCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 设置键（唯一索引：租户+公司内唯一，见 ix_setting_key_unique；如 system.siteName, upload.maxSize）
     /// </summary>
@@ -253,32 +252,34 @@ public class TaktSettingCreateDto
     /// <summary>
     /// 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
-    public string SettingGroup { get; set; } = "frontend";
+    [Required(ErrorMessage = "设置类别（字典 sys_resource_type；frontend=前端 backend=后端）不能为空")]
+    public string SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    public string ValueType { get; set; } = "input";
+    [Required(ErrorMessage = "值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）不能为空")]
+    public string ValueType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 只读（字典 sys_yes_no_type；0=否 1=是）
+    /// 只读（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 加密（字典 sys_yes_no_type；0=否 1=是）
+    /// 加密（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    public int SettingStatus { get; set; } = 1;
+    public int SettingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -330,10 +331,10 @@ public class TaktSettingStatusDto
     public long SettingId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "状态不能为空")]
-    public int SettingStatus { get; set; } = 1;
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；1=启用 0=禁用）不能为空")]
+    public int SettingStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -354,10 +355,34 @@ public class TaktSettingSortDto
     public long SettingId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
+}
+
+// ========================================
+// Setting 内置 DTO
+// ========================================
+
+/// <summary>
+/// Setting 内置更新 DTO
+/// </summary>
+public class TaktSettingBuiltInDto
+{
+    /// <summary>
+    /// SettingID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SettingId { get; set; }
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no；1=是，0=否）
+    /// </summary>
+    [Required(ErrorMessage = "内置不能为空")]
+    public int IsBuiltIn { get; set; } = 0;
 }
 
 // ========================================
@@ -384,11 +409,11 @@ public class TaktSettingTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 设置键（唯一索引：租户+公司内唯一，见 ix_setting_key_unique；如 system.siteName, upload.maxSize）
     /// </summary>
@@ -412,30 +437,30 @@ public class TaktSettingTemplateDto
     /// <summary>
     /// 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
-    public string? SettingGroup { get; set; }
+    public string? SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    public string? ValueType { get; set; }
+    public string? ValueType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 只读（字典 sys_yes_no_type；0=否 1=是）
+    /// 只读（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsReadonly { get; set; }
 
     /// <summary>
-    /// 加密（字典 sys_yes_no_type；0=否 1=是）
+    /// 加密（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsEncrypted { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? SettingStatus { get; set; }
 
@@ -471,12 +496,11 @@ public class TaktSettingImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 设置键（唯一索引：租户+公司内唯一，见 ix_setting_key_unique；如 system.siteName, upload.maxSize）
     /// </summary>
@@ -500,30 +524,30 @@ public class TaktSettingImportDto
     /// <summary>
     /// 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
-    public string? SettingGroup { get; set; }
+    public string? SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    public string? ValueType { get; set; }
+    public string? ValueType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 只读（字典 sys_yes_no_type；0=否 1=是）
+    /// 只读（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsReadonly { get; set; }
 
     /// <summary>
-    /// 加密（字典 sys_yes_no_type；0=否 1=是）
+    /// 加密（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsEncrypted { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? SettingStatus { get; set; }
 
@@ -561,6 +585,16 @@ public class TaktSettingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 设置键（唯一索引：租户+公司内唯一，见 ix_setting_key_unique；如 system.siteName, upload.maxSize）
     /// </summary>
     public string SettingKey { get; set; } = string.Empty;
@@ -583,37 +617,37 @@ public class TaktSettingExportDto
     /// <summary>
     /// 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
-    public string SettingGroup { get; set; } = "frontend";
+    public string SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    public string ValueType { get; set; } = "input";
+    public string ValueType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 只读（字典 sys_yes_no_type；0=否 1=是）
+    /// 只读（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 加密（字典 sys_yes_no_type；0=否 1=是）
+    /// 加密（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    public int SettingStatus { get; set; } = 1;
+    public int SettingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

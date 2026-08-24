@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktDictDataDtos.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DictData 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDictData 生成，请按需审阅）
 // 
@@ -22,13 +22,12 @@ namespace Takt.Application.Dtos.Foundation;
 // ========================================
 
 /// <summary>
-/// 字典数据实体 字典类型的具体数据项，如：订单状态下的“待支付”、“已完成”等 租户级实体：CultureCode mul=多种语言内容（IETF BCP 47 / ISO 639-3）；区域专用项为 zh-CN/ja-JP 等；前端加载「mul + Accept-Language」项
+/// 字典数据实体 字典类型的具体数据项，如：订单状态下的“待支付”、“已完成”等 租户级实体：字典数据在租户内共享；CultureCode 默认 mul（IETF BCP 47 / ISO 639-3，多种语言内容，各 UI 语言均加载）；区域专用项用 zh-CN、ja-JP 等（与 TaktCulture.CultureCode 一致） GetDataDictAll 下发全量；服务/前端按「mul + Accept-Language」过滤；TaktTenantScopeFillHelper 不对 DictData 回填公司主档语言 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase）
 /// 对应前端 TaktDictDataDto
-/// 继承 TaktTenantCultureDtoBase（组合 2：无关联工厂、有语言）
+/// 继承 TaktTenantCultureDtoBase
 /// </summary>
 public class TaktDictDataDto : TaktTenantCultureDtoBase
 {
-
     /// <summary>
     /// DictDataID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -37,13 +36,13 @@ public class TaktDictDataDto : TaktTenantCultureDtoBase
     public long DictDataId { get; set; }
 
     /// <summary>
-    /// 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型名称（填充字段）
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     public string? DictTypeName { get; set; }
 
@@ -93,7 +92,7 @@ public class TaktDictDataDto : TaktTenantCultureDtoBase
     public int IsDefault { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -121,7 +120,12 @@ public class TaktDictDataQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DictTypeId { get; set; }
@@ -167,16 +171,12 @@ public class TaktDictDataQueryDto : TaktPagedQuery
     public int? CssClass { get; set; }
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
-    /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
     public int? IsDefault { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -216,7 +216,12 @@ public class TaktDictDataCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DictTypeId { get; set; }
@@ -224,7 +229,6 @@ public class TaktDictDataCreateDto
     /// <summary>
     /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
     /// </summary>
-    [Required(ErrorMessage = "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）不能为空")]
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -266,18 +270,9 @@ public class TaktDictDataCreateDto
     public int CssClass { get; set; } = 0;
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-    /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
     public int IsDefault { get; set; } = 0;
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -329,9 +324,9 @@ public class TaktDictDataSortDto
     public long DictDataId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -350,7 +345,12 @@ public class TaktDictDataTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DictTypeId { get; set; }
@@ -396,18 +396,9 @@ public class TaktDictDataTemplateDto
     public int? CssClass { get; set; }
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
-    /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
     public int? IsDefault { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -432,7 +423,12 @@ public class TaktDictDataImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DictTypeId { get; set; }
@@ -478,18 +474,9 @@ public class TaktDictDataImportDto
     public int? CssClass { get; set; }
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
-    /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
     public int? IsDefault { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -520,7 +507,12 @@ public class TaktDictDataExportDto
     public long DictDataId { get; set; }
 
     /// <summary>
-    /// 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DictTypeId { get; set; }
@@ -566,17 +558,12 @@ public class TaktDictDataExportDto
     public int CssClass { get; set; } = 0;
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
     public int IsDefault { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -596,13 +583,14 @@ public class TaktDictDataExportDto
     public DateTime CreatedAt { get; set; }
 }
 
+// <takt:hand-maintained-begin>
 // ========================================
 // 公司区域下全量字典（登录/下拉缓存）
 // ========================================
 
 /// <summary>
 /// 当前登录 UI 语言下全部字典数据响应 DTO（CultureCode mul=多种语言内容 + 匹配 Accept-Language；含 DictTypeCode 供前端分组）
-/// 对应前端 DataDictAll；Items 为扁平列表，含 DictTypeCode 供前端分组
+/// 对应前端 DataDictAll；Items 为扁平列表，按 DictTypeCode 供前端分组
 /// </summary>
 public class TaktDataDictAllDto
 {
@@ -611,3 +599,4 @@ public class TaktDataDictAllDto
     /// </summary>
     public List<TaktSelectOption> Items { get; set; } = new();
 }
+// <takt:hand-maintained-end>

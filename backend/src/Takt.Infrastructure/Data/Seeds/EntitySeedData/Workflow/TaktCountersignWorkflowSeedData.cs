@@ -75,7 +75,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
             database.CompanyCodes,
             companies,
             c => c.CompanyCode);
-        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "admin");
+        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "admin");
         if (adminUser == null)
         {
             return (0, 0);
@@ -94,7 +94,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
             updateCount += fu;
             var processContent = BuildProcessContent(
                 adminUser.Id,
-                adminUser.Nickname ?? adminUser.Username);
+                adminUser.NickName ?? adminUser.UserName);
             var (_, si, su) = await UpsertSchemeAsync(
                 schemeRepository,
                 tenantCode,
@@ -158,7 +158,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
                 new { dbColumnName = "applicant_by", csharpColumnName = "applicantBy", columnDescription = "申请人", dataType = "bigint", displayType = "select", optionsSource = "employee" },
                 new { dbColumnName = "application_dept", csharpColumnName = "applicationDept", columnDescription = "申请部门", dataType = "varchar", displayType = "treeSelect", optionsSource = "dept" },
                 new { dbColumnName = "cost_bearer_dept", csharpColumnName = "costBearerDept", columnDescription = "经费负担部门", dataType = "varchar", displayType = "treeSelect", optionsSource = "dept" },
-                new { dbColumnName = "is_budget", csharpColumnName = "isBudget", columnDescription = "预算否", dataType = "int", displayType = "select", dictTypeCode = "sys_yes_no_type" },
+                new { dbColumnName = "is_budget", csharpColumnName = "isBudget", columnDescription = "预算否", dataType = "int", displayType = "select", dictTypeCode = "sys_yes_no" },
                 new { dbColumnName = "countersign_status", csharpColumnName = "countersignStatus", columnDescription = "会签单状态", dataType = "int", displayType = "select", dictTypeCode = "sys_approval_status" },
                 new { dbColumnName = "application_reason", csharpColumnName = "applicationReason", columnDescription = "申请原因", dataType = "nvarchar", displayType = "textarea" }
             },

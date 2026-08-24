@@ -23,12 +23,12 @@ public class TaktFileStorageConfigPayload
     public string? UploadPath { get; set; }
 
     /// <summary>
-    /// 存储命名规则（字典 sys_storage_naming_config：0/1/2）
+    /// 存储命名规则（字典 sys_storage_naming：0/1/2）
     /// </summary>
     public int? StorageNaming { get; set; }
 
     /// <summary>
-    /// OSS 提供商标识（字典 sys_oss_provider_type，如 aliyun；StorageType=1 时使用）
+    /// OSS 提供商标识（字典 sys_oss_provider，如 aliyun；StorageType=1 时使用）
     /// </summary>
     public string? OssProvider { get; set; }
 

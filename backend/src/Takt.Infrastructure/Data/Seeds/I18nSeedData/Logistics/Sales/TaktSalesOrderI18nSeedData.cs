@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesOrderI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -289,13 +289,13 @@ public class TaktSalesOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorder.deliveryaddress", "zh-HK", "交货地址_hk", "交货地址"),
 
             // entity.salesorder.orderstatus
-            new TranslationSeedItem("entity.salesorder.orderstatus", "en-US", "订单状态_us", "订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.salesorder.orderstatus", "en-US", "订单状态_us", "订单状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.salesorder.orderstatus
-            new TranslationSeedItem("entity.salesorder.orderstatus", "ja-JP", "订单状态_jp", "订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.salesorder.orderstatus", "ja-JP", "订单状态_jp", "订单状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.salesorder.orderstatus
-            new TranslationSeedItem("entity.salesorder.orderstatus", "zh-CN", "订单状态", "订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.salesorder.orderstatus", "zh-CN", "订单状态", "订单状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.salesorder.orderstatus
-            new TranslationSeedItem("entity.salesorder.orderstatus", "zh-HK", "订单状态_hk", "订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.salesorder.orderstatus", "zh-HK", "订单状态_hk", "订单状态（字典 sys_normal_disable；1=启用 0=禁用）"),
 
             // entity.salesorder.deliverystatus
             new TranslationSeedItem("entity.salesorder.deliverystatus", "en-US", "交货状态_us", "交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）"),

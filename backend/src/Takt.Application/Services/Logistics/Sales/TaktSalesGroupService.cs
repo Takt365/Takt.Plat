@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesGroupService.cs
-// 创建时间：2026-07-08
+// 创建时间：2026-08-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售组主数据应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktSalesGroupService : TaktServiceBase, ITaktSalesGroupService
     }
 
     /// <summary>
-    /// 获取销售组主数据列表（分页）
+    /// 获取销售组主数据列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSalesGroupDto>> GetSalesGroupListAsync(TaktSalesGroupQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSalesGroupDto>.Create(
+                new List<TaktSalesGroupDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _salesGroupRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -249,6 +257,31 @@ public class TaktSalesGroupService : TaktServiceBase, ITaktSalesGroupService
     }
 
     /// <summary>
+    /// 更新销售组主数据内置
+    /// </summary>
+    /// <param name="dto">内置 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSalesGroupDto> UpdateSalesGroupBuiltInAsync(TaktSalesGroupBuiltInDto dto)
+    {
+        var entity = await _salesGroupRepository.GetByIdAsync(dto.SalesGroupId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("销售组主数据不存在");
+        }
+        if (dto.IsBuiltIn is not 0 and not 1)
+        {
+            throw new TaktBusinessException("内置必须为字典 sys_yes_no 合法值（0=否，1=是）");
+        }
+        if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
+        {
+            throw new TaktBusinessException("不允许取消内置销售组主数据标识");
+        }
+        entity.IsBuiltIn = dto.IsBuiltIn;
+        await _salesGroupRepository.UpdateAsync(entity);
+        return await GetSalesGroupByIdAsync(dto.SalesGroupId) ?? throw new TaktBusinessException("销售组主数据不存在");
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -326,7 +359,15 @@ public class TaktSalesGroupService : TaktServiceBase, ITaktSalesGroupService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSalesGroupAsync(TaktSalesGroupQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSalesGroupQueryDto());
+        var queryDto = query ?? new TaktSalesGroupQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSalesGroupExportDto>(),
+                sheetName ?? "销售组主数据数据",
+                fileName ?? "销售组主数据导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _salesGroupRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -355,102 +396,186 @@ public class TaktSalesGroupService : TaktServiceBase, ITaktSalesGroupService
     {
         var exp = Expressionable.Create<TaktSalesGroup>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SalesGroupCode != null && x.SalesGroupCode.Contains(keywords))
                 || (x.SalesGroupName != null && x.SalesGroupName.Contains(keywords))
                 || (x.SalesGroupDescription != null && x.SalesGroupDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ResponsibleUserId).Contains(keywords)
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.GroupStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesGroupCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.SalesGroupCode != null && x.SalesGroupCode.Contains(queryDto.SalesGroupCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesGroupName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesGroupCode))
         {
-            exp = exp.And(x => x.SalesGroupName != null && x.SalesGroupName.Contains(queryDto.SalesGroupName));
+            var salesGroupCode = queryDto.SalesGroupCode;
+            exp = exp.And(x => x.SalesGroupCode != null && x.SalesGroupCode.Contains(salesGroupCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesGroupDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesGroupName))
         {
-            exp = exp.And(x => x.SalesGroupDescription != null && x.SalesGroupDescription.Contains(queryDto.SalesGroupDescription));
+            var salesGroupName = queryDto.SalesGroupName;
+            exp = exp.And(x => x.SalesGroupName != null && x.SalesGroupName.Contains(salesGroupName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesGroupDescription))
+        {
+            var salesGroupDescription = queryDto.SalesGroupDescription;
+            exp = exp.And(x => x.SalesGroupDescription != null && x.SalesGroupDescription.Contains(salesGroupDescription));
         }
 
         if (queryDto?.ResponsibleUserId.HasValue == true)
         {
-            exp = exp.And(x => x.ResponsibleUserId == queryDto.ResponsibleUserId);
+            var responsibleUserId = queryDto.ResponsibleUserId.Value;
+            exp = exp.And(x => x.ResponsibleUserId == responsibleUserId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactPhone))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {
-            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(queryDto.ContactPhone));
+            var contactPhone = queryDto.ContactPhone;
+            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(contactPhone));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactEmail))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactEmail))
         {
-            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(queryDto.ContactEmail));
+            var contactEmail = queryDto.ContactEmail;
+            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(contactEmail));
         }
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.GroupStatus.HasValue == true)
         {
-            exp = exp.And(x => x.GroupStatus == queryDto.GroupStatus);
+            var groupStatus = queryDto.GroupStatus.Value;
+            exp = exp.And(x => x.GroupStatus == groupStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSalesGroupQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesGroupCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesGroupName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesGroupDescription))
+        {
+            return true;
+        }
+        if (queryDto.ResponsibleUserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactPhone))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactEmail))
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GroupStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

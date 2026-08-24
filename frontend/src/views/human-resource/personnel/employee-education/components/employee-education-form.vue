@@ -2,15 +2,14 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-education/components -->
 <!-- 文件名称：employee-education-form.vue -->
-<!-- 功能描述：员工教育经历维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：员工实体子表 employeeEducation 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
-<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form"
+    class="takt-generated-form employee-education-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,26 +26,40 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeeducation.employeeid')"
-                name="employeeId"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('schoolName')"
+                name="schoolName"
               >
                 <a-input
-                  v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.employeeid') })"
+                  v-model:value="formState.schoolName"
+                  :placeholder="pi.ph('schoolName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -55,80 +68,92 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeeducation.schoolname')"
-                name="schoolName"
-              >
-                <a-input
-                  v-model:value="formState.schoolName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.schoolname') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.employeeeducation.educationlevel')"
+                :label="pi.label('educationLevel')"
                 name="educationLevel"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.educationLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.educationlevel') })"
-                  style="width: 100%"
+                  dict-type="hr_education_level_category"
+                  :placeholder="pi.ph('educationLevel')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeeducation.degreelevel')"
+                :label="pi.label('degreeLevel')"
                 name="degreeLevel"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.degreeLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.degreelevel') })"
-                  style="width: 100%"
+                  dict-type="hr_degree_level_category"
+                  :placeholder="pi.ph('degreeLevel')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeeducation.majorname')"
+                :label="pi.label('majorName')"
                 name="majorName"
               >
                 <a-input
                   v-model:value="formState.majorName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.majorname') })"
+                  :placeholder="pi.ph('majorName')"
                   show-count
-                  :maxlength="100"
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeeducation.CertificateCode')"
-                name="CertificateCode"
+                :label="pi.label('certificateCode')"
+                name="certificateCode"
               >
                 <a-input
-                  v-model:value="formState.CertificateCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.CertificateCode') })"
+                  v-model:value="formState.certificateCode"
+                  :placeholder="pi.ph('certificateCode')"
                   show-count
-                  :maxlength="100"
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.employeeEducationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeeducation.startdate')"
+                :label="pi.label('startDate')"
                 name="startDate"
               >
                 <a-date-picker
                   v-model:value="formState.startDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeeducation.startdate') })"
+                  :placeholder="pi.ph('startDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('endDate')"
+                name="endDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.endDate"
+                  :placeholder="pi.ph('endDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isHighest')"
+                name="isHighest"
+              >
+                <TaktSelect
+                  v-model:value="formState.isHighest"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isHighest')"
                 />
               </a-form-item>
             </a-col>
@@ -142,69 +167,30 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeeducation.enddate')"
-                name="endDate"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
-                <a-date-picker
-                  v-model:value="formState.endDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeeducation.enddate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.employeeeducation.ishighest')"
-                name="isHighest"
-              >
-                <a-input-number
-                  v-model:value="formState.isHighest"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.ishighest') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
-                  :maxlength="400"
-                  allow-clear
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -217,62 +203,78 @@
 
 <script setup lang="ts">
 /**
- * 员工教育经历维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 员工实体子表 employeeEducation 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/human-resource/personnel/employee-education/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useEmployeeEducationI18n } from '../composables/use-employee-education-i18n'
+
+/** 实体字段 i18n */
+const pi = useEmployeeEducationI18n()
+
 import type { EmployeeEducationCreate } from '@/types/human-resource/personnel/employee-education'
-import { RiQuestionLine } from '@remixicon/vue'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","employeeId","schoolName","educationLevel","degreeLevel","majorName","CertificateCode","startDate","endDate","isHighest","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","schoolName","educationLevel","degreeLevel","majorName","certificateCode","startDate","endDate","isHighest"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<EmployeeEducationCreate & { employeeEducationId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
+  /** 主表选中行 Id（Create/Update 提交时写入外键） */
+  masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
+  masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -283,6 +285,14 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 employeeEducationId 才视为编辑） */
 watch(
@@ -310,10 +320,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.employeeEducationId
-    if (isCreate) {
+    if (!props.formData?.employeeEducationId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -321,28 +330,21 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  employeeId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.employeeid') }),
-      trigger: 'blur'
-    }
-  ],
   schoolName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.schoolname') }),
+      message: pi.ph('schoolName'),
       trigger: 'blur'
     }
   ],
   isHighest: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeeeducation.ishighest') }))
+        return Promise.reject(pi.ph('isHighest'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeeeducation.ishighest') }))
+        return Promise.reject(pi.ph('isHighest'))
       }
       return Promise.resolve()
     },
@@ -356,26 +358,73 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO */
+/** 映射为 Create/Update DTO（含主表外键 employeeId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('educationLevel' in payload) {
     const raweducationLevel = payload.educationLevel
-    payload.educationLevel = typeof raweducationLevel === 'number' ? raweducationLevel : Number(raweducationLevel)
+    if (raweducationLevel === undefined || raweducationLevel === null || raweducationLevel === '') {
+      delete payload.educationLevel
+    } else {
+      const numeducationLevel = typeof raweducationLevel === 'number' ? raweducationLevel : Number(raweducationLevel)
+      if (Number.isFinite(numeducationLevel)) payload.educationLevel = numeducationLevel
+      else delete payload.educationLevel
+    }
   }
   if ('degreeLevel' in payload) {
     const rawdegreeLevel = payload.degreeLevel
-    payload.degreeLevel = typeof rawdegreeLevel === 'number' ? rawdegreeLevel : Number(rawdegreeLevel)
+    if (rawdegreeLevel === undefined || rawdegreeLevel === null || rawdegreeLevel === '') {
+      delete payload.degreeLevel
+    } else {
+      const numdegreeLevel = typeof rawdegreeLevel === 'number' ? rawdegreeLevel : Number(rawdegreeLevel)
+      if (Number.isFinite(numdegreeLevel)) payload.degreeLevel = numdegreeLevel
+      else delete payload.degreeLevel
+    }
   }
   if ('isHighest' in payload) {
     const rawisHighest = payload.isHighest
-    payload.isHighest = typeof rawisHighest === 'number' ? rawisHighest : Number(rawisHighest)
+    if (rawisHighest === undefined || rawisHighest === null || rawisHighest === '') {
+      delete payload.isHighest
+    } else {
+      const numisHighest = typeof rawisHighest === 'number' ? rawisHighest : Number(rawisHighest)
+      if (Number.isFinite(numisHighest)) payload.isHighest = numisHighest
+      else delete payload.isHighest
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.employeeEducationId) {
+    payload.employeeEducationId = props.formData.employeeEducationId
+  }
+  payload.employeeId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.employeeCode ?? masterRow.EmployeeCode
+    const masterName = masterRow.employeeName ?? masterRow.EmployeeName
+    if (masterCode != null && masterCode !== '' && !payload.employeeCode) {
+      payload.employeeCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.employeeName) {
+      payload.employeeName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
-/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
+/** 重置表单（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
@@ -383,7 +432,6 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.employeeEducationId)
-
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

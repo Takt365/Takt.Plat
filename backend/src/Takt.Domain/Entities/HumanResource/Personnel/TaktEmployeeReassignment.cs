@@ -94,4 +94,14 @@ public class TaktEmployeeReassignment : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "reason", ColumnDescription = "调动原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? Reason { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

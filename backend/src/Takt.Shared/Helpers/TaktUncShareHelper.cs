@@ -67,17 +67,17 @@ public static class TaktUncShareHelper
     /// 使用可选凭据临时连接 UNC 共享；Dispose 时取消连接
     /// </summary>
     /// <param name="uncPath">任意位于共享下的 UNC 路径</param>
-    /// <param name="userName">用户名（可含 DOMAIN\user）；空则不挂载</param>
+    /// <param name="UserName">用户名（可含 DOMAIN\user）；空则不挂载</param>
     /// <param name="password">密码；与用户名同时为空则不挂载</param>
     /// <returns>连接作用域；须 using</returns>
     /// <exception cref="ArgumentException">路径非法</exception>
     /// <exception cref="InvalidOperationException">挂载失败（非 Windows 或 WNet 错误）</exception>
     [SupportedOSPlatform("windows")]
-    public static IDisposable Connect(string uncPath, string? userName, string? password)
+    public static IDisposable Connect(string uncPath, string? UserName, string? password)
     {
         var normalized = NormalizeUncPath(uncPath);
         var shareRoot = GetShareRoot(normalized);
-        if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(UserName) && string.IsNullOrWhiteSpace(password))
         {
             return NullScope.Instance;
         }
@@ -85,19 +85,19 @@ public static class TaktUncShareHelper
         {
             throw new InvalidOperationException("带凭据的 UNC 浏览仅支持 Windows 宿主");
         }
-        ConnectShare(shareRoot, userName?.Trim(), password ?? string.Empty);
+        ConnectShare(shareRoot, UserName?.Trim(), password ?? string.Empty);
         return new UncConnectionScope(shareRoot);
     }
 
     [SupportedOSPlatform("windows")]
-    private static void ConnectShare(string shareRoot, string? userName, string password)
+    private static void ConnectShare(string shareRoot, string? UserName, string password)
     {
         var resource = new NetResource
         {
             dwType = ResourceTypeDisk,
             lpRemoteName = shareRoot,
         };
-        var result = WNetAddConnection2(ref resource, password, userName, ConnectTemporary);
+        var result = WNetAddConnection2(ref resource, password, UserName, ConnectTemporary);
         if (result == NoError || result == ErrorAlreadyAssigned)
         {
             return;
@@ -105,7 +105,7 @@ public static class TaktUncShareHelper
         if (result == ErrorSessionCredentialConflict)
         {
             WNetCancelConnection2(shareRoot, 0, true);
-            result = WNetAddConnection2(ref resource, password, userName, ConnectTemporary);
+            result = WNetAddConnection2(ref resource, password, UserName, ConnectTemporary);
             if (result == NoError || result == ErrorAlreadyAssigned)
             {
                 return;
@@ -118,7 +118,7 @@ public static class TaktUncShareHelper
     private static extern int WNetAddConnection2(
         ref NetResource lpNetResource,
         string lpPassword,
-        string? lpUsername,
+        string? lpUserName,
         int dwFlags);
 
     [DllImport("mpr.dll", CharSet = CharSet.Unicode)]

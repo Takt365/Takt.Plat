@@ -54,7 +54,7 @@ export interface SopStepCheckItem extends CompanyDtoBase {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no，0=否，1=是）
    */
   isRequired?: number;
 
@@ -107,7 +107,7 @@ export interface SopStepCheckItemExport {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no，0=否，1=是）
    */
   isRequired: number;
 

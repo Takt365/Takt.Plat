@@ -81,16 +81,43 @@ public class TaktNumberingsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取编码规则选项列表
+    /// 预览下一个业务编码（登录即可；不占用流水号，供表单选类型后展示）
     /// </summary>
-    /// <returns>下拉选项</returns>
-    [TaktPermission("foundation:numbering:query", "编码规则选项")]
-    [HttpGet("options")]
-    public async Task<IActionResult> GetNumberingOptionsAsync()
+    /// <param name="ruleCode">规则编码</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>预览结果</returns>
+    [HttpGet("preview-next")]
+    public async Task<IActionResult> PreviewNumberingNextAsync(
+        [FromQuery] string ruleCode,
+        CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _numberingService.GetNumberingOptionsAsync();
+            if (string.IsNullOrWhiteSpace(ruleCode))
+            {
+                return BadRequest("规则编码不能为空");
+            }
+            var result = await _numberingService.PreviewNumberingNextAsync(ruleCode, cancellationToken);
+            return Success(result, "预览成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取编码规则选项列表
+    /// </summary>
+    /// <param name="documentType">单据类型（菜单名称）；有值时仅返回该类型规则</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("foundation:numbering:query", "编码规则选项")]
+    [HttpGet("options")]
+    public async Task<IActionResult> GetNumberingOptionsAsync([FromQuery] string? documentType = null)
+    {
+        try
+        {
+            var result = await _numberingService.GetNumberingOptionsAsync(documentType);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

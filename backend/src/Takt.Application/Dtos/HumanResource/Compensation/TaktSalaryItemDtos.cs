@@ -37,12 +37,12 @@ public class TaktSalaryItemDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -125,22 +125,22 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     public int? VestingYears { get; set; }
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no_type）
+    /// 是否扣款项（字典 sys_yes_no）
     /// </summary>
     public int? IsDeduction { get; set; }
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no_type）
+    /// 是否计入应税所得（字典 sys_yes_no）
     /// </summary>
     public int? IsTaxable { get; set; }
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no_type）
+    /// 是否计入社保基数（字典 sys_yes_no）
     /// </summary>
     public int? IncludeSocialSecurityBase { get; set; }
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no_type）
+    /// 是否计入公积金基数（字典 sys_yes_no）
     /// </summary>
     public int? IncludeHousingFundBase { get; set; }
 
@@ -150,12 +150,12 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -259,22 +259,22 @@ public class TaktSalaryItemCreateDto
     public int VestingYears { get; set; } = 0;
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no_type）
+    /// 是否扣款项（字典 sys_yes_no）
     /// </summary>
     public int IsDeduction { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no_type）
+    /// 是否计入应税所得（字典 sys_yes_no）
     /// </summary>
     public int IsTaxable { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no_type）
+    /// 是否计入社保基数（字典 sys_yes_no）
     /// </summary>
     public int IncludeSocialSecurityBase { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no_type）
+    /// 是否计入公积金基数（字典 sys_yes_no）
     /// </summary>
     public int IncludeHousingFundBase { get; set; } = 0;
 
@@ -285,7 +285,7 @@ public class TaktSalaryItemCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -339,9 +339,9 @@ public class TaktSalaryItemStatusDto
     public long SalaryItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int ItemStatus { get; set; } = 0;
 }
 
@@ -363,7 +363,7 @@ public class TaktSalaryItemSortDto
     public long SalaryItemId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -445,22 +445,22 @@ public class TaktSalaryItemTemplateDto
     public int? VestingYears { get; set; }
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no_type）
+    /// 是否扣款项（字典 sys_yes_no）
     /// </summary>
     public int? IsDeduction { get; set; }
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no_type）
+    /// 是否计入应税所得（字典 sys_yes_no）
     /// </summary>
     public int? IsTaxable { get; set; }
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no_type）
+    /// 是否计入社保基数（字典 sys_yes_no）
     /// </summary>
     public int? IncludeSocialSecurityBase { get; set; }
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no_type）
+    /// 是否计入公积金基数（字典 sys_yes_no）
     /// </summary>
     public int? IncludeHousingFundBase { get; set; }
 
@@ -470,7 +470,7 @@ public class TaktSalaryItemTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -559,22 +559,22 @@ public class TaktSalaryItemImportDto
     public int? VestingYears { get; set; }
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no_type）
+    /// 是否扣款项（字典 sys_yes_no）
     /// </summary>
     public int? IsDeduction { get; set; }
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no_type）
+    /// 是否计入应税所得（字典 sys_yes_no）
     /// </summary>
     public int? IsTaxable { get; set; }
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no_type）
+    /// 是否计入社保基数（字典 sys_yes_no）
     /// </summary>
     public int? IncludeSocialSecurityBase { get; set; }
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no_type）
+    /// 是否计入公积金基数（字典 sys_yes_no）
     /// </summary>
     public int? IncludeHousingFundBase { get; set; }
 
@@ -584,7 +584,7 @@ public class TaktSalaryItemImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -673,22 +673,22 @@ public class TaktSalaryItemExportDto
     public int VestingYears { get; set; } = 0;
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no_type）
+    /// 是否扣款项（字典 sys_yes_no）
     /// </summary>
     public int IsDeduction { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no_type）
+    /// 是否计入应税所得（字典 sys_yes_no）
     /// </summary>
     public int IsTaxable { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no_type）
+    /// 是否计入社保基数（字典 sys_yes_no）
     /// </summary>
     public int IncludeSocialSecurityBase { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no_type）
+    /// 是否计入公积金基数（字典 sys_yes_no）
     /// </summary>
     public int IncludeHousingFundBase { get; set; } = 0;
 
@@ -698,12 +698,12 @@ public class TaktSalaryItemExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 

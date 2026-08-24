@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Benefits
 // 文件名称：TaktEmpBenefitPlanValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmpBenefitPlan 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmpBenefitPlan 生成，请按需审阅）
 // 
@@ -36,15 +36,15 @@ public class TaktEmpBenefitPlanCreateValidator : AbstractValidator<TaktEmpBenefi
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
         RuleFor(x => x.EmployeeName)
-            .NotEmpty().WithMessage("员工姓名不能为空")
+            .NotEmpty().WithMessage("员工姓名不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(50).WithMessage("员工姓名长度不能超过50个字符");
         RuleFor(x => x.BenefitItemId)
             .GreaterThanOrEqualTo(0).WithMessage("福利项目不能为负数");
@@ -81,15 +81,15 @@ public class TaktEmpBenefitPlanUpdateValidator : AbstractValidator<TaktEmpBenefi
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
         RuleFor(x => x.EmployeeName)
-            .NotEmpty().WithMessage("员工姓名不能为空")
+            .NotEmpty().WithMessage("员工姓名不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(50).WithMessage("员工姓名长度不能超过50个字符");
         RuleFor(x => x.BenefitItemId)
             .GreaterThanOrEqualTo(0).WithMessage("福利项目不能为负数");

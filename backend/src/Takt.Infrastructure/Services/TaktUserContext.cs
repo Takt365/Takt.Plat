@@ -284,8 +284,8 @@ public class TaktUserContext : ITaktUserContext
             return stashed;
         }
 
-        var userName = ResolveAuditUserName(httpContext);
-        if (string.Equals(userName, TaktConstants.AuditUserName.Unknown, StringComparison.Ordinal))
+        var UserName = ResolveAuditUserName(httpContext);
+        if (string.Equals(UserName, TaktConstants.AuditUserName.Unknown, StringComparison.Ordinal))
         {
             return TaktAuditContextRemarks.DefaultUnknownOperator;
         }
@@ -298,12 +298,12 @@ public class TaktUserContext : ITaktUserContext
     /// </summary>
     /// <param name="httpContext">HTTP 上下文</param>
     /// <param name="userId">用户 ID</param>
-    /// <param name="userName">登录名</param>
+    /// <param name="UserName">登录名</param>
     /// <param name="contextRemark">审计 Remark（如登出时用户名未知的原因）</param>
     public static void StashAuditOperator(
         HttpContext? httpContext,
         long? userId,
-        string? userName,
+        string? UserName,
         string? contextRemark = null)
     {
         if (httpContext == null)
@@ -316,7 +316,7 @@ public class TaktUserContext : ITaktUserContext
             httpContext.Items[TaktHttpContextItemKeys.AuditOperatorUserId] = userId.Value;
         }
 
-        var normalizedUserName = userName?.Trim();
+        var normalizedUserName = UserName?.Trim();
         if (!string.IsNullOrWhiteSpace(normalizedUserName))
         {
             httpContext.Items[TaktHttpContextItemKeys.AuditOperatorUserName] = normalizedUserName;
@@ -342,8 +342,8 @@ public class TaktUserContext : ITaktUserContext
         string? fallbackUserName = null)
     {
         var userId = TryResolveUserId(principal) ?? fallbackUserId;
-        var userName = TryResolveUserName(principal) ?? fallbackUserName;
-        return (userId, userName);
+        var UserName = TryResolveUserName(principal) ?? fallbackUserName;
+        return (userId, UserName);
     }
 
     /// <summary>

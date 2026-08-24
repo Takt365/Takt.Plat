@@ -141,7 +141,7 @@ async function loadUserCompanies() {
     loading.value = true
     optionsLoading.value = true
     const u = props.user
-    userInfo.value = `${u.username || u.userName || ''}（${u.nickname || u.nickName || ''}）`
+    userInfo.value = `${u.userName || u.userName || ''}（${u.nickName || u.nickName || ''}）`
     const [allCompanies, userCompanies] = await Promise.all([
       getCompanyOptions(),
       getUserCompanyIds(String(u.userId))

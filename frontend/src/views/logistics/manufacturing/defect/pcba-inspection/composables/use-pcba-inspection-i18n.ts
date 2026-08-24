@@ -20,7 +20,6 @@ export const PCBAINSPECTION_SELF_I18N_KEY = buildEntitySelfI18nKey(PCBAINSPECTIO
 
 /** 列表业务列（不含主键） */
 export const PCBAINSPECTION_LIST_FIELDS = [
-  'plantCode',
   'prodCategory',
   'prodOrderType',
   'prodOrderCode',
@@ -28,23 +27,12 @@ export const PCBAINSPECTION_LIST_FIELDS = [
   'modelCode',
   'batchCode',
   'materialCode',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PCBAINSPECTION_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'optional',
-  prodCategory: 'select',
-  prodOrderType: 'optional',
-  prodOrderCode: 'select',
-  prodOrderQty: 'select',
-  modelCode: 'required',
-  batchCode: 'optional',
-  materialCode: 'required',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -52,28 +40,13 @@ export type PcbaInspectionField = keyof typeof PCBAINSPECTION_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PCBAINSPECTION_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'prodCategory',
-  'prodOrderType',
-  'prodOrderCode',
-  'modelCode',
-  'batchCode',
-  'materialCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PcbaInspectionQuery)[]
 
-export type PcbaInspectionQueryField =
-  | (typeof PCBAINSPECTION_QUERY_STRING_FIELDS)[number]
-  | 'prodOrderQty'
+export type PcbaInspectionQueryField = (typeof PCBAINSPECTION_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PCBAINSPECTION_QUERY_FIELDS: readonly PcbaInspectionQueryField[] = [
-  ...PCBAINSPECTION_QUERY_STRING_FIELDS,
-  'prodOrderQty',
-]
+export const PCBAINSPECTION_QUERY_FIELDS: readonly PcbaInspectionQueryField[] = [...PCBAINSPECTION_QUERY_STRING_FIELDS]
 
 /**
  * PCBA检查日报实体 不良率字段 i18n：index / pcba-inspection-form 统一入口

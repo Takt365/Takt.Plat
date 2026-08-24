@@ -142,7 +142,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.sopStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopdoc.sopstatus') })"
                 />
               </a-form-item>

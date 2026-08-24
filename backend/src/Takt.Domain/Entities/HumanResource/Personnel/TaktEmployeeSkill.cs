@@ -67,4 +67,14 @@ public class TaktEmployeeSkill : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "到期日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPlantDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Plant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPlant 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 // ========================================
 
 /// <summary>
-/// Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
+/// Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
 /// 对应前端 TaktPlantDto
 /// 继承 TaktTenantCultureDtoBase
 /// </summary>
@@ -266,12 +266,12 @@ public class TaktPlantDto : TaktTenantCultureDtoBase
     public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int PlantStatus { get; set; } = 0;
 
@@ -538,12 +538,12 @@ public class TaktPlantQueryDto : TaktPagedQuery
     public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? PlantStatus { get; set; }
 
@@ -855,7 +855,7 @@ public class TaktPlantCreateDto
     public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int PlantStatus { get; set; } = 0;
 
@@ -909,9 +909,9 @@ public class TaktPlantStatusDto
     public long PlantId { get; set; }
 
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
+    [Required(ErrorMessage = "工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）不能为空")]
     public int PlantStatus { get; set; } = 0;
 }
 
@@ -933,9 +933,9 @@ public class TaktPlantSortDto
     public long PlantId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -1189,7 +1189,7 @@ public class TaktPlantTemplateDto
     public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? PlantStatus { get; set; }
 
@@ -1451,7 +1451,7 @@ public class TaktPlantImportDto
     public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? PlantStatus { get; set; }
 
@@ -1719,12 +1719,12 @@ public class TaktPlantExportDto
     public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int PlantStatus { get; set; } = 0;
 

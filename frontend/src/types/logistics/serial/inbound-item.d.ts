@@ -54,7 +54,7 @@ export interface SerialInboundItem extends CompanyDtoBase {
   inboundSerialCode: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -104,7 +104,7 @@ export interface SerialInboundItemQuery extends TaktPagedQuery {
   inboundSerialCode?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -176,7 +176,7 @@ export interface SerialInboundItemCreate {
   inboundSerialCode: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -220,7 +220,7 @@ export interface SerialInboundItemObsolete {
   serialInboundItemId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -264,7 +264,7 @@ export interface SerialInboundItemTemplate {
   inboundSerialCode?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -326,7 +326,7 @@ export interface SerialInboundItemImport {
   inboundSerialCode?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -380,7 +380,7 @@ export interface SerialInboundItemExport {
   inboundSerialCode: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

@@ -160,7 +160,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "")]
     public string CustomerCode { get; set; } = string.Empty;
     /// <summary>
-    /// 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有客户的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "clearing_with_customer", ColumnDescription = "具有客户的清算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ClearingWithCustomer { get; set; } = 0;
@@ -190,7 +190,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "account_holder", ColumnDescription = "帐户持有人", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
     public string AccountHolder { get; set; } = string.Empty;
     /// <summary>
-    /// 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票验证（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "gr_based_invoice_inspection", ColumnDescription = "基于收货的发票验证", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int GrBasedInvoiceInspection { get; set; } = 0;
@@ -205,7 +205,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "incoterms2", ColumnDescription = "国际贸易条件2", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string Incoterms2 { get; set; } = string.Empty;
     /// <summary>
-    /// 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+    /// 自动产生的采购订单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "automatic_purchase_order", ColumnDescription = "自动产生的采购订单", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AutomaticPurchaseOrder { get; set; } = 0;
@@ -225,7 +225,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "planned_delivery_time_days", ColumnDescription = "计划交货时间", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PlannedDeliveryTimeDays { get; set; } = 0;
     /// <summary>
-    /// 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+    /// 评估收据结算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "evaluated_receipt_settlement", ColumnDescription = "评估收据结算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluatedReceiptSettlement { get; set; } = 0;
@@ -265,12 +265,12 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "evaluation_score", ColumnDescription = "评价分数", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal EvaluationScore { get; set; } = 0;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 经销商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 经销商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "vendor_status", ColumnDescription = "经销商状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int VendorStatus { get; set; } = 1;

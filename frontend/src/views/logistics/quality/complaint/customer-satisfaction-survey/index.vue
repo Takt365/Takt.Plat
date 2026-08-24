@@ -74,37 +74,7 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'surveyMethod'">
-          <TaktDictTag
-            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyMethod')"
-            dict-type="logistics_quality_survey_method"
-          />
-        </template>
-        <template v-else-if="column.key === 'surveyType'">
-          <TaktDictTag
-            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyType')"
-            dict-type="logistics_quality_survey_type"
-          />
-        </template>
-        <template v-else-if="column.key === 'surveyPeriod'">
-          <TaktDictTag
-            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyPeriod')"
-            dict-type="logistics_quality_period"
-          />
-        </template>
-        <template v-else-if="column.key === 'overallSatisfaction'">
-          <TaktDictTag
-            :value="getCustomerSatisfactionSurveyDictValue(record, 'overallSatisfaction')"
-            dict-type="logistics_quality_satisfaction_level"
-          />
-        </template>
-        <template v-else-if="column.key === 'surveyStatus'">
-          <TaktDictTag
-            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyStatus')"
-            dict-type="logistics_quality_survey_status"
-          />
-        </template>
-        <template v-else-if="column.key === 'followUpStatus'">
+        <template v-if="column.key === 'followUpStatus'">
           <TaktDictTag
             :value="getCustomerSatisfactionSurveyDictValue(record, 'followUpStatus')"
             dict-type="logistics_quality_follow_up_status"
@@ -147,340 +117,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('customerSatisfactionSurveyCode')">
-      <a-form-item :label="pi.queryLabel('customerSatisfactionSurveyCode')">
-        <a-input
-          v-model:value="advancedQueryForm.customerSatisfactionSurveyCode"
-          :placeholder="pi.queryPh('customerSatisfactionSurveyCode', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerId')">
-      <a-form-item :label="pi.queryLabel('customerId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.customerId"
-          api-url="TaktCustomers/options"
-          :placeholder="pi.queryPh('customerId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerName1')">
-      <a-form-item :label="pi.queryLabel('customerName1')">
-        <a-input
-          v-model:value="advancedQueryForm.customerName1"
-          :placeholder="pi.queryPh('customerName1', 'required')"
-          show-count
-          :maxlength="140"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="pi.queryLabel('customerCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.customerCode"
-          api-url="TaktCustomers/options"
-          :placeholder="pi.queryPh('customerCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('surveyDateStart')">
-      <a-form-item :label="pi.queryLabel('surveyDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.surveyDateStart"
-          :placeholder="pi.queryPh('surveyDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('surveyDateEnd')">
-      <a-form-item :label="pi.queryLabel('surveyDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.surveyDateEnd"
-          :placeholder="pi.queryPh('surveyDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('surveyMethod')">
-      <a-form-item :label="pi.queryLabel('surveyMethod')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.surveyMethod"
-          dict-type="logistics_quality_survey_method"
-          :placeholder="pi.queryPh('surveyMethod', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('surveyType')">
-      <a-form-item :label="pi.queryLabel('surveyType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.surveyType"
-          dict-type="logistics_quality_survey_type"
-          :placeholder="pi.queryPh('surveyType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('surveyPeriod')">
-      <a-form-item :label="pi.queryLabel('surveyPeriod')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.surveyPeriod"
-          dict-type="logistics_quality_period"
-          :placeholder="pi.queryPh('surveyPeriod', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('surveyorBy')">
-      <a-form-item :label="pi.queryLabel('surveyorBy')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.surveyorBy"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('surveyorBy', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerContact')">
-      <a-form-item :label="pi.queryLabel('customerContact')">
-        <a-input
-          v-model:value="advancedQueryForm.customerContact"
-          :placeholder="pi.queryPh('customerContact', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerPhone')">
-      <a-form-item :label="pi.queryLabel('customerPhone')">
-        <a-input
-          v-model:value="advancedQueryForm.customerPhone"
-          :placeholder="pi.queryPh('customerPhone', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('overallSatisfaction')">
-      <a-form-item :label="pi.queryLabel('overallSatisfaction')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.overallSatisfaction"
-          dict-type="logistics_quality_satisfaction_level"
-          :placeholder="pi.queryPh('overallSatisfaction', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('totalScore')">
-      <a-form-item :label="pi.queryLabel('totalScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.totalScore"
-          :placeholder="pi.queryPh('totalScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('qualityScore')">
-      <a-form-item :label="pi.queryLabel('qualityScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.qualityScore"
-          :placeholder="pi.queryPh('qualityScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deliveryScore')">
-      <a-form-item :label="pi.queryLabel('deliveryScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.deliveryScore"
-          :placeholder="pi.queryPh('deliveryScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('serviceScore')">
-      <a-form-item :label="pi.queryLabel('serviceScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.serviceScore"
-          :placeholder="pi.queryPh('serviceScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('priceScore')">
-      <a-form-item :label="pi.queryLabel('priceScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.priceScore"
-          :placeholder="pi.queryPh('priceScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('technicalScore')">
-      <a-form-item :label="pi.queryLabel('technicalScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.technicalScore"
-          :placeholder="pi.queryPh('technicalScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerPraise')">
-      <a-form-item :label="pi.queryLabel('customerPraise')">
-        <a-input
-          v-model:value="advancedQueryForm.customerPraise"
-          :placeholder="pi.queryPh('customerPraise', 'required')"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerFeedback')">
-      <a-form-item :label="pi.queryLabel('customerFeedback')">
-        <a-input
-          v-model:value="advancedQueryForm.customerFeedback"
-          :placeholder="pi.queryPh('customerFeedback', 'required')"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('improvementPlan')">
-      <a-form-item :label="pi.queryLabel('improvementPlan')">
-        <a-input
-          v-model:value="advancedQueryForm.improvementPlan"
-          :placeholder="pi.queryPh('improvementPlan', 'required')"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('relatedComplaintId')">
-      <a-form-item :label="pi.queryLabel('relatedComplaintId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.relatedComplaintId"
-          api-url="TaktCustomerComplaints/options"
-          :placeholder="pi.queryPh('relatedComplaintId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('attachments')">
-      <a-form-item :label="pi.queryLabel('attachments')">
-        <a-input
-          v-model:value="advancedQueryForm.attachments"
-          :placeholder="pi.queryPh('attachments', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('surveyStatus')">
-      <a-form-item :label="pi.queryLabel('surveyStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.surveyStatus"
-          dict-type="logistics_quality_survey_status"
-          :placeholder="pi.queryPh('surveyStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('followUpStatus')">
-      <a-form-item :label="pi.queryLabel('followUpStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.followUpStatus"
-          dict-type="logistics_quality_follow_up_status"
-          :placeholder="pi.queryPh('followUpStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -541,7 +178,7 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   useCustomerSatisfactionSurveyI18n,
@@ -596,7 +233,26 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -606,18 +262,6 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    surveyMethod: undefined as number | undefined,
-    surveyType: undefined as number | undefined,
-    surveyPeriod: undefined as number | undefined,
-    overallSatisfaction: undefined as number | undefined,
-    totalScore: undefined as number | undefined,
-    qualityScore: undefined as number | undefined,
-    deliveryScore: undefined as number | undefined,
-    serviceScore: undefined as number | undefined,
-    priceScore: undefined as number | undefined,
-    technicalScore: undefined as number | undefined,
-    surveyStatus: undefined as number | undefined,
-    followUpStatus: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -648,7 +292,7 @@ const { selectedMasterRow } = provideCustomerSatisfactionSurveyMasterContext()
 const customerSatisfactionSurveyItemPanelRef = ref<InstanceType<typeof CustomerSatisfactionSurveyItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {CustomerSatisfactionSurveyQuery} 查询 DTO
  */
@@ -672,50 +316,15 @@ function buildListQuery(overrides?: Partial<CustomerSatisfactionSurveyQuery>): C
   for (const key of CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.surveyMethod !== undefined && form.surveyMethod !== null) {
-    query.surveyMethod = form.surveyMethod
-  }
-  if (form.surveyType !== undefined && form.surveyType !== null) {
-    query.surveyType = form.surveyType
-  }
-  if (form.surveyPeriod !== undefined && form.surveyPeriod !== null) {
-    query.surveyPeriod = form.surveyPeriod
-  }
-  if (form.overallSatisfaction !== undefined && form.overallSatisfaction !== null) {
-    query.overallSatisfaction = form.overallSatisfaction
-  }
-  if (form.totalScore !== undefined && form.totalScore !== null) {
-    query.totalScore = form.totalScore
-  }
-  if (form.qualityScore !== undefined && form.qualityScore !== null) {
-    query.qualityScore = form.qualityScore
-  }
-  if (form.deliveryScore !== undefined && form.deliveryScore !== null) {
-    query.deliveryScore = form.deliveryScore
-  }
-  if (form.serviceScore !== undefined && form.serviceScore !== null) {
-    query.serviceScore = form.serviceScore
-  }
-  if (form.priceScore !== undefined && form.priceScore !== null) {
-    query.priceScore = form.priceScore
-  }
-  if (form.technicalScore !== undefined && form.technicalScore !== null) {
-    query.technicalScore = form.technicalScore
-  }
-  if (form.surveyStatus !== undefined && form.surveyStatus !== null) {
-    query.surveyStatus = form.surveyStatus
-  }
-  if (form.followUpStatus !== undefined && form.followUpStatus !== null) {
-    query.followUpStatus = form.followUpStatus
-  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -780,232 +389,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerSatisfactionSurveyId') ?? ''
   },
   {
-    title: pi.label('customerSatisfactionSurveyCode'),
-    dataIndex: 'customerSatisfactionSurveyCode',
-    key: 'customerSatisfactionSurveyCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerSatisfactionSurveyCode') ?? ''
-  },
-  {
-    title: pi.label('customerId'),
-    dataIndex: 'customerId',
-    key: 'customerId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerId') ?? ''
-  },
-  {
-    title: pi.label('customerName1'),
-    dataIndex: 'customerName1',
-    key: 'customerName1',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerName1') ?? ''
-  },
-  {
-    title: pi.label('customerCode'),
-    dataIndex: 'customerCode',
-    key: 'customerCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerCode') ?? ''
-  },
-  {
-    title: pi.label('surveyDate'),
-    dataIndex: 'surveyDate',
-    key: 'surveyDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyDate') ?? ''
-  },
-  {
-    title: pi.label('surveyMethod'),
-    dataIndex: 'surveyMethod',
-    key: 'surveyMethod',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('surveyType'),
-    dataIndex: 'surveyType',
-    key: 'surveyType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('surveyPeriod'),
-    dataIndex: 'surveyPeriod',
-    key: 'surveyPeriod',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('surveyorBy'),
-    dataIndex: 'surveyorBy',
-    key: 'surveyorBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyorBy') ?? ''
-  },
-  {
-    title: pi.label('customerContact'),
-    dataIndex: 'customerContact',
-    key: 'customerContact',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerContact') ?? ''
-  },
-  {
-    title: pi.label('customerPhone'),
-    dataIndex: 'customerPhone',
-    key: 'customerPhone',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerPhone') ?? ''
-  },
-  {
-    title: pi.label('overallSatisfaction'),
-    dataIndex: 'overallSatisfaction',
-    key: 'overallSatisfaction',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('totalScore'),
-    dataIndex: 'totalScore',
-    key: 'totalScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'totalScore') ?? ''
-  },
-  {
-    title: pi.label('qualityScore'),
-    dataIndex: 'qualityScore',
-    key: 'qualityScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'qualityScore') ?? ''
-  },
-  {
-    title: pi.label('deliveryScore'),
-    dataIndex: 'deliveryScore',
-    key: 'deliveryScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'deliveryScore') ?? ''
-  },
-  {
-    title: pi.label('serviceScore'),
-    dataIndex: 'serviceScore',
-    key: 'serviceScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'serviceScore') ?? ''
-  },
-  {
-    title: pi.label('priceScore'),
-    dataIndex: 'priceScore',
-    key: 'priceScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'priceScore') ?? ''
-  },
-  {
-    title: pi.label('technicalScore'),
-    dataIndex: 'technicalScore',
-    key: 'technicalScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'technicalScore') ?? ''
-  },
-  {
-    title: pi.label('customerPraise'),
-    dataIndex: 'customerPraise',
-    key: 'customerPraise',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerPraise') ?? ''
-  },
-  {
-    title: pi.label('customerFeedback'),
-    dataIndex: 'customerFeedback',
-    key: 'customerFeedback',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerFeedback') ?? ''
-  },
-  {
-    title: pi.label('improvementPlan'),
-    dataIndex: 'improvementPlan',
-    key: 'improvementPlan',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'improvementPlan') ?? ''
-  },
-  {
-    title: pi.label('relatedComplaintId'),
-    dataIndex: 'relatedComplaintId',
-    key: 'relatedComplaintId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'relatedComplaintId') ?? ''
-  },
-  {
-    title: pi.label('attachments'),
-    dataIndex: 'attachments',
-    key: 'attachments',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'attachments') ?? ''
-  },
-  {
-    title: pi.label('surveyStatus'),
-    dataIndex: 'surveyStatus',
-    key: 'surveyStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('followUpStatus'),
     dataIndex: 'followUpStatus',
     key: 'followUpStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
+  },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'remark') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1055,6 +453,8 @@ const getCustomerSatisfactionSurveyDictValue = (
   return String(value)
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1087,6 +487,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getCustomerSatisfactionSurveyList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1113,37 +518,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  customerSatisfactionSurveyCode: '',
-  customerId: '',
-  customerName1: '',
-  customerCode: '',
-  surveyDateStart: '',
-  surveyDateEnd: '',
-  surveyMethod: undefined as number | undefined,
-  surveyType: undefined as number | undefined,
-  surveyPeriod: undefined as number | undefined,
-  surveyorBy: '',
-  customerContact: '',
-  customerPhone: '',
-  overallSatisfaction: undefined as number | undefined,
-  totalScore: undefined as number | undefined,
-  qualityScore: undefined as number | undefined,
-  deliveryScore: undefined as number | undefined,
-  serviceScore: undefined as number | undefined,
-  priceScore: undefined as number | undefined,
-  technicalScore: undefined as number | undefined,
-  customerPraise: '',
-  customerFeedback: '',
-  improvementPlan: '',
-  relatedComplaintId: '',
-  attachments: '',
-  surveyStatus: undefined as number | undefined,
-  plantCode: '',
-  followUpStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1252,6 +627,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportCustomerSatisfactionSurvey(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1338,37 +716,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  customerSatisfactionSurveyCode: '',
-  customerId: '',
-  customerName1: '',
-  customerCode: '',
-  surveyDateStart: '',
-  surveyDateEnd: '',
-  surveyMethod: undefined as number | undefined,
-  surveyType: undefined as number | undefined,
-  surveyPeriod: undefined as number | undefined,
-  surveyorBy: '',
-  customerContact: '',
-  customerPhone: '',
-  overallSatisfaction: undefined as number | undefined,
-  totalScore: undefined as number | undefined,
-  qualityScore: undefined as number | undefined,
-  deliveryScore: undefined as number | undefined,
-  serviceScore: undefined as number | undefined,
-  priceScore: undefined as number | undefined,
-  technicalScore: undefined as number | undefined,
-  customerPraise: '',
-  customerFeedback: '',
-  improvementPlan: '',
-  relatedComplaintId: '',
-  attachments: '',
-  surveyStatus: undefined as number | undefined,
-  plantCode: '',
-  followUpStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

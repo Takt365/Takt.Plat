@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepMediaI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopStepMedia 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktSopStepMediaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstepmedia.fileext", "zh-HK", "文件扩展名_hk", "文件扩展名（jpg/png/mp4/pdf/glb 等）"),
 
             // entity.sopstepmedia.sortorder
-            new TranslationSeedItem("entity.sopstepmedia.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.sopstepmedia.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.sopstepmedia.sortorder
-            new TranslationSeedItem("entity.sopstepmedia.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.sopstepmedia.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.sopstepmedia.sortorder
-            new TranslationSeedItem("entity.sopstepmedia.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.sopstepmedia.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.sopstepmedia.sortorder
-            new TranslationSeedItem("entity.sopstepmedia.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.sopstepmedia.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.sopstepmedia.step
             new TranslationSeedItem("entity.sopstepmedia.step", "en-US", "工步_us", "工步"),

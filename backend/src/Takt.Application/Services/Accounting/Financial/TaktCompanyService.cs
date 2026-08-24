@@ -619,13 +619,13 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
 
         if (queryDto?.RegisteredCapital.HasValue == true)
         {
-            var registeredCapital = queryDto.RegisteredCapital;
+            var registeredCapital = queryDto.RegisteredCapital.Value;
             exp = exp.And(x => x.RegisteredCapital == registeredCapital);
         }
 
         if (queryDto?.CompanyExistence.HasValue == true)
         {
-            var companyExistence = queryDto.CompanyExistence;
+            var companyExistence = queryDto.CompanyExistence.Value;
             exp = exp.And(x => x.CompanyExistence == companyExistence);
         }
 
@@ -709,13 +709,13 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.CompanyStatus.HasValue == true)
         {
-            var companyStatus = queryDto.CompanyStatus;
+            var companyStatus = queryDto.CompanyStatus.Value;
             exp = exp.And(x => x.CompanyStatus == companyStatus);
         }
 
@@ -733,37 +733,37 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
 
         if (queryDto?.EstablishmentDateStart.HasValue == true)
         {
-            var establishmentDateStart = queryDto.EstablishmentDateStart;
+            var establishmentDateStart = queryDto.EstablishmentDateStart.Value;
             exp = exp.And(x => x.EstablishmentDate >= establishmentDateStart);
         }
 
         if (queryDto?.EstablishmentDateEnd.HasValue == true)
         {
-            var establishmentDateEnd = queryDto.EstablishmentDateEnd;
+            var establishmentDateEnd = queryDto.EstablishmentDateEnd.Value;
             exp = exp.And(x => x.EstablishmentDate <= establishmentDateEnd);
         }
 
         if (queryDto?.ClosingDateStart.HasValue == true)
         {
-            var closingDateStart = queryDto.ClosingDateStart;
+            var closingDateStart = queryDto.ClosingDateStart.Value;
             exp = exp.And(x => x.ClosingDate >= closingDateStart);
         }
 
         if (queryDto?.ClosingDateEnd.HasValue == true)
         {
-            var closingDateEnd = queryDto.ClosingDateEnd;
+            var closingDateEnd = queryDto.ClosingDateEnd.Value;
             exp = exp.And(x => x.ClosingDate <= closingDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

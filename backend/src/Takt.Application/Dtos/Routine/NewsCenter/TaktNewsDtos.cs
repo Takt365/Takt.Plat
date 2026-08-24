@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：News 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNews 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Routine.NewsCenter;
 // ========================================
 
 /// <summary>
-/// 新闻中心主实体 支持分类、置顶、推荐、社交统计；需审批通过后发布（草稿→审批→发布） 审批态见基类 ApprovalStatus，字典 sys_approval_status
+/// 新闻中心主实体 支持分类、置顶、推荐、社交统计；正文为富文本 HTML；需审批通过后发布（草稿→审批→发布） 审批态见基类 ApprovalStatus，字典 sys_approval_status
 /// 对应前端 TaktNewsDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -36,12 +36,12 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public long NewsId { get; set; }
 
     /// <summary>
-    /// 新闻编码（租户+公司内唯一）
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
     /// </summary>
     public string NewsCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
+    /// 新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
     /// </summary>
     public int NewsCategory { get; set; } = 0;
 
@@ -61,7 +61,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻内容
+    /// 新闻内容（富文本 HTML；插图随正文存储，无独立附件）
     /// </summary>
     public string NewsContent { get; set; } = string.Empty;
 
@@ -71,12 +71,12 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int NewsIsTop { get; set; } = 0;
 
     /// <summary>
-    /// 推荐（字典 sys_yes_no_type；1=是 0=否）
+    /// 推荐（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int NewsIsRecommended { get; set; } = 0;
 
@@ -116,18 +116,13 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public int NewsShareCount { get; set; } = 0;
 
     /// <summary>
-    /// 附件数量
-    /// </summary>
-    public int NewsAttachmentCount { get; set; } = 0;
-
-    /// <summary>
-    /// 发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 发布部门名称
+    /// 发布部门名称（冗余字段，便于查询）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -138,7 +133,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public long PublisherId { get; set; }
 
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
     public string PublisherName { get; set; } = string.Empty;
 
@@ -148,7 +143,22 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
+    /// </summary>
+    public int TargetScope { get; set; } = 0;
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -156,42 +166,6 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// 新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int NewsStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 新闻附件列表（主子表关系）
-    /// （子表：TaktNewsAttachment）
-    /// </summary>
-    public List<TaktNewsAttachmentDto>? Attachments { get; set; }
-
-    /// <summary>
-    /// 新闻评论列表（主子表关系）
-    /// （子表：TaktNewsComment）
-    /// </summary>
-    public List<TaktNewsCommentDto>? Comments { get; set; }
-
-    /// <summary>
-    /// 新闻点赞记录列表（主子表关系）
-    /// （子表：TaktNewsLike）
-    /// </summary>
-    public List<TaktNewsLikeDto>? Likes { get; set; }
-
-    /// <summary>
-    /// 新闻阅读记录列表（主子表关系）
-    /// （子表：TaktNewsRead）
-    /// </summary>
-    public List<TaktNewsReadDto>? Reads { get; set; }
-
-    /// <summary>
-    /// 新闻收藏记录列表（主子表关系）
-    /// （子表：TaktNewsFavorite）
-    /// </summary>
-    public List<TaktNewsFavoriteDto>? Favorites { get; set; }
-
-    /// <summary>
-    /// 新闻分享记录列表（主子表关系）
-    /// （子表：TaktNewsShare）
-    /// </summary>
-    public List<TaktNewsShareDto>? Shares { get; set; }
 
 }
 
@@ -211,7 +185,7 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -220,18 +194,18 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 新闻编码（租户+公司内唯一）
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
     /// </summary>
     public string? NewsCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
+    /// 新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
     /// </summary>
     public int? NewsCategory { get; set; }
 
@@ -251,7 +225,7 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻内容
+    /// 新闻内容（富文本 HTML；插图随正文存储，无独立附件）
     /// </summary>
     public string? NewsContent { get; set; } = string.Empty;
 
@@ -261,12 +235,12 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? NewsIsTop { get; set; }
 
     /// <summary>
-    /// 推荐（字典 sys_yes_no_type；1=是 0=否）
+    /// 推荐（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? NewsIsRecommended { get; set; }
 
@@ -316,18 +290,13 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public int? NewsShareCount { get; set; }
 
     /// <summary>
-    /// 附件数量
-    /// </summary>
-    public int? NewsAttachmentCount { get; set; }
-
-    /// <summary>
-    /// 发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 发布部门名称
+    /// 发布部门名称（冗余字段，便于查询）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -338,7 +307,7 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public long? PublisherId { get; set; }
 
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
     public string? PublisherName { get; set; } = string.Empty;
 
@@ -353,7 +322,22 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public DateTime? NewsPublishTimeEnd { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
+    /// </summary>
+    public int? TargetScope { get; set; }
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -424,36 +408,6 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 生效时间（范围查询-结束）；与 NewsEffectiveTimeEnd 同义
-    /// </summary>
-    public DateTime? EffectiveTimeEnd { get; set; }
-
-    /// <summary>
-    /// 生效时间（范围查询-开始）；与 NewsEffectiveTimeStart 同义
-    /// </summary>
-    public DateTime? EffectiveTimeStart { get; set; }
-
-    /// <summary>
-    /// 失效时间（范围查询-结束）；与 NewsExpireTimeEnd 同义
-    /// </summary>
-    public DateTime? ExpireTimeEnd { get; set; }
-
-    /// <summary>
-    /// 失效时间（范围查询-开始）；与 NewsExpireTimeStart 同义
-    /// </summary>
-    public DateTime? ExpireTimeStart { get; set; }
-
-    /// <summary>
-    /// 发布时间（范围查询-结束）；与 NewsPublishTimeEnd 同义
-    /// </summary>
-    public DateTime? PublishTimeEnd { get; set; }
-
-    /// <summary>
-    /// 发布时间（范围查询-开始）；与 NewsPublishTimeStart 同义
-    /// </summary>
-    public DateTime? PublishTimeStart { get; set; }
 }
 
 // ========================================
@@ -480,19 +434,24 @@ public class TaktNewsCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 新闻编码（租户+公司内唯一）
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
     /// </summary>
-    [Required(ErrorMessage = "新闻编码（租户+公司内唯一）不能为空")]
+    [Required(ErrorMessage = "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）不能为空")]
     public string NewsCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
+    /// 编码规则编码（前端表单从 TaktNumberings/options 选择；对应 TaktNumbering.RuleCode；不落库）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
+
+    /// <summary>
+    /// 新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
     /// </summary>
     public int NewsCategory { get; set; } = 0;
 
@@ -513,9 +472,9 @@ public class TaktNewsCreateDto
     public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻内容
+    /// 新闻内容（富文本 HTML；插图随正文存储，无独立附件）
     /// </summary>
-    [Required(ErrorMessage = "新闻内容不能为空")]
+    [Required(ErrorMessage = "新闻内容（富文本 HTML；插图随正文存储，无独立附件）不能为空")]
     public string NewsContent { get; set; } = string.Empty;
 
     /// <summary>
@@ -524,12 +483,12 @@ public class TaktNewsCreateDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int NewsIsTop { get; set; } = 0;
 
     /// <summary>
-    /// 推荐（字典 sys_yes_no_type；1=是 0=否）
+    /// 推荐（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int NewsIsRecommended { get; set; } = 0;
 
@@ -569,18 +528,13 @@ public class TaktNewsCreateDto
     public int NewsShareCount { get; set; } = 0;
 
     /// <summary>
-    /// 附件数量
-    /// </summary>
-    public int NewsAttachmentCount { get; set; } = 0;
-
-    /// <summary>
-    /// 发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 发布部门名称
+    /// 发布部门名称（冗余字段，便于查询）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -591,9 +545,8 @@ public class TaktNewsCreateDto
     public long PublisherId { get; set; }
 
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "发布人姓名不能为空")]
     public string PublisherName { get; set; } = string.Empty;
 
     /// <summary>
@@ -602,39 +555,24 @@ public class TaktNewsCreateDto
     public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
+    /// </summary>
+    public int TargetScope { get; set; } = 0;
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
     /// 新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int NewsStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 新闻附件列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsAttachmentCreateDto>? Attachments { get; set; }
-
-    /// <summary>
-    /// 新闻评论列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsCommentCreateDto>? Comments { get; set; }
-
-    /// <summary>
-    /// 新闻点赞记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsLikeCreateDto>? Likes { get; set; }
-
-    /// <summary>
-    /// 新闻阅读记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsReadCreateDto>? Reads { get; set; }
-
-    /// <summary>
-    /// 新闻收藏记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsFavoriteCreateDto>? Favorites { get; set; }
-
-    /// <summary>
-    /// 新闻分享记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsShareCreateDto>? Shares { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -665,36 +603,6 @@ public class TaktNewsUpdateDto : TaktNewsCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
-
-    /// <summary>
-    /// 新闻附件列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public new List<TaktNewsAttachmentUpdateDto>? Attachments { get; set; }
-
-    /// <summary>
-    /// 新闻评论列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public new List<TaktNewsCommentUpdateDto>? Comments { get; set; }
-
-    /// <summary>
-    /// 新闻点赞记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public new List<TaktNewsLikeUpdateDto>? Likes { get; set; }
-
-    /// <summary>
-    /// 新闻阅读记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public new List<TaktNewsReadUpdateDto>? Reads { get; set; }
-
-    /// <summary>
-    /// 新闻收藏记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public new List<TaktNewsFavoriteUpdateDto>? Favorites { get; set; }
-
-    /// <summary>
-    /// 新闻分享记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public new List<TaktNewsShareUpdateDto>? Shares { get; set; }
 
 }
 
@@ -740,9 +648,9 @@ public class TaktNewsSortDto
     public long NewsId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -770,18 +678,18 @@ public class TaktNewsTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 新闻编码（租户+公司内唯一）
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
     /// </summary>
     public string? NewsCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
+    /// 新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
     /// </summary>
     public int? NewsCategory { get; set; }
 
@@ -801,7 +709,7 @@ public class TaktNewsTemplateDto
     public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻内容
+    /// 新闻内容（富文本 HTML；插图随正文存储，无独立附件）
     /// </summary>
     public string? NewsContent { get; set; } = string.Empty;
 
@@ -811,12 +719,12 @@ public class TaktNewsTemplateDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? NewsIsTop { get; set; }
 
     /// <summary>
-    /// 推荐（字典 sys_yes_no_type；1=是 0=否）
+    /// 推荐（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? NewsIsRecommended { get; set; }
 
@@ -856,18 +764,13 @@ public class TaktNewsTemplateDto
     public int? NewsShareCount { get; set; }
 
     /// <summary>
-    /// 附件数量
-    /// </summary>
-    public int? NewsAttachmentCount { get; set; }
-
-    /// <summary>
-    /// 发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 发布部门名称
+    /// 发布部门名称（冗余字段，便于查询）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -878,7 +781,7 @@ public class TaktNewsTemplateDto
     public long? PublisherId { get; set; }
 
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
     public string? PublisherName { get; set; } = string.Empty;
 
@@ -888,39 +791,24 @@ public class TaktNewsTemplateDto
     public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
+    /// </summary>
+    public int? TargetScope { get; set; }
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
     /// 新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int? NewsStatus { get; set; }
-
-    /// <summary>
-    /// 新闻附件列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsAttachmentCreateDto>? Attachments { get; set; }
-
-    /// <summary>
-    /// 新闻评论列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsCommentCreateDto>? Comments { get; set; }
-
-    /// <summary>
-    /// 新闻点赞记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsLikeCreateDto>? Likes { get; set; }
-
-    /// <summary>
-    /// 新闻阅读记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsReadCreateDto>? Reads { get; set; }
-
-    /// <summary>
-    /// 新闻收藏记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsFavoriteCreateDto>? Favorites { get; set; }
-
-    /// <summary>
-    /// 新闻分享记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsShareCreateDto>? Shares { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -954,18 +842,18 @@ public class TaktNewsImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 新闻编码（租户+公司内唯一）
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
     /// </summary>
     public string? NewsCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
+    /// 新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
     /// </summary>
     public int? NewsCategory { get; set; }
 
@@ -985,7 +873,7 @@ public class TaktNewsImportDto
     public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻内容
+    /// 新闻内容（富文本 HTML；插图随正文存储，无独立附件）
     /// </summary>
     public string? NewsContent { get; set; } = string.Empty;
 
@@ -995,12 +883,12 @@ public class TaktNewsImportDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? NewsIsTop { get; set; }
 
     /// <summary>
-    /// 推荐（字典 sys_yes_no_type；1=是 0=否）
+    /// 推荐（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? NewsIsRecommended { get; set; }
 
@@ -1040,18 +928,13 @@ public class TaktNewsImportDto
     public int? NewsShareCount { get; set; }
 
     /// <summary>
-    /// 附件数量
-    /// </summary>
-    public int? NewsAttachmentCount { get; set; }
-
-    /// <summary>
-    /// 发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 发布部门名称
+    /// 发布部门名称（冗余字段，便于查询）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -1062,7 +945,7 @@ public class TaktNewsImportDto
     public long? PublisherId { get; set; }
 
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
     public string? PublisherName { get; set; } = string.Empty;
 
@@ -1072,39 +955,24 @@ public class TaktNewsImportDto
     public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
+    /// </summary>
+    public int? TargetScope { get; set; }
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
     /// 新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int? NewsStatus { get; set; }
-
-    /// <summary>
-    /// 新闻附件列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsAttachmentCreateDto>? Attachments { get; set; }
-
-    /// <summary>
-    /// 新闻评论列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsCommentCreateDto>? Comments { get; set; }
-
-    /// <summary>
-    /// 新闻点赞记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsLikeCreateDto>? Likes { get; set; }
-
-    /// <summary>
-    /// 新闻阅读记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsReadCreateDto>? Reads { get; set; }
-
-    /// <summary>
-    /// 新闻收藏记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsFavoriteCreateDto>? Favorites { get; set; }
-
-    /// <summary>
-    /// 新闻分享记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktNewsShareCreateDto>? Shares { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1135,12 +1003,27 @@ public class TaktNewsExportDto
     public long NewsId { get; set; }
 
     /// <summary>
-    /// 新闻编码（租户+公司内唯一）
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
     /// </summary>
     public string NewsCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
+    /// 新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
     /// </summary>
     public int NewsCategory { get; set; } = 0;
 
@@ -1160,7 +1043,7 @@ public class TaktNewsExportDto
     public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新闻内容
+    /// 新闻内容（富文本 HTML；插图随正文存储，无独立附件）
     /// </summary>
     public string NewsContent { get; set; } = string.Empty;
 
@@ -1170,12 +1053,12 @@ public class TaktNewsExportDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int NewsIsTop { get; set; } = 0;
 
     /// <summary>
-    /// 推荐（字典 sys_yes_no_type；1=是 0=否）
+    /// 推荐（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int NewsIsRecommended { get; set; } = 0;
 
@@ -1215,18 +1098,13 @@ public class TaktNewsExportDto
     public int NewsShareCount { get; set; } = 0;
 
     /// <summary>
-    /// 附件数量
-    /// </summary>
-    public int NewsAttachmentCount { get; set; } = 0;
-
-    /// <summary>
-    /// 发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 发布部门名称
+    /// 发布部门名称（冗余字段，便于查询）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -1237,7 +1115,7 @@ public class TaktNewsExportDto
     public long PublisherId { get; set; }
 
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
     public string PublisherName { get; set; } = string.Empty;
 
@@ -1247,7 +1125,22 @@ public class TaktNewsExportDto
     public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
+    /// </summary>
+    public int TargetScope { get; set; } = 0;
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

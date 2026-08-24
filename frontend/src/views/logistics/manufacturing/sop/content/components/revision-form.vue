@@ -116,7 +116,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isLocked"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.islocked') })"
                 />
               </a-form-item>
@@ -128,7 +128,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.forceLeaderAck"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.forceleaderack') })"
                 />
               </a-form-item>

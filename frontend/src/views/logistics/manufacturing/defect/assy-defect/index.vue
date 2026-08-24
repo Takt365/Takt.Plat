@@ -123,13 +123,22 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="pi.queryPh('plantCode', 'required')"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -164,12 +173,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('TeamCode')">
-      <a-form-item :label="pi.queryLabel('TeamCode')">
+      <div v-show="isFieldVisible('teamCode')">
+      <a-form-item :label="pi.queryLabel('teamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.TeamCode"
+          v-model:value="advancedQueryForm.teamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('TeamCode', 'select')"
+          :placeholder="pi.queryPh('teamCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -190,7 +199,7 @@
           v-model:value="advancedQueryForm.prodOrderType"
           :placeholder="pi.queryPh('prodOrderType', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -201,7 +210,7 @@
           v-model:value="advancedQueryForm.prodOrderCode"
           :placeholder="pi.queryPh('prodOrderCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="12"
           allow-clear
         />
       </a-form-item>
@@ -221,7 +230,7 @@
           v-model:value="advancedQueryForm.modelCode"
           :placeholder="pi.queryPh('modelCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -443,7 +452,37 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of ASSYDEFECT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    return true
+  }
+  if (form.prodOrderQty !== undefined && form.prodOrderQty !== null) {
+    return true
+  }
+  if (form.prodActualQty !== undefined && form.prodActualQty !== null) {
+    return true
+  }
+  if (form.goodQuantity !== undefined && form.goodQuantity !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -456,8 +495,7 @@ function createEmptyAdvancedQueryForm() {
     shiftNo: undefined as number | undefined,
     prodOrderQty: undefined as number | undefined,
     prodActualQty: undefined as number | undefined,
-    goodQuantity: undefined as number | undefined,
-  }
+    goodQuantity: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -487,7 +525,7 @@ const { selectedMasterRow } = provideAssyDefectMasterContext()
 const assyDefectDetailPanelRef = ref<InstanceType<typeof AssyDefectDetailPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {AssyDefectQuery} 查询 DTO
  */
@@ -525,12 +563,13 @@ function buildListQuery(overrides?: Partial<AssyDefectQuery>): AssyDefectQuery {
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -595,15 +634,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'assyDefectId') ?? ''
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('prodCategory'),
     dataIndex: 'prodCategory',
     key: 'prodCategory',
@@ -621,13 +651,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodDate') ?? ''
   },
   {
-    title: pi.label('TeamCode'),
-    dataIndex: 'TeamCode',
-    key: 'TeamCode',
+    title: pi.label('teamCode'),
+    dataIndex: 'teamCode',
+    key: 'teamCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'TeamCode') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'teamCode') ?? ''
   },
   {
     title: pi.label('shiftNo'),
@@ -757,6 +787,8 @@ const getAssyDefectDictValue = (
   return String(value)
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -789,6 +821,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getAssyDefectList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -815,11 +852,12 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  TeamCode: '',
+  teamCode: '',
   shiftNo: undefined as number | undefined,
   prodOrderType: '',
   prodOrderCode: '',
@@ -941,6 +979,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportAssyDefect(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1027,11 +1068,12 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  TeamCode: '',
+  teamCode: '',
   shiftNo: undefined as number | undefined,
   prodOrderType: '',
   prodOrderCode: '',

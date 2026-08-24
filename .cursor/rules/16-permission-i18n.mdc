@@ -140,7 +140,7 @@ menu.RoutePath = "/identity/user";
 
 ```text
 菜单标题  I18nKey:  menu.identity.user          Permission: identity:user:list
-实体字段  I18nKey:  entity.user.username         （无 Permission）
+实体字段  I18nKey:  entity.user.UserName         （无 Permission）
 按钮文案  I18nKey:  common.page.button.create        Permission: identity:user:create
 ```
 
@@ -189,7 +189,7 @@ menu.RoutePath = "/identity/user";
 | 分隔符 | `:` | `.` |
 | 用户管理列表页 | `identity:user:list` | 菜单 `menu.identity.user` |
 | 新增按钮 | `identity:user:create` | `common.page.button.create` |
-| 用户名字段 | — | `entity.user.username` |
+| 用户名字段 | — | `entity.user.UserName` |
 | 后端校验 | `[TaktPermission]` + Filter | — |
 | 前端显隐 | `v-permission` | — |
 | 文案展示 | — | `t('…')` |

@@ -27,13 +27,14 @@ namespace Takt.Domain.Entities.Foundation;
 [SugarIndex("ix_file_category", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FileCategory), OrderByType.Asc, false)]
 [SugarIndex("ix_file_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FileStatus), OrderByType.Asc, false)]
 public class TaktFile : TaktCompanyEntityBase
-{    /// <summary>
-    /// 文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）
+{
+    /// <summary>
+    /// 文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique；根据 MIME 类型自动通过 TaktNumbering 文件编码规则生成，非表单手选）
     /// </summary>
     [SugarColumn(ColumnName = "file_code", ColumnDescription = "文件编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string FileCode { get; set; } = string.Empty;
     /// <summary>
-    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+    /// 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string FileName { get; set; } = string.Empty;
@@ -98,7 +99,7 @@ public class TaktFile : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "last_download_time", ColumnDescription = "最后下载", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? LastDownloadTime { get; set; }
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     [SugarColumn(ColumnName = "is_public", ColumnDescription = "公开", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPublic { get; set; } = 0;
@@ -123,7 +124,7 @@ public class TaktFile : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "location", ColumnDescription = "位置", ColumnDataType = "nvarchar", Length = 200, IsNullable = false, DefaultValue = "''")]
     public string Location { get; set; } = string.Empty;
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "file_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FileStatus { get; set; } = 1;

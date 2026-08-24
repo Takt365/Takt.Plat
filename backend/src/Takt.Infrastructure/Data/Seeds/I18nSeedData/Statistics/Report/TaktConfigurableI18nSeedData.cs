@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurable 实体字段国际化种子（已对齐前端 locales：src/locales/statistics/report/configurable）
 // 
@@ -91,13 +91,13 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurable._self", "zh-HK", "自定义报表主信息_hk", "实体名称"),
 
             // entity.configurable.reportcode
-            new TranslationSeedItem("entity.configurable.reportcode", "en-US", "报表编码_us", "报表编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.configurable.reportcode", "en-US", "报表编码_us", "报表编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 报表编码规则生成并展示，非手输；单据类型菜单：SQVI报表）"),
             // entity.configurable.reportcode
-            new TranslationSeedItem("entity.configurable.reportcode", "ja-JP", "报表编码_jp", "报表编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.configurable.reportcode", "ja-JP", "报表编码_jp", "报表编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 报表编码规则生成并展示，非手输；单据类型菜单：SQVI报表）"),
             // entity.configurable.reportcode
-            new TranslationSeedItem("entity.configurable.reportcode", "zh-CN", "报表编码", "报表编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.configurable.reportcode", "zh-CN", "报表编码", "报表编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 报表编码规则生成并展示，非手输；单据类型菜单：SQVI报表）"),
             // entity.configurable.reportcode
-            new TranslationSeedItem("entity.configurable.reportcode", "zh-HK", "报表编码_hk", "报表编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.configurable.reportcode", "zh-HK", "报表编码_hk", "报表编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 报表编码规则生成并展示，非手输；单据类型菜单：SQVI报表）"),
 
             // entity.configurable.reportname
             new TranslationSeedItem("entity.configurable.reportname", "en-US", "报表名称_us", "报表名称"),
@@ -109,13 +109,13 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurable.reportname", "zh-HK", "报表名称_hk", "报表名称"),
 
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "en-US", "报表业务域_us", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "en-US", "报表业务域_us", "报表业务域（TaktModule；0=仪表盘 1=身份认证 2=日常事务 3=财务核算 4=后勤管理 5=人力资源 6=工作流 7=代码管理 8=基础设置 9=统计看板 10=实体；与一级菜单映射）"),
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "ja-JP", "报表业务域_jp", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "ja-JP", "报表业务域_jp", "报表业务域（TaktModule；0=仪表盘 1=身份认证 2=日常事务 3=财务核算 4=后勤管理 5=人力资源 6=工作流 7=代码管理 8=基础设置 9=统计看板 10=实体；与一级菜单映射）"),
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "zh-CN", "报表业务域", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "zh-CN", "报表业务域", "报表业务域（TaktModule；0=仪表盘 1=身份认证 2=日常事务 3=财务核算 4=后勤管理 5=人力资源 6=工作流 7=代码管理 8=基础设置 9=统计看板 10=实体；与一级菜单映射）"),
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "zh-HK", "报表业务域_hk", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "zh-HK", "报表业务域_hk", "报表业务域（TaktModule；0=仪表盘 1=身份认证 2=日常事务 3=财务核算 4=后勤管理 5=人力资源 6=工作流 7=代码管理 8=基础设置 9=统计看板 10=实体；与一级菜单映射）"),
 
             // entity.configurable.reportsubcategory
             new TranslationSeedItem("entity.configurable.reportsubcategory", "en-US", "报表子分类_us", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
@@ -127,40 +127,40 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurable.reportsubcategory", "zh-HK", "报表子分类_hk", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
 
             // entity.configurable.distinctrows
-            new TranslationSeedItem("entity.configurable.distinctrows", "en-US", "是否去重_us", "是否去重行（SELECT DISTINCT）"),
+            new TranslationSeedItem("entity.configurable.distinctrows", "en-US", "是否去重_us", "是否去重行（字典 sys_yes_no；0=否 1=是；SELECT DISTINCT）"),
             // entity.configurable.distinctrows
-            new TranslationSeedItem("entity.configurable.distinctrows", "ja-JP", "是否去重_jp", "是否去重行（SELECT DISTINCT）"),
+            new TranslationSeedItem("entity.configurable.distinctrows", "ja-JP", "是否去重_jp", "是否去重行（字典 sys_yes_no；0=否 1=是；SELECT DISTINCT）"),
             // entity.configurable.distinctrows
-            new TranslationSeedItem("entity.configurable.distinctrows", "zh-CN", "是否去重", "是否去重行（SELECT DISTINCT）"),
+            new TranslationSeedItem("entity.configurable.distinctrows", "zh-CN", "是否去重", "是否去重行（字典 sys_yes_no；0=否 1=是；SELECT DISTINCT）"),
             // entity.configurable.distinctrows
-            new TranslationSeedItem("entity.configurable.distinctrows", "zh-HK", "是否去重_hk", "是否去重行（SELECT DISTINCT）"),
+            new TranslationSeedItem("entity.configurable.distinctrows", "zh-HK", "是否去重_hk", "是否去重行（字典 sys_yes_no；0=否 1=是；SELECT DISTINCT）"),
 
             // entity.configurable.maxexportrows
-            new TranslationSeedItem("entity.configurable.maxexportrows", "en-US", "导出最大行数_us", "单次导出最大行数（Excel 上限，防止 OOM）"),
+            new TranslationSeedItem("entity.configurable.maxexportrows", "en-US", "导出最大行数_us", "单次导出最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
             // entity.configurable.maxexportrows
-            new TranslationSeedItem("entity.configurable.maxexportrows", "ja-JP", "导出最大行数_jp", "单次导出最大行数（Excel 上限，防止 OOM）"),
+            new TranslationSeedItem("entity.configurable.maxexportrows", "ja-JP", "导出最大行数_jp", "单次导出最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
             // entity.configurable.maxexportrows
-            new TranslationSeedItem("entity.configurable.maxexportrows", "zh-CN", "导出最大行数", "单次导出最大行数（Excel 上限，防止 OOM）"),
+            new TranslationSeedItem("entity.configurable.maxexportrows", "zh-CN", "导出最大行数", "单次导出最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
             // entity.configurable.maxexportrows
-            new TranslationSeedItem("entity.configurable.maxexportrows", "zh-HK", "导出最大行数_hk", "单次导出最大行数（Excel 上限，防止 OOM）"),
+            new TranslationSeedItem("entity.configurable.maxexportrows", "zh-HK", "导出最大行数_hk", "单次导出最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
 
             // entity.configurable.maxqueryrows
-            new TranslationSeedItem("entity.configurable.maxqueryrows", "en-US", "查询最大行数_us", "单次查询最大行数（预览/分页上限）"),
+            new TranslationSeedItem("entity.configurable.maxqueryrows", "en-US", "查询最大行数_us", "单次查询最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
             // entity.configurable.maxqueryrows
-            new TranslationSeedItem("entity.configurable.maxqueryrows", "ja-JP", "查询最大行数_jp", "单次查询最大行数（预览/分页上限）"),
+            new TranslationSeedItem("entity.configurable.maxqueryrows", "ja-JP", "查询最大行数_jp", "单次查询最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
             // entity.configurable.maxqueryrows
-            new TranslationSeedItem("entity.configurable.maxqueryrows", "zh-CN", "查询最大行数", "单次查询最大行数（预览/分页上限）"),
+            new TranslationSeedItem("entity.configurable.maxqueryrows", "zh-CN", "查询最大行数", "单次查询最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
             // entity.configurable.maxqueryrows
-            new TranslationSeedItem("entity.configurable.maxqueryrows", "zh-HK", "查询最大行数_hk", "单次查询最大行数（预览/分页上限）"),
+            new TranslationSeedItem("entity.configurable.maxqueryrows", "zh-HK", "查询最大行数_hk", "单次查询最大行数（TaktConfigurableConstants；DefaultRowLimit=500，MaxRowLimit=50000）"),
 
             // entity.configurable.ispublic
-            new TranslationSeedItem("entity.configurable.ispublic", "en-US", "公开_us", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
+            new TranslationSeedItem("entity.configurable.ispublic", "en-US", "公开_us", "公开（字典 sys_public_type；0=公开 1=私有）"),
             // entity.configurable.ispublic
-            new TranslationSeedItem("entity.configurable.ispublic", "ja-JP", "公开_jp", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
+            new TranslationSeedItem("entity.configurable.ispublic", "ja-JP", "公开_jp", "公开（字典 sys_public_type；0=公开 1=私有）"),
             // entity.configurable.ispublic
-            new TranslationSeedItem("entity.configurable.ispublic", "zh-CN", "公开", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
+            new TranslationSeedItem("entity.configurable.ispublic", "zh-CN", "公开", "公开（字典 sys_public_type；0=公开 1=私有）"),
             // entity.configurable.ispublic
-            new TranslationSeedItem("entity.configurable.ispublic", "zh-HK", "公开_hk", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
+            new TranslationSeedItem("entity.configurable.ispublic", "zh-HK", "公开_hk", "公开（字典 sys_public_type；0=公开 1=私有）"),
 
             // entity.configurable.description
             new TranslationSeedItem("entity.configurable.description", "en-US", "报表描述_us", "报表描述"),
@@ -172,22 +172,22 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurable.description", "zh-HK", "报表描述_hk", "报表描述"),
 
             // entity.configurable.sortorder
-            new TranslationSeedItem("entity.configurable.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.configurable.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.configurable.sortorder
-            new TranslationSeedItem("entity.configurable.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.configurable.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.configurable.sortorder
-            new TranslationSeedItem("entity.configurable.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.configurable.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.configurable.sortorder
-            new TranslationSeedItem("entity.configurable.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.configurable.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.configurable.reportstatus
-            new TranslationSeedItem("entity.configurable.reportstatus", "en-US", "报表状态_us", "报表状态（0=禁用 1=启用）"),
+            new TranslationSeedItem("entity.configurable.reportstatus", "en-US", "报表状态_us", "报表状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.configurable.reportstatus
-            new TranslationSeedItem("entity.configurable.reportstatus", "ja-JP", "报表状态_jp", "报表状态（0=禁用 1=启用）"),
+            new TranslationSeedItem("entity.configurable.reportstatus", "ja-JP", "报表状态_jp", "报表状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.configurable.reportstatus
-            new TranslationSeedItem("entity.configurable.reportstatus", "zh-CN", "报表状态", "报表状态（0=禁用 1=启用）"),
+            new TranslationSeedItem("entity.configurable.reportstatus", "zh-CN", "报表状态", "报表状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.configurable.reportstatus
-            new TranslationSeedItem("entity.configurable.reportstatus", "zh-HK", "报表状态_hk", "报表状态（0=禁用 1=启用）"),
+            new TranslationSeedItem("entity.configurable.reportstatus", "zh-HK", "报表状态_hk", "报表状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
 
             // entity.configurable.sources
             new TranslationSeedItem("entity.configurable.sources", "en-US", "数据源表列表_us", "数据源表列表（FROM）"),

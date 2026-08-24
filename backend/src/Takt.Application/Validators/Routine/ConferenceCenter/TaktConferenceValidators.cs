@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.ConferenceCenter
 // 文件名称：TaktConferenceValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Conference 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktConference 生成，请按需审阅）
 // 
@@ -36,10 +36,10 @@ public class TaktConferenceCreateValidator : AbstractValidator<TaktConferenceCre
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ConferenceCode)
             .NotEmpty().WithMessage("会议编码不能为空")
@@ -50,7 +50,7 @@ public class TaktConferenceCreateValidator : AbstractValidator<TaktConferenceCre
         RuleFor(x => x.OrganizerId)
             .GreaterThanOrEqualTo(0).WithMessage("组织人 ID不能为负数");
         RuleFor(x => x.OrganizerName)
-            .NotEmpty().WithMessage("组织人姓名不能为空")
+            .NotEmpty().WithMessage("组织人姓名不能为空").When(x => x.OrganizerId <= 0)
             .MaximumLength(20).WithMessage("组织人姓名长度不能超过20个字符");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("主办部门 ID不能为负数");
@@ -86,10 +86,10 @@ public class TaktConferenceUpdateValidator : AbstractValidator<TaktConferenceUpd
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ConferenceCode)
             .NotEmpty().WithMessage("会议编码不能为空")
@@ -100,7 +100,7 @@ public class TaktConferenceUpdateValidator : AbstractValidator<TaktConferenceUpd
         RuleFor(x => x.OrganizerId)
             .GreaterThanOrEqualTo(0).WithMessage("组织人 ID不能为负数");
         RuleFor(x => x.OrganizerName)
-            .NotEmpty().WithMessage("组织人姓名不能为空")
+            .NotEmpty().WithMessage("组织人姓名不能为空").When(x => x.OrganizerId <= 0)
             .MaximumLength(20).WithMessage("组织人姓名长度不能超过20个字符");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("主办部门 ID不能为负数");

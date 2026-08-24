@@ -154,7 +154,7 @@
       <a-form-item :label="t('entity.sopstepcheckitem.isrequired')">
         <TaktSelect
           v-model:value="advancedQueryForm.isRequired"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopstepcheckitem.isrequired') })"
           allow-clear
         />

@@ -97,16 +97,16 @@
             dict-type="sys_industry_attribute_type"
           />
         </template>
-        <template v-else-if="column.key === 'cultureCode'">
+        <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
-            :value="getClientDictValue(record, 'cultureCode')"
-            dict-type="sys_culture_code"
+            :value="getClientDictValue(record, 'taxCode')"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getClientDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_rate_param"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'registrationCountry'">
@@ -136,13 +136,13 @@
         <template v-else-if="column.key === 'centralPostingBlock'">
           <TaktDictTag
             :value="getClientDictValue(record, 'centralPostingBlock')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'clearingWithVendor'">
           <TaktDictTag
             :value="getClientDictValue(record, 'clearingWithVendor')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'paymentTerms'">
@@ -228,6 +228,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
@@ -312,16 +322,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('cultureCode')">
-      <a-form-item :label="pi.queryLabel('cultureCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.cultureCode"
-          dict-type="sys_culture_code"
-          :placeholder="pi.queryPh('cultureCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('clientTaxNumber')">
       <a-form-item :label="pi.queryLabel('clientTaxNumber')">
         <a-input
@@ -333,11 +333,21 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('taxRate')">
       <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_rate_param"
+          dict-type="accounting_tax_code"
           :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
@@ -567,7 +577,7 @@
       <a-form-item :label="pi.queryLabel('centralPostingBlock')">
         <TaktSelect
           v-model:value="advancedQueryForm.centralPostingBlock"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('centralPostingBlock', 'select')"
           allow-clear
         />
@@ -597,7 +607,7 @@
       <a-form-item :label="pi.queryLabel('clearingWithVendor')">
         <TaktSelect
           v-model:value="advancedQueryForm.clearingWithVendor"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('clearingWithVendor', 'select')"
           allow-clear
         />
@@ -729,7 +739,7 @@
       <a-form-item :label="pi.queryLabel('clientStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.clientStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('clientStatus', 'select')"
           allow-clear
         />
@@ -1000,6 +1010,7 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
@@ -1060,6 +1071,7 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /**
  * 构建列表标准文本列
@@ -1135,6 +1147,8 @@ const toClientNumber = (value: string | number | undefined | null): number => {
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

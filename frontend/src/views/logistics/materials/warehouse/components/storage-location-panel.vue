@@ -8,9 +8,6 @@
 
 <template>
   <div class="storage-location-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.storagelocation._self') }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -32,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -41,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -55,7 +51,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="storage-location-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="storage-location-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -63,6 +62,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getStorageLocationId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -73,12 +73,28 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -92,167 +108,23 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterWarehouseId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-materials-warehouse-storage-location"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('common.page.entity.plantcode')">
-        <a-input
-          v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('warehouseCode')">
-      <a-form-item :label="t('entity.storagelocation.warehousecode')">
-        <a-input
-          v-model:value="advancedQueryForm.warehouseCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.warehousecode') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('locationCode')">
-      <a-form-item :label="t('entity.storagelocation.locationcode')">
-        <a-input
-          v-model:value="advancedQueryForm.locationCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationcode') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('locationName')">
-      <a-form-item :label="t('entity.storagelocation.locationname')">
-        <a-input
-          v-model:value="advancedQueryForm.locationName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationname') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('locationType')">
-      <a-form-item :label="t('entity.storagelocation.locationtype')">
-        <a-input-number
-          v-model:value="advancedQueryForm.locationType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationtype') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('locationStatus')">
-      <a-form-item :label="t('entity.storagelocation.locationstatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.locationStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.storagelocation.locationstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isBuiltIn')">
-      <a-form-item :label="t('entity.storagelocation.isbuiltin')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.storagelocation.isbuiltin') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.storagelocation._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.storagelocation._self"
+        v-if="importVisible"
+        :entity-i18n-key="STORAGELOCATION_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -270,7 +142,7 @@
       id-column-key="storageLocationId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -282,15 +154,25 @@
  * Takt仓库主数据实体子表 storageLocation 右栏面板
  * @module views/logistics/materials/warehouse/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import StorageLocationForm from './storage-location-form.vue'
 import { useWarehouseMasterContext } from '../composables/use-warehouse-master-context'
 import {
@@ -306,6 +188,18 @@ import {
 } from '@/api/logistics/materials/storage-location'
 import type { StorageLocation, StorageLocationQuery } from '@/types/logistics/materials/storage-location'
 
+import {
+  useStorageLocationI18n,
+  STORAGELOCATION_DEFAULT_VISIBLE_COLUMN_KEYS,
+  STORAGELOCATION_SUMMARY_SUM_FIELDS,
+  STORAGELOCATION_QUERY_STRING_FIELDS,
+  STORAGELOCATION_QUERY_FIELDS,
+  STORAGELOCATION_SELF_I18N_KEY,
+} from '../composables/use-storage-location-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useStorageLocationI18n()
+
 const { t } = useI18n()
 const { selectedMasterRow } = useWarehouseMasterContext()
 
@@ -313,10 +207,45 @@ const { selectedMasterRow } = useWarehouseMasterContext()
 const excelNames = taktExcelEntityNames('TaktStorageLocation')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.storagelocation._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<StorageLocation[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -331,71 +260,9 @@ const formData = ref<Partial<StorageLocation>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  plantCode: '',
-  warehouseCode: '',
-  locationCode: '',
-  locationName: '',
-  locationType: undefined as number | undefined,
-  locationStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('common.page.entity.plantcode') },
-  { key: 'warehouseCode', label: t('entity.storagelocation.warehousecode') },
-  { key: 'locationCode', label: t('entity.storagelocation.locationcode') },
-  { key: 'locationName', label: t('entity.storagelocation.locationname') },
-  { key: 'locationType', label: t('entity.storagelocation.locationtype') },
-  { key: 'locationStatus', label: t('entity.storagelocation.locationstatus') },
-  { key: 'isBuiltIn', label: t('entity.storagelocation.isbuiltin') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  warehouseCode: '',
-  locationCode: '',
-  locationName: '',
-  locationType: undefined as number | undefined,
-  locationStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
-}
 const columnSettingVisible = ref(false)
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...STORAGELOCATION_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -406,13 +273,16 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...STORAGELOCATION_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
 const entityIdName = 'storageLocationId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.warehouseId)
-const masterWarehouseId = computed(() => selectedMasterRow.value?.warehouseId ?? '')
+const masterWarehouseId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['warehouseId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterWarehouseId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -437,17 +307,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'storageLocationId') ?? ''),
   },
   {
-    title: t('common.page.entity.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: StorageLocation }) =>
-      String(getStorageLocationField(record, 'plantCode') ?? ''),
-  },
-  {
-    title: t('entity.storagelocation.warehousecode'),
+    title: pi.label('warehouseCode'),
     dataIndex: 'warehouseCode',
     key: 'warehouseCode',
     width: 120,
@@ -457,7 +317,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'warehouseCode') ?? ''),
   },
   {
-    title: t('entity.storagelocation.locationcode'),
+    title: pi.label('locationCode'),
     dataIndex: 'locationCode',
     key: 'locationCode',
     width: 120,
@@ -467,7 +327,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'locationCode') ?? ''),
   },
   {
-    title: t('entity.storagelocation.locationname'),
+    title: pi.label('locationName'),
     dataIndex: 'locationName',
     key: 'locationName',
     width: 120,
@@ -477,7 +337,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'locationName') ?? ''),
   },
   {
-    title: t('entity.storagelocation.locationtype'),
+    title: pi.label('locationType'),
     dataIndex: 'locationType',
     key: 'locationType',
     width: 120,
@@ -487,7 +347,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'locationType') ?? ''),
   },
   {
-    title: t('entity.storagelocation.locationstatus'),
+    title: pi.label('locationStatus'),
     dataIndex: 'locationStatus',
     key: 'locationStatus',
     width: 120,
@@ -497,7 +357,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'locationStatus') ?? ''),
   },
   {
-    title: t('entity.storagelocation.isbuiltin'),
+    title: pi.label('isBuiltIn'),
     dataIndex: 'isBuiltIn',
     key: 'isBuiltIn',
     width: 120,
@@ -507,14 +367,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'isBuiltIn') ?? ''),
   },
   {
-    title: t('entity.storagelocation.warehouse'),
-    dataIndex: 'warehouse',
-    key: 'warehouse',
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: StorageLocation }) =>
-      String(getStorageLocationField(record, 'warehouse') ?? ''),
+      String(getStorageLocationField(record, 'remark') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -533,9 +393,80 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:materials:warehouse:delete',
         onClick: (record: StorageLocation) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'storageLocationId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(STORAGELOCATION_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    STORAGELOCATION_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof STORAGELOCATION_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of STORAGELOCATION_SUMMARY_SUM_FIELDS) {
+      const num = Number(getStorageLocationField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: StorageLocation[]) => {
@@ -574,7 +505,7 @@ function onClickRow(record: StorageLocation) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {StorageLocationQuery} 查询 DTO
  */
@@ -596,23 +527,9 @@ function buildListQuery(overrides?: Partial<StorageLocationQuery>): StorageLocat
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('warehouseCode', form.warehouseCode)
-  assignTrimmed('locationCode', form.locationCode)
-  assignTrimmed('locationName', form.locationName)
-  if (form.locationType !== undefined && form.locationType !== null) {
-    query.locationType = form.locationType
+  for (const key of STORAGELOCATION_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  if (form.locationStatus !== undefined && form.locationStatus !== null) {
-    query.locationStatus = form.locationStatus
-  }
-  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
-    query.isBuiltIn = form.isBuiltIn
-  }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 
@@ -653,6 +570,36 @@ watch(masterWarehouseId, () => {
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
 
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
+
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
@@ -669,13 +616,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.storagelocation._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: StorageLocation) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.storagelocation._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getStorageLocationById(getStorageLocationId(record))
@@ -692,7 +639,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.storagelocation._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -711,10 +658,10 @@ async function handleFormSubmit() {
     const id = formData.value?.storageLocationId
     if (id) {
       await updateStorageLocation(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.storagelocation._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createStorageLocation(payload)
-      message.success(t('common.feedback.created', { target: t('entity.storagelocation._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -731,14 +678,14 @@ async function handleDeleteOne(record: StorageLocation) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.storagelocation._self'),
-      name: t('common.tip.this.target', { target: t('entity.storagelocation._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteStorageLocationById(getStorageLocationId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.storagelocation._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -748,14 +695,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.storagelocation._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.storagelocation._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -763,7 +710,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getStorageLocationId(r)).filter(Boolean)
       await deleteStorageLocationBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.storagelocation._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -773,35 +720,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getStorageLocationTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importStorageLocation(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importStorageLocation(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }
@@ -812,6 +760,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportStorageLocation(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -835,10 +786,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.storagelocation._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.storagelocation._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

@@ -4,7 +4,7 @@
 // 文件名称：TaktBomMaterialCostAnalysisService.cs
 // 创建时间：2026-07-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：BOM 成本分析应用服务（转置 / 差异 / 月度涨跌；三页共用工厂/机种/物料级联选项）
+// 功能描述：BOM 成本分析应用服务（转置 / 差异 / 月度涨跌）
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using OfficeOpenXml;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
@@ -22,13 +21,11 @@ using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
 /// <summary>
-/// BOM 成本分析服务（转置 / 差异 / 月度涨跌；
-/// 工厂→机种→物料级联选项供成本分析 / 产品推移 / 机种推移三页共用）
+/// BOM 成本分析服务（转置 / 差异 / 月度涨跌）
 /// </summary>
 public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMaterialCostAnalysisService
 {
@@ -48,10 +45,6 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     /// 型号目的地仓储（机种名称）
     /// </summary>
     private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
-    /// <summary>
-    /// 公司仓储（读取 RelatedPlant）
-    /// </summary>
-    private readonly ITaktTenantRepository<TaktCompany> _companyRepository;
 
     /// <summary>
     /// 构造函数
@@ -59,14 +52,12 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     /// <param name="bomMaterialCostItemRepository">BOM 物料成本明细仓储</param>
     /// <param name="bomMaterialCostRepository">BOM 物料成本汇总仓储（转置/涨跌分析数据源）</param>
     /// <param name="modelDestinationRepository">型号目的地仓储</param>
-    /// <param name="companyRepository">公司仓储（读取 RelatedPlant）</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktBomMaterialCostAnalysisService(
         ITaktCompanyRepository<TaktBomMaterialCostItem> bomMaterialCostItemRepository,
         ITaktCompanyRepository<TaktBomMaterialCost> bomMaterialCostRepository,
         ITaktTenantRepository<TaktModelDestination> modelDestinationRepository,
-        ITaktTenantRepository<TaktCompany> companyRepository,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -74,209 +65,17 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         _bomMaterialCostItemRepository = bomMaterialCostItemRepository;
         _bomMaterialCostRepository = bomMaterialCostRepository;
         _modelDestinationRepository = modelDestinationRepository;
-        _companyRepository = companyRepository;
-    }
-
-    // ========================================
-    // 三页共用级联选项（工厂 → 机种 → 物料/产品）
-    // ========================================
-
-    /// <summary>
-    /// 查询栏工厂选项（级联第 1 级）：当前公司 RelatedPlant ∩ 本表 PlantCode
-    /// <para>非 TaktPlants 全量；无关联工厂或本表无该工厂数据时返回空列表。</para>
-    /// </summary>
-    /// <returns>下拉选项（通常 0～1 项；DictValue/DictLabel=PlantCode）</returns>
-    public async Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisPlantOptionsAsync()
-    {
-        EnsureThreeLayerContext();
-        var companies = await _companyRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode);
-        var relatedPlant = companies
-            .Select(c => c.RelatedPlant?.Trim() ?? string.Empty)
-            .FirstOrDefault(p => !string.IsNullOrEmpty(p))
-            ?? string.Empty;
-        if (string.IsNullOrEmpty(relatedPlant))
-        {
-            return new List<TaktSelectOption>();
-        }
-        var costPlants = await _bomMaterialCostRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == relatedPlant);
-        if (costPlants.Count == 0)
-        {
-            return new List<TaktSelectOption>();
-        }
-        return new List<TaktSelectOption>
-        {
-            new()
-            {
-                DictValue = relatedPlant,
-                DictLabel = relatedPlant,
-            },
-        };
-    }
-
-    /// <summary>
-    /// 查询栏物料类型去重选项（本表 MaterialType；须工厂）
-    /// <para>返回该工厂下全部类型（FERT/HALB/…），不做默认截断；前端拉全量后再默认选中 FERT。</para>
-    /// <para>❌ 非字典 logistics_material_type（CRUD 表单专用）。</para>
-    /// </summary>
-    /// <param name="queryDto">须 PlantCode</param>
-    /// <returns>DictValue/DictLabel=MaterialType；PlantCode 空则空列表</returns>
-    public async Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisMaterialTypeOptionsAsync(
-        TaktBomMaterialCostAnalysisMaterialTypeOptionsQueryDto queryDto)
-    {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        EnsureThreeLayerContext();
-        var plant = queryDto.PlantCode?.Trim() ?? string.Empty;
-        if (string.IsNullOrEmpty(plant))
-        {
-            return new List<TaktSelectOption>();
-        }
-        // 本表 MaterialType 全量去重（含 FERT/HALB/…）；❌ 不默认截成仅 FERT
-        var list = await _bomMaterialCostRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == plant
-                && x.MaterialType != null
-                && x.MaterialType != string.Empty);
-        return list
-            .Select(e => e.MaterialType.Trim())
-            .Where(t => !string.IsNullOrWhiteSpace(t))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(t => t, StringComparer.Ordinal)
-            .Select(t => new TaktSelectOption
-            {
-                DictValue = t,
-                DictLabel = t,
-            })
-            .ToList();
     }
 
     /// <summary>
     /// 规范化物料类型筛选（空=不按类型过滤）
     /// </summary>
     /// <param name="materialType">查询传入类型</param>
-    /// <returns>非空类型码；空则 null（不过滤）</returns>
+    /// <returns>非空类型码；空则 null</returns>
     private static string? NormalizeMaterialTypeFilter(string? materialType)
     {
         var trimmed = materialType?.Trim();
         return string.IsNullOrEmpty(trimmed) ? null : trimmed;
-    }
-
-    /// <summary>
-    /// 查询栏机种去重选项（本表 ModelCode；须工厂）
-    /// <para>MaterialType 有值才按类型过滤，空=该工厂全部机种。DictLabel 优先型号目的地机种名。</para>
-    /// <para>❌ 非 CRUD 主数据 TaktModelDestination / TaktBomMaterialCosts/model-options。</para>
-    /// </summary>
-    /// <param name="queryDto">机种选项查询（PlantCode 必填；MaterialType 可选）</param>
-    /// <returns>下拉选项（DictValue=ModelCode；DictLabel=机种名或编码）</returns>
-    public async Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisModelOptionsAsync(
-        TaktBomMaterialCostAnalysisModelOptionsQueryDto queryDto)
-    {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        EnsureThreeLayerContext();
-        var plant = queryDto.PlantCode?.Trim() ?? string.Empty;
-        if (string.IsNullOrEmpty(plant))
-        {
-            return new List<TaktSelectOption>();
-        }
-        var materialType = NormalizeMaterialTypeFilter(queryDto.MaterialType);
-        // 本表 ModelCode 去重；MaterialType 有值才过滤，空=该工厂全部机种（含各类型）
-        var exp = Expressionable.Create<TaktBomMaterialCost>();
-        exp = exp.And(x =>
-            x.TenantCode == CurrentTenantCode
-            && x.CompanyCode == CurrentCompanyCode
-            && x.PlantCode == plant
-            && x.ModelCode != null
-            && x.ModelCode != string.Empty);
-        if (materialType != null)
-        {
-            var type = materialType;
-            exp = exp.And(x => x.MaterialType == type);
-        }
-        var list = await _bomMaterialCostRepository.GetListAsync(exp.ToExpression());
-        var modelNameLookup = await BuildModelNameLookupAsync();
-        return list
-            .Where(e => materialType == null
-                || string.Equals(e.MaterialType?.Trim(), materialType, StringComparison.OrdinalIgnoreCase))
-            .GroupBy(e => e.ModelCode!.Trim(), StringComparer.OrdinalIgnoreCase)
-            .OrderBy(g => g.Key, StringComparer.Ordinal)
-            .Select(g =>
-            {
-                var modelCode = g.Key;
-                var label = modelNameLookup.TryGetValue(modelCode, out var modelName) && !string.IsNullOrWhiteSpace(modelName)
-                    ? modelName
-                    : modelCode;
-                return new TaktSelectOption
-                {
-                    DictValue = modelCode,
-                    DictLabel = label,
-                };
-            })
-            .ToList();
-    }
-
-    /// <summary>
-    /// 查询栏产品编码去重选项（本表 ProductCode；须工厂）
-    /// <para>仅 TaktBomMaterialCost.ProductCode；❌ 不读 TaktMaterialPlant、不读字典 logistics_material_type。</para>
-    /// <para>MaterialType / ModelCode 均可空；空则不按该维过滤。类型与机种分步 And，避免 OR 吞条件。</para>
-    /// </summary>
-    /// <param name="queryDto">产品选项查询（PlantCode 必填；MaterialType、ModelCode 可选）</param>
-    /// <returns>DictValue=ProductCode；DictLabel=编码或「编码 - 描述」；ExtValue=ModelCode；ExtLabel=MaterialType</returns>
-    public async Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisProductOptionsAsync(
-        TaktBomMaterialCostAnalysisProductOptionsQueryDto queryDto)
-    {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        EnsureThreeLayerContext();
-        var plant = queryDto.PlantCode?.Trim() ?? string.Empty;
-        if (string.IsNullOrEmpty(plant))
-        {
-            return new List<TaktSelectOption>();
-        }
-        var materialType = NormalizeMaterialTypeFilter(queryDto.MaterialType);
-        var trimmedModel = queryDto.ModelCode?.Trim();
-        var exp = Expressionable.Create<TaktBomMaterialCost>();
-        exp = exp.And(x =>
-            x.TenantCode == CurrentTenantCode
-            && x.CompanyCode == CurrentCompanyCode
-            && x.PlantCode == plant
-            && x.ProductCode != null
-            && x.ProductCode != string.Empty);
-        if (materialType != null)
-        {
-            var type = materialType;
-            exp = exp.And(x => x.MaterialType == type);
-        }
-        if (!string.IsNullOrWhiteSpace(trimmedModel))
-        {
-            var model = trimmedModel;
-            exp = exp.And(x => x.ModelCode == model);
-        }
-        var list = await _bomMaterialCostRepository.GetListAsync(exp.ToExpression());
-        return list
-            .Where(e => materialType == null
-                || string.Equals(e.MaterialType?.Trim(), materialType, StringComparison.OrdinalIgnoreCase))
-            .Where(e => string.IsNullOrWhiteSpace(trimmedModel)
-                || string.Equals(e.ModelCode?.Trim(), trimmedModel, StringComparison.OrdinalIgnoreCase))
-            .GroupBy(e => e.ProductCode!.Trim(), StringComparer.OrdinalIgnoreCase)
-            .OrderBy(g => g.Key, StringComparer.Ordinal)
-            .Select(g =>
-            {
-                var first = g.OrderByDescending(x => x.CostingDate).First();
-                var description = first.ProductDescription?.Trim();
-                var label = string.IsNullOrWhiteSpace(description) ? g.Key : $"{g.Key} - {description}";
-                return new TaktSelectOption
-                {
-                    DictValue = g.Key,
-                    DictLabel = label,
-                    ExtValue = first.ModelCode?.Trim() ?? string.Empty,
-                    ExtLabel = first.MaterialType?.Trim() ?? string.Empty,
-                };
-            })
-            .ToList();
     }
 
     // ========================================

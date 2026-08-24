@@ -100,28 +100,34 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
     /// <summary>
     /// 获取菜单树形选项列表
     /// </summary>
+    /// <param name="valueBy">选项值：id=菜单Id（默认）；name=菜单名称 MenuName</param>
     /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetMenuTreeOptionsAsync()
+    public async Task<List<TaktTreeSelectOption>> GetMenuTreeOptionsAsync(string? valueBy = null)
     {
         var list = await _menuRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.MenuStatus == 1);
-        return BuildMenuTreeOptions(list, 0);
+        var useMenuName = string.Equals(valueBy?.Trim(), "name", StringComparison.OrdinalIgnoreCase);
+        return BuildMenuTreeOptions(list, 0, useMenuName);
     }
 
     /// <summary>
     /// 在内存中构建菜单树形选项（递归，按 ParentId）
     /// </summary>
-    private List<TaktTreeSelectOption> BuildMenuTreeOptions(List<TaktMenu> all, long parentId)
+    /// <param name="all">全部菜单</param>
+    /// <param name="parentId">父级 Id</param>
+    /// <param name="useMenuName">true 时 DictValue=MenuName，否则为菜单 Id</param>
+    private List<TaktTreeSelectOption> BuildMenuTreeOptions(List<TaktMenu> all, long parentId, bool useMenuName)
     {
         var result = new List<TaktTreeSelectOption>();
         foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
         {
+            var label = item.MenuName ?? item.Id.ToString();
             var option = new TaktTreeSelectOption
             {
-                DictValue = item.Id,
-                DictLabel = item.MenuName ?? item.Id.ToString(),
+                DictValue = useMenuName ? label : item.Id,
+                DictLabel = label,
                 SortOrder = item.SortOrder,
             };
-            var children = BuildMenuTreeOptions(all, item.Id);
+            var children = BuildMenuTreeOptions(all, item.Id, useMenuName);
             if (children.Count > 0)
             {
                 option.Children = children;

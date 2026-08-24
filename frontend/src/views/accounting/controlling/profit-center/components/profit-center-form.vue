@@ -22,36 +22,51 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
-
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('parentId')"
+                name="parentId"
+              >
+                <TaktTreeSelect
+                  v-model:value="formState.parentId"
+                  api-url="TaktProfitCenters/tree-options"
+                  :lazy="true"
+                  :placeholder="pi.ph('parentId')"
+                  allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('profitCenterCode')"
-                name="profitCenterCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.profitCenterCode"
-                  :placeholder="pi.ph('profitCenterCode')"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.profitCenterId"
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -137,17 +152,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('validFrom')"
                 name="validFrom"
@@ -160,7 +165,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('validTo')"
                 name="validTo"
@@ -173,18 +178,16 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                />
-              </a-form-item>
-            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('profitCenterStatus')"
@@ -192,8 +195,45 @@
               >
                 <TaktSelect
                   v-model:value="formState.profitCenterStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('profitCenterStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -275,7 +315,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -289,17 +329,21 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
-  if (force || !target.plantCode) {
+  if (formFields.includes('plantCode') && (force || !target.plantCode)) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
+  if (formFields.includes('relatedPlant') && (force || !target.relatedPlant)) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","profitCenterCode","profitCenterName","managerId","managerName","deptId","deptName","profitCenterLevel","validFrom","validTo","plantCode","profitCenterStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","profitCenterName","managerId","managerName","deptId","deptName","profitCenterLevel","validFrom","validTo","plantCode","profitCenterStatus","extField","remark"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -321,6 +365,7 @@ const formState = reactive<Record<string, any>>({ parentId: '0' })
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   profitCenterStatus: 1
 }
+
 
 /** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
 function normalizeTreeParentId(target: Record<string, unknown>) {
@@ -368,7 +413,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.profitCenterId
     if (isCreate) {
@@ -384,13 +429,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('parentId'),
       trigger: 'change'
-    }
-  ],
-  profitCenterCode: [
-    {
-      required: true,
-      message: pi.ph('profitCenterCode'),
-      trigger: 'blur'
     }
   ],
   profitCenterName: [

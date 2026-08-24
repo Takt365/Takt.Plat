@@ -92,7 +92,8 @@ public class TaktApprovalFlowBusinessService : TaktServiceBase
     public async Task OnFlowTerminalAsync(TaktFlowInstance instance)
     {
         ArgumentNullException.ThrowIfNull(instance);
-        if (instance.InstanceStatus is not (
+        var instanceStatus = (TaktFlowInstanceStatus)instance.InstanceStatus;
+        if (instanceStatus is not (
             TaktFlowInstanceStatus.Completed
             or TaktFlowInstanceStatus.Rejected
             or TaktFlowInstanceStatus.Terminated))
@@ -105,8 +106,8 @@ public class TaktApprovalFlowBusinessService : TaktServiceBase
             return;
         }
         var binding = TaktFlowFormBindingHelper.ParseBinding(form.RelatedFormField);
-        var approvalStatus = MapApprovalStatus(instance.InstanceStatus);
-        var businessStatus = TaktFlowFormBindingHelper.ResolveBusinessStatusValue(binding.Business, instance.InstanceStatus);
+        var approvalStatus = MapApprovalStatus(instanceStatus);
+        var businessStatus = TaktFlowFormBindingHelper.ResolveBusinessStatusValue(binding.Business, instanceStatus);
         var patch = new TaktApprovalFlowStatePatch
         {
             ApprovalStatus = approvalStatus,
@@ -120,7 +121,7 @@ public class TaktApprovalFlowBusinessService : TaktServiceBase
             instance.CompanyCode,
             instance.StartUserId,
             patch);
-        if (instance.InstanceStatus == TaktFlowInstanceStatus.Completed
+        if ((TaktFlowInstanceStatus)instance.InstanceStatus == TaktFlowInstanceStatus.Completed
             && !string.IsNullOrWhiteSpace(instance.FrmData))
         {
             var dataColumns = TaktFlowFormBindingHelper.BuildDbColumnsFromFrmData(instance.FrmData, binding);
@@ -135,7 +136,7 @@ public class TaktApprovalFlowBusinessService : TaktServiceBase
                     dataColumns);
             }
         }
-        if (instance.InstanceStatus == TaktFlowInstanceStatus.Completed)
+        if ((TaktFlowInstanceStatus)instance.InstanceStatus == TaktFlowInstanceStatus.Completed)
         {
             await DispatchFlowCompletedContributorsAsync(instance, form.RelatedTableName!, entityId);
         }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopDocDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopDoc 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopDoc 生成，请按需审阅）
 // 
@@ -84,7 +84,7 @@ public class TaktSopDocDto : TaktApprovalDtoBase
     public string? CurrentRevisionName { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int SopStatus { get; set; } = 0;
 
@@ -124,7 +124,7 @@ public class TaktSopDocQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -172,7 +172,7 @@ public class TaktSopDocQueryDto : TaktPagedQuery
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? SopStatus { get; set; }
 
@@ -306,7 +306,7 @@ public class TaktSopDocCreateDto
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int SopStatus { get; set; } = 0;
 
@@ -370,9 +370,9 @@ public class TaktSopDocStatusDto
     public long SopDocId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）不能为空")]
     public int SopStatus { get; set; } = 0;
 }
 
@@ -439,7 +439,7 @@ public class TaktSopDocTemplateDto
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? SopStatus { get; set; }
 
@@ -519,7 +519,7 @@ public class TaktSopDocImportDto
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? SopStatus { get; set; }
 
@@ -567,6 +567,11 @@ public class TaktSopDocExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// SOP 编码
     /// </summary>
     public string SopCode { get; set; } = string.Empty;
@@ -600,7 +605,7 @@ public class TaktSopDocExportDto
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int SopStatus { get; set; } = 0;
 

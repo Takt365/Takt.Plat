@@ -21,49 +21,50 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('timePeriod')"
-                name="timePeriod"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.timePeriod"
-                  :placeholder="pi.ph('timePeriod')"
-                  show-count
-                  :maxlength="20"
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                name="stdCapacity"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="pi.stdCapacityHint()"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('stdCapacity') }}</span>
-                  </span>
-                </template>
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('lineNumber')"
+                name="lineNumber"
+              >
                 <a-input-number
-                  v-model:value="formState.stdCapacity"
-                  :placeholder="pi.ph('stdCapacity')"
+                  v-model:value="formState.lineNumber"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
-                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('prodActualQty')"
                 name="prodActualQty"
@@ -75,7 +76,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('downtimeMinutes')"
                 name="downtimeMinutes"
@@ -84,21 +85,20 @@
                   v-model:value="formState.downtimeMinutes"
                   :placeholder="pi.ph('downtimeMinutes')"
                   style="width: 100%"
-                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('downtimeReason')"
                 name="downtimeReason"
               >
-                <TaktSelect
+                <a-input
                   v-model:value="formState.downtimeReason"
-                  dict-type="logistics_stop_reason_category"
-                  multiple
                   :placeholder="pi.ph('downtimeReason')"
-                  :disabled="loading"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -114,17 +114,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('unachievedReason')"
                 name="unachievedReason"
               >
-                <TaktSelect
+                <a-input
                   v-model:value="formState.unachievedReason"
-                  dict-type="logistics_nonachievement_reason_category"
-                  multiple
                   :placeholder="pi.ph('unachievedReason')"
-                  :disabled="loading"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -137,56 +137,89 @@
                   v-model:value="formState.unachievedDescription"
                   :placeholder="pi.ph('unachievedDescription')"
                   :rows="2"
-                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
+                :label="pi.label('confirmMinutes')"
                 name="confirmMinutes"
               >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="pi.confirmMinutesHint()"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('confirmMinutes') }}</span>
-                  </span>
-                </template>
                 <a-input-number
                   v-model:value="formState.confirmMinutes"
                   :placeholder="pi.ph('confirmMinutes')"
                   style="width: 100%"
-                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('prodOrderCode')"
-                name="prodOrderCode"
+                :label="pi.label('mixedProd')"
+                name="mixedProd"
+              >
+                <a-date-picker
+                  v-model:value="formState.mixedProd"
+                  :placeholder="pi.ph('mixedProd')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
                 <a-input
-                  v-model:value="formState.prodOrderCode"
-                  :placeholder="pi.ph('prodOrderCode')"
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('lineNumber')"
-                name="lineNumber"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="pi.ph('lineNumber')"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
                   disabled
                 />
               </a-form-item>
@@ -205,19 +238,8 @@
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { RiQuestionLine } from '@remixicon/vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useAssyOutputDetailI18n } from '../composables/use-assy-output-detail-i18n'
-import {
-  calculateAssyOutputDetailDerived,
-  type AssyOutputMasterCalcSnapshot,
-} from '../composables/use-assy-output-derived-calc'
-import { useAssyOutputDetailDictMultiFormat } from '../composables/use-assy-output-detail-dict-multi-format'
-import {
-  applyAssyCleaningPeriodDefaults,
-  ASSY_CLEANING_STOP_REASON_LABEL,
-  isAssyCleaningTimePeriod,
-} from '@/utils/takt-production-stat'
 
 /** 实体字段 i18n */
 const pi = useAssyOutputDetailI18n()
@@ -225,17 +247,47 @@ const pi = useAssyOutputDetailI18n()
 import type { AssyOutputDetailCreate } from '@/types/logistics/manufacturing/output/assy-output-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-const { formatDowntimeReason, formatUnachievedReason, sortDowntimeReasonValues, sortUnachievedReasonValues, parseDowntimeReasonForSelect, parseUnachievedReasonForSelect } =
-  useAssyOutputDetailDictMultiFormat()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["timePeriod","prodActualQty","downtimeMinutes","downtimeReason","downtimeDescription","unachievedReason","unachievedDescription","confirmMinutes","prodOrderCode","lineNumber"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","prodActualQty","downtimeMinutes","downtimeReason","downtimeDescription","unachievedReason","unachievedDescription","confirmMinutes","mixedProd","isObsolete"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -244,15 +296,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
-  /** 主表派生计算快照（直接人员、标准产能） */
-  masterContext?: AssyOutputMasterCalcSnapshot | null
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
-  masterContext: null,
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -261,18 +313,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  if (!Array.isArray(target.downtimeReason)) {
-    target.downtimeReason = parseDowntimeReasonForSelect(target.downtimeReason as string)
-  }
-  if (!Array.isArray(target.unachievedReason)) {
-    target.unachievedReason = parseUnachievedReasonForSelect(target.unachievedReason as string)
-  }
-}
-
-/** 灌入表单时解析多选字典字段（库内 Label → Select DictValue） */
-function hydrateDictMultiFields(target: Record<string, unknown>) {
-  target.downtimeReason = parseDowntimeReasonForSelect(target.downtimeReason as string)
-  target.unachievedReason = parseUnachievedReasonForSelect(target.unachievedReason as string)
+  void target
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -283,36 +324,6 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
-/** 按主表快照刷新明细派生字段 */
-function refreshDerivedDisplayFields() {
-  const master = props.masterContext
-  if (!master) {
-    return
-  }
-  const directLabor = Number(master.directLabor) || 0
-  const prodQty = Number(formState.prodActualQty) || 0
-  applyAssyCleaningPeriodDefaults(formState, directLabor)
-  if (isAssyCleaningTimePeriod(String(formState.timePeriod ?? '')) && prodQty > 0) {
-    formState.downtimeReason = parseDowntimeReasonForSelect(ASSY_CLEANING_STOP_REASON_LABEL)
-  }
-  const isCreate = !props.formData?.assyOutputDetailId
-  const mixedProd = isCreate ? 0 : (Number(formState.mixedProd) || 0)
-  const derived = calculateAssyOutputDetailDerived(master, {
-    prodActualQty: Number(formState.prodActualQty) || 0,
-    downtimeMinutes: Number(formState.downtimeMinutes) || 0,
-    confirmMinutes: Number(formState.confirmMinutes) || 0,
-    mixedProd,
-  })
-  formState.inputMinutes = derived.inputMinutes
-  formState.actualMinutes = derived.actualMinutes
-  formState.indirectMinutes = derived.indirectMinutes
-  formState.stdCapacity = derived.stdCapacity
-  formState.achievementRate = derived.achievementRate
-  if (isCreate) {
-    formState.mixedProd = 0
-  }
-}
-
 /** 编辑态灌入 formData；新增态恢复默认值（须含 assyOutputDetailId 才视为编辑） */
 watch(
   () => props.formData,
@@ -320,49 +331,35 @@ watch(
     if (val?.assyOutputDetailId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-      hydrateDictMultiFields(next)
+
+      applyScopeDefaults(next)
       Object.assign(formState, next)
-      refreshDerivedDisplayFields()
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
       if (val && typeof val === 'object' && Object.keys(val).length > 0) {
-        const next = { ...val } as Record<string, unknown>
-        hydrateDictMultiFields(next)
-        Object.assign(formState, next)
+        Object.assign(formState, val)
       }
       applyFormDefaults(formState)
-      refreshDerivedDisplayFields()
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [
-    props.masterContext?.directLabor,
-    props.masterContext?.indirectLabor,
-    props.masterContext?.stdCapacity,
-    props.masterContext?.stdMinutes,
-    formState.timePeriod,
-    formState.prodActualQty,
-    formState.downtimeMinutes,
-    formState.confirmMinutes] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    refreshDerivedDisplayFields()
-  }
+    if (!props.formData?.assyOutputDetailId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
 )
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  prodOrderCode: [
-    {
-      required: true,
-      message: pi.ph('prodOrderCode'),
-      trigger: 'blur'
-    }
-  ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -376,13 +373,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  timePeriod: [
-    {
-      required: true,
-      message: pi.ph('timePeriod'),
-      trigger: 'blur'
-    }
-  ],
   prodActualQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -422,6 +412,26 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  mixedProd: [
+    {
+      required: true,
+      message: pi.ph('mixedProd'),
+      trigger: 'change'
+    }
+  ],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -435,28 +445,94 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+    if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
+      delete payload.lineNumber
+    } else {
+      const numlineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+      if (Number.isFinite(numlineNumber)) payload.lineNumber = numlineNumber
+      else delete payload.lineNumber
+    }
   }
   if ('prodActualQty' in payload) {
     const rawprodActualQty = payload.prodActualQty
-    payload.prodActualQty = typeof rawprodActualQty === 'number' ? rawprodActualQty : Number(rawprodActualQty)
+    if (rawprodActualQty === undefined || rawprodActualQty === null || rawprodActualQty === '') {
+      delete payload.prodActualQty
+    } else {
+      const numprodActualQty = typeof rawprodActualQty === 'number' ? rawprodActualQty : Number(rawprodActualQty)
+      if (Number.isFinite(numprodActualQty)) payload.prodActualQty = numprodActualQty
+      else delete payload.prodActualQty
+    }
   }
   if ('downtimeMinutes' in payload) {
     const rawdowntimeMinutes = payload.downtimeMinutes
-    payload.downtimeMinutes = typeof rawdowntimeMinutes === 'number' ? rawdowntimeMinutes : Number(rawdowntimeMinutes)
+    if (rawdowntimeMinutes === undefined || rawdowntimeMinutes === null || rawdowntimeMinutes === '') {
+      delete payload.downtimeMinutes
+    } else {
+      const numdowntimeMinutes = typeof rawdowntimeMinutes === 'number' ? rawdowntimeMinutes : Number(rawdowntimeMinutes)
+      if (Number.isFinite(numdowntimeMinutes)) payload.downtimeMinutes = numdowntimeMinutes
+      else delete payload.downtimeMinutes
+    }
   }
   if ('confirmMinutes' in payload) {
-    const rawConfirmMinutes = payload.confirmMinutes
-    payload.confirmMinutes = typeof rawConfirmMinutes === 'number' ? rawConfirmMinutes : Number(rawConfirmMinutes)
+    const rawconfirmMinutes = payload.confirmMinutes
+    if (rawconfirmMinutes === undefined || rawconfirmMinutes === null || rawconfirmMinutes === '') {
+      delete payload.confirmMinutes
+    } else {
+      const numconfirmMinutes = typeof rawconfirmMinutes === 'number' ? rawconfirmMinutes : Number(rawconfirmMinutes)
+      if (Number.isFinite(numconfirmMinutes)) payload.confirmMinutes = numconfirmMinutes
+      else delete payload.confirmMinutes
+    }
   }
-  if ('downtimeReason' in payload) {
-    payload.downtimeReason = formatDowntimeReason(payload.downtimeReason)
+  if ('mixedProd' in payload) {
+    const rawmixedProd = payload.mixedProd
+    if (rawmixedProd === undefined || rawmixedProd === null || rawmixedProd === '') {
+      delete payload.mixedProd
+    } else {
+      const nummixedProd = typeof rawmixedProd === 'number' ? rawmixedProd : Number(rawmixedProd)
+      if (Number.isFinite(nummixedProd)) payload.mixedProd = nummixedProd
+      else delete payload.mixedProd
+    }
   }
-  if ('unachievedReason' in payload) {
-    payload.unachievedReason = formatUnachievedReason(payload.unachievedReason)
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    if (rawisObsolete === undefined || rawisObsolete === null || rawisObsolete === '') {
+      delete payload.isObsolete
+    } else {
+      const numisObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+      if (Number.isFinite(numisObsolete)) payload.isObsolete = numisObsolete
+      else delete payload.isObsolete
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.assyOutputDetailId) {
+    payload.assyOutputDetailId = props.formData.assyOutputDetailId
+  }
   payload.assyOutputId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.assyOutputCode ?? masterRow.AssyOutputCode
+    const masterName = masterRow.assyOutputName ?? masterRow.AssyOutputName
+    if (masterCode != null && masterCode !== '' && !payload.assyOutputCode) {
+      payload.assyOutputCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.assyOutputName) {
+      payload.assyOutputName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -464,11 +540,10 @@ function getValues(): Record<string, any> {
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
-    const next = { ...props.formData } as Record<string, unknown>
-    hydrateDictMultiFields(next)
-    Object.assign(formState, next)
+    Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.assyOutputDetailId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

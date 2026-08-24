@@ -75,7 +75,7 @@ const selectedRowKeys = ref<string[]>([])
 const nameById = ref<Record<string, string>>({})
 
 const columns = computed(() => [
-  { title: t('workflow.designer.page.colusername'), dataIndex: 'userName', ellipsis: true },
+  { title: t('workflow.designer.page.colUserName'), dataIndex: 'userName', ellipsis: true },
   { title: t('workflow.designer.page.coluseremail'), dataIndex: 'userEmail', ellipsis: true },
   { title: t('workflow.designer.page.coluserphone'), dataIndex: 'userPhone', ellipsis: true }
 ])

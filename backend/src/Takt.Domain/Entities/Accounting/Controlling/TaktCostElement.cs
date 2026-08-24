@@ -65,12 +65,12 @@ public class TaktCostElement : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 成本要素状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "cost_element_status", ColumnDescription = "成本要素状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CostElementStatus { get; set; } = 1;

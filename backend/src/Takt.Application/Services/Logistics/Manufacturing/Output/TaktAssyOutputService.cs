@@ -229,12 +229,11 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         await ApplyPlantCodeFromProdOrderAsync(entity);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.ProdDate == entity.ProdDate.Date
+            x => x.ProdDate == entity.ProdDate.Date
                 && x.ProdOrderCode == entity.ProdOrderCode);
         if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
         {
-            throw new TaktBusinessException("组立日报的PlantCode、生产日期、工单号已存在");
+            throw new TaktBusinessException("组立日报的生产日期、工单号已存在");
         }
         await ApplyAssyOutputDerivedFieldsAsync(entity);
         entity = await _assyOutputRepository.CreateAsync(entity);
@@ -267,13 +266,12 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         await ApplyPlantCodeFromProdOrderAsync(entity);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.ProdDate == entity.ProdDate.Date
+            x => x.ProdDate == entity.ProdDate.Date
                 && x.ProdOrderCode == entity.ProdOrderCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
         {
-            throw new TaktBusinessException("组立日报的PlantCode、生产日期、工单号已存在");
+            throw new TaktBusinessException("组立日报的生产日期、工单号已存在");
         }
         await ApplyAssyOutputDerivedFieldsAsync(entity);
         await _assyOutputRepository.UpdateAsync(entity);
@@ -372,19 +370,18 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                 ApplyDefaultAssyOutputProdDateIfMissing(entity);
                 EnsureAssyOutputProdDateEditable(entity.ProdDate);
                 await ApplyPlantCodeFromProdOrderAsync(entity);
-                var importKey = TaktOutputOrderUniqueHelper.BuildImportKey(entity.PlantCode, entity.ProdDate, entity.ProdOrderCode);
+                var importKey = TaktOutputOrderUniqueHelper.BuildImportKey(entity.ProdDate, entity.ProdOrderCode);
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdDate、ProdOrderCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（ProdDate、ProdOrderCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_output_assy_unique = await _uniqueValidator.IsUniqueAsync(
                     _assyOutputRepository,
-                    x => x.PlantCode == entity.PlantCode
-                        && x.ProdDate == entity.ProdDate.Date
+                    x => x.ProdDate == entity.ProdDate.Date
                         && x.ProdOrderCode == entity.ProdOrderCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
                 {
-                    throw new TaktBusinessException("组立日报的PlantCode、生产日期、工单号已存在");
+                    throw new TaktBusinessException("组立日报的生产日期、工单号已存在");
                 }
                 await ApplyAssyOutputDerivedFieldsAsync(entity);
                 await _assyOutputRepository.CreateAsync(entity);
@@ -683,11 +680,11 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     private static void EnsureDefaultAssyOutputDetailsOnCreate(TaktAssyOutputCreateDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
-        var submittedByPeriod = (dto.AssyOutputDetails ?? new List<TaktAssyOutputDetailUpdateDto>())
+        var submittedByPeriod = (dto.AssyOutputDetails ?? new List<TaktAssyOutputDetailCreateDto>())
             .Where(d => !string.IsNullOrWhiteSpace(d.TimePeriod))
             .GroupBy(d => d.TimePeriod.Trim(), StringComparer.Ordinal)
             .ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
-        var details = new List<TaktAssyOutputDetailUpdateDto>(TaktAssyOutputTimePeriodConstants.DefaultTimePeriods.Length);
+        var details = new List<TaktAssyOutputDetailCreateDto>(TaktAssyOutputTimePeriodConstants.DefaultTimePeriods.Length);
         var lineNumber = 10;
         foreach (var timePeriod in TaktAssyOutputTimePeriodConstants.DefaultTimePeriods)
         {
@@ -715,9 +712,8 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             }
             else
             {
-                details.Add(new TaktAssyOutputDetailUpdateDto
+                details.Add(new TaktAssyOutputDetailCreateDto
                 {
-                    AssyOutputDetailId = 0,
                     TenantCode = dto.TenantCode,
                     CompanyCode = dto.CompanyCode,
                     CultureCode = dto.CultureCode,
@@ -900,11 +896,9 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// <returns>自然键相同为 true</returns>
     private static bool IsSameOutputDefectKey(TaktAssyOutput before, TaktAssyOutput after)
     {
-        return TaktOutputOrderUniqueHelper.IsSamePlantDailyOrderKey(
-            before.PlantCode,
+        return TaktOutputOrderUniqueHelper.IsSameDailyOrderKey(
             before.ProdDate,
             before.ProdOrderCode,
-            after.PlantCode,
             after.ProdDate,
             after.ProdOrderCode);
     }

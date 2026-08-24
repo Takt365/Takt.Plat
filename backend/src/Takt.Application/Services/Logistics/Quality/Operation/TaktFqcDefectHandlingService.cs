@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcDefectHandlingService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验不良处理记录应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
     }
 
     /// <summary>
-    /// 获取出货检验不良处理记录列表（分页）
+    /// 获取出货检验不良处理记录列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktFqcDefectHandlingDto>> GetFqcDefectHandlingListAsync(TaktFqcDefectHandlingQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktFqcDefectHandlingDto>.Create(
+                new List<TaktFqcDefectHandlingDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _fqcDefectHandlingRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -331,7 +339,15 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportFqcDefectHandlingAsync(TaktFqcDefectHandlingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktFqcDefectHandlingQueryDto());
+        var queryDto = query ?? new TaktFqcDefectHandlingQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktFqcDefectHandlingExportDto>(),
+                sheetName ?? "出货检验不良处理记录数据",
+                fileName ?? "出货检验不良处理记录导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _fqcDefectHandlingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -369,6 +385,26 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
             throw new TaktBusinessException("出货检验单明细不存在");
         }
         entity.FqcOrderItemId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.FqcOrderCode))
+        {
+            entity.FqcOrderCode = master.FqcOrderCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -392,19 +428,16 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.FqcDefectHandlingCode != null && x.FqcDefectHandlingCode.Contains(keywords))
-                || SqlFunc.ToString(x.FqcOrderItemId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.FqcDefectHandlingCode != null && x.FqcDefectHandlingCode.Contains(keywords))
                 || (x.FqcOrderCode != null && x.FqcOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.DefectType).Contains(keywords)
                 || (x.DefectCode != null && x.DefectCode.Contains(keywords))
                 || (x.DefectDescription != null && x.DefectDescription.Contains(keywords))
-                || SqlFunc.ToString(x.DefectQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.HandlingMethod).Contains(keywords)
                 || (x.HandlingDescription != null && x.HandlingDescription.Contains(keywords))
                 || (x.ResponsibleDept != null && x.ResponsibleDept.Contains(keywords))
                 || (x.ResponsibleBy != null && x.ResponsibleBy.Contains(keywords))
@@ -412,141 +445,275 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
                 || (x.CorrectiveAction != null && x.CorrectiveAction.Contains(keywords))
                 || (x.DefectImages != null && x.DefectImages.Contains(keywords))
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
-                || SqlFunc.ToString(x.HandlingStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.HandlingAt).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FqcDefectHandlingCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.FqcDefectHandlingCode != null && x.FqcDefectHandlingCode.Contains(queryDto.FqcDefectHandlingCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.FqcOrderItemId.HasValue == true)
-        {
-            exp = exp.And(x => x.FqcOrderItemId == queryDto.FqcOrderItemId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FqcOrderCode))
-        {
-            exp = exp.And(x => x.FqcOrderCode != null && x.FqcOrderCode.Contains(queryDto.FqcOrderCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.DefectType.HasValue == true)
-        {
-            exp = exp.And(x => x.DefectType == queryDto.DefectType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectCode))
-        {
-            exp = exp.And(x => x.DefectCode != null && x.DefectCode.Contains(queryDto.DefectCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectDescription))
-        {
-            exp = exp.And(x => x.DefectDescription != null && x.DefectDescription.Contains(queryDto.DefectDescription));
-        }
-
-        if (queryDto?.DefectQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.DefectQuantity == queryDto.DefectQuantity);
-        }
-
-        if (queryDto?.HandlingMethod.HasValue == true)
-        {
-            exp = exp.And(x => x.HandlingMethod == queryDto.HandlingMethod);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.HandlingDescription))
-        {
-            exp = exp.And(x => x.HandlingDescription != null && x.HandlingDescription.Contains(queryDto.HandlingDescription));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ResponsibleDept))
-        {
-            exp = exp.And(x => x.ResponsibleDept != null && x.ResponsibleDept.Contains(queryDto.ResponsibleDept));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ResponsibleBy))
-        {
-            exp = exp.And(x => x.ResponsibleBy != null && x.ResponsibleBy.Contains(queryDto.ResponsibleBy));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.HandlerBy))
-        {
-            exp = exp.And(x => x.HandlerBy != null && x.HandlerBy.Contains(queryDto.HandlerBy));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CorrectiveAction))
-        {
-            exp = exp.And(x => x.CorrectiveAction != null && x.CorrectiveAction.Contains(queryDto.CorrectiveAction));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectImages))
-        {
-            exp = exp.And(x => x.DefectImages != null && x.DefectImages.Contains(queryDto.DefectImages));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Attachments))
-        {
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
-        }
-
-        if (queryDto?.HandlingStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.HandlingStatus == queryDto.HandlingStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.HandlingAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.HandlingAt >= queryDto.HandlingAtStart);
-        }
-
-        if (queryDto?.HandlingAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.HandlingAt <= queryDto.HandlingAtEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.FqcDefectHandlingCode))
+        {
+            var fqcDefectHandlingCode = queryDto.FqcDefectHandlingCode;
+            exp = exp.And(x => x.FqcDefectHandlingCode != null && x.FqcDefectHandlingCode.Contains(fqcDefectHandlingCode));
+        }
+
+        if (queryDto?.FqcOrderItemId.HasValue == true)
+        {
+            var fqcOrderItemId = queryDto.FqcOrderItemId.Value;
+            exp = exp.And(x => x.FqcOrderItemId == fqcOrderItemId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.FqcOrderCode))
+        {
+            var fqcOrderCode = queryDto.FqcOrderCode;
+            exp = exp.And(x => x.FqcOrderCode != null && x.FqcOrderCode.Contains(fqcOrderCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.DefectType.HasValue == true)
+        {
+            var defectType = queryDto.DefectType.Value;
+            exp = exp.And(x => x.DefectType == defectType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectCode))
+        {
+            var defectCode = queryDto.DefectCode;
+            exp = exp.And(x => x.DefectCode != null && x.DefectCode.Contains(defectCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectDescription))
+        {
+            var defectDescription = queryDto.DefectDescription;
+            exp = exp.And(x => x.DefectDescription != null && x.DefectDescription.Contains(defectDescription));
+        }
+
+        if (queryDto?.DefectQuantity.HasValue == true)
+        {
+            var defectQuantity = queryDto.DefectQuantity.Value;
+            exp = exp.And(x => x.DefectQuantity == defectQuantity);
+        }
+
+        if (queryDto?.HandlingMethod.HasValue == true)
+        {
+            var handlingMethod = queryDto.HandlingMethod.Value;
+            exp = exp.And(x => x.HandlingMethod == handlingMethod);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandlingDescription))
+        {
+            var handlingDescription = queryDto.HandlingDescription;
+            exp = exp.And(x => x.HandlingDescription != null && x.HandlingDescription.Contains(handlingDescription));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleDept))
+        {
+            var responsibleDept = queryDto.ResponsibleDept;
+            exp = exp.And(x => x.ResponsibleDept != null && x.ResponsibleDept.Contains(responsibleDept));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleBy))
+        {
+            var responsibleBy = queryDto.ResponsibleBy;
+            exp = exp.And(x => x.ResponsibleBy != null && x.ResponsibleBy.Contains(responsibleBy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandlerBy))
+        {
+            var handlerBy = queryDto.HandlerBy;
+            exp = exp.And(x => x.HandlerBy != null && x.HandlerBy.Contains(handlerBy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CorrectiveAction))
+        {
+            var correctiveAction = queryDto.CorrectiveAction;
+            exp = exp.And(x => x.CorrectiveAction != null && x.CorrectiveAction.Contains(correctiveAction));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectImages))
+        {
+            var defectImages = queryDto.DefectImages;
+            exp = exp.And(x => x.DefectImages != null && x.DefectImages.Contains(defectImages));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Attachments))
+        {
+            var attachments = queryDto.Attachments;
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(attachments));
+        }
+
+        if (queryDto?.HandlingStatus.HasValue == true)
+        {
+            var handlingStatus = queryDto.HandlingStatus.Value;
+            exp = exp.And(x => x.HandlingStatus == handlingStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.HandlingAtStart.HasValue == true)
+        {
+            var handlingAtStart = queryDto.HandlingAtStart.Value;
+            exp = exp.And(x => x.HandlingAt >= handlingAtStart);
+        }
+
+        if (queryDto?.HandlingAtEnd.HasValue == true)
+        {
+            var handlingAtEnd = queryDto.HandlingAtEnd.Value;
+            exp = exp.And(x => x.HandlingAt <= handlingAtEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktFqcDefectHandlingQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FqcDefectHandlingCode))
+        {
+            return true;
+        }
+        if (queryDto.FqcOrderItemId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FqcOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DefectType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectDescription))
+        {
+            return true;
+        }
+        if (queryDto.DefectQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.HandlingMethod.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HandlingDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleDept))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HandlerBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CorrectiveAction))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectImages))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Attachments))
+        {
+            return true;
+        }
+        if (queryDto.HandlingStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.HandlingAtStart.HasValue || queryDto.HandlingAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

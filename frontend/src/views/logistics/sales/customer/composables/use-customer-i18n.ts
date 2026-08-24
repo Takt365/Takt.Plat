@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/logistics/sales/customer/composables
 // 文件名称：use-customer-i18n.ts
-// 功能描述：Takt客户信息实体字段清单 + useCustomerI18n（字段名映射一次，文案由 entity.customer.* 种子动态解析）
+// 功能描述：Takt客户信息实体 <para>业务唯一键：TenantCode+CompanyCode+CustomerCode字段清单 + useCustomerI18n（字段名映射一次，文案由 entity.customer.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,7 +20,6 @@ export const CUSTOMER_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTOMER_ENTITY_SLU
 
 /** 列表业务列（不含主键） */
 export const CUSTOMER_LIST_FIELDS = [
-  'plantCode',
   'customerCode',
   'customerName1',
   'customerName2',
@@ -28,8 +27,8 @@ export const CUSTOMER_LIST_FIELDS = [
   'customerType',
   'enterpriseNature',
   'industryAttribute',
-  'cultureCode',
   'customerTaxNumber',
+  'taxCode',
   'taxRate',
   'registrationCountry',
   'registrationProvince',
@@ -76,8 +75,8 @@ export const CUSTOMER_LIST_FIELDS = [
 export const CUSTOMER_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   customerCode: 'required',
   customerName1: 'required',
   customerName2: 'optional',
@@ -85,8 +84,8 @@ export const CUSTOMER_PLACEHOLDER = {
   customerType: 'select',
   enterpriseNature: 'select',
   industryAttribute: 'select',
-  cultureCode: 'select',
   customerTaxNumber: 'optional',
+  taxCode: 'optional',
   taxRate: 'select',
   registrationCountry: 'optional',
   registrationProvince: 'optional',
@@ -136,6 +135,7 @@ export type CustomerField = keyof typeof CUSTOMER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const CUSTOMER_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'customerCode',
   'customerName1',
@@ -143,8 +143,8 @@ export const CUSTOMER_QUERY_STRING_FIELDS = [
   'customerShortName',
   'enterpriseNature',
   'industryAttribute',
-  'cultureCode',
   'customerTaxNumber',
+  'taxCode',
   'registrationCountry',
   'registrationProvince',
   'registrationCity',
@@ -202,7 +202,7 @@ export const CUSTOMER_QUERY_FIELDS: readonly CustomerQueryField[] = [
 ]
 
 /**
- * Takt客户信息实体字段 i18n：index / customer-form 统一入口
+ * Takt客户信息实体 <para>业务唯一键：TenantCode+CompanyCode+CustomerCode字段 i18n：index / customer-form 统一入口
  */
 export function useCustomerI18n() {
   const ef = useEntityFieldI18n(CUSTOMER_ENTITY_SLUG)

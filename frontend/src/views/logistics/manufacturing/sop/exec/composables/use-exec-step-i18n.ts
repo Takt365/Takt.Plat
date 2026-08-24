@@ -57,8 +57,7 @@ export const SOPEXECSTEP_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'select',
-  execId: 'select',
+  plantCode: 'optional',
   stepId: 'select',
   stepNo: 'select',
   startedAt: 'select',
@@ -76,7 +75,6 @@ export type SopExecStepField = keyof typeof SOPEXECSTEP_PLACEHOLDER
 export const SOPEXECSTEP_QUERY_STRING_FIELDS = [
   'cultureCode',
   'plantCode',
-  'execId',
   'stepId',
   'startedAtStart',
   'startedAtEnd',

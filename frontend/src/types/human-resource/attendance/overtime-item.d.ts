@@ -74,7 +74,7 @@ export interface OvertimeItem extends CompanyDtoBase {
   actualHours?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -159,7 +159,7 @@ export interface OvertimeItemQuery extends TaktPagedQuery {
   actualHours?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -256,7 +256,7 @@ export interface OvertimeItemCreate {
   actualHours?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -300,7 +300,7 @@ export interface OvertimeItemObsolete {
   overtimeItemId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -369,7 +369,7 @@ export interface OvertimeItemTemplate {
   actualHours?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -456,7 +456,7 @@ export interface OvertimeItemImport {
   actualHours?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -530,7 +530,7 @@ export interface OvertimeItemExport {
   actualHours?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

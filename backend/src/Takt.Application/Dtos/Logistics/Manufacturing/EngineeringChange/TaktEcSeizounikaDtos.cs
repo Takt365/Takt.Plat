@@ -92,7 +92,7 @@ public class TaktEcSeizounikaDto : TaktCompanyDtoBase
     public string? OutboundOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -185,7 +185,7 @@ public class TaktEcSeizounikaQueryDto : TaktPagedQuery
     public string? OutboundOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -293,7 +293,7 @@ public class TaktEcSeizounikaCreateDto
     public string? OutboundOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -347,7 +347,7 @@ public class TaktEcSeizounikaObsoleteDto
     public long EcSeizounikaId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -433,7 +433,7 @@ public class TaktEcSeizounikaTemplateDto
     public string? OutboundOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -526,7 +526,7 @@ public class TaktEcSeizounikaImportDto
     public string? OutboundOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -615,7 +615,7 @@ public class TaktEcSeizounikaExportDto
     public string? OutboundOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

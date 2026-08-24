@@ -18,7 +18,7 @@ import type { LogReportPayload } from '../types/logger';
 import {
   TAKT_CLIENT_LOG_INGEST_PATH,
   writeClientLogEntriesToFiles,
-} from './vite-log-file-writer';
+} from './vite-log-file-writer.ts';
 
 /** 开发代理路径前缀（与 vite.config 代理段一致） */
 const DEV_LOG_PATH_PREFIXES = ['/api', '/connect', '/hubs'] as const;

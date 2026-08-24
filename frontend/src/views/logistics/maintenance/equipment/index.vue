@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getEquipmentId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -73,7 +74,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'equipmentStatus'">
           <TaktDictTag
-            :value="getEquipmentField(record, 'equipmentStatus')"
+            :value="getEquipmentDictValue(record, 'equipmentStatus')"
             dict-type="sys_equipment_status"
           />
         </template>
@@ -118,437 +119,22 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('common.page.entity.plantcode')">
-        <a-input
-          v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('EquipCode')">
-      <a-form-item :label="t('entity.equipment.code')">
-        <a-input
-          v-model:value="advancedQueryForm.EquipCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.code') })"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentName')">
-      <a-form-item :label="t('entity.equipment.name')">
-        <a-input
-          v-model:value="advancedQueryForm.equipmentName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.name') })"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentType')">
-      <a-form-item :label="t('entity.equipment.type')">
-        <a-input-number
-          v-model:value="advancedQueryForm.equipmentType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.type') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentModel')">
-      <a-form-item :label="t('entity.equipment.model')">
-        <a-input
-          v-model:value="advancedQueryForm.equipmentModel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.model') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('EquipSpecification')">
-      <a-form-item :label="t('entity.equipment.specification')">
-        <a-input
-          v-model:value="advancedQueryForm.EquipSpecification"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.specification') })"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('EquipBrand')">
-      <a-form-item :label="t('entity.equipment.brand')">
-        <a-input
-          v-model:value="advancedQueryForm.EquipBrand"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.brand') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('manufacturer')">
-      <a-form-item :label="t('entity.equipment.manufacturer')">
-        <a-input
-          v-model:value="advancedQueryForm.manufacturer"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.manufacturer') })"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('dealerBy')">
-      <a-form-item :label="t('entity.equipment.dealerby')">
-        <a-input
-          v-model:value="advancedQueryForm.dealerBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.dealerby') })"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('serialNumber')">
-      <a-form-item :label="t('entity.equipment.serialnumber')">
-        <a-input
-          v-model:value="advancedQueryForm.serialNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.serialnumber') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('workshopBy')">
-      <a-form-item :label="t('entity.equipment.workshopby')">
-        <a-input
-          v-model:value="advancedQueryForm.workshopBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.workshopby') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productionLineBy')">
-      <a-form-item :label="t('entity.equipment.productionlineby')">
-        <a-input
-          v-model:value="advancedQueryForm.productionLineBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.productionlineby') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('workstationBy')">
-      <a-form-item :label="t('entity.equipment.workstationby')">
-        <a-input
-          v-model:value="advancedQueryForm.workstationBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.workstationby') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deptBy')">
-      <a-form-item :label="t('entity.equipment.deptby')">
-        <a-input
-          v-model:value="advancedQueryForm.deptBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.deptby') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentLocation')">
-      <a-form-item :label="t('entity.equipment.location')">
-        <a-input
-          v-model:value="advancedQueryForm.equipmentLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.location') })"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('responsibleUserBy')">
-      <a-form-item :label="t('entity.equipment.responsibleuserby')">
-        <a-input
-          v-model:value="advancedQueryForm.responsibleUserBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.responsibleuserby') })"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('operatorBy')">
-      <a-form-item :label="t('entity.equipment.operatorby')">
-        <a-input
-          v-model:value="advancedQueryForm.operatorBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.operatorby') })"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('purchaseDateStart')">
-      <a-form-item :label="t('entity.equipment.purchasedatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.purchaseDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.purchasedatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('purchaseDateEnd')">
-      <a-form-item :label="t('entity.equipment.purchasedateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.purchaseDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.purchasedateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('installationDateStart')">
-      <a-form-item :label="t('entity.equipment.installationdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.installationDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.installationdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('installationDateEnd')">
-      <a-form-item :label="t('entity.equipment.installationdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.installationDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.installationdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('startDateStart')">
-      <a-form-item :label="t('entity.equipment.startdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.startDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.startdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('startDateEnd')">
-      <a-form-item :label="t('entity.equipment.startdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.startDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.startdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('warrantyStartDateStart')">
-      <a-form-item :label="t('entity.equipment.warrantystartdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.warrantyStartDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantystartdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('warrantyStartDateEnd')">
-      <a-form-item :label="t('entity.equipment.warrantystartdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.warrantyStartDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantystartdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('warrantyEndDateStart')">
-      <a-form-item :label="t('entity.equipment.warrantyenddatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.warrantyEndDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantyenddatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('warrantyEndDateEnd')">
-      <a-form-item :label="t('entity.equipment.warrantyenddateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.warrantyEndDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantyenddateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentOriginalValue')">
-      <a-form-item :label="t('entity.equipment.originalvalue')">
-        <a-input-number
-          v-model:value="advancedQueryForm.equipmentOriginalValue"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.originalvalue') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('technicalParameters')">
-      <a-form-item :label="t('entity.equipment.technicalparameters')">
-        <a-input
-          v-model:value="advancedQueryForm.technicalParameters"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.technicalparameters') })"
-          show-count
-          :maxlength="4000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentImages')">
-      <a-form-item :label="t('entity.equipment.images')">
-        <a-input
-          v-model:value="advancedQueryForm.equipmentImages"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.images') })"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentDocuments')">
-      <a-form-item :label="t('entity.equipment.documents')">
-        <a-input
-          v-model:value="advancedQueryForm.equipmentDocuments"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.documents') })"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isCritical')">
-      <a-form-item :label="t('entity.equipment.iscritical')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isCritical"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.iscritical') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('warrantyStatus')">
-      <a-form-item :label="t('entity.equipment.warrantystatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.warrantyStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.warrantystatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipmentStatus')">
-      <a-form-item :label="t('entity.equipment.status')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.equipmentStatus"
-          dict-type="sys_equipment_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.status') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.equipment._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.equipment._self"
+        v-if="importVisible"
+        :entity-i18n-key="EQUIPMENT_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -591,15 +177,28 @@ import type { Equipment, EquipmentQuery } from '@/types/logistics/maintenance/eq
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
+import {
+  useEquipmentI18n,
+  EQUIPMENT_LIST_FIELDS,
+  EQUIPMENT_QUERY_STRING_FIELDS,
+  EQUIPMENT_QUERY_FIELDS,
+  EQUIPMENT_SELF_I18N_KEY,
+} from './composables/use-equipment-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useEquipmentI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type EquipmentRowRecord = Equipment | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktEquipment')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.equipment._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -615,9 +214,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Equipment | null>(null)
+const selectedRow = ref<EquipmentRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Equipment[]>([])
+const selectedRows = ref<EquipmentRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -634,87 +233,44 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of EQUIPMENT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(EQUIPMENT_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof EQUIPMENT_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  EquipCode: '',
-  equipmentName: '',
-  equipmentType: undefined as number | undefined,
-  equipmentModel: '',
-  EquipSpecification: '',
-  EquipBrand: '',
-  manufacturer: '',
-  dealerBy: '',
-  serialNumber: '',
-  workshopBy: '',
-  productionLineBy: '',
-  workstationBy: '',
-  deptBy: '',
-  equipmentLocation: '',
-  responsibleUserBy: '',
-  operatorBy: '',
-  purchaseDateStart: '',
-  purchaseDateEnd: '',
-  installationDateStart: '',
-  installationDateEnd: '',
-  startDateStart: '',
-  startDateEnd: '',
-  warrantyStartDateStart: '',
-  warrantyStartDateEnd: '',
-  warrantyEndDateStart: '',
-  warrantyEndDateEnd: '',
-  equipmentOriginalValue: undefined as number | undefined,
-  technicalParameters: '',
-  equipmentImages: '',
-  equipmentDocuments: '',
-  isCritical: undefined as number | undefined,
-  warrantyStatus: undefined as number | undefined,
-  equipmentStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('common.page.entity.plantcode') },
-  { key: 'EquipCode', label: t('entity.equipment.code') },
-  { key: 'equipmentName', label: t('entity.equipment.name') },
-  { key: 'equipmentType', label: t('entity.equipment.type') },
-  { key: 'equipmentModel', label: t('entity.equipment.model') },
-  { key: 'EquipSpecification', label: t('entity.equipment.specification') },
-  { key: 'EquipBrand', label: t('entity.equipment.brand') },
-  { key: 'manufacturer', label: t('entity.equipment.manufacturer') },
-  { key: 'dealerBy', label: t('entity.equipment.dealerby') },
-  { key: 'serialNumber', label: t('entity.equipment.serialnumber') },
-  { key: 'workshopBy', label: t('entity.equipment.workshopby') },
-  { key: 'productionLineBy', label: t('entity.equipment.productionlineby') },
-  { key: 'workstationBy', label: t('entity.equipment.workstationby') },
-  { key: 'deptBy', label: t('entity.equipment.deptby') },
-  { key: 'equipmentLocation', label: t('entity.equipment.location') },
-  { key: 'responsibleUserBy', label: t('entity.equipment.responsibleuserby') },
-  { key: 'operatorBy', label: t('entity.equipment.operatorby') },
-  { key: 'purchaseDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.purchasedate')) },
-  { key: 'purchaseDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.purchasedate')) },
-  { key: 'installationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.installationdate')) },
-  { key: 'installationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.installationdate')) },
-  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.startdate')) },
-  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.startdate')) },
-  { key: 'warrantyStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantystartdate')) },
-  { key: 'warrantyStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantystartdate')) },
-  { key: 'warrantyEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantyenddate')) },
-  { key: 'warrantyEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantyenddate')) },
-  { key: 'equipmentOriginalValue', label: t('entity.equipment.originalvalue') },
-  { key: 'technicalParameters', label: t('entity.equipment.technicalparameters') },
-  { key: 'equipmentImages', label: t('entity.equipment.images') },
-  { key: 'equipmentDocuments', label: t('entity.equipment.documents') },
-  { key: 'isCritical', label: t('entity.equipment.iscritical') },
-  { key: 'warrantyStatus', label: t('entity.equipment.warrantystatus') },
-  { key: 'equipmentStatus', label: t('entity.equipment.status') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  EQUIPMENT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -733,8 +289,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {EquipmentQuery} 查询 DTO
  */
@@ -755,335 +312,45 @@ function buildListQuery(overrides?: Partial<EquipmentQuery>): EquipmentQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('EquipCode', form.EquipCode)
-  assignTrimmed('equipmentName', form.equipmentName)
-  if (form.equipmentType !== undefined && form.equipmentType !== null) {
-    query.equipmentType = form.equipmentType
+  for (const key of EQUIPMENT_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('equipmentModel', form.equipmentModel)
-  assignTrimmed('EquipSpecification', form.EquipSpecification)
-  assignTrimmed('EquipBrand', form.EquipBrand)
-  assignTrimmed('manufacturer', form.manufacturer)
-  assignTrimmed('dealerBy', form.dealerBy)
-  assignTrimmed('serialNumber', form.serialNumber)
-  assignTrimmed('workshopBy', form.workshopBy)
-  assignTrimmed('productionLineBy', form.productionLineBy)
-  assignTrimmed('workstationBy', form.workstationBy)
-  assignTrimmed('deptBy', form.deptBy)
-  assignTrimmed('equipmentLocation', form.equipmentLocation)
-  assignTrimmed('responsibleUserBy', form.responsibleUserBy)
-  assignTrimmed('operatorBy', form.operatorBy)
-  assignTrimmed('purchaseDateStart', form.purchaseDateStart)
-  assignTrimmed('purchaseDateEnd', form.purchaseDateEnd)
-  assignTrimmed('installationDateStart', form.installationDateStart)
-  assignTrimmed('installationDateEnd', form.installationDateEnd)
-  assignTrimmed('startDateStart', form.startDateStart)
-  assignTrimmed('startDateEnd', form.startDateEnd)
-  assignTrimmed('warrantyStartDateStart', form.warrantyStartDateStart)
-  assignTrimmed('warrantyStartDateEnd', form.warrantyStartDateEnd)
-  assignTrimmed('warrantyEndDateStart', form.warrantyEndDateStart)
-  assignTrimmed('warrantyEndDateEnd', form.warrantyEndDateEnd)
-  if (form.equipmentOriginalValue !== undefined && form.equipmentOriginalValue !== null) {
-    query.equipmentOriginalValue = form.equipmentOriginalValue
-  }
-  assignTrimmed('technicalParameters', form.technicalParameters)
-  assignTrimmed('equipmentImages', form.equipmentImages)
-  assignTrimmed('equipmentDocuments', form.equipmentDocuments)
-  if (form.isCritical !== undefined && form.isCritical !== null) {
-    query.isCritical = form.isCritical
-  }
-  if (form.warrantyStatus !== undefined && form.warrantyStatus !== null) {
-    query.warrantyStatus = form.warrantyStatus
-  }
-  if (form.equipmentStatus !== undefined && form.equipmentStatus !== null) {
-    query.equipmentStatus = form.equipmentStatus
-  }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
+
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildEquipmentListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'equipmentId',
-    key: 'equipmentId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentId') ?? ''
-  },
-  {
-    title: t('common.page.entity.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.equipment.code'),
-    dataIndex: 'EquipCode',
-    key: 'EquipCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'EquipCode') ?? ''
-  },
-  {
-    title: t('entity.equipment.name'),
-    dataIndex: 'equipmentName',
-    key: 'equipmentName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentName') ?? ''
-  },
-  {
-    title: t('entity.equipment.type'),
-    dataIndex: 'equipmentType',
-    key: 'equipmentType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentType') ?? ''
-  },
-  {
-    title: t('entity.equipment.model'),
-    dataIndex: 'equipmentModel',
-    key: 'equipmentModel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentModel') ?? ''
-  },
-  {
-    title: t('entity.equipment.specification'),
-    dataIndex: 'EquipSpecification',
-    key: 'EquipSpecification',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'EquipSpecification') ?? ''
-  },
-  {
-    title: t('entity.equipment.brand'),
-    dataIndex: 'EquipBrand',
-    key: 'EquipBrand',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'EquipBrand') ?? ''
-  },
-  {
-    title: t('entity.equipment.manufacturer'),
-    dataIndex: 'manufacturer',
-    key: 'manufacturer',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'manufacturer') ?? ''
-  },
-  {
-    title: t('entity.equipment.dealerby'),
-    dataIndex: 'dealerBy',
-    key: 'dealerBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'dealerBy') ?? ''
-  },
-  {
-    title: t('entity.equipment.serialnumber'),
-    dataIndex: 'serialNumber',
-    key: 'serialNumber',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'serialNumber') ?? ''
-  },
-  {
-    title: t('entity.equipment.workshopby'),
-    dataIndex: 'workshopBy',
-    key: 'workshopBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'workshopBy') ?? ''
-  },
-  {
-    title: t('entity.equipment.productionlineby'),
-    dataIndex: 'productionLineBy',
-    key: 'productionLineBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'productionLineBy') ?? ''
-  },
-  {
-    title: t('entity.equipment.workstationby'),
-    dataIndex: 'workstationBy',
-    key: 'workstationBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'workstationBy') ?? ''
-  },
-  {
-    title: t('entity.equipment.deptby'),
-    dataIndex: 'deptBy',
-    key: 'deptBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'deptBy') ?? ''
-  },
-  {
-    title: t('entity.equipment.location'),
-    dataIndex: 'equipmentLocation',
-    key: 'equipmentLocation',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentLocation') ?? ''
-  },
-  {
-    title: t('entity.equipment.responsibleuserby'),
-    dataIndex: 'responsibleUserBy',
-    key: 'responsibleUserBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'responsibleUserBy') ?? ''
-  },
-  {
-    title: t('entity.equipment.operatorby'),
-    dataIndex: 'operatorBy',
-    key: 'operatorBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'operatorBy') ?? ''
-  },
-  {
-    title: t('entity.equipment.purchasedate'),
-    dataIndex: 'purchaseDate',
-    key: 'purchaseDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'purchaseDate') ?? ''
-  },
-  {
-    title: t('entity.equipment.installationdate'),
-    dataIndex: 'installationDate',
-    key: 'installationDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'installationDate') ?? ''
-  },
-  {
-    title: t('entity.equipment.startdate'),
-    dataIndex: 'startDate',
-    key: 'startDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'startDate') ?? ''
-  },
-  {
-    title: t('entity.equipment.warrantystartdate'),
-    dataIndex: 'warrantyStartDate',
-    key: 'warrantyStartDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'warrantyStartDate') ?? ''
-  },
-  {
-    title: t('entity.equipment.warrantyenddate'),
-    dataIndex: 'warrantyEndDate',
-    key: 'warrantyEndDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'warrantyEndDate') ?? ''
-  },
-  {
-    title: t('entity.equipment.originalvalue'),
-    dataIndex: 'equipmentOriginalValue',
-    key: 'equipmentOriginalValue',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentOriginalValue') ?? ''
-  },
-  {
-    title: t('entity.equipment.technicalparameters'),
-    dataIndex: 'technicalParameters',
-    key: 'technicalParameters',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'technicalParameters') ?? ''
-  },
-  {
-    title: t('entity.equipment.images'),
-    dataIndex: 'equipmentImages',
-    key: 'equipmentImages',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentImages') ?? ''
-  },
-  {
-    title: t('entity.equipment.documents'),
-    dataIndex: 'equipmentDocuments',
-    key: 'equipmentDocuments',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentDocuments') ?? ''
-  },
-  {
-    title: t('entity.equipment.iscritical'),
-    dataIndex: 'isCritical',
-    key: 'isCritical',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'isCritical') ?? ''
-  },
-  {
-    title: t('entity.equipment.warrantystatus'),
-    dataIndex: 'warrantyStatus',
-    key: 'warrantyStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'warrantyStatus') ?? ''
-  },
-  {
-    title: t('entity.equipment.status'),
-    dataIndex: 'equipmentStatus',
-    key: 'equipmentStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+  buildEquipmentListColumn('equipmentId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...EQUIPMENT_LIST_FIELDS.map((key) => buildEquipmentListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -1092,7 +359,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:maintenance:equipment:update',
-        onClick: (record: Equipment) => handleEdit(record)
+        onClick: (record: EquipmentRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1100,43 +367,56 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:maintenance:equipment:delete',
-        onClick: (record: Equipment) => handleDeleteOne(record)
+        onClick: (record: EquipmentRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getEquipmentId = (record: any): string => record?.[entityIdName] ?? ''
+const getEquipmentId = (record: EquipmentRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getEquipmentField = (record: any, field: string): any => record?.[field]
+const getEquipmentDictValue = (
+  record: EquipmentRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Equipment[]) => {
+  onChange: (keys: (string | number)[], rows: EquipmentRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: Equipment, selected: boolean) => {
+  onSelect: (record: EquipmentRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getEquipmentId(selectedRow.value) === getEquipmentId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Equipment[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EquipmentRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Equipment) => ({
+const onClickRow = (record: EquipmentRowRecord) => ({
   onClick: () => {
     const key = getEquipmentId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -1157,6 +437,11 @@ const onClickRow = (record: Equipment) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getEquipmentList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1182,70 +467,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  EquipCode: '',
-  equipmentName: '',
-  equipmentType: undefined as number | undefined,
-  equipmentModel: '',
-  EquipSpecification: '',
-  EquipBrand: '',
-  manufacturer: '',
-  dealerBy: '',
-  serialNumber: '',
-  workshopBy: '',
-  productionLineBy: '',
-  workstationBy: '',
-  deptBy: '',
-  equipmentLocation: '',
-  responsibleUserBy: '',
-  operatorBy: '',
-  purchaseDateStart: '',
-  purchaseDateEnd: '',
-  installationDateStart: '',
-  installationDateEnd: '',
-  startDateStart: '',
-  startDateEnd: '',
-  warrantyStartDateStart: '',
-  warrantyStartDateEnd: '',
-  warrantyEndDateStart: '',
-  warrantyEndDateEnd: '',
-  equipmentOriginalValue: undefined as number | undefined,
-  technicalParameters: '',
-  equipmentImages: '',
-  equipmentDocuments: '',
-  isCritical: undefined as number | undefined,
-  warrantyStatus: undefined as number | undefined,
-  equipmentStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.equipment._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Equipment) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.equipment._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: EquipmentRowRecord) {
+  const id = getEquipmentId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getEquipmentById(id)
+    formData.value = detail ?? ({ ...record } as Partial<Equipment>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.equipment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1263,10 +521,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEquipment(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.equipment._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createEquipment(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.equipment._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1294,15 +552,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEquipment(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEquipment(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1313,6 +574,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportEquipment(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1336,24 +600,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.equipment._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Equipment] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.equipment._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Equipment) {
+async function handleDeleteOne(record: EquipmentRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.equipment._self'), name: t('common.tip.this.target', { target: t('entity.equipment._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEquipmentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.equipment._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1361,18 +625,18 @@ async function handleDeleteOne(record: Equipment) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.equipment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.equipment._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEquipmentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.equipment._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1390,46 +654,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  EquipCode: '',
-  equipmentName: '',
-  equipmentType: undefined as number | undefined,
-  equipmentModel: '',
-  EquipSpecification: '',
-  EquipBrand: '',
-  manufacturer: '',
-  dealerBy: '',
-  serialNumber: '',
-  workshopBy: '',
-  productionLineBy: '',
-  workstationBy: '',
-  deptBy: '',
-  equipmentLocation: '',
-  responsibleUserBy: '',
-  operatorBy: '',
-  purchaseDateStart: '',
-  purchaseDateEnd: '',
-  installationDateStart: '',
-  installationDateEnd: '',
-  startDateStart: '',
-  startDateEnd: '',
-  warrantyStartDateStart: '',
-  warrantyStartDateEnd: '',
-  warrantyEndDateStart: '',
-  warrantyEndDateEnd: '',
-  equipmentOriginalValue: undefined as number | undefined,
-  technicalParameters: '',
-  equipmentImages: '',
-  equipmentDocuments: '',
-  isCritical: undefined as number | undefined,
-  warrantyStatus: undefined as number | undefined,
-  equipmentStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

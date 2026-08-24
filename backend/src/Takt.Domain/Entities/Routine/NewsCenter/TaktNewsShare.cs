@@ -33,13 +33,18 @@ public class TaktNewsShare : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
     /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    public int LineNumber { get; set; } = 10;
+    /// <summary>
     /// 分享人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "分享人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
     /// <summary>
-    /// 分享人姓名
+    /// 分享人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "user_name", ColumnDescription = "分享人姓名", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string UserName { get; set; } = string.Empty;
@@ -53,6 +58,11 @@ public class TaktNewsShare : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "share_time", ColumnDescription = "分享时间", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ShareTime { get; set; } = DateTime.Now;
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
     /// <summary>
     /// 新闻（主表）
     /// </summary>

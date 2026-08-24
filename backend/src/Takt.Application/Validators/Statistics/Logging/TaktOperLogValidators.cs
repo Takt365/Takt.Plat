@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktOperLogValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：OperLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktOperLog 生成，请按需审阅）
 // 
@@ -12,7 +12,6 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Statistics.Logging;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Statistics.Logging;
 
@@ -84,8 +83,6 @@ public class TaktOperLogCreateValidator : AbstractValidator<TaktOperLogCreateDto
         RuleFor(x => x.DeviceType)
             .NotEmpty().WithMessage("登录设备不能为空")
             .MaximumLength(40).WithMessage("登录设备长度不能超过40个字符");
-        RuleFor(x => x.OperStatus)
-            .IsInEnum().WithMessage("操作状态无效");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -163,8 +160,6 @@ public class TaktOperLogUpdateValidator : AbstractValidator<TaktOperLogUpdateDto
         RuleFor(x => x.DeviceType)
             .NotEmpty().WithMessage("登录设备不能为空")
             .MaximumLength(40).WithMessage("登录设备长度不能超过40个字符");
-        RuleFor(x => x.OperStatus)
-            .IsInEnum().WithMessage("操作状态无效");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)

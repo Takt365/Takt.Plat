@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktSalaryItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalaryItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,58 +181,58 @@ public class TaktSalaryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salaryitem.vestingyears", "zh-HK", "默认归属年限_hk", "默认归属年限（年；item_type=5 股权激励时使用）"),
 
             // entity.salaryitem.isdeduction
-            new TranslationSeedItem("entity.salaryitem.isdeduction", "en-US", "是否扣款项_us", "是否扣款项（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.isdeduction", "en-US", "是否扣款项_us", "是否扣款项（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.isdeduction
-            new TranslationSeedItem("entity.salaryitem.isdeduction", "ja-JP", "是否扣款项_jp", "是否扣款项（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.isdeduction", "ja-JP", "是否扣款项_jp", "是否扣款项（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.isdeduction
-            new TranslationSeedItem("entity.salaryitem.isdeduction", "zh-CN", "是否扣款项", "是否扣款项（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.isdeduction", "zh-CN", "是否扣款项", "是否扣款项（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.isdeduction
-            new TranslationSeedItem("entity.salaryitem.isdeduction", "zh-HK", "是否扣款项_hk", "是否扣款项（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.isdeduction", "zh-HK", "是否扣款项_hk", "是否扣款项（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.salaryitem.istaxable
-            new TranslationSeedItem("entity.salaryitem.istaxable", "en-US", "是否计入应税所得_us", "是否计入应税所得（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.istaxable", "en-US", "是否计入应税所得_us", "是否计入应税所得（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.istaxable
-            new TranslationSeedItem("entity.salaryitem.istaxable", "ja-JP", "是否计入应税所得_jp", "是否计入应税所得（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.istaxable", "ja-JP", "是否计入应税所得_jp", "是否计入应税所得（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.istaxable
-            new TranslationSeedItem("entity.salaryitem.istaxable", "zh-CN", "是否计入应税所得", "是否计入应税所得（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.istaxable", "zh-CN", "是否计入应税所得", "是否计入应税所得（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.istaxable
-            new TranslationSeedItem("entity.salaryitem.istaxable", "zh-HK", "是否计入应税所得_hk", "是否计入应税所得（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.istaxable", "zh-HK", "是否计入应税所得_hk", "是否计入应税所得（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.salaryitem.includesocialsecuritybase
-            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "en-US", "是否计入社保基数_us", "是否计入社保基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "en-US", "是否计入社保基数_us", "是否计入社保基数（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.includesocialsecuritybase
-            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "ja-JP", "是否计入社保基数_jp", "是否计入社保基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "ja-JP", "是否计入社保基数_jp", "是否计入社保基数（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.includesocialsecuritybase
-            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "zh-CN", "是否计入社保基数", "是否计入社保基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "zh-CN", "是否计入社保基数", "是否计入社保基数（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.includesocialsecuritybase
-            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "zh-HK", "是否计入社保基数_hk", "是否计入社保基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includesocialsecuritybase", "zh-HK", "是否计入社保基数_hk", "是否计入社保基数（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.salaryitem.includehousingfundbase
-            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "en-US", "是否计入公积金基数_us", "是否计入公积金基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "en-US", "是否计入公积金基数_us", "是否计入公积金基数（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.includehousingfundbase
-            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "ja-JP", "是否计入公积金基数_jp", "是否计入公积金基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "ja-JP", "是否计入公积金基数_jp", "是否计入公积金基数（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.includehousingfundbase
-            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "zh-CN", "是否计入公积金基数", "是否计入公积金基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "zh-CN", "是否计入公积金基数", "是否计入公积金基数（字典 sys_yes_no；0=否 1=是）"),
             // entity.salaryitem.includehousingfundbase
-            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "zh-HK", "是否计入公积金基数_hk", "是否计入公积金基数（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "zh-HK", "是否计入公积金基数_hk", "是否计入公积金基数（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.salaryitem.sortorder
-            new TranslationSeedItem("entity.salaryitem.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.salaryitem.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.salaryitem.sortorder
-            new TranslationSeedItem("entity.salaryitem.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.salaryitem.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.salaryitem.sortorder
-            new TranslationSeedItem("entity.salaryitem.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.salaryitem.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.salaryitem.sortorder
-            new TranslationSeedItem("entity.salaryitem.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.salaryitem.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.salaryitem.itemstatus
-            new TranslationSeedItem("entity.salaryitem.itemstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.salaryitem.itemstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.salaryitem.itemstatus
-            new TranslationSeedItem("entity.salaryitem.itemstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.salaryitem.itemstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.salaryitem.itemstatus
-            new TranslationSeedItem("entity.salaryitem.itemstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.salaryitem.itemstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.salaryitem.itemstatus
-            new TranslationSeedItem("entity.salaryitem.itemstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.salaryitem.itemstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
         };
     }
 

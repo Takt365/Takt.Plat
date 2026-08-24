@@ -74,13 +74,13 @@
         <template v-if="column.key === 'isCompliant'">
           <TaktDictTag
             :value="getSopEsdCheckField(record, 'isCompliant')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'lockScreenTriggered'">
           <TaktDictTag
             :value="getSopEsdCheckField(record, 'lockScreenTriggered')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -181,7 +181,7 @@
       <a-form-item :label="t('entity.sopesdcheck.iscompliant')">
         <TaktSelect
           v-model:value="advancedQueryForm.isCompliant"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopesdcheck.iscompliant') })"
           allow-clear
         />
@@ -191,7 +191,7 @@
       <a-form-item :label="t('entity.sopesdcheck.lockscreentriggered')">
         <TaktSelect
           v-model:value="advancedQueryForm.lockScreenTriggered"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopesdcheck.lockscreentriggered') })"
           allow-clear
         />

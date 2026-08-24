@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopDocI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopDoc 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktSopDocI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopdoc.currentrevisionid", "zh-HK", "当前版本ID_hk", "当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）"),
 
             // entity.sopdoc.sopstatus
-            new TranslationSeedItem("entity.sopdoc.sopstatus", "en-US", "文档状态_us", "状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.sopdoc.sopstatus", "en-US", "文档状态_us", "状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.sopdoc.sopstatus
-            new TranslationSeedItem("entity.sopdoc.sopstatus", "ja-JP", "文档状态_jp", "状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.sopdoc.sopstatus", "ja-JP", "文档状态_jp", "状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.sopdoc.sopstatus
-            new TranslationSeedItem("entity.sopdoc.sopstatus", "zh-CN", "文档状态", "状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.sopdoc.sopstatus", "zh-CN", "文档状态", "状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.sopdoc.sopstatus
-            new TranslationSeedItem("entity.sopdoc.sopstatus", "zh-HK", "文档状态_hk", "状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.sopdoc.sopstatus", "zh-HK", "文档状态_hk", "状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
 
             // entity.sopdoc.routingitem
             new TranslationSeedItem("entity.sopdoc.routingitem", "en-US", "工序_us", "工序"),

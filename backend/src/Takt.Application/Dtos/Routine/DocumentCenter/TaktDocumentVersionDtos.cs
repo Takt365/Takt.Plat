@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.DocumentCenter
 // 文件名称：TaktDocumentVersionDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DocumentVersion 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDocumentVersion 生成，请按需审阅）
 // 
@@ -47,6 +47,11 @@ public class TaktDocumentVersionDto : TaktCompanyDtoBase
     public string? DocumentName { get; set; }
 
     /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
     /// 版本号
     /// </summary>
     public int VersionNo { get; set; } = 0;
@@ -57,36 +62,15 @@ public class TaktDocumentVersionDto : TaktCompanyDtoBase
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id；上传下载元数据在 TaktFile）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FileId { get; set; }
 
     /// <summary>
-    /// 文件名称
+    /// 文件 名称（填充字段）
     /// </summary>
-    public string FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    public string FilePath { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FileSize { get; set; }
-
-    /// <summary>
-    /// 文件类型（MIME）
-    /// </summary>
-    public string? FileType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件扩展名
-    /// </summary>
-    public string? FileExtension { get; set; } = string.Empty;
+    public string? FileName { get; set; }
 
     /// <summary>
     /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -95,7 +79,7 @@ public class TaktDocumentVersionDto : TaktCompanyDtoBase
     public long RevisedBy { get; set; }
 
     /// <summary>
-    /// 修订人姓名
+    /// 修订人姓名（冗余字段，便于查询）
     /// </summary>
     public string? RevisedByName { get; set; } = string.Empty;
 
@@ -103,6 +87,11 @@ public class TaktDocumentVersionDto : TaktCompanyDtoBase
     /// 修订时间
     /// </summary>
     public DateTime RevisedAt { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 文档（主表）
@@ -128,7 +117,7 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -137,16 +126,21 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DocumentId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 版本号
@@ -159,36 +153,10 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id；上传下载元数据在 TaktFile）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
-
-    /// <summary>
-    /// 文件名称
-    /// </summary>
-    public string? FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    public string? FilePath { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FileSize { get; set; }
-
-    /// <summary>
-    /// 文件类型（MIME）
-    /// </summary>
-    public string? FileType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件扩展名
-    /// </summary>
-    public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
     /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -197,7 +165,7 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     public long? RevisedBy { get; set; }
 
     /// <summary>
-    /// 修订人姓名
+    /// 修订人姓名（冗余字段，便于查询）
     /// </summary>
     public string? RevisedByName { get; set; } = string.Empty;
 
@@ -210,6 +178,11 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     /// 修订时间（范围查询-结束）
     /// </summary>
     public DateTime? RevisedAtEnd { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -256,16 +229,21 @@ public class TaktDocumentVersionCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DocumentId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 版本号
@@ -278,38 +256,10 @@ public class TaktDocumentVersionCreateDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id；上传下载元数据在 TaktFile）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FileId { get; set; }
-
-    /// <summary>
-    /// 文件名称
-    /// </summary>
-    [Required(ErrorMessage = "文件名称不能为空")]
-    public string FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    [Required(ErrorMessage = "文件路径不能为空")]
-    public string FilePath { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FileSize { get; set; }
-
-    /// <summary>
-    /// 文件类型（MIME）
-    /// </summary>
-    public string? FileType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件扩展名
-    /// </summary>
-    public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
     /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -318,7 +268,7 @@ public class TaktDocumentVersionCreateDto
     public long RevisedBy { get; set; }
 
     /// <summary>
-    /// 修订人姓名
+    /// 修订人姓名（冗余字段，便于查询）
     /// </summary>
     public string? RevisedByName { get; set; } = string.Empty;
 
@@ -326,6 +276,11 @@ public class TaktDocumentVersionCreateDto
     /// 修订时间
     /// </summary>
     public DateTime RevisedAt { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -360,6 +315,29 @@ public class TaktDocumentVersionUpdateDto : TaktDocumentVersionCreateDto
 }
 
 // ========================================
+// DocumentVersion 作废 DTO
+// ========================================
+
+/// <summary>
+/// DocumentVersion 作废/撤销作废 DTO
+/// </summary>
+public class TaktDocumentVersionObsoleteDto
+{
+    /// <summary>
+    /// DocumentVersionID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long DocumentVersionId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -383,16 +361,21 @@ public class TaktDocumentVersionTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DocumentId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 版本号
@@ -405,36 +388,10 @@ public class TaktDocumentVersionTemplateDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id；上传下载元数据在 TaktFile）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
-
-    /// <summary>
-    /// 文件名称
-    /// </summary>
-    public string? FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    public string? FilePath { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FileSize { get; set; }
-
-    /// <summary>
-    /// 文件类型（MIME）
-    /// </summary>
-    public string? FileType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件扩展名
-    /// </summary>
-    public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
     /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -443,7 +400,7 @@ public class TaktDocumentVersionTemplateDto
     public long? RevisedBy { get; set; }
 
     /// <summary>
-    /// 修订人姓名
+    /// 修订人姓名（冗余字段，便于查询）
     /// </summary>
     public string? RevisedByName { get; set; } = string.Empty;
 
@@ -451,6 +408,11 @@ public class TaktDocumentVersionTemplateDto
     /// 修订时间
     /// </summary>
     public DateTime? RevisedAt { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -484,16 +446,21 @@ public class TaktDocumentVersionImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DocumentId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 版本号
@@ -506,36 +473,10 @@ public class TaktDocumentVersionImportDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id；上传下载元数据在 TaktFile）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
-
-    /// <summary>
-    /// 文件名称
-    /// </summary>
-    public string? FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    public string? FilePath { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FileSize { get; set; }
-
-    /// <summary>
-    /// 文件类型（MIME）
-    /// </summary>
-    public string? FileType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件扩展名
-    /// </summary>
-    public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
     /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -544,7 +485,7 @@ public class TaktDocumentVersionImportDto
     public long? RevisedBy { get; set; }
 
     /// <summary>
-    /// 修订人姓名
+    /// 修订人姓名（冗余字段，便于查询）
     /// </summary>
     public string? RevisedByName { get; set; } = string.Empty;
 
@@ -552,6 +493,11 @@ public class TaktDocumentVersionImportDto
     /// 修订时间
     /// </summary>
     public DateTime? RevisedAt { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -587,10 +533,25 @@ public class TaktDocumentVersionExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DocumentId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 版本号
@@ -603,36 +564,10 @@ public class TaktDocumentVersionExportDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id；上传下载元数据在 TaktFile）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FileId { get; set; }
-
-    /// <summary>
-    /// 文件名称
-    /// </summary>
-    public string FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    public string FilePath { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FileSize { get; set; }
-
-    /// <summary>
-    /// 文件类型（MIME）
-    /// </summary>
-    public string? FileType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件扩展名
-    /// </summary>
-    public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
     /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -641,7 +576,7 @@ public class TaktDocumentVersionExportDto
     public long RevisedBy { get; set; }
 
     /// <summary>
-    /// 修订人姓名
+    /// 修订人姓名（冗余字段，便于查询）
     /// </summary>
     public string? RevisedByName { get; set; } = string.Empty;
 
@@ -649,6 +584,11 @@ public class TaktDocumentVersionExportDto
     /// 修订时间
     /// </summary>
     public DateTime RevisedAt { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

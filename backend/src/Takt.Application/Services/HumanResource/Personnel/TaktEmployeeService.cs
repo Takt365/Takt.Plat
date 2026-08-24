@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工应用服务实现
 // 
@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Personnel;
+using Takt.Application.Services.Identity;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -21,7 +22,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Application.Services.Identity;
 
 namespace Takt.Application.Services.HumanResource.Personnel;
 
@@ -44,7 +44,9 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     private readonly ITaktApprovalRepository<TaktEmployeeReassignment> _employeeReassignmentRepository;
     private readonly ITaktApprovalRepository<TaktEmployeeResignation> _employeeResignationRepository;
     private readonly ITaktCompanyRepository<TaktEmployeeAttachment> _employeeAttachmentRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeDelegation> _employeeDelegationRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktNumberingGenerator _numberingGenerator;
 
     /// <summary>
     /// 构造函数
@@ -63,7 +65,9 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     /// <param name="employeeReassignmentRepository">EmployeeReassignment仓储</param>
     /// <param name="employeeResignationRepository">EmployeeResignation仓储</param>
     /// <param name="employeeAttachmentRepository">EmployeeAttachment仓储</param>
+    /// <param name="employeeDelegationRepository">EmployeeDelegation仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="numberingGenerator">编码生成器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeService(
@@ -81,7 +85,9 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         ITaktApprovalRepository<TaktEmployeeReassignment> employeeReassignmentRepository,
         ITaktApprovalRepository<TaktEmployeeResignation> employeeResignationRepository,
         ITaktCompanyRepository<TaktEmployeeAttachment> employeeAttachmentRepository,
+        ITaktCompanyRepository<TaktEmployeeDelegation> employeeDelegationRepository,
         ITaktUniqueValidator uniqueValidator,
+        ITaktNumberingGenerator numberingGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -100,16 +106,26 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         _employeeReassignmentRepository = employeeReassignmentRepository;
         _employeeResignationRepository = employeeResignationRepository;
         _employeeAttachmentRepository = employeeAttachmentRepository;
+        _employeeDelegationRepository = employeeDelegationRepository;
         _uniqueValidator = uniqueValidator;
+        _numberingGenerator = numberingGenerator;
     }
 
     /// <summary>
-    /// 获取员工列表（分页）
+    /// 获取员工列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEmployeeDto>> GetEmployeeListAsync(TaktEmployeeQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEmployeeDto>.Create(
+                new List<TaktEmployeeDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _employeeRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -166,6 +182,19 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     {
         var entity = dto.Adapt<TaktEmployee>();
         entity.IsBuiltIn = 0;
+        if (!string.IsNullOrWhiteSpace(dto.NumberingRuleCode))
+        {
+            var generated = await _numberingGenerator.GenerateNextAsync(dto.NumberingRuleCode.Trim());
+            if (string.IsNullOrWhiteSpace(generated.BusinessCode))
+            {
+                throw new TaktBusinessException("业务编码生成失败");
+            }
+            entity.EmployeeCode = generated.BusinessCode;
+        }
+        else if (string.IsNullOrWhiteSpace(entity.EmployeeCode))
+        {
+            throw new TaktBusinessException("员工编码不能为空");
+        }
         var isUnique_ix_employee_code_unique = await _uniqueValidator.IsUniqueAsync(
             _employeeRepository,
             x => x.EmployeeCode == entity.EmployeeCode);
@@ -363,7 +392,15 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeAsync(TaktEmployeeQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmployeeQueryDto());
+        var queryDto = query ?? new TaktEmployeeQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEmployeeExportDto>(),
+                sheetName ?? "员工数据",
+                fileName ?? "员工导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _employeeRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -384,7 +421,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     // ========================================
 
     /// <summary>
-    /// 填充员工详情（加载 OneToMany 子表：员工地址、员工教育经历、员工家庭成员、员工工作经历、员工技能、员工劳动合同、员工入职上岗、入职待办、员工调动、员工离职、员工附件）
+    /// 填充员工详情（加载 OneToMany 子表：员工地址、员工教育经历、员工家庭成员、员工工作经历、员工技能、员工劳动合同、员工入职上岗、入职待办、员工调动、员工离职、员工附件、员工代理关系）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -428,10 +465,13 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         // 员工附件 → dto.EmployeeAttachments
         var employeeattachments = await _employeeAttachmentRepository.GetListAsync(x => x.EmployeeId == entity.Id);
         dto.EmployeeAttachments = employeeattachments.Adapt<List<TaktEmployeeAttachmentDto>>();
+        // 员工代理关系 → dto.EmployeeDelegations
+        var employeedelegations = await _employeeDelegationRepository.GetListAsync(x => x.OriginalEmployeeId == entity.Id);
+        dto.EmployeeDelegations = employeedelegations.Adapt<List<TaktEmployeeDelegationDto>>();
     }
 
     /// <summary>
-    /// 保存员工子表级联（员工地址、员工教育经历、员工家庭成员、员工工作经历、员工技能、员工劳动合同、员工入职上岗、入职待办、员工调动、员工离职、员工附件；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
+    /// 保存员工子表级联（员工地址、员工教育经历、员工家庭成员、员工工作经历、员工技能、员工劳动合同、员工入职上岗、入职待办、员工调动、员工离职、员工附件、员工代理关系；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -466,6 +506,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeAddressesForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeAddressId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeAddressId, out var target))
@@ -527,6 +573,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeEducationsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeEducationId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeEducationId, out var target))
@@ -588,6 +640,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeFamiliesForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeFamilyId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeFamilyId, out var target))
@@ -649,6 +707,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeExperiencesForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeExperienceId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeExperienceId, out var target))
@@ -710,6 +774,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeSkillsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeSkillId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeSkillId, out var target))
@@ -771,6 +841,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeContractsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeContractId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeContractId, out var target))
@@ -832,6 +908,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeJoinedsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeJoinedId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeJoinedId, out var target))
@@ -893,6 +975,13 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeOnboardingsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.Mobile = entity.Mobile;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeOnboardingId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeOnboardingId, out var target))
@@ -954,6 +1043,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeReassignmentsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeReassignmentId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeReassignmentId, out var target))
@@ -1015,6 +1110,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeResignationsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeResignationId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeResignationId, out var target))
@@ -1076,6 +1177,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var childDto = employeeAttachmentsForSave[i];
                 childDto.EmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EmployeeCode = entity.EmployeeCode;
+                childDto.EmployeeName = entity.EmployeeName;
                 if (childDto.EmployeeAttachmentId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.EmployeeAttachmentId, out var target))
@@ -1109,6 +1216,73 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
                 await _employeeAttachmentRepository.CreateRangeAsync(toCreate);
             }
         }
+        // 员工代理关系（EmployeeDelegations）
+        List<TaktEmployeeDelegationUpdateDto>? employeeDelegationsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeDelegations && updateDtoForEmployeeDelegations.EmployeeDelegations != null)
+        {
+            employeeDelegationsForSave = updateDtoForEmployeeDelegations.EmployeeDelegations;
+        }
+        else if (dto.EmployeeDelegations != null)
+        {
+            employeeDelegationsForSave = dto.EmployeeDelegations.Adapt<List<TaktEmployeeDelegationUpdateDto>>();
+        }
+        else
+        {
+            employeeDelegationsForSave = null;
+        }
+        if (employeeDelegationsForSave is not { Count: > 0 })
+        {
+            await _employeeDelegationRepository.DeleteAsync(x => x.OriginalEmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeDelegationRepository.GetListAsync(x => x.OriginalEmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeDelegation>();
+            for (var i = 0; i < employeeDelegationsForSave.Count; i++)
+            {
+                var childDto = employeeDelegationsForSave[i];
+                childDto.OriginalEmployeeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.OriginalEmployeeCode = entity.EmployeeCode;
+                childDto.OriginalEmployeeName = entity.EmployeeName;
+                if (childDto.EmployeeDelegationId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeDelegationId, out var target))
+                    {
+                        throw new TaktBusinessException("员工代理关系不存在（EmployeeDelegationId={childDto.EmployeeDelegationId}）");
+                    }
+                    if (target.OriginalEmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工代理关系不属于当前主表（EmployeeDelegationId={childDto.EmployeeDelegationId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeDelegationId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeDelegationId;
+                    target.OriginalEmployeeId = entity.Id;
+                    await _employeeDelegationRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeDelegation>();
+                    child.Id = 0;
+                    child.OriginalEmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeDelegationRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeDelegationRepository.CreateRangeAsync(toCreate);
+            }
+        }
     }
     // ========================================
     // 查询表达式
@@ -1123,137 +1297,244 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     {
         var exp = Expressionable.Create<TaktEmployee>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
-                || SqlFunc.ToString(x.Gender).Contains(keywords)
                 || (x.IdCardCode != null && x.IdCardCode.Contains(keywords))
                 || (x.Mobile != null && x.Mobile.Contains(keywords))
                 || (x.Email != null && x.Email.Contains(keywords))
                 || (x.NativePlace != null && x.NativePlace.Contains(keywords))
-                || SqlFunc.ToString(x.Ethnicity).Contains(keywords)
-                || SqlFunc.ToString(x.PoliticalAffiliation).Contains(keywords)
-                || SqlFunc.ToString(x.MaritalStatus).Contains(keywords)
-                || SqlFunc.ToString(x.EmployeeStatus).Contains(keywords)
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || (x.Avatar != null && x.Avatar.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.BirthDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
-        {
-            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
-        }
-
-        if (queryDto?.Gender.HasValue == true)
-        {
-            exp = exp.And(x => x.Gender == queryDto.Gender);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.IdCardCode))
-        {
-            exp = exp.And(x => x.IdCardCode != null && x.IdCardCode.Contains(queryDto.IdCardCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Mobile))
-        {
-            exp = exp.And(x => x.Mobile != null && x.Mobile.Contains(queryDto.Mobile));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Email))
-        {
-            exp = exp.And(x => x.Email != null && x.Email.Contains(queryDto.Email));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.NativePlace))
-        {
-            exp = exp.And(x => x.NativePlace != null && x.NativePlace.Contains(queryDto.NativePlace));
-        }
-
-        if (queryDto?.Ethnicity.HasValue == true)
-        {
-            exp = exp.And(x => x.Ethnicity == queryDto.Ethnicity);
-        }
-
-        if (queryDto?.PoliticalAffiliation.HasValue == true)
-        {
-            exp = exp.And(x => x.PoliticalAffiliation == queryDto.PoliticalAffiliation);
-        }
-
-        if (queryDto?.MaritalStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.MaritalStatus == queryDto.MaritalStatus);
-        }
-
-        if (queryDto?.EmployeeStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.EmployeeStatus == queryDto.EmployeeStatus);
-        }
-
-        if (queryDto?.IsBuiltIn.HasValue == true)
-        {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Avatar))
-        {
-            exp = exp.And(x => x.Avatar != null && x.Avatar.Contains(queryDto.Avatar));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.BirthDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.BirthDate >= queryDto.BirthDateStart);
-        }
-
-        if (queryDto?.BirthDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.BirthDate <= queryDto.BirthDateEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeCode))
+        {
+            var employeeCode = queryDto.EmployeeCode;
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(employeeCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeName))
+        {
+            var employeeName = queryDto.EmployeeName;
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
+        }
+
+        if (queryDto?.Gender.HasValue == true)
+        {
+            var gender = queryDto.Gender.Value;
+            exp = exp.And(x => x.Gender == gender);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.IdCardCode))
+        {
+            var idCardCode = queryDto.IdCardCode;
+            exp = exp.And(x => x.IdCardCode != null && x.IdCardCode.Contains(idCardCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Mobile))
+        {
+            var mobile = queryDto.Mobile;
+            exp = exp.And(x => x.Mobile != null && x.Mobile.Contains(mobile));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Email))
+        {
+            var email = queryDto.Email;
+            exp = exp.And(x => x.Email != null && x.Email.Contains(email));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NativePlace))
+        {
+            var nativePlace = queryDto.NativePlace;
+            exp = exp.And(x => x.NativePlace != null && x.NativePlace.Contains(nativePlace));
+        }
+
+        if (queryDto?.Ethnicity.HasValue == true)
+        {
+            var ethnicity = queryDto.Ethnicity.Value;
+            exp = exp.And(x => x.Ethnicity == ethnicity);
+        }
+
+        if (queryDto?.PoliticalAffiliation.HasValue == true)
+        {
+            var politicalAffiliation = queryDto.PoliticalAffiliation.Value;
+            exp = exp.And(x => x.PoliticalAffiliation == politicalAffiliation);
+        }
+
+        if (queryDto?.MaritalStatus.HasValue == true)
+        {
+            var maritalStatus = queryDto.MaritalStatus.Value;
+            exp = exp.And(x => x.MaritalStatus == maritalStatus);
+        }
+
+        if (queryDto?.EmployeeStatus.HasValue == true)
+        {
+            var employeeStatus = queryDto.EmployeeStatus.Value;
+            exp = exp.And(x => x.EmployeeStatus == employeeStatus);
+        }
+
+        if (queryDto?.IsBuiltIn.HasValue == true)
+        {
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Avatar))
+        {
+            var avatar = queryDto.Avatar;
+            exp = exp.And(x => x.Avatar != null && x.Avatar.Contains(avatar));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.BirthDateStart.HasValue == true)
+        {
+            var birthDateStart = queryDto.BirthDateStart.Value;
+            exp = exp.And(x => x.BirthDate >= birthDateStart);
+        }
+
+        if (queryDto?.BirthDateEnd.HasValue == true)
+        {
+            var birthDateEnd = queryDto.BirthDateEnd.Value;
+            exp = exp.And(x => x.BirthDate <= birthDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEmployeeQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeName))
+        {
+            return true;
+        }
+        if (queryDto.Gender.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IdCardCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Mobile))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Email))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NativePlace))
+        {
+            return true;
+        }
+        if (queryDto.Ethnicity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PoliticalAffiliation.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MaritalStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EmployeeStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Avatar))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.BirthDateStart.HasValue || queryDto.BirthDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

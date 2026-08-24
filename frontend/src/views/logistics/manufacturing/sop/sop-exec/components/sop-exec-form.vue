@@ -666,7 +666,7 @@
             <template v-else-if="column.key === 'isOutOfRange'">
               <TaktSelect
                 v-model:value="record.isOutOfRange"
-                dict-type="sys_yes_no_type"
+                dict-type="sys_yes_no"
                 :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopargument.isoutofrange') })"
               />
             </template>
@@ -827,7 +827,7 @@ const sopExecStepFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.action'),
+    title: t('common.action.operation'),
     key: '__action',
     width: 80,
     fixed: 'right',
@@ -902,7 +902,7 @@ const sopExecScanFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.action'),
+    title: t('common.action.operation'),
     key: '__action',
     width: 80,
     fixed: 'right',
@@ -977,7 +977,7 @@ const sopArgumentFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.action'),
+    title: t('common.action.operation'),
     key: '__action',
     width: 80,
     fixed: 'right',

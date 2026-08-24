@@ -72,7 +72,7 @@ export interface ProfitCenter extends CompanyDtoBase {
    */
   sortOrder: number;
   /**
-   * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   profitCenterStatus: number;
 }
@@ -181,7 +181,7 @@ export interface ProfitCenterQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   profitCenterStatus?: number;
 
@@ -288,7 +288,7 @@ export interface ProfitCenterCreate {
   plantCode: string;
 
   /**
-   * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   profitCenterStatus: number;
 
@@ -332,7 +332,7 @@ export interface ProfitCenterStatus {
   profitCenterId: string;
 
   /**
-   * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   profitCenterStatus: number;
 
@@ -430,7 +430,7 @@ export interface ProfitCenterTemplate {
   plantCode?: string;
 
   /**
-   * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   profitCenterStatus?: number;
 
@@ -527,7 +527,7 @@ export interface ProfitCenterImport {
   plantCode?: string;
 
   /**
-   * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   profitCenterStatus?: number;
 
@@ -621,7 +621,7 @@ export interface ProfitCenterExport {
   sortOrder: number;
 
   /**
-   * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   profitCenterStatus: number;
 

@@ -94,7 +94,7 @@ export interface Bank extends CompanyDtoBase {
   bankGroup?: string;
 
   /**
-   * 邮政银行往来账户（字典 sys_yes_no_type）
+   * 邮政银行往来账户（字典 sys_yes_no）
    */
   pobkCurAc: number;
 
@@ -134,12 +134,12 @@ export interface Bank extends CompanyDtoBase {
   ibanRule?: string;
 
   /**
-   * 企业间（字典 sys_yes_no_type）
+   * 企业间（字典 sys_yes_no）
    */
   sddB2b: number;
 
   /**
-   * 核心个人（字典 sys_yes_no_type）
+   * 核心个人（字典 sys_yes_no）
    */
   sddCore: number;
 
@@ -254,7 +254,7 @@ export interface BankQuery extends TaktPagedQuery {
   bankGroup?: string;
 
   /**
-   * 邮政银行往来账户（字典 sys_yes_no_type）
+   * 邮政银行往来账户（字典 sys_yes_no）
    */
   pobkCurAc?: number;
 
@@ -294,12 +294,12 @@ export interface BankQuery extends TaktPagedQuery {
   ibanRule?: string;
 
   /**
-   * 企业间（字典 sys_yes_no_type）
+   * 企业间（字典 sys_yes_no）
    */
   sddB2b?: number;
 
   /**
-   * 核心个人（字典 sys_yes_no_type）
+   * 核心个人（字典 sys_yes_no）
    */
   sddCore?: number;
 
@@ -433,7 +433,7 @@ export interface BankCreate {
   bankGroup?: string;
 
   /**
-   * 邮政银行往来账户（字典 sys_yes_no_type）
+   * 邮政银行往来账户（字典 sys_yes_no）
    */
   pobkCurAc: number;
 
@@ -473,12 +473,12 @@ export interface BankCreate {
   ibanRule?: string;
 
   /**
-   * 企业间（字典 sys_yes_no_type）
+   * 企业间（字典 sys_yes_no）
    */
   sddB2b: number;
 
   /**
-   * 核心个人（字典 sys_yes_no_type）
+   * 核心个人（字典 sys_yes_no）
    */
   sddCore: number;
 
@@ -617,7 +617,7 @@ export interface BankTemplate {
   bankGroup?: string;
 
   /**
-   * 邮政银行往来账户（字典 sys_yes_no_type）
+   * 邮政银行往来账户（字典 sys_yes_no）
    */
   pobkCurAc?: number;
 
@@ -657,12 +657,12 @@ export interface BankTemplate {
   ibanRule?: string;
 
   /**
-   * 企业间（字典 sys_yes_no_type）
+   * 企业间（字典 sys_yes_no）
    */
   sddB2b?: number;
 
   /**
-   * 核心个人（字典 sys_yes_no_type）
+   * 核心个人（字典 sys_yes_no）
    */
   sddCore?: number;
 
@@ -786,7 +786,7 @@ export interface BankImport {
   bankGroup?: string;
 
   /**
-   * 邮政银行往来账户（字典 sys_yes_no_type）
+   * 邮政银行往来账户（字典 sys_yes_no）
    */
   pobkCurAc?: number;
 
@@ -826,12 +826,12 @@ export interface BankImport {
   ibanRule?: string;
 
   /**
-   * 企业间（字典 sys_yes_no_type）
+   * 企业间（字典 sys_yes_no）
    */
   sddB2b?: number;
 
   /**
-   * 核心个人（字典 sys_yes_no_type）
+   * 核心个人（字典 sys_yes_no）
    */
   sddCore?: number;
 
@@ -955,7 +955,7 @@ export interface BankExport {
   bankGroup?: string;
 
   /**
-   * 邮政银行往来账户（字典 sys_yes_no_type）
+   * 邮政银行往来账户（字典 sys_yes_no）
    */
   pobkCurAc: number;
 
@@ -995,12 +995,12 @@ export interface BankExport {
   ibanRule?: string;
 
   /**
-   * 企业间（字典 sys_yes_no_type）
+   * 企业间（字典 sys_yes_no）
    */
   sddB2b: number;
 
   /**
-   * 核心个人（字典 sys_yes_no_type）
+   * 核心个人（字典 sys_yes_no）
    */
   sddCore: number;
 

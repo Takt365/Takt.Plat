@@ -27,6 +27,10 @@ description: >-
 - [ ] defineExpose：validate、getValues、resetFields（+ setServerValidationErrors 可选）
 - [ ] a-form horizontal；标签 t('entity.*')；占位 common.page.form.placeholder.*
 - [ ] TaktSelect / TaktTreeSelect；主键与 long 字段 string
+- [ ] 「xxx内容」正文用 takt-rich-editor（非 a-input/a-textarea）
+- [ ] fileName + accessUrl 成对时用 takt-upload-file（fileName 上传回填；排除 TaktFile）
+- [ ] 「自动通过 TaktNumbering」无 MIME：规则下拉（`api-params.documentType`=菜单 MenuName）+ 只读编码（useTaktFormNumbering）
+- [ ] DocumentType 存 MenuName（tree-options?valueBy=name）；禁止存菜单 Id
 - [ ] 03-format-blank-lines
 ```
 

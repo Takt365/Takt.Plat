@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceContractService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务合同应用服务实现
 // 
@@ -392,7 +392,7 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
 
         if (queryDto?.ClientId.HasValue == true)
         {
-            var clientId = queryDto.ClientId;
+            var clientId = queryDto.ClientId.Value;
             exp = exp.And(x => x.ClientId == clientId);
         }
 
@@ -410,19 +410,19 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
 
         if (queryDto?.ContractType.HasValue == true)
         {
-            var contractType = queryDto.ContractType;
+            var contractType = queryDto.ContractType.Value;
             exp = exp.And(x => x.ContractType == contractType);
         }
 
         if (queryDto?.ContractStatus.HasValue == true)
         {
-            var contractStatus = queryDto.ContractStatus;
+            var contractStatus = queryDto.ContractStatus.Value;
             exp = exp.And(x => x.ContractStatus == contractStatus);
         }
 
         if (queryDto?.ContractAmount.HasValue == true)
         {
-            var contractAmount = queryDto.ContractAmount;
+            var contractAmount = queryDto.ContractAmount.Value;
             exp = exp.And(x => x.ContractAmount == contractAmount);
         }
 
@@ -434,7 +434,7 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
 
         if (queryDto?.PaymentTerms.HasValue == true)
         {
-            var paymentTerms = queryDto.PaymentTerms;
+            var paymentTerms = queryDto.PaymentTerms.Value;
             exp = exp.And(x => x.PaymentTerms == paymentTerms);
         }
 
@@ -446,13 +446,13 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
 
         if (queryDto?.SlaResponseHours.HasValue == true)
         {
-            var slaResponseHours = queryDto.SlaResponseHours;
+            var slaResponseHours = queryDto.SlaResponseHours.Value;
             exp = exp.And(x => x.SlaResponseHours == slaResponseHours);
         }
 
         if (queryDto?.SlaResolveHours.HasValue == true)
         {
-            var slaResolveHours = queryDto.SlaResolveHours;
+            var slaResolveHours = queryDto.SlaResolveHours.Value;
             exp = exp.And(x => x.SlaResolveHours == slaResolveHours);
         }
 
@@ -464,7 +464,7 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
@@ -482,49 +482,49 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
 
         if (queryDto?.SignDateStart.HasValue == true)
         {
-            var signDateStart = queryDto.SignDateStart;
+            var signDateStart = queryDto.SignDateStart.Value;
             exp = exp.And(x => x.SignDate >= signDateStart);
         }
 
         if (queryDto?.SignDateEnd.HasValue == true)
         {
-            var signDateEnd = queryDto.SignDateEnd;
+            var signDateEnd = queryDto.SignDateEnd.Value;
             exp = exp.And(x => x.SignDate <= signDateEnd);
         }
 
         if (queryDto?.EffectiveDateStart.HasValue == true)
         {
-            var effectiveDateStart = queryDto.EffectiveDateStart;
+            var effectiveDateStart = queryDto.EffectiveDateStart.Value;
             exp = exp.And(x => x.EffectiveDate >= effectiveDateStart);
         }
 
         if (queryDto?.EffectiveDateEnd.HasValue == true)
         {
-            var effectiveDateEnd = queryDto.EffectiveDateEnd;
+            var effectiveDateEnd = queryDto.EffectiveDateEnd.Value;
             exp = exp.And(x => x.EffectiveDate <= effectiveDateEnd);
         }
 
         if (queryDto?.ExpiryDateStart.HasValue == true)
         {
-            var expiryDateStart = queryDto.ExpiryDateStart;
+            var expiryDateStart = queryDto.ExpiryDateStart.Value;
             exp = exp.And(x => x.ExpiryDate >= expiryDateStart);
         }
 
         if (queryDto?.ExpiryDateEnd.HasValue == true)
         {
-            var expiryDateEnd = queryDto.ExpiryDateEnd;
+            var expiryDateEnd = queryDto.ExpiryDateEnd.Value;
             exp = exp.And(x => x.ExpiryDate <= expiryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

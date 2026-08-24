@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:talent:offer:create"
-      update-permission="human:resource:talent:offer:update"
-      delete-permission="human:resource:talent:offer:delete"
-      import-permission="human:resource:talent:offer:import"
-      export-permission="human:resource:talent:offer:export"
+      create-permission="human:resource:talent:job:posting:create"
+      update-permission="human:resource:talent:job:posting:update"
+      delete-permission="human:resource:talent:job:posting:delete"
+      import-permission="human:resource:talent:job:posting:import"
+      export-permission="human:resource:talent:job:posting:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getTalentOfferId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -109,275 +110,22 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('jobPostingId')">
-      <a-form-item :label="t('entity.talentoffer.jobpostingid')">
-        <a-input
-          v-model:value="advancedQueryForm.jobPostingId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.jobpostingid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('offerCode')">
-      <a-form-item :label="t('entity.talentoffer.offerCode')">
-        <a-input
-          v-model:value="advancedQueryForm.offerCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.offerCode') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('hireDateStart')">
-      <a-form-item :label="t('entity.talentoffer.hiredatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.hireDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentoffer.hiredatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('hireDateEnd')">
-      <a-form-item :label="t('entity.talentoffer.hiredateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.hireDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentoffer.hiredateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.talentoffer.employeeid')">
-        <a-input
-          v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.employeeid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.talentoffer.deptid')">
-        <a-input
-          v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.deptid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="t('entity.talentoffer.deptname')">
-        <a-input
-          v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.deptname') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postId')">
-      <a-form-item :label="t('entity.talentoffer.postid')">
-        <a-input
-          v-model:value="advancedQueryForm.postId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.postid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postName')">
-      <a-form-item :label="t('entity.talentoffer.postname')">
-        <a-input
-          v-model:value="advancedQueryForm.postName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.postname') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('reason')">
-      <a-form-item :label="t('entity.talentoffer.reason')">
-        <a-input
-          v-model:value="advancedQueryForm.reason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.reason') })"
-          show-count
-          :maxlength="500"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.talentoffer.approvalstatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.approvalStatus"
-          dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentoffer.approvalstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.talentoffer.initiatorid')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.initiatorid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.talentoffer.initiatedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.initiatedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.talentoffer.initiatedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentoffer.initiatedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.talentoffer.approvedby')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.approvedby') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.talentoffer.approvedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.approvedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.talentoffer.approvedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentoffer.approvedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.talentoffer.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.flowinstanceid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.talentoffer._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.talentoffer._self"
+        v-if="importVisible"
+        :entity-i18n-key="TALENTOFFER_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -419,15 +167,28 @@ import { getTalentOfferList, getTalentOfferById, createTalentOffer, updateTalent
 import type { TalentOffer, TalentOfferQuery } from '@/types/human-resource/talent/offer'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
+import {
+  useTalentOfferI18n,
+  TALENTOFFER_LIST_FIELDS,
+  TALENTOFFER_QUERY_STRING_FIELDS,
+  TALENTOFFER_QUERY_FIELDS,
+  TALENTOFFER_SELF_I18N_KEY,
+} from './composables/use-offer-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useTalentOfferI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type TalentOfferRowRecord = TalentOffer | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktTalentOffer')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.talentoffer._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -443,9 +204,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<TalentOffer | null>(null)
+const selectedRow = ref<TalentOfferRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<TalentOffer[]>([])
+const selectedRows = ref<TalentOfferRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -462,55 +223,44 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of TALENTOFFER_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(TALENTOFFER_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof TALENTOFFER_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  jobPostingId: '',
-  offerCode: '',
-  hireDateStart: '',
-  hireDateEnd: '',
-  employeeId: '',
-  deptId: '',
-  deptName: '',
-  postId: '',
-  postName: '',
-  reason: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'jobPostingId', label: t('entity.talentoffer.jobpostingid') },
-  { key: 'offerCode', label: t('entity.talentoffer.offerCode') },
-  { key: 'hireDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.talentoffer.hiredate')) },
-  { key: 'hireDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.talentoffer.hiredate')) },
-  { key: 'employeeId', label: t('entity.talentoffer.employeeid') },
-  { key: 'deptId', label: t('entity.talentoffer.deptid') },
-  { key: 'deptName', label: t('entity.talentoffer.deptname') },
-  { key: 'postId', label: t('entity.talentoffer.postid') },
-  { key: 'postName', label: t('entity.talentoffer.postname') },
-  { key: 'reason', label: t('entity.talentoffer.reason') },
-  { key: 'approvalStatus', label: t('entity.talentoffer.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.talentoffer.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.talentoffer.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.talentoffer.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.talentoffer.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.talentoffer.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.talentoffer.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.talentoffer.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  TALENTOFFER_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -526,8 +276,10 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {TalentOfferQuery} 查询 DTO
  */
@@ -548,140 +300,44 @@ function buildListQuery(overrides?: Partial<TalentOfferQuery>): TalentOfferQuery
       query[key] = v as never
     }
   }
-  assignTrimmed('jobPostingId', form.jobPostingId)
-  assignTrimmed('offerCode', form.offerCode)
-  assignTrimmed('hireDateStart', form.hireDateStart)
-  assignTrimmed('hireDateEnd', form.hireDateEnd)
-  assignTrimmed('employeeId', form.employeeId)
-  assignTrimmed('deptId', form.deptId)
-  assignTrimmed('deptName', form.deptName)
-  assignTrimmed('postId', form.postId)
-  assignTrimmed('postName', form.postName)
-  assignTrimmed('reason', form.reason)
-  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
-    query.approvalStatus = form.approvalStatus
+  for (const key of TALENTOFFER_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
+
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildTalentOfferListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'talentOfferId',
-    key: 'talentOfferId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'talentOfferId') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.jobpostingid'),
-    dataIndex: 'jobPostingId',
-    key: 'jobPostingId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'jobPostingId') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.offerCode'),
-    dataIndex: 'offerCode',
-    key: 'offerCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'offerCode') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.hiredate'),
-    dataIndex: 'hireDate',
-    key: 'hireDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'hireDate') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.employeeid'),
-    dataIndex: 'employeeId',
-    key: 'employeeId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'employeeId') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.deptid'),
-    dataIndex: 'deptId',
-    key: 'deptId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'deptId') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.deptname'),
-    dataIndex: 'deptName',
-    key: 'deptName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'deptName') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.postid'),
-    dataIndex: 'postId',
-    key: 'postId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'postId') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.postname'),
-    dataIndex: 'postName',
-    key: 'postName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'postName') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.reason'),
-    dataIndex: 'reason',
-    key: 'reason',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'reason') ?? ''
-  },
-  {
-    title: t('entity.talentoffer.jobposting'),
-    dataIndex: 'jobPosting',
-    key: 'jobPosting',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'jobPosting') ?? ''
-  },
+  buildTalentOfferListColumn('talentOfferId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...TALENTOFFER_LIST_FIELDS.map((key) => buildTalentOfferListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -689,52 +345,51 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:talent:offer:update',
-        onClick: (record: TalentOffer) => handleEdit(record)
+        permission: 'human:resource:talent:job:posting:update',
+        onClick: (record: TalentOfferRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:talent:offer:delete',
-        onClick: (record: TalentOffer) => handleDeleteOne(record)
+        permission: 'human:resource:talent:job:posting:delete',
+        onClick: (record: TalentOfferRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getTalentOfferId = (record: any): string => record?.[entityIdName] ?? ''
-/**
- * 读取行字段值
- * @param record 行数据
- * @param field 字段名
- */
-const getTalentOfferField = (record: any, field: string): any => record?.[field]
+const getTalentOfferId = (record: TalentOfferRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: TalentOffer[]) => {
+  onChange: (keys: (string | number)[], rows: TalentOfferRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: TalentOffer, selected: boolean) => {
+  onSelect: (record: TalentOfferRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getTalentOfferId(selectedRow.value) === getTalentOfferId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: TalentOffer[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: TalentOfferRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: TalentOffer) => ({
+const onClickRow = (record: TalentOfferRowRecord) => ({
   onClick: () => {
     const key = getTalentOfferId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -755,6 +410,11 @@ const onClickRow = (record: TalentOffer) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getTalentOfferList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -780,54 +440,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  jobPostingId: '',
-  offerCode: '',
-  hireDateStart: '',
-  hireDateEnd: '',
-  employeeId: '',
-  deptId: '',
-  deptName: '',
-  postId: '',
-  postName: '',
-  reason: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.talentoffer._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: TalentOffer) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.talentoffer._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: TalentOfferRowRecord) {
+  const id = getTalentOfferId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getTalentOfferById(id)
+    formData.value = detail ?? ({ ...record } as Partial<TalentOffer>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.talentoffer._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -845,10 +494,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateTalentOffer(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.talentoffer._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createTalentOffer(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.talentoffer._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -876,15 +525,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importTalentOffer(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importTalentOffer(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -895,6 +547,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportTalentOffer(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -918,24 +573,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.talentoffer._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[TalentOffer] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.talentoffer._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: TalentOffer) {
+async function handleDeleteOne(record: TalentOfferRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.talentoffer._self'), name: t('common.tip.this.target', { target: t('entity.talentoffer._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteTalentOfferById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.talentoffer._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -943,18 +598,18 @@ async function handleDeleteOne(record: TalentOffer) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.talentoffer._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.talentoffer._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteTalentOfferBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.talentoffer._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -972,30 +627,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  jobPostingId: '',
-  offerCode: '',
-  hireDateStart: '',
-  hireDateEnd: '',
-  employeeId: '',
-  deptId: '',
-  deptName: '',
-  postId: '',
-  postName: '',
-  reason: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

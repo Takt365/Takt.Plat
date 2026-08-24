@@ -63,13 +63,13 @@ public static class TaktFileHelper
 
     #region 文件状态
 
-    /// <summary>禁用（字典 sys_normal_disable_status=0）</summary>
+    /// <summary>禁用（字典 sys_normal_disable=0）</summary>
     public const int FileStatusDisabled = 0;
 
-    /// <summary>启用（字典 sys_normal_disable_status=1）</summary>
+    /// <summary>启用（字典 sys_normal_disable=1）</summary>
     public const int FileStatusEnabled = 1;
 
-    /// <summary>锁定（字典 sys_normal_disable_status=2）</summary>
+    /// <summary>锁定（字典 sys_normal_disable=2）</summary>
     public const int FileStatusLocked = 2;
 
     /// <summary>
@@ -107,7 +107,7 @@ public static class TaktFileHelper
     #region 文件访问
 
     /// <summary>
-    /// 当前用户是否可访问该文件（IsPublic 字典 sys_is_public_type：0=公开，1=私有；不含 RBAC）
+    /// 当前用户是否可访问该文件（IsPublic 字典 sys_public_type：0=公开，1=私有；不含 RBAC）
     /// </summary>
     /// <param name="isPublic">公开（0=公开，1=私有）</param>
     /// <param name="createdBy">文件创建人用户 ID</param>
@@ -136,7 +136,7 @@ public static class TaktFileHelper
     /// <summary>FTP 存储（字典 sys_storage_type=2）</summary>
     public const int StorageTypeFtp = 2;
 
-    /// <summary>默认 OSS 提供商标识（字典 sys_oss_provider_type=aliyun）</summary>
+    /// <summary>默认 OSS 提供商标识（字典 sys_oss_provider=aliyun）</summary>
     public const string DefaultOssProvider = "aliyun";
 
     /// <summary>默认 FTP 提供商标识（字典 sys_ftp_provider_type=teac_cn）</summary>
@@ -1103,7 +1103,7 @@ public static class TaktFileHelper
     }
 
     /// <summary>
-    /// 规范化前端传入的 storageNaming（字典 sys_storage_naming_config：0/1/2）
+    /// 规范化前端传入的 storageNaming（字典 sys_storage_naming：0/1/2）
     /// </summary>
     /// <param name="storageNaming">表单传入值；为空时使用 defaultValue</param>
     /// <param name="defaultValue">缺省或非法时返回值，默认 0=原文件+哈希</param>
@@ -1119,7 +1119,7 @@ public static class TaktFileHelper
     }
 
     /// <summary>
-    /// 按字典 sys_storage_naming_config 解析磁盘存储文件名（与 FileCode 业务编码无关）
+    /// 按字典 sys_storage_naming 解析磁盘存储文件名（与 FileCode 业务编码无关）
     /// </summary>
     /// <param name="storageNaming">0=原文件+哈希，1=自动生成 GUID 文件名，2=自定义 targetFileName</param>
     /// <param name="originalFileName">原始文件名（含扩展名）</param>

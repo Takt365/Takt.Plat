@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceContractI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerServiceContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -244,13 +244,13 @@ public class TaktCustomerServiceContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerservicecontract.accountmanager", "zh-HK", "客户经理_hk", "客户经理（人员代码）"),
 
             // entity.customerservicecontract.sortorder
-            new TranslationSeedItem("entity.customerservicecontract.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicecontract.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.customerservicecontract.sortorder
-            new TranslationSeedItem("entity.customerservicecontract.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicecontract.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.customerservicecontract.sortorder
-            new TranslationSeedItem("entity.customerservicecontract.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicecontract.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.customerservicecontract.sortorder
-            new TranslationSeedItem("entity.customerservicecontract.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicecontract.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.customerservicecontract.serviceorders
             new TranslationSeedItem("entity.customerservicecontract.serviceorders", "en-US", "服务订单列表_us", "服务订单列表（外键在子表 TaktCustomerServiceOrder.ServiceContractId）"),

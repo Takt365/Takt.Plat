@@ -410,12 +410,102 @@ function parseEntityFile(filePath) {
 // ========================================
 
 /**
+ * 冗余 Code/Name 对应的主表外键（XxxCode→XxxId；仅当 XxxId 在实体/DTO 上为 long）
+ * @param {string} propName
+ * @param {Set<string>|null|undefined} dtoPropNames
+ * @param {Map<string, object>|null|undefined} entityPropMap
+ * @returns {string|null}
+ */
+function resolveRedundantFieldFkGuard(propName, dtoPropNames, entityPropMap) {
+  if (!dtoPropNames || !propName) {
+    return null;
+  }
+  for (const suffix of ['Code', 'Name']) {
+    if (!propName.endsWith(suffix) || propName.length <= suffix.length) {
+      continue;
+    }
+    const fk = `${propName.slice(0, -suffix.length)}Id`;
+    if (fk === 'Id' || !dtoPropNames.has(fk)) {
+      continue;
+    }
+    const entityProp = entityPropMap?.get(fk);
+    if (!entityProp || entityProp.bareType !== 'long') {
+      continue;
+    }
+    return fk;
+  }
+  return null;
+}
+
+/** 角色前缀外键：Plant/Culture Stamp 守卫优先选用无此前缀的主表 FK */
+const STAMP_FK_ROLE_PREFIX = /^(Original|Proxy|Source|Target|Related|From|To)/;
+
+/**
+ * 子表 Stamp 可用的主表外键（配套 *Code/*Name 的 long *Id；无则回退主子关联 FK）
+ * @param {Set<string>|null|undefined} dtoPropNames
+ * @param {string} [entityShort]
+ * @param {Map<string, object>|null|undefined} [entityPropMap]
+ * @returns {string|null}
+ */
+function resolvePrimaryMasterFkForStamp(dtoPropNames, entityShort, entityPropMap) {
+  if (!dtoPropNames || dtoPropNames.size === 0) {
+    return null;
+  }
+  /** @type {string[]} */
+  const candidates = [];
+  for (const name of dtoPropNames) {
+    if (!name.endsWith('Id') || name === 'Id' || name === 'ParentId') {
+      continue;
+    }
+    const entityProp = entityPropMap?.get(name);
+    if (!entityProp || entityProp.bareType !== 'long') {
+      continue;
+    }
+    const prefix = name.slice(0, -2);
+    if (dtoPropNames.has(`${prefix}Code`) || dtoPropNames.has(`${prefix}Name`)) {
+      candidates.push(name);
+    }
+  }
+  if (candidates.length > 0) {
+    candidates.sort((a, b) => {
+      const aRole = STAMP_FK_ROLE_PREFIX.test(a) ? 1 : 0;
+      const bRole = STAMP_FK_ROLE_PREFIX.test(b) ? 1 : 0;
+      if (aRole !== bRole) {
+        return aRole - bRole;
+      }
+      return a.length - b.length;
+    });
+    return candidates[0];
+  }
+  if (entityShort) {
+    try {
+      const { listAssociationsForChild } = require('./generate-master-detail-associations.cjs');
+      const assocs = listAssociationsForChild(entityShort);
+      for (const assoc of assocs) {
+        const fk = assoc.fkFieldOnChild;
+        if (!fk || !fk.endsWith('Id') || !dtoPropNames.has(fk)) {
+          continue;
+        }
+        const entityProp = entityPropMap?.get(fk);
+        if (!entityProp || entityProp.bareType !== 'long') {
+          continue;
+        }
+        return fk;
+      }
+    } catch {
+      // 关联模块不可用时仅依赖配套 Code/Name
+    }
+  }
+  return null;
+}
+
+/**
  * @param {object} prop
  * @param {object} options
  * @returns {string[]}
  */
 function buildValidationRules(prop, options) {
-  const { mode = 'create', required = false } = options;
+  const { mode = 'create', required = false, stampFkGuard = null } = options;
   if (!shouldValidateProperty(prop)) {
     return [];
   }
@@ -424,7 +514,13 @@ function buildValidationRules(prop, options) {
 
   if (prop.bareType === 'string') {
     if (required) {
-      rules.push(`NotEmpty().WithMessage("${label}不能为空")`);
+      if (stampFkGuard) {
+        rules.push(
+          `NotEmpty().WithMessage("${label}不能为空").When(x => x.${stampFkGuard} <= 0)`,
+        );
+      } else {
+        rules.push(`NotEmpty().WithMessage("${label}不能为空")`);
+      }
     }
     if (prop.maxLength) {
       if (mode === 'import' && !required) {
@@ -502,6 +598,10 @@ function emitExtFieldAndRemarkRules(mode) {
  */
 function emitTenantCompanyScopeRules(entity, entityBase, mode, dtoPropNames) {
   const lines = [];
+  const entityShort = String(entity?.className || '').replace(/^Takt/, '');
+  const entityPropMap = entity?.properties
+    ? new Map(entity.properties.map((p) => [p.name, p]))
+    : null;
   const tenantWhen =
     mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.TenantCode))' : '';
   const companyWhen =
@@ -527,11 +627,18 @@ function emitTenantCompanyScopeRules(entity, entityBase, mode, dtoPropNames) {
     isCompanyOrApprovalEntityBase(entityBase) &&
     (!dtoPropNames || dtoPropNames.has('CultureCode'))
   ) {
+    const stampFk = resolvePrimaryMasterFkForStamp(dtoPropNames, entityShort, entityPropMap);
     const cultureWhen =
       mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.CultureCode))' : '';
     lines.push('        RuleFor(x => x.CultureCode)');
     if (mode === 'create') {
-      lines.push('            .NotEmpty().WithMessage("区域文化编码不能为空")');
+      if (stampFk) {
+        lines.push(
+          `            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.${stampFk} <= 0)`,
+        );
+      } else {
+        lines.push('            .NotEmpty().WithMessage("区域文化编码不能为空")');
+      }
     }
     lines.push(`            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符")${cultureWhen};`);
   } else if (
@@ -539,11 +646,18 @@ function emitTenantCompanyScopeRules(entity, entityBase, mode, dtoPropNames) {
     entityBaseHasCultureCode(entityBase) &&
     (!dtoPropNames || dtoPropNames.has('CultureCode'))
   ) {
+    const stampFk = resolvePrimaryMasterFkForStamp(dtoPropNames, entityShort, entityPropMap);
     const cultureWhen =
       mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.CultureCode))' : '';
     lines.push('        RuleFor(x => x.CultureCode)');
     if (mode === 'create') {
-      lines.push('            .NotEmpty().WithMessage("区域文化编码不能为空")');
+      if (stampFk) {
+        lines.push(
+          `            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.${stampFk} <= 0)`,
+        );
+      } else {
+        lines.push('            .NotEmpty().WithMessage("区域文化编码不能为空")');
+      }
     }
     lines.push(`            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符")${cultureWhen};`);
   }
@@ -551,11 +665,18 @@ function emitTenantCompanyScopeRules(entity, entityBase, mode, dtoPropNames) {
     isCompanyOrApprovalEntityBase(entityBase) &&
     (!dtoPropNames || dtoPropNames.has('PlantCode'))
   ) {
+    const stampFk = resolvePrimaryMasterFkForStamp(dtoPropNames, entityShort, entityPropMap);
     const plantWhen =
       mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.PlantCode))' : '';
     lines.push('        RuleFor(x => x.PlantCode)');
     if (mode === 'create') {
-      lines.push('            .NotEmpty().WithMessage("工厂代码不能为空")');
+      if (stampFk) {
+        lines.push(
+          `            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.${stampFk} <= 0)`,
+        );
+      } else {
+        lines.push('            .NotEmpty().WithMessage("工厂代码不能为空")');
+      }
     }
     lines.push(`            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符")${plantWhen};`);
   }
@@ -661,7 +782,8 @@ function generateValidatorFileContent(entity) {
       return;
     }
     const required = isCreateRequiredString(prop);
-    const rule = emitRuleFor(prop, { mode: 'create', required });
+    const stampFkGuard = resolveRedundantFieldFkGuard(prop.name, createDtoPropNames, propMap);
+    const rule = emitRuleFor(prop, { mode: 'create', required, stampFkGuard });
     if (rule) {
       createRules.push(rule);
     }
@@ -703,7 +825,8 @@ function generateValidatorFileContent(entity) {
         return;
       }
       const required = isCreateRequiredString(prop);
-      const rule = emitRuleFor(prop, { mode: 'create', required });
+      const stampFkGuard = resolveRedundantFieldFkGuard(prop.name, updateDtoPropNames, propMap);
+      const rule = emitRuleFor(prop, { mode: 'create', required, stampFkGuard });
       if (rule) {
         updateFieldRules.push(rule);
       }

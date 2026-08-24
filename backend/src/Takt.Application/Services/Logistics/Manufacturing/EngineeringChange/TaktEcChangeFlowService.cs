@@ -480,6 +480,6 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
             return null;
         }
         var user = await _userRepository.GetByIdAsync(userId.Value);
-        return user?.Username;
+        return user?.UserName;
     }
 }

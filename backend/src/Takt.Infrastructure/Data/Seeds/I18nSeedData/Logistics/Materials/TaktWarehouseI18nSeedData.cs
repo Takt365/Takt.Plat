@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktWarehouseI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWarehouse 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,22 +145,22 @@ public class TaktWarehouseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.warehouse.contactphone", "zh-HK", "联系电话_hk", "联系电话（contact_phone）"),
 
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "en-US", "仓库负责人用户编码_us", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "en-US", "仓库负责人用户编码_us", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "ja-JP", "仓库负责人用户编码_jp", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "ja-JP", "仓库负责人用户编码_jp", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-CN", "仓库负责人用户编码", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-CN", "仓库负责人用户编码", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-HK", "仓库负责人用户编码_hk", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-HK", "仓库负责人用户编码_hk", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
 
             // entity.warehouse.isvirtual
-            new TranslationSeedItem("entity.warehouse.isvirtual", "en-US", "虚拟仓_us", "虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）"),
+            new TranslationSeedItem("entity.warehouse.isvirtual", "en-US", "虚拟仓_us", "虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）"),
             // entity.warehouse.isvirtual
-            new TranslationSeedItem("entity.warehouse.isvirtual", "ja-JP", "虚拟仓_jp", "虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）"),
+            new TranslationSeedItem("entity.warehouse.isvirtual", "ja-JP", "虚拟仓_jp", "虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）"),
             // entity.warehouse.isvirtual
-            new TranslationSeedItem("entity.warehouse.isvirtual", "zh-CN", "虚拟仓", "虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）"),
+            new TranslationSeedItem("entity.warehouse.isvirtual", "zh-CN", "虚拟仓", "虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）"),
             // entity.warehouse.isvirtual
-            new TranslationSeedItem("entity.warehouse.isvirtual", "zh-HK", "虚拟仓_hk", "虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）"),
+            new TranslationSeedItem("entity.warehouse.isvirtual", "zh-HK", "虚拟仓_hk", "虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）"),
 
             // entity.warehouse.type
             new TranslationSeedItem("entity.warehouse.type", "en-US", "仓库类型_us", "仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
@@ -172,31 +172,31 @@ public class TaktWarehouseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.warehouse.type", "zh-HK", "仓库类型_hk", "仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
 
             // entity.warehouse.isbuiltin
-            new TranslationSeedItem("entity.warehouse.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.warehouse.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.warehouse.isbuiltin
-            new TranslationSeedItem("entity.warehouse.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.warehouse.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.warehouse.isbuiltin
-            new TranslationSeedItem("entity.warehouse.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.warehouse.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.warehouse.isbuiltin
-            new TranslationSeedItem("entity.warehouse.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.warehouse.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
 
             // entity.warehouse.sortorder
-            new TranslationSeedItem("entity.warehouse.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.warehouse.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.warehouse.sortorder
-            new TranslationSeedItem("entity.warehouse.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.warehouse.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.warehouse.sortorder
-            new TranslationSeedItem("entity.warehouse.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.warehouse.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.warehouse.sortorder
-            new TranslationSeedItem("entity.warehouse.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.warehouse.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.warehouse.status
-            new TranslationSeedItem("entity.warehouse.status", "en-US", "仓库状态_us", "仓库状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.warehouse.status", "en-US", "仓库状态_us", "仓库状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.warehouse.status
-            new TranslationSeedItem("entity.warehouse.status", "ja-JP", "仓库状态_jp", "仓库状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.warehouse.status", "ja-JP", "仓库状态_jp", "仓库状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.warehouse.status
-            new TranslationSeedItem("entity.warehouse.status", "zh-CN", "仓库状态", "仓库状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.warehouse.status", "zh-CN", "仓库状态", "仓库状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.warehouse.status
-            new TranslationSeedItem("entity.warehouse.status", "zh-HK", "仓库状态_hk", "仓库状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.warehouse.status", "zh-HK", "仓库状态_hk", "仓库状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
 
             // entity.warehouse.storagelocations
             new TranslationSeedItem("entity.warehouse.storagelocations", "en-US", "库位列表_us", "库位列表（主子表关系）"),

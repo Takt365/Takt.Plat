@@ -143,7 +143,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.sopStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopdoc.sopstatus') })"
                 />
               </a-form-item>
@@ -282,7 +282,7 @@ const childSopRevisionRows = ref<Record<string, unknown>[]>([])
 const sopRevisionFormColumns = computed(() => [
 
   {
-    title: t('common.page.entity.action'),
+    title: t('common.action.operation'),
     key: '__action',
     width: 80,
     fixed: 'right',

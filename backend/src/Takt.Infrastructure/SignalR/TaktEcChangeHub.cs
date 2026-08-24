@@ -56,10 +56,10 @@ public class TaktEcChangeHub : Hub
         try
         {
             RequireResolvedLoginUser();
-            var userName = _userContext.UserName!.Trim();
+            var UserName = _userContext.UserName!.Trim();
             var companyCode = await ResolveCompanyCodeAsync();
             var connectionId = Context.ConnectionId ?? string.Empty;
-            await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
+            await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, UserName));
             await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.NotificationsGroup(companyCode));
             await base.OnConnectedAsync();
         }
@@ -81,10 +81,10 @@ public class TaktEcChangeHub : Hub
         try
         {
             RequireResolvedLoginUser();
-            var userName = _userContext.UserName!.Trim();
+            var UserName = _userContext.UserName!.Trim();
             var companyCode = await ResolveCompanyCodeAsync();
             var connectionId = Context.ConnectionId ?? string.Empty;
-            await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
+            await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, UserName));
             await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.NotificationsGroup(companyCode));
             await base.OnDisconnectedAsync(exception);
         }
@@ -195,8 +195,8 @@ public class TaktEcChangeHub : Hub
     /// </summary>
     private void RequireResolvedLoginUser()
     {
-        var (userId, userName) = ResolveUserFromContext();
-        if (!userId.HasValue || userId.Value <= 0 || string.IsNullOrWhiteSpace(userName))
+        var (userId, UserName) = ResolveUserFromContext();
+        if (!userId.HasValue || userId.Value <= 0 || string.IsNullOrWhiteSpace(UserName))
         {
             throw new HubException("无法解析当前登录用户，请重新登录后重试。");
         }
@@ -208,12 +208,12 @@ public class TaktEcChangeHub : Hub
     private async Task<string> ResolveCompanyCodeAsync()
     {
         RequireResolvedLoginUser();
-        var (userId, userName) = ResolveUserFromContext();
+        var (userId, UserName) = ResolveUserFromContext();
         return await TaktSignalRHubCompanyResolver.ResolveAsync(
             _userContext,
             _authService,
             userId!.Value,
-            userName!);
+            UserName!);
     }
 
     /// <summary>

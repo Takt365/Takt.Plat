@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerSatisfactionSurvey 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -307,13 +307,13 @@ public class TaktCustomerSatisfactionSurveyI18nSeedData : ITaktSeedDataCoordinat
             new TranslationSeedItem("entity.customersatisfactionsurvey.surveystatus", "zh-HK", "调查状态_hk", "调查状态（字典 logistics_quality_survey_status）"),
 
             // entity.customersatisfactionsurvey.sortorder
-            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.customersatisfactionsurvey.sortorder
-            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.customersatisfactionsurvey.sortorder
-            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.customersatisfactionsurvey.sortorder
-            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.customersatisfactionsurvey.followupstatus
             new TranslationSeedItem("entity.customersatisfactionsurvey.followupstatus", "en-US", "跟进状态_us", "跟进状态（字典 logistics_quality_follow_up_status）"),

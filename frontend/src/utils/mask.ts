@@ -107,15 +107,15 @@ export class MaskHelper {
       return emailStr
     }
 
-    const username = emailStr.substring(0, atIndex)
+    const userName = emailStr.substring(0, atIndex)
     const domain = emailStr.substring(atIndex)
 
-    if (username.length <= 1) {
-      return `${username}${maskChar.repeat(3)}${domain}`
+    if (userName.length <= 1) {
+      return `${userName}${maskChar.repeat(3)}${domain}`
     }
 
-    const visibleStart = username.substring(0, 1)
-    const mask = maskChar.repeat(Math.max(3, username.length - 1))
+    const visibleStart = userName.substring(0, 1)
+    const mask = maskChar.repeat(Math.max(3, userName.length - 1))
 
     return `${visibleStart}${mask}${domain}`
   }
@@ -332,7 +332,7 @@ export class MaskHelper {
             sanitized[key] = this.maskIdCard(value, 3, 4, maskChar)
           } else if (lowerKey.includes('bankcard') || lowerKey.includes('cardnumber') || lowerKey.includes('cardno')) {
             sanitized[key] = this.maskBankCard(value, 4, 4, maskChar)
-          } else if (lowerKey.includes('name') && !lowerKey.includes('username')) {
+          } else if (lowerKey.includes('name') && !lowerKey.includes('userName')) {
             sanitized[key] = this.maskName(value, maskChar)
           } else if (lowerKey.includes('address') || lowerKey.includes('addr')) {
             sanitized[key] = this.maskAddress(value, 6, maskChar)

@@ -45,12 +45,12 @@ export interface SourceOfSupply extends CompanyDtoBase {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed?: number;
 
   /**
-   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked?: number;
 
@@ -95,7 +95,7 @@ export interface SourceOfSupply extends CompanyDtoBase {
   validTo?: string;
 
   /**
-   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   sourceStatus?: number;
 
@@ -153,12 +153,12 @@ export interface SourceOfSupplyExport {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed: number;
 
   /**
-   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked: number;
 
@@ -208,7 +208,7 @@ export interface SourceOfSupplyExport {
   sortOrder: number;
 
   /**
-   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   sourceStatus: number;
 

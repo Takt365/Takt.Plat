@@ -140,7 +140,6 @@ public class TaktDatabaseInfoService : TaktServiceBase, ITaktDatabaseInfoService
                 IsIdentity = c.IsIdentity,
                 IsNullable = c.IsNullable
             })
-            .OrderBy(c => c.DatabaseColumnName, StringComparer.OrdinalIgnoreCase)
             .ToList();
     }
 }

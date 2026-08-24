@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：ITaktDeptService.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：部门应用服务接口
 // 
@@ -41,6 +41,13 @@ public interface ITaktDeptService
     /// <param name="parentId">父级ID（0=根）</param>
     /// <returns>树形选项（一层）</returns>
     Task<List<TaktTreeSelectOption>> GetDeptTreeOptionsAsync(long parentId = 0);
+
+    /// <summary>
+    /// 获取部门 ISO 编码树形选项列表（懒加载：DictValue=IsoCode，用于编码规则等部门段选择）
+    /// </summary>
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    Task<List<TaktTreeSelectOption>> GetDeptIsoTreeOptionsAsync(long parentId = 0);
 
     /// <summary>
     /// 获取部门树形列表（懒加载：仅 parentId 直接子级一层）
@@ -85,6 +92,13 @@ public interface ITaktDeptService
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktDeptDto> UpdateDeptStatusAsync(TaktDeptStatusDto dto);
+
+    /// <summary>
+    /// 更新部门内置
+    /// </summary>
+    /// <param name="dto">内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktDeptDto> UpdateDeptBuiltInAsync(TaktDeptBuiltInDto dto);
 
     /// <summary>
     /// 更新部门排序

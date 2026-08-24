@@ -33,6 +33,27 @@
       </a-form-item>
 
       <a-form-item
+        :label="t('common.page.entity.tenantcode')"
+        name="tenantCode"
+      >
+        <a-input
+          v-model:value="formState.tenantCode"
+          disabled
+        />
+      </a-form-item>
+
+      <a-form-item
+        :label="t('entity.dictdata.culturecode')"
+        name="cultureCode"
+      >
+        <TaktSelect
+          v-model:value="formState.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictdata.culturecode') })"
+        />
+      </a-form-item>
+
+      <a-form-item
         :label="t('entity.dictdata.dictlabel')"
         name="dictLabel"
       >
@@ -137,8 +158,10 @@ import { ref, reactive, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { DictData, DictDataCreate, DictDataUpdate } from '@/types/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
 
 const { t } = useI18n()
+const tenantStore = useTenantStore()
 
 /** 弹窗表单：`DictDataCreate` 中 `extLabel`/`extValue`/`remark` 为可选时与 `a-input`/`a-textarea` 在 exactOptionalPropertyTypes 下不兼容，此处收窄为必填 `string`（空串表示未填）。 */
 type DictDataFormState = Omit<DictDataCreate, 'extLabel' | 'extValue' | 'remark'> & {
@@ -174,6 +197,8 @@ const formRef = ref()
 
 /** 表单状态（与 DictData 接口字段顺序一致） */
 const formState = reactive<DictDataFormState>({
+  tenantCode: '',
+  cultureCode: 'mul',
   dictTypeId: '',
   dictTypeCode: '',
   dictLabel: '',
@@ -189,6 +214,9 @@ const formState = reactive<DictDataFormState>({
 })
 
 const formRulesComputed = computed<Record<string, Rule[]>>(() => ({
+  cultureCode: [
+    { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.dictdata.culturecode') }), trigger: 'change' }
+  ],
   dictLabel: [
     { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.dictdata.dictlabel') }), trigger: 'blur' }
   ],
@@ -208,6 +236,8 @@ watch(
     if (newData) {
       Object.assign(formState, {
         dictDataId: newData.dictDataId,
+        tenantCode: newData.tenantCode || tenantStore.tenantCode,
+        cultureCode: newData.cultureCode || 'mul',
         dictTypeId: newData.dictTypeId || props.dictTypeId,
         dictTypeCode: newData.dictTypeCode || props.dictTypeCode,
         dictLabel: newData.dictLabel || '',
@@ -224,6 +254,8 @@ watch(
     } else {
       Object.assign(formState, {
         dictDataId: undefined,
+        tenantCode: tenantStore.tenantCode,
+        cultureCode: 'mul',
         dictTypeId: props.dictTypeId || '',
         dictTypeCode: props.dictTypeCode || '',
         dictLabel: '',
@@ -265,6 +297,8 @@ const validate = async () => {
  */
 const getFormData = (): DictDataCreate | DictDataUpdate => {
   const baseData: DictDataCreate & { dictDataId?: string } = {
+    tenantCode: formState.tenantCode || tenantStore.tenantCode,
+    cultureCode: formState.cultureCode || 'mul',
     dictTypeId: formState.dictTypeId,
     dictTypeCode: formState.dictTypeCode,
     dictLabel: formState.dictLabel,

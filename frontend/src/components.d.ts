@@ -155,6 +155,7 @@ declare module 'vue' {
     TaktQueryBar: typeof import('./components/business/takt-query-bar/index.vue')['default']
     TaktQueryDrawer: typeof import('./components/business/takt-query-drawer/index.vue')['default']
     TaktRemixIcon: typeof import('./components/common/takt-remix-icon/index.vue')['default']
+    TaktRichEditor: typeof import('./components/common/takt-rich-editor/index.vue')['default']
     TaktSelect: typeof import('./components/business/takt-select/index.vue')['default']
     TaktSideMenu: typeof import('./components/navigation/takt-side-menu/index.vue')['default']
     TaktSingleTable: typeof import('./components/business/takt-single-table/index.vue')['default']

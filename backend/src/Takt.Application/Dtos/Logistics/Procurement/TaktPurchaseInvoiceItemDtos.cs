@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInvoiceItem 生成，请按需审阅）
 // 
@@ -35,9 +35,19 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceItemId { get; set; }
 
+    /// <summary>
+    /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
+    /// 采购发票名称（填充字段）
+    /// </summary>
+    public string? PurchaseInvoiceName { get; set; }
+
+    /// <summary>
+    /// 凭证编号（冗余字段，便于查询）
     /// </summary>
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -212,7 +222,7 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -240,7 +250,7 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -250,18 +260,18 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
+    /// 凭证编号（冗余字段，便于查询）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -436,7 +446,7 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -486,20 +496,19 @@ public class TaktPurchaseInvoiceItemCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 凭证编号（冗余字段，便于查询）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
-    /// </summary>
-    [Required(ErrorMessage = "凭证编号（冗余；会计年度见主表 FiscalYear）不能为空")]
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -673,7 +682,7 @@ public class TaktPurchaseInvoiceItemCreateDto
     public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -727,7 +736,7 @@ public class TaktPurchaseInvoiceItemObsoleteDto
     public long PurchaseInvoiceItemId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -757,18 +766,18 @@ public class TaktPurchaseInvoiceItemTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
+    /// 凭证编号（冗余字段，便于查询）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -943,7 +952,7 @@ public class TaktPurchaseInvoiceItemTemplateDto
     public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -980,18 +989,18 @@ public class TaktPurchaseInvoiceItemImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
+    /// 凭证编号（冗余字段，便于查询）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -1166,7 +1175,7 @@ public class TaktPurchaseInvoiceItemImportDto
     public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -1204,18 +1213,23 @@ public class TaktPurchaseInvoiceItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
+    /// 凭证编号（冗余字段，便于查询）
     /// </summary>
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -1390,7 +1404,7 @@ public class TaktPurchaseInvoiceItemExportDto
     public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

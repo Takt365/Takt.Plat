@@ -79,52 +79,52 @@ export interface GenTableColumn extends TenantCoreDtoBase {
   decimalDigits: number;
 
   /**
-   * 主键（字典 sys_yes_no_type；0=否 1=是）
+   * 主键（字典 sys_yes_no；0=否 1=是）
    */
   isPk: number;
 
   /**
-   * 自增（字典 sys_yes_no_type；0=否 1=是）
+   * 自增（字典 sys_yes_no；0=否 1=是）
    */
   isIncrement: number;
 
   /**
-   * 必填（字典 sys_yes_no_type；0=否 1=是）
+   * 必填（字典 sys_yes_no；0=否 1=是）
    */
   isRequired: number;
 
   /**
-   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   * 新增（字典 sys_yes_no；0=否 1=是）
    */
   isCreate: number;
 
   /**
-   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   * 更新（字典 sys_yes_no；0=否 1=是）
    */
   isUpdate: number;
 
   /**
-   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   * 查重（字典 sys_yes_no；0=否 1=是）
    */
   isUnique: number;
 
   /**
-   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   * 列表（字典 sys_yes_no；0=否 1=是）
    */
   isList: number;
 
   /**
-   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   * 导出（字典 sys_yes_no；0=否 1=是）
    */
   isExport: number;
 
   /**
-   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort: number;
 
   /**
-   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   * 查询（字典 sys_yes_no；0=否 1=是）
    */
   isQuery: number;
 
@@ -209,52 +209,52 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   decimalDigits?: number;
 
   /**
-   * 主键（字典 sys_yes_no_type；0=否 1=是）
+   * 主键（字典 sys_yes_no；0=否 1=是）
    */
   isPk?: number;
 
   /**
-   * 自增（字典 sys_yes_no_type；0=否 1=是）
+   * 自增（字典 sys_yes_no；0=否 1=是）
    */
   isIncrement?: number;
 
   /**
-   * 必填（字典 sys_yes_no_type；0=否 1=是）
+   * 必填（字典 sys_yes_no；0=否 1=是）
    */
   isRequired?: number;
 
   /**
-   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   * 新增（字典 sys_yes_no；0=否 1=是）
    */
   isCreate?: number;
 
   /**
-   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   * 更新（字典 sys_yes_no；0=否 1=是）
    */
   isUpdate?: number;
 
   /**
-   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   * 查重（字典 sys_yes_no；0=否 1=是）
    */
   isUnique?: number;
 
   /**
-   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   * 列表（字典 sys_yes_no；0=否 1=是）
    */
   isList?: number;
 
   /**
-   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   * 导出（字典 sys_yes_no；0=否 1=是）
    */
   isExport?: number;
 
   /**
-   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort?: number;
 
   /**
-   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   * 查询（字典 sys_yes_no；0=否 1=是）
    */
   isQuery?: number;
 
@@ -353,52 +353,52 @@ export interface GenTableColumnCreate {
   decimalDigits: number;
 
   /**
-   * 主键（字典 sys_yes_no_type；0=否 1=是）
+   * 主键（字典 sys_yes_no；0=否 1=是）
    */
   isPk: number;
 
   /**
-   * 自增（字典 sys_yes_no_type；0=否 1=是）
+   * 自增（字典 sys_yes_no；0=否 1=是）
    */
   isIncrement: number;
 
   /**
-   * 必填（字典 sys_yes_no_type；0=否 1=是）
+   * 必填（字典 sys_yes_no；0=否 1=是）
    */
   isRequired: number;
 
   /**
-   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   * 新增（字典 sys_yes_no；0=否 1=是）
    */
   isCreate: number;
 
   /**
-   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   * 更新（字典 sys_yes_no；0=否 1=是）
    */
   isUpdate: number;
 
   /**
-   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   * 查重（字典 sys_yes_no；0=否 1=是）
    */
   isUnique: number;
 
   /**
-   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   * 列表（字典 sys_yes_no；0=否 1=是）
    */
   isList: number;
 
   /**
-   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   * 导出（字典 sys_yes_no；0=否 1=是）
    */
   isExport: number;
 
   /**
-   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort: number;
 
   /**
-   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   * 查询（字典 sys_yes_no；0=否 1=是）
    */
   isQuery: number;
 
@@ -502,52 +502,52 @@ export interface GenTableColumnTemplate {
   decimalDigits?: number;
 
   /**
-   * 主键（字典 sys_yes_no_type；0=否 1=是）
+   * 主键（字典 sys_yes_no；0=否 1=是）
    */
   isPk?: number;
 
   /**
-   * 自增（字典 sys_yes_no_type；0=否 1=是）
+   * 自增（字典 sys_yes_no；0=否 1=是）
    */
   isIncrement?: number;
 
   /**
-   * 必填（字典 sys_yes_no_type；0=否 1=是）
+   * 必填（字典 sys_yes_no；0=否 1=是）
    */
   isRequired?: number;
 
   /**
-   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   * 新增（字典 sys_yes_no；0=否 1=是）
    */
   isCreate?: number;
 
   /**
-   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   * 更新（字典 sys_yes_no；0=否 1=是）
    */
   isUpdate?: number;
 
   /**
-   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   * 查重（字典 sys_yes_no；0=否 1=是）
    */
   isUnique?: number;
 
   /**
-   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   * 列表（字典 sys_yes_no；0=否 1=是）
    */
   isList?: number;
 
   /**
-   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   * 导出（字典 sys_yes_no；0=否 1=是）
    */
   isExport?: number;
 
   /**
-   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort?: number;
 
   /**
-   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   * 查询（字典 sys_yes_no；0=否 1=是）
    */
   isQuery?: number;
 
@@ -636,52 +636,52 @@ export interface GenTableColumnImport {
   decimalDigits?: number;
 
   /**
-   * 主键（字典 sys_yes_no_type；0=否 1=是）
+   * 主键（字典 sys_yes_no；0=否 1=是）
    */
   isPk?: number;
 
   /**
-   * 自增（字典 sys_yes_no_type；0=否 1=是）
+   * 自增（字典 sys_yes_no；0=否 1=是）
    */
   isIncrement?: number;
 
   /**
-   * 必填（字典 sys_yes_no_type；0=否 1=是）
+   * 必填（字典 sys_yes_no；0=否 1=是）
    */
   isRequired?: number;
 
   /**
-   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   * 新增（字典 sys_yes_no；0=否 1=是）
    */
   isCreate?: number;
 
   /**
-   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   * 更新（字典 sys_yes_no；0=否 1=是）
    */
   isUpdate?: number;
 
   /**
-   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   * 查重（字典 sys_yes_no；0=否 1=是）
    */
   isUnique?: number;
 
   /**
-   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   * 列表（字典 sys_yes_no；0=否 1=是）
    */
   isList?: number;
 
   /**
-   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   * 导出（字典 sys_yes_no；0=否 1=是）
    */
   isExport?: number;
 
   /**
-   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort?: number;
 
   /**
-   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   * 查询（字典 sys_yes_no；0=否 1=是）
    */
   isQuery?: number;
 
@@ -770,52 +770,52 @@ export interface GenTableColumnExport {
   decimalDigits: number;
 
   /**
-   * 主键（字典 sys_yes_no_type；0=否 1=是）
+   * 主键（字典 sys_yes_no；0=否 1=是）
    */
   isPk: number;
 
   /**
-   * 自增（字典 sys_yes_no_type；0=否 1=是）
+   * 自增（字典 sys_yes_no；0=否 1=是）
    */
   isIncrement: number;
 
   /**
-   * 必填（字典 sys_yes_no_type；0=否 1=是）
+   * 必填（字典 sys_yes_no；0=否 1=是）
    */
   isRequired: number;
 
   /**
-   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   * 新增（字典 sys_yes_no；0=否 1=是）
    */
   isCreate: number;
 
   /**
-   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   * 更新（字典 sys_yes_no；0=否 1=是）
    */
   isUpdate: number;
 
   /**
-   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   * 查重（字典 sys_yes_no；0=否 1=是）
    */
   isUnique: number;
 
   /**
-   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   * 列表（字典 sys_yes_no；0=否 1=是）
    */
   isList: number;
 
   /**
-   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   * 导出（字典 sys_yes_no；0=否 1=是）
    */
   isExport: number;
 
   /**
-   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort: number;
 
   /**
-   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   * 查询（字典 sys_yes_no；0=否 1=是）
    */
   isQuery: number;
 

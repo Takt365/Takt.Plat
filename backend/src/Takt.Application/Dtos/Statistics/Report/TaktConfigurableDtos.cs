@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Configurable 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurable 生成，请按需审阅）
 // 
@@ -58,7 +58,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public int DistinctRows { get; set; } = 0;
+    public int DistinctRows { get; set; } = 1;
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -71,7 +71,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     public int MaxQueryRows { get; set; } = 0;
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     public int IsPublic { get; set; } = 0;
 
@@ -81,7 +81,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     public string? ConfigurableDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -144,7 +144,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -153,11 +153,11 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
@@ -194,7 +194,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     public int? MaxQueryRows { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     public int? IsPublic { get; set; }
 
@@ -204,7 +204,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     public string? ConfigurableDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -258,16 +258,21 @@ public class TaktConfigurableCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
     [Required(ErrorMessage = "报表编码（租户+公司内唯一）不能为空")]
     public string ReportCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 编码规则编码（表单选规则后取号；对应 TaktNumbering.RuleCode；不落库）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
 
     /// <summary>
     /// 报表名称
@@ -288,7 +293,7 @@ public class TaktConfigurableCreateDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public int DistinctRows { get; set; } = 0;
+    public int DistinctRows { get; set; } = 1;
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -301,7 +306,7 @@ public class TaktConfigurableCreateDto
     public int MaxQueryRows { get; set; } = 0;
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     public int IsPublic { get; set; } = 0;
 
@@ -449,9 +454,9 @@ public class TaktConfigurableSortDto
     public long ConfigurableId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -479,11 +484,11 @@ public class TaktConfigurableTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
@@ -520,7 +525,7 @@ public class TaktConfigurableTemplateDto
     public int? MaxQueryRows { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     public int? IsPublic { get; set; }
 
@@ -596,11 +601,11 @@ public class TaktConfigurableImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
@@ -637,7 +642,7 @@ public class TaktConfigurableImportDto
     public int? MaxQueryRows { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     public int? IsPublic { get; set; }
 
@@ -715,6 +720,16 @@ public class TaktConfigurableExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
     public string ReportCode { get; set; } = string.Empty;
@@ -737,7 +752,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public int DistinctRows { get; set; } = 0;
+    public int DistinctRows { get; set; } = 1;
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -750,7 +765,7 @@ public class TaktConfigurableExportDto
     public int MaxQueryRows { get; set; } = 0;
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     public int IsPublic { get; set; } = 0;
 
@@ -760,7 +775,7 @@ public class TaktConfigurableExportDto
     public string? ConfigurableDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

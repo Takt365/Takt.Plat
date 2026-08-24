@@ -40,22 +40,22 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "parent_id", ColumnDescription = "父级ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     public long ParentId { get; set; }
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "manager_id", ColumnDescription = "负责人ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? ManagerId { get; set; }
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
     [SugarColumn(ColumnName = "manager_name", ColumnDescription = "负责人姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ManagerName { get; set; }
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "所属部门ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "所属部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
@@ -75,12 +75,12 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "profit_center_status", ColumnDescription = "利润中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProfitCenterStatus { get; set; } = 1;

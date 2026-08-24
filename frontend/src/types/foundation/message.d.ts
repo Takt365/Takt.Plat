@@ -24,59 +24,54 @@ import type {
  */
 export interface Message extends CompanyDtoBase {
   /**
-   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   * MessageID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
-  cultureCode: string
-
-  /**
-   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-   */
-  cultureCode?: string
-
-  /**
-   * 发送者用户名
-   */
-  fromUserName?: string;
+  messageId: string;
 
   /**
    * 发送者用户 ID
    */
-  fromUserId?: string;
+  fromUserId: string;
 
   /**
-   * 接收者用户名
+   * 发送者用户名
    */
-  toUserName?: string;
+  fromUserName: string;
+
+  /**
+   * 发送者昵称（由用户表 NickName 解析，非消息表持久化字段）
+   */
+  fromUserNickName?: string;
 
   /**
    * 接收者用户 ID
    */
-  toUserId?: string;
+  toUserId: string;
+
+  /**
+   * 接收者用户名
+   */
+  toUserName: string;
 
   /**
    * 消息标题
    */
-  messageTitle?: string;
+  messageTitle: string;
 
   /**
    * 消息内容
    */
-  messageContent?: string;
+  messageContent: string;
 
   /**
-   * 消息类型（1=系统消息 2=用户消息 3=通知消息）
+   * 消息类型（字典 sys_message_type DictValue：text、system、multimedia）
    */
-  messageType?: string;
+  messageType: string;
 
   /**
-   * 消息分组（查询条件，字典 DictValue）
+   * 消息分组（字典 sys_message_group DictValue）
    */
-  messageGroup?: string;
-
-  /**
-   * 读取状态（0=未读 1=已读）
-   */
-  readStatus?: number;
+  messageGroup: string;
 
   /**
    * 读取时间
@@ -86,17 +81,22 @@ export interface Message extends CompanyDtoBase {
   /**
    * 发送时间
    */
-  sendTime?: string;
+  sendTime: string;
 
   /**
    * 抄送（0=否，1=是）
    */
-  isCc?: number;
+  isCc: number;
 
   /**
-   * 附件路径（JSON 或逗号分隔）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  messageAttachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 消息扩展数据（JSON）
@@ -104,15 +104,9 @@ export interface Message extends CompanyDtoBase {
   messageExtData?: string;
 
   /**
-   * 扩展字段JSON
+   * 读取状态（0=未读 1=已读）
    */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
+  readStatus: number;
 }
 
 /**
@@ -132,24 +126,24 @@ export interface MessageExport {
   companyCode: string;
 
   /**
-   * 发送者用户名
-   */
-  fromUserName: string;
-
-  /**
    * 发送者用户 ID
    */
   fromUserId?: string;
 
   /**
-   * 接收者用户名
+   * 发送者用户名
    */
-  toUserName: string;
+  fromUserName: string;
 
   /**
    * 接收者用户 ID
    */
   toUserId?: string;
+
+  /**
+   * 接收者用户名
+   */
+  toUserName: string;
 
   /**
    * 消息标题
@@ -167,7 +161,7 @@ export interface MessageExport {
   messageType: string;
 
   /**
-   * 消息分组（字典 sys_message_group_category DictValue）
+   * 消息分组（字典 sys_message_group DictValue）
    */
   messageGroup: string;
 
@@ -192,9 +186,14 @@ export interface MessageExport {
   isCc: number;
 
   /**
-   * 附件路径（JSON 或逗号分隔）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  messageAttachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 消息扩展数据（JSON）
@@ -219,54 +218,136 @@ export interface MessageExport {
 }
 
 /**
- * 消息附件 JSON 项（写入 MessageAttachments 字段）
+ * 创建 Message DTO
+ * @description 对应后端 TaktMessageCreateDto
  */
-export interface MessageAttachmentItem {
-  /** 文件 ID */
-  fileId: string;
-  /** 存储文件名 */
-  fileName: string;
-  /** 原始文件名 */
-  fileOriginalName?: string;
-  /** 访问 URL */
-  accessUrl: string;
-  /** 文件大小 */
-  fileSize?: string;
-  /** 文件类型 */
-  fileType?: string;
-  /** 扩展名 */
-  fileExtension?: string;
-  /** 排序号 */
-  sortOrder?: number;
+export interface MessageCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 发送者用户 ID
+   */
+  fromUserId?: string;
+
+  /**
+   * 发送者用户名
+   */
+  fromUserName: string;
+
+  /**
+   * 接收者用户 ID
+   */
+  toUserId?: string;
+
+  /**
+   * 接收者用户名
+   */
+  toUserName?: string;
+
+  /**
+   * 消息标题
+   */
+  messageTitle: string;
+
+  /**
+   * 消息内容
+   */
+  messageContent: string;
+
+  /**
+   * 消息类型（字典 sys_message_type DictValue：text、system、multimedia）
+   */
+  messageType?: string;
+
+  /**
+   * 消息分组（字典 sys_message_group DictValue）
+   */
+  messageGroup?: string;
+
+  /**
+   * 读取时间
+   */
+  readTime?: string;
+
+  /**
+   * 发送时间
+   */
+  sendTime?: string;
+
+  /**
+   * 抄送（0=否，1=是）
+   */
+  isCc?: number;
+
+  /**
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
+   */
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 消息扩展数据（JSON）
+   */
+  messageExtData?: string;
+
+  /**
+   * 读取状态（0=未读 1=已读）
+   */
+  readStatus?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+}
+
+/**
+ * 更新 Message DTO
+ * @description 对应后端 TaktMessageUpdateDto
+ */
+export interface MessageUpdate extends MessageCreate {
+  /**
+   * MessageID（标识要更新的实体）
+   */
+  messageId: string;
 }
 
 /**
  * 批量创建并发送消息 DTO
  * @description 对应后端 TaktMessageBatchCreateDto / POST TaktMessages/batch-send
  */
-export interface MessageBatchCreate {
-  /** 发送者用户名 */
-  fromUserName?: string;
-  /** 发送者用户 ID */
-  fromUserId?: string;
-  /** 消息标题 */
-  messageTitle?: string;
-  /** 消息内容 */
-  messageContent: string;
-  /** 附件 JSON 字符串 */
-  messageAttachments?: string;
-  /** 消息类型（字典 sys_message_type DictValue） */
-  messageType: string;
-  /** 消息分组（字典 sys_message_group_category DictValue） */
-  messageGroup: string;
-  /** 抄送（0=否，1=是） */
-  isCc: number;
+export interface MessageBatchCreate extends MessageCreate {
   /** 是否发送给当前公司全部可访问用户 */
   sendToAll: boolean;
   /** 指定接收者用户 ID 列表 */
   toUserIds?: string[];
-  /** 发送时间 */
-  sendTime?: string;
 }
 
 /**
@@ -274,10 +355,10 @@ export interface MessageBatchCreate {
  * @description 对应后端 TaktMessageStatisticsDto / GET TaktMessages/statistics
  */
 export interface MessageStatistics {
-  /** 用户名（接收者） */
-  userName: string;
   /** 用户 ID */
   userId?: string;
+  /** 用户名（接收者） */
+  userName: string;
   /** 收件箱消息总数 */
   totalCount: number;
   /** 已读数量 */

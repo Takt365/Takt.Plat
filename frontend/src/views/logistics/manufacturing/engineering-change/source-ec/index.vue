@@ -2,44 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/source-ec -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：设变来源主表实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：设变来源明细列表管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      import-permission="logistics:manufacturing:engineering:change:source:ec:import"
-      export-permission="logistics:manufacturing:engineering:change:source:ec:export"
-      :show-create="false"
-      :show-update="false"
-      :show-delete="false"
-      :show-import="true"
-      :show-export="true"
-      :show-expand="false"
-      :show-advanced-query="true"
-      :show-column-setting="true"
-      :show-fullscreen="true"
-      :show-refresh="true"
-      :refresh-loading="loading"
-      @import="handleImport"
-      @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
-      @column-setting="handleColumnSetting"
-      @refresh="handleRefresh"
-    />
-
     <!-- 左主右从 -->
     <TaktMasterDetailTableLr
       v-model:master-current="currentPage"
@@ -53,6 +22,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="sourceEcId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -60,6 +31,47 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="logistics:manufacturing:engineering:change:source:ec:create"
+      update-permission="logistics:manufacturing:engineering:change:source:ec:update"
+      delete-permission="logistics:manufacturing:engineering:change:source:ec:delete"
+      import-permission="logistics:manufacturing:engineering:change:source:ec:import"
+      export-permission="logistics:manufacturing:engineering:change:source:ec:export"
+      :show-create="true"
+      :show-update="true"
+      :show-delete="true"
+      :show-import="true"
+      :show-export="true"
+      :show-expand="false"
+      :show-advanced-query="true"
+      :show-column-setting="true"
+      :show-fullscreen="true"
+      :show-refresh="true"
+      :create-disabled="false"
+      :create-loading="loading"
+      :update-disabled="updateDisabled"
+      :update-loading="loading"
+      :delete-disabled="deleteDisabled"
+      :delete-loading="loading"
+      :refresh-loading="loading"
+      @create="handleCreate"
+      @update="handleUpdate"
+      @delete="handleDelete"
+      @import="handleImport"
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
+      @column-setting="handleColumnSetting"
+      @refresh="handleRefresh"
+        />
+      </template>
       <template #detail>
         <SourceEcDetailPanel
           ref="sourceEcDetailPanelRef"
@@ -68,24 +80,22 @@
       </template>
     </TaktMasterDetailTableLr>
 
-    <!-- 详情对话框 -->
+    <!-- 新增/编辑对话框 -->
     <TaktModal
-      v-model:open="detailVisible"
-      :title="t('common.dialog.title.detail', { entity: t('entity.sourceec._self') })"
+      v-model:open="formVisible"
+      :title="formTitle"
       width="1100px"
       wrap-class-name="takt-form-modal-resizable"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleDetailClose"
+      :confirm-loading="formLoading"
+      @ok="handleFormSubmit"
+      @cancel="handleFormCancel"
     >
-      <a-spin :spinning="detailLoading">
-        <SourceEcForm
-          :key="detailData?.sourceEcId ?? 'detail'"
-          :form-data="detailData"
-          :loading="detailLoading"
-          read-only
-        />
-      </a-spin>
+      <SourceEcForm
+        :key="formData?.sourceEcId ?? 'create'"
+        ref="formRef"
+        :form-data="formData"
+        :loading="formLoading"
+      />
     </TaktModal>
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
@@ -98,11 +108,31 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('sourceEcCode')">
-      <a-form-item :label="t('entity.sourceec.no')">
+      <a-form-item :label="pi.queryLabel('sourceEcCode')">
         <a-input
           v-model:value="advancedQueryForm.sourceEcCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.no') })"
+          :placeholder="pi.queryPh('sourceEcCode', 'required')"
           show-count
           :maxlength="6"
           allow-clear
@@ -110,21 +140,21 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceModel')">
-      <a-form-item :label="t('entity.sourceec.sourcemodel')">
+      <a-form-item :label="pi.queryLabel('sourceModel')">
         <a-input
           v-model:value="advancedQueryForm.sourceModel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcemodel') })"
+          :placeholder="pi.queryPh('sourceModel', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceTitle')">
-      <a-form-item :label="t('entity.sourceec.sourcetitle')">
+      <a-form-item :label="pi.queryLabel('sourceTitle')">
         <a-input
           v-model:value="advancedQueryForm.sourceTitle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetitle') })"
+          :placeholder="pi.queryPh('sourceTitle', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -132,10 +162,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceStatus')">
-      <a-form-item :label="t('entity.sourceec.sourcestatus')">
+      <a-form-item :label="pi.queryLabel('sourceStatus')">
         <a-input
           v-model:value="advancedQueryForm.sourceStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcestatus') })"
+          :placeholder="pi.queryPh('sourceStatus', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -143,30 +173,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceIssueDateStart')">
-      <a-form-item :label="t('entity.sourceec.sourceissuedatestart')">
+      <a-form-item :label="pi.queryLabel('sourceIssueDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.sourceIssueDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourceissuedatestart') })"
+          :placeholder="pi.queryPh('sourceIssueDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceIssueDateEnd')">
-      <a-form-item :label="t('entity.sourceec.sourceissuedateend')">
+      <a-form-item :label="pi.queryLabel('sourceIssueDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.sourceIssueDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceec.sourceissuedateend') })"
+          :placeholder="pi.queryPh('sourceIssueDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceTcjOwner')">
-      <a-form-item :label="t('entity.sourceec.sourcetcjowner')">
+      <a-form-item :label="pi.queryLabel('sourceTcjOwner')">
         <a-input
           v-model:value="advancedQueryForm.sourceTcjOwner"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetcjowner') })"
+          :placeholder="pi.queryPh('sourceTcjOwner', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -174,10 +204,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceTcjDependency')">
-      <a-form-item :label="t('entity.sourceec.sourcetcjdependency')">
+      <a-form-item :label="pi.queryLabel('sourceTcjDependency')">
         <a-input
           v-model:value="advancedQueryForm.sourceTcjDependency"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetcjdependency') })"
+          :placeholder="pi.queryPh('sourceTcjDependency', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -185,10 +215,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceEcMeeting')">
-      <a-form-item :label="t('entity.sourceec.meeting')">
+      <a-form-item :label="pi.queryLabel('sourceEcMeeting')">
         <a-input
           v-model:value="advancedQueryForm.sourceEcMeeting"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.meeting') })"
+          :placeholder="pi.queryPh('sourceEcMeeting', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -196,10 +226,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourcePpCode')">
-      <a-form-item :label="t('entity.sourceec.sourceppCode')">
+      <a-form-item :label="pi.queryLabel('sourcePpCode')">
         <a-input
           v-model:value="advancedQueryForm.sourcePpCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceppCode') })"
+          :placeholder="pi.queryPh('sourcePpCode', 'required')"
           show-count
           :maxlength="10"
           allow-clear
@@ -207,10 +237,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceTechnicalNoticeCode')">
-      <a-form-item :label="t('entity.sourceec.sourcetechnicalnoticeCode')">
+      <a-form-item :label="pi.queryLabel('sourceTechnicalNoticeCode')">
         <a-input
           v-model:value="advancedQueryForm.sourceTechnicalNoticeCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetechnicalnoticeCode') })"
+          :placeholder="pi.queryPh('sourceTechnicalNoticeCode', 'required')"
           show-count
           :maxlength="10"
           allow-clear
@@ -218,10 +248,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceImplementation')">
-      <a-form-item :label="t('entity.sourceec.sourceimplementation')">
+      <a-form-item :label="pi.queryLabel('sourceImplementation')">
         <a-input
           v-model:value="advancedQueryForm.sourceImplementation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceimplementation') })"
+          :placeholder="pi.queryPh('sourceImplementation', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -229,10 +259,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceMainChangeReason')">
-      <a-form-item :label="t('entity.sourceec.sourcemainchangereason')">
+      <a-form-item :label="pi.queryLabel('sourceMainChangeReason')">
         <a-input
           v-model:value="advancedQueryForm.sourceMainChangeReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcemainchangereason') })"
+          :placeholder="pi.queryPh('sourceMainChangeReason', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -240,10 +270,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceSecondaryChangeReason')">
-      <a-form-item :label="t('entity.sourceec.sourcesecondarychangereason')">
+      <a-form-item :label="pi.queryLabel('sourceSecondaryChangeReason')">
         <a-input
           v-model:value="advancedQueryForm.sourceSecondaryChangeReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcesecondarychangereason') })"
+          :placeholder="pi.queryPh('sourceSecondaryChangeReason', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -251,10 +281,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceSafetyRegulation')">
-      <a-form-item :label="t('entity.sourceec.sourcesafetyregulation')">
+      <a-form-item :label="pi.queryLabel('sourceSafetyRegulation')">
         <a-input
           v-model:value="advancedQueryForm.sourceSafetyRegulation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcesafetyregulation') })"
+          :placeholder="pi.queryPh('sourceSafetyRegulation', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -262,10 +292,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceProgressStatus')">
-      <a-form-item :label="t('entity.sourceec.sourceprogressstatus')">
+      <a-form-item :label="pi.queryLabel('sourceProgressStatus')">
         <a-input
           v-model:value="advancedQueryForm.sourceProgressStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceprogressstatus') })"
+          :placeholder="pi.queryPh('sourceProgressStatus', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -273,10 +303,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceSerialNumberControl')">
-      <a-form-item :label="t('entity.sourceec.sourceserialnumbercontrol')">
+      <a-form-item :label="pi.queryLabel('sourceSerialNumberControl')">
         <a-input
           v-model:value="advancedQueryForm.sourceSerialNumberControl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceserialnumbercontrol') })"
+          :placeholder="pi.queryPh('sourceSerialNumberControl', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -284,10 +314,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceCustomerApproval')">
-      <a-form-item :label="t('entity.sourceec.sourcecustomerapproval')">
+      <a-form-item :label="pi.queryLabel('sourceCustomerApproval')">
         <a-input
           v-model:value="advancedQueryForm.sourceCustomerApproval"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcecustomerapproval') })"
+          :placeholder="pi.queryPh('sourceCustomerApproval', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -295,10 +325,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceServiceManualRevision')">
-      <a-form-item :label="t('entity.sourceec.sourceservicemanualrevision')">
+      <a-form-item :label="pi.queryLabel('sourceServiceManualRevision')">
         <a-input
           v-model:value="advancedQueryForm.sourceServiceManualRevision"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceservicemanualrevision') })"
+          :placeholder="pi.queryPh('sourceServiceManualRevision', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -306,10 +336,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceUserManualRevision')">
-      <a-form-item :label="t('entity.sourceec.sourceusermanualrevision')">
+      <a-form-item :label="pi.queryLabel('sourceUserManualRevision')">
         <a-input
           v-model:value="advancedQueryForm.sourceUserManualRevision"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceusermanualrevision') })"
+          :placeholder="pi.queryPh('sourceUserManualRevision', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -317,10 +347,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourcePromotionManualRevision')">
-      <a-form-item :label="t('entity.sourceec.sourcepromotionmanualrevision')">
+      <a-form-item :label="pi.queryLabel('sourcePromotionManualRevision')">
         <a-input
           v-model:value="advancedQueryForm.sourcePromotionManualRevision"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcepromotionmanualrevision') })"
+          :placeholder="pi.queryPh('sourcePromotionManualRevision', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -328,10 +358,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceStandardDocumentRevision')">
-      <a-form-item :label="t('entity.sourceec.sourcestandarddocumentrevision')">
+      <a-form-item :label="pi.queryLabel('sourceStandardDocumentRevision')">
         <a-input
           v-model:value="advancedQueryForm.sourceStandardDocumentRevision"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcestandarddocumentrevision') })"
+          :placeholder="pi.queryPh('sourceStandardDocumentRevision', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -339,10 +369,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceInformationRelease')">
-      <a-form-item :label="t('entity.sourceec.sourceinformationrelease')">
+      <a-form-item :label="pi.queryLabel('sourceInformationRelease')">
         <a-input
           v-model:value="advancedQueryForm.sourceInformationRelease"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceinformationrelease') })"
+          :placeholder="pi.queryPh('sourceInformationRelease', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -350,10 +380,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceCostChange')">
-      <a-form-item :label="t('entity.sourceec.sourcecostchange')">
+      <a-form-item :label="pi.queryLabel('sourceCostChange')">
         <a-input
           v-model:value="advancedQueryForm.sourceCostChange"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcecostchange') })"
+          :placeholder="pi.queryPh('sourceCostChange', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -361,28 +391,28 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceUnitCost')">
-      <a-form-item :label="t('entity.sourceec.sourceunitcost')">
+      <a-form-item :label="pi.queryLabel('sourceUnitCost')">
         <a-input-number
           v-model:value="advancedQueryForm.sourceUnitCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceunitcost') })"
+          :placeholder="pi.queryPh('sourceUnitCost', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceMoldModificationCost')">
-      <a-form-item :label="t('entity.sourceec.sourcemoldmodificationcost')">
+      <a-form-item :label="pi.queryLabel('sourceMoldModificationCost')">
         <a-input-number
           v-model:value="advancedQueryForm.sourceMoldModificationCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcemoldmodificationcost') })"
+          :placeholder="pi.queryPh('sourceMoldModificationCost', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceRelatedDrawing')">
-      <a-form-item :label="t('entity.sourceec.sourcerelateddrawing')">
+      <a-form-item :label="pi.queryLabel('sourceRelatedDrawing')">
         <a-input
           v-model:value="advancedQueryForm.sourceRelatedDrawing"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcerelateddrawing') })"
+          :placeholder="pi.queryPh('sourceRelatedDrawing', 'required')"
           show-count
           :maxlength="210"
           allow-clear
@@ -390,20 +420,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceEcContent')">
-      <a-form-item :label="t('entity.sourceec.content')">
+      <a-form-item :label="pi.queryLabel('sourceEcContent')">
         <a-textarea
           v-model:value="advancedQueryForm.sourceEcContent"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceec.content') })"
+          :placeholder="pi.queryPh('sourceEcContent', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -411,10 +441,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -436,7 +466,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -450,10 +480,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -467,7 +497,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.sourceec._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -475,7 +505,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.sourceec._self"
+        :entity-i18n-key="SOURCEEC_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -494,7 +524,7 @@
       :id-column-key="'sourceEcId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -503,24 +533,36 @@
 
 <script setup lang="ts">
 /**
- * 设变来源主表实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 设变来源明细列表管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/source-ec
  */
 import { ref, computed, onMounted } from 'vue'
-import { message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SourceEcForm from './components/source-ec-form.vue'
 import SourceEcDetailPanel from './components/source-ec-detail-panel.vue'
-import { provideSourceEcMasterContext } from './composables/use-source-ec-master-context'
-import { getSourceEcList, getSourceEcById, getSourceEcTemplate, importSourceEc, exportSourceEc } from '@/api/logistics/manufacturing/engineering-change/source-ec'
+import { provideSourceEcMasterContext, type SourceEcRowRecord } from './composables/use-source-ec-master-context'
+import { getSourceEcList, getSourceEcById, createSourceEc, updateSourceEc, deleteSourceEcById, deleteSourceEcBatch, getSourceEcTemplate, importSourceEc, exportSourceEc, updateSourceEcStatus } from '@/api/logistics/manufacturing/engineering-change/source-ec'
 import type { SourceEc, SourceEcQuery } from '@/types/logistics/manufacturing/engineering-change/source-ec'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEyeLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useSourceEcI18n,
+  SOURCEEC_LIST_FIELDS,
+  SOURCEEC_QUERY_STRING_FIELDS,
+  SOURCEEC_QUERY_FIELDS,
+  SOURCEEC_SELF_I18N_KEY,
+} from './composables/use-source-ec-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSourceEcI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -528,7 +570,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSourceEc')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.sourceec._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -544,90 +586,69 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SourceEc | null>(null)
+const selectedRow = ref<SourceEcRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SourceEc[]>([])
+const selectedRows = ref<SourceEcRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
-/** 详情弹窗是否打开 */
-const detailVisible = ref(false)
-/** 详情加载 loading */
-const detailLoading = ref(false)
-/** 详情数据（只读展示） */
-const detailData = ref<Partial<SourceEc> | null>(null)
+/** 新增/编辑弹窗是否打开 */
+const formVisible = ref(false)
+/** 弹窗标题（新增/编辑） */
+const formTitle = ref('')
+/** 传入内嵌表单的编辑数据 */
+const formData = ref<Partial<SourceEc> | null>(null)
+/** 表单提交 loading */
+const formLoading = ref(false)
+/** 内嵌表单组件 ref（validate / getValues / resetFields） */
+const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SOURCEEC_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.sourceUnitCost !== undefined && form.sourceUnitCost !== null) {
+    return true
+  }
+  if (form.sourceMoldModificationCost !== undefined && form.sourceMoldModificationCost !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SOURCEEC_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SOURCEEC_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    sourceUnitCost: undefined as number | undefined,
+    sourceMoldModificationCost: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  sourceEcCode: '',
-  sourceModel: '',
-  sourceTitle: '',
-  sourceStatus: '',
-  sourceIssueDateStart: '',
-  sourceIssueDateEnd: '',
-  sourceTcjOwner: '',
-  sourceTcjDependency: '',
-  sourceEcMeeting: '',
-  sourcePpCode: '',
-  sourceTechnicalNoticeCode: '',
-  sourceImplementation: '',
-  sourceMainChangeReason: '',
-  sourceSecondaryChangeReason: '',
-  sourceSafetyRegulation: '',
-  sourceProgressStatus: '',
-  sourceSerialNumberControl: '',
-  sourceCustomerApproval: '',
-  sourceServiceManualRevision: '',
-  sourceUserManualRevision: '',
-  sourcePromotionManualRevision: '',
-  sourceStandardDocumentRevision: '',
-  sourceInformationRelease: '',
-  sourceCostChange: '',
-  sourceUnitCost: undefined as number | undefined,
-  sourceMoldModificationCost: undefined as number | undefined,
-  sourceRelatedDrawing: '',
-  sourceEcContent: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'sourceEcCode', label: t('entity.sourceec.no') },
-  { key: 'sourceModel', label: t('entity.sourceec.sourcemodel') },
-  { key: 'sourceTitle', label: t('entity.sourceec.sourcetitle') },
-  { key: 'sourceStatus', label: t('entity.sourceec.sourcestatus') },
-  { key: 'sourceIssueDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.sourceec.sourceissuedate')) },
-  { key: 'sourceIssueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.sourceec.sourceissuedate')) },
-  { key: 'sourceTcjOwner', label: t('entity.sourceec.sourcetcjowner') },
-  { key: 'sourceTcjDependency', label: t('entity.sourceec.sourcetcjdependency') },
-  { key: 'sourceEcMeeting', label: t('entity.sourceec.meeting') },
-  { key: 'sourcePpCode', label: t('entity.sourceec.sourceppCode') },
-  { key: 'sourceTechnicalNoticeCode', label: t('entity.sourceec.sourcetechnicalnoticeCode') },
-  { key: 'sourceImplementation', label: t('entity.sourceec.sourceimplementation') },
-  { key: 'sourceMainChangeReason', label: t('entity.sourceec.sourcemainchangereason') },
-  { key: 'sourceSecondaryChangeReason', label: t('entity.sourceec.sourcesecondarychangereason') },
-  { key: 'sourceSafetyRegulation', label: t('entity.sourceec.sourcesafetyregulation') },
-  { key: 'sourceProgressStatus', label: t('entity.sourceec.sourceprogressstatus') },
-  { key: 'sourceSerialNumberControl', label: t('entity.sourceec.sourceserialnumbercontrol') },
-  { key: 'sourceCustomerApproval', label: t('entity.sourceec.sourcecustomerapproval') },
-  { key: 'sourceServiceManualRevision', label: t('entity.sourceec.sourceservicemanualrevision') },
-  { key: 'sourceUserManualRevision', label: t('entity.sourceec.sourceusermanualrevision') },
-  { key: 'sourcePromotionManualRevision', label: t('entity.sourceec.sourcepromotionmanualrevision') },
-  { key: 'sourceStandardDocumentRevision', label: t('entity.sourceec.sourcestandarddocumentrevision') },
-  { key: 'sourceInformationRelease', label: t('entity.sourceec.sourceinformationrelease') },
-  { key: 'sourceCostChange', label: t('entity.sourceec.sourcecostchange') },
-  { key: 'sourceUnitCost', label: t('entity.sourceec.sourceunitcost') },
-  { key: 'sourceMoldModificationCost', label: t('entity.sourceec.sourcemoldmodificationcost') },
-  { key: 'sourceRelatedDrawing', label: t('entity.sourceec.sourcerelateddrawing') },
-  { key: 'sourceEcContent', label: t('entity.sourceec.content') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  SOURCEEC_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -638,13 +659,19 @@ const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'sourceEcId'
+/** 工具栏「编辑」是否禁用（须恰好选中一行） */
+const updateDisabled = computed(() => selectedRows.value.length !== 1)
+/** 工具栏「删除」是否禁用（未选中任何行） */
+const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSourceEcMasterContext()
 const sourceEcDetailPanelRef = ref<InstanceType<typeof SourceEcDetailPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SourceEcQuery} 查询 DTO
  */
@@ -665,55 +692,30 @@ function buildListQuery(overrides?: Partial<SourceEcQuery>): SourceEcQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('sourceEcCode', form.sourceEcCode)
-  assignTrimmed('sourceModel', form.sourceModel)
-  assignTrimmed('sourceTitle', form.sourceTitle)
-  assignTrimmed('sourceStatus', form.sourceStatus)
-  assignTrimmed('sourceIssueDateStart', form.sourceIssueDateStart)
-  assignTrimmed('sourceIssueDateEnd', form.sourceIssueDateEnd)
-  assignTrimmed('sourceTcjOwner', form.sourceTcjOwner)
-  assignTrimmed('sourceTcjDependency', form.sourceTcjDependency)
-  assignTrimmed('sourceEcMeeting', form.sourceEcMeeting)
-  assignTrimmed('sourcePpCode', form.sourcePpCode)
-  assignTrimmed('sourceTechnicalNoticeCode', form.sourceTechnicalNoticeCode)
-  assignTrimmed('sourceImplementation', form.sourceImplementation)
-  assignTrimmed('sourceMainChangeReason', form.sourceMainChangeReason)
-  assignTrimmed('sourceSecondaryChangeReason', form.sourceSecondaryChangeReason)
-  assignTrimmed('sourceSafetyRegulation', form.sourceSafetyRegulation)
-  assignTrimmed('sourceProgressStatus', form.sourceProgressStatus)
-  assignTrimmed('sourceSerialNumberControl', form.sourceSerialNumberControl)
-  assignTrimmed('sourceCustomerApproval', form.sourceCustomerApproval)
-  assignTrimmed('sourceServiceManualRevision', form.sourceServiceManualRevision)
-  assignTrimmed('sourceUserManualRevision', form.sourceUserManualRevision)
-  assignTrimmed('sourcePromotionManualRevision', form.sourcePromotionManualRevision)
-  assignTrimmed('sourceStandardDocumentRevision', form.sourceStandardDocumentRevision)
-  assignTrimmed('sourceInformationRelease', form.sourceInformationRelease)
-  assignTrimmed('sourceCostChange', form.sourceCostChange)
+  for (const key of SOURCEEC_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.sourceUnitCost !== undefined && form.sourceUnitCost !== null) {
     query.sourceUnitCost = form.sourceUnitCost
   }
   if (form.sourceMoldModificationCost !== undefined && form.sourceMoldModificationCost !== null) {
     query.sourceMoldModificationCost = form.sourceMoldModificationCost
   }
-  assignTrimmed('sourceRelatedDrawing', form.sourceRelatedDrawing)
-  assignTrimmed('sourceEcContent', form.sourceEcContent)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: SourceEc | null) {
+function syncMasterSelection(record: SourceEcRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getSourceEcId(record) : ''
 }
@@ -723,7 +725,7 @@ function syncMasterSelection(record: SourceEc | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as SourceEc
+  const row = record as unknown as SourceEcRowRecord
   const key = getSourceEcId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -741,7 +743,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSourceEcDetail(record: SourceEc): Promise<SourceEc | null> {
+async function loadSourceEcDetail(record: SourceEcRowRecord): Promise<SourceEc | null> {
   const id = getSourceEcId(record)
   if (!id) {
     return null
@@ -772,18 +774,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceEcId') ?? ''
   },
   {
-    title: t('entity.sourceec.no'),
+    title: pi.label('sourceEcCode'),
     dataIndex: 'sourceEcCode',
     key: 'sourceEcCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    sorter: (a: SourceEc, b: SourceEc) =>
-      String(getSourceEcField(a, 'sourceEcCode') ?? '').localeCompare(String(getSourceEcField(b, 'sourceEcCode') ?? '')),
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceEcCode') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcemodel'),
+    title: pi.label('sourceModel'),
     dataIndex: 'sourceModel',
     key: 'sourceModel',
     width: 120,
@@ -792,7 +792,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceModel') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcetitle'),
+    title: pi.label('sourceTitle'),
     dataIndex: 'sourceTitle',
     key: 'sourceTitle',
     width: 120,
@@ -801,7 +801,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceTitle') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcestatus'),
+    title: pi.label('sourceStatus'),
     dataIndex: 'sourceStatus',
     key: 'sourceStatus',
     width: 120,
@@ -810,19 +810,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceStatus') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceissuedate'),
+    title: pi.label('sourceIssueDate'),
     dataIndex: 'sourceIssueDate',
     key: 'sourceIssueDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    sorter: (a: SourceEc, b: SourceEc) =>
-      new Date(String(getSourceEcField(a, 'sourceIssueDate') ?? 0)).getTime()
-      - new Date(String(getSourceEcField(b, 'sourceIssueDate') ?? 0)).getTime(),
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceIssueDate') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcetcjowner'),
+    title: pi.label('sourceTcjOwner'),
     dataIndex: 'sourceTcjOwner',
     key: 'sourceTcjOwner',
     width: 120,
@@ -831,7 +828,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceTcjOwner') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcetcjdependency'),
+    title: pi.label('sourceTcjDependency'),
     dataIndex: 'sourceTcjDependency',
     key: 'sourceTcjDependency',
     width: 120,
@@ -840,7 +837,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceTcjDependency') ?? ''
   },
   {
-    title: t('entity.sourceec.meeting'),
+    title: pi.label('sourceEcMeeting'),
     dataIndex: 'sourceEcMeeting',
     key: 'sourceEcMeeting',
     width: 120,
@@ -849,7 +846,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceEcMeeting') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceppCode'),
+    title: pi.label('sourcePpCode'),
     dataIndex: 'sourcePpCode',
     key: 'sourcePpCode',
     width: 120,
@@ -858,7 +855,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourcePpCode') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcetechnicalnoticeCode'),
+    title: pi.label('sourceTechnicalNoticeCode'),
     dataIndex: 'sourceTechnicalNoticeCode',
     key: 'sourceTechnicalNoticeCode',
     width: 120,
@@ -867,7 +864,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceTechnicalNoticeCode') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceimplementation'),
+    title: pi.label('sourceImplementation'),
     dataIndex: 'sourceImplementation',
     key: 'sourceImplementation',
     width: 120,
@@ -876,7 +873,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceImplementation') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcemainchangereason'),
+    title: pi.label('sourceMainChangeReason'),
     dataIndex: 'sourceMainChangeReason',
     key: 'sourceMainChangeReason',
     width: 120,
@@ -885,7 +882,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceMainChangeReason') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcesecondarychangereason'),
+    title: pi.label('sourceSecondaryChangeReason'),
     dataIndex: 'sourceSecondaryChangeReason',
     key: 'sourceSecondaryChangeReason',
     width: 120,
@@ -894,7 +891,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceSecondaryChangeReason') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcesafetyregulation'),
+    title: pi.label('sourceSafetyRegulation'),
     dataIndex: 'sourceSafetyRegulation',
     key: 'sourceSafetyRegulation',
     width: 120,
@@ -903,7 +900,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceSafetyRegulation') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceprogressstatus'),
+    title: pi.label('sourceProgressStatus'),
     dataIndex: 'sourceProgressStatus',
     key: 'sourceProgressStatus',
     width: 120,
@@ -912,7 +909,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceProgressStatus') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceserialnumbercontrol'),
+    title: pi.label('sourceSerialNumberControl'),
     dataIndex: 'sourceSerialNumberControl',
     key: 'sourceSerialNumberControl',
     width: 120,
@@ -921,7 +918,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceSerialNumberControl') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcecustomerapproval'),
+    title: pi.label('sourceCustomerApproval'),
     dataIndex: 'sourceCustomerApproval',
     key: 'sourceCustomerApproval',
     width: 120,
@@ -930,7 +927,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceCustomerApproval') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceservicemanualrevision'),
+    title: pi.label('sourceServiceManualRevision'),
     dataIndex: 'sourceServiceManualRevision',
     key: 'sourceServiceManualRevision',
     width: 120,
@@ -939,7 +936,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceServiceManualRevision') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceusermanualrevision'),
+    title: pi.label('sourceUserManualRevision'),
     dataIndex: 'sourceUserManualRevision',
     key: 'sourceUserManualRevision',
     width: 120,
@@ -948,7 +945,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceUserManualRevision') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcepromotionmanualrevision'),
+    title: pi.label('sourcePromotionManualRevision'),
     dataIndex: 'sourcePromotionManualRevision',
     key: 'sourcePromotionManualRevision',
     width: 120,
@@ -957,7 +954,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourcePromotionManualRevision') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcestandarddocumentrevision'),
+    title: pi.label('sourceStandardDocumentRevision'),
     dataIndex: 'sourceStandardDocumentRevision',
     key: 'sourceStandardDocumentRevision',
     width: 120,
@@ -966,7 +963,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceStandardDocumentRevision') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceinformationrelease'),
+    title: pi.label('sourceInformationRelease'),
     dataIndex: 'sourceInformationRelease',
     key: 'sourceInformationRelease',
     width: 120,
@@ -975,7 +972,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceInformationRelease') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcecostchange'),
+    title: pi.label('sourceCostChange'),
     dataIndex: 'sourceCostChange',
     key: 'sourceCostChange',
     width: 120,
@@ -984,7 +981,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceCostChange') ?? ''
   },
   {
-    title: t('entity.sourceec.sourceunitcost'),
+    title: pi.label('sourceUnitCost'),
     dataIndex: 'sourceUnitCost',
     key: 'sourceUnitCost',
     width: 120,
@@ -993,7 +990,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceUnitCost') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcemoldmodificationcost'),
+    title: pi.label('sourceMoldModificationCost'),
     dataIndex: 'sourceMoldModificationCost',
     key: 'sourceMoldModificationCost',
     width: 120,
@@ -1002,7 +999,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceMoldModificationCost') ?? ''
   },
   {
-    title: t('entity.sourceec.sourcerelateddrawing'),
+    title: pi.label('sourceRelatedDrawing'),
     dataIndex: 'sourceRelatedDrawing',
     key: 'sourceRelatedDrawing',
     width: 120,
@@ -1011,7 +1008,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceRelatedDrawing') ?? ''
   },
   {
-    title: t('entity.sourceec.content'),
+    title: pi.label('sourceEcContent'),
     dataIndex: 'sourceEcContent',
     key: 'sourceEcContent',
     width: 120,
@@ -1020,21 +1017,32 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceEcContent') ?? ''
   },
   CreateActionColumn({
-    width: 88,
     actions: [
       {
-        key: 'detail',
-        label: t('common.page.button.detail'),
+        key: 'update',
+        label: t('common.page.button.edit'),
         shape: 'plain',
-        icon: RiEyeLine,
-        permission: 'logistics:manufacturing:engineering:change:source:ec:query',
-        onClick: (record: SourceEc) => void handleShowDetail(record),
-      }],
+        icon: RiEditLine,
+        permission: 'logistics:manufacturing:engineering:change:source:ec:update',
+        onClick: (record: SourceEcRowRecord) => handleEdit(record)
+      },
+      {
+        key: 'delete',
+        label: t('common.page.button.delete'),
+        shape: 'plain',
+        icon: RiDeleteBinLine,
+        permission: 'logistics:manufacturing:engineering:change:source:ec:delete',
+        onClick: (record: SourceEcRowRecord) => handleDeleteOne(record)
+      }
+    ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSourceEcId = (record: any): string => record?.[entityIdName] ?? ''
+const getSourceEcId = (record: SourceEcRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
@@ -1042,10 +1050,12 @@ const getSourceEcId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getSourceEcField = (record: any, field: string): any => record?.[field]
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SourceEc[]) => {
+  onChange: (keys: (string | number)[], rows: SourceEcRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1055,7 +1065,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: SourceEc, selected: boolean) => {
+  onSelect: (record: SourceEcRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1064,7 +1074,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SourceEc[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SourceEcRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1074,6 +1084,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSourceEcList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1100,6 +1115,8 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   sourceEcCode: '',
   sourceModel: '',
   sourceTitle: '',
@@ -1137,31 +1154,71 @@ function handleReset() {
   loadData()
 }
 
-/** 打开详情弹窗（含子表明细） */
-async function handleShowDetail(record: SourceEc) {
-  const id = getSourceEcId(record)
-  if (!id) {
-    return
-  }
-  detailVisible.value = true
-  detailLoading.value = true
-  detailData.value = null
+/** 打开新增弹窗 */
+function handleCreate() {
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
+  formData.value = null
+  formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
+}
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
+async function handleEdit(record: SourceEcRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
   try {
     const detail = await loadSourceEcDetail(record)
-    detailData.value = detail ? { ...detail } : { ...record }
-  } catch (error: unknown) {
-    const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.load.data.failed'))
-    detailVisible.value = false
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
   } finally {
-    detailLoading.value = false
+    formLoading.value = false
   }
 }
 
-/** 关闭详情弹窗 */
-function handleDetailClose() {
-  detailVisible.value = false
-  detailData.value = null
+/** 工具栏编辑：打开当前单选行 */
+function handleUpdate() {
+  if (selectedRow.value) {
+    void handleEdit(selectedRow.value)
+  } else {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
+  }
+}
+/** 提交新增/编辑表单 */
+async function handleFormSubmit() {
+  const refInst = formRef.value
+  if (!refInst?.validate) return
+  try {
+    await refInst.validate()
+  } catch {
+    return
+  }
+  formLoading.value = true
+  try {
+    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
+    const id = (formData.value as any)?.[entityIdName]
+    if (id) {
+      await updateSourceEc(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
+    } else {
+      await createSourceEc(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
+    }
+    formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  sourceEcDetailPanelRef.value?.reload?.()
+    }
+    loadData()
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 关闭新增/编辑弹窗（不提交） */
+function handleFormCancel() {
+  formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1183,9 +1240,10 @@ async function handleImportFile(file: File, sheetName?: string): Promise<TaktImp
 /** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
 function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (selectedMasterKey.value) {
+
+      if (selectedMasterKey.value) {
     sourceEcDetailPanelRef.value?.reload?.()
-  }
+      }
   if (result.fail === 0 && result.success > 0) {
     setTimeout(() => { importVisible.value = false }, 2000)
   }
@@ -1199,6 +1257,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSourceEc(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1222,13 +1283,54 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.sourceec._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[SourceEc] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.sourceec._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
+}
+/** 删除单行 */
+async function handleDeleteOne(record: SourceEcRowRecord) {
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      await deleteSourceEcById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
+      loadData()
+    }
+  })
+}
+/** 批量删除选中行 */
+async function handleDelete() {
+  if (selectedRows.value.length === 0) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
+    return
+  }
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
+      await deleteSourceEcBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
+      loadData()
+    }
+  })
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
@@ -1244,6 +1346,8 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   sourceEcCode: '',
   sourceModel: '',
   sourceTitle: '',
@@ -1299,7 +1403,7 @@ function handleRefresh() {
   loadData()
 }
 
-/** 表格 change（仅处理排序，分页由 TaktPagination 处理） */
+/** 表格 change 占位 */
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}

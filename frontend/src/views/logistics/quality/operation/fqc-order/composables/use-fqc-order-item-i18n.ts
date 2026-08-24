@@ -20,7 +20,6 @@ export const FQCORDERITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(FQCORDERITEM_EN
 
 /** 列表业务列（不含主键） */
 export const FQCORDERITEM_LIST_FIELDS = [
-  'fqcOrderId',
   'fqcOrderCode',
   'lineNumber',
   'materialCode',
@@ -40,11 +39,11 @@ export const FQCORDERITEM_LIST_FIELDS = [
   'inspectionDate',
   'judgeStatus',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const FQCORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'fqcOrderId',
   'fqcOrderCode',
   'lineNumber',
   'materialCode',
@@ -81,28 +80,7 @@ export const FQCORDERITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const FQCORDERITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  materialCode: 'select',
-  materialDescription: 'optional',
-  batchCode: 'optional',
-  warehouseQuantity: 'select',
-  standardCode: 'select',
-  samplingSchemeCode: 'select',
-  inspectionMethod: 'select',
-  sampleQuantity: 'select',
-  qualifiedQuantity: 'select',
-  unqualifiedQuantity: 'select',
-  inspectionReturnQuantity: 'select',
-  sampleSerialCode: 'optional',
-  inspectionDescription: 'optional',
-  inspectorBy: 'select',
-  inspectionDate: 'select',
-  judgeStatus: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -110,40 +88,13 @@ export type FqcOrderItemField = keyof typeof FQCORDERITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const FQCORDERITEM_QUERY_STRING_FIELDS = [
-  'fqcOrderCode',
-  'materialCode',
-  'materialDescription',
-  'batchCode',
-  'standardCode',
-  'samplingSchemeCode',
-  'sampleSerialCode',
-  'inspectionDescription',
-  'inspectorBy',
-  'inspectionDateStart',
-  'inspectionDateEnd',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof FqcOrderItemQuery)[]
 
-export type FqcOrderItemQueryField =
-  | (typeof FQCORDERITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'warehouseQuantity' | 'inspectionMethod' | 'sampleQuantity' | 'qualifiedQuantity' | 'unqualifiedQuantity' | 'inspectionReturnQuantity' | 'judgeStatus' | 'isObsolete'
+export type FqcOrderItemQueryField = (typeof FQCORDERITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const FQCORDERITEM_QUERY_FIELDS: readonly FqcOrderItemQueryField[] = [
-  ...FQCORDERITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'warehouseQuantity',
-  'inspectionMethod',
-  'sampleQuantity',
-  'qualifiedQuantity',
-  'unqualifiedQuantity',
-  'inspectionReturnQuantity',
-  'judgeStatus',
-  'isObsolete',
-]
+export const FQCORDERITEM_QUERY_FIELDS: readonly FqcOrderItemQueryField[] = [...FQCORDERITEM_QUERY_STRING_FIELDS]
 
 /**
  * FqcOrderItem字段 i18n：index / fqc-order-item-form 统一入口

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：TaktNewsCommentService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心评论应用服务实现
 // 
@@ -30,37 +30,45 @@ namespace Takt.Application.Services.Routine.NewsCenter;
 public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
 {
     private readonly ITaktApprovalRepository<TaktNewsComment> _newsCommentRepository;
-    private readonly ITaktCompanyRepository<TaktNewsCommentLike> _newsCommentLikeRepository;
+    private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="newsCommentRepository">新闻中心评论仓储</param>
-    /// <param name="newsCommentLikeRepository">NewsCommentLike仓储</param>
+    /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktNewsCommentService(
         ITaktApprovalRepository<TaktNewsComment> newsCommentRepository,
-        ITaktCompanyRepository<TaktNewsCommentLike> newsCommentLikeRepository,
+        ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _newsCommentRepository = newsCommentRepository;
-        _newsCommentLikeRepository = newsCommentLikeRepository;
+        _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取新闻中心评论列表（分页）
+    /// 获取新闻中心评论列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktNewsCommentDto>> GetNewsCommentListAsync(TaktNewsCommentQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktNewsCommentDto>.Create(
+                new List<TaktNewsCommentDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _newsCommentRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -85,82 +93,57 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
         {
             return null;
         }
-        var dto = entity.Adapt<TaktNewsCommentDto>();
-        await FillNewsCommentDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktNewsCommentDto>();
+    }
 
     /// <summary>
-    /// 获取新闻中心评论树形选项列表
+    /// 获取新闻中心评论树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetNewsCommentTreeOptionsAsync()
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    public async Task<List<TaktTreeSelectOption>> GetNewsCommentTreeOptionsAsync(long parentId = 0)
     {
         EnsureThreeLayerContext();
-        var list = await _newsCommentRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CommentStatus == 1);
-        return BuildNewsCommentTreeOptions(list, 0);
+        var list = await _newsCommentRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.CommentStatus == 1);
+        return list
+            .OrderBy(x => x.Id)
+            .Select(item =>
+            {
+                var isLeaf = false;
+                return new TaktTreeSelectOption
+                {
+                    DictValue = item.Id.ToString(),
+                    DictLabel = item.UserName,
+                    SortOrder = 0,
+                    IsLeaf = isLeaf,
+                    Children = null,
+                };
+            })
+            .ToList();
     }
 
     /// <summary>
-    /// 在内存中构建新闻中心评论树形选项（递归，按 ParentId）
+    /// 获取新闻中心评论树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）
     /// </summary>
-    private List<TaktTreeSelectOption> BuildNewsCommentTreeOptions(List<TaktNewsComment> all, long parentId)
-    {
-        var result = new List<TaktTreeSelectOption>();
-        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.Id))
-        {
-            var option = new TaktTreeSelectOption
-            {
-                DictValue = item.Id,
-                DictLabel = item.UserName ?? item.Id.ToString(),
-                SortOrder = 0,
-            };
-            var children = BuildNewsCommentTreeOptions(all, item.Id);
-            if (children.Count > 0)
-            {
-                option.Children = children;
-            }
-            result.Add(option);
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// 获取新闻中心评论树形列表
-    /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     public async Task<List<TaktNewsCommentTreeDto>> GetNewsCommentTreeAsync(long parentId = 0, bool includeDisabled = false)
     {
         EnsureThreeLayerContext();
-        var list = await _newsCommentRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
-        var filtered = includeDisabled
-            ? list
-            : list.Where(x => x.CommentStatus == 1).ToList();
-        return BuildNewsCommentTree(filtered, parentId);
-    }
-
-    /// <summary>
-    /// 在内存中构建新闻中心评论树（递归，按 ParentId）
-    /// </summary>
-    private List<TaktNewsCommentTreeDto> BuildNewsCommentTree(List<TaktNewsComment> allRecords, long parentId)
-    {
-        var children = allRecords
-            .Where(x => x.ParentId == parentId)
+        Expression<Func<TaktNewsComment, bool>> predicate = includeDisabled
+            ? (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.IsObsolete == 0)
+            : (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.IsObsolete == 0 && x.CommentStatus == 1);
+        var list = await _newsCommentRepository.GetListAsync(predicate);
+        return list
             .OrderBy(x => x.Id)
-            .ToList();
-        var treeList = new List<TaktNewsCommentTreeDto>();
-        foreach (var item in children)
-        {
-            var treeDto = item.Adapt<TaktNewsCommentTreeDto>();
-            var childTree = BuildNewsCommentTree(allRecords, item.Id);
-            if (childTree.Count > 0)
+            .Select(item =>
             {
-                treeDto.Children = childTree;
-            }
-            treeList.Add(treeDto);
-        }
-        return treeList;
+                var treeDto = item.Adapt<TaktNewsCommentTreeDto>();
+                treeDto.Children = null;
+                return treeDto;
+            })
+            .ToList();
     }
 
     /// <summary>
@@ -171,8 +154,16 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
     public async Task<TaktNewsCommentDto> CreateNewsCommentAsync(TaktNewsCommentCreateDto dto)
     {
         var entity = dto.Adapt<TaktNewsComment>();
+        entity.IsObsolete = 0;
+        if (entity.LineNumber <= 0)
+        {
+            var maxLine = await _newsCommentRepository.GetMaxIntAsync(
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.NewsId == entity.NewsId,
+                x => x.LineNumber);
+            var businessCode = entity.NewsId.ToString();
+            entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+        }
         entity = await _newsCommentRepository.CreateAsync(entity);
-                await SaveNewsCommentChildrenAsync(entity, dto);
         return await GetNewsCommentByIdAsync(entity.Id) ?? entity.Adapt<TaktNewsCommentDto>();
     }
 
@@ -191,7 +182,6 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
         }
         dto.Adapt(entity);
         await _newsCommentRepository.UpdateAsync(entity);
-                await SaveNewsCommentChildrenAsync(entity, dto);
         return await GetNewsCommentByIdAsync(id) ?? throw new TaktBusinessException("新闻中心评论不存在");
     }
 
@@ -202,17 +192,27 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
     /// <returns>任务</returns>
     public async Task DeleteNewsCommentByIdAsync(long id)
     {
+
+        var hasChildren = await _newsCommentRepository.ExistsAsync(x => x.ParentId == id);
+        if (hasChildren)
+        {
+            throw new TaktBusinessException("存在子节点，无法删除");
+        }
         var entity = await _newsCommentRepository.GetByIdAsync(id);
         if (entity == null)
         {
             throw new TaktBusinessException("新闻中心评论不存在或已删除");
         }
-        await _newsCommentLikeRepository.DeleteAsync(x => x.CommentId == entity.Id);
-        var deleted = await _newsCommentRepository.DeleteAsync(id);
-        if (!deleted)
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             throw new TaktBusinessException("新闻中心评论不存在或已删除");
         }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("新闻中心评论已作废");
+        }
+        entity.IsObsolete = 1;
+        await _newsCommentRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -246,6 +246,27 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
             throw new TaktBusinessException("新闻中心评论不存在");
         }
         entity.CommentStatus = dto.CommentStatus;
+        await _newsCommentRepository.UpdateAsync(entity);
+        return await GetNewsCommentByIdAsync(dto.NewsCommentId) ?? throw new TaktBusinessException("新闻中心评论不存在");
+    }
+
+    /// <summary>
+    /// 更新新闻中心评论作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktNewsCommentDto> UpdateNewsCommentObsoleteAsync(TaktNewsCommentObsoleteDto dto)
+    {
+        var entity = await _newsCommentRepository.GetByIdAsync(dto.NewsCommentId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("新闻中心评论不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("新闻中心评论不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _newsCommentRepository.UpdateAsync(entity);
         return await GetNewsCommentByIdAsync(dto.NewsCommentId) ?? throw new TaktBusinessException("新闻中心评论不存在");
     }
@@ -285,6 +306,14 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
             try
             {
                 var entity = rows[i].Adapt<TaktNewsComment>();
+                if (entity.LineNumber <= 0)
+                {
+                    var maxLine = await _newsCommentRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.NewsId == entity.NewsId,
+                        x => x.LineNumber);
+                    var businessCode = entity.NewsId.ToString();
+                    entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+                }
                 await _newsCommentRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -306,7 +335,15 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportNewsCommentAsync(TaktNewsCommentQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktNewsCommentQueryDto());
+        var queryDto = query ?? new TaktNewsCommentQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktNewsCommentExportDto>(),
+                sheetName ?? "新闻中心评论数据",
+                fileName ?? "新闻中心评论导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _newsCommentRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -323,72 +360,6 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
-    /// <summary>
-    /// 填充新闻中心评论详情（加载 OneToMany 子表：新闻中心评论点赞记录）
-    /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
-    /// <returns>任务</returns>
-    private async Task FillNewsCommentDetailsAsync(TaktNewsCommentDto dto, TaktNewsComment entity)
-    {
-        if (dto == null)
-        {
-            return;
-        }
-        // 新闻中心评论点赞记录 → dto.Likes
-        var likes = await _newsCommentLikeRepository.GetListAsync(x => x.CommentId == entity.Id);
-        dto.Likes = likes.Adapt<List<TaktNewsCommentLikeDto>>();
-    }
-
-    /// <summary>
-    /// 保存新闻中心评论子表级联（新闻中心评论点赞记录；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveNewsCommentChildrenAsync(TaktNewsComment entity, TaktNewsCommentCreateDto dto)
-    {
-        // 新闻中心评论点赞记录（Likes）
-        if (dto.Likes is not { Count: > 0 })
-        {
-            await _newsCommentLikeRepository.DeleteAsync(x => x.CommentId == entity.Id);
-        }
-        else
-        {
-            var likes = dto.Likes.Adapt<List<TaktNewsCommentLike>>();
-            foreach (var child in likes)
-            {
-                child.CommentId = entity.Id;
-            }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < likes.Count; i++)
-                        {
-                            var key = $"{likes[i].CompanyCode}|{likes[i].CommentId}|{likes[i].UserId}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"新闻中心评论点赞记录第{i + 1}项与本次提交的其他项重复（CompanyCode、CommentId、UserId）");
-                            }
-                        }
-            await _newsCommentLikeRepository.DeleteAsync(x => x.CommentId == entity.Id);
-            foreach (var child in likes)
-            {
-            var isUnique_ix_news_comment_like_unique = await _uniqueValidator.IsUniqueAsync(
-                _newsCommentLikeRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.CommentId == child.CommentId
-                    && x.UserId == child.UserId);
-            if (!isUnique_ix_news_comment_like_unique)
-            {
-                throw new TaktBusinessException("新闻中心评论点赞记录的CompanyCode、CommentId、UserId已存在");
-            }
-            }
-            await _newsCommentLikeRepository.CreateRangeAsync(likes);
-        }
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -401,131 +372,254 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
     {
         var exp = Expressionable.Create<TaktNewsComment>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (queryDto?.IsObsolete.HasValue == true)
         {
-            var keywords = queryDto.KeyWords;
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
+        {
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.NewsId).Contains(keywords)
-                || SqlFunc.ToString(x.ParentId).Contains(keywords)
-                || SqlFunc.ToString(x.UserId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.UserName != null && x.UserName.Contains(keywords))
                 || (x.UserAvatar != null && x.UserAvatar.Contains(keywords))
-                || SqlFunc.ToString(x.ReplyToUserId).Contains(keywords)
                 || (x.ReplyToUserName != null && x.ReplyToUserName.Contains(keywords))
                 || (x.CommentContent != null && x.CommentContent.Contains(keywords))
-                || SqlFunc.ToString(x.NewsCommentLikeCount).Contains(keywords)
-                || SqlFunc.ToString(x.ReplyCount).Contains(keywords)
-                || SqlFunc.ToString(x.CommentLevel).Contains(keywords)
-                || SqlFunc.ToString(x.CommentStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CommentTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.NewsId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.NewsId == queryDto.NewsId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.ParentId.HasValue == true)
-        {
-            exp = exp.And(x => x.ParentId == queryDto.ParentId);
-        }
-
-        if (queryDto?.UserId.HasValue == true)
-        {
-            exp = exp.And(x => x.UserId == queryDto.UserId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.UserName))
-        {
-            exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.UserAvatar))
-        {
-            exp = exp.And(x => x.UserAvatar != null && x.UserAvatar.Contains(queryDto.UserAvatar));
-        }
-
-        if (queryDto?.ReplyToUserId.HasValue == true)
-        {
-            exp = exp.And(x => x.ReplyToUserId == queryDto.ReplyToUserId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ReplyToUserName))
-        {
-            exp = exp.And(x => x.ReplyToUserName != null && x.ReplyToUserName.Contains(queryDto.ReplyToUserName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CommentContent))
-        {
-            exp = exp.And(x => x.CommentContent != null && x.CommentContent.Contains(queryDto.CommentContent));
-        }
-
-        if (queryDto?.NewsCommentLikeCount.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsCommentLikeCount == queryDto.NewsCommentLikeCount);
-        }
-
-        if (queryDto?.ReplyCount.HasValue == true)
-        {
-            exp = exp.And(x => x.ReplyCount == queryDto.ReplyCount);
-        }
-
-        if (queryDto?.CommentLevel.HasValue == true)
-        {
-            exp = exp.And(x => x.CommentLevel == queryDto.CommentLevel);
-        }
-
-        if (queryDto?.CommentStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.CommentStatus == queryDto.CommentStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CommentTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CommentTime >= queryDto.CommentTimeStart);
-        }
-
-        if (queryDto?.CommentTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CommentTime <= queryDto.CommentTimeEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.NewsId.HasValue == true)
+        {
+            var newsId = queryDto.NewsId.Value;
+            exp = exp.And(x => x.NewsId == newsId);
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.ParentId.HasValue == true)
+        {
+            var parentId = queryDto.ParentId.Value;
+            exp = exp.And(x => x.ParentId == parentId);
+        }
+
+        if (queryDto?.UserId.HasValue == true)
+        {
+            var userId = queryDto.UserId.Value;
+            exp = exp.And(x => x.UserId == userId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UserName))
+        {
+            var UserName = queryDto.UserName;
+            exp = exp.And(x => x.UserName != null && x.UserName.Contains(UserName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UserAvatar))
+        {
+            var userAvatar = queryDto.UserAvatar;
+            exp = exp.And(x => x.UserAvatar != null && x.UserAvatar.Contains(userAvatar));
+        }
+
+        if (queryDto?.ReplyToUserId.HasValue == true)
+        {
+            var replyToUserId = queryDto.ReplyToUserId.Value;
+            exp = exp.And(x => x.ReplyToUserId == replyToUserId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReplyToUserName))
+        {
+            var replyToUserName = queryDto.ReplyToUserName;
+            exp = exp.And(x => x.ReplyToUserName != null && x.ReplyToUserName.Contains(replyToUserName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CommentContent))
+        {
+            var commentContent = queryDto.CommentContent;
+            exp = exp.And(x => x.CommentContent != null && x.CommentContent.Contains(commentContent));
+        }
+
+        if (queryDto?.NewsCommentLikeCount.HasValue == true)
+        {
+            var newsCommentLikeCount = queryDto.NewsCommentLikeCount.Value;
+            exp = exp.And(x => x.NewsCommentLikeCount == newsCommentLikeCount);
+        }
+
+        if (queryDto?.ReplyCount.HasValue == true)
+        {
+            var replyCount = queryDto.ReplyCount.Value;
+            exp = exp.And(x => x.ReplyCount == replyCount);
+        }
+
+        if (queryDto?.CommentLevel.HasValue == true)
+        {
+            var commentLevel = queryDto.CommentLevel.Value;
+            exp = exp.And(x => x.CommentLevel == commentLevel);
+        }
+
+        if (queryDto?.CommentStatus.HasValue == true)
+        {
+            var commentStatus = queryDto.CommentStatus.Value;
+            exp = exp.And(x => x.CommentStatus == commentStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CommentTimeStart.HasValue == true)
+        {
+            var commentTimeStart = queryDto.CommentTimeStart.Value;
+            exp = exp.And(x => x.CommentTime >= commentTimeStart);
+        }
+
+        if (queryDto?.CommentTimeEnd.HasValue == true)
+        {
+            var commentTimeEnd = queryDto.CommentTimeEnd.Value;
+            exp = exp.And(x => x.CommentTime <= commentTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktNewsCommentQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.NewsId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ParentId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.UserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UserName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UserAvatar))
+        {
+            return true;
+        }
+        if (queryDto.ReplyToUserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReplyToUserName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CommentContent))
+        {
+            return true;
+        }
+        if (queryDto.NewsCommentLikeCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ReplyCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CommentLevel.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CommentStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CommentTimeStart.HasValue || queryDto.CommentTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

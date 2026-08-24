@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderItemDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIqcOrderItem 生成，请按需审阅）
 // 
@@ -62,7 +62,7 @@ public class TaktIqcOrderItemDto : TaktCompanyDtoBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string MaterialDescription { get; set; } = string.Empty;
 
@@ -137,7 +137,7 @@ public class TaktIqcOrderItemDto : TaktCompanyDtoBase
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -171,7 +171,7 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -180,11 +180,11 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// IQC检验单 ID（选项 TaktIqcOrders/options，DictValue=Id）
     /// </summary>
@@ -207,7 +207,7 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -287,7 +287,7 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     public int? JudgeStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -336,11 +336,11 @@ public class TaktIqcOrderItemCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// IQC检验单 ID（选项 TaktIqcOrders/options，DictValue=Id）
     /// </summary>
@@ -350,7 +350,6 @@ public class TaktIqcOrderItemCreateDto
     /// <summary>
     /// IQC检验单编码（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "IQC检验单编码（冗余字段，便于查询）不能为空")]
     public string IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -365,9 +364,9 @@ public class TaktIqcOrderItemCreateDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
-    [Required(ErrorMessage = "物料描述（回填：随物料）不能为空")]
+    [Required(ErrorMessage = "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）不能为空")]
     public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
@@ -444,7 +443,7 @@ public class TaktIqcOrderItemCreateDto
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -532,7 +531,7 @@ public class TaktIqcOrderItemObsoleteDto
     public long IqcOrderItemId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -561,11 +560,11 @@ public class TaktIqcOrderItemTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// IQC检验单 ID（选项 TaktIqcOrders/options，DictValue=Id）
     /// </summary>
@@ -588,7 +587,7 @@ public class TaktIqcOrderItemTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -663,7 +662,7 @@ public class TaktIqcOrderItemTemplateDto
     public int? JudgeStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -704,11 +703,11 @@ public class TaktIqcOrderItemImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// IQC检验单 ID（选项 TaktIqcOrders/options，DictValue=Id）
     /// </summary>
@@ -731,7 +730,7 @@ public class TaktIqcOrderItemImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -806,7 +805,7 @@ public class TaktIqcOrderItemImportDto
     public int? JudgeStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -849,6 +848,16 @@ public class TaktIqcOrderItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// IQC检验单 ID（选项 TaktIqcOrders/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -870,7 +879,7 @@ public class TaktIqcOrderItemExportDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string MaterialDescription { get; set; } = string.Empty;
 
@@ -945,7 +954,7 @@ public class TaktIqcOrderItemExportDto
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

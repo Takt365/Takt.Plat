@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktCountersignDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Countersign 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCountersign 生成，请按需审阅）
 // 
@@ -92,7 +92,7 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
@@ -108,7 +108,7 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算否（字典 sys_yes_no_type）
+    /// 预算否（字典 sys_yes_no）
     /// </summary>
     public int IsBudget { get; set; } = 0;
 
@@ -181,7 +181,7 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -190,11 +190,11 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会签编码
     /// </summary>
@@ -247,7 +247,7 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
@@ -263,7 +263,7 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算否（字典 sys_yes_no_type）
+    /// 预算否（字典 sys_yes_no）
     /// </summary>
     public int? IsBudget { get; set; }
 
@@ -400,12 +400,11 @@ public class TaktCountersignCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会签编码
     /// </summary>
@@ -460,7 +459,7 @@ public class TaktCountersignCreateDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
@@ -476,7 +475,7 @@ public class TaktCountersignCreateDto
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算否（字典 sys_yes_no_type）
+    /// 预算否（字典 sys_yes_no）
     /// </summary>
     public int IsBudget { get; set; } = 0;
 
@@ -528,7 +527,7 @@ public class TaktCountersignCreateDto
     /// <summary>
     /// 会签单明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktCountersignDetailUpdateDto>? CountersignDetails { get; set; }
+    public List<TaktCountersignDetailCreateDto>? CountersignDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -559,6 +558,11 @@ public class TaktCountersignUpdateDto : TaktCountersignCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CountersignId { get; set; }
+
+    /// <summary>
+    /// 会签单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktCountersignDetailUpdateDto>? CountersignDetails { get; set; }
 
 }
 
@@ -610,11 +614,11 @@ public class TaktCountersignTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会签编码
     /// </summary>
@@ -667,7 +671,7 @@ public class TaktCountersignTemplateDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
@@ -683,7 +687,7 @@ public class TaktCountersignTemplateDto
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算否（字典 sys_yes_no_type）
+    /// 预算否（字典 sys_yes_no）
     /// </summary>
     public int? IsBudget { get; set; }
 
@@ -769,12 +773,11 @@ public class TaktCountersignImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会签编码
     /// </summary>
@@ -827,7 +830,7 @@ public class TaktCountersignImportDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
@@ -843,7 +846,7 @@ public class TaktCountersignImportDto
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算否（字典 sys_yes_no_type）
+    /// 预算否（字典 sys_yes_no）
     /// </summary>
     public int? IsBudget { get; set; }
 
@@ -926,6 +929,21 @@ public class TaktCountersignExportDto
     public long CountersignId { get; set; }
 
     /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 会签编码
     /// </summary>
     public string CountersignCode { get; set; } = string.Empty;
@@ -977,7 +995,7 @@ public class TaktCountersignExportDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
@@ -993,7 +1011,7 @@ public class TaktCountersignExportDto
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算否（字典 sys_yes_no_type）
+    /// 预算否（字典 sys_yes_no）
     /// </summary>
     public int IsBudget { get; set; } = 0;
 

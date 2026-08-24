@@ -75,19 +75,19 @@
         <template v-if="column.key === 'priority'">
           <TaktDictTag
             :value="getTicketDictValue(record, 'priority')"
-            dict-type="sys_priority_level_category"
+            dict-type="sys_priority_level"
           />
         </template>
         <template v-else-if="column.key === 'urgency'">
           <TaktDictTag
             :value="getTicketDictValue(record, 'urgency')"
-            dict-type="sys_urgency_level_category"
+            dict-type="sys_urgency_level"
           />
         </template>
         <template v-else-if="column.key === 'impact'">
           <TaktDictTag
             :value="getTicketDictValue(record, 'impact')"
-            dict-type="sys_impact_level_category"
+            dict-type="sys_impact_level"
           />
         </template>
         <template v-else-if="column.key === 'ticketSource'">
@@ -200,7 +200,7 @@
       <a-form-item :label="pi.queryLabel('priority')">
         <TaktSelect
           v-model:value="advancedQueryForm.priority"
-          dict-type="sys_priority_level_category"
+          dict-type="sys_priority_level"
           :placeholder="pi.queryPh('priority', 'select')"
           allow-clear
         />
@@ -210,7 +210,7 @@
       <a-form-item :label="pi.queryLabel('urgency')">
         <TaktSelect
           v-model:value="advancedQueryForm.urgency"
-          dict-type="sys_urgency_level_category"
+          dict-type="sys_urgency_level"
           :placeholder="pi.queryPh('urgency', 'select')"
           allow-clear
         />
@@ -220,7 +220,7 @@
       <a-form-item :label="pi.queryLabel('impact')">
         <TaktSelect
           v-model:value="advancedQueryForm.impact"
-          dict-type="sys_impact_level_category"
+          dict-type="sys_impact_level"
           :placeholder="pi.queryPh('impact', 'select')"
           allow-clear
         />

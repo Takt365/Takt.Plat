@@ -109,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterGenTableId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -207,7 +208,7 @@
       <a-form-item :label="pi.queryLabel('isPk')">
         <TaktSelect
           v-model:value="advancedQueryForm.isPk"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isPk', 'select')"
           allow-clear
         />
@@ -217,7 +218,7 @@
       <a-form-item :label="pi.queryLabel('isIncrement')">
         <TaktSelect
           v-model:value="advancedQueryForm.isIncrement"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isIncrement', 'select')"
           allow-clear
         />
@@ -227,7 +228,7 @@
       <a-form-item :label="pi.queryLabel('isRequired')">
         <TaktSelect
           v-model:value="advancedQueryForm.isRequired"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isRequired', 'select')"
           allow-clear
         />
@@ -237,7 +238,7 @@
       <a-form-item :label="pi.queryLabel('isCreate')">
         <TaktSelect
           v-model:value="advancedQueryForm.isCreate"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isCreate', 'select')"
           allow-clear
         />
@@ -247,7 +248,7 @@
       <a-form-item :label="pi.queryLabel('isUpdate')">
         <TaktSelect
           v-model:value="advancedQueryForm.isUpdate"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isUpdate', 'select')"
           allow-clear
         />
@@ -257,7 +258,7 @@
       <a-form-item :label="pi.queryLabel('isUnique')">
         <TaktSelect
           v-model:value="advancedQueryForm.isUnique"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isUnique', 'select')"
           allow-clear
         />
@@ -267,7 +268,7 @@
       <a-form-item :label="pi.queryLabel('isList')">
         <TaktSelect
           v-model:value="advancedQueryForm.isList"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isList', 'select')"
           allow-clear
         />
@@ -277,7 +278,7 @@
       <a-form-item :label="pi.queryLabel('isExport')">
         <TaktSelect
           v-model:value="advancedQueryForm.isExport"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isExport', 'select')"
           allow-clear
         />
@@ -287,7 +288,7 @@
       <a-form-item :label="pi.queryLabel('isSort')">
         <TaktSelect
           v-model:value="advancedQueryForm.isSort"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isSort', 'select')"
           allow-clear
         />
@@ -297,7 +298,7 @@
       <a-form-item :label="pi.queryLabel('isQuery')">
         <TaktSelect
           v-model:value="advancedQueryForm.isQuery"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isQuery', 'select')"
           allow-clear
         />

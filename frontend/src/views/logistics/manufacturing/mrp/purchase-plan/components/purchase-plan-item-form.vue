@@ -21,249 +21,12 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo')"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('lineNumber')"
-                name="lineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="pi.ph('lineNumber')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionPlanId')"
-                name="productionPlanId"
-              >
-                <a-input
-                  v-model:value="formState.productionPlanId"
-                  :placeholder="pi.ph('productionPlanId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionPlanCode')"
-                name="productionPlanCode"
-              >
-                <a-input
-                  v-model:value="formState.productionPlanCode"
-                  :placeholder="pi.ph('productionPlanCode')"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.purchasePlanItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionPlanLineNumber')"
-                name="productionPlanLineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.productionPlanLineNumber"
-                  :placeholder="pi.ph('productionPlanLineNumber')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialRequirementsPlanningItemId')"
-                name="materialRequirementsPlanningItemId"
-              >
-                <a-input
-                  v-model:value="formState.materialRequirementsPlanningItemId"
-                  :placeholder="pi.ph('materialRequirementsPlanningItemId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterialPlants/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.purchasePlanItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planUnit')"
-                name="planUnit"
-              >
-                <TaktSelect
-                  v-model:value="formState.planUnit"
-                  dict-type="logistics_unit_of_measure_code"
-                  :placeholder="pi.ph('planUnit')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planQuantity')"
-                name="planQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.planQuantity"
-                  :placeholder="pi.ph('planQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plannedArrivalDate')"
-                name="plannedArrivalDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.plannedArrivalDate"
-                  :placeholder="pi.ph('plannedArrivalDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('convertedQuantity')"
-                name="convertedQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.convertedQuantity"
-                  :placeholder="pi.ph('convertedQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('estimatedUnitPrice')"
-                name="estimatedUnitPrice"
-              >
-                <a-input-number
-                  v-model:value="formState.estimatedUnitPrice"
-                  :placeholder="pi.ph('estimatedUnitPrice')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('estimatedAmount')"
-                name="estimatedAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.estimatedAmount"
-                  :placeholder="pi.ph('estimatedAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxIncludedPrice')"
-                name="taxIncludedPrice"
-              >
-                <a-input-number
-                  v-model:value="formState.taxIncludedPrice"
-                  :placeholder="pi.ph('taxIncludedPrice')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('untaxedPrice')"
-                name="untaxedPrice"
-              >
-                <a-input-number
-                  v-model:value="formState.untaxedPrice"
-                  :placeholder="pi.ph('untaxedPrice')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxAmount')"
-                name="taxAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.taxAmount"
-                  :placeholder="pi.ph('taxAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('referenceSupplierCode')"
-                name="referenceSupplierCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.referenceSupplierCode"
-                  api-url="TaktSuppliers/options"
-                  :placeholder="pi.ph('referenceSupplierCode')"
-                  :disabled="!!formData?.purchasePlanItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('referenceSupplierName1')"
-                name="referenceSupplierName1"
-              >
-                <a-input
-                  v-model:value="formState.referenceSupplierName1"
-                  :placeholder="pi.ph('referenceSupplierName1')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('isObsolete')"
-                name="isObsolete"
-              >
-                <TaktSelect
-                  v-model:value="formState.isObsolete"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="pi.ph('isObsolete')"
-                />
-              </a-form-item>
-            </a-col>
+
           </a-row>
         </div>
       </a-tab-pane>
@@ -276,7 +39,7 @@
  * Takt采购计划实体子表 purchasePlanItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/mrp/purchase-plan/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { usePurchasePlanItemI18n } from '../composables/use-purchase-plan-item-i18n'
@@ -285,8 +48,6 @@ import { usePurchasePlanItemI18n } from '../composables/use-purchase-plan-item-i
 const pi = usePurchasePlanItemI18n()
 
 import type { PurchasePlanItemCreate } from '@/types/logistics/manufacturing/mrp/purchase-plan-item'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -295,7 +56,9 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","productionPlanId","productionPlanCode","productionPlanLineNumber","materialRequirementsPlanningItemId","materialCode","planUnit","planQuantity","plannedArrivalDate","convertedQuantity","estimatedUnitPrice","estimatedAmount","taxIncludedPrice","untaxedPrice","taxAmount","referenceSupplierCode","referenceSupplierName1","isObsolete"]
+const formFields = []
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -304,12 +67,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -321,13 +87,6 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 purchasePlanItemId 才视为编辑） */
 watch(
@@ -353,137 +112,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  lineNumber: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('lineNumber'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('lineNumber'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  materialCode: [
-    {
-      required: true,
-      message: pi.ph('materialCode'),
-      trigger: 'change'
-    }
-  ],
-  planUnit: [
-    {
-      required: true,
-      message: pi.ph('planUnit'),
-      trigger: 'change'
-    }
-  ],
-  planQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('planQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('planQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  convertedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('convertedQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('convertedQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  estimatedUnitPrice: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('estimatedUnitPrice'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('estimatedUnitPrice'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  estimatedAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('estimatedAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('estimatedAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxIncludedPrice: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxIncludedPrice'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxIncludedPrice'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  untaxedPrice: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('untaxedPrice'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('untaxedPrice'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  isObsolete: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('isObsolete'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('isObsolete'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -495,48 +124,32 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 purchasePlanId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('lineNumber' in payload) {
-    const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
-  }
-  if ('productionPlanLineNumber' in payload) {
-    const rawproductionPlanLineNumber = payload.productionPlanLineNumber
-    payload.productionPlanLineNumber = typeof rawproductionPlanLineNumber === 'number' ? rawproductionPlanLineNumber : Number(rawproductionPlanLineNumber)
-  }
-  if ('planQuantity' in payload) {
-    const rawplanQuantity = payload.planQuantity
-    payload.planQuantity = typeof rawplanQuantity === 'number' ? rawplanQuantity : Number(rawplanQuantity)
-  }
-  if ('convertedQuantity' in payload) {
-    const rawconvertedQuantity = payload.convertedQuantity
-    payload.convertedQuantity = typeof rawconvertedQuantity === 'number' ? rawconvertedQuantity : Number(rawconvertedQuantity)
-  }
-  if ('estimatedUnitPrice' in payload) {
-    const rawestimatedUnitPrice = payload.estimatedUnitPrice
-    payload.estimatedUnitPrice = typeof rawestimatedUnitPrice === 'number' ? rawestimatedUnitPrice : Number(rawestimatedUnitPrice)
-  }
-  if ('estimatedAmount' in payload) {
-    const rawestimatedAmount = payload.estimatedAmount
-    payload.estimatedAmount = typeof rawestimatedAmount === 'number' ? rawestimatedAmount : Number(rawestimatedAmount)
-  }
-  if ('taxIncludedPrice' in payload) {
-    const rawtaxIncludedPrice = payload.taxIncludedPrice
-    payload.taxIncludedPrice = typeof rawtaxIncludedPrice === 'number' ? rawtaxIncludedPrice : Number(rawtaxIncludedPrice)
-  }
-  if ('untaxedPrice' in payload) {
-    const rawuntaxedPrice = payload.untaxedPrice
-    payload.untaxedPrice = typeof rawuntaxedPrice === 'number' ? rawuntaxedPrice : Number(rawuntaxedPrice)
-  }
-  if ('taxAmount' in payload) {
-    const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
-  }
-  if ('isObsolete' in payload) {
-    const rawisObsolete = payload.isObsolete
-    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.purchasePlanItemId) {
+    payload.purchasePlanItemId = props.formData.purchasePlanItemId
+  }
   payload.purchasePlanId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.purchasePlanCode ?? masterRow.PurchasePlanCode
+    const masterName = masterRow.purchasePlanName ?? masterRow.PurchasePlanName
+    if (masterCode != null && masterCode !== '' && !payload.purchasePlanCode) {
+      payload.purchasePlanCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.purchasePlanName) {
+      payload.purchasePlanName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 

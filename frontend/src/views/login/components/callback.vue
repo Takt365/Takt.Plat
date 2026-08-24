@@ -106,7 +106,7 @@ onMounted(async () => {
 
     EventBus.emit('user:login', {
       userId: userStore.userId,
-      username: userStore.username,
+      userName: userStore.userName,
     });
 
     const saved = sessionStorage.getItem('takt.oauth.return_after_login');

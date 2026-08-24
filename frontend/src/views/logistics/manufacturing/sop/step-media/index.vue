@@ -77,7 +77,7 @@
         <template v-if="column.key === 'safetyPopupRequired'">
           <TaktDictTag
             :value="getSopStepField(record, 'safetyPopupRequired')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -172,7 +172,7 @@
       <a-form-item :label="t('entity.sopstep.safetypopuprequired')">
         <TaktSelect
           v-model:value="advancedQueryForm.safetyPopupRequired"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopstep.safetypopuprequired') })"
           allow-clear
         />

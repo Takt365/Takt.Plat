@@ -51,17 +51,17 @@ public class TaktStorageLocation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "location_type", ColumnDescription = "库位类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LocationType { get; set; } = 0;
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "location_status", ColumnDescription = "库位状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int LocationStatus { get; set; } = 1;

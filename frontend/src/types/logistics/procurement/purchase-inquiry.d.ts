@@ -117,7 +117,7 @@ export interface PurchaseInquiry extends CompanyDtoBase {
   cultureCode?: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   inquiryStatus?: number;
 
@@ -256,7 +256,7 @@ export interface PurchaseInquiryExport {
   cultureCode: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   inquiryStatus: number;
 

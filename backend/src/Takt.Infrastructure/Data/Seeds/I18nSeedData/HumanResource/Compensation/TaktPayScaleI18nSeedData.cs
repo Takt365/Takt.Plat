@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayScaleI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayScale 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,22 +145,22 @@ public class TaktPayScaleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payscale.maxsalary", "zh-HK", "上限金额_hk", "上限金额（元）"),
 
             // entity.payscale.sortorder
-            new TranslationSeedItem("entity.payscale.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.payscale.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.payscale.sortorder
-            new TranslationSeedItem("entity.payscale.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.payscale.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.payscale.sortorder
-            new TranslationSeedItem("entity.payscale.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.payscale.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.payscale.sortorder
-            new TranslationSeedItem("entity.payscale.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.payscale.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
         };
     }
 

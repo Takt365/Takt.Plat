@@ -42,7 +42,7 @@ public class TaktConfigurableRuntimeSelectionDto
     public long ConfigurableSelectionId { get; set; }
 
     /// <summary>
-    /// 排序号（运行时取值键）
+    /// 排序号（回填）（运行时取值键）
     /// </summary>
     public int SortOrder { get; set; }
 
@@ -67,7 +67,7 @@ public class TaktConfigurableRuntimeSelectionDto
     public int FilterOperator { get; set; }
 
     /// <summary>
-    /// 是否必填（sys_yes_no_type，1=是）
+    /// 是否必填（sys_yes_no，1=是）
     /// </summary>
     public int IsRequired { get; set; }
 
@@ -136,7 +136,7 @@ public class TaktConfigurableRuntimeSelectionValueDto
     public long ConfigurableSelectionId { get; set; }
 
     /// <summary>
-    /// 排序号（与筛选项 SortOrder 一致）
+    /// 排序号（回填）（与筛选项 SortOrder 一致）
     /// </summary>
     public int SortOrder { get; set; }
 

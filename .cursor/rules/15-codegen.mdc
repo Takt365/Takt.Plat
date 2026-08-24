@@ -120,6 +120,9 @@ alwaysApply: false
 | 主子表 | CreateDto 含 `List<ChildCreate>` → 展开行懒加载 `getById` + 表单子表 Tab 行编辑 |
 | 表单 Tabs | 每 Tab 最多 10 字段；`tenantCode`/`companyCode` 隔离字段只读（Tenant/Company 实体除外） |
 | 表单控件尺寸 | **禁止** `size="small"`（`renderFormControl` / 主子表 Tab 内嵌表均须默认 `middle`）；写入前 `assertGeneratedFormNoSmallSize` 校验 |
+| 「xxx内容」字段 | 表单控件 **`takt-rich-editor`**（`inferHtmlType` ← `isRichTextContentField`：`content` / `XxxContent` 或摘要标题以「内容」结尾，或注释含「富文本 HTML」）。排除 `contentType` 等元数据、流程 `ProcessContent` / 快照、JSON 列。高级查询抽屉仍用 `a-textarea`；子表行内单元格空间不足仍用 `textarea` 编辑器 |
+| 文件名称 + 访问地址 | 表单控件 **`takt-upload-file`**（`fileName` + `accessUrl` 成对；`fileName` 上传后回填只读）。**排除** `TaktFile`（Pascal `File`）。查询抽屉仍用 `a-input`；子表行内单元格仍用 input。参照 `announcement-form.vue` |
+| TaktNumbering 表单编码 | 实体 XML 含「自动通过 TaktNumbering」且**无** MIME → 表单 **`numberingRule` + `numberingCode`**（`applyTaktNumberingFormMeta` / `useTaktFormNumbering`）；CreateDto 插入 `NumberingRuleCode`；Service Create 调 `ITaktNumberingGenerator.GenerateNextAsync`。含 MIME → **不**生成表单规则控件（`TaktFileUploadEngine` MIME→`FD-F*`） |
 | 只读/隔离字段 | **禁止** HTML `readonly`；须 `disabled`（`renderReadOnlyControlAttrs`，参照 `user-form.vue`） |
 | 权限前缀 | 优先菜单 `ComponentPath`/`Permission`，其次控制器 `TaktPermission` |
 | `--view-path` | 覆盖 views 输出目录（相对 `src/views`） |

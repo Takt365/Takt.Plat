@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getConferenceId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="conferenceId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="routine:conference:center:create"
       update-permission="routine:conference:center:update"
       delete-permission="routine:conference:center:delete"
@@ -50,28 +70,8 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getConferenceId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="conferenceId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <template #detail>
         <ConferenceParticipantPanel
           ref="conferenceParticipantPanelRef"
@@ -108,396 +108,22 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('conferenceCode')">
-      <a-form-item :label="t('entity.conference.code')">
-        <a-input
-          v-model:value="advancedQueryForm.conferenceCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.code') })"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('title')">
-      <a-form-item :label="t('entity.conference.title')">
-        <a-input
-          v-model:value="advancedQueryForm.title"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.title') })"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('conferenceType')">
-      <a-form-item :label="t('entity.conference.type')">
-        <a-input-number
-          v-model:value="advancedQueryForm.conferenceType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.type') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('conferenceStatus')">
-      <a-form-item :label="t('entity.conference.status')">
-        <a-input-number
-          v-model:value="advancedQueryForm.conferenceStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.status') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('startTimeStart')">
-      <a-form-item :label="t('entity.conference.starttimestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.startTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.starttimestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('startTimeEnd')">
-      <a-form-item :label="t('entity.conference.starttimeend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.startTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.starttimeend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('endTimeStart')">
-      <a-form-item :label="t('entity.conference.endtimestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.endTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.endtimestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('endTimeEnd')">
-      <a-form-item :label="t('entity.conference.endtimeend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.endTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.endtimeend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('location')">
-      <a-form-item :label="t('entity.conference.location')">
-        <a-input
-          v-model:value="advancedQueryForm.location"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.location') })"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('meetingLink')">
-      <a-form-item :label="t('entity.conference.meetinglink')">
-        <a-input
-          v-model:value="advancedQueryForm.meetingLink"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.meetinglink') })"
-          show-count
-          :maxlength="500"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('agenda')">
-      <a-form-item :label="t('entity.conference.agenda')">
-        <a-input
-          v-model:value="advancedQueryForm.agenda"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.agenda') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('content')">
-      <a-form-item :label="t('entity.conference.content')">
-        <a-textarea
-          v-model:value="advancedQueryForm.content"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.conference.content') })"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('summary')">
-      <a-form-item :label="t('entity.conference.summary')">
-        <a-input
-          v-model:value="advancedQueryForm.summary"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.summary') })"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('tags')">
-      <a-form-item :label="t('entity.conference.tags')">
-        <a-input
-          v-model:value="advancedQueryForm.tags"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.tags') })"
-          show-count
-          :maxlength="500"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('organizerId')">
-      <a-form-item :label="t('entity.conference.organizerid')">
-        <a-input
-          v-model:value="advancedQueryForm.organizerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.organizerid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('organizerName')">
-      <a-form-item :label="t('entity.conference.organizername')">
-        <a-input
-          v-model:value="advancedQueryForm.organizerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.organizername') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.conference.deptid')">
-        <a-input
-          v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.deptid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="t('entity.conference.deptname')">
-        <a-input
-          v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.deptname') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('maxParticipants')">
-      <a-form-item :label="t('entity.conference.maxparticipants')">
-        <a-input-number
-          v-model:value="advancedQueryForm.maxParticipants"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.maxparticipants') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('reminderMinutes')">
-      <a-form-item :label="t('entity.conference.reminderminutes')">
-        <a-input-number
-          v-model:value="advancedQueryForm.reminderMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.reminderminutes') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('conferenceRoomId')">
-      <a-form-item :label="t('entity.conference.roomid')">
-        <a-input
-          v-model:value="advancedQueryForm.conferenceRoomId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('conferenceRoomName')">
-      <a-form-item :label="t('entity.conference.roomname')">
-        <a-input
-          v-model:value="advancedQueryForm.conferenceRoomName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomname') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.conference.approvalstatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.approvalStatus"
-          dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.approvalstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.conference.initiatorid')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.initiatorid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.conference.initiatedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.initiatedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.conference.initiatedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.initiatedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.conference.approvedby')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.approvedby') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.conference.approvedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.approvedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.conference.approvedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.approvedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.conference.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.flowinstanceid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.conference._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.conference._self"
+        v-if="importVisible"
+        :entity-i18n-key="CONFERENCE_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -516,7 +142,7 @@
       :id-column-key="'conferenceId'"
       :action-column-key="'action'"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -536,12 +162,24 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ConferenceForm from './components/conference-form.vue'
 import ConferenceParticipantPanel from './components/conference-participant-panel.vue'
-import { provideConferenceMasterContext } from './composables/use-conference-master-context'
+import { provideConferenceMasterContext, type ConferenceRowRecord } from './composables/use-conference-master-context'
 import { getConferenceList, getConferenceById, createConference, updateConference, deleteConferenceById, deleteConferenceBatch, getConferenceTemplate, importConference, exportConference, updateConferenceStatus } from '@/api/routine/conference-center/conference'
 import type { Conference, ConferenceQuery } from '@/types/routine/conference-center/conference'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+
+import {
+  useConferenceI18n,
+  CONFERENCE_LIST_FIELDS,
+  CONFERENCE_QUERY_STRING_FIELDS,
+  CONFERENCE_QUERY_FIELDS,
+  CONFERENCE_SELF_I18N_KEY,
+} from './composables/use-conference-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useConferenceI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -549,7 +187,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktConference')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.conference._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -565,9 +203,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Conference | null>(null)
+const selectedRow = ref<ConferenceRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Conference[]>([])
+const selectedRows = ref<ConferenceRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -584,79 +222,44 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of CONFERENCE_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(CONFERENCE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof CONFERENCE_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  conferenceCode: '',
-  title: '',
-  conferenceType: undefined as number | undefined,
-  conferenceStatus: undefined as number | undefined,
-  startTimeStart: '',
-  startTimeEnd: '',
-  endTimeStart: '',
-  endTimeEnd: '',
-  location: '',
-  meetingLink: '',
-  agenda: '',
-  content: '',
-  summary: '',
-  tags: '',
-  organizerId: '',
-  organizerName: '',
-  deptId: '',
-  deptName: '',
-  maxParticipants: undefined as number | undefined,
-  reminderMinutes: undefined as number | undefined,
-  conferenceRoomId: '',
-  conferenceRoomName: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'conferenceCode', label: t('entity.conference.code') },
-  { key: 'title', label: t('entity.conference.title') },
-  { key: 'conferenceType', label: t('entity.conference.type') },
-  { key: 'conferenceStatus', label: t('entity.conference.status') },
-  { key: 'startTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.conference.starttime')) },
-  { key: 'startTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.conference.starttime')) },
-  { key: 'endTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.conference.endtime')) },
-  { key: 'endTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.conference.endtime')) },
-  { key: 'location', label: t('entity.conference.location') },
-  { key: 'meetingLink', label: t('entity.conference.meetinglink') },
-  { key: 'agenda', label: t('entity.conference.agenda') },
-  { key: 'content', label: t('entity.conference.content') },
-  { key: 'summary', label: t('entity.conference.summary') },
-  { key: 'tags', label: t('entity.conference.tags') },
-  { key: 'organizerId', label: t('entity.conference.organizerid') },
-  { key: 'organizerName', label: t('entity.conference.organizername') },
-  { key: 'deptId', label: t('entity.conference.deptid') },
-  { key: 'deptName', label: t('entity.conference.deptname') },
-  { key: 'maxParticipants', label: t('entity.conference.maxparticipants') },
-  { key: 'reminderMinutes', label: t('entity.conference.reminderminutes') },
-  { key: 'conferenceRoomId', label: t('entity.conference.roomid') },
-  { key: 'conferenceRoomName', label: t('entity.conference.roomname') },
-  { key: 'approvalStatus', label: t('entity.conference.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.conference.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.conference.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.conference.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.conference.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.conference.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.conference.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.conference.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  CONFERENCE_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -677,7 +280,7 @@ const { selectedMasterRow } = provideConferenceMasterContext()
 const conferenceParticipantPanelRef = ref<InstanceType<typeof ConferenceParticipantPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {ConferenceQuery} 查询 DTO
  */
@@ -698,63 +301,23 @@ function buildListQuery(overrides?: Partial<ConferenceQuery>): ConferenceQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('conferenceCode', form.conferenceCode)
-  assignTrimmed('title', form.title)
-  if (form.conferenceType !== undefined && form.conferenceType !== null) {
-    query.conferenceType = form.conferenceType
+  for (const key of CONFERENCE_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  if (form.conferenceStatus !== undefined && form.conferenceStatus !== null) {
-    query.conferenceStatus = form.conferenceStatus
-  }
-  assignTrimmed('startTimeStart', form.startTimeStart)
-  assignTrimmed('startTimeEnd', form.startTimeEnd)
-  assignTrimmed('endTimeStart', form.endTimeStart)
-  assignTrimmed('endTimeEnd', form.endTimeEnd)
-  assignTrimmed('location', form.location)
-  assignTrimmed('meetingLink', form.meetingLink)
-  assignTrimmed('agenda', form.agenda)
-  assignTrimmed('content', form.content)
-  assignTrimmed('summary', form.summary)
-  assignTrimmed('tags', form.tags)
-  assignTrimmed('organizerId', form.organizerId)
-  assignTrimmed('organizerName', form.organizerName)
-  assignTrimmed('deptId', form.deptId)
-  assignTrimmed('deptName', form.deptName)
-  if (form.maxParticipants !== undefined && form.maxParticipants !== null) {
-    query.maxParticipants = form.maxParticipants
-  }
-  if (form.reminderMinutes !== undefined && form.reminderMinutes !== null) {
-    query.reminderMinutes = form.reminderMinutes
-  }
-  assignTrimmed('conferenceRoomId', form.conferenceRoomId)
-  assignTrimmed('conferenceRoomName', form.conferenceRoomName)
-  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
-    query.approvalStatus = form.approvalStatus
-  }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
+
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: Conference | null) {
+function syncMasterSelection(record: ConferenceRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getConferenceId(record) : ''
 }
@@ -764,7 +327,7 @@ function syncMasterSelection(record: Conference | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as Conference
+  const row = record as unknown as ConferenceRowRecord
   const key = getConferenceId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -782,7 +345,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadConferenceDetail(record: Conference): Promise<Conference | null> {
+async function loadConferenceDetail(record: ConferenceRowRecord): Promise<Conference | null> {
   const id = getConferenceId(record)
   if (!id) {
     return null
@@ -813,25 +376,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceId') ?? ''
   },
   {
-    title: t('entity.conference.code'),
-    dataIndex: 'conferenceCode',
-    key: 'conferenceCode',
+    title: pi.label('conferenceTitle'),
+    dataIndex: 'conferenceTitle',
+    key: 'conferenceTitle',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceCode') ?? ''
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceTitle') ?? ''
   },
   {
-    title: t('entity.conference.title'),
-    dataIndex: 'title',
-    key: 'title',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'title') ?? ''
-  },
-  {
-    title: t('entity.conference.type'),
+    title: pi.label('conferenceType'),
     dataIndex: 'conferenceType',
     key: 'conferenceType',
     width: 120,
@@ -840,7 +394,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceType') ?? ''
   },
   {
-    title: t('entity.conference.status'),
+    title: pi.label('conferenceStatus'),
     dataIndex: 'conferenceStatus',
     key: 'conferenceStatus',
     width: 120,
@@ -849,7 +403,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceStatus') ?? ''
   },
   {
-    title: t('entity.conference.starttime'),
+    title: pi.label('startTime'),
     dataIndex: 'startTime',
     key: 'startTime',
     width: 120,
@@ -858,7 +412,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'startTime') ?? ''
   },
   {
-    title: t('entity.conference.endtime'),
+    title: pi.label('endTime'),
     dataIndex: 'endTime',
     key: 'endTime',
     width: 120,
@@ -867,7 +421,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'endTime') ?? ''
   },
   {
-    title: t('entity.conference.location'),
+    title: pi.label('location'),
     dataIndex: 'location',
     key: 'location',
     width: 120,
@@ -876,7 +430,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'location') ?? ''
   },
   {
-    title: t('entity.conference.meetinglink'),
+    title: pi.label('meetingLink'),
     dataIndex: 'meetingLink',
     key: 'meetingLink',
     width: 120,
@@ -885,7 +439,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'meetingLink') ?? ''
   },
   {
-    title: t('entity.conference.agenda'),
+    title: pi.label('agenda'),
     dataIndex: 'agenda',
     key: 'agenda',
     width: 120,
@@ -894,34 +448,34 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'agenda') ?? ''
   },
   {
-    title: t('entity.conference.content'),
-    dataIndex: 'content',
-    key: 'content',
+    title: pi.label('conferenceContent'),
+    dataIndex: 'conferenceContent',
+    key: 'conferenceContent',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'content') ?? ''
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceContent') ?? ''
   },
   {
-    title: t('entity.conference.summary'),
-    dataIndex: 'summary',
-    key: 'summary',
+    title: pi.label('conferenceSummary'),
+    dataIndex: 'conferenceSummary',
+    key: 'conferenceSummary',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'summary') ?? ''
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceSummary') ?? ''
   },
   {
-    title: t('entity.conference.tags'),
-    dataIndex: 'tags',
-    key: 'tags',
+    title: pi.label('conferenceTags'),
+    dataIndex: 'conferenceTags',
+    key: 'conferenceTags',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'tags') ?? ''
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceTags') ?? ''
   },
   {
-    title: t('entity.conference.organizerid'),
+    title: pi.label('organizerId'),
     dataIndex: 'organizerId',
     key: 'organizerId',
     width: 120,
@@ -930,7 +484,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'organizerId') ?? ''
   },
   {
-    title: t('entity.conference.organizername'),
+    title: pi.label('organizerName'),
     dataIndex: 'organizerName',
     key: 'organizerName',
     width: 120,
@@ -939,7 +493,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'organizerName') ?? ''
   },
   {
-    title: t('entity.conference.deptid'),
+    title: pi.label('deptId'),
     dataIndex: 'deptId',
     key: 'deptId',
     width: 120,
@@ -948,7 +502,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'deptId') ?? ''
   },
   {
-    title: t('entity.conference.deptname'),
+    title: pi.label('deptName'),
     dataIndex: 'deptName',
     key: 'deptName',
     width: 120,
@@ -957,7 +511,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'deptName') ?? ''
   },
   {
-    title: t('entity.conference.maxparticipants'),
+    title: pi.label('maxParticipants'),
     dataIndex: 'maxParticipants',
     key: 'maxParticipants',
     width: 120,
@@ -966,7 +520,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'maxParticipants') ?? ''
   },
   {
-    title: t('entity.conference.reminderminutes'),
+    title: pi.label('reminderMinutes'),
     dataIndex: 'reminderMinutes',
     key: 'reminderMinutes',
     width: 120,
@@ -975,7 +529,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'reminderMinutes') ?? ''
   },
   {
-    title: t('entity.conference.roomid'),
+    title: pi.label('conferenceRoomId'),
     dataIndex: 'conferenceRoomId',
     key: 'conferenceRoomId',
     width: 120,
@@ -984,13 +538,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceRoomId') ?? ''
   },
   {
-    title: t('entity.conference.roomname'),
+    title: pi.label('conferenceRoomName'),
     dataIndex: 'conferenceRoomName',
     key: 'conferenceRoomName',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceRoomName') ?? ''
+  },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'remark') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1000,7 +563,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'routine:conference:center:update',
-        onClick: (record: Conference) => handleEdit(record)
+        onClick: (record: ConferenceRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1008,14 +571,17 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'routine:conference:center:delete',
-        onClick: (record: Conference) => handleDeleteOne(record)
+        onClick: (record: ConferenceRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getConferenceId = (record: any): string => record?.[entityIdName] ?? ''
+const getConferenceId = (record: ConferenceRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
@@ -1023,10 +589,12 @@ const getConferenceId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getConferenceField = (record: any, field: string): any => record?.[field]
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Conference[]) => {
+  onChange: (keys: (string | number)[], rows: ConferenceRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1036,7 +604,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: Conference, selected: boolean) => {
+  onSelect: (record: ConferenceRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1045,7 +613,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Conference[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ConferenceRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1055,6 +623,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getConferenceList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1081,40 +654,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  conferenceCode: '',
-  title: '',
-  conferenceType: undefined as number | undefined,
-  conferenceStatus: undefined as number | undefined,
-  startTimeStart: '',
-  startTimeEnd: '',
-  endTimeStart: '',
-  endTimeEnd: '',
-  location: '',
-  meetingLink: '',
-  agenda: '',
-  content: '',
-  summary: '',
-  tags: '',
-  organizerId: '',
-  organizerName: '',
-  deptId: '',
-  deptName: '',
-  maxParticipants: undefined as number | undefined,
-  reminderMinutes: undefined as number | undefined,
-  conferenceRoomId: '',
-  conferenceRoomName: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1122,14 +662,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.conference._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: Conference) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.conference._self') })
+async function handleEdit(record: ConferenceRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadConferenceDetail(record)
@@ -1145,7 +685,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.conference._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1163,10 +703,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateConference(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.conference._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createConference(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.conference._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1197,15 +737,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importConference(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importConference(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    conferenceParticipantPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1216,6 +763,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportConference(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1239,24 +789,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.conference._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Conference] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.conference._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Conference) {
+async function handleDeleteOne(record: ConferenceRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.conference._self'), name: t('common.tip.this.target', { target: t('entity.conference._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteConferenceById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.conference._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1268,18 +818,18 @@ async function handleDeleteOne(record: Conference) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.conference._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.conference._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteConferenceBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.conference._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1302,40 +852,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  conferenceCode: '',
-  title: '',
-  conferenceType: undefined as number | undefined,
-  conferenceStatus: undefined as number | undefined,
-  startTimeStart: '',
-  startTimeEnd: '',
-  endTimeStart: '',
-  endTimeEnd: '',
-  location: '',
-  meetingLink: '',
-  agenda: '',
-  content: '',
-  summary: '',
-  tags: '',
-  organizerId: '',
-  organizerName: '',
-  deptId: '',
-  deptName: '',
-  maxParticipants: undefined as number | undefined,
-  reminderMinutes: undefined as number | undefined,
-  conferenceRoomId: '',
-  conferenceRoomName: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

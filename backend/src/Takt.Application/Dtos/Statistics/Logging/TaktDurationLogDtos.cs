@@ -36,15 +36,15 @@ public class TaktDurationLogDto : TaktCompanyDtoBase
     public long DurationLogId { get; set; }
 
     /// <summary>
-    /// 用户名（登录账号）
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号）
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 统计日期（自然日，不含时分秒）
@@ -89,15 +89,15 @@ public class TaktDurationLogQueryDto : TaktPagedQuery
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（登录账号）
-    /// </summary>
-    public string? UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号）
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 统计日期（自然日，不含时分秒）（范围查询-开始）
@@ -165,16 +165,16 @@ public class TaktDurationLogCreateDto
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（登录账号）
-    /// </summary>
-    [Required(ErrorMessage = "用户名（登录账号）不能为空")]
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号）
+    /// </summary>
+    [Required(ErrorMessage = "用户名（登录账号）不能为空")]
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 统计日期（自然日，不含时分秒）
@@ -240,15 +240,15 @@ public class TaktDurationLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（登录账号）
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号）
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 统计日期（自然日，不含时分秒）

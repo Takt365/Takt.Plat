@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceRequestI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerServiceRequest 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktCustomerServiceRequestI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerservicerequest.sourcechannel", "zh-HK", "请求来源_hk", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
 
             // entity.customerservicerequest.priority
-            new TranslationSeedItem("entity.customerservicerequest.priority", "en-US", "优先级_us", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.customerservicerequest.priority", "en-US", "优先级_us", "优先级（字典 sys_priority_level）"),
             // entity.customerservicerequest.priority
-            new TranslationSeedItem("entity.customerservicerequest.priority", "ja-JP", "优先级_jp", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.customerservicerequest.priority", "ja-JP", "优先级_jp", "优先级（字典 sys_priority_level）"),
             // entity.customerservicerequest.priority
-            new TranslationSeedItem("entity.customerservicerequest.priority", "zh-CN", "优先级", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.customerservicerequest.priority", "zh-CN", "优先级", "优先级（字典 sys_priority_level）"),
             // entity.customerservicerequest.priority
-            new TranslationSeedItem("entity.customerservicerequest.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.customerservicerequest.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level）"),
 
             // entity.customerservicerequest.requeststatus
             new TranslationSeedItem("entity.customerservicerequest.requeststatus", "en-US", "请求状态_us", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
@@ -289,13 +289,13 @@ public class TaktCustomerServiceRequestI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerservicerequest.closedat", "zh-HK", "关闭时间_hk", "关闭时间"),
 
             // entity.customerservicerequest.sortorder
-            new TranslationSeedItem("entity.customerservicerequest.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicerequest.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.customerservicerequest.sortorder
-            new TranslationSeedItem("entity.customerservicerequest.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicerequest.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.customerservicerequest.sortorder
-            new TranslationSeedItem("entity.customerservicerequest.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicerequest.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.customerservicerequest.sortorder
-            new TranslationSeedItem("entity.customerservicerequest.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customerservicerequest.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.customerservicerequest.customerservicecontract
             new TranslationSeedItem("entity.customerservicerequest.customerservicecontract", "en-US", "关联服务合同_us", "关联服务合同"),

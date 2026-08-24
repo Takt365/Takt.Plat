@@ -103,22 +103,22 @@ export interface SalaryItemExport {
   vestingYears: number;
 
   /**
-   * 是否扣款项（字典 sys_yes_no_type）
+   * 是否扣款项（字典 sys_yes_no）
    */
   isDeduction: number;
 
   /**
-   * 是否计入应税所得（字典 sys_yes_no_type）
+   * 是否计入应税所得（字典 sys_yes_no）
    */
   isTaxable: number;
 
   /**
-   * 是否计入社保基数（字典 sys_yes_no_type）
+   * 是否计入社保基数（字典 sys_yes_no）
    */
   includeSocialSecurityBase: number;
 
   /**
-   * 是否计入公积金基数（字典 sys_yes_no_type）
+   * 是否计入公积金基数（字典 sys_yes_no）
    */
   includeHousingFundBase: number;
 
@@ -128,7 +128,7 @@ export interface SalaryItemExport {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   itemStatus: number;
 

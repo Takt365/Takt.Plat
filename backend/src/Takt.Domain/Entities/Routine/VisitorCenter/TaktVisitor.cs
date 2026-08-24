@@ -44,6 +44,6 @@ public class TaktVisitor : TaktCompanyEntityBase
     /// <summary>
     /// 来访人员列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktVisitorCompanion.VisitorId))]
+    [Navigate(NavigateType.OneToMany, nameof(TaktVisitorCompanion.VisitorId), nameof(Id))]
     public List<TaktVisitorCompanion>? Companions { get; set; }
 }

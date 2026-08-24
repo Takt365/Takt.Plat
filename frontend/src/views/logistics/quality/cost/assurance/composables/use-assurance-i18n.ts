@@ -20,7 +20,6 @@ export const QUALITYASSURANCE_SELF_I18N_KEY = buildEntitySelfI18nKey(QUALITYASSU
 
 /** 列表业务列（不含主键） */
 export const QUALITYASSURANCE_LIST_FIELDS = [
-  'plantCode',
   'qualityAssuranceCode',
   'assuranceMonth',
   'customerName1',
@@ -28,23 +27,12 @@ export const QUALITYASSURANCE_LIST_FIELDS = [
   'recorder',
   'totalQualityCost',
   'currencyCode',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const QUALITYASSURANCE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  qualityAssuranceCode: 'required',
-  assuranceMonth: 'required',
-  customerName1: 'optional',
-  debitNoteCode: 'optional',
-  recorder: 'optional',
-  totalQualityCost: 'select',
-  currencyCode: 'required',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -52,28 +40,13 @@ export type QualityAssuranceField = keyof typeof QUALITYASSURANCE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const QUALITYASSURANCE_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'qualityAssuranceCode',
-  'assuranceMonth',
-  'customerName1',
-  'debitNoteCode',
-  'recorder',
-  'currencyCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof QualityAssuranceQuery)[]
 
-export type QualityAssuranceQueryField =
-  | (typeof QUALITYASSURANCE_QUERY_STRING_FIELDS)[number]
-  | 'totalQualityCost'
+export type QualityAssuranceQueryField = (typeof QUALITYASSURANCE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const QUALITYASSURANCE_QUERY_FIELDS: readonly QualityAssuranceQueryField[] = [
-  ...QUALITYASSURANCE_QUERY_STRING_FIELDS,
-  'totalQualityCost',
-]
+export const QUALITYASSURANCE_QUERY_FIELDS: readonly QualityAssuranceQueryField[] = [...QUALITYASSURANCE_QUERY_STRING_FIELDS]
 
 /**
  * 品质业务主表字段 i18n：index / assurance-form 统一入口

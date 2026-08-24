@@ -49,8 +49,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
                   show-count
                   :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.ecNotificationId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -356,7 +355,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.ecNotificationId
     if (isCreate) {

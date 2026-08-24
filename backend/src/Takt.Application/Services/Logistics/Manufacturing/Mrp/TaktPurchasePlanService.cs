@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购计划应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
     }
 
     /// <summary>
-    /// 获取采购计划列表（分页）
+    /// 获取采购计划列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPurchasePlanDto>> GetPurchasePlanListAsync(TaktPurchasePlanQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPurchasePlanDto>.Create(
+                new List<TaktPurchasePlanDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _purchasePlanRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -119,12 +127,12 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
     public async Task<TaktPurchasePlanDto> CreatePurchasePlanAsync(TaktPurchasePlanCreateDto dto)
     {
         var entity = dto.Adapt<TaktPurchasePlan>();
-        var isUnique_ix_takt_logistics_manufacturing_planning_purchase_plan_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mrp_purchase_plan_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePlanRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.PurchasePlanCode == entity.PurchasePlanCode
                 && x.PlanDate == entity.PlanDate);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_purchase_plan_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mrp_purchase_plan_unique)
         {
             throw new TaktBusinessException("采购计划的PlantCode、PurchasePlanCode、PlanDate已存在");
         }
@@ -147,13 +155,13 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
             throw new TaktBusinessException("采购计划不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_purchase_plan_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mrp_purchase_plan_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePlanRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.PurchasePlanCode == entity.PurchasePlanCode
                 && x.PlanDate == entity.PlanDate,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_purchase_plan_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mrp_purchase_plan_unique)
         {
             throw new TaktBusinessException("采购计划的PlantCode、PurchasePlanCode、PlanDate已存在");
         }
@@ -258,12 +266,12 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PurchasePlanCode、PlanDate）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_planning_purchase_plan_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_mrp_purchase_plan_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchasePlanRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.PurchasePlanCode == entity.PurchasePlanCode
                         && x.PlanDate == entity.PlanDate);
-                if (!isUnique_ix_takt_logistics_manufacturing_planning_purchase_plan_unique)
+                if (!isUnique_ix_takt_logistics_manufacturing_mrp_purchase_plan_unique)
                 {
                     throw new TaktBusinessException("采购计划的PlantCode、PurchasePlanCode、PlanDate已存在");
                 }
@@ -288,7 +296,15 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPurchasePlanAsync(TaktPurchasePlanQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPurchasePlanQueryDto());
+        var queryDto = query ?? new TaktPurchasePlanQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPurchasePlanExportDto>(),
+                sheetName ?? "采购计划数据",
+                fileName ?? "采购计划导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _purchasePlanRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -387,6 +403,12 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
             {
                 var childDto = itemsForSave[i];
                 childDto.PurchasePlanId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.PurchasePlanCode = entity.PurchasePlanCode;
+                childDto.ProductionPlanCode = entity.ProductionPlanCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -403,16 +425,15 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
                         throw new TaktBusinessException("采购计划明细不属于当前主表（PurchasePlanItemId={childDto.PurchasePlanItemId}）");
                     }
                     submittedIds.Add(childDto.PurchasePlanItemId);
-                    var isUniqueUpdate_ix_takt_logistics_manufacturing_planning_purchase_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_mrp_purchase_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _purchasePlanItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.PurchasePlanId == x.PurchasePlanId
+                        x => x.PurchasePlanId == x.PurchasePlanId
                 && x.LineNumber == x.LineNumber
                 && x.MaterialCode == x.MaterialCode,
                         childDto.PurchasePlanItemId);
-                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_planning_purchase_plan_item_line_unique)
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_mrp_purchase_plan_item_line_unique)
                     {
-                        throw new TaktBusinessException("采购计划明细的CompanyCode、PurchasePlanId、LineNumber、MaterialCode已存在");
+                        throw new TaktBusinessException("采购计划明细的PurchasePlanId、LineNumber、MaterialCode已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.PurchasePlanItemId;
@@ -422,15 +443,14 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
                 }
                 else
                 {
-                    var isUniqueCreate_ix_takt_logistics_manufacturing_planning_purchase_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_mrp_purchase_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _purchasePlanItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.PurchasePlanId == x.PurchasePlanId
+                        x => x.PurchasePlanId == x.PurchasePlanId
                 && x.LineNumber == x.LineNumber
                 && x.MaterialCode == x.MaterialCode);
-                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_planning_purchase_plan_item_line_unique)
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_mrp_purchase_plan_item_line_unique)
                     {
-                        throw new TaktBusinessException("采购计划明细的CompanyCode、PurchasePlanId、LineNumber、MaterialCode已存在");
+                        throw new TaktBusinessException("采购计划明细的PurchasePlanId、LineNumber、MaterialCode已存在");
                     }
                     var child = childDto.Adapt<TaktPurchasePlanItem>();
                     child.Id = 0;
@@ -479,171 +499,295 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
     {
         var exp = Expressionable.Create<TaktPurchasePlan>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(keywords))
-                || SqlFunc.ToString(x.MaterialRequirementsPlanningId).Contains(keywords)
                 || (x.MaterialRequirementsPlanningCode != null && x.MaterialRequirementsPlanningCode.Contains(keywords))
-                || SqlFunc.ToString(x.ProductionPlanId).Contains(keywords)
                 || (x.ProductionPlanCode != null && x.ProductionPlanCode.Contains(keywords))
                 || (x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(keywords))
-                || SqlFunc.ToString(x.PlannerId).Contains(keywords)
                 || (x.PlanBy != null && x.PlanBy.Contains(keywords))
-                || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
-                || SqlFunc.ToString(x.ConvertedQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.ConvertedAmount).Contains(keywords)
-                || SqlFunc.ToString(x.PlanStatus).Contains(keywords)
-                || SqlFunc.ToString(x.ConvertedStatus).Contains(keywords)
                 || (x.PlanDescription != null && x.PlanDescription.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PlanDate).Contains(keywords)
-                || SqlFunc.ToString(x.PlanPeriodStart).Contains(keywords)
-                || SqlFunc.ToString(x.PlanPeriodEnd).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchasePlanCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(queryDto.PurchasePlanCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchasePlanCode))
+        {
+            var purchasePlanCode = queryDto.PurchasePlanCode;
+            exp = exp.And(x => x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(purchasePlanCode));
         }
 
         if (queryDto?.MaterialRequirementsPlanningId.HasValue == true)
         {
-            exp = exp.And(x => x.MaterialRequirementsPlanningId == queryDto.MaterialRequirementsPlanningId);
+            var materialRequirementsPlanningId = queryDto.MaterialRequirementsPlanningId.Value;
+            exp = exp.And(x => x.MaterialRequirementsPlanningId == materialRequirementsPlanningId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialRequirementsPlanningCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialRequirementsPlanningCode))
         {
-            exp = exp.And(x => x.MaterialRequirementsPlanningCode != null && x.MaterialRequirementsPlanningCode.Contains(queryDto.MaterialRequirementsPlanningCode));
+            var materialRequirementsPlanningCode = queryDto.MaterialRequirementsPlanningCode;
+            exp = exp.And(x => x.MaterialRequirementsPlanningCode != null && x.MaterialRequirementsPlanningCode.Contains(materialRequirementsPlanningCode));
         }
 
         if (queryDto?.ProductionPlanId.HasValue == true)
         {
-            exp = exp.And(x => x.ProductionPlanId == queryDto.ProductionPlanId);
+            var productionPlanId = queryDto.ProductionPlanId.Value;
+            exp = exp.And(x => x.ProductionPlanId == productionPlanId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionPlanCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductionPlanCode))
         {
-            exp = exp.And(x => x.ProductionPlanCode != null && x.ProductionPlanCode.Contains(queryDto.ProductionPlanCode));
+            var productionPlanCode = queryDto.ProductionPlanCode;
+            exp = exp.And(x => x.ProductionPlanCode != null && x.ProductionPlanCode.Contains(productionPlanCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroupCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseGroupCode))
         {
-            exp = exp.And(x => x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(queryDto.PurchaseGroupCode));
+            var purchaseGroupCode = queryDto.PurchaseGroupCode;
+            exp = exp.And(x => x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(purchaseGroupCode));
         }
 
         if (queryDto?.PlannerId.HasValue == true)
         {
-            exp = exp.And(x => x.PlannerId == queryDto.PlannerId);
+            var plannerId = queryDto.PlannerId.Value;
+            exp = exp.And(x => x.PlannerId == plannerId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlanBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlanBy))
         {
-            exp = exp.And(x => x.PlanBy != null && x.PlanBy.Contains(queryDto.PlanBy));
+            var planBy = queryDto.PlanBy;
+            exp = exp.And(x => x.PlanBy != null && x.PlanBy.Contains(planBy));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalQuantity == queryDto.TotalQuantity);
+            var totalQuantity = queryDto.TotalQuantity.Value;
+            exp = exp.And(x => x.TotalQuantity == totalQuantity);
         }
 
         if (queryDto?.TotalAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TotalAmount == queryDto.TotalAmount);
+            var totalAmount = queryDto.TotalAmount.Value;
+            exp = exp.And(x => x.TotalAmount == totalAmount);
         }
 
         if (queryDto?.ConvertedQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.ConvertedQuantity == queryDto.ConvertedQuantity);
+            var convertedQuantity = queryDto.ConvertedQuantity.Value;
+            exp = exp.And(x => x.ConvertedQuantity == convertedQuantity);
         }
 
         if (queryDto?.ConvertedAmount.HasValue == true)
         {
-            exp = exp.And(x => x.ConvertedAmount == queryDto.ConvertedAmount);
+            var convertedAmount = queryDto.ConvertedAmount.Value;
+            exp = exp.And(x => x.ConvertedAmount == convertedAmount);
         }
 
         if (queryDto?.PlanStatus.HasValue == true)
         {
-            exp = exp.And(x => x.PlanStatus == queryDto.PlanStatus);
+            var planStatus = queryDto.PlanStatus.Value;
+            exp = exp.And(x => x.PlanStatus == planStatus);
         }
 
         if (queryDto?.ConvertedStatus.HasValue == true)
         {
-            exp = exp.And(x => x.ConvertedStatus == queryDto.ConvertedStatus);
+            var convertedStatus = queryDto.ConvertedStatus.Value;
+            exp = exp.And(x => x.ConvertedStatus == convertedStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlanDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlanDescription))
         {
-            exp = exp.And(x => x.PlanDescription != null && x.PlanDescription.Contains(queryDto.PlanDescription));
+            var planDescription = queryDto.PlanDescription;
+            exp = exp.And(x => x.PlanDescription != null && x.PlanDescription.Contains(planDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.PlanDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlanDate >= queryDto.PlanDateStart);
+            var planDateStart = queryDto.PlanDateStart.Value;
+            exp = exp.And(x => x.PlanDate >= planDateStart);
         }
 
         if (queryDto?.PlanDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlanDate <= queryDto.PlanDateEnd);
+            var planDateEnd = queryDto.PlanDateEnd.Value;
+            exp = exp.And(x => x.PlanDate <= planDateEnd);
         }
 
         if (queryDto?.PlanPeriodStartStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlanPeriodStart >= queryDto.PlanPeriodStartStart);
+            var planPeriodStartStart = queryDto.PlanPeriodStartStart.Value;
+            exp = exp.And(x => x.PlanPeriodStart >= planPeriodStartStart);
         }
 
         if (queryDto?.PlanPeriodStartEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlanPeriodStart <= queryDto.PlanPeriodStartEnd);
+            var planPeriodStartEnd = queryDto.PlanPeriodStartEnd.Value;
+            exp = exp.And(x => x.PlanPeriodStart <= planPeriodStartEnd);
         }
 
         if (queryDto?.PlanPeriodEndStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlanPeriodEnd >= queryDto.PlanPeriodEndStart);
+            var planPeriodEndStart = queryDto.PlanPeriodEndStart.Value;
+            exp = exp.And(x => x.PlanPeriodEnd >= planPeriodEndStart);
         }
 
         if (queryDto?.PlanPeriodEndEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlanPeriodEnd <= queryDto.PlanPeriodEndEnd);
+            var planPeriodEndEnd = queryDto.PlanPeriodEndEnd.Value;
+            exp = exp.And(x => x.PlanPeriodEnd <= planPeriodEndEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPurchasePlanQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchasePlanCode))
+        {
+            return true;
+        }
+        if (queryDto.MaterialRequirementsPlanningId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialRequirementsPlanningCode))
+        {
+            return true;
+        }
+        if (queryDto.ProductionPlanId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductionPlanCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseGroupCode))
+        {
+            return true;
+        }
+        if (queryDto.PlannerId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlanBy))
+        {
+            return true;
+        }
+        if (queryDto.TotalQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ConvertedQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ConvertedAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlanStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ConvertedStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlanDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.PlanDateStart.HasValue || queryDto.PlanDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlanPeriodStartStart.HasValue || queryDto.PlanPeriodStartEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlanPeriodEndStart.HasValue || queryDto.PlanPeriodEndEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

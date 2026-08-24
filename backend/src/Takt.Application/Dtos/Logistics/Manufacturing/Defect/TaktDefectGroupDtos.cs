@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktDefectGroupDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DefectGroup 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDefectGroup 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktDefectGroupDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DefectGroupId { get; set; }
-
 
     /// <summary>
     /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
@@ -78,17 +77,17 @@ public class TaktDefectGroupDto : TaktCompanyDtoBase
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 
@@ -110,7 +109,7 @@ public class TaktDefectGroupQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -161,17 +160,17 @@ public class TaktDefectGroupQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -221,9 +220,8 @@ public class TaktDefectGroupCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -265,12 +263,12 @@ public class TaktDefectGroupCreateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 
@@ -324,9 +322,9 @@ public class TaktDefectGroupStatusDto
     public long DefectGroupId { get; set; }
 
     /// <summary>
-    /// 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "不良组状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int GroupStatus { get; set; } = 0;
 }
 
@@ -348,9 +346,9 @@ public class TaktDefectGroupSortDto
     public long DefectGroupId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -379,7 +377,7 @@ public class TaktDefectGroupTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -420,12 +418,12 @@ public class TaktDefectGroupTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -462,7 +460,7 @@ public class TaktDefectGroupImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -503,12 +501,12 @@ public class TaktDefectGroupImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -551,6 +549,11 @@ public class TaktDefectGroupExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
     /// </summary>
     public int DefectCategory { get; set; } = 0;
@@ -587,17 +590,17 @@ public class TaktDefectGroupExportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 

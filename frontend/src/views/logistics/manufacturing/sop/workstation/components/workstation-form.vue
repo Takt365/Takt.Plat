@@ -49,8 +49,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
                   show-count
                   :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.sopWorkstationId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -152,7 +151,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.workstationStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopworkstation.workstationstatus') })"
                 />
               </a-form-item>
@@ -243,6 +242,12 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (formFields.includes('plantCode') && (force || !target.plantCode)) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+  if (formFields.includes('relatedPlant') && (force || !target.relatedPlant)) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
@@ -312,7 +317,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.sopWorkstationId
     if (isCreate) {

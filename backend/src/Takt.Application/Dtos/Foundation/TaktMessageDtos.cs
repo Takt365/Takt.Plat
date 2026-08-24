@@ -36,31 +36,31 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public long MessageId { get; set; }
 
     /// <summary>
-    /// 发送者用户名
-    /// </summary>
-    public string FromUserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者昵称（由用户表 Nickname 解析，非消息表持久化字段）
+    /// 发送者用户名
     /// </summary>
-    public string? FromUserNickname { get; set; }
+    public string FromUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 接收者用户名
+    /// 发送者昵称（由用户表 NickName 解析，非消息表持久化字段）
     /// </summary>
-    public string ToUserName { get; set; } = string.Empty;
+    public string? FromUserNickName { get; set; }
 
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ToUserId { get; set; }
+
+    /// <summary>
+    /// 接收者用户名
+    /// </summary>
+    public string ToUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息标题
@@ -78,7 +78,7 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public string MessageType { get; set; } = "system";
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group_category DictValue）
+    /// 消息分组（字典 sys_message_group DictValue）
     /// </summary>
     public string MessageGroup { get; set; } = "message";
 
@@ -98,9 +98,14 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public int IsCc { get; set; } = 0;
 
     /// <summary>
-    /// 附件路径（JSON 或逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? MessageAttachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息扩展数据（JSON）
@@ -145,26 +150,26 @@ public class TaktMessageQueryDto : TaktPagedQuery
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 发送者用户名
-    /// </summary>
-    public string? FromUserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 发送者用户名
     /// </summary>
-    public string? ToUserName { get; set; } = string.Empty;
+    public string? FromUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
+
+    /// <summary>
+    /// 接收者用户名
+    /// </summary>
+    public string? ToUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息标题
@@ -212,9 +217,14 @@ public class TaktMessageQueryDto : TaktPagedQuery
     public int? IsCc { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON 或逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? MessageAttachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息扩展数据（JSON）
@@ -278,27 +288,27 @@ public class TaktMessageCreateDto
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 发送者用户名
-    /// </summary>
-    [Required(ErrorMessage = "发送者用户名不能为空")]
-    public string FromUserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名（单条创建必填，由 FluentValidation 校验；批量发送由服务端按 ToUserIds 解析）
+    /// 发送者用户名
     /// </summary>
-    public string ToUserName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "发送者用户名不能为空")]
+    public string FromUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
+
+    /// <summary>
+    /// 接收者用户名（单条创建必填，由 FluentValidation 校验；批量发送由服务端按 ToUserIds 解析）
+    /// </summary>
+    public string ToUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息标题
@@ -318,7 +328,7 @@ public class TaktMessageCreateDto
     public string MessageType { get; set; } = "system";
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group_category DictValue）
+    /// 消息分组（字典 sys_message_group DictValue）
     /// </summary>
     public string MessageGroup { get; set; } = "message";
 
@@ -338,9 +348,14 @@ public class TaktMessageCreateDto
     public int IsCc { get; set; } = 0;
 
     /// <summary>
-    /// 附件路径（JSON 或逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? MessageAttachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息扩展数据（JSON）
@@ -530,15 +545,15 @@ public class TaktMessageUnreadDto
 public class TaktMessageStatisticsDto
 {
     /// <summary>
-    /// 用户名（接收者）
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（接收者）
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 收件箱消息总数
@@ -586,26 +601,26 @@ public class TaktMessageTemplateDto
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 发送者用户名
-    /// </summary>
-    public string? FromUserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 发送者用户名
     /// </summary>
-    public string? ToUserName { get; set; } = string.Empty;
+    public string? FromUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
+
+    /// <summary>
+    /// 接收者用户名
+    /// </summary>
+    public string? ToUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息标题
@@ -643,9 +658,14 @@ public class TaktMessageTemplateDto
     public int? IsCc { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON 或逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? MessageAttachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息扩展数据（JSON）
@@ -696,26 +716,26 @@ public class TaktMessageImportDto
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 发送者用户名
-    /// </summary>
-    public string? FromUserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 发送者用户名
     /// </summary>
-    public string? ToUserName { get; set; } = string.Empty;
+    public string? FromUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
+
+    /// <summary>
+    /// 接收者用户名
+    /// </summary>
+    public string? ToUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息标题
@@ -753,9 +773,14 @@ public class TaktMessageImportDto
     public int? IsCc { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON 或逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? MessageAttachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息扩展数据（JSON）
@@ -801,26 +826,26 @@ public class TaktMessageExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发送者用户名
-    /// </summary>
-    public string FromUserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FromUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 发送者用户名
     /// </summary>
-    public string ToUserName { get; set; } = string.Empty;
+    public string FromUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ToUserId { get; set; }
+
+    /// <summary>
+    /// 接收者用户名
+    /// </summary>
+    public string ToUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息标题
@@ -838,7 +863,7 @@ public class TaktMessageExportDto
     public string MessageType { get; set; } = "system";
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group_category DictValue）
+    /// 消息分组（字典 sys_message_group DictValue）
     /// </summary>
     public string MessageGroup { get; set; } = "message";
 
@@ -858,9 +883,14 @@ public class TaktMessageExportDto
     public int IsCc { get; set; } = 0;
 
     /// <summary>
-    /// 附件路径（JSON 或逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? MessageAttachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息扩展数据（JSON）

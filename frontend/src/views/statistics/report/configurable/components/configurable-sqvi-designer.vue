@@ -14,7 +14,7 @@
     :rules="rules"
     layout="horizontal"
     label-align="right"
-    class="configurable-sqvi-designer-form"
+    class="configurable-sqvi-designer-form takt-generated-form"
   >
     <div class="flex flex-col gap-4">
     <a-steps
@@ -31,9 +31,6 @@
     </a-steps>
     <!-- 步骤：基本信息（单表模式含选表；表连接模式仅选类型） -->
     <section v-show="currentStepId === 'basic'" class="rounded border border-border bg-container">
-      <div class="border-b border-border bg-page px-4 py-2 text-sm font-semibold text-text">
-        {{ basicStepTitle }}
-      </div>
       <div class="p-4">
         <a-row :gutter="24">
           <a-col :span="12">
@@ -47,8 +44,28 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
+            <a-form-item :label="t('common.page.entity.plantcode')" name="plantCode">
+              <a-input v-model:value="formState.plantCode" size="small" disabled />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
             <a-form-item :label="t('common.page.entity.culturecode')" name="cultureCode">
               <a-input v-model:value="formState.cultureCode" size="small" disabled />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item
+              v-if="!formData?.configurableId"
+              :label="t('common.page.form.numberingRule')"
+              name="numberingRuleCode"
+            >
+              <TaktSelect
+                v-model:value="formState.numberingRuleCode"
+                api-url="TaktNumberings/options"
+                :api-params="{ documentType: 'SQVI报表' }"
+                :placeholder="t('common.page.form.placeholder.selectonly')"
+                size="small"
+              />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -56,8 +73,9 @@
               <a-input
                 v-model:value="formState.reportCode"
                 size="small"
+                :placeholder="t('common.page.form.numberingCodePreview')"
                 :disabled="!!formData?.configurableId"
-                allow-clear
+                readonly
               />
             </a-form-item>
           </a-col>
@@ -93,7 +111,7 @@
             <a-form-item :label="t('entity.configurable.distinctrows')" name="distinctRows">
               <TaktSelect
                 v-model:value="formState.distinctRows"
-                dict-type="sys_yes_no_type"
+                dict-type="sys_yes_no"
                 :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.distinctrows') })"
                 size="small"
               />
@@ -113,7 +131,7 @@
             <a-form-item :label="t('entity.configurable.ispublic')" name="isPublic">
               <TaktSelect
                 v-model:value="formState.isPublic"
-                dict-type="sys_is_public_type"
+                dict-type="sys_public_type"
                 :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.ispublic') })"
                 size="small"
               />
@@ -123,7 +141,7 @@
             <a-form-item :label="t('entity.configurable.reportstatus')" name="reportStatus">
               <TaktSelect
                 v-model:value="formState.reportStatus"
-                dict-type="sys_normal_disable_status"
+                dict-type="sys_normal_disable"
                 :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.reportstatus') })"
                 size="small"
               />
@@ -135,37 +153,103 @@
             </a-form-item>
           </a-col>
         </a-row>
-        <div class="mt-2 text-sm font-medium text-text">
-          {{ t('statistics.report.configurable.page.sqvi.section.datasource') }}
+        <div class="mt-4 border-t border-border pt-4">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item :label="t('statistics.report.configurable.page.sqvi.section.datasource')">
+                <div class="flex flex-col gap-1">
+                  <a-select
+                    v-model:value="sourceType"
+                    size="small"
+                    class="w-48"
+                    :disabled="sourceTypeLocked"
+                    :options="sourceTypeOptions"
+                    @change="handleSourceTypeChange"
+                  />
+                  <p v-if="sourceTypeLocked" class="text-xs text-text-secondary">
+                    {{ t('statistics.report.configurable.page.sqvi.sourcetype.locked') }}
+                  </p>
+                </div>
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <!-- 单表：基本信息步选表；表连接：仅选类型，下一步进入表连接设计 -->
+          <template v-if="isSingleTableMode">
+            <a-row :gutter="24">
+              <a-col :span="12">
+                <a-form-item :label="t('statistics.report.configurable.page.field.tenant')">
+                  <a-select
+                    v-model:value="primaryCatalogTenant"
+                    :loading="databaseInfoLoading"
+                    :disabled="sourceTypeLocked"
+                    show-search
+                    option-filter-prop="label"
+                    size="small"
+                    class="w-full"
+                    @change="handlePrimaryTenantChange"
+                  >
+                    <a-select-option
+                      v-for="item in databaseInfoList"
+                      :key="item.tenantCode"
+                      :value="item.tenantCode"
+                      :label="`${item.displayName} (${item.tenantCode})`"
+                    >
+                      {{ item.displayName }} ({{ item.tenantCode }})
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item :label="t('statistics.report.configurable.page.field.database')">
+                  <span class="text-sm text-text">{{ resolveDatabaseDisplayName(primaryCatalogTenant) }}</span>
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="24">
+              <a-col :span="24">
+                <a-form-item :label="t('statistics.report.configurable.page.sqvi.tableview')">
+                  <a-select
+                    v-model:value="primaryTableName"
+                    :loading="isTablesLoading(primaryCatalogTenant)"
+                    :disabled="sourceTypeLocked"
+                    show-search
+                    option-filter-prop="label"
+                    allow-clear
+                    size="small"
+                    class="w-full"
+                    :placeholder="t('common.page.form.placeholder.select', { field: t('statistics.report.configurable.page.sqvi.tableview') })"
+                    @change="handlePrimaryTableChange"
+                  >
+                    <a-select-option
+                      v-for="tbl in primaryTableOptions"
+                      :key="tbl.tableName"
+                      :value="tbl.tableName"
+                      :label="tbl.tableName"
+                    >
+                      {{ tbl.tableName }}{{ tbl.tableComment ? ` - ${tbl.tableComment}` : '' }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </template>
         </div>
-        <div class="flex flex-col gap-1 py-2 pl-6">
-          <div class="flex items-center gap-4">
-            <a-select
-              v-model:value="sourceType"
-              size="small"
-              class="w-48"
-              :disabled="sourceTypeLocked"
-              :options="sourceTypeOptions"
-              @change="handleSourceTypeChange"
-            />
-          </div>
-          <p v-if="sourceTypeLocked" class="text-xs text-text-secondary">
-            {{ t('statistics.report.configurable.page.sqvi.sourcetype.locked') }}
-          </p>
-        </div>
-        <!-- 单表：基本信息步选表；表连接：仅选类型，下一步进入表连接设计 -->
-        <template v-if="isSingleTableMode">
-          <div class="mt-4 border-t border-border pt-4">
-            <div class="flex flex-wrap items-center gap-3 py-2 text-xs text-text-secondary">
-              <span>{{ t('statistics.report.configurable.page.field.tenant') }}</span>
+      </div>
+    </section>
+    <!-- 步骤：表连接设计（仅表连接模式） -->
+    <section v-show="currentStepId === 'join'" class="rounded border border-border bg-container">
+      <div class="p-4">
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-item :label="t('statistics.report.configurable.page.field.tenant')">
               <a-select
                 v-model:value="primaryCatalogTenant"
                 :loading="databaseInfoLoading"
-                :disabled="sourceTypeLocked"
                 show-search
                 option-filter-prop="label"
                 size="small"
-                class="w-40"
+                class="w-full"
                 @change="handlePrimaryTenantChange"
               >
                 <a-select-option
@@ -177,190 +261,134 @@
                   {{ item.displayName }} ({{ item.tenantCode }})
                 </a-select-option>
               </a-select>
-              <span>{{ t('statistics.report.configurable.page.field.database') }}</span>
-              <span class="text-text">{{ resolveDatabaseDisplayName(primaryCatalogTenant) }}</span>
-            </div>
-            <div class="mt-2 text-sm font-medium text-text">
-              {{ t('statistics.report.configurable.page.sqvi.section.tabledata') }}
-            </div>
-            <div class="flex flex-wrap items-center gap-4 py-2 pl-6">
-              <span class="text-sm text-text">
-                {{ t('statistics.report.configurable.page.sqvi.tableview') }}
-              </span>
-              <a-select
-                v-model:value="primaryTableName"
-                :loading="isTablesLoading(primaryCatalogTenant)"
-                :disabled="sourceTypeLocked"
-                show-search
-                option-filter-prop="label"
-                allow-clear
-                size="small"
-                class="min-w-[280px] max-w-2xl flex-1"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('statistics.report.configurable.page.sqvi.tableview') })"
-                @change="handlePrimaryTableChange"
-              >
-                <a-select-option
-                  v-for="tbl in primaryTableOptions"
-                  :key="tbl.tableName"
-                  :value="tbl.tableName"
-                  :label="tbl.tableName"
-                >
-                  {{ tbl.tableName }}{{ tbl.tableComment ? ` - ${tbl.tableComment}` : '' }}
-                </a-select-option>
-              </a-select>
-            </div>
-          </div>
-        </template>
-      </div>
-    </section>
-    <!-- 步骤：表连接设计（仅表连接模式） -->
-    <section v-show="currentStepId === 'join'" class="rounded border border-border bg-container">
-      <div class="border-b border-border bg-page px-4 py-2 text-sm font-semibold text-text">
-        {{ t('statistics.report.configurable.page.sqvi.steps.joindesign') }}
-      </div>
-      <div class="p-4">
-        <div class="flex flex-wrap items-center gap-3 py-2 text-xs text-text-secondary">
-          <span>{{ t('statistics.report.configurable.page.field.tenant') }}</span>
-          <a-select
-            v-model:value="primaryCatalogTenant"
-            :loading="databaseInfoLoading"
-            show-search
-            option-filter-prop="label"
-            size="small"
-            class="w-40"
-            @change="handlePrimaryTenantChange"
-          >
-            <a-select-option
-              v-for="item in databaseInfoList"
-              :key="item.tenantCode"
-              :value="item.tenantCode"
-              :label="`${item.displayName} (${item.tenantCode})`"
-            >
-              {{ item.displayName }} ({{ item.tenantCode }})
-            </a-select-option>
-          </a-select>
-          <span>{{ t('statistics.report.configurable.page.field.database') }}</span>
-          <span class="text-text">{{ resolveDatabaseDisplayName(primaryCatalogTenant) }}</span>
-        </div>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item :label="t('statistics.report.configurable.page.field.database')">
+              <span class="text-sm text-text">{{ resolveDatabaseDisplayName(primaryCatalogTenant) }}</span>
+            </a-form-item>
+          </a-col>
+        </a-row>
         <div class="mt-2 text-sm font-medium text-text">
           {{ t('statistics.report.configurable.page.sqvi.section.tabledata') }}
         </div>
-        <div class="flex flex-wrap items-center gap-4 py-2 pl-6">
-          <span class="w-20 shrink-0 text-sm text-text">
-            {{ t('statistics.report.configurable.page.sqvi.join.primarytable') }}
-          </span>
-          <a-select
-            v-model:value="primaryTableName"
-            :loading="isTablesLoading(primaryCatalogTenant)"
-            show-search
-            option-filter-prop="label"
-            allow-clear
-            size="small"
-            class="min-w-[240px] max-w-xl flex-1"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('statistics.report.configurable.page.sqvi.tableview') })"
-            @change="handlePrimaryTableChange"
-          >
-            <a-select-option
-              v-for="tbl in primaryTableOptions"
-              :key="tbl.tableName"
-              :value="tbl.tableName"
-              :label="tbl.tableName"
-            >
-              {{ tbl.tableName }}{{ tbl.tableComment ? ` - ${tbl.tableComment}` : '' }}
-            </a-select-option>
-          </a-select>
-          <span class="text-sm text-text-secondary">{{ t('entity.configurablesource.sourcealias') }}</span>
-          <a-input v-model:value="primaryAlias" size="small" class="w-16" allow-clear />
-        </div>
-        <div class="flex flex-wrap items-center gap-4 py-2 pl-6">
-          <span class="w-20 shrink-0 text-sm text-text">
-            {{ t('statistics.report.configurable.page.sqvi.join.jointable') }}
-          </span>
-          <a-select
-            v-model:value="joinTableName"
-            :loading="isTablesLoading(primaryCatalogTenant)"
-            show-search
-            option-filter-prop="label"
-            allow-clear
-            size="small"
-            class="min-w-[240px] max-w-xl flex-1"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('statistics.report.configurable.page.sqvi.join.jointable') })"
-            @change="handleJoinTableChange"
-          >
-            <a-select-option
-              v-for="tbl in primaryTableOptions"
-              :key="tbl.tableName"
-              :value="tbl.tableName"
-              :label="tbl.tableName"
-            >
-              {{ tbl.tableName }}{{ tbl.tableComment ? ` - ${tbl.tableComment}` : '' }}
-            </a-select-option>
-          </a-select>
-          <span class="text-sm text-text-secondary">{{ t('entity.configurablesource.sourcealias') }}</span>
-          <a-input v-model:value="joinTableAlias" size="small" class="w-16" allow-clear />
-        </div>
-        <div class="flex flex-wrap items-center gap-4 py-2 pl-6">
-          <span class="w-20 shrink-0 text-sm text-text">
-            {{ t('entity.configurablejoin.jointype') }}
-          </span>
-          <a-select
-            v-model:value="joinType"
-            size="small"
-            class="w-40"
-            :options="joinTypeOptions"
-          />
-        </div>
-        <div class="flex flex-wrap items-center gap-3 py-2 pl-6">
-          <span class="w-20 shrink-0 text-sm text-text">
-            {{ t('statistics.report.configurable.page.sqvi.join.condition') }}
-          </span>
-          <a-select
-            v-model:value="joinLeftColumn"
-            :loading="primaryColumnsLoading"
-            show-search
-            option-filter-prop="label"
-            allow-clear
-            size="small"
-            class="min-w-[160px]"
-            :placeholder="primaryAlias + '.column'"
-          >
-            <a-select-option
-              v-for="col in primaryColumnOptions"
-              :key="col.databaseColumnName"
-              :value="col.databaseColumnName"
-              :label="col.databaseColumnName"
-            >
-              {{ primaryAlias }}.{{ col.databaseColumnName }}
-            </a-select-option>
-          </a-select>
-          <span class="text-sm text-text-secondary">=</span>
-          <a-select
-            v-model:value="joinRightColumn"
-            :loading="joinColumnsLoading"
-            show-search
-            option-filter-prop="label"
-            allow-clear
-            size="small"
-            class="min-w-[160px]"
-            :placeholder="joinTableAlias + '.column'"
-          >
-            <a-select-option
-              v-for="col in joinColumnOptions"
-              :key="col.databaseColumnName"
-              :value="col.databaseColumnName"
-              :label="col.databaseColumnName"
-            >
-              {{ joinTableAlias }}.{{ col.databaseColumnName }}
-            </a-select-option>
-          </a-select>
-        </div>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-item :label="t('statistics.report.configurable.page.sqvi.join.primarytable')">
+              <div class="flex flex-wrap items-center gap-2">
+                <a-select
+                  v-model:value="primaryTableName"
+                  :loading="isTablesLoading(primaryCatalogTenant)"
+                  show-search
+                  option-filter-prop="label"
+                  allow-clear
+                  size="small"
+                  class="min-w-0 flex-1"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('statistics.report.configurable.page.sqvi.tableview') })"
+                  @change="handlePrimaryTableChange"
+                >
+                  <a-select-option
+                    v-for="tbl in primaryTableOptions"
+                    :key="tbl.tableName"
+                    :value="tbl.tableName"
+                    :label="tbl.tableName"
+                  >
+                    {{ tbl.tableName }}{{ tbl.tableComment ? ` - ${tbl.tableComment}` : '' }}
+                  </a-select-option>
+                </a-select>
+                <span class="shrink-0 text-sm text-text-secondary">{{ t('entity.configurablesource.sourcealias') }}</span>
+                <a-input v-model:value="primaryAlias" size="small" class="w-16" allow-clear />
+              </div>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item :label="t('statistics.report.configurable.page.sqvi.join.jointable')">
+              <div class="flex flex-wrap items-center gap-2">
+                <a-select
+                  v-model:value="joinTableName"
+                  :loading="isTablesLoading(primaryCatalogTenant)"
+                  show-search
+                  option-filter-prop="label"
+                  allow-clear
+                  size="small"
+                  class="min-w-0 flex-1"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('statistics.report.configurable.page.sqvi.join.jointable') })"
+                  @change="handleJoinTableChange"
+                >
+                  <a-select-option
+                    v-for="tbl in primaryTableOptions"
+                    :key="tbl.tableName"
+                    :value="tbl.tableName"
+                    :label="tbl.tableName"
+                  >
+                    {{ tbl.tableName }}{{ tbl.tableComment ? ` - ${tbl.tableComment}` : '' }}
+                  </a-select-option>
+                </a-select>
+                <span class="shrink-0 text-sm text-text-secondary">{{ t('entity.configurablesource.sourcealias') }}</span>
+                <a-input v-model:value="joinTableAlias" size="small" class="w-16" allow-clear />
+              </div>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item :label="t('entity.configurablejoin.jointype')">
+              <a-select
+                v-model:value="joinType"
+                size="small"
+                class="w-full"
+                :options="joinTypeOptions"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item :label="t('statistics.report.configurable.page.sqvi.join.condition')">
+              <div class="flex flex-wrap items-center gap-2">
+                <a-select
+                  v-model:value="joinLeftColumn"
+                  :loading="primaryColumnsLoading"
+                  show-search
+                  option-filter-prop="label"
+                  allow-clear
+                  size="small"
+                  class="min-w-[160px] flex-1"
+                  :placeholder="primaryAlias + '.column'"
+                >
+                  <a-select-option
+                    v-for="col in primaryColumnOptions"
+                    :key="col.databaseColumnName"
+                    :value="col.databaseColumnName"
+                    :label="col.databaseColumnName"
+                  >
+                    {{ primaryAlias }}.{{ col.databaseColumnName }}
+                  </a-select-option>
+                </a-select>
+                <span class="shrink-0 text-sm text-text-secondary">=</span>
+                <a-select
+                  v-model:value="joinRightColumn"
+                  :loading="joinColumnsLoading"
+                  show-search
+                  option-filter-prop="label"
+                  allow-clear
+                  size="small"
+                  class="min-w-[160px] flex-1"
+                  :placeholder="joinTableAlias + '.column'"
+                >
+                  <a-select-option
+                    v-for="col in joinColumnOptions"
+                    :key="col.databaseColumnName"
+                    :value="col.databaseColumnName"
+                    :label="col.databaseColumnName"
+                  >
+                    {{ joinTableAlias }}.{{ col.databaseColumnName }}
+                  </a-select-option>
+                </a-select>
+              </div>
+            </a-form-item>
+          </a-col>
+        </a-row>
       </div>
     </section>
     <!-- 步骤：数据列清单（单表 / 表连接共用） -->
     <section v-show="currentStepId === 'fields'" class="rounded border border-border bg-container">
-      <div class="border-b border-border bg-page px-4 py-2 text-sm font-semibold text-text">
-        {{ t('statistics.report.configurable.page.sqvi.steps.datalist') }}
-      </div>
       <div class="p-2">
         <a-spin :spinning="fieldTreeLoading">
           <a-empty
@@ -615,6 +643,7 @@ import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 import { useConfigurableSchemaCatalog } from '../composables/use-configurable-schema-catalog'
 import { useConfigurableReportCategory } from '../composables/use-configurable-report-category'
+import { useTaktFormNumbering } from '@/composables/use-takt-form-numbering'
 
 /** 字段树节点类型 */
 type SqviFieldTreeNodeType = 'root' | 'source' | 'column'
@@ -647,6 +676,13 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 主表表单模型（TaktConfigurable） */
 const formState = reactive<Record<string, any>>({})
+/** 是否编辑态 */
+const isEditMode = computed(() => !!props.formData?.configurableId)
+useTaktFormNumbering({
+  formState,
+  isEdit: isEditMode,
+  businessCodeField: 'reportCode',
+})
 /** 报表业务域 / 子分类（菜单联动） */
 const { moduleOptions, subCategoryOptions } = useConfigurableReportCategory(
   toRef(formState, 'reportDomain'),
@@ -762,6 +798,7 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
 }
 
 /**
@@ -772,8 +809,11 @@ function applyCreateFieldDefaults(target: Record<string, unknown>) {
   if (target.reportDomain == null || target.reportDomain === '') {
     target.reportDomain = 9
   }
+  if (!String(target.numberingRuleCode ?? '').trim()) {
+    target.numberingRuleCode = 'ST-RPT'
+  }
   if (target.distinctRows == null || target.distinctRows === '') {
-    target.distinctRows = 0
+    target.distinctRows = 1
   }
   if (target.maxExportRows == null || target.maxExportRows === '') {
     target.maxExportRows = 500
@@ -840,13 +880,17 @@ function buildSubmitPayload() {
     normalizeRowsForSingleTable()
     pruneSourcesForSingleTable()
   }
+  normalizeFieldRelatedRowOrder()
   const payload: Record<string, unknown> = {
     ...formState,
     sources: sourceRows.value.map(({ __rowKey, __catalogTenantCode, ...rest }) => rest),
     joins: isSingleTableMode.value
       ? []
       : joinRows.value.map(({ __rowKey, ...rest }) => rest),
-    fields: fieldRows.value.map(({ __rowKey, ...rest }) => rest),
+    fields: fieldRows.value.map(({ __rowKey, ...rest }, index) => ({
+      ...rest,
+      sortOrder: index,
+    })),
     selections: selectionRows.value.map(({ __rowKey, ...rest }, index) => ({
       ...rest,
       sortOrder: index + 1,
@@ -856,18 +900,43 @@ function buildSubmitPayload() {
     orderBys: orderByRows.value.map(({ __rowKey, ...rest }) => rest),
   }
   delete payload.ExtField
+  delete payload.plantCode
   if (!props.formData?.configurableId) {
     delete payload.sortOrder
+  } else if (payload.numberingRuleCode !== undefined) {
+    delete payload.numberingRuleCode
+  }
+  if (payload.numberingRuleCode !== undefined && !String(payload.numberingRuleCode ?? '').trim()) {
+    delete payload.numberingRuleCode
   }
   return payload
 }
 
 /** 表单校验规则 */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  numberingRuleCode: [{
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingRuleRequired'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],
   reportCode: [{
-    required: true,
-    message: t('common.page.form.placeholder.required', { field: t('entity.configurable.reportcode') }),
-    trigger: 'blur',
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingCodePreview'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
   }],
   reportName: [{
     required: true,
@@ -947,12 +1016,6 @@ function resetWizardPickerState(): void {
   clearJoinPickerState()
   currentStepIndex.value = 0
 }
-
-/** 第一步标题（SQVI {code}：基本信息） */
-const basicStepTitle = computed(() => {
-  const code = String(formState.reportCode ?? '').trim() || '—'
-  return t('statistics.report.configurable.page.sqvi.createstep', { code })
-})
 
 /** 是否为表连接模式 */
 const isJoinMode = computed(() => sourceType.value === 'join')
@@ -1148,7 +1211,7 @@ const groupByColumnsDisplay = computed(() => {
   }
   columns.push(
     { title: t('entity.configurablegroupby.columnname'), key: 'columnName', width: 160 },
-    { title: t('common.page.entity.action'), key: '__action', width: 72 }
+    { title: t('common.action.operation'), key: '__action', width: 72 }
   )
   return columns
 })
@@ -1166,7 +1229,7 @@ const orderByColumnsDisplay = computed(() => {
   columns.push(
     { title: t('entity.configurableorderby.columnname'), key: 'columnName', width: 160 },
     { title: t('entity.configurableorderby.sortdirection'), key: 'sortDirection', width: 100 },
-    { title: t('common.page.entity.action'), key: '__action', width: 72 }
+    { title: t('common.action.operation'), key: '__action', width: 72 }
   )
   return columns
 })
@@ -1240,12 +1303,14 @@ async function goNextStep(): Promise<void> {
  */
 function validateStepBeforeLeave(stepId: SqviWizardStepId): boolean {
   if (stepId === 'basic') {
+    if (!isEditMode.value && !String(formState.numberingRuleCode ?? '').trim()) {
+      message.warning(t('common.page.form.numberingRuleRequired'))
+      return false
+    }
     const reportCode = String(formState.reportCode ?? '').trim()
     const reportName = String(formState.reportName ?? '').trim()
     if (!reportCode) {
-      message.warning(
-        t('common.page.form.placeholder.required', { field: t('entity.configurable.reportcode') })
-      )
+      message.warning(t('common.page.form.numberingCodePreview'))
       return false
     }
     if (!reportName) {
@@ -1559,6 +1624,16 @@ function resolveFieldTreeSourceRows(): Array<Record<string, unknown>> {
   ensurePrimaryCatalogTenantFromContext()
   if (sourceRows.value.length > 0) {
     return sourceRows.value
+      .map((row, index) => ({ row, index }))
+      .sort((a, b) => {
+        const primaryA = Number(a.row.isPrimary) === 1 ? 0 : 1
+        const primaryB = Number(b.row.isPrimary) === 1 ? 0 : 1
+        if (primaryA !== primaryB) {
+          return primaryA - primaryB
+        }
+        return a.index - b.index
+      })
+      .map(({ row }) => row)
   }
   const tenantCode = resolvePrimaryCatalogTenant()
   const tableName = primaryTableName.value?.trim()
@@ -1631,6 +1706,7 @@ async function ensureFieldTreeColumnsLoaded(): Promise<void> {
         await loadColumnsForTable(tenant, tableName)
       })
     )
+    normalizeFieldRelatedRowOrder()
   } catch {
     message.error(t('common.feedback.load.data.failed'))
   } finally {
@@ -1712,6 +1788,107 @@ function isFieldSelectionChecked(sourceAlias: string, columnName: string): boole
 }
 
 /**
+ * 解析列在实体属性清单中的序号（与 schema API 返回顺序一致）
+ * @param tenantCode 租户编码
+ * @param tableName 物理表名
+ * @param columnName 列名
+ * @returns 序号；未找到时返回极大值
+ */
+function resolveEntityColumnIndex(tenantCode: string, tableName: string, columnName: string): number {
+  const columns = getCachedColumns(tenantCode, tableName)
+  const index = columns.findIndex(
+    (col) => col.databaseColumnName.toLowerCase() === columnName.toLowerCase()
+  )
+  return index >= 0 ? index : Number.MAX_SAFE_INTEGER
+}
+
+/**
+ * 解析数据源行在字段树中的顺序（主表优先，其余按 sourceRows 顺序）
+ * @param row 子表行
+ * @returns 排序权重
+ */
+function resolveSourceRowOrder(row: Record<string, unknown>): number {
+  if (isSingleTableMode.value) {
+    return 0
+  }
+  const alias = String(row.sourceAlias ?? '').trim()
+  const sources = resolveFieldTreeSourceRows()
+  const index = sources.findIndex((source) => String(source.sourceAlias ?? '').trim() === alias)
+  return index >= 0 ? index : Number.MAX_SAFE_INTEGER
+}
+
+/**
+ * 解析子表行所属物理表（用于列序对照）
+ * @param row 子表行
+ * @returns 租户与表名；无法解析时 null
+ */
+function resolveRowTableMeta(row: Record<string, unknown>): { tenantCode: string; tableName: string } | null {
+  if (isSingleTableMode.value) {
+    const primary = resolvePrimarySourceRow() ?? sourceRows.value[0]
+    if (!primary) {
+      return null
+    }
+    const tenantCode = String(primary.__catalogTenantCode ?? primaryCatalogTenant.value).trim()
+    const tableName = String(primary.tableName ?? '').trim()
+    if (!tenantCode || !tableName) {
+      return null
+    }
+    return { tenantCode, tableName }
+  }
+  const alias = String(row.sourceAlias ?? '').trim()
+  const source = sourceRows.value.find((item) => String(item.sourceAlias ?? '').trim() === alias)
+  if (!source) {
+    return null
+  }
+  const tenantCode = String(source.__catalogTenantCode ?? primaryCatalogTenant.value).trim()
+  const tableName = String(source.tableName ?? '').trim()
+  if (!tenantCode || !tableName) {
+    return null
+  }
+  return { tenantCode, tableName }
+}
+
+/**
+ * 按数据源与实体列声明顺序排序行
+ * @param rows 待排序行
+ * @returns 新数组（不修改原引用顺序外的对象）
+ */
+function sortRowsByEntityColumnOrder<T extends Record<string, unknown>>(rows: readonly T[]): T[] {
+  return [...rows].sort((a, b) => {
+    const sourceOrderA = resolveSourceRowOrder(a)
+    const sourceOrderB = resolveSourceRowOrder(b)
+    if (sourceOrderA !== sourceOrderB) {
+      return sourceOrderA - sourceOrderB
+    }
+    const tableA = resolveRowTableMeta(a)
+    const tableB = resolveRowTableMeta(b)
+    const columnA = String(a.columnName ?? '').trim()
+    const columnB = String(b.columnName ?? '').trim()
+    if (!tableA || !tableB) {
+      return columnA.localeCompare(columnB)
+    }
+    const ordA = resolveEntityColumnIndex(tableA.tenantCode, tableA.tableName, columnA)
+    const ordB = resolveEntityColumnIndex(tableB.tenantCode, tableB.tableName, columnB)
+    if (ordA !== ordB) {
+      return ordA - ordB
+    }
+    return columnA.localeCompare(columnB)
+  })
+}
+
+/** 将输出列/选择屏幕列按实体列序重排并刷新 sortOrder */
+function normalizeFieldRelatedRowOrder(): void {
+  fieldRows.value = sortRowsByEntityColumnOrder(fieldRows.value)
+  fieldRows.value.forEach((row, index) => {
+    row.sortOrder = index
+  })
+  selectionRows.value = sortRowsByEntityColumnOrder(selectionRows.value)
+  selectionRows.value.forEach((row, index) => {
+    row.sortOrder = index + 1
+  })
+}
+
+/**
  * 解析列元数据
  * @param sourceAlias 数据源别名
  * @param columnName 列名
@@ -1772,11 +1949,13 @@ function toggleFieldOutput(node: SqviFieldTreeNode, checked: boolean): void {
       sortOrder: fieldRows.value.length,
       ExtField: '',
     })
+    normalizeFieldRelatedRowOrder()
     return
   }
   if (existingIndex >= 0) {
     fieldRows.value.splice(existingIndex, 1)
   }
+  normalizeFieldRelatedRowOrder()
 }
 
 /**
@@ -1816,11 +1995,13 @@ function toggleFieldSelection(node: SqviFieldTreeNode, checked: boolean): void {
       isRequired: 0,
       sortOrder: selectionRows.value.length + 1,
     })
+    normalizeFieldRelatedRowOrder()
     return
   }
   if (existingIndex >= 0) {
     selectionRows.value.splice(existingIndex, 1)
   }
+  normalizeFieldRelatedRowOrder()
 }
 
 /**
@@ -2294,10 +2475,15 @@ watch(wizardSteps, (steps) => {
 })
 
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [
+    tenantStore.tenantCode,
+    tenantStore.companyCode,
+    tenantStore.currentCompanyRelatedPlant,
+    userStore.userInfo?.companyDefaultCulture,
+  ] as const,
   () => {
+    applyScopeDefaults(formState, !props.formData?.configurableId)
     if (!props.formData?.configurableId) {
-      applyScopeDefaults(formState, true)
       ensurePrimaryCatalogTenantFromContext()
     }
   }

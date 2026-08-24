@@ -77,7 +77,7 @@ public class TaktExchangeRate : TaktTenantCoreEntityBase
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "exchange_rate_status", ColumnDescription = "汇率状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ExchangeRateStatus { get; set; } = 1;

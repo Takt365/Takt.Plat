@@ -150,7 +150,7 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "delivery_address", ColumnDescription = "交货地址", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? DeliveryAddress { get; set; }
     /// <summary>
-    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "order_status", ColumnDescription = "订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int OrderStatus { get; set; } = 1;

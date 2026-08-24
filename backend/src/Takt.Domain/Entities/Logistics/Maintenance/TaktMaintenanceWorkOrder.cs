@@ -161,7 +161,7 @@ public class TaktMaintenanceWorkOrder : TaktApprovalEntityBase
     /// <summary>
     /// 结算成本中心编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "结算成本中心编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "结算成本中心编码", ColumnDataType = "varchar", Length = 6, IsNullable = true)]
     public string? CostCenterCode { get; set; }
 
     /// <summary>
@@ -268,7 +268,7 @@ public class TaktMaintenanceWorkOrder : TaktApprovalEntityBase
     public string? AcceptedSummary { get; set; }
 
     /// <summary>
-    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_history_archived", ColumnDescription = "是否已归档履历", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsHistoryArchived { get; set; } = 0;

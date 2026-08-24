@@ -84,10 +84,17 @@ public class TaktEmployeeOnboarding : TaktCompanyEntityBase
     // ========================================
 
     /// <summary>
+    /// 员工主档（多对一；建档回填后可有值）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
+
+    /// <summary>
     /// 录用信息
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(OfferId))]
     public TaktTalentOffer? Offer { get; set; }
+
     /// <summary>
     /// 入职上岗单
     /// </summary>

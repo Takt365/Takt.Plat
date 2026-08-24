@@ -34,7 +34,7 @@ export const SOPDOC_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'select',
+  plantCode: 'optional',
   sopCode: 'required',
   sopName: 'required',
   materialCode: 'select',

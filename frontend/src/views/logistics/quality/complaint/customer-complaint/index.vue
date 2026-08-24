@@ -74,31 +74,7 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'complaintMethod'">
-          <TaktDictTag
-            :value="getCustomerComplaintDictValue(record, 'complaintMethod')"
-            dict-type="logistics_quality_complaint_method"
-          />
-        </template>
-        <template v-else-if="column.key === 'complaintType'">
-          <TaktDictTag
-            :value="getCustomerComplaintDictValue(record, 'complaintType')"
-            dict-type="logistics_quality_complaint_type"
-          />
-        </template>
-        <template v-else-if="column.key === 'complaintLevel'">
-          <TaktDictTag
-            :value="getCustomerComplaintDictValue(record, 'complaintLevel')"
-            dict-type="logistics_quality_complaint_level"
-          />
-        </template>
-        <template v-else-if="column.key === 'customerSatisfaction'">
-          <TaktDictTag
-            :value="getCustomerComplaintDictValue(record, 'customerSatisfaction')"
-            dict-type="logistics_quality_customer_satisfaction"
-          />
-        </template>
-        <template v-else-if="column.key === 'complaintStatus'">
+        <template v-if="column.key === 'complaintStatus'">
           <TaktDictTag
             :value="getCustomerComplaintDictValue(record, 'complaintStatus')"
             dict-type="logistics_quality_complaint_status"
@@ -141,304 +117,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('customerComplaintCode')">
-      <a-form-item :label="pi.queryLabel('customerComplaintCode')">
-        <a-input
-          v-model:value="advancedQueryForm.customerComplaintCode"
-          :placeholder="pi.queryPh('customerComplaintCode', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerId')">
-      <a-form-item :label="pi.queryLabel('customerId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.customerId"
-          api-url="TaktCustomers/options"
-          :placeholder="pi.queryPh('customerId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerName1')">
-      <a-form-item :label="pi.queryLabel('customerName1')">
-        <a-input
-          v-model:value="advancedQueryForm.customerName1"
-          :placeholder="pi.queryPh('customerName1', 'required')"
-          show-count
-          :maxlength="140"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="pi.queryLabel('customerCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.customerCode"
-          api-url="TaktCustomers/options"
-          :placeholder="pi.queryPh('customerCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('complaintDateStart')">
-      <a-form-item :label="pi.queryLabel('complaintDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.complaintDateStart"
-          :placeholder="pi.queryPh('complaintDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('complaintDateEnd')">
-      <a-form-item :label="pi.queryLabel('complaintDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.complaintDateEnd"
-          :placeholder="pi.queryPh('complaintDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('complaintMethod')">
-      <a-form-item :label="pi.queryLabel('complaintMethod')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.complaintMethod"
-          dict-type="logistics_quality_complaint_method"
-          :placeholder="pi.queryPh('complaintMethod', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('complaintType')">
-      <a-form-item :label="pi.queryLabel('complaintType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.complaintType"
-          dict-type="logistics_quality_complaint_type"
-          :placeholder="pi.queryPh('complaintType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('complaintLevel')">
-      <a-form-item :label="pi.queryLabel('complaintLevel')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.complaintLevel"
-          dict-type="logistics_quality_complaint_level"
-          :placeholder="pi.queryPh('complaintLevel', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('responsibleDeptId')">
-      <a-form-item :label="pi.queryLabel('responsibleDeptId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.responsibleDeptId"
-          api-url="TaktDepts/options"
-          :placeholder="pi.queryPh('responsibleDeptId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('responsibleDeptName')">
-      <a-form-item :label="pi.queryLabel('responsibleDeptName')">
-        <a-input
-          v-model:value="advancedQueryForm.responsibleDeptName"
-          :placeholder="pi.queryPh('responsibleDeptName', 'required')"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('responsiblePersonId')">
-      <a-form-item :label="pi.queryLabel('responsiblePersonId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.responsiblePersonId"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('responsiblePersonId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('responsiblePersonName')">
-      <a-form-item :label="pi.queryLabel('responsiblePersonName')">
-        <a-input
-          v-model:value="advancedQueryForm.responsiblePersonName"
-          :placeholder="pi.queryPh('responsiblePersonName', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('requiredReplyDateStart')">
-      <a-form-item :label="pi.queryLabel('requiredReplyDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.requiredReplyDateStart"
-          :placeholder="pi.queryPh('requiredReplyDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('requiredReplyDateEnd')">
-      <a-form-item :label="pi.queryLabel('requiredReplyDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.requiredReplyDateEnd"
-          :placeholder="pi.queryPh('requiredReplyDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('actualReplyDateStart')">
-      <a-form-item :label="pi.queryLabel('actualReplyDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.actualReplyDateStart"
-          :placeholder="pi.queryPh('actualReplyDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('actualReplyDateEnd')">
-      <a-form-item :label="pi.queryLabel('actualReplyDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.actualReplyDateEnd"
-          :placeholder="pi.queryPh('actualReplyDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('complaintDescription')">
-      <a-form-item :label="pi.queryLabel('complaintDescription')">
-        <a-textarea
-          v-model:value="advancedQueryForm.complaintDescription"
-          :placeholder="pi.queryPh('complaintDescription', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('handlingResult')">
-      <a-form-item :label="pi.queryLabel('handlingResult')">
-        <a-input
-          v-model:value="advancedQueryForm.handlingResult"
-          :placeholder="pi.queryPh('handlingResult', 'required')"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerSatisfaction')">
-      <a-form-item :label="pi.queryLabel('customerSatisfaction')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.customerSatisfaction"
-          dict-type="logistics_quality_customer_satisfaction"
-          :placeholder="pi.queryPh('customerSatisfaction', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('attachments')">
-      <a-form-item :label="pi.queryLabel('attachments')">
-        <a-input
-          v-model:value="advancedQueryForm.attachments"
-          :placeholder="pi.queryPh('attachments', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('complaintStatus')">
-      <a-form-item :label="pi.queryLabel('complaintStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.complaintStatus"
-          dict-type="logistics_quality_complaint_status"
-          :placeholder="pi.queryPh('complaintStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -499,7 +178,7 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   useCustomerComplaintI18n,
@@ -554,7 +233,26 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -564,11 +262,6 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    complaintMethod: undefined as number | undefined,
-    complaintType: undefined as number | undefined,
-    complaintLevel: undefined as number | undefined,
-    customerSatisfaction: undefined as number | undefined,
-    complaintStatus: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -599,7 +292,7 @@ const { selectedMasterRow } = provideCustomerComplaintMasterContext()
 const customerComplaintItemPanelRef = ref<InstanceType<typeof CustomerComplaintItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {CustomerComplaintQuery} 查询 DTO
  */
@@ -623,29 +316,15 @@ function buildListQuery(overrides?: Partial<CustomerComplaintQuery>): CustomerCo
   for (const key of CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.complaintMethod !== undefined && form.complaintMethod !== null) {
-    query.complaintMethod = form.complaintMethod
-  }
-  if (form.complaintType !== undefined && form.complaintType !== null) {
-    query.complaintType = form.complaintType
-  }
-  if (form.complaintLevel !== undefined && form.complaintLevel !== null) {
-    query.complaintLevel = form.complaintLevel
-  }
-  if (form.customerSatisfaction !== undefined && form.customerSatisfaction !== null) {
-    query.customerSatisfaction = form.customerSatisfaction
-  }
-  if (form.complaintStatus !== undefined && form.complaintStatus !== null) {
-    query.complaintStatus = form.complaintStatus
-  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -710,179 +389,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'customerComplaintId') ?? ''
   },
   {
-    title: pi.label('customerComplaintCode'),
-    dataIndex: 'customerComplaintCode',
-    key: 'customerComplaintCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'customerComplaintCode') ?? ''
-  },
-  {
-    title: pi.label('customerId'),
-    dataIndex: 'customerId',
-    key: 'customerId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'customerId') ?? ''
-  },
-  {
-    title: pi.label('customerName1'),
-    dataIndex: 'customerName1',
-    key: 'customerName1',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'customerName1') ?? ''
-  },
-  {
-    title: pi.label('customerCode'),
-    dataIndex: 'customerCode',
-    key: 'customerCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'customerCode') ?? ''
-  },
-  {
-    title: pi.label('complaintDate'),
-    dataIndex: 'complaintDate',
-    key: 'complaintDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'complaintDate') ?? ''
-  },
-  {
-    title: pi.label('complaintMethod'),
-    dataIndex: 'complaintMethod',
-    key: 'complaintMethod',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('complaintType'),
-    dataIndex: 'complaintType',
-    key: 'complaintType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('complaintLevel'),
-    dataIndex: 'complaintLevel',
-    key: 'complaintLevel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('responsibleDeptId'),
-    dataIndex: 'responsibleDeptId',
-    key: 'responsibleDeptId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'responsibleDeptId') ?? ''
-  },
-  {
-    title: pi.label('responsibleDeptName'),
-    dataIndex: 'responsibleDeptName',
-    key: 'responsibleDeptName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'responsibleDeptName') ?? ''
-  },
-  {
-    title: pi.label('responsiblePersonId'),
-    dataIndex: 'responsiblePersonId',
-    key: 'responsiblePersonId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'responsiblePersonId') ?? ''
-  },
-  {
-    title: pi.label('responsiblePersonName'),
-    dataIndex: 'responsiblePersonName',
-    key: 'responsiblePersonName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'responsiblePersonName') ?? ''
-  },
-  {
-    title: pi.label('requiredReplyDate'),
-    dataIndex: 'requiredReplyDate',
-    key: 'requiredReplyDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'requiredReplyDate') ?? ''
-  },
-  {
-    title: pi.label('actualReplyDate'),
-    dataIndex: 'actualReplyDate',
-    key: 'actualReplyDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'actualReplyDate') ?? ''
-  },
-  {
-    title: pi.label('complaintDescription'),
-    dataIndex: 'complaintDescription',
-    key: 'complaintDescription',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'complaintDescription') ?? ''
-  },
-  {
-    title: pi.label('handlingResult'),
-    dataIndex: 'handlingResult',
-    key: 'handlingResult',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'handlingResult') ?? ''
-  },
-  {
-    title: pi.label('customerSatisfaction'),
-    dataIndex: 'customerSatisfaction',
-    key: 'customerSatisfaction',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('attachments'),
-    dataIndex: 'attachments',
-    key: 'attachments',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'attachments') ?? ''
-  },
-  {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('complaintStatus'),
     dataIndex: 'complaintStatus',
     key: 'complaintStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
+  },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'remark') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -932,6 +453,8 @@ const getCustomerComplaintDictValue = (
   return String(value)
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -964,6 +487,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getCustomerComplaintList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -990,33 +518,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  customerComplaintCode: '',
-  customerId: '',
-  customerName1: '',
-  customerCode: '',
-  complaintDateStart: '',
-  complaintDateEnd: '',
-  complaintMethod: undefined as number | undefined,
-  complaintType: undefined as number | undefined,
-  complaintLevel: undefined as number | undefined,
-  responsibleDeptId: '',
-  responsibleDeptName: '',
-  responsiblePersonId: '',
-  responsiblePersonName: '',
-  requiredReplyDateStart: '',
-  requiredReplyDateEnd: '',
-  actualReplyDateStart: '',
-  actualReplyDateEnd: '',
-  complaintDescription: '',
-  handlingResult: '',
-  customerSatisfaction: undefined as number | undefined,
-  attachments: '',
-  plantCode: '',
-  complaintStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1125,6 +627,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportCustomerComplaint(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1211,33 +716,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  customerComplaintCode: '',
-  customerId: '',
-  customerName1: '',
-  customerCode: '',
-  complaintDateStart: '',
-  complaintDateEnd: '',
-  complaintMethod: undefined as number | undefined,
-  complaintType: undefined as number | undefined,
-  complaintLevel: undefined as number | undefined,
-  responsibleDeptId: '',
-  responsibleDeptName: '',
-  responsiblePersonId: '',
-  responsiblePersonName: '',
-  requiredReplyDateStart: '',
-  requiredReplyDateEnd: '',
-  actualReplyDateStart: '',
-  actualReplyDateEnd: '',
-  complaintDescription: '',
-  handlingResult: '',
-  customerSatisfaction: undefined as number | undefined,
-  attachments: '',
-  plantCode: '',
-  complaintStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

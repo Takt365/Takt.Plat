@@ -42,7 +42,7 @@ public class TaktSalaryFormulaDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
 
@@ -150,7 +150,7 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? FormulaStatus { get; set; }
 
@@ -269,7 +269,7 @@ public class TaktSalaryFormulaCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
 
@@ -323,9 +323,9 @@ public class TaktSalaryFormulaStatusDto
     public long SalaryFormulaId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int FormulaStatus { get; set; } = 0;
 }
 
@@ -439,7 +439,7 @@ public class TaktSalaryFormulaTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? FormulaStatus { get; set; }
 
@@ -538,7 +538,7 @@ public class TaktSalaryFormulaImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? FormulaStatus { get; set; }
 
@@ -642,7 +642,7 @@ public class TaktSalaryFormulaExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
 

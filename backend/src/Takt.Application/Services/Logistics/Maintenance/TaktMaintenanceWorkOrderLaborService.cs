@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderLaborService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单报工应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktMaintenanceWorkOrderLaborService : TaktServiceBase, ITaktMainte
     }
 
     /// <summary>
-    /// 获取维护工单报工列表（分页）
+    /// 获取维护工单报工列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktMaintenanceWorkOrderLaborDto>> GetMaintenanceWorkOrderLaborListAsync(TaktMaintenanceWorkOrderLaborQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktMaintenanceWorkOrderLaborDto>.Create(
+                new List<TaktMaintenanceWorkOrderLaborDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _maintenanceWorkOrderLaborRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -100,13 +108,13 @@ public class TaktMaintenanceWorkOrderLaborService : TaktServiceBase, ITaktMainte
     {
         EnsureThreeLayerContext();
         var list = await _maintenanceWorkOrderLaborRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ConfirmationStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ConfirmationStatus == 1 && x.IsObsolete == 0,
             x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EmployeeName ?? e.Id.ToString(),
+            DictValue = e.WorkOrderCode,
+            DictLabel = e.EmployeeName ?? e.WorkOrderCode,
         }).ToList();
     }
 
@@ -331,7 +339,15 @@ public class TaktMaintenanceWorkOrderLaborService : TaktServiceBase, ITaktMainte
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaintenanceWorkOrderLaborAsync(TaktMaintenanceWorkOrderLaborQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktMaintenanceWorkOrderLaborQueryDto());
+        var queryDto = query ?? new TaktMaintenanceWorkOrderLaborQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktMaintenanceWorkOrderLaborExportDto>(),
+                sheetName ?? "维护工单报工数据",
+                fileName ?? "维护工单报工导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _maintenanceWorkOrderLaborRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -369,6 +385,26 @@ public class TaktMaintenanceWorkOrderLaborService : TaktServiceBase, ITaktMainte
             throw new TaktBusinessException("维护工单不存在");
         }
         entity.MaintenanceWorkOrderId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.WorkOrderCode))
+        {
+            entity.WorkOrderCode = master.WorkOrderCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -392,158 +428,273 @@ public class TaktMaintenanceWorkOrderLaborService : TaktServiceBase, ITaktMainte
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.MaintenanceWorkOrderId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WorkOrderCode != null && x.WorkOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
                 || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
-                || SqlFunc.ToString(x.WorkHours).Contains(keywords)
-                || SqlFunc.ToString(x.HourlyRate).Contains(keywords)
-                || SqlFunc.ToString(x.LaborCost).Contains(keywords)
                 || (x.OperationDescription != null && x.OperationDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ConfirmationStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.WorkDate).Contains(keywords)
-                || SqlFunc.ToString(x.StartTime).Contains(keywords)
-                || SqlFunc.ToString(x.EndTime).Contains(keywords)
-                || SqlFunc.ToString(x.ConfirmedAt).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.MaintenanceWorkOrderId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.MaintenanceWorkOrderId == queryDto.MaintenanceWorkOrderId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkOrderCode))
-        {
-            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(queryDto.WorkOrderCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.EmployeeId.HasValue == true)
-        {
-            exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
-        {
-            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
-        {
-            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
-        }
-
-        if (queryDto?.WorkHours.HasValue == true)
-        {
-            exp = exp.And(x => x.WorkHours == queryDto.WorkHours);
-        }
-
-        if (queryDto?.HourlyRate.HasValue == true)
-        {
-            exp = exp.And(x => x.HourlyRate == queryDto.HourlyRate);
-        }
-
-        if (queryDto?.LaborCost.HasValue == true)
-        {
-            exp = exp.And(x => x.LaborCost == queryDto.LaborCost);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.OperationDescription))
-        {
-            exp = exp.And(x => x.OperationDescription != null && x.OperationDescription.Contains(queryDto.OperationDescription));
-        }
-
-        if (queryDto?.ConfirmationStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.ConfirmationStatus == queryDto.ConfirmationStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.WorkDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.WorkDate >= queryDto.WorkDateStart);
-        }
-
-        if (queryDto?.WorkDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.WorkDate <= queryDto.WorkDateEnd);
-        }
-
-        if (queryDto?.StartTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.StartTime >= queryDto.StartTimeStart);
-        }
-
-        if (queryDto?.StartTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.StartTime <= queryDto.StartTimeEnd);
-        }
-
-        if (queryDto?.EndTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EndTime >= queryDto.EndTimeStart);
-        }
-
-        if (queryDto?.EndTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EndTime <= queryDto.EndTimeEnd);
-        }
-
-        if (queryDto?.ConfirmedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ConfirmedAt >= queryDto.ConfirmedAtStart);
-        }
-
-        if (queryDto?.ConfirmedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ConfirmedAt <= queryDto.ConfirmedAtEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.MaintenanceWorkOrderId.HasValue == true)
+        {
+            var maintenanceWorkOrderId = queryDto.MaintenanceWorkOrderId.Value;
+            exp = exp.And(x => x.MaintenanceWorkOrderId == maintenanceWorkOrderId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkOrderCode))
+        {
+            var workOrderCode = queryDto.WorkOrderCode;
+            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(workOrderCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.EmployeeId.HasValue == true)
+        {
+            var employeeId = queryDto.EmployeeId.Value;
+            exp = exp.And(x => x.EmployeeId == employeeId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeCode))
+        {
+            var employeeCode = queryDto.EmployeeCode;
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(employeeCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeName))
+        {
+            var employeeName = queryDto.EmployeeName;
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
+        }
+
+        if (queryDto?.WorkHours.HasValue == true)
+        {
+            var workHours = queryDto.WorkHours.Value;
+            exp = exp.And(x => x.WorkHours == workHours);
+        }
+
+        if (queryDto?.HourlyRate.HasValue == true)
+        {
+            var hourlyRate = queryDto.HourlyRate.Value;
+            exp = exp.And(x => x.HourlyRate == hourlyRate);
+        }
+
+        if (queryDto?.LaborCost.HasValue == true)
+        {
+            var laborCost = queryDto.LaborCost.Value;
+            exp = exp.And(x => x.LaborCost == laborCost);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.OperationDescription))
+        {
+            var operationDescription = queryDto.OperationDescription;
+            exp = exp.And(x => x.OperationDescription != null && x.OperationDescription.Contains(operationDescription));
+        }
+
+        if (queryDto?.ConfirmationStatus.HasValue == true)
+        {
+            var confirmationStatus = queryDto.ConfirmationStatus.Value;
+            exp = exp.And(x => x.ConfirmationStatus == confirmationStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.WorkDateStart.HasValue == true)
+        {
+            var workDateStart = queryDto.WorkDateStart.Value;
+            exp = exp.And(x => x.WorkDate >= workDateStart);
+        }
+
+        if (queryDto?.WorkDateEnd.HasValue == true)
+        {
+            var workDateEnd = queryDto.WorkDateEnd.Value;
+            exp = exp.And(x => x.WorkDate <= workDateEnd);
+        }
+
+        if (queryDto?.StartTimeStart.HasValue == true)
+        {
+            var startTimeStart = queryDto.StartTimeStart.Value;
+            exp = exp.And(x => x.StartTime >= startTimeStart);
+        }
+
+        if (queryDto?.StartTimeEnd.HasValue == true)
+        {
+            var startTimeEnd = queryDto.StartTimeEnd.Value;
+            exp = exp.And(x => x.StartTime <= startTimeEnd);
+        }
+
+        if (queryDto?.EndTimeStart.HasValue == true)
+        {
+            var endTimeStart = queryDto.EndTimeStart.Value;
+            exp = exp.And(x => x.EndTime >= endTimeStart);
+        }
+
+        if (queryDto?.EndTimeEnd.HasValue == true)
+        {
+            var endTimeEnd = queryDto.EndTimeEnd.Value;
+            exp = exp.And(x => x.EndTime <= endTimeEnd);
+        }
+
+        if (queryDto?.ConfirmedAtStart.HasValue == true)
+        {
+            var confirmedAtStart = queryDto.ConfirmedAtStart.Value;
+            exp = exp.And(x => x.ConfirmedAt >= confirmedAtStart);
+        }
+
+        if (queryDto?.ConfirmedAtEnd.HasValue == true)
+        {
+            var confirmedAtEnd = queryDto.ConfirmedAtEnd.Value;
+            exp = exp.And(x => x.ConfirmedAt <= confirmedAtEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktMaintenanceWorkOrderLaborQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceWorkOrderId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeName))
+        {
+            return true;
+        }
+        if (queryDto.WorkHours.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.HourlyRate.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LaborCost.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OperationDescription))
+        {
+            return true;
+        }
+        if (queryDto.ConfirmationStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WorkDateStart.HasValue || queryDto.WorkDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StartTimeStart.HasValue || queryDto.StartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EndTimeStart.HasValue || queryDto.EndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ConfirmedAtStart.HasValue || queryDto.ConfirmedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

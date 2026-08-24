@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：group.d.ts
-// 创建时间：2026-07-08
+// 创建时间：2026-08-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,11 +29,6 @@ export interface SalesGroup extends CompanyDtoBase {
   salesGroupId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
    * 销售组编码（3）
    */
   salesGroupCode: string;
@@ -49,7 +44,7 @@ export interface SalesGroup extends CompanyDtoBase {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -69,17 +64,17 @@ export interface SalesGroup extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -99,12 +94,17 @@ export interface SalesGroupQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -124,7 +124,7 @@ export interface SalesGroupQuery extends TaktPagedQuery {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -139,17 +139,17 @@ export interface SalesGroupQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder?: number;
 
   /**
-   * 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -193,15 +193,12 @@ export interface SalesGroupCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode: string
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -221,7 +218,7 @@ export interface SalesGroupCreate {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -236,12 +233,12 @@ export interface SalesGroupCreate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -285,7 +282,7 @@ export interface SalesGroupStatus {
   salesGroupId: string;
 
   /**
-   * 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 
@@ -304,9 +301,28 @@ export interface SalesGroupSort {
   salesGroupId: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
+
+}
+
+
+/**
+ * SalesGroup 内置更新 DTO
+ * 对应前端 SalesGroupBuiltIn
+ * @description 对应后端 TaktSalesGroupBuiltInDto
+ */
+export interface SalesGroupBuiltIn {
+  /**
+   * SalesGroupID
+   */
+  salesGroupId: string;
+
+  /**
+   * 内置（字典 sys_yes_no；1=是，0=否）
+   */
+  isBuiltIn: number;
 
 }
 
@@ -328,7 +344,12 @@ export interface SalesGroupTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -348,7 +369,7 @@ export interface SalesGroupTemplate {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -363,12 +384,12 @@ export interface SalesGroupTemplate {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -402,15 +423,12 @@ export interface SalesGroupImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode?: string
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -430,7 +448,7 @@ export interface SalesGroupImport {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -445,12 +463,12 @@ export interface SalesGroupImport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus?: number;
 
@@ -484,9 +502,14 @@ export interface SalesGroupExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 销售组编码（3）
@@ -504,7 +527,7 @@ export interface SalesGroupExport {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
    */
   responsibleUserId?: string;
 
@@ -519,17 +542,17 @@ export interface SalesGroupExport {
   contactEmail?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   groupStatus: number;
 

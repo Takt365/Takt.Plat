@@ -145,7 +145,7 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "evaluation_status", ColumnDescription = "评价状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationStatus { get; set; } = 0;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

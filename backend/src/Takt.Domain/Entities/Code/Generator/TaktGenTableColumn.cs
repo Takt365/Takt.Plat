@@ -83,61 +83,61 @@ public class TaktGenTableColumn : TaktTenantCoreEntityBase
     public int DecimalDigits { get; set; } = 0;
 
     /// <summary>
-    /// 主键（字典 sys_yes_no_type；0=否 1=是）
+    /// 主键（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_pk", ColumnDescription = "主键", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPk { get; set; } = 0;
 
     /// <summary>
-    /// 自增（字典 sys_yes_no_type；0=否 1=是）
+    /// 自增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_increment", ColumnDescription = "自增", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsIncrement { get; set; } = 0;
 
     /// <summary>
-    /// 必填（字典 sys_yes_no_type；0=否 1=是）
+    /// 必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_required", ColumnDescription = "必填", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsRequired { get; set; } = 1;
 
     /// <summary>
-    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// 新增（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_create", ColumnDescription = "新增", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsCreate { get; set; } = 1;
 
     /// <summary>
-    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// 更新（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_update", ColumnDescription = "更新", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsUpdate { get; set; } = 1;
 
     /// <summary>
-    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// 查重（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_unique", ColumnDescription = "查重", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsUnique { get; set; } = 0;
 
     /// <summary>
-    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// 列表（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_list", ColumnDescription = "列表", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsList { get; set; } = 1;
 
     /// <summary>
-    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// 导出（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_export", ColumnDescription = "导出", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsExport { get; set; } = 1;
 
     /// <summary>
-    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// 可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
     [SugarColumn(ColumnName = "is_sort", ColumnDescription = "排序", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsSort { get; set; } = 0;
 
     /// <summary>
-    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// 查询（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_query", ColumnDescription = "查询", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsQuery { get; set; } = 0;

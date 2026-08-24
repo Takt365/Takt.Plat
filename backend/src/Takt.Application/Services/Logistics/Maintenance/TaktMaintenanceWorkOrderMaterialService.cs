@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderMaterialService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单领料应用服务实现
 // 
@@ -64,12 +64,20 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
     }
 
     /// <summary>
-    /// 获取维护工单领料列表（分页）
+    /// 获取维护工单领料列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktMaintenanceWorkOrderMaterialDto>> GetMaintenanceWorkOrderMaterialListAsync(TaktMaintenanceWorkOrderMaterialQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktMaintenanceWorkOrderMaterialDto>.Create(
+                new List<TaktMaintenanceWorkOrderMaterialDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _maintenanceWorkOrderMaterialRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -105,13 +113,13 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
     {
         EnsureThreeLayerContext();
         var list = await _maintenanceWorkOrderMaterialRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IssueStatus == 1,
-            x => x.MaterialDescription ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IssueStatus == 1 && x.IsObsolete == 0,
+            x => x.WorkOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialDescription ?? e.Id.ToString(),
+            DictValue = e.WorkOrderCode,
+            DictLabel = e.WorkOrderCode,
         }).ToList();
     }
 
@@ -339,7 +347,15 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaintenanceWorkOrderMaterialAsync(TaktMaintenanceWorkOrderMaterialQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktMaintenanceWorkOrderMaterialQueryDto());
+        var queryDto = query ?? new TaktMaintenanceWorkOrderMaterialQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktMaintenanceWorkOrderMaterialExportDto>(),
+                sheetName ?? "维护工单领料数据",
+                fileName ?? "维护工单领料导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _maintenanceWorkOrderMaterialRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -377,6 +393,26 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
             throw new TaktBusinessException("维护工单不存在");
         }
         entity.MaintenanceWorkOrderId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.WorkOrderCode))
+        {
+            entity.WorkOrderCode = master.WorkOrderCode;
+        }
     }
 
     /// <summary>
@@ -397,6 +433,34 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
             throw new TaktBusinessException("工厂物料不存在");
         }
         entity.MaterialId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.MaterialCode))
+        {
+            entity.MaterialCode = master.MaterialCode;
+        }
+        if (string.IsNullOrEmpty(entity.MaterialDescription))
+        {
+            entity.MaterialDescription = master.MaterialDescription ?? string.Empty;
+        }
+        if (string.IsNullOrEmpty(entity.StorageLocation))
+        {
+            entity.StorageLocation = master.StorageLocation;
+        }
     }
     // ========================================
     // 查询表达式
@@ -420,143 +484,257 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.MaintenanceWorkOrderId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WorkOrderCode != null && x.WorkOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.MaterialId).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
-                || SqlFunc.ToString(x.RequiredQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.IssuedQuantity).Contains(keywords)
                 || (x.MaterialUnit != null && x.MaterialUnit.Contains(keywords))
-                || SqlFunc.ToString(x.UnitPrice).Contains(keywords)
-                || SqlFunc.ToString(x.Amount).Contains(keywords)
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.StorageLocation != null && x.StorageLocation.Contains(keywords))
-                || SqlFunc.ToString(x.IssueStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.IssueTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.MaintenanceWorkOrderId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.MaintenanceWorkOrderId == queryDto.MaintenanceWorkOrderId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkOrderCode))
-        {
-            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(queryDto.WorkOrderCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.MaterialId.HasValue == true)
-        {
-            exp = exp.And(x => x.MaterialId == queryDto.MaterialId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
-        {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
-        {
-            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
-        }
-
-        if (queryDto?.RequiredQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.RequiredQuantity == queryDto.RequiredQuantity);
-        }
-
-        if (queryDto?.IssuedQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.IssuedQuantity == queryDto.IssuedQuantity);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialUnit))
-        {
-            exp = exp.And(x => x.MaterialUnit != null && x.MaterialUnit.Contains(queryDto.MaterialUnit));
-        }
-
-        if (queryDto?.UnitPrice.HasValue == true)
-        {
-            exp = exp.And(x => x.UnitPrice == queryDto.UnitPrice);
-        }
-
-        if (queryDto?.Amount.HasValue == true)
-        {
-            exp = exp.And(x => x.Amount == queryDto.Amount);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.WarehouseCode))
-        {
-            exp = exp.And(x => x.WarehouseCode != null && x.WarehouseCode.Contains(queryDto.WarehouseCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.StorageLocation))
-        {
-            exp = exp.And(x => x.StorageLocation != null && x.StorageLocation.Contains(queryDto.StorageLocation));
-        }
-
-        if (queryDto?.IssueStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.IssueStatus == queryDto.IssueStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.IssueTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.IssueTime >= queryDto.IssueTimeStart);
-        }
-
-        if (queryDto?.IssueTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.IssueTime <= queryDto.IssueTimeEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.MaintenanceWorkOrderId.HasValue == true)
+        {
+            var maintenanceWorkOrderId = queryDto.MaintenanceWorkOrderId.Value;
+            exp = exp.And(x => x.MaintenanceWorkOrderId == maintenanceWorkOrderId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkOrderCode))
+        {
+            var workOrderCode = queryDto.WorkOrderCode;
+            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(workOrderCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.MaterialId.HasValue == true)
+        {
+            var materialId = queryDto.MaterialId.Value;
+            exp = exp.And(x => x.MaterialId == materialId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
+        {
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDescription))
+        {
+            var materialDescription = queryDto.MaterialDescription;
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(materialDescription));
+        }
+
+        if (queryDto?.RequiredQuantity.HasValue == true)
+        {
+            var requiredQuantity = queryDto.RequiredQuantity.Value;
+            exp = exp.And(x => x.RequiredQuantity == requiredQuantity);
+        }
+
+        if (queryDto?.IssuedQuantity.HasValue == true)
+        {
+            var issuedQuantity = queryDto.IssuedQuantity.Value;
+            exp = exp.And(x => x.IssuedQuantity == issuedQuantity);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialUnit))
+        {
+            var materialUnit = queryDto.MaterialUnit;
+            exp = exp.And(x => x.MaterialUnit != null && x.MaterialUnit.Contains(materialUnit));
+        }
+
+        if (queryDto?.UnitPrice.HasValue == true)
+        {
+            var unitPrice = queryDto.UnitPrice.Value;
+            exp = exp.And(x => x.UnitPrice == unitPrice);
+        }
+
+        if (queryDto?.Amount.HasValue == true)
+        {
+            var amount = queryDto.Amount.Value;
+            exp = exp.And(x => x.Amount == amount);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseCode))
+        {
+            var warehouseCode = queryDto.WarehouseCode;
+            exp = exp.And(x => x.WarehouseCode != null && x.WarehouseCode.Contains(warehouseCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.StorageLocation))
+        {
+            var storageLocation = queryDto.StorageLocation;
+            exp = exp.And(x => x.StorageLocation != null && x.StorageLocation.Contains(storageLocation));
+        }
+
+        if (queryDto?.IssueStatus.HasValue == true)
+        {
+            var issueStatus = queryDto.IssueStatus.Value;
+            exp = exp.And(x => x.IssueStatus == issueStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.IssueTimeStart.HasValue == true)
+        {
+            var issueTimeStart = queryDto.IssueTimeStart.Value;
+            exp = exp.And(x => x.IssueTime >= issueTimeStart);
+        }
+
+        if (queryDto?.IssueTimeEnd.HasValue == true)
+        {
+            var issueTimeEnd = queryDto.IssueTimeEnd.Value;
+            exp = exp.And(x => x.IssueTime <= issueTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktMaintenanceWorkOrderMaterialQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceWorkOrderId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MaterialId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (queryDto.RequiredQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IssuedQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialUnit))
+        {
+            return true;
+        }
+        if (queryDto.UnitPrice.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Amount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WarehouseCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.StorageLocation))
+        {
+            return true;
+        }
+        if (queryDto.IssueStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IssueTimeStart.HasValue || queryDto.IssueTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -135,374 +135,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('purchaseInvoiceCode')">
-      <a-form-item :label="pi.queryLabel('purchaseInvoiceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.purchaseInvoiceCode"
-          :placeholder="pi.queryPh('purchaseInvoiceCode', 'required')"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('fiscalYear')">
-      <a-form-item :label="pi.queryLabel('fiscalYear')">
-        <a-input
-          v-model:value="advancedQueryForm.fiscalYear"
-          :placeholder="pi.queryPh('fiscalYear', 'required')"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('documentType')">
-      <a-form-item :label="pi.queryLabel('documentType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.documentType"
-          dict-type="logistics_purchase_invoice_document_type"
-          :placeholder="pi.queryPh('documentType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('documentDateStart')">
-      <a-form-item :label="pi.queryLabel('documentDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.documentDateStart"
-          :placeholder="pi.queryPh('documentDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('documentDateEnd')">
-      <a-form-item :label="pi.queryLabel('documentDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.documentDateEnd"
-          :placeholder="pi.queryPh('documentDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postingDateStart')">
-      <a-form-item :label="pi.queryLabel('postingDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.postingDateStart"
-          :placeholder="pi.queryPh('postingDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postingDateEnd')">
-      <a-form-item :label="pi.queryLabel('postingDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.postingDateEnd"
-          :placeholder="pi.queryPh('postingDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('transactionEventType')">
-      <a-form-item :label="pi.queryLabel('transactionEventType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.transactionEventType"
-          dict-type="logistics_purchase_invoice_transaction_event_type"
-          :placeholder="pi.queryPh('transactionEventType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('referenceCode')">
-      <a-form-item :label="pi.queryLabel('referenceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.referenceCode"
-          :placeholder="pi.queryPh('referenceCode', 'required')"
-          show-count
-          :maxlength="16"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('supplierCode')">
-      <a-form-item :label="pi.queryLabel('supplierCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.supplierCode"
-          api-url="TaktSuppliers/options"
-          :placeholder="pi.queryPh('supplierCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="pi.queryLabel('currencyCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('currencyCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('exchangeRate')">
-      <a-form-item :label="pi.queryLabel('exchangeRate')">
-        <a-input-number
-          v-model:value="advancedQueryForm.exchangeRate"
-          :placeholder="pi.queryPh('exchangeRate', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('grossAmount')">
-      <a-form-item :label="pi.queryLabel('grossAmount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.grossAmount"
-          :placeholder="pi.queryPh('grossAmount', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('vatAmount')">
-      <a-form-item :label="pi.queryLabel('vatAmount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.vatAmount"
-          :placeholder="pi.queryPh('vatAmount', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taxJurisdictionCode')">
-      <a-form-item :label="pi.queryLabel('taxJurisdictionCode')">
-        <a-input
-          v-model:value="advancedQueryForm.taxJurisdictionCode"
-          :placeholder="pi.queryPh('taxJurisdictionCode', 'required')"
-          show-count
-          :maxlength="15"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('cashDiscountDays1')">
-      <a-form-item :label="pi.queryLabel('cashDiscountDays1')">
-        <a-input-number
-          v-model:value="advancedQueryForm.cashDiscountDays1"
-          :placeholder="pi.queryPh('cashDiscountDays1', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('invoiceFlag')">
-      <a-form-item :label="pi.queryLabel('invoiceFlag')">
-        <a-input
-          v-model:value="advancedQueryForm.invoiceFlag"
-          :placeholder="pi.queryPh('invoiceFlag', 'required')"
-          show-count
-          :maxlength="1"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('headerText')">
-      <a-form-item :label="pi.queryLabel('headerText')">
-        <a-input
-          v-model:value="advancedQueryForm.headerText"
-          :placeholder="pi.queryPh('headerText', 'required')"
-          show-count
-          :maxlength="25"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('reversalDocumentCode')">
-      <a-form-item :label="pi.queryLabel('reversalDocumentCode')">
-        <a-input
-          v-model:value="advancedQueryForm.reversalDocumentCode"
-          :placeholder="pi.queryPh('reversalDocumentCode', 'required')"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('reversalFiscalYear')">
-      <a-form-item :label="pi.queryLabel('reversalFiscalYear')">
-        <a-input
-          v-model:value="advancedQueryForm.reversalFiscalYear"
-          :placeholder="pi.queryPh('reversalFiscalYear', 'required')"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taxCode')">
-      <a-form-item :label="pi.queryLabel('taxCode')">
-        <a-input
-          v-model:value="advancedQueryForm.taxCode"
-          :placeholder="pi.queryPh('taxCode', 'required')"
-          show-count
-          :maxlength="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('supplyingCountry')">
-      <a-form-item :label="pi.queryLabel('supplyingCountry')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.supplyingCountry"
-          dict-type="sys_country_code"
-          :placeholder="pi.queryPh('supplyingCountry', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taxExchangeRate')">
-      <a-form-item :label="pi.queryLabel('taxExchangeRate')">
-        <a-input-number
-          v-model:value="advancedQueryForm.taxExchangeRate"
-          :placeholder="pi.queryPh('taxExchangeRate', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('baselineDateStart')">
-      <a-form-item :label="pi.queryLabel('baselineDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.baselineDateStart"
-          :placeholder="pi.queryPh('baselineDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('baselineDateEnd')">
-      <a-form-item :label="pi.queryLabel('baselineDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.baselineDateEnd"
-          :placeholder="pi.queryPh('baselineDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('enteredBy')">
-      <a-form-item :label="pi.queryLabel('enteredBy')">
-        <a-input
-          v-model:value="advancedQueryForm.enteredBy"
-          :placeholder="pi.queryPh('enteredBy', 'required')"
-          show-count
-          :maxlength="12"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('exchangeRateDateStart')">
-      <a-form-item :label="pi.queryLabel('exchangeRateDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.exchangeRateDateStart"
-          :placeholder="pi.queryPh('exchangeRateDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('exchangeRateDateEnd')">
-      <a-form-item :label="pi.queryLabel('exchangeRateDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.exchangeRateDateEnd"
-          :placeholder="pi.queryPh('exchangeRateDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('transactionCode')">
-      <a-form-item :label="pi.queryLabel('transactionCode')">
-        <a-input
-          v-model:value="advancedQueryForm.transactionCode"
-          :placeholder="pi.queryPh('transactionCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postedBy')">
-      <a-form-item :label="pi.queryLabel('postedBy')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.postedBy"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('postedBy', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -563,7 +196,7 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   usePurchaseInvoiceI18n,
@@ -632,21 +265,7 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
-  if (form.exchangeRate !== undefined && form.exchangeRate !== null) {
-    return true
-  }
-  if (form.grossAmount !== undefined && form.grossAmount !== null) {
-    return true
-  }
-  if (form.vatAmount !== undefined && form.vatAmount !== null) {
-    return true
-  }
-  if (form.cashDiscountDays1 !== undefined && form.cashDiscountDays1 !== null) {
-    return true
-  }
-  if (form.taxExchangeRate !== undefined && form.taxExchangeRate !== null) {
-    return true
-  }
+
   return false
 }
 
@@ -661,11 +280,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    exchangeRate: undefined as number | undefined,
-    grossAmount: undefined as number | undefined,
-    vatAmount: undefined as number | undefined,
-    cashDiscountDays1: undefined as number | undefined,
-    taxExchangeRate: undefined as number | undefined,  }
+  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -719,21 +334,6 @@ function buildListQuery(overrides?: Partial<PurchaseInvoiceQuery>): PurchaseInvo
   for (const key of PURCHASEINVOICE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.exchangeRate !== undefined && form.exchangeRate !== null) {
-    query.exchangeRate = form.exchangeRate
-  }
-  if (form.grossAmount !== undefined && form.grossAmount !== null) {
-    query.grossAmount = form.grossAmount
-  }
-  if (form.vatAmount !== undefined && form.vatAmount !== null) {
-    query.vatAmount = form.vatAmount
-  }
-  if (form.cashDiscountDays1 !== undefined && form.cashDiscountDays1 !== null) {
-    query.cashDiscountDays1 = form.cashDiscountDays1
-  }
-  if (form.taxExchangeRate !== undefined && form.taxExchangeRate !== null) {
-    query.taxExchangeRate = form.taxExchangeRate
-  }
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
@@ -742,6 +342,7 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -804,15 +405,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     fixed: 'left',
     customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'purchaseInvoiceId') ?? ''
-  },
-  {
-    title: pi.label('purchaseInvoiceCode'),
-    dataIndex: 'purchaseInvoiceCode',
-    key: 'purchaseInvoiceCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'purchaseInvoiceCode') ?? ''
   },
   {
     title: pi.label('fiscalYear'),
@@ -1035,6 +627,15 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'postedBy') ?? ''
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'remark') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -1082,6 +683,8 @@ const getPurchaseInvoiceDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1146,40 +749,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  purchaseInvoiceCode: '',
-  fiscalYear: '',
-  documentType: '',
-  documentDateStart: '',
-  documentDateEnd: '',
-  postingDateStart: '',
-  postingDateEnd: '',
-  transactionEventType: '',
-  referenceCode: '',
-  supplierCode: '',
-  currencyCode: '',
-  exchangeRate: undefined as number | undefined,
-  grossAmount: undefined as number | undefined,
-  vatAmount: undefined as number | undefined,
-  taxJurisdictionCode: '',
-  cashDiscountDays1: undefined as number | undefined,
-  invoiceFlag: '',
-  headerText: '',
-  reversalDocumentCode: '',
-  reversalFiscalYear: '',
-  taxCode: '',
-  supplyingCountry: '',
-  taxExchangeRate: undefined as number | undefined,
-  baselineDateStart: '',
-  baselineDateEnd: '',
-  enteredBy: '',
-  exchangeRateDateStart: '',
-  exchangeRateDateEnd: '',
-  transactionCode: '',
-  postedBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1377,40 +947,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  purchaseInvoiceCode: '',
-  fiscalYear: '',
-  documentType: '',
-  documentDateStart: '',
-  documentDateEnd: '',
-  postingDateStart: '',
-  postingDateEnd: '',
-  transactionEventType: '',
-  referenceCode: '',
-  supplierCode: '',
-  currencyCode: '',
-  exchangeRate: undefined as number | undefined,
-  grossAmount: undefined as number | undefined,
-  vatAmount: undefined as number | undefined,
-  taxJurisdictionCode: '',
-  cashDiscountDays1: undefined as number | undefined,
-  invoiceFlag: '',
-  headerText: '',
-  reversalDocumentCode: '',
-  reversalFiscalYear: '',
-  taxCode: '',
-  supplyingCountry: '',
-  taxExchangeRate: undefined as number | undefined,
-  baselineDateStart: '',
-  baselineDateEnd: '',
-  enteredBy: '',
-  exchangeRateDateStart: '',
-  exchangeRateDateEnd: '',
-  transactionCode: '',
-  postedBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

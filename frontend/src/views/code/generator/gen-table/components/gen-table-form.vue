@@ -148,7 +148,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.inDatabase"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('inDatabase')"
                 />
               </a-form-item>
@@ -400,7 +400,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isRepository"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isRepository')"
                 />
               </a-form-item>
@@ -514,7 +514,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isGenMenu"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isGenMenu')"
                 />
               </a-form-item>
@@ -538,7 +538,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isGenTranslation"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isGenTranslation')"
                 />
               </a-form-item>
@@ -622,7 +622,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isGenCode"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isGenCode')"
                   :disabled="!!formData?.genTableId"
                 />
@@ -647,7 +647,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isUseTabs"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isUseTabs')"
                 />
               </a-form-item>
@@ -800,7 +800,7 @@
       <template #cell-isPk="{ record }">
         <TaktSelect
           v-model:value="record.isPk"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isPk')"
@@ -811,7 +811,7 @@
       <template #cell-isIncrement="{ record }">
         <TaktSelect
           v-model:value="record.isIncrement"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isIncrement')"
@@ -822,7 +822,7 @@
       <template #cell-isRequired="{ record }">
         <TaktSelect
           v-model:value="record.isRequired"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isRequired')"
@@ -833,7 +833,7 @@
       <template #cell-isCreate="{ record }">
         <TaktSelect
           v-model:value="record.isCreate"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isCreate')"
@@ -844,7 +844,7 @@
       <template #cell-isUpdate="{ record }">
         <TaktSelect
           v-model:value="record.isUpdate"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isUpdate')"
@@ -855,7 +855,7 @@
       <template #cell-isUnique="{ record }">
         <TaktSelect
           v-model:value="record.isUnique"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isUnique')"
@@ -866,7 +866,7 @@
       <template #cell-isList="{ record }">
         <TaktSelect
           v-model:value="record.isList"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isList')"
@@ -877,7 +877,7 @@
       <template #cell-isExport="{ record }">
         <TaktSelect
           v-model:value="record.isExport"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isExport')"
@@ -888,7 +888,7 @@
       <template #cell-isSort="{ record }">
         <TaktSelect
           v-model:value="record.isSort"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isSort')"
@@ -899,7 +899,7 @@
       <template #cell-isQuery="{ record }">
         <TaktSelect
           v-model:value="record.isQuery"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('isQuery')"
@@ -962,30 +962,21 @@ import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -1264,12 +1255,11 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
+/** 租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => tenantStore.tenantCode,
   () => {
-    const isCreate = !props.formData?.genTableId
-    if (isCreate) {
+    if (!props.formData?.genTableId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -1524,53 +1514,129 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('inDatabase' in payload) {
     const rawinDatabase = payload.inDatabase
-    payload.inDatabase = typeof rawinDatabase === 'number' ? rawinDatabase : Number(rawinDatabase)
+    if (rawinDatabase === undefined || rawinDatabase === null || rawinDatabase === '') {
+      delete payload.inDatabase
+    } else {
+      const numinDatabase = typeof rawinDatabase === 'number' ? rawinDatabase : Number(rawinDatabase)
+      if (Number.isFinite(numinDatabase)) payload.inDatabase = numinDatabase
+      else delete payload.inDatabase
+    }
   }
   if ('isRepository' in payload) {
     const rawisRepository = payload.isRepository
-    payload.isRepository = typeof rawisRepository === 'number' ? rawisRepository : Number(rawisRepository)
+    if (rawisRepository === undefined || rawisRepository === null || rawisRepository === '') {
+      delete payload.isRepository
+    } else {
+      const numisRepository = typeof rawisRepository === 'number' ? rawisRepository : Number(rawisRepository)
+      if (Number.isFinite(numisRepository)) payload.isRepository = numisRepository
+      else delete payload.isRepository
+    }
   }
   if ('genMethod' in payload) {
     const rawgenMethod = payload.genMethod
-    payload.genMethod = typeof rawgenMethod === 'number' ? rawgenMethod : Number(rawgenMethod)
+    if (rawgenMethod === undefined || rawgenMethod === null || rawgenMethod === '') {
+      delete payload.genMethod
+    } else {
+      const numgenMethod = typeof rawgenMethod === 'number' ? rawgenMethod : Number(rawgenMethod)
+      if (Number.isFinite(numgenMethod)) payload.genMethod = numgenMethod
+      else delete payload.genMethod
+    }
   }
   if ('isGenMenu' in payload) {
     const rawisGenMenu = payload.isGenMenu
-    payload.isGenMenu = typeof rawisGenMenu === 'number' ? rawisGenMenu : Number(rawisGenMenu)
+    if (rawisGenMenu === undefined || rawisGenMenu === null || rawisGenMenu === '') {
+      delete payload.isGenMenu
+    } else {
+      const numisGenMenu = typeof rawisGenMenu === 'number' ? rawisGenMenu : Number(rawisGenMenu)
+      if (Number.isFinite(numisGenMenu)) payload.isGenMenu = numisGenMenu
+      else delete payload.isGenMenu
+    }
   }
   if ('isGenTranslation' in payload) {
     const rawisGenTranslation = payload.isGenTranslation
-    payload.isGenTranslation = typeof rawisGenTranslation === 'number' ? rawisGenTranslation : Number(rawisGenTranslation)
+    if (rawisGenTranslation === undefined || rawisGenTranslation === null || rawisGenTranslation === '') {
+      delete payload.isGenTranslation
+    } else {
+      const numisGenTranslation = typeof rawisGenTranslation === 'number' ? rawisGenTranslation : Number(rawisGenTranslation)
+      if (Number.isFinite(numisGenTranslation)) payload.isGenTranslation = numisGenTranslation
+      else delete payload.isGenTranslation
+    }
   }
   if ('frontUi' in payload) {
     const rawfrontUi = payload.frontUi
-    payload.frontUi = typeof rawfrontUi === 'number' ? rawfrontUi : Number(rawfrontUi)
+    if (rawfrontUi === undefined || rawfrontUi === null || rawfrontUi === '') {
+      delete payload.frontUi
+    } else {
+      const numfrontUi = typeof rawfrontUi === 'number' ? rawfrontUi : Number(rawfrontUi)
+      if (Number.isFinite(numfrontUi)) payload.frontUi = numfrontUi
+      else delete payload.frontUi
+    }
   }
   if ('frontFormLayout' in payload) {
     const rawfrontFormLayout = payload.frontFormLayout
-    payload.frontFormLayout = typeof rawfrontFormLayout === 'number' ? rawfrontFormLayout : Number(rawfrontFormLayout)
+    if (rawfrontFormLayout === undefined || rawfrontFormLayout === null || rawfrontFormLayout === '') {
+      delete payload.frontFormLayout
+    } else {
+      const numfrontFormLayout = typeof rawfrontFormLayout === 'number' ? rawfrontFormLayout : Number(rawfrontFormLayout)
+      if (Number.isFinite(numfrontFormLayout)) payload.frontFormLayout = numfrontFormLayout
+      else delete payload.frontFormLayout
+    }
   }
   if ('frontBtnStyle' in payload) {
     const rawfrontBtnStyle = payload.frontBtnStyle
-    payload.frontBtnStyle = typeof rawfrontBtnStyle === 'number' ? rawfrontBtnStyle : Number(rawfrontBtnStyle)
+    if (rawfrontBtnStyle === undefined || rawfrontBtnStyle === null || rawfrontBtnStyle === '') {
+      delete payload.frontBtnStyle
+    } else {
+      const numfrontBtnStyle = typeof rawfrontBtnStyle === 'number' ? rawfrontBtnStyle : Number(rawfrontBtnStyle)
+      if (Number.isFinite(numfrontBtnStyle)) payload.frontBtnStyle = numfrontBtnStyle
+      else delete payload.frontBtnStyle
+    }
   }
   if ('isGenCode' in payload) {
     const rawisGenCode = payload.isGenCode
-    payload.isGenCode = typeof rawisGenCode === 'number' ? rawisGenCode : Number(rawisGenCode)
+    if (rawisGenCode === undefined || rawisGenCode === null || rawisGenCode === '') {
+      delete payload.isGenCode
+    } else {
+      const numisGenCode = typeof rawisGenCode === 'number' ? rawisGenCode : Number(rawisGenCode)
+      if (Number.isFinite(numisGenCode)) payload.isGenCode = numisGenCode
+      else delete payload.isGenCode
+    }
   }
   if ('genCodeCount' in payload) {
     const rawgenCodeCount = payload.genCodeCount
-    payload.genCodeCount = typeof rawgenCodeCount === 'number' ? rawgenCodeCount : Number(rawgenCodeCount)
+    if (rawgenCodeCount === undefined || rawgenCodeCount === null || rawgenCodeCount === '') {
+      delete payload.genCodeCount
+    } else {
+      const numgenCodeCount = typeof rawgenCodeCount === 'number' ? rawgenCodeCount : Number(rawgenCodeCount)
+      if (Number.isFinite(numgenCodeCount)) payload.genCodeCount = numgenCodeCount
+      else delete payload.genCodeCount
+    }
   }
   if ('isUseTabs' in payload) {
     const rawisUseTabs = payload.isUseTabs
-    payload.isUseTabs = typeof rawisUseTabs === 'number' ? rawisUseTabs : Number(rawisUseTabs)
+    if (rawisUseTabs === undefined || rawisUseTabs === null || rawisUseTabs === '') {
+      delete payload.isUseTabs
+    } else {
+      const numisUseTabs = typeof rawisUseTabs === 'number' ? rawisUseTabs : Number(rawisUseTabs)
+      if (Number.isFinite(numisUseTabs)) payload.isUseTabs = numisUseTabs
+      else delete payload.isUseTabs
+    }
   }
   if ('tabsFieldCount' in payload) {
     const rawtabsFieldCount = payload.tabsFieldCount
-    payload.tabsFieldCount = typeof rawtabsFieldCount === 'number' ? rawtabsFieldCount : Number(rawtabsFieldCount)
+    if (rawtabsFieldCount === undefined || rawtabsFieldCount === null || rawtabsFieldCount === '') {
+      delete payload.tabsFieldCount
+    } else {
+      const numtabsFieldCount = typeof rawtabsFieldCount === 'number' ? rawtabsFieldCount : Number(rawtabsFieldCount)
+      if (Number.isFinite(numtabsFieldCount)) payload.tabsFieldCount = numtabsFieldCount
+      else delete payload.tabsFieldCount
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.genTableId) {
+    payload.genTableId = props.formData.genTableId
+  }
   return payload
 }
 

@@ -35,7 +35,7 @@ public static class TaktRegexHelper
     /// <summary>用户昵称最小长度。</summary>
     public const int NickNameMinLength = 2;
 
-    /// <summary>用户昵称最大长度（与 TaktUser.nickname nvarchar(40) 一致）。</summary>
+    /// <summary>用户昵称最大长度（与 TaktUser.NickName nvarchar(40) 一致）。</summary>
     public const int NickNameMaxLength = 40;
 
     /// <summary>中国大陆手机号位数。</summary>
@@ -141,9 +141,9 @@ public static class TaktRegexHelper
     /// </summary>
     public static readonly Regex UserName = new(@"^[a-z][a-z0-9]{3,19}$", Opt);
     /// <summary>
-    /// 登录账号（小写字母开头，5-20 位，与前端 RegexPatterns.LOGIN_USERNAME 对齐）。
+    /// 登录账号（小写字母开头，5-20 位，与前端 RegexPatterns.LOGIN_USER_NAME 对齐）。
     /// </summary>
-    public static readonly Regex LoginUsername = new(@"^[a-z][a-z0-9]{4,19}$", Opt);
+    public static readonly Regex LoginUserName = new(@"^[a-z][a-z0-9]{4,19}$", Opt);
     /// <summary>
     /// 租户编码（3 位数字，与前端 RegexPatterns.TENANT_CODE 对齐）。
     /// </summary>
@@ -554,7 +554,7 @@ public static class TaktRegexHelper
     /// <summary>
     /// 是否为有效登录账号（5-20 位小写字母开头）。
     /// </summary>
-    public static bool IsValidLoginUsername(string? value) => IsMatch(LoginUsername, value);
+    public static bool IsValidLoginUserName(string? value) => IsMatch(LoginUserName, value);
 
     /// <summary>
     /// 是否为有效租户编码（3 位数字）。

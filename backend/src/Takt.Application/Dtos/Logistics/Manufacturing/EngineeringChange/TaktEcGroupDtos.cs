@@ -73,17 +73,17 @@ public class TaktEcGroupDto : TaktCompanyDtoBase
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 
@@ -151,17 +151,17 @@ public class TaktEcGroupQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -250,12 +250,12 @@ public class TaktEcGroupCreateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 
@@ -309,9 +309,9 @@ public class TaktEcGroupStatusDto
     public long EcGroupId { get; set; }
 
     /// <summary>
-    /// 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "设变组状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int GroupStatus { get; set; } = 0;
 }
 
@@ -333,7 +333,7 @@ public class TaktEcGroupSortDto
     public long EcGroupId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -400,12 +400,12 @@ public class TaktEcGroupTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -478,12 +478,12 @@ public class TaktEcGroupImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -557,17 +557,17 @@ public class TaktEcGroupExportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 设变组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 

@@ -10,244 +10,87 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form inspection-standard-form flex flex-col min-h-0"
+    class="takt-generated-form inspection-standard-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="inspection-standard-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.plantcode')"
-                name="plantCode"
-              >
-                <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.inspectionStandardId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.inspectionstandard.standardcode')"
-                name="standardCode"
-              >
-                <a-input
-                  v-model:value="formState.standardCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.inspectionStandardId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.inspectionstandard.standardname')"
-                name="standardName"
-              >
-                <a-input
-                  v-model:value="formState.standardName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardname') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.inspectionstandard.inspectiontype')"
-                name="inspectionType"
-              >
-                <TaktSelect
-                  v-model:value="formState.inspectionType"
-                  dict-type="logistics_quality_inspection_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.inspectiontype') })"
-                  :disabled="loading"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.inspectionstandard.materialcategorycode')"
-                name="materialCategoryCode"
-              >
-                <a-input
-                  v-model:value="formState.materialCategoryCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategorycode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.inspectionStandardId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.inspectionstandard.materialcategoryname')"
-                name="materialCategoryName"
-              >
-                <a-input
-                  v-model:value="formState.materialCategoryName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategoryname') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.inspectionstandard.samplingschemecode')"
-                name="samplingSchemeCode"
-              >
-                <a-input
-                  v-model:value="formState.samplingSchemeCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.samplingschemecode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.inspectionStandardId"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.inspectionstandard.samplingschemename')"
-                name="samplingSchemeName"
-              >
-                <a-input
-                  v-model:value="formState.samplingSchemeName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.samplingschemename') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.inspectionstandard.standardstatus')"
-                name="standardStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.standardStatus"
-                  dict-type="logistics_quality_standard_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.standardstatus') })"
-                  :disabled="loading"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.inspectionstandard.standarddescription')"
-                name="standardDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.standardDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.inspectionstandard.standarddescription') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="inspectionStandardItemTableRef"
       v-model="childInspectionStandardItemRows"
       :columns="inspectionStandardItemFormColumns"
-      :title="t('entity.inspectionstandarditem._self')"
-      :add-button-entity="t('entity.inspectionstandarditem._self')"
+      :title="inspectionStandardItemPi.self()"
+      :add-button-entity="inspectionStandardItemPi.self()"
       id-field="inspectionStandardItemId"
       :default-row="createDefaultInspectionStandardItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-itemType="{ record }">
+        <TaktSelect
+          v-model:value="record.itemType"
+          dict-type="logistics_quality_inspection_item_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="inspectionStandardItemPi.ph('itemType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-defectLevel="{ record }">
+        <TaktSelect
+          v-model:value="record.defectLevel"
+          dict-type="logistics_quality_defect_severity_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="inspectionStandardItemPi.ph('defectLevel')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-inspectionMode="{ record }">
+        <TaktSelect
+          v-model:value="record.inspectionMode"
+          dict-type="logistics_quality_inspection_mode"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="inspectionStandardItemPi.ph('inspectionMode')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isQualifiedBasis="{ record }">
+        <TaktSelect
+          v-model:value="record.isQualifiedBasis"
+          dict-type="sys_yes_no"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="inspectionStandardItemPi.ph('isQualifiedBasis')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="inspectionStandardItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -259,47 +102,60 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useInspectionStandardI18n } from '../composables/use-inspection-standard-i18n'
+
+/** 实体字段 i18n */
+const pi = useInspectionStandardI18n()
+
 import type { InspectionStandardCreate } from '@/types/logistics/quality/operation/inspection-standard'
-import { RiQuestionLine } from '@remixicon/vue'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","standardCode","standardName","inspectionType","materialCategoryCode","materialCategoryName","samplingSchemeCode","samplingSchemeName","standardStatus","standardDescription","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useInspectionStandardItemI18n } from '../composables/use-inspection-standard-item-i18n'
+
+const inspectionStandardItemPi = useInspectionStandardItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childInspectionStandardItemRows = ref<Record<string, unknown>[]>([])
 const inspectionStandardItemTableRef = ref<{
@@ -308,65 +164,120 @@ const inspectionStandardItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedInspectionStandardItemRow(row: Record<string, unknown>): boolean {
+  const id = row.inspectionStandardItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextInspectionStandardItemLineNumber(): number {
+  const rows = inspectionStandardItemTableRef.value?.getRows?.() ?? childInspectionStandardItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 inspectionStandardItem 可编辑列 */
 const inspectionStandardItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.inspectionstandarditem.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: inspectionStandardItemPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'itemCode',
-    title: t('entity.inspectionstandarditem.itemcode'),
+    title: inspectionStandardItemPi.label('itemCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'itemName',
-    title: t('entity.inspectionstandarditem.itemname'),
+    title: inspectionStandardItemPi.label('itemName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'itemType',
-    title: t('entity.inspectionstandarditem.itemtype'),
-    editor: 'inputNumber',
+    title: inspectionStandardItemPi.label('itemType'),
     width: 140,
   },
   {
     key: 'defectLevel',
-    title: t('entity.inspectionstandarditem.defectlevel'),
-    editor: 'input',
+    title: inspectionStandardItemPi.label('defectLevel'),
     width: 140,
   },
   {
     key: 'inspectionMode',
-    title: t('entity.inspectionstandarditem.inspectionmode'),
-    editor: 'inputNumber',
+    title: inspectionStandardItemPi.label('inspectionMode'),
     width: 140,
   },
   {
     key: 'standardValue',
-    title: t('entity.inspectionstandarditem.standardvalue'),
+    title: inspectionStandardItemPi.label('standardValue'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'upperLimit',
-    title: t('entity.inspectionstandarditem.upperlimit'),
+    title: inspectionStandardItemPi.label('upperLimit'),
     editor: 'input',
     width: 140,
-  }])
+  },
+  {
+    key: 'lowerLimit',
+    title: inspectionStandardItemPi.label('lowerLimit'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'inspectionTool',
+    title: inspectionStandardItemPi.label('inspectionTool'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'inspectionMethodDescription',
+    title: inspectionStandardItemPi.label('inspectionMethodDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: inspectionStandardItemPi.ph('inspectionMethodDescription'),
+    width: 180,
+  },
+  {
+    key: 'acceptanceCriteria',
+    title: inspectionStandardItemPi.label('acceptanceCriteria'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'rejectionCriteria',
+    title: inspectionStandardItemPi.label('rejectionCriteria'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'isQualifiedBasis',
+    title: inspectionStandardItemPi.label('isQualifiedBasis'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: inspectionStandardItemPi.label('isObsolete'),
+    width: 140,
+  },
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<InspectionStandardCreate & { inspectionStandardId?: string }> | null | undefined) {
-  childInspectionStandardItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_inspectionStandardItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childInspectionStandardItemRows.value = rows_inspectionStandardItem
 }
 
 function createDefaultInspectionStandardItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childInspectionStandardItemRows.value.length + 1) * 10,
+    lineNumber: allocateNextInspectionStandardItemLineNumber(),
     itemCode: '',
     itemName: '',
     itemType: 0,
@@ -374,21 +285,37 @@ function createDefaultInspectionStandardItemRow(): Record<string, unknown> {
     inspectionMode: 0,
     standardValue: '',
     upperLimit: '',
+    lowerLimit: '',
+    inspectionTool: '',
+    inspectionMethodDescription: '',
+    acceptanceCriteria: '',
+    rejectionCriteria: '',
+    isQualifiedBasis: 0,
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.inspectionStandardId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: inspectionStandardItemTableRef.value?.getRows?.() ?? childInspectionStandardItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      inspectionStandardId: masterId,
-    })),
+    items: inspectionStandardItemTableRef.value?.getRows?.() ?? childInspectionStandardItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        inspectionStandardId: masterId,
+      }
+      if (isUpdate && isPersistedInspectionStandardItemRow(row)) {
+        normalized.inspectionStandardItemId = row.inspectionStandardItemId
+      } else {
+        delete normalized.inspectionStandardItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -412,6 +339,7 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 inspectionStandardId 才视为编辑） */
 watch(
@@ -440,10 +368,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.inspectionStandardId
-    if (isCreate) {
+    if (!props.formData?.inspectionStandardId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -451,67 +378,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') }),
-      trigger: 'blur'
-    }
-  ],
-  standardCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardcode') }),
-      trigger: 'blur'
-    }
-  ],
-  standardName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardname') }),
-      trigger: 'blur'
-    }
-  ],
-  inspectionType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.inspectiontype') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.inspectiontype') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  materialCategoryCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategorycode') }),
-      trigger: 'blur'
-    }
-  ],
-  materialCategoryName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategoryname') }),
-      trigger: 'blur'
-    }
-  ],
-  standardStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.standardstatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.standardstatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -524,15 +391,11 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('inspectionType' in payload) {
-    const rawinspectionType = payload.inspectionType
-    payload.inspectionType = typeof rawinspectionType === 'number' ? rawinspectionType : Number(rawinspectionType)
-  }
-  if ('standardStatus' in payload) {
-    const rawstandardStatus = payload.standardStatus
-    payload.standardStatus = typeof rawstandardStatus === 'number' ? rawstandardStatus : Number(rawstandardStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.inspectionStandardId) {
+    payload.inspectionStandardId = props.formData.inspectionStandardId
+  }
   return payload
 }
 
@@ -546,19 +409,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.inspectionStandardId)
   childInspectionStandardItemRows.value = []
   inspectionStandardItemTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

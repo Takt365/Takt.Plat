@@ -56,12 +56,12 @@ public class TaktWarehouse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "contact_phone", ColumnDescription = "联系电话", ColumnDataType = "varchar", Length = 30, IsNullable = true)]
     public string? ContactPhone { get; set; }
     /// <summary>
-    /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=Username）
+    /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
     /// </summary>
     [SugarColumn(ColumnName = "manager_user_code", ColumnDescription = "仓库负责人用户编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? ManagerUserCode { get; set; }
     /// <summary>
-    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
     /// </summary>
     [SugarColumn(ColumnName = "is_virtual", ColumnDescription = "虚拟仓", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsVirtual { get; set; } = 0;
@@ -71,17 +71,17 @@ public class TaktWarehouse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "warehouse_type", ColumnDescription = "仓库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
     public int WarehouseType { get; set; } = 2;
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 仓库状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 仓库状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_status", ColumnDescription = "仓库状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int WarehouseStatus { get; set; } = 1;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mds
 // 文件名称：TaktMasterDemandScheduleI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMasterDemandSchedule 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktMasterDemandScheduleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.masterdemandschedule.buckettype", "zh-HK", "时间桶粒度_hk", "时间桶粒度（字典 mps_time_bucket_type；0=日，1=周，2=月）"),
 
             // entity.masterdemandschedule.schedulestatus
-            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.masterdemandschedule.schedulestatus
-            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.masterdemandschedule.schedulestatus
-            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.masterdemandschedule.schedulestatus
-            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.masterdemandschedule.schedulestatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
 
             // entity.masterdemandschedule.lines
             new TranslationSeedItem("entity.masterdemandschedule.lines", "en-US", "MDS 明细行_us", "MDS 明细行（按物料与时间桶）"),

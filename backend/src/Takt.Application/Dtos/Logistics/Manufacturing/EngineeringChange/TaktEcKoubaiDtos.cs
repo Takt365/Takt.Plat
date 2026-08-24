@@ -87,7 +87,7 @@ public class TaktEcKoubaiDto : TaktCompanyDtoBase
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -175,7 +175,7 @@ public class TaktEcKoubaiQueryDto : TaktPagedQuery
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -278,7 +278,7 @@ public class TaktEcKoubaiCreateDto
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -332,7 +332,7 @@ public class TaktEcKoubaiObsoleteDto
     public long EcKoubaiId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -413,7 +413,7 @@ public class TaktEcKoubaiTemplateDto
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -501,7 +501,7 @@ public class TaktEcKoubaiImportDto
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -585,7 +585,7 @@ public class TaktEcKoubaiExportDto
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

@@ -83,7 +83,7 @@
         <template v-else-if="column.key === 'isDatasource'">
           <TaktDictTag
             :value="record.isDatasource"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'formStatus'">
@@ -284,6 +284,7 @@ const form = reactive<FlowFormCreate & { flowFormId?: string }>({
   companyCode: '',
   companyDefaultCulture: '',
   formCode: '',
+  numberingRuleCode: '',
   formName: '',
   formCategory: 0,
   formType: 0,
@@ -638,6 +639,7 @@ function handleResizeColumn(w: number, col: FlowFormColumn) {
 function resetForm() {
   delete form.flowFormId
   form.formCode = ''
+  form.numberingRuleCode = ''
   form.formName = ''
   form.formCategory = 0
   form.formType = 0
@@ -779,6 +781,7 @@ async function handleFormSubmit() {
       companyCode: form.companyCode,
       companyDefaultCulture: form.companyDefaultCulture,
       formCode: form.formCode.trim(),
+      numberingRuleCode: form.numberingRuleCode?.trim() || undefined,
       formName: form.formName.trim(),
       formCategory: form.formCategory,
       formType: form.formType,
@@ -793,7 +796,8 @@ async function handleFormSubmit() {
       formStatus: form.formStatus
     }
     if (form.flowFormId) {
-      await updateFlowForm(form.flowFormId, { ...payload, flowFormId: form.flowFormId } as FlowFormUpdate)
+      const { numberingRuleCode: _omitRule, ...updateBody } = payload
+      await updateFlowForm(form.flowFormId, { ...updateBody, flowFormId: form.flowFormId } as FlowFormUpdate)
       message.success(t('common.feedback.updated'))
     } else {
       await createFlowForm(payload)

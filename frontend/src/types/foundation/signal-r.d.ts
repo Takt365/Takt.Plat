@@ -92,7 +92,7 @@ export interface SignalRMessage {
   /**
    * 发送者昵称
    */
-  fromUserNickname?: string;
+  fromUserNickName?: string;
 
   /**
    * 接收者用户名
@@ -115,9 +115,14 @@ export interface SignalRMessage {
   messageContent: string;
 
   /**
-   * 附件列表 JSON
+   * 文件名称
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址
+   */
+  accessUrl?: string;
 
   /**
    * 消息类型（字典 sys_message_type DictValue）
@@ -125,7 +130,7 @@ export interface SignalRMessage {
   messageType: string;
 
   /**
-   * 消息分组（字典 sys_message_group_category DictValue）
+   * 消息分组（字典 sys_message_group DictValue）
    */
   messageGroup: string;
 
@@ -170,7 +175,7 @@ export interface BroadcastMessage {
   messageType: string;
 
   /**
-   * 消息分组（字典 sys_message_group_category DictValue）
+   * 消息分组（字典 sys_message_group DictValue）
    */
   messageGroup: string;
 

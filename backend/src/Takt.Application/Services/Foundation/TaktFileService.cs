@@ -33,6 +33,7 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     private readonly ITaktCompanyRepository<TaktFile> _fileRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
     private readonly ITaktFileUploadEngine _fileUploadEngine;
+    private readonly ITaktNumberingGenerator _numberingGenerator;
 
     /// <summary>
     /// 构造函数
@@ -40,12 +41,14 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     /// <param name="fileRepository">文件仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="fileUploadEngine">文件上传引擎</param>
+    /// <param name="numberingGenerator">编码生成器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktFileService(
         ITaktCompanyRepository<TaktFile> fileRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktFileUploadEngine fileUploadEngine,
+        ITaktNumberingGenerator numberingGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -53,6 +56,7 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
         _fileRepository = fileRepository;
         _uniqueValidator = uniqueValidator;
         _fileUploadEngine = fileUploadEngine;
+        _numberingGenerator = numberingGenerator;
     }
 
     /// <summary>
@@ -359,7 +363,7 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
         }
         if (dto.IsPublic is not 0 and not 1)
         {
-            throw new TaktBusinessException("公开必须为字典 sys_is_public_type 合法值（0=公开，1=私有）");
+            throw new TaktBusinessException("公开必须为字典 sys_public_type 合法值（0=公开，1=私有）");
         }
         entity.IsPublic = dto.IsPublic;
         await _fileRepository.UpdateAsync(entity);
@@ -719,13 +723,38 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
             x => x.FileCode == entity.FileCode);
         if (!isUnique_ix_file_code_unique)
         {
-            entity.FileCode = TaktFileHelper.GenerateFileCode();
+            var ruleCode = ResolveFileNumberingRuleCode(entity.FileType);
+            var generated = await _numberingGenerator.GenerateNextAsync(ruleCode);
+            if (string.IsNullOrWhiteSpace(generated.BusinessCode))
+            {
+                throw new TaktBusinessException("文件编码生成失败");
+            }
+
+            entity.FileCode = generated.BusinessCode;
             if (string.IsNullOrWhiteSpace(meta?.FileDescription))
             {
                 entity.FileDescription = TaktFileHelper.BuildFileCodeNameDescription(entity.FileCode, entity.FileName);
             }
         }
         return await _fileRepository.CreateAsync(entity);
+    }
+
+    /// <summary>
+    /// MIME → 文件编码规则码（与 TaktNumberingSeedData FD-F*、上传引擎一致）
+    /// </summary>
+    /// <param name="fileMimeType">MIME 类型</param>
+    /// <returns>规则码</returns>
+    private static string ResolveFileNumberingRuleCode(string fileMimeType)
+    {
+        return TaktFileHelper.GetFileCategoryFromMimeType(fileMimeType) switch
+        {
+            TaktFileHelper.FileCategory.Document => "FD-FDOC",
+            TaktFileHelper.FileCategory.Image => "FD-FIMG",
+            TaktFileHelper.FileCategory.Video => "FD-FVID",
+            TaktFileHelper.FileCategory.Audio => "FD-FAUD",
+            TaktFileHelper.FileCategory.Archive => "FD-FARC",
+            _ => "FD-FOTH",
+        };
     }
 
     /// <summary>

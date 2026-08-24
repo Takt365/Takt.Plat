@@ -13,7 +13,7 @@
 namespace Takt.Shared.Enums;
 
 /// <summary>
-/// 流程定义挂起状态（1 激活，2 挂起）
+/// 流程定义挂起状态（字典 sys_flow_suspension_state；1=激活 2=挂起）
 /// </summary>
 public enum TaktFlowSuspensionState
 {
@@ -24,7 +24,7 @@ public enum TaktFlowSuspensionState
 }
 
 /// <summary>
-/// 流程实例状态（与前端 workflow.instance.status.* 一致）
+/// 流程实例状态（字典 sys_flow_status；与 TaktFlowInstance.InstanceStatus 一致）
 /// </summary>
 public enum TaktFlowInstanceStatus
 {
@@ -43,7 +43,7 @@ public enum TaktFlowInstanceStatus
 }
 
 /// <summary>
-/// 用户任务状态
+/// 用户任务状态（字典 sys_flow_task_status）
 /// </summary>
 public enum TaktFlowTaskStatus
 {
@@ -56,7 +56,7 @@ public enum TaktFlowTaskStatus
 }
 
 /// <summary>
-/// 会签类型（1 或签，2 会签）
+/// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
 /// </summary>
 public enum TaktFlowSignType
 {
@@ -67,7 +67,7 @@ public enum TaktFlowSignType
 }
 
 /// <summary>
-/// 流程变量类型
+/// 流程变量类型（字典 sys_flow_variable_type）
 /// </summary>
 public enum TaktFlowVariableType
 {
@@ -84,7 +84,7 @@ public enum TaktFlowVariableType
 }
 
 /// <summary>
-/// 流程流转动作类型
+/// 流程流转动作类型（字典 sys_flow_action_type）
 /// </summary>
 public enum TaktFlowActionType
 {

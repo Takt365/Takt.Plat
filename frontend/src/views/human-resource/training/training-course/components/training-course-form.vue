@@ -211,7 +211,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.trainingCourseStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.trainingcourse.status') })"
                   size="small"
                 />
@@ -226,7 +226,7 @@
                   v-model:value="formState.plantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingcourse.relatedplant') })"
                   size="small"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -344,7 +344,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.trainingCourseId
     if (isCreate) {

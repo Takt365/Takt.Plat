@@ -68,13 +68,13 @@
         <template v-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getTenantField(record, 'isBuiltIn')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'tenantStatus'">
           <TaktDictTag
             :value="getTenantField(record, 'tenantStatus')"
-            dict-type="sys_normal_disable_status"
+            dict-type="sys_normal_disable"
           />
         </template>
         <template v-else-if="column.key === 'userTenants'">
@@ -222,7 +222,7 @@
       <a-form-item :label="t('entity.tenant.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.tenantStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.tenant.status') })"
           allow-clear
         />

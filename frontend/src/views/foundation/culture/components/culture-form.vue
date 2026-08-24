@@ -29,18 +29,6 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('relatedPlant')"
-                name="relatedPlant"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('relatedPlant')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
                 :label="pi.label('cultureCode')"
                 name="cultureCode"
               >
@@ -48,6 +36,7 @@
                   v-model:value="formState.cultureCode"
                   dict-type="sys_culture_code"
                   :placeholder="pi.ph('cultureCode')"
+                  :disabled="!!formData?.cultureId"
                 />
               </a-form-item>
             </a-col>
@@ -86,7 +75,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isDefault"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isDefault')"
                 />
               </a-form-item>
@@ -174,17 +163,6 @@
       section-border
       class="w-full min-w-0"
     >
-      <template #cell-relatedPlant="{ record }">
-        <TaktSelect
-          v-model:value="record.relatedPlant"
-          api-url="TaktPlants/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="translationPi.queryPh('relatedPlant', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
       <template #cell-resourceGroup="{ record }">
         <TaktSelect
           v-model:value="record.resourceGroup"
@@ -229,27 +207,20 @@ import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * 上下文隔离字段：仅租户（TaktTenantCoreEntityBase，无工厂/无语言隔离）
+ * cultureCode 为业务字段（本条区域文化编码），不从当前用户语言注入
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -257,7 +228,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","relatedPlant","cultureCode","nativeName","icon","isDefault","extField","remark"]
+const formFields = ["tenantCode","cultureCode","nativeName","icon","isDefault","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -279,11 +250,6 @@ const translationTableRef = ref<{
 
 /** 子表 translation 可编辑列 */
 const translationFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'relatedPlant',
-    title: translationPi.label('relatedPlant'),
-    width: 140,
-  },
   {
     key: 'i18nKey',
     title: translationPi.label('i18nKey'),
@@ -324,7 +290,7 @@ function syncChildRowsFromFormData(val: Partial<CultureCreate & { cultureId?: st
 
 function createDefaultTranslationRow(): Record<string, unknown> {
   return {
-    relatedPlant: '',
+    tenantCode: tenantStore.tenantCode,
     i18nKey: '',
     translationText: '',
     resourceGroup: '',
@@ -342,8 +308,6 @@ function buildSubmitPayload() {
     translationList: translationTableRef.value?.getRows?.() ?? childTranslationRows.value.map((rest) => ({
       ...rest,
       tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: typeof formState.cultureCode === 'string' ? formState.cultureCode : '',
       cultureId: masterId,
     })),
   }
@@ -365,14 +329,9 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  cultureCode: "zh-CN"
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -408,12 +367,11 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
+/** 租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => tenantStore.tenantCode,
   () => {
-    const isCreate = !props.formData?.cultureId
-    if (isCreate) {
+    if (!props.formData?.cultureId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -421,13 +379,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  relatedPlant: [
-    {
-      required: true,
-      message: pi.ph('relatedPlant'),
-      trigger: 'change'
-    }
-  ],
   cultureCode: [
     {
       required: true,
@@ -469,9 +420,19 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('isDefault' in payload) {
     const rawisDefault = payload.isDefault
-    payload.isDefault = typeof rawisDefault === 'number' ? rawisDefault : Number(rawisDefault)
+    if (rawisDefault === undefined || rawisDefault === null || rawisDefault === '') {
+      delete payload.isDefault
+    } else {
+      const numisDefault = typeof rawisDefault === 'number' ? rawisDefault : Number(rawisDefault)
+      if (Number.isFinite(numisDefault)) payload.isDefault = numisDefault
+      else delete payload.isDefault
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.cultureId) {
+    payload.cultureId = props.formData.cultureId
+  }
   return payload
 }
 

@@ -413,7 +413,7 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
 
         if (queryDto?.ResponsibleUserId.HasValue == true)
         {
-            var responsibleUserId = queryDto.ResponsibleUserId;
+            var responsibleUserId = queryDto.ResponsibleUserId.Value;
             exp = exp.And(x => x.ResponsibleUserId == responsibleUserId);
         }
 
@@ -431,19 +431,19 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            var isBuiltIn = queryDto.IsBuiltIn;
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
             exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.GroupStatus.HasValue == true)
         {
-            var groupStatus = queryDto.GroupStatus;
+            var groupStatus = queryDto.GroupStatus.Value;
             exp = exp.And(x => x.GroupStatus == groupStatus);
         }
 
@@ -461,13 +461,13 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

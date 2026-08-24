@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktOperLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOperLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktOperLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.operlog.opermodule", "zh-HK", "操作模块_hk", "操作模块（如：用户管理、部门管理）"),
 
             // entity.operlog.opertype
-            new TranslationSeedItem("entity.operlog.opertype", "en-US", "操作类型_us", "操作类型（TaktConstants.OperType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.opertype", "en-US", "操作类型_us", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
             // entity.operlog.opertype
-            new TranslationSeedItem("entity.operlog.opertype", "ja-JP", "操作类型_jp", "操作类型（TaktConstants.OperType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.opertype", "ja-JP", "操作类型_jp", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
             // entity.operlog.opertype
-            new TranslationSeedItem("entity.operlog.opertype", "zh-CN", "操作类型", "操作类型（TaktConstants.OperType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.opertype", "zh-CN", "操作类型", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
             // entity.operlog.opertype
-            new TranslationSeedItem("entity.operlog.opertype", "zh-HK", "操作类型_hk", "操作类型（TaktConstants.OperType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.opertype", "zh-HK", "操作类型_hk", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
 
             // entity.operlog.opermethod
             new TranslationSeedItem("entity.operlog.opermethod", "en-US", "操作方法_us", "操作方法（如：TaktUserService.CreateUserAsync）"),
@@ -199,31 +199,31 @@ public class TaktOperLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.operlog.useragent", "zh-HK", "用户代理_hk", "用户代理（User-Agent）"),
 
             // entity.operlog.browser
-            new TranslationSeedItem("entity.operlog.browser", "en-US", "浏览器_us", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.browser", "en-US", "浏览器_us", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.operlog.browser
-            new TranslationSeedItem("entity.operlog.browser", "ja-JP", "浏览器_jp", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.browser", "ja-JP", "浏览器_jp", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.operlog.browser
-            new TranslationSeedItem("entity.operlog.browser", "zh-CN", "浏览器", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.browser", "zh-CN", "浏览器", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.operlog.browser
-            new TranslationSeedItem("entity.operlog.browser", "zh-HK", "浏览器_hk", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.browser", "zh-HK", "浏览器_hk", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
 
             // entity.operlog.os
-            new TranslationSeedItem("entity.operlog.os", "en-US", "操作系统_us", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.os", "en-US", "操作系统_us", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.operlog.os
-            new TranslationSeedItem("entity.operlog.os", "ja-JP", "操作系统_jp", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.os", "ja-JP", "操作系统_jp", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.operlog.os
-            new TranslationSeedItem("entity.operlog.os", "zh-CN", "操作系统", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.os", "zh-CN", "操作系统", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.operlog.os
-            new TranslationSeedItem("entity.operlog.os", "zh-HK", "操作系统_hk", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.os", "zh-HK", "操作系统_hk", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
 
             // entity.operlog.devicetype
-            new TranslationSeedItem("entity.operlog.devicetype", "en-US", "登录设备_us", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.devicetype", "en-US", "登录设备_us", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
             // entity.operlog.devicetype
-            new TranslationSeedItem("entity.operlog.devicetype", "ja-JP", "登录设备_jp", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.devicetype", "ja-JP", "登录设备_jp", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
             // entity.operlog.devicetype
-            new TranslationSeedItem("entity.operlog.devicetype", "zh-CN", "登录设备", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.devicetype", "zh-CN", "登录设备", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
             // entity.operlog.devicetype
-            new TranslationSeedItem("entity.operlog.devicetype", "zh-HK", "登录设备_hk", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.operlog.devicetype", "zh-HK", "登录设备_hk", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
 
             // entity.operlog.opertime
             new TranslationSeedItem("entity.operlog.opertime", "en-US", "操作时间_us", "操作时间（业务操作发生时刻）"),
@@ -244,13 +244,13 @@ public class TaktOperLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.operlog.elapsedtime", "zh-HK", "执行耗时毫秒_hk", "执行耗时（毫秒）"),
 
             // entity.operlog.operstatus
-            new TranslationSeedItem("entity.operlog.operstatus", "en-US", "操作状态_us", "操作状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.operlog.operstatus", "en-US", "操作状态_us", "操作状态（字典 sys_success_fail_status；0=失败 1=成功）"),
             // entity.operlog.operstatus
-            new TranslationSeedItem("entity.operlog.operstatus", "ja-JP", "操作状态_jp", "操作状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.operlog.operstatus", "ja-JP", "操作状态_jp", "操作状态（字典 sys_success_fail_status；0=失败 1=成功）"),
             // entity.operlog.operstatus
-            new TranslationSeedItem("entity.operlog.operstatus", "zh-CN", "操作状态", "操作状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.operlog.operstatus", "zh-CN", "操作状态", "操作状态（字典 sys_success_fail_status；0=失败 1=成功）"),
             // entity.operlog.operstatus
-            new TranslationSeedItem("entity.operlog.operstatus", "zh-HK", "操作状态_hk", "操作状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.operlog.operstatus", "zh-HK", "操作状态_hk", "操作状态（字典 sys_success_fail_status；0=失败 1=成功）"),
         };
     }
 

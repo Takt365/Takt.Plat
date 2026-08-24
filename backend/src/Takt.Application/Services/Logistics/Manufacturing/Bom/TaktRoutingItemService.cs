@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线明细应用服务实现
 // 
@@ -430,6 +430,10 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             {
                 var childDto = argumentsForSave[i];
                 childDto.RoutingItemId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
                 if (childDto.RoutingItemArgumentId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.RoutingItemArgumentId, out var target))
@@ -491,6 +495,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.RoutingCode != null && x.RoutingCode.Contains(keywords))
                 || (x.BaseUnit != null && x.BaseUnit.Contains(keywords))
                 || (x.TimeUnit != null && x.TimeUnit.Contains(keywords))
@@ -509,9 +514,15 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
         if (queryDto?.RoutingId.HasValue == true)
         {
-            var routingId = queryDto.RoutingId;
+            var routingId = queryDto.RoutingId.Value;
             exp = exp.And(x => x.RoutingId == routingId);
         }
 
@@ -523,7 +534,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            var lineNumber = queryDto.LineNumber;
+            var lineNumber = queryDto.LineNumber.Value;
             exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
@@ -535,13 +546,13 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
 
         if (queryDto?.BaseQuantity.HasValue == true)
         {
-            var baseQuantity = queryDto.BaseQuantity;
+            var baseQuantity = queryDto.BaseQuantity.Value;
             exp = exp.And(x => x.BaseQuantity == baseQuantity);
         }
 
         if (queryDto?.StandardMinutes.HasValue == true)
         {
-            var standardMinutes = queryDto.StandardMinutes;
+            var standardMinutes = queryDto.StandardMinutes.Value;
             exp = exp.And(x => x.StandardMinutes == standardMinutes);
         }
 
@@ -553,7 +564,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
 
         if (queryDto?.StandardShorts.HasValue == true)
         {
-            var standardShorts = queryDto.StandardShorts;
+            var standardShorts = queryDto.StandardShorts.Value;
             exp = exp.And(x => x.StandardShorts == standardShorts);
         }
 
@@ -571,31 +582,31 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
 
         if (queryDto?.ConvertedMinutes.HasValue == true)
         {
-            var convertedMinutes = queryDto.ConvertedMinutes;
+            var convertedMinutes = queryDto.ConvertedMinutes.Value;
             exp = exp.And(x => x.ConvertedMinutes == convertedMinutes);
         }
 
         if (queryDto?.SetupMinutes.HasValue == true)
         {
-            var setupMinutes = queryDto.SetupMinutes;
+            var setupMinutes = queryDto.SetupMinutes.Value;
             exp = exp.And(x => x.SetupMinutes == setupMinutes);
         }
 
         if (queryDto?.TeardownMinutes.HasValue == true)
         {
-            var teardownMinutes = queryDto.TeardownMinutes;
+            var teardownMinutes = queryDto.TeardownMinutes.Value;
             exp = exp.And(x => x.TeardownMinutes == teardownMinutes);
         }
 
         if (queryDto?.IsInspection.HasValue == true)
         {
-            var isInspection = queryDto.IsInspection;
+            var isInspection = queryDto.IsInspection.Value;
             exp = exp.And(x => x.IsInspection == isInspection);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
@@ -607,7 +618,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
 
         if (queryDto?.ProcessSegmentType.HasValue == true)
         {
-            var processSegmentType = queryDto.ProcessSegmentType;
+            var processSegmentType = queryDto.ProcessSegmentType.Value;
             exp = exp.And(x => x.ProcessSegmentType == processSegmentType);
         }
 
@@ -631,21 +642,15 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -666,6 +671,10 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }

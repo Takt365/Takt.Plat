@@ -219,7 +219,7 @@ export function showNewMessage(
  */
 export function showPrivateMessageNotify(options: {
   sender: string;
-  senderNickname?: string;
+  senderNickName?: string;
   content: string;
   messageId?: string;
   sendTime?: string;
@@ -228,7 +228,7 @@ export function showPrivateMessageNotify(options: {
     type: 'info',
     message: translate('common.page.signalr.new.message'),
     description: formatPrivateMessageNotificationContent(
-      options.senderNickname,
+      options.senderNickName,
       options.sender,
       options.content,
     ),

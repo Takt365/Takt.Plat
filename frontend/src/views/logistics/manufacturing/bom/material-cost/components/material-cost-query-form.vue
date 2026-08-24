@@ -24,6 +24,7 @@
         value-format="YYYY-MM"
         class="material-cost-query-bar__control material-cost-query-bar__control--period"
         :placeholder="t('logistics.manufacturing.bom.material-cost.page.costingMonth')"
+        @change="handlePeriodChange"
       />
       <TaktSelect
         v-model:value="materialType"
@@ -31,19 +32,19 @@
         class="material-cost-query-bar__control material-cost-query-bar__control--type"
         allow-clear
         show-search
-        :disabled="!plantCode || materialTypeOptionsLoading"
+        :disabled="!plantCode || !costingMonth || materialTypeOptionsLoading"
         :placeholder="t('entity.bommaterialcost.materialtype')"
         @change="handleMaterialTypeChange"
       />
       <TaktSelect
-        :key="`model-${modelSelectKey}-${materialType || ''}`"
+        :key="`model-${modelSelectKey}-${materialType || ''}-${costingMonth || ''}`"
         v-model:value="modelCode"
         :api-url="modelOptionsUrl"
         :api-params="modelApiParams"
         class="material-cost-query-bar__control material-cost-query-bar__control--model"
         allow-clear
         show-search
-        :disabled="!plantCode"
+        :disabled="!plantCode || !costingMonth"
         :placeholder="t('entity.bommaterialcost.modelcode')"
       />
     </div>
@@ -75,12 +76,13 @@
 <script setup lang="ts">
 /**
  * 浏览页查询栏：工厂 → 期间 → 物料类型（本表去重）→ 机种（本表去重，按类型过滤）
- * 与分析/推移同源 TaktBomMaterialCostAnalyses/*-options，避免字典/型号目的地与汇总表脱节
+ * 与分析/推移同源 TaktBomCostOptions/*-options，避免字典/型号目的地与汇总表脱节
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
-import { getBomMaterialCostAnalysisModelOptionsUrl } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
+import { getBomCostOptionModelOptionsUrl } from '@/api/logistics/manufacturing/bom/cost-option'
 import type { TaktSelectOption } from '@/types/common'
+import { buildBomCostOptionParams } from '../utils/bom-cost-option-params'
 import {
   loadBomMaterialTypeOptionsWithDefault,
   pickDefaultBomMaterialType,
@@ -115,23 +117,18 @@ const materialTypeOptionsPlant = ref('')
 /** 选项请求序号（防竞态） */
 let materialTypeLoadToken = 0
 /** 本表机种 options */
-const modelOptionsUrl = getBomMaterialCostAnalysisModelOptionsUrl()
+const modelOptionsUrl = getBomCostOptionModelOptionsUrl()
 
 /**
- * 机种下拉参数（工厂 + 已选类型）
+ * 机种下拉参数（工厂 + 单月 + 已选类型）
  */
-const modelApiParams = computed(() => {
-  const plant = plantCode.value?.trim()
-  if (!plant) {
-    return undefined
-  }
-  const params: Record<string, string> = { plantCode: plant }
-  const type = materialType.value?.trim()
-  if (type) {
-    params.materialType = type
-  }
-  return params
-})
+const modelApiParams = computed(() =>
+  buildBomCostOptionParams({
+    plantCode: plantCode.value,
+    costingMonth: costingMonth.value,
+    materialType: materialType.value,
+  }),
+)
 
 /**
  * 按工厂拉取本表物料类型全量选项
@@ -142,7 +139,11 @@ async function ensureMaterialTypeOptions(plant: string): Promise<string | undefi
   const token = ++materialTypeLoadToken
   materialTypeOptionsLoading.value = true
   try {
-    const { options, defaultType } = await loadBomMaterialTypeOptionsWithDefault(plant)
+    const { options, defaultType } = await loadBomMaterialTypeOptionsWithDefault(
+      plant,
+      undefined,
+      costingMonth.value,
+    )
     if (token !== materialTypeLoadToken) {
       return undefined
     }
@@ -173,13 +174,24 @@ async function handlePlantChange() {
   materialType.value = undefined
   modelSelectKey.value += 1
   const plant = plantCode.value?.trim()
-  if (!plant) {
+  if (!plant || !costingMonth.value?.trim()) {
     materialTypeOptions.value = []
     materialTypeOptionsPlant.value = ''
     return
   }
   const defaultType = await ensureMaterialTypeOptions(plant)
   if (defaultType && !materialType.value?.trim()) {
+    materialType.value = defaultType
+  }
+  modelSelectKey.value += 1
+}
+
+/** 期间变更：重拉类型并清空机种 */
+async function handlePeriodChange() {
+  modelCode.value = undefined
+  const plant = plantCode.value?.trim()
+  if (plant && costingMonth.value?.trim()) {
+    const defaultType = await ensureMaterialTypeOptions(plant)
     materialType.value = defaultType
   }
   modelSelectKey.value += 1

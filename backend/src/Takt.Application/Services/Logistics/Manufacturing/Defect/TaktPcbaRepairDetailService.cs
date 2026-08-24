@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA改修明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
     }
 
     /// <summary>
-    /// 获取PCBA改修明细列表（分页）
+    /// 获取PCBA改修明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPcbaRepairDetailDto>> GetPcbaRepairDetailListAsync(TaktPcbaRepairDetailQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPcbaRepairDetailDto>.Create(
+                new List<TaktPcbaRepairDetailDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _pcbaRepairDetailRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -100,13 +108,13 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
     {
         EnsureThreeLayerContext();
         var list = await _pcbaRepairDetailRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.ProdOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ProdOrderCode ?? e.Id.ToString(),
+            DictValue = e.ProdOrderCode,
+            DictLabel = e.ProdOrderCode,
         }).ToList();
     }
 
@@ -311,7 +319,15 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPcbaRepairDetailAsync(TaktPcbaRepairDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPcbaRepairDetailQueryDto());
+        var queryDto = query ?? new TaktPcbaRepairDetailQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPcbaRepairDetailExportDto>(),
+                sheetName ?? "PCBA改修明细数据",
+                fileName ?? "PCBA改修明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _pcbaRepairDetailRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -349,6 +365,30 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
             throw new TaktBusinessException("PCBA改修日报不存在");
         }
         entity.PcbaRepairId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.ProdOrderCode))
+        {
+            entity.ProdOrderCode = master.ProdOrderCode;
+        }
+        if (string.IsNullOrEmpty(entity.TeamCode))
+        {
+            entity.TeamCode = master.TeamCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -372,132 +412,245 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.PcbaRepairId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.PcbaBoardType != null && x.PcbaBoardType.Contains(keywords))
-                || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
                 || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || (x.CardCode != null && x.CardCode.Contains(keywords))
                 || (x.DefectSymptom != null && x.DefectSymptom.Contains(keywords))
                 || (x.DefectEngineering != null && x.DefectEngineering.Contains(keywords))
                 || (x.DefectReason != null && x.DefectReason.Contains(keywords))
-                || SqlFunc.ToString(x.DefectQty).Contains(keywords)
                 || (x.DefectResponsibility != null && x.DefectResponsibility.Contains(keywords))
                 || (x.DefectNature != null && x.DefectNature.Contains(keywords))
                 || (x.RepairOperator != null && x.RepairOperator.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.PcbaRepairId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PcbaRepairId == queryDto.PcbaRepairId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdOrderCode))
-        {
-            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(queryDto.ProdOrderCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PcbaBoardType))
-        {
-            exp = exp.And(x => x.PcbaBoardType != null && x.PcbaBoardType.Contains(queryDto.PcbaBoardType));
-        }
-
-        if (queryDto?.ProdActualQty.HasValue == true)
-        {
-            exp = exp.And(x => x.ProdActualQty == queryDto.ProdActualQty);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
-        {
-            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CardCode))
-        {
-            exp = exp.And(x => x.CardCode != null && x.CardCode.Contains(queryDto.CardCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectSymptom))
-        {
-            exp = exp.And(x => x.DefectSymptom != null && x.DefectSymptom.Contains(queryDto.DefectSymptom));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectEngineering))
-        {
-            exp = exp.And(x => x.DefectEngineering != null && x.DefectEngineering.Contains(queryDto.DefectEngineering));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectReason))
-        {
-            exp = exp.And(x => x.DefectReason != null && x.DefectReason.Contains(queryDto.DefectReason));
-        }
-
-        if (queryDto?.DefectQty.HasValue == true)
-        {
-            exp = exp.And(x => x.DefectQty == queryDto.DefectQty);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectResponsibility))
-        {
-            exp = exp.And(x => x.DefectResponsibility != null && x.DefectResponsibility.Contains(queryDto.DefectResponsibility));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectNature))
-        {
-            exp = exp.And(x => x.DefectNature != null && x.DefectNature.Contains(queryDto.DefectNature));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RepairOperator))
-        {
-            exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(queryDto.RepairOperator));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.PcbaRepairId.HasValue == true)
+        {
+            var pcbaRepairId = queryDto.PcbaRepairId.Value;
+            exp = exp.And(x => x.PcbaRepairId == pcbaRepairId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProdOrderCode))
+        {
+            var prodOrderCode = queryDto.ProdOrderCode;
+            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(prodOrderCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbaBoardType))
+        {
+            var pcbaBoardType = queryDto.PcbaBoardType;
+            exp = exp.And(x => x.PcbaBoardType != null && x.PcbaBoardType.Contains(pcbaBoardType));
+        }
+
+        if (queryDto?.ProdActualQty.HasValue == true)
+        {
+            var prodActualQty = queryDto.ProdActualQty.Value;
+            exp = exp.And(x => x.ProdActualQty == prodActualQty);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TeamCode))
+        {
+            var teamCode = queryDto.TeamCode;
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(teamCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CardCode))
+        {
+            var cardCode = queryDto.CardCode;
+            exp = exp.And(x => x.CardCode != null && x.CardCode.Contains(cardCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectSymptom))
+        {
+            var defectSymptom = queryDto.DefectSymptom;
+            exp = exp.And(x => x.DefectSymptom != null && x.DefectSymptom.Contains(defectSymptom));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectEngineering))
+        {
+            var defectEngineering = queryDto.DefectEngineering;
+            exp = exp.And(x => x.DefectEngineering != null && x.DefectEngineering.Contains(defectEngineering));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectReason))
+        {
+            var defectReason = queryDto.DefectReason;
+            exp = exp.And(x => x.DefectReason != null && x.DefectReason.Contains(defectReason));
+        }
+
+        if (queryDto?.DefectQty.HasValue == true)
+        {
+            var defectQty = queryDto.DefectQty.Value;
+            exp = exp.And(x => x.DefectQty == defectQty);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectResponsibility))
+        {
+            var defectResponsibility = queryDto.DefectResponsibility;
+            exp = exp.And(x => x.DefectResponsibility != null && x.DefectResponsibility.Contains(defectResponsibility));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectNature))
+        {
+            var defectNature = queryDto.DefectNature;
+            exp = exp.And(x => x.DefectNature != null && x.DefectNature.Contains(defectNature));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RepairOperator))
+        {
+            var repairOperator = queryDto.RepairOperator;
+            exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(repairOperator));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPcbaRepairDetailQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.PcbaRepairId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProdOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbaBoardType))
+        {
+            return true;
+        }
+        if (queryDto.ProdActualQty.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TeamCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CardCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectSymptom))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectEngineering))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectReason))
+        {
+            return true;
+        }
+        if (queryDto.DefectQty.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectResponsibility))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectNature))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RepairOperator))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

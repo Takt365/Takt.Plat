@@ -36,6 +36,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -44,11 +45,10 @@
                 :label="pi.label('cultureCode')"
                 name="cultureCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
                   :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -138,7 +138,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.sopStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('sopStatus')"
                 />
               </a-form-item>
@@ -172,11 +172,10 @@
                 :label="pi.label('companyCode')"
                 name="companyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
                   :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -272,7 +271,10 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
@@ -351,13 +353,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   sopCode: [
     {
       required: true,
@@ -412,9 +407,23 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('sopStatus' in payload) {
     const rawsopStatus = payload.sopStatus
-    payload.sopStatus = typeof rawsopStatus === 'number' ? rawsopStatus : Number(rawsopStatus)
+    if (rawsopStatus === undefined || rawsopStatus === null || rawsopStatus === '') {
+      delete payload.sopStatus
+    } else {
+      const numsopStatus = typeof rawsopStatus === 'number' ? rawsopStatus : Number(rawsopStatus)
+      if (Number.isFinite(numsopStatus)) payload.sopStatus = numsopStatus
+      else delete payload.sopStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.sopDocId) {
+    payload.sopDocId = props.formData.sopDocId
+  }
   return payload
 }
 

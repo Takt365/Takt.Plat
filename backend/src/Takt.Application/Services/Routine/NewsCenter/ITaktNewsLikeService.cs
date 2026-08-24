@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：ITaktNewsLikeService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心点赞记录应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktNewsLikeService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteNewsLikeBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新新闻中心点赞记录作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktNewsLikeDto> UpdateNewsLikeObsoleteAsync(TaktNewsLikeObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

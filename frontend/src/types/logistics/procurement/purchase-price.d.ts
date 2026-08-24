@@ -60,7 +60,7 @@ export interface PurchasePrice extends CompanyDtoBase {
   taxCode?: string;
 
   /**
-   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   * 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
    */
   grBasedInvoiceInspection?: number;
 
@@ -168,7 +168,7 @@ export interface PurchasePriceExport {
   taxCode?: string;
 
   /**
-   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   * 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
    */
   grBasedInvoiceInspection: number;
 

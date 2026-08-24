@@ -21,116 +21,156 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.documentversion.versionno')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('lineNumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="pi.ph('lineNumber')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('versionNo')"
                 name="versionNo"
               >
                 <a-input-number
                   v-model:value="formState.versionNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.documentversion.versionno') })"
+                  :placeholder="pi.ph('versionNo')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.documentversion.versionnote')"
+                :label="pi.label('versionNote')"
                 name="versionNote"
               >
                 <a-textarea
                   v-model:value="formState.versionNote"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.documentversion.versionnote') })"
+                  :placeholder="pi.ph('versionNote')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.documentversion.fileid')"
+                :label="pi.label('fileId')"
                 name="fileId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.fileId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.documentversion.fileid') })"
+                  api-url="TaktFiles/options"
+                  :placeholder="pi.ph('fileId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('revisedBy')"
+                name="revisedBy"
+              >
+                <TaktSelect
+                  v-model:value="formState.revisedBy"
+                  api-url="TaktUsers/options"
+                  :placeholder="pi.ph('revisedBy')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('revisedAt')"
+                name="revisedAt"
+              >
+                <a-date-picker
+                  v-model:value="formState.revisedAt"
+                  :placeholder="pi.ph('revisedAt')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.documentversion.filename')"
-                name="fileName"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <a-input
-                  v-model:value="formState.fileName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.documentversion.filename') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.documentversion.filepath')"
-                name="filePath"
-              >
-                <a-input
-                  v-model:value="formState.filePath"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.documentversion.filepath') })"
-                  show-count
-                  :maxlength="500"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.documentversion.filesize')"
-                name="fileSize"
-              >
-                <a-input
-                  v-model:value="formState.fileSize"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.documentversion.filesize') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.documentversion.filetype')"
-                name="fileType"
-              >
-                <a-input
-                  v-model:value="formState.fileType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.documentversion.filetype') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.documentversion.fileextension')"
-                name="fileExtension"
-              >
-                <a-input
-                  v-model:value="formState.fileExtension"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.documentversion.fileextension') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -146,19 +186,58 @@
  * 文管中心主实体 支持制度、流程、模板等文档的分类、版本与权限控制子表 documentVersion 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/routine/document-center/document/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useDocumentVersionI18n } from '../composables/use-document-version-i18n'
+
+/** 实体字段 i18n */
+const pi = useDocumentVersionI18n()
+
 import type { DocumentVersionCreate } from '@/types/routine/document-center/document-version'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["versionNo","versionNote","fileId","fileName","filePath","fileSize","fileType","fileExtension"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","versionNo","versionNote","fileId","revisedBy","revisedAt","isObsolete"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -167,12 +246,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -184,6 +266,16 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 documentVersionId 才视为编辑） */
 watch(
   () => props.formData,
@@ -192,6 +284,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -200,22 +293,46 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.documentVersionId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  versionNo: [{
+  lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.documentversion.versionno') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.documentversion.versionno') }))
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  versionNo: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('versionNo'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('versionNo'))
       }
       return Promise.resolve()
     },
@@ -224,31 +341,37 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   fileId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.documentversion.fileid') }),
-      trigger: 'blur'
+      message: pi.ph('fileId'),
+      trigger: 'change'
     }
   ],
-  fileName: [
+  revisedBy: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.documentversion.filename') }),
-      trigger: 'blur'
+      message: pi.ph('revisedBy'),
+      trigger: 'change'
     }
   ],
-  filePath: [
+  revisedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.documentversion.filepath') }),
-      trigger: 'blur'
+      message: pi.ph('revisedAt'),
+      trigger: 'change'
     }
   ],
-  fileSize: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.documentversion.filesize') }),
-      trigger: 'blur'
-    }
-  ],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -260,12 +383,68 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 documentId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
+      delete payload.lineNumber
+    } else {
+      const numlineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+      if (Number.isFinite(numlineNumber)) payload.lineNumber = numlineNumber
+      else delete payload.lineNumber
+    }
+  }
   if ('versionNo' in payload) {
     const rawversionNo = payload.versionNo
-    payload.versionNo = typeof rawversionNo === 'number' ? rawversionNo : Number(rawversionNo)
+    if (rawversionNo === undefined || rawversionNo === null || rawversionNo === '') {
+      delete payload.versionNo
+    } else {
+      const numversionNo = typeof rawversionNo === 'number' ? rawversionNo : Number(rawversionNo)
+      if (Number.isFinite(numversionNo)) payload.versionNo = numversionNo
+      else delete payload.versionNo
+    }
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    if (rawisObsolete === undefined || rawisObsolete === null || rawisObsolete === '') {
+      delete payload.isObsolete
+    } else {
+      const numisObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+      if (Number.isFinite(numisObsolete)) payload.isObsolete = numisObsolete
+      else delete payload.isObsolete
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.documentVersionId) {
+    payload.documentVersionId = props.formData.documentVersionId
+    delete payload.numberingRuleCode
+  }
   payload.documentId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.documentCode ?? masterRow.DocumentCode
+    const masterName = masterRow.documentName ?? masterRow.DocumentName
+    if (masterCode != null && masterCode !== '' && !payload.documentCode) {
+      payload.documentCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.documentName) {
+      payload.documentName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -276,6 +455,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.documentVersionId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

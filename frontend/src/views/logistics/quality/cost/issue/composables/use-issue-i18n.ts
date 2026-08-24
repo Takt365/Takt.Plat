@@ -20,7 +20,6 @@ export const QUALITYISSUE_SELF_I18N_KEY = buildEntitySelfI18nKey(QUALITYISSUE_EN
 
 /** 列表业务列（不含主键） */
 export const QUALITYISSUE_LIST_FIELDS = [
-  'plantCode',
   'qualityIssueCode',
   'issueDate',
   'model',
@@ -31,26 +30,12 @@ export const QUALITYISSUE_LIST_FIELDS = [
   'totalTimeMinutes',
   'totalCost',
   'currencyCode',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const QUALITYISSUE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  qualityIssueCode: 'required',
-  issueDate: 'select',
-  model: 'required',
-  lot: 'required',
-  qualityProblemsResponse: 'optional',
-  reworkDueToDefects: 'optional',
-  needRework: 'optional',
-  totalTimeMinutes: 'select',
-  totalCost: 'select',
-  currencyCode: 'required',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -58,32 +43,13 @@ export type QualityIssueField = keyof typeof QUALITYISSUE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const QUALITYISSUE_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'qualityIssueCode',
-  'issueDateStart',
-  'issueDateEnd',
-  'model',
-  'lot',
-  'qualityProblemsResponse',
-  'reworkDueToDefects',
-  'needRework',
-  'currencyCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof QualityIssueQuery)[]
 
-export type QualityIssueQueryField =
-  | (typeof QUALITYISSUE_QUERY_STRING_FIELDS)[number]
-  | 'totalTimeMinutes' | 'totalCost'
+export type QualityIssueQueryField = (typeof QUALITYISSUE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const QUALITYISSUE_QUERY_FIELDS: readonly QualityIssueQueryField[] = [
-  ...QUALITYISSUE_QUERY_STRING_FIELDS,
-  'totalTimeMinutes',
-  'totalCost',
-]
+export const QUALITYISSUE_QUERY_FIELDS: readonly QualityIssueQueryField[] = [...QUALITYISSUE_QUERY_STRING_FIELDS]
 
 /**
  * 品质问题应对主表字段 i18n：index / issue-form 统一入口

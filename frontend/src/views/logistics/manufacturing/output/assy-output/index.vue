@@ -40,36 +40,36 @@
           @reset="handleReset"
         />
         <TaktToolsBar
-          create-permission="logistics:manufacturing:output:assy:create"
-          update-permission="logistics:manufacturing:output:assy:update"
-          delete-permission="logistics:manufacturing:output:assy:delete"
-          import-permission="logistics:manufacturing:output:assy:import"
-          export-permission="logistics:manufacturing:output:assy:export"
-          :show-create="true"
-          :show-update="true"
-          :show-delete="true"
-          :show-import="true"
-          :show-export="true"
-          :show-expand="false"
-          :show-advanced-query="true"
-          :show-column-setting="true"
-          :show-fullscreen="true"
-          :show-refresh="true"
-          :create-disabled="false"
-          :create-loading="loading"
-          :update-disabled="updateDisabled"
-          :update-loading="loading"
-          :delete-disabled="deleteDisabled"
-          :delete-loading="loading"
-          :refresh-loading="loading"
-          @create="handleCreate"
-          @update="handleUpdate"
-          @delete="handleDelete"
-          @import="handleImport"
-          @export="handleExport"
-          @advanced-query="handleAdvancedQuery"
-          @column-setting="handleColumnSetting"
-          @refresh="handleRefresh"
+      create-permission="logistics:manufacturing:output:assy:create"
+      update-permission="logistics:manufacturing:output:assy:update"
+      delete-permission="logistics:manufacturing:output:assy:delete"
+      import-permission="logistics:manufacturing:output:assy:import"
+      export-permission="logistics:manufacturing:output:assy:export"
+      :show-create="true"
+      :show-update="true"
+      :show-delete="true"
+      :show-import="true"
+      :show-export="true"
+      :show-expand="false"
+      :show-advanced-query="true"
+      :show-column-setting="true"
+      :show-fullscreen="true"
+      :show-refresh="true"
+      :create-disabled="false"
+      :create-loading="loading"
+      :update-disabled="updateDisabled"
+      :update-loading="loading"
+      :delete-disabled="deleteDisabled"
+      :delete-loading="loading"
+      :refresh-loading="loading"
+      @create="handleCreate"
+      @update="handleUpdate"
+      @delete="handleDelete"
+      @import="handleImport"
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
+      @column-setting="handleColumnSetting"
+      @refresh="handleRefresh"
         />
       </template>
       <!-- 字典/开关列渲染 -->
@@ -123,6 +123,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
@@ -163,12 +173,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('TeamCode')">
-      <a-form-item :label="pi.queryLabel('TeamCode')">
+      <div v-show="isFieldVisible('teamCode')">
+      <a-form-item :label="pi.queryLabel('teamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.TeamCode"
+          v-model:value="advancedQueryForm.teamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('TeamCode', 'select')"
+          :placeholder="pi.queryPh('teamCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -203,10 +213,11 @@
       </div>
       <div v-show="isFieldVisible('prodOrderType')">
       <a-form-item :label="pi.queryLabel('prodOrderType')">
-        <TaktSelect
+        <a-input
           v-model:value="advancedQueryForm.prodOrderType"
-          api-url="TaktProductionOrders/options"
-          :placeholder="pi.queryPh('prodOrderType', 'select')"
+          :placeholder="pi.queryPh('prodOrderType', 'required')"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -227,7 +238,7 @@
           v-model:value="advancedQueryForm.modelCode"
           :placeholder="pi.queryPh('modelCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -267,7 +278,7 @@
       <a-form-item :label="pi.queryLabel('serialCode')">
         <a-input
           v-model:value="advancedQueryForm.serialCode"
-          :placeholder="pi.queryPh('serialCode', 'optional')"
+          :placeholder="pi.queryPh('serialCode', 'required')"
           show-count
           :maxlength="80"
           allow-clear
@@ -399,8 +410,8 @@
  * 组立日报管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/assy-output
  */
-import { ref, computed, onMounted, h } from 'vue'
-import { message, Modal, Tooltip } from 'ant-design-vue'
+import { ref, computed, onMounted } from 'vue'
+import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
@@ -423,10 +434,6 @@ import {
   ASSYOUTPUT_QUERY_FIELDS,
   ASSYOUTPUT_SELF_I18N_KEY,
 } from './composables/use-assy-output-i18n'
-import {
-  getAssyOutputProdDateYmdFromRecord,
-  isAssyOutputProdDateLocked,
-} from './composables/takt-assy-output-prod-date-edit-lock'
 
 /** 实体字段 i18n（标签/占位符统一入口） */
 const pi = useAssyOutputI18n()
@@ -473,7 +480,43 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of ASSYOUTPUT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.directLabor !== undefined && form.directLabor !== null) {
+    return true
+  }
+  if (form.indirectLabor !== undefined && form.indirectLabor !== null) {
+    return true
+  }
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    return true
+  }
+  if (form.prodOrderQty !== undefined && form.prodOrderQty !== null) {
+    return true
+  }
+  if (form.stdMinutes !== undefined && form.stdMinutes !== null) {
+    return true
+  }
+  if (form.stdCapacity !== undefined && form.stdCapacity !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -488,8 +531,7 @@ function createEmptyAdvancedQueryForm() {
     shiftNo: undefined as number | undefined,
     prodOrderQty: undefined as number | undefined,
     stdMinutes: undefined as number | undefined,
-    stdCapacity: undefined as number | undefined,
-  }
+    stdCapacity: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -507,20 +549,10 @@ const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'assyOutputId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行且生产日期未锁定） */
-const updateDisabled = computed(() => {
-  if (selectedRows.value.length !== 1) {
-    return true
-  }
-  return isAssyOutputRowProdDateLocked(selectedRows.value[0])
-})
-/** 工具栏「删除」是否禁用（未选中或含已锁定生产日期行） */
-const deleteDisabled = computed(() => {
-  if (selectedRows.value.length === 0) {
-    return true
-  }
-  return selectedRows.value.some((row) => isAssyOutputRowProdDateLocked(row))
-})
+/** 工具栏「编辑」是否禁用（须恰好选中一行） */
+const updateDisabled = computed(() => selectedRows.value.length !== 1)
+/** 工具栏「删除」是否禁用（未选中任何行） */
+const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
@@ -529,7 +561,7 @@ const { selectedMasterRow } = provideAssyOutputMasterContext()
 const assyOutputDetailPanelRef = ref<InstanceType<typeof AssyOutputDetailPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {AssyOutputQuery} 查询 DTO
  */
@@ -573,7 +605,7 @@ function buildListQuery(overrides?: Partial<AssyOutputQuery>): AssyOutputQuery {
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
@@ -644,15 +676,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'assyOutputId') ?? ''
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('prodCategory'),
     dataIndex: 'prodCategory',
     key: 'prodCategory',
@@ -670,13 +693,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodDate') ?? ''
   },
   {
-    title: pi.label('TeamCode'),
-    dataIndex: 'TeamCode',
-    key: 'TeamCode',
+    title: pi.label('teamCode'),
+    dataIndex: 'teamCode',
+    key: 'teamCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'TeamCode') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'teamCode') ?? ''
   },
   {
     title: pi.label('directLabor'),
@@ -777,19 +800,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'stdMinutes') ?? ''
   },
   {
-    title: () =>
-      h('span', { class: 'inline-flex items-center gap-1 align-middle' }, [
-        h(
-          Tooltip,
-          { title: pi.stdCapacityHint(), placement: 'top' },
-          {
-            default: () =>
-              h('span', { class: 'takt-form-label-hint-icon inline-flex cursor-help' }, [
-                h(RiQuestionLine, { class: 'takt-remix-icon' })]),
-          },
-        ),
-        h('span', null, pi.label('stdCapacity'))]),
-    taktColumnSettingLabel: pi.label('stdCapacity'),
+    title: pi.label('stdCapacity'),
     dataIndex: 'stdCapacity',
     key: 'stdCapacity',
     width: 120,
@@ -805,7 +816,6 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:output:assy:update',
-        disabled: (record: AssyOutputRowRecord) => isAssyOutputRowProdDateLocked(record),
         onClick: (record: AssyOutputRowRecord) => handleEdit(record)
       },
       {
@@ -814,7 +824,6 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:output:assy:delete',
-        disabled: (record: AssyOutputRowRecord) => isAssyOutputRowProdDateLocked(record),
         onClick: (record: AssyOutputRowRecord) => handleDeleteOne(record)
       }
     ]
@@ -832,29 +841,6 @@ const getAssyOutputId = (record: AssyOutputRowRecord): string => {
  * @param field 字段名
  */
 const getAssyOutputField = (record: any, field: string): any => record?.[field]
-/**
- * 主表行生产日期是否已锁定
- * @param record 主表行
- */
-function isAssyOutputRowProdDateLocked(record: AssyOutputRowRecord | null | undefined): boolean {
-  if (!record) {
-    return false
-  }
-  const ymd = getAssyOutputProdDateYmdFromRecord(record as Record<string, unknown>)
-  return ymd !== '' && isAssyOutputProdDateLocked(ymd)
-}
-/**
- * 锁定行操作时提示
- * @param record 主表行
- */
-function warnAssyOutputProdDateLocked(record: AssyOutputRowRecord): boolean {
-  if (!isAssyOutputRowProdDateLocked(record)) {
-    return false
-  }
-  const ymd = getAssyOutputProdDateYmdFromRecord(record as Record<string, unknown>)
-  message.warning(pi.prodDateLockedMessage(ymd))
-  return true
-}
 /**
  * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
@@ -904,6 +890,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getAssyOutputList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -930,11 +921,12 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  TeamCode: '',
+  teamCode: '',
   directLabor: undefined as number | undefined,
   indirectLabor: undefined as number | undefined,
   shiftNo: undefined as number | undefined,
@@ -943,8 +935,8 @@ function handleReset() {
   modelCode: '',
   materialCode: '',
   batchCode: '',
-  serialCode: '',
   prodOrderQty: undefined as number | undefined,
+  serialCode: '',
   stdMinutes: undefined as number | undefined,
   stdCapacity: undefined as number | undefined,
   createdAtStart: '',
@@ -965,9 +957,6 @@ function handleCreate() {
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: AssyOutputRowRecord) {
-  if (warnAssyOutputProdDateLocked(record)) {
-    return
-  }
   formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
@@ -1014,8 +1003,6 @@ async function handleFormSubmit() {
   assyOutputDetailPanelRef.value?.reload?.()
     }
     loadData()
-  } catch {
-    // 错误文案由 request 拦截器 notification 展示
   } finally {
     formLoading.value = false
   }
@@ -1064,6 +1051,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportAssyOutput(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1097,9 +1087,6 @@ async function handleExport() {
 }
 /** 删除单行 */
 async function handleDeleteOne(record: AssyOutputRowRecord) {
-  if (warnAssyOutputProdDateLocked(record)) {
-    return
-  }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
@@ -1120,11 +1107,6 @@ async function handleDeleteOne(record: AssyOutputRowRecord) {
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
-    return
-  }
-  const lockedRow = selectedRows.value.find((row) => isAssyOutputRowProdDateLocked(row))
-  if (lockedRow) {
-    warnAssyOutputProdDateLocked(lockedRow)
     return
   }
   Modal.confirm({
@@ -1158,11 +1140,12 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  TeamCode: '',
+  teamCode: '',
   directLabor: undefined as number | undefined,
   indirectLabor: undefined as number | undefined,
   shiftNo: undefined as number | undefined,
@@ -1171,8 +1154,8 @@ function handleAdvancedQueryReset() {
   modelCode: '',
   materialCode: '',
   batchCode: '',
-  serialCode: '',
   prodOrderQty: undefined as number | undefined,
+  serialCode: '',
   stdMinutes: undefined as number | undefined,
   stdCapacity: undefined as number | undefined,
   createdAtStart: '',

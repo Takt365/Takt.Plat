@@ -80,10 +80,16 @@
             dict-type="accounting_currency_code"
           />
         </template>
+        <template v-else-if="column.key === 'taxCode'">
+          <TaktDictTag
+            :value="getSalesQuotationDictValue(record, 'taxCode')"
+            dict-type="accounting_tax_code"
+          />
+        </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getSalesQuotationDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_rate_param"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'quotationStatus'">
@@ -129,6 +135,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
@@ -145,7 +161,7 @@
           v-model:value="advancedQueryForm.salesQuotationCode"
           :placeholder="pi.queryPh('salesQuotationCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -258,11 +274,21 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('taxRate')">
       <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_rate_param"
+          dict-type="accounting_tax_code"
           :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
@@ -483,7 +509,46 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SALESQUOTATION_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
+    return true
+  }
+  if (form.totalAmount !== undefined && form.totalAmount !== null) {
+    return true
+  }
+  if (form.discountAmount !== undefined && form.discountAmount !== null) {
+    return true
+  }
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.actualAmount !== undefined && form.actualAmount !== null) {
+    return true
+  }
+  if (form.quotationStatus !== undefined && form.quotationStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -499,8 +564,7 @@ function createEmptyAdvancedQueryForm() {
     taxRate: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
     actualAmount: undefined as number | undefined,
-    quotationStatus: undefined as number | undefined,
-  }
+    quotationStatus: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -530,7 +594,7 @@ const { selectedMasterRow } = provideSalesQuotationMasterContext()
 const salesQuotationItemPanelRef = ref<InstanceType<typeof SalesQuotationItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SalesQuotationQuery} 查询 DTO
  */
@@ -577,12 +641,13 @@ function buildListQuery(overrides?: Partial<SalesQuotationQuery>): SalesQuotatio
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -645,15 +710,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     fixed: 'left',
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'salesQuotationId') ?? ''
-  },
-  {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'plantCode') ?? ''
   },
   {
     title: pi.label('salesQuotationCode'),
@@ -740,6 +796,14 @@ const columns = computed<TableColumnsType>(() => [
     title: pi.label('currencyCode'),
     dataIndex: 'currencyCode',
     key: 'currencyCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('taxCode'),
+    dataIndex: 'taxCode',
+    key: 'taxCode',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -835,6 +899,8 @@ const getSalesQuotationDictValue = (
   return String(value)
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -867,6 +933,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSalesQuotationList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -893,6 +964,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   salesQuotationCode: '',
   customerCode: '',
@@ -906,6 +978,7 @@ function handleReset() {
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,
   currencyCode: '',
+  taxCode: '',
   taxRate: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,
@@ -1023,6 +1096,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSalesQuotation(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1109,6 +1185,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   salesQuotationCode: '',
   customerCode: '',
@@ -1122,6 +1199,7 @@ function handleAdvancedQueryReset() {
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,
   currencyCode: '',
+  taxCode: '',
   taxRate: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,

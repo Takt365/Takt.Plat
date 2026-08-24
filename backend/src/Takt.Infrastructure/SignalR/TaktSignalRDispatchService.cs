@@ -155,12 +155,13 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             MessageId = message.MessageId.ToString(),
             message.FromUserName,
             FromUserId = message.FromUserId?.ToString(),
-            message.FromUserNickname,
+            message.FromUserNickName,
             ToUserName = toUserName,
             ToUserId = message.ToUserId?.ToString(),
             message.MessageTitle,
             message.MessageContent,
-            message.Attachments,
+            message.FileName,
+            message.AccessUrl,
             message.MessageType,
             message.MessageGroup,
             message.SendTime,
@@ -246,47 +247,47 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// 向指定用户推送最新在线统计（多终端同步）
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="userId">用户 ID</param>
     /// <returns>任务</returns>
-    public async Task PushOnlineStatisticsToUserAsync(string companyCode, string userName, long? userId = null)
+    public async Task PushOnlineStatisticsToUserAsync(string companyCode, string UserName, long? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(UserName))
         {
             return;
         }
 
         var statistics = await _onlineService.GetOnlineStatisticsAsync(new TaktOnlineStatisticsQueryDto
         {
-            UserName = userName,
+            UserName = UserName,
         });
         var payload = ToOnlineStatisticsPayload(statistics);
-        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
 
         await _connectHubContext.Clients.Group(userGroup).SendAsync("OnlineStatisticsUpdated", payload);
-        TaktSignalRLogging.LogStatisticsPushed("online", userName, companyCode);
+        TaktSignalRLogging.LogStatisticsPushed("online", UserName, companyCode);
     }
 
     /// <summary>
     /// 向指定用户推送最新消息统计（多终端同步）
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">用户名（接收者）</param>
+    /// <param name="UserName">用户名（接收者）</param>
     /// <param name="userId">用户 ID</param>
     /// <returns>任务</returns>
-    public async Task PushMessageStatisticsToUserAsync(string companyCode, string userName, long? userId = null)
+    public async Task PushMessageStatisticsToUserAsync(string companyCode, string UserName, long? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(UserName))
         {
             return;
         }
 
-        var statistics = await _messageService.Value.GetMessageStatisticsByUserNameAsync(userName, userId);
+        var statistics = await _messageService.Value.GetMessageStatisticsByUserNameAsync(UserName, userId);
         var payload = ToMessageStatisticsPayload(statistics);
-        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
 
         await _notificationHubContext.Clients.Group(userGroup).SendAsync("MessageStatisticsUpdated", payload);
-        TaktSignalRLogging.LogStatisticsPushed("message", userName, companyCode);
+        TaktSignalRLogging.LogStatisticsPushed("message", UserName, companyCode);
     }
 
     /// <summary>
@@ -331,8 +332,8 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     {
         ArgumentNullException.ThrowIfNull(push);
         var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
-        var userName = targetUserName?.Trim() ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        var UserName = targetUserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(UserName))
         {
             return;
         }
@@ -351,9 +352,9 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             ProgressedAt = push.ProgressedAt,
         };
 
-        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
         await _notificationHubContext.Clients.Group(userGroup).SendAsync("FlowInstanceProgressed", payload);
-        TaktSignalRLogging.LogWorkflowPushed("instance-progressed", companyCode, push.InstanceCode, userName);
+        TaktSignalRLogging.LogWorkflowPushed("instance-progressed", companyCode, push.InstanceCode, UserName);
     }
 
     /// <summary>
@@ -365,8 +366,8 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     {
         ArgumentNullException.ThrowIfNull(push);
         var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
-        var userName = push.UserName?.Trim() ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        var UserName = push.UserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(UserName))
         {
             return;
         }
@@ -375,15 +376,15 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         {
             TenantCode = push.TenantCode,
             CompanyCode = companyCode,
-            UserName = userName,
+            UserName = UserName,
             UserId = push.UserId?.ToString(),
             push.TodoCount,
             UpdatedAt = push.UpdatedAt,
         };
 
-        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
         await _notificationHubContext.Clients.Group(userGroup).SendAsync("FlowTodoCountUpdated", payload);
-        TaktSignalRLogging.LogWorkflowPushed("todo-count", companyCode, push.TodoCount.ToString(), userName);
+        TaktSignalRLogging.LogWorkflowPushed("todo-count", companyCode, push.TodoCount.ToString(), UserName);
     }
 
     /// <summary>
@@ -466,8 +467,8 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     {
         ArgumentNullException.ThrowIfNull(push);
         var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
-        var userName = push.TriggerUserName?.Trim() ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        var UserName = push.TriggerUserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(UserName))
         {
             return;
         }
@@ -476,7 +477,7 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         {
             TenantCode = push.TenantCode,
             CompanyCode = companyCode,
-            TriggerUserName = userName,
+            TriggerUserName = UserName,
             push.ProcessedMonth,
             push.ForceRecalculate,
             push.ExecuteStatus,
@@ -490,9 +491,9 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             CompletedAt = push.CompletedAt,
         };
 
-        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
         await _notificationHubContext.Clients.Group(userGroup).SendAsync("BomMaterialCostItemRecalculateCompleted", payload);
-        TaktSignalRLogging.LogWorkflowPushed("bom-material-cost-item-recalculate", companyCode, push.ProcessedMonth, userName);
+        TaktSignalRLogging.LogWorkflowPushed("bom-material-cost-item-recalculate", companyCode, push.ProcessedMonth, UserName);
     }
 
     /// <summary>
@@ -574,14 +575,14 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// 向发起人推送部门确认通知
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">发起人用户名</param>
+    /// <param name="UserName">发起人用户名</param>
     /// <param name="payload">载荷</param>
     /// <returns>任务</returns>
-    public async Task PushEcNotificationConfirmedToUserAsync(string companyCode, string userName, object payload)
+    public async Task PushEcNotificationConfirmedToUserAsync(string companyCode, string UserName, object payload)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(userName);
-        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(UserName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
         await _ecChangeHubContext.Clients.Group(userGroup).SendAsync("NotificationConfirmed", payload);
     }
 
@@ -589,14 +590,14 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// 向发起人推送变更闭环完成
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">发起人用户名</param>
+    /// <param name="UserName">发起人用户名</param>
     /// <param name="push">闭环模型</param>
     /// <returns>任务</returns>
-    public async Task PushEcChangeClosedToUserAsync(string companyCode, string userName, TaktEcChangeClosedPush push)
+    public async Task PushEcChangeClosedToUserAsync(string companyCode, string UserName, TaktEcChangeClosedPush push)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(userName);
-        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(UserName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
         await _ecChangeHubContext.Clients.Group(userGroup).SendAsync("ChangeClosed", push);
     }
 

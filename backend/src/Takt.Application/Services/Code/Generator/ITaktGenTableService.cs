@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Code.Generator
 // 文件名称：ITaktGenTableService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表配置应用服务接口
 // 

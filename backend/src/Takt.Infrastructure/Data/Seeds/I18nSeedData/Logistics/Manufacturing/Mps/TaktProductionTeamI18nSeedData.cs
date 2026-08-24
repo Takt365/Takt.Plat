@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionTeam 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktProductionTeamI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionteam.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.productionteam.teamstatus
-            new TranslationSeedItem("entity.productionteam.teamstatus", "en-US", "启用状态_us", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.productionteam.teamstatus", "en-US", "启用状态_us", "启用状态（字典 sys_normal_disable；0=禁用，1=启用）"),
             // entity.productionteam.teamstatus
-            new TranslationSeedItem("entity.productionteam.teamstatus", "ja-JP", "启用状态_jp", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.productionteam.teamstatus", "ja-JP", "启用状态_jp", "启用状态（字典 sys_normal_disable；0=禁用，1=启用）"),
             // entity.productionteam.teamstatus
-            new TranslationSeedItem("entity.productionteam.teamstatus", "zh-CN", "启用状态", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.productionteam.teamstatus", "zh-CN", "启用状态", "启用状态（字典 sys_normal_disable；0=禁用，1=启用）"),
             // entity.productionteam.teamstatus
-            new TranslationSeedItem("entity.productionteam.teamstatus", "zh-HK", "启用状态_hk", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.productionteam.teamstatus", "zh-HK", "启用状态_hk", "启用状态（字典 sys_normal_disable；0=禁用，1=启用）"),
 
             // entity.productionteam.teamequipmentlist
             new TranslationSeedItem("entity.productionteam.teamequipmentlist", "en-US", "设备组明细_us", "设备组明细（PCBA 线体 SMT/AI/手插等生产设备及台数）"),

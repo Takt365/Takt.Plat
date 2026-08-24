@@ -40,7 +40,7 @@ public class TaktLoginRequestValidator : AbstractValidator<TaktLoginRequestDto>
     {
         string T(string key) => localizationService.Translate(key);
 
-        RuleFor(x => x.Username)
+        RuleFor(x => x.UserName)
             .NotEmpty().WithMessage(TaktValidationMessageHelper.Build(T, TaktValidationI18nKeys.Required, TaktValidationI18nKeys.EntityUserName))
             .MinimumLength(5)
             .MaximumLength(20)
@@ -87,7 +87,7 @@ public class TaktSessionVerifyPasswordRequestValidator : AbstractValidator<TaktS
     {
         string T(string key) => localizationService.Translate(key);
 
-        RuleFor(x => x.Username)
+        RuleFor(x => x.UserName)
             .NotEmpty().WithMessage(TaktValidationMessageHelper.Build(T, TaktValidationI18nKeys.Required, TaktValidationI18nKeys.EntityUserName))
             .MinimumLength(5)
             .MaximumLength(20)

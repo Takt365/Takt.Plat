@@ -298,13 +298,13 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
 
             // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "en-US", "制造商状态_us", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.manufacturer.status", "en-US", "制造商状态_us", "制造商状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "ja-JP", "制造商状态_jp", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.manufacturer.status", "ja-JP", "制造商状态_jp", "制造商状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "zh-CN", "制造商状态", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.manufacturer.status", "zh-CN", "制造商状态", "制造商状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "zh-HK", "制造商状态_hk", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.manufacturer.status", "zh-HK", "制造商状态_hk", "制造商状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
 
             // entity.manufacturer.materials
             new TranslationSeedItem("entity.manufacturer.materials", "en-US", "导航属性：制造商物料列表_us", "导航属性：制造商物料列表"),

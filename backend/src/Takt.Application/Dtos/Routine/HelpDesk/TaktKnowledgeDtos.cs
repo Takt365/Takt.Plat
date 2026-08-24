@@ -76,7 +76,7 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     public int UnhelpfulCount { get; set; } = 0;
 
     /// <summary>
-    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 是否已发布（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int KnowledgeIsPublished { get; set; } = 0;
 
@@ -96,7 +96,7 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     public DateTime? RevisedAt { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -183,7 +183,7 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     public int? UnhelpfulCount { get; set; }
 
     /// <summary>
-    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 是否已发布（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int? KnowledgeIsPublished { get; set; }
 
@@ -213,7 +213,7 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     public DateTime? RevisedAtEnd { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -319,7 +319,7 @@ public class TaktKnowledgeCreateDto
     public int UnhelpfulCount { get; set; } = 0;
 
     /// <summary>
-    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 是否已发布（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int KnowledgeIsPublished { get; set; } = 0;
 
@@ -422,7 +422,7 @@ public class TaktKnowledgeSortDto
     public long KnowledgeId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -498,7 +498,7 @@ public class TaktKnowledgeTemplateDto
     public int? UnhelpfulCount { get; set; }
 
     /// <summary>
-    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 是否已发布（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int? KnowledgeIsPublished { get; set; }
 
@@ -605,7 +605,7 @@ public class TaktKnowledgeImportDto
     public int? UnhelpfulCount { get; set; }
 
     /// <summary>
-    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 是否已发布（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int? KnowledgeIsPublished { get; set; }
 
@@ -708,7 +708,7 @@ public class TaktKnowledgeExportDto
     public int UnhelpfulCount { get; set; } = 0;
 
     /// <summary>
-    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 是否已发布（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int KnowledgeIsPublished { get; set; } = 0;
 
@@ -728,7 +728,7 @@ public class TaktKnowledgeExportDto
     public DateTime? RevisedAt { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

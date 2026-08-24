@@ -45,7 +45,6 @@ export const TRANSLATION_SUMMARY_SUM_FIELDS = [] as const
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const TRANSLATION_PLACEHOLDER = {
   tenantCode: 'optional',
-  relatedPlant: 'select',
   i18nKey: 'required',
   translationText: 'required',
   resourceGroup: 'select',
@@ -58,7 +57,6 @@ export type TranslationField = keyof typeof TRANSLATION_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const TRANSLATION_QUERY_STRING_FIELDS = [
-  'relatedPlant',
   'i18nKey',
   'translationText',
   'resourceGroup',

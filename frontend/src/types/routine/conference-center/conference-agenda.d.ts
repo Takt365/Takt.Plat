@@ -99,7 +99,7 @@ export interface ConferenceAgenda extends CompanyDtoBase {
   attachments?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -204,7 +204,7 @@ export interface ConferenceAgendaQuery extends TaktPagedQuery {
   attachments?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -326,7 +326,7 @@ export interface ConferenceAgendaCreate {
   attachments?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -370,7 +370,7 @@ export interface ConferenceAgendaObsolete {
   conferenceAgendaId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -464,7 +464,7 @@ export interface ConferenceAgendaTemplate {
   attachments?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -576,7 +576,7 @@ export interface ConferenceAgendaImport {
   attachments?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -675,7 +675,7 @@ export interface ConferenceAgendaExport {
   attachments?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

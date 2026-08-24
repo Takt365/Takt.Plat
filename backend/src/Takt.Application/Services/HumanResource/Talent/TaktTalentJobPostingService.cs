@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Talent
 // 文件名称：TaktTalentJobPostingService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：职位发布应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     }
 
     /// <summary>
-    /// 获取职位发布列表（分页）
+    /// 获取职位发布列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktTalentJobPostingDto>> GetTalentJobPostingListAsync(TaktTalentJobPostingQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktTalentJobPostingDto>.Create(
+                new List<TaktTalentJobPostingDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _talentJobPostingRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -102,8 +110,8 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PostingCode ?? e.Id.ToString(),
+            DictValue = e.PostingCode,
+            DictLabel = e.PostingCode,
         }).ToList();
     }
 
@@ -278,7 +286,15 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportTalentJobPostingAsync(TaktTalentJobPostingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktTalentJobPostingQueryDto());
+        var queryDto = query ?? new TaktTalentJobPostingQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktTalentJobPostingExportDto>(),
+                sheetName ?? "职位发布数据",
+                fileName ?? "职位发布导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _talentJobPostingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -316,7 +332,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     }
 
     /// <summary>
-    /// 保存职位发布子表级联（录用信息；Create/Update 后按主表 Id 先删后插）
+    /// 保存职位发布子表级联（录用信息；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -324,22 +340,70 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     private async Task SaveTalentJobPostingChildrenAsync(TaktTalentJobPosting entity, TaktTalentJobPostingCreateDto dto)
     {
         // 录用信息（TalentOffers）
-        if (dto.TalentOffers is not { Count: > 0 })
+        List<TaktTalentOfferUpdateDto>? talentOffersForSave;
+        if (dto is TaktTalentJobPostingUpdateDto updateDtoForTalentOffers && updateDtoForTalentOffers.TalentOffers != null)
+        {
+            talentOffersForSave = updateDtoForTalentOffers.TalentOffers;
+        }
+        else if (dto.TalentOffers != null)
+        {
+            talentOffersForSave = dto.TalentOffers.Adapt<List<TaktTalentOfferUpdateDto>>();
+        }
+        else
+        {
+            talentOffersForSave = null;
+        }
+        if (talentOffersForSave is not { Count: > 0 })
         {
             await _talentOfferRepository.DeleteAsync(x => x.JobPostingId == entity.Id);
         }
         else
         {
-            var talentoffers = dto.TalentOffers.Adapt<List<TaktTalentOffer>>();
-            foreach (var child in talentoffers)
+            var existingList = await _talentOfferRepository.GetListAsync(x => x.JobPostingId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktTalentOffer>();
+            for (var i = 0; i < talentOffersForSave.Count; i++)
             {
-                child.JobPostingId = entity.Id;
+                var childDto = talentOffersForSave[i];
+                childDto.JobPostingId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.Reason = entity.Reason;
+                if (childDto.TalentOfferId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.TalentOfferId, out var target))
+                    {
+                        throw new TaktBusinessException("录用信息不存在（TalentOfferId={childDto.TalentOfferId}）");
+                    }
+                    if (target.JobPostingId != entity.Id)
+                    {
+                        throw new TaktBusinessException("录用信息不属于当前主表（TalentOfferId={childDto.TalentOfferId}）");
+                    }
+                    submittedIds.Add(childDto.TalentOfferId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.TalentOfferId;
+                    target.JobPostingId = entity.Id;
+                    await _talentOfferRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktTalentOffer>();
+                    child.Id = 0;
+                    child.JobPostingId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-            await _talentOfferRepository.DeleteAsync(x => x.JobPostingId == entity.Id);
-            foreach (var child in talentoffers)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
+                await _talentOfferRepository.DeleteAsync(removed.Id);
             }
-            await _talentOfferRepository.CreateRangeAsync(talentoffers);
+            if (toCreate.Count > 0)
+            {
+                await _talentOfferRepository.CreateRangeAsync(toCreate);
+            }
         }
     }
     // ========================================
@@ -355,117 +419,202 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     {
         var exp = Expressionable.Create<TaktTalentJobPosting>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.StaffingRequirementId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PostingCode != null && x.PostingCode.Contains(keywords))
                 || (x.TalentJobPostingTitle != null && x.TalentJobPostingTitle.Contains(keywords))
-                || SqlFunc.ToString(x.PostingStatus).Contains(keywords)
-                || SqlFunc.ToString(x.PublishChannel).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PublishDate).Contains(keywords)
-                || SqlFunc.ToString(x.OpenDate).Contains(keywords)
-                || SqlFunc.ToString(x.CloseDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.StaffingRequirementId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.StaffingRequirementId == queryDto.StaffingRequirementId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PostingCode))
-        {
-            exp = exp.And(x => x.PostingCode != null && x.PostingCode.Contains(queryDto.PostingCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TalentJobPostingTitle))
-        {
-            exp = exp.And(x => x.TalentJobPostingTitle != null && x.TalentJobPostingTitle.Contains(queryDto.TalentJobPostingTitle));
-        }
-
-        if (queryDto?.PostingStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.PostingStatus == queryDto.PostingStatus);
-        }
-
-        if (queryDto?.PublishChannel.HasValue == true)
-        {
-            exp = exp.And(x => x.PublishChannel == queryDto.PublishChannel);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Reason))
-        {
-            exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.PublishDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.PublishDate >= queryDto.PublishDateStart);
-        }
-
-        if (queryDto?.PublishDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.PublishDate <= queryDto.PublishDateEnd);
-        }
-
-        if (queryDto?.OpenDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.OpenDate >= queryDto.OpenDateStart);
-        }
-
-        if (queryDto?.OpenDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.OpenDate <= queryDto.OpenDateEnd);
-        }
-
-        if (queryDto?.CloseDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CloseDate >= queryDto.CloseDateStart);
-        }
-
-        if (queryDto?.CloseDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CloseDate <= queryDto.CloseDateEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.StaffingRequirementId.HasValue == true)
+        {
+            var staffingRequirementId = queryDto.StaffingRequirementId.Value;
+            exp = exp.And(x => x.StaffingRequirementId == staffingRequirementId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostingCode))
+        {
+            var postingCode = queryDto.PostingCode;
+            exp = exp.And(x => x.PostingCode != null && x.PostingCode.Contains(postingCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TalentJobPostingTitle))
+        {
+            var talentJobPostingTitle = queryDto.TalentJobPostingTitle;
+            exp = exp.And(x => x.TalentJobPostingTitle != null && x.TalentJobPostingTitle.Contains(talentJobPostingTitle));
+        }
+
+        if (queryDto?.PublishChannel.HasValue == true)
+        {
+            var publishChannel = queryDto.PublishChannel.Value;
+            exp = exp.And(x => x.PublishChannel == publishChannel);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Reason))
+        {
+            var reason = queryDto.Reason;
+            exp = exp.And(x => x.Reason != null && x.Reason.Contains(reason));
+        }
+
+        if (queryDto?.PostingStatus.HasValue == true)
+        {
+            var postingStatus = queryDto.PostingStatus.Value;
+            exp = exp.And(x => x.PostingStatus == postingStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.PublishDateStart.HasValue == true)
+        {
+            var publishDateStart = queryDto.PublishDateStart.Value;
+            exp = exp.And(x => x.PublishDate >= publishDateStart);
+        }
+
+        if (queryDto?.PublishDateEnd.HasValue == true)
+        {
+            var publishDateEnd = queryDto.PublishDateEnd.Value;
+            exp = exp.And(x => x.PublishDate <= publishDateEnd);
+        }
+
+        if (queryDto?.OpenDateStart.HasValue == true)
+        {
+            var openDateStart = queryDto.OpenDateStart.Value;
+            exp = exp.And(x => x.OpenDate >= openDateStart);
+        }
+
+        if (queryDto?.OpenDateEnd.HasValue == true)
+        {
+            var openDateEnd = queryDto.OpenDateEnd.Value;
+            exp = exp.And(x => x.OpenDate <= openDateEnd);
+        }
+
+        if (queryDto?.CloseDateStart.HasValue == true)
+        {
+            var closeDateStart = queryDto.CloseDateStart.Value;
+            exp = exp.And(x => x.CloseDate >= closeDateStart);
+        }
+
+        if (queryDto?.CloseDateEnd.HasValue == true)
+        {
+            var closeDateEnd = queryDto.CloseDateEnd.Value;
+            exp = exp.And(x => x.CloseDate <= closeDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktTalentJobPostingQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.StaffingRequirementId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostingCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TalentJobPostingTitle))
+        {
+            return true;
+        }
+        if (queryDto.PublishChannel.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Reason))
+        {
+            return true;
+        }
+        if (queryDto.PostingStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.PublishDateStart.HasValue || queryDto.PublishDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OpenDateStart.HasValue || queryDto.OpenDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CloseDateStart.HasValue || queryDto.CloseDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

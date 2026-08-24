@@ -47,6 +47,8 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
     private readonly IConfiguration _configuration;
     /// <summary>已解析的 SqlSugar 数据库类型（构造时映射一次）</summary>
     private readonly DbType _sugarDbType;
+    /// <summary>物理表名 → 实体类型缓存（大小写不敏感）</summary>
+    private readonly Dictionary<string, Type?> _entityTypeByTableName = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// 初始化数据库 Schema 提供者
@@ -127,6 +129,7 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
         using var db = CreateClient(tenantCode);
         var columns = db.DbMaintenance.GetColumnInfosByTableName(tableName, false) ?? new List<DbColumnInfo>();
         var list = columns.Select(MapColumnInfo).ToList();
+        list = OrderColumnsByEntity(db, tableName, list);
         return Task.FromResult<IReadOnlyList<TaktDatabaseTableColumnInfo>>(list);
     }
 
@@ -248,5 +251,82 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
             IsIdentity = col.IsIdentity,
             IsNullable = col.IsNullable
         };
+    }
+
+    /// <summary>
+    /// 按 Domain 实体属性顺序（SqlSugar CreateTableFieldSort + 列声明序）重排列清单；无匹配实体时保持库内原始顺序
+    /// </summary>
+    /// <param name="db">SqlSugar 客户端</param>
+    /// <param name="tableName">物理表名</param>
+    /// <param name="columns">库内 introspect 列清单</param>
+    /// <returns>与实体声明一致的列顺序</returns>
+    private List<TaktDatabaseTableColumnInfo> OrderColumnsByEntity(
+        SqlSugarClient db,
+        string tableName,
+        List<TaktDatabaseTableColumnInfo> columns)
+    {
+        if (columns.Count == 0)
+        {
+            return columns;
+        }
+        var entityType = ResolveEntityTypeByTableName(db, tableName);
+        if (entityType == null)
+        {
+            return columns;
+        }
+        var entityInfo = db.EntityMaintenance.GetEntityInfo(entityType);
+        var orderMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var index = 0;
+        foreach (var col in entityInfo.Columns.Where(c => !c.IsIgnore))
+        {
+            var dbColumnName = col.DbColumnName?.Trim();
+            if (string.IsNullOrEmpty(dbColumnName))
+            {
+                continue;
+            }
+            if (!orderMap.ContainsKey(dbColumnName))
+            {
+                orderMap[dbColumnName] = index++;
+            }
+        }
+        if (orderMap.Count == 0)
+        {
+            return columns;
+        }
+        return columns
+            .OrderBy(c => orderMap.TryGetValue(c.DatabaseColumnName, out var ord) ? ord : int.MaxValue)
+            .ThenBy(c => c.DatabaseColumnName, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    /// <summary>
+    /// 按物理表名解析 Domain 实体类型（带实例级缓存）
+    /// </summary>
+    /// <param name="db">SqlSugar 客户端</param>
+    /// <param name="tableName">物理表名</param>
+    /// <returns>实体类型；无匹配时 null</returns>
+    private Type? ResolveEntityTypeByTableName(SqlSugarClient db, string tableName)
+    {
+        var key = tableName?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(key))
+        {
+            return null;
+        }
+        if (_entityTypeByTableName.TryGetValue(key, out var cached))
+        {
+            return cached;
+        }
+        Type? found = null;
+        foreach (var entityType in EntityTypes)
+        {
+            var info = db.EntityMaintenance.GetEntityInfo(entityType);
+            if (string.Equals(info.DbTableName, key, StringComparison.OrdinalIgnoreCase))
+            {
+                found = entityType;
+                break;
+            }
+        }
+        _entityTypeByTableName[key] = found;
+        return found;
     }
 }

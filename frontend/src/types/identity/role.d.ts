@@ -49,12 +49,12 @@ export interface Role extends TenantCoreDtoBase {
   sortOrder: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+   * 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   roleStatus: number;
 
@@ -123,12 +123,12 @@ export interface RoleQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+   * 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   roleStatus?: number;
 
@@ -191,12 +191,12 @@ export interface RoleCreate {
   dataScope: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+   * 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   roleStatus: number;
 
@@ -258,7 +258,7 @@ export interface RoleStatus {
   roleId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   roleStatus: number;
 
@@ -314,12 +314,12 @@ export interface RoleTemplate {
   dataScope?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+   * 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   roleStatus?: number;
 
@@ -387,12 +387,12 @@ export interface RoleImport {
   dataScope?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+   * 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   roleStatus?: number;
 
@@ -460,12 +460,12 @@ export interface RoleExport {
   sortOrder: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+   * 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   roleStatus: number;
 

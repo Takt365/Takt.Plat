@@ -31,7 +31,7 @@ export interface LoginLog extends CompanyDtoBase {
   /**
    * 用户名（登录账号）
    */
-  username: string;
+  userName: string;
 
   /**
    * 登录方式
@@ -123,7 +123,7 @@ export interface LoginLogExport {
   /**
    * 用户名（登录账号）
    */
-  username: string;
+  userName: string;
 
   /**
    * 登录方式

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopEsdCheckI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopEsdCheck 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,22 +136,22 @@ public class TaktSopEsdCheckI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopesdcheck.resistancevalue", "zh-HK", "阻值兆欧_hk", "阻值（兆欧）"),
 
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "en-US", "达标_us", "达标（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "en-US", "达标_us", "达标（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "ja-JP", "达标_jp", "达标（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "ja-JP", "达标_jp", "达标（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-CN", "达标", "达标（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-CN", "达标", "达标（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-HK", "达标_hk", "达标（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-HK", "达标_hk", "达标（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "en-US", "锁屏_us", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "en-US", "锁屏_us", "锁屏（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "ja-JP", "锁屏_jp", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "ja-JP", "锁屏_jp", "锁屏（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-CN", "锁屏", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-CN", "锁屏", "锁屏（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-HK", "锁屏_hk", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-HK", "锁屏_hk", "锁屏（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.sopesdcheck.checkedat
             new TranslationSeedItem("entity.sopesdcheck.checkedat", "en-US", "检查时间_us", "检查时间"),

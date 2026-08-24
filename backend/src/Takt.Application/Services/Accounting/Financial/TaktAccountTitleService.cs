@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAccountTitleService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     }
 
     /// <summary>
-    /// 获取会计科目列表（分页）
+    /// 获取会计科目列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktAccountTitleDto>> GetAccountTitleListAsync(TaktAccountTitleQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktAccountTitleDto>.Create(
+                new List<TaktAccountTitleDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _accountTitleRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -85,149 +93,62 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         {
             return null;
         }
-        var dto = entity.Adapt<TaktAccountTitleDto>();
-        await FillAccountTitleDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktAccountTitleDto>();
+    }
 
     /// <summary>
-    /// 获取会计科目树形选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
+    /// 获取会计科目树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue 为 AccountTitleCode）
     /// </summary>
-    /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync()
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    public async Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync(long parentId = 0)
     {
         EnsureThreeLayerContext();
-        var list = await _accountTitleRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AccountTitleStatus == 1);
-        return BuildAccountTitleTreeOptions(list, 0);
-    }
-
-    /// <summary>
-    /// 获取会计科目父级树形选项列表（DictValue 为 Id，用于 ParentId 选择）
-    /// </summary>
-    /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetAccountTitleParentTreeOptionsAsync()
-    {
-        EnsureThreeLayerContext();
-        var list = await _accountTitleRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AccountTitleStatus == 1);
-        return BuildAccountTitleParentTreeOptions(list, 0);
-    }
-
-    /// <summary>
-    /// 获取会计科目选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
-    /// </summary>
-    /// <param name="reconciliationOnly">为 true 时仅返回统驭科目（辅助核算类型 / 统驭标识为 D=客户、K=供应商、A=资产）</param>
-    /// <param name="auxiliaryType">可选；按统驭标识精确过滤（如 D=客户、K=供应商）</param>
-    /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync(bool reconciliationOnly = false, string? auxiliaryType = null)
-    {
-        EnsureThreeLayerContext();
-        var auxType = string.IsNullOrWhiteSpace(auxiliaryType) ? null : auxiliaryType.Trim();
-        var list = await _accountTitleRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.AccountTitleStatus == 1
-                && (!reconciliationOnly
-                    || x.AuxiliaryType == "D"
-                    || x.AuxiliaryType == "K"
-                    || x.AuxiliaryType == "A")
-                && (auxType == null || x.AuxiliaryType == auxType),
-            x => x.SortOrder,
-            false);
-        return list.Select(e => new TaktSelectOption
-        {
-            DictValue = e.AccountTitleCode,
-            DictLabel = string.IsNullOrWhiteSpace(e.AccountTitleName) ? e.AccountTitleCode : e.AccountTitleName,
-            ExtLabel = e.AccountTitleCode,
-            SortOrder = e.SortOrder,
-        }).ToList();
-    }
-
-    /// <summary>
-    /// 在内存中构建会计科目树形选项（递归，按 ParentId；DictValue 为 AccountTitleCode）
-    /// </summary>
-    private List<TaktTreeSelectOption> BuildAccountTitleTreeOptions(List<TaktAccountTitle> all, long parentId)
-    {
-        var result = new List<TaktTreeSelectOption>();
-        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
-        {
-            var option = new TaktTreeSelectOption
+        var list = await _accountTitleRepository.GetListAsync(x =>
+            x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.ParentId == parentId
+            && x.AccountTitleStatus == 1);
+        return list
+            .OrderBy(x => x.SortOrder)
+            .Select(item =>
             {
-                DictValue = item.AccountTitleCode,
-                DictLabel = string.IsNullOrWhiteSpace(item.AccountTitleName) ? item.AccountTitleCode : item.AccountTitleName,
-                ExtLabel = item.AccountTitleCode,
-                SortOrder = item.SortOrder,
-            };
-            var children = BuildAccountTitleTreeOptions(all, item.Id);
-            if (children.Count > 0)
-            {
-                option.Children = children;
-            }
-            result.Add(option);
-        }
-        return result;
+                var isLeaf = TaktLazyTreeHelper.ToAntIsLeaf(item.IsLeaf);
+                return new TaktTreeSelectOption
+                {
+                    DictValue = item.AccountTitleCode,
+                    DictLabel = string.IsNullOrWhiteSpace(item.AccountTitleName) ? item.AccountTitleCode : item.AccountTitleName,
+                    ExtLabel = item.AccountTitleCode,
+                    SortOrder = item.SortOrder,
+                    IsLeaf = isLeaf,
+                    Children = null,
+                };
+            })
+            .ToList();
     }
 
     /// <summary>
-    /// 在内存中构建会计科目父级树形选项（递归，按 ParentId；DictValue 为 Id）
+    /// 获取会计科目树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）
     /// </summary>
-    private List<TaktTreeSelectOption> BuildAccountTitleParentTreeOptions(List<TaktAccountTitle> all, long parentId)
-    {
-        var result = new List<TaktTreeSelectOption>();
-        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
-        {
-            var option = new TaktTreeSelectOption
-            {
-                DictValue = item.Id,
-                DictLabel = string.IsNullOrWhiteSpace(item.AccountTitleName) ? item.Id.ToString() : item.AccountTitleName,
-                ExtLabel = item.AccountTitleCode,
-                SortOrder = item.SortOrder,
-            };
-            var children = BuildAccountTitleParentTreeOptions(all, item.Id);
-            if (children.Count > 0)
-            {
-                option.Children = children;
-            }
-            result.Add(option);
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// 获取会计科目树形列表
-    /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     public async Task<List<TaktAccountTitleTreeDto>> GetAccountTitleTreeAsync(long parentId = 0, bool includeDisabled = false)
     {
         EnsureThreeLayerContext();
-        var list = await _accountTitleRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
-        var filtered = includeDisabled
-            ? list
-            : list.Where(x => x.AccountTitleStatus == 1).ToList();
-        return BuildAccountTitleTree(filtered, parentId);
-    }
-
-    /// <summary>
-    /// 在内存中构建会计科目树（递归，按 ParentId）
-    /// </summary>
-    private List<TaktAccountTitleTreeDto> BuildAccountTitleTree(List<TaktAccountTitle> allRecords, long parentId)
-    {
-        var children = allRecords
-            .Where(x => x.ParentId == parentId)
+        Expression<Func<TaktAccountTitle, bool>> predicate = includeDisabled
+            ? (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId)
+            : (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.AccountTitleStatus == 1);
+        var list = await _accountTitleRepository.GetListAsync(predicate);
+        return list
             .OrderBy(x => x.SortOrder)
-            .ToList();
-        var treeList = new List<TaktAccountTitleTreeDto>();
-        foreach (var item in children)
-        {
-            var treeDto = item.Adapt<TaktAccountTitleTreeDto>();
-            var childTree = BuildAccountTitleTree(allRecords, item.Id);
-            if (childTree.Count > 0)
+            .Select(item =>
             {
-                treeDto.Children = childTree;
-            }
-            treeList.Add(treeDto);
-        }
-        return treeList;
+                var treeDto = item.Adapt<TaktAccountTitleTreeDto>();
+                treeDto.Children = new List<TaktAccountTitleTreeDto>();
+                return treeDto;
+            })
+            .ToList();
     }
 
     /// <summary>
@@ -253,7 +174,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
             entity.SortOrder = _sortOrderGenerator.GenerateNext(entity.ParentId, maxSort);
         }
         entity = await _accountTitleRepository.CreateAsync(entity);
-                await SaveAccountTitleChildrenAsync(entity, dto);
         return await GetAccountTitleByIdAsync(entity.Id) ?? entity.Adapt<TaktAccountTitleDto>();
     }
 
@@ -280,7 +200,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
             throw new TaktBusinessException("会计科目的AccountTitleCode已存在");
         }
         await _accountTitleRepository.UpdateAsync(entity);
-                await SaveAccountTitleChildrenAsync(entity, dto);
         return await GetAccountTitleByIdAsync(id) ?? throw new TaktBusinessException("会计科目不存在");
     }
 
@@ -291,11 +210,13 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     /// <returns>任务</returns>
     public async Task DeleteAccountTitleByIdAsync(long id)
     {
-        var entity = await _accountTitleRepository.GetByIdAsync(id);
-        if (entity == null)
+
+        var hasChildren = await _accountTitleRepository.ExistsAsync(x => x.ParentId == id);
+        if (hasChildren)
         {
-            throw new TaktBusinessException("会计科目不存在或已删除");
-        }        var deleted = await _accountTitleRepository.DeleteAsync(id);
+            throw new TaktBusinessException("存在子节点，无法删除");
+        }
+        var deleted = await _accountTitleRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("会计科目不存在或已删除");
@@ -430,7 +351,15 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportAccountTitleAsync(TaktAccountTitleQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktAccountTitleQueryDto());
+        var queryDto = query ?? new TaktAccountTitleQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktAccountTitleExportDto>(),
+                sheetName ?? "会计科目数据",
+                fileName ?? "会计科目导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _accountTitleRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -447,33 +376,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
-    /// <summary>
-    /// 填充会计科目详情（加载 OneToMany 子表：会计科目变更记录）
-    /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
-    /// <returns>任务</returns>
-    private async Task FillAccountTitleDetailsAsync(TaktAccountTitleDto dto, TaktAccountTitle entity)
-    {
-        if (dto == null)
-        {
-            return;
-        }
-    }
-
-    /// <summary>
-    /// 保存会计科目子表级联（会计科目变更记录；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveAccountTitleChildrenAsync(TaktAccountTitle entity, TaktAccountTitleCreateDto dto)
-    {
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -486,160 +388,277 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     {
         var exp = Expressionable.Create<TaktAccountTitle>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.AccountTitleCode != null && x.AccountTitleCode.Contains(keywords))
-                || (x.AccountTitleName != null && x.AccountTitleName.Contains(keywords))
-                || SqlFunc.ToString(x.ParentId).Contains(keywords)
-                || (x.AccountTitleType != null && x.AccountTitleType.Contains(keywords))
-                || SqlFunc.ToString(x.BalanceDirection).Contains(keywords)
-                || SqlFunc.ToString(x.AccountTitleLevel).Contains(keywords)
-                || SqlFunc.ToString(x.IsLeaf).Contains(keywords)
-                || SqlFunc.ToString(x.IsAuxiliary).Contains(keywords)
-                || (x.AuxiliaryType != null && x.AuxiliaryType.Contains(keywords))
-                || SqlFunc.ToString(x.IsQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.IsCurrency).Contains(keywords)
-                || SqlFunc.ToString(x.IsCash).Contains(keywords)
-                || SqlFunc.ToString(x.IsBank).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.AccountTitleStatus).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.AccountTitleCode != null && x.AccountTitleCode.Contains(keywords))
+                || (x.AccountTitleName != null && x.AccountTitleName.Contains(keywords))
+                || (x.AccountTitleType != null && x.AccountTitleType.Contains(keywords))
+                || (x.AuxiliaryType != null && x.AuxiliaryType.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
-                || SqlFunc.ToString(x.ValidTo).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AccountTitleCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.AccountTitleCode != null && x.AccountTitleCode.Contains(queryDto.AccountTitleCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AccountTitleName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.AccountTitleName != null && x.AccountTitleName.Contains(queryDto.AccountTitleName));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountTitleCode))
+        {
+            var accountTitleCode = queryDto.AccountTitleCode;
+            exp = exp.And(x => x.AccountTitleCode != null && x.AccountTitleCode.Contains(accountTitleCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountTitleName))
+        {
+            var accountTitleName = queryDto.AccountTitleName;
+            exp = exp.And(x => x.AccountTitleName != null && x.AccountTitleName.Contains(accountTitleName));
         }
 
         if (queryDto?.ParentId.HasValue == true)
         {
-            exp = exp.And(x => x.ParentId == queryDto.ParentId);
+            var parentId = queryDto.ParentId.Value;
+            exp = exp.And(x => x.ParentId == parentId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AccountTitleType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountTitleType))
         {
-            exp = exp.And(x => x.AccountTitleType == queryDto.AccountTitleType);
+            var accountTitleType = queryDto.AccountTitleType;
+            exp = exp.And(x => x.AccountTitleType != null && x.AccountTitleType.Contains(accountTitleType));
         }
 
         if (queryDto?.BalanceDirection.HasValue == true)
         {
-            exp = exp.And(x => x.BalanceDirection == queryDto.BalanceDirection);
+            var balanceDirection = queryDto.BalanceDirection.Value;
+            exp = exp.And(x => x.BalanceDirection == balanceDirection);
         }
 
         if (queryDto?.AccountTitleLevel.HasValue == true)
         {
-            exp = exp.And(x => x.AccountTitleLevel == queryDto.AccountTitleLevel);
+            var accountTitleLevel = queryDto.AccountTitleLevel.Value;
+            exp = exp.And(x => x.AccountTitleLevel == accountTitleLevel);
         }
 
         if (queryDto?.IsLeaf.HasValue == true)
         {
-            exp = exp.And(x => x.IsLeaf == queryDto.IsLeaf);
+            var isLeaf = queryDto.IsLeaf.Value;
+            exp = exp.And(x => x.IsLeaf == isLeaf);
         }
 
         if (queryDto?.IsAuxiliary.HasValue == true)
         {
-            exp = exp.And(x => x.IsAuxiliary == queryDto.IsAuxiliary);
+            var isAuxiliary = queryDto.IsAuxiliary.Value;
+            exp = exp.And(x => x.IsAuxiliary == isAuxiliary);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AuxiliaryType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AuxiliaryType))
         {
-            exp = exp.And(x => x.AuxiliaryType == queryDto.AuxiliaryType);
+            var auxiliaryType = queryDto.AuxiliaryType;
+            exp = exp.And(x => x.AuxiliaryType != null && x.AuxiliaryType.Contains(auxiliaryType));
         }
 
         if (queryDto?.IsQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.IsQuantity == queryDto.IsQuantity);
+            var isQuantity = queryDto.IsQuantity.Value;
+            exp = exp.And(x => x.IsQuantity == isQuantity);
         }
 
         if (queryDto?.IsCurrency.HasValue == true)
         {
-            exp = exp.And(x => x.IsCurrency == queryDto.IsCurrency);
+            var isCurrency = queryDto.IsCurrency.Value;
+            exp = exp.And(x => x.IsCurrency == isCurrency);
         }
 
         if (queryDto?.IsCash.HasValue == true)
         {
-            exp = exp.And(x => x.IsCash == queryDto.IsCash);
+            var isCash = queryDto.IsCash.Value;
+            exp = exp.And(x => x.IsCash == isCash);
         }
 
         if (queryDto?.IsBank.HasValue == true)
         {
-            exp = exp.And(x => x.IsBank == queryDto.IsBank);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
-        {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
-        }
-
-        if (queryDto?.AccountTitleStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.AccountTitleStatus == queryDto.AccountTitleStatus);
+            var isBank = queryDto.IsBank.Value;
+            exp = exp.And(x => x.IsBank == isBank);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (queryDto?.AccountTitleStatus.HasValue == true)
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var accountTitleStatus = queryDto.AccountTitleStatus.Value;
+            exp = exp.And(x => x.AccountTitleStatus == accountTitleStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.ValidFromStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFrom >= queryDto.ValidFromStart);
+            var validFromStart = queryDto.ValidFromStart.Value;
+            exp = exp.And(x => x.ValidFrom >= validFromStart);
         }
 
         if (queryDto?.ValidFromEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFrom <= queryDto.ValidFromEnd);
+            var validFromEnd = queryDto.ValidFromEnd.Value;
+            exp = exp.And(x => x.ValidFrom <= validFromEnd);
         }
 
         if (queryDto?.ValidToStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidTo >= queryDto.ValidToStart);
+            var validToStart = queryDto.ValidToStart.Value;
+            exp = exp.And(x => x.ValidTo >= validToStart);
         }
 
         if (queryDto?.ValidToEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidTo <= queryDto.ValidToEnd);
+            var validToEnd = queryDto.ValidToEnd.Value;
+            exp = exp.And(x => x.ValidTo <= validToEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktAccountTitleQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountTitleCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountTitleName))
+        {
+            return true;
+        }
+        if (queryDto.ParentId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountTitleType))
+        {
+            return true;
+        }
+        if (queryDto.BalanceDirection.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AccountTitleLevel.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsLeaf.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsAuxiliary.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AuxiliaryType))
+        {
+            return true;
+        }
+        if (queryDto.IsQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsCurrency.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsCash.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsBank.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AccountTitleStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ValidFromStart.HasValue || queryDto.ValidFromEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ValidToStart.HasValue || queryDto.ValidToEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -74,12 +74,12 @@ export interface SopEsdCheck extends CompanyDtoBase {
   resistanceValue?: number;
 
   /**
-   * 达标（字典 sys_yes_no_type；0=否，1=是）
+   * 达标（字典 sys_yes_no；0=否，1=是）
    */
   isCompliant: number;
 
   /**
-   * 锁屏（字典 sys_yes_no_type；0=否，1=是）
+   * 锁屏（字典 sys_yes_no；0=否，1=是）
    */
   lockScreenTriggered: number;
 
@@ -144,12 +144,12 @@ export interface SopEsdCheckQuery extends TaktPagedQuery {
   resistanceValue?: number;
 
   /**
-   * 达标（字典 sys_yes_no_type；0=否，1=是）
+   * 达标（字典 sys_yes_no；0=否，1=是）
    */
   isCompliant?: number;
 
   /**
-   * 锁屏（字典 sys_yes_no_type；0=否，1=是）
+   * 锁屏（字典 sys_yes_no；0=否，1=是）
    */
   lockScreenTriggered?: number;
 
@@ -241,12 +241,12 @@ export interface SopEsdCheckCreate {
   resistanceValue?: number;
 
   /**
-   * 达标（字典 sys_yes_no_type；0=否，1=是）
+   * 达标（字典 sys_yes_no；0=否，1=是）
    */
   isCompliant: number;
 
   /**
-   * 锁屏（字典 sys_yes_no_type；0=否，1=是）
+   * 锁屏（字典 sys_yes_no；0=否，1=是）
    */
   lockScreenTriggered: number;
 
@@ -330,12 +330,12 @@ export interface SopEsdCheckTemplate {
   resistanceValue?: number;
 
   /**
-   * 达标（字典 sys_yes_no_type；0=否，1=是）
+   * 达标（字典 sys_yes_no；0=否，1=是）
    */
   isCompliant?: number;
 
   /**
-   * 锁屏（字典 sys_yes_no_type；0=否，1=是）
+   * 锁屏（字典 sys_yes_no；0=否，1=是）
    */
   lockScreenTriggered?: number;
 
@@ -412,12 +412,12 @@ export interface SopEsdCheckImport {
   resistanceValue?: number;
 
   /**
-   * 达标（字典 sys_yes_no_type；0=否，1=是）
+   * 达标（字典 sys_yes_no；0=否，1=是）
    */
   isCompliant?: number;
 
   /**
-   * 锁屏（字典 sys_yes_no_type；0=否，1=是）
+   * 锁屏（字典 sys_yes_no；0=否，1=是）
    */
   lockScreenTriggered?: number;
 
@@ -486,12 +486,12 @@ export interface SopEsdCheckExport {
   resistanceValue?: number;
 
   /**
-   * 达标（字典 sys_yes_no_type；0=否，1=是）
+   * 达标（字典 sys_yes_no；0=否，1=是）
    */
   isCompliant: number;
 
   /**
-   * 锁屏（字典 sys_yes_no_type；0=否，1=是）
+   * 锁屏（字典 sys_yes_no；0=否，1=是）
    */
   lockScreenTriggered: number;
 

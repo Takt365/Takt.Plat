@@ -104,7 +104,7 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
   usageRatio: number;
 
   /**
-   * 是否启用（0=否，1=是，字典 sys_yes_no_type）
+   * 是否启用（0=否，1=是，字典 sys_yes_no）
    */
   isEnabled: number;
 
@@ -119,7 +119,7 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -224,7 +224,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   usageRatio?: number;
 
   /**
-   * 是否启用（0=否，1=是，字典 sys_yes_no_type）
+   * 是否启用（0=否，1=是，字典 sys_yes_no）
    */
   isEnabled?: number;
 
@@ -249,7 +249,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   expiryDateEnd?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -363,7 +363,7 @@ export interface BillOfMaterialSubstituteCreate {
   usageRatio: number;
 
   /**
-   * 是否启用（0=否，1=是，字典 sys_yes_no_type）
+   * 是否启用（0=否，1=是，字典 sys_yes_no）
    */
   isEnabled: number;
 
@@ -378,7 +378,7 @@ export interface BillOfMaterialSubstituteCreate {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -422,7 +422,7 @@ export interface BillOfMaterialSubstituteObsolete {
   billOfMaterialSubstituteId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -516,7 +516,7 @@ export interface BillOfMaterialSubstituteTemplate {
   usageRatio?: number;
 
   /**
-   * 是否启用（0=否，1=是，字典 sys_yes_no_type）
+   * 是否启用（0=否，1=是，字典 sys_yes_no）
    */
   isEnabled?: number;
 
@@ -531,7 +531,7 @@ export interface BillOfMaterialSubstituteTemplate {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -635,7 +635,7 @@ export interface BillOfMaterialSubstituteImport {
   usageRatio?: number;
 
   /**
-   * 是否启用（0=否，1=是，字典 sys_yes_no_type）
+   * 是否启用（0=否，1=是，字典 sys_yes_no）
    */
   isEnabled?: number;
 
@@ -650,7 +650,7 @@ export interface BillOfMaterialSubstituteImport {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -744,7 +744,7 @@ export interface BillOfMaterialSubstituteExport {
   usageRatio: number;
 
   /**
-   * 是否启用（0=否，1=是，字典 sys_yes_no_type）
+   * 是否启用（0=否，1=是，字典 sys_yes_no）
    */
   isEnabled: number;
 
@@ -759,7 +759,7 @@ export interface BillOfMaterialSubstituteExport {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

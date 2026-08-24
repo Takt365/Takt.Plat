@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeJoined 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeJoined 生成，请按需审阅）
 // 
@@ -125,6 +125,18 @@ public class TaktEmployeeJoinedDto : TaktApprovalDtoBase
     /// </summary>
     public string? DirectManagerName { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 员工主档（多对一）
+    /// （主表：TaktEmployee）
+    /// </summary>
+    public TaktEmployeeDto? Employee { get; set; }
+
+    /// <summary>
+    /// 直属上级员工（多对一）
+    /// （主表：TaktEmployee）
+    /// </summary>
+    public TaktEmployeeDto? DirectManager { get; set; }
+
 }
 
 // ========================================
@@ -143,7 +155,7 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -152,11 +164,11 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
@@ -345,12 +357,11 @@ public class TaktEmployeeJoinedCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
@@ -360,13 +371,11 @@ public class TaktEmployeeJoinedCreateDto
     /// <summary>
     /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
     public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
     /// </summary>
-    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
@@ -399,7 +408,6 @@ public class TaktEmployeeJoinedCreateDto
     /// <summary>
     /// 上岗部门名称
     /// </summary>
-    [Required(ErrorMessage = "上岗部门名称不能为空")]
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
@@ -495,11 +503,11 @@ public class TaktEmployeeJoinedTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
@@ -617,12 +625,11 @@ public class TaktEmployeeJoinedImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
@@ -735,6 +742,21 @@ public class TaktEmployeeJoinedExportDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeJoinedId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 员工（选项 TaktEmployees/options；DictValue=Id）

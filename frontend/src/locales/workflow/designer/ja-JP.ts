@@ -27,7 +27,7 @@ export default {
     errorcolmessage: 'メッセージ',
     selectuserdialogtitle: 'ユーザー選択',
     selectusersearchplaceholder: '名前・メール・電話で検索',
-    colusername: 'ユーザー名',
+    colUserName: 'ユーザー名',
     coluseremail: 'メール',
     coluserphone: '電話',
     pagetotal: '合計 {total} 件',

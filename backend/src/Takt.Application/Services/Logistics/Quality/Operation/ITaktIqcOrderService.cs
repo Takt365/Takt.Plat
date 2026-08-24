@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：ITaktIqcOrderService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：进货检验单应用服务接口
 // 
@@ -27,13 +27,6 @@ public interface ITaktIqcOrderService
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     Task<TaktPagedResult<TaktIqcOrderDto>> GetIqcOrderListAsync(TaktIqcOrderQueryDto queryDto);
-
-    /// <summary>
-    /// 获取 IQC 检验统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>IQC 检验统计</returns>
-    Task<TaktIqcOrderStatDto> GetIqcOrderStatAsync(TaktQualityStatQueryDto queryDto);
 
     /// <summary>
     /// 根据ID获取进货检验单
@@ -108,5 +101,16 @@ public interface ITaktIqcOrderService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportIqcOrderAsync(TaktIqcOrderQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取 IQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>IQC 检验统计</returns>
+    Task<TaktIqcOrderStatDto> GetIqcOrderStatAsync(TaktQualityStatQueryDto queryDto);
 
 }

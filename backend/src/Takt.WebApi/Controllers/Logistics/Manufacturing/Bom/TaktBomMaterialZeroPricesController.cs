@@ -16,12 +16,12 @@ using Takt.Application.Services.Foundation;
 using Takt.Application.Services.Logistics.Manufacturing.Bom;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
-using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
 
 /// <summary>
-/// BOM 组件零价格清单控制器（独立菜单：list / export / plant-options / model-options）
+/// BOM 组件零价格清单控制器（独立菜单：list / export）
+/// 查询栏工厂/机种选项走 TaktBomCostOptions。
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "BOM零价格")]
@@ -44,49 +44,6 @@ public class TaktBomMaterialZeroPricesController : TaktControllerBase
     {
         _bomMaterialZeroPriceService = bomMaterialZeroPriceService;
         _messageService = messageService;
-    }
-
-    /// <summary>
-    /// 工厂选项（查询栏）
-    /// </summary>
-    /// <returns>下拉选项</returns>
-    [HttpGet("plant-options")]
-    public async Task<IActionResult> GetBomMaterialZeroPricePlantOptionsAsync()
-    {
-        try
-        {
-            var result = await _bomMaterialZeroPriceService.GetBomMaterialZeroPricePlantOptionsAsync();
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 机种选项（工厂 + 核算月；FERT 主表去重；可多选可空）
-    /// </summary>
-    /// <param name="queryDto">工厂 + FocusPeriod</param>
-    /// <returns>下拉选项</returns>
-    [HttpGet("model-options")]
-    public async Task<IActionResult> GetBomMaterialZeroPriceModelOptionsAsync(
-        [FromQuery] TaktBomMaterialZeroPriceModelOptionsQueryDto queryDto)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(queryDto.PlantCode)
-                || string.IsNullOrWhiteSpace(queryDto.FocusPeriod))
-            {
-                return Success(new List<TaktSelectOption>(), "查询成功");
-            }
-            var result = await _bomMaterialZeroPriceService.GetBomMaterialZeroPriceModelOptionsAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
     }
 
     /// <summary>

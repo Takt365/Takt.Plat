@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Shared.Constants;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Logging;
 
@@ -23,7 +22,7 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 /// 记录业务操作上下文及当前操作值（RequestParam、JsonResult 等 JSON 快照）。
 /// 与 TaktDeltaLog 区分：操作日志不记录库表字段级变更前后对比。
 /// 数据隔离：租户 + 公司（TaktCompanyEntityBase），与 TaktLoginLog 一致。
-    /// 业务字段均非空：无数据用空串；UserName 无法解析时为 unknown；Browser/Os/DeviceType 默认 unknown；ErrorMsg 成功时为空串。
+/// 业务字段均非空：无数据用空串；UserName 无法解析时为 unknown；Browser/Os/DeviceType 默认 unknown；ErrorMsg 成功时为空串。
 /// </remarks>
 [SugarTable("takt_statistics_logging_oper_log", "操作日志表")]
 [SugarIndex("ix_oper_log_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -49,7 +48,7 @@ public class TaktOperLog : TaktCompanyEntityBase
     public string OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType，默认 unknown）
+    /// 操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）
     /// </summary>
     [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.OperType.Unknown)]
     public string OperType { get; set; } = TaktConstants.OperType.Unknown;
@@ -109,19 +108,19 @@ public class TaktOperLog : TaktCompanyEntityBase
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
+    /// 浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）
     /// </summary>
     [SugarColumn(ColumnName = "browser", ColumnDescription = "浏览器", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.BrowserType.Unknown)]
     public string Browser { get; set; } = TaktConstants.BrowserType.Unknown;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
+    /// 操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）
     /// </summary>
     [SugarColumn(ColumnName = "os", ColumnDescription = "操作系统", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.OperatingSystem.Unknown)]
     public string Os { get; set; } = TaktConstants.OperatingSystem.Unknown;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
+    /// 登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）
     /// </summary>
     [SugarColumn(ColumnName = "device_type", ColumnDescription = "登录设备", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.DeviceType.Unknown)]
     public string DeviceType { get; set; } = TaktConstants.DeviceType.Unknown;
@@ -139,8 +138,8 @@ public class TaktOperLog : TaktCompanyEntityBase
     public int ElapsedTime { get; set; }
 
     /// <summary>
-    /// 操作状态（0=失败，1=成功）
+    /// 操作状态（字典 sys_success_fail_status；0=失败 1=成功）
     /// </summary>
     [SugarColumn(ColumnName = "oper_status", ColumnDescription = "操作状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktExecuteStatus OperStatus { get; set; } = TaktExecuteStatus.Success;
+    public int OperStatus { get; set; } = 1;
 }

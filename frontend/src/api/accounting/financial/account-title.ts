@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/financial
 // 文件名称：account-title.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -13,7 +13,6 @@
 import request from '@/api/request';
 import type {
   TaktPagedResult,
-  TaktSelectOption,
   TaktTreeSelectOption
 } from '@/types/common';
 import type {
@@ -61,9 +60,9 @@ export function getAccountTitleById(id: string): Promise<AccountTitle> {
 }
 
 /**
- * 获取会计科目树形列表
- * @param {string} parentId parentId
- * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
+ * 获取会计科目树形列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 字段）
  * @returns {Promise<AccountTitleTree[]>} 树形数据
  */
 export function getAccountTitleTree(parentId: string, includeDisabled: boolean): Promise<AccountTitleTree[]> {
@@ -160,43 +159,16 @@ export function updateAccountTitleSort(dto: AccountTitleSort): Promise<AccountTi
 // ========================================
 
 /**
- * 获取会计科目树形选项列表
+ * 获取会计科目树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue 为 AccountTitleCode）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
  * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
  */
-export function getAccountTitleTreeOptions(): Promise<TaktTreeSelectOption[]> {
+export function getAccountTitleTreeOptions(parentId: string): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${ACCOUNT_TITLE_API_BASE}/tree-options`,
     method: 'get',
-  });
-}
-
-/**
- * 获取会计科目父级树形选项列表
- * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
- */
-export function getAccountTitleParentTreeOptions(): Promise<TaktTreeSelectOption[]> {
-  return request<TaktTreeSelectOption[]>({
-    url: `${ACCOUNT_TITLE_API_BASE}/parent-tree-options`,
-    method: 'get',
-  });
-}
-
-/**
- * 获取会计科目选项列表
- * @param reconciliationOnly 为 true 时仅返回带统驭标识的科目
- * @param auxiliaryType 可选统驭标识（D=客户、K=供应商等）
- * @returns {Promise<TaktSelectOption[]>} 下拉选项
- */
-export function getAccountTitleOptions(
-  reconciliationOnly?: boolean,
-  auxiliaryType?: string,
-): Promise<TaktSelectOption[]> {
-  return request<TaktSelectOption[]>({
-    url: `${ACCOUNT_TITLE_API_BASE}/options`,
-    method: 'get',
     params: {
-      ...(reconciliationOnly != null ? { reconciliationOnly } : {}),
-      ...(auxiliaryType ? { auxiliaryType } : {}),
+      parentId
     },
   });
 }

@@ -93,7 +93,7 @@ public class TaktCountersign : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "cost_bearer_dept", ColumnDescription = "经费负担部门", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? CostBearerDept { get; set; }
     /// <summary>
-    /// 预算否（字典 sys_yes_no_type）
+    /// 预算否（字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "is_budget", ColumnDescription = "预算否", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBudget { get; set; } = 0;

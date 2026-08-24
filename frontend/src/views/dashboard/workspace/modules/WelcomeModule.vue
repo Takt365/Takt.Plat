@@ -77,7 +77,7 @@ dayjs.extend(quarterOfYear)
 
 const { t } = useI18n()
 const userStore = useUserStore()
-const { holidayFromToken, username, isLoggedIn } = storeToRefs(userStore)
+const { holidayFromToken, userName, isLoggedIn } = storeToRefs(userStore)
 const localeStore = useLocaleStore()
 const { currentLocale } = storeToRefs(localeStore)
 
@@ -149,12 +149,12 @@ async function resolveDisplayName(): Promise<void> {
     }
     const profile = normalizeUserInfoProfile(await getCurrentUser())
     displayName.value =
-      safeTrim(profile.nickname) ||
+      safeTrim(profile.nickName) ||
       safeTrim(profile.employeeName) ||
-      safeTrim(profile.username) ||
-      safeTrim(username.value)
+      safeTrim(profile.userName) ||
+      safeTrim(userName.value)
   } catch {
-    displayName.value = safeTrim(username.value)
+    displayName.value = safeTrim(userName.value)
   }
 }
 

@@ -169,7 +169,7 @@ export interface ApsScheduleItem extends CompanyDtoBase {
   priority: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -344,7 +344,7 @@ export interface ApsScheduleItemQuery extends TaktPagedQuery {
   priority?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -521,7 +521,7 @@ export interface ApsScheduleItemCreate {
   priority: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -584,7 +584,7 @@ export interface ApsScheduleItemObsolete {
   apsScheduleItemId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -733,7 +733,7 @@ export interface ApsScheduleItemTemplate {
   priority?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -900,7 +900,7 @@ export interface ApsScheduleItemImport {
   priority?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -1054,7 +1054,7 @@ export interface ApsScheduleItemExport {
   priority: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecScanService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP物料扫码记录应用服务实现
 // 
@@ -282,6 +282,22 @@ public class TaktSopExecScanService : TaktServiceBase, ITaktSopExecScanService
             throw new TaktBusinessException("SOP工位执行不存在");
         }
         entity.ExecId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -324,19 +340,19 @@ public class TaktSopExecScanService : TaktServiceBase, ITaktSopExecScanService
 
         if (queryDto?.ExecId.HasValue == true)
         {
-            var execId = queryDto.ExecId;
+            var execId = queryDto.ExecId.Value;
             exp = exp.And(x => x.ExecId == execId);
         }
 
         if (queryDto?.ExecStepId.HasValue == true)
         {
-            var execStepId = queryDto.ExecStepId;
+            var execStepId = queryDto.ExecStepId.Value;
             exp = exp.And(x => x.ExecStepId == execStepId);
         }
 
         if (queryDto?.StepId.HasValue == true)
         {
-            var stepId = queryDto.StepId;
+            var stepId = queryDto.StepId.Value;
             exp = exp.And(x => x.StepId == stepId);
         }
 
@@ -354,7 +370,7 @@ public class TaktSopExecScanService : TaktServiceBase, ITaktSopExecScanService
 
         if (queryDto?.ScanResult.HasValue == true)
         {
-            var scanResult = queryDto.ScanResult;
+            var scanResult = queryDto.ScanResult.Value;
             exp = exp.And(x => x.ScanResult == scanResult);
         }
 
@@ -378,25 +394,25 @@ public class TaktSopExecScanService : TaktServiceBase, ITaktSopExecScanService
 
         if (queryDto?.ScannedAtStart.HasValue == true)
         {
-            var scannedAtStart = queryDto.ScannedAtStart;
+            var scannedAtStart = queryDto.ScannedAtStart.Value;
             exp = exp.And(x => x.ScannedAt >= scannedAtStart);
         }
 
         if (queryDto?.ScannedAtEnd.HasValue == true)
         {
-            var scannedAtEnd = queryDto.ScannedAtEnd;
+            var scannedAtEnd = queryDto.ScannedAtEnd.Value;
             exp = exp.And(x => x.ScannedAt <= scannedAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

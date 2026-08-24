@@ -32,6 +32,7 @@ public class TaktFlowFormService : TaktServiceBase, ITaktFlowFormService
     private readonly ITaktCompanyRepository<TaktFlowForm> _flowFormRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktNumberingGenerator _numberingGenerator;
 
     /// <summary>
     /// 构造函数
@@ -39,12 +40,14 @@ public class TaktFlowFormService : TaktServiceBase, ITaktFlowFormService
     /// <param name="flowFormRepository">流程表单仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="numberingGenerator">编码生成器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktFlowFormService(
         ITaktCompanyRepository<TaktFlowForm> flowFormRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
+        ITaktNumberingGenerator numberingGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -52,6 +55,7 @@ public class TaktFlowFormService : TaktServiceBase, ITaktFlowFormService
         _flowFormRepository = flowFormRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
+        _numberingGenerator = numberingGenerator;
     }
 
     /// <summary>
@@ -114,6 +118,19 @@ public class TaktFlowFormService : TaktServiceBase, ITaktFlowFormService
     public async Task<TaktFlowFormDto> CreateFlowFormAsync(TaktFlowFormCreateDto dto)
     {
         var entity = dto.Adapt<TaktFlowForm>();
+        if (!string.IsNullOrWhiteSpace(dto.NumberingRuleCode))
+        {
+            var generated = await _numberingGenerator.GenerateNextAsync(dto.NumberingRuleCode.Trim());
+            if (string.IsNullOrWhiteSpace(generated.BusinessCode))
+            {
+                throw new TaktBusinessException("业务编码生成失败");
+            }
+            entity.FormCode = generated.BusinessCode;
+        }
+        else if (string.IsNullOrWhiteSpace(entity.FormCode))
+        {
+            throw new TaktBusinessException("表单编码不能为空");
+        }
         var isUnique_ix_flow_form_code_unique = await _uniqueValidator.IsUniqueAsync(
             _flowFormRepository,
             x => x.FormCode == entity.FormCode);

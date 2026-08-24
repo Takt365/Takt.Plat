@@ -141,7 +141,7 @@ async function loadUserTenants() {
     loading.value = true
     optionsLoading.value = true
     const u = props.user
-    userInfo.value = `${u.username || u.userName || ''}（${u.nickname || u.nickName || ''}）`
+    userInfo.value = `${u.userName || u.userName || ''}（${u.nickName || u.nickName || ''}）`
     const [tenantPage, userTenants] = await Promise.all([
       getTenantList({ pageIndex: 1, pageSize: 500 }),
       getUserTenantIds(String(u.userId))

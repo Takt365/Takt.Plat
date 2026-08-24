@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/document-center
 // 文件名称：document-version.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/document-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   DocumentVersion,
   DocumentVersionCreate,
+  DocumentVersionObsolete,
   DocumentVersionUpdate
 } from '@/types/routine/document-center/document-version';
 
@@ -105,6 +106,19 @@ export function deleteDocumentVersionBatch(ids: string[]): Promise<void> {
     url: `${DOCUMENT_VERSION_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新文管文档版本作废状态
+ * @param {DocumentVersionObsolete} dto 作废 DTO
+ * @returns {Promise<DocumentVersion>} 文管文档版本DTO
+ */
+export function updateDocumentVersionObsolete(dto: DocumentVersionObsolete): Promise<DocumentVersion> {
+  return request<DocumentVersion>({
+    url: `${DOCUMENT_VERSION_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

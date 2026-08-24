@@ -56,17 +56,17 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+    /// 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
     /// </summary>
     public int Urgency { get; set; } = 0;
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+    /// 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
     /// </summary>
     public int Impact { get; set; } = 0;
 
@@ -246,17 +246,17 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+    /// 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
     /// </summary>
     public int? Urgency { get; set; }
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+    /// 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
     /// </summary>
     public int? Impact { get; set; }
 
@@ -460,17 +460,17 @@ public class TaktTicketCreateDto
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+    /// 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
     /// </summary>
     public int Urgency { get; set; } = 0;
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+    /// 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
     /// </summary>
     public int Impact { get; set; } = 0;
 
@@ -692,17 +692,17 @@ public class TaktTicketTemplateDto
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+    /// 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
     /// </summary>
     public int? Urgency { get; set; }
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+    /// 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
     /// </summary>
     public int? Impact { get; set; }
 
@@ -871,17 +871,17 @@ public class TaktTicketImportDto
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+    /// 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
     /// </summary>
     public int? Urgency { get; set; }
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+    /// 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
     /// </summary>
     public int? Impact { get; set; }
 
@@ -1046,17 +1046,17 @@ public class TaktTicketExportDto
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+    /// 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
     /// </summary>
     public int Urgency { get; set; } = 0;
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+    /// 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
     /// </summary>
     public int Impact { get; set; } = 0;
 

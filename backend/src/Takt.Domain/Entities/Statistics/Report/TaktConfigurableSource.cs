@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.Statistics.Report;
 public class TaktConfigurableSource : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联报表主表 ID（主子表关系）
+    /// 关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "configurable_id", ColumnDescription = "报表主表ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -37,19 +37,19 @@ public class TaktConfigurableSource : TaktCompanyEntityBase
     public string SourceAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物理表名（须为 takt_ 前缀业务表，运行时白名单校验）
+    /// 物理表名（选项 TaktDatabaseInfos/tables；DictValue=TableName；运行时 takt_ 前缀白名单校验）
     /// </summary>
     [SugarColumn(ColumnName = "table_name", ColumnDescription = "物理表名", ColumnDataType = "varchar", Length = 128, IsNullable = false)]
     public string TableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否主表（驱动 FROM 的第一张表）
+    /// 是否主表（字典 sys_yes_no；0=否 1=是；驱动 FROM 的第一张表）
     /// </summary>
     [SugarColumn(ColumnName = "is_primary", ColumnDescription = "是否主表", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPrimary { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（多表 FROM 顺序）
+    /// 排序号（回填）（多表 FROM 顺序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

@@ -46,13 +46,13 @@ public class TaktCulture : TaktTenantCoreEntityBase
     public string? Icon { get; set; }
 
     /// <summary>
-    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// 默认语言（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_default", ColumnDescription = "默认语言", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsDefault { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

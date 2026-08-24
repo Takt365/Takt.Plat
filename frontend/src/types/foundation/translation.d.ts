@@ -174,11 +174,6 @@ export interface TranslationCreate {
   tenantCode: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
-
-  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId: string;
@@ -248,11 +243,6 @@ export interface TranslationTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
@@ -305,11 +295,6 @@ export interface TranslationImport {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 文化ID（关联 TaktCulture.Id）

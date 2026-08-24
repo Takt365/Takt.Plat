@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktNumberingValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Numbering 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktNumbering 生成，请按需审阅）
 // 
@@ -49,10 +49,10 @@ public class TaktNumberingCreateValidator : AbstractValidator<TaktNumberingCreat
             .MaximumLength(100).WithMessage("规则名称长度不能超过100个字符");
         RuleFor(x => x.DocumentType)
             .NotEmpty().WithMessage("单据类型不能为空")
-            .MaximumLength(40).WithMessage("单据类型长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("单据类型长度不能超过100个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
         RuleFor(x => x.ResetPeriod)
             .NotEmpty().WithMessage("重置周期不能为空")
             .MaximumLength(20).WithMessage("重置周期长度不能超过20个字符");
@@ -102,10 +102,10 @@ public class TaktNumberingUpdateValidator : AbstractValidator<TaktNumberingUpdat
             .MaximumLength(100).WithMessage("规则名称长度不能超过100个字符");
         RuleFor(x => x.DocumentType)
             .NotEmpty().WithMessage("单据类型不能为空")
-            .MaximumLength(40).WithMessage("单据类型长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("单据类型长度不能超过100个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
         RuleFor(x => x.ResetPeriod)
             .NotEmpty().WithMessage("重置周期不能为空")
             .MaximumLength(20).WithMessage("重置周期长度不能超过20个字符");
@@ -149,10 +149,10 @@ public class TaktNumberingImportValidator : AbstractValidator<TaktNumberingImpor
             .MaximumLength(100).WithMessage("规则名称长度不能超过100个字符");
         RuleFor(x => x.DocumentType)
             .NotEmpty().WithMessage("单据类型不能为空")
-            .MaximumLength(40).WithMessage("单据类型长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("单据类型长度不能超过100个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
         RuleFor(x => x.ResetPeriod)
             .NotEmpty().WithMessage("重置周期不能为空")
             .MaximumLength(20).WithMessage("重置周期长度不能超过20个字符");

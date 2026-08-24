@@ -33,7 +33,7 @@ public class TaktUserTenant : TaktTenantCoreEntityBase
     public long UserId { get; set; }
 
     /// <summary>
-    /// 是否默认登录租户（字典 sys_yes_no_type；同一用户仅应有一条为是）
+    /// 是否默认登录租户（字典 sys_yes_no；同一用户仅应有一条为是）
     /// </summary>
     [SugarColumn(ColumnName = "is_default", ColumnDescription = "是否默认租户", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsDefault { get; set; } = 0;

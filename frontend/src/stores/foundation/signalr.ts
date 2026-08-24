@@ -350,7 +350,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           }
           showPrivateMessageNotify({
             sender,
-            senderNickname: msg.fromUserNickname,
+            senderNickName: msg.fromUserNickName,
             content: body,
             messageId: msg.messageId,
             sendTime: msg.sendTime,

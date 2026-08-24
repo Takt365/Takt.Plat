@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：RoutingItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRoutingItem 生成，请按需审阅）
 // 
@@ -107,12 +107,12 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public decimal TeardownMinutes { get; set; }
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type：0=否，1=是）
+    /// 检验（字典 sys_yes_no：0=否，1=是）
     /// </summary>
     public int IsInspection { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -132,7 +132,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -166,7 +166,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -175,11 +175,11 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -247,12 +247,12 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public decimal? TeardownMinutes { get; set; }
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type：0=否，1=是）
+    /// 检验（字典 sys_yes_no：0=否，1=是）
     /// </summary>
     public int? IsInspection { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -272,7 +272,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -321,11 +321,11 @@ public class TaktRoutingItemCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -335,7 +335,6 @@ public class TaktRoutingItemCreateDto
     /// <summary>
     /// 工艺路线编码（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "工艺路线编码（冗余字段，便于查询）不能为空")]
     public string RoutingCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -398,7 +397,7 @@ public class TaktRoutingItemCreateDto
     public decimal TeardownMinutes { get; set; }
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type：0=否，1=是）
+    /// 检验（字典 sys_yes_no：0=否，1=是）
     /// </summary>
     public int IsInspection { get; set; } = 0;
 
@@ -418,7 +417,7 @@ public class TaktRoutingItemCreateDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -482,9 +481,9 @@ public class TaktRoutingItemSortDto
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -506,7 +505,7 @@ public class TaktRoutingItemObsoleteDto
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -535,11 +534,11 @@ public class TaktRoutingItemTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -607,7 +606,7 @@ public class TaktRoutingItemTemplateDto
     public decimal? TeardownMinutes { get; set; }
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type：0=否，1=是）
+    /// 检验（字典 sys_yes_no：0=否，1=是）
     /// </summary>
     public int? IsInspection { get; set; }
 
@@ -627,7 +626,7 @@ public class TaktRoutingItemTemplateDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -668,11 +667,11 @@ public class TaktRoutingItemImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -740,7 +739,7 @@ public class TaktRoutingItemImportDto
     public decimal? TeardownMinutes { get; set; }
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type：0=否，1=是）
+    /// 检验（字典 sys_yes_no：0=否，1=是）
     /// </summary>
     public int? IsInspection { get; set; }
 
@@ -760,7 +759,7 @@ public class TaktRoutingItemImportDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -801,6 +800,16 @@ public class TaktRoutingItemExportDto
     /// 公司代码
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -869,12 +878,12 @@ public class TaktRoutingItemExportDto
     public decimal TeardownMinutes { get; set; }
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type：0=否，1=是）
+    /// 检验（字典 sys_yes_no：0=否，1=是）
     /// </summary>
     public int IsInspection { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -894,7 +903,7 @@ public class TaktRoutingItemExportDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

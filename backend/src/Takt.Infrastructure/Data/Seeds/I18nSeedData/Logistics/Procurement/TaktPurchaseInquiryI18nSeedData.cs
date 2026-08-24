@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseInquiry 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -253,13 +253,13 @@ public class TaktPurchaseInquiryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinquiry.inquiryreason", "zh-HK", "询价原因_hk", "询价原因"),
 
             // entity.purchaseinquiry.inquirystatus
-            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "en-US", "询价状态_us", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "en-US", "询价状态_us", "询价状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.purchaseinquiry.inquirystatus
-            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "ja-JP", "询价状态_jp", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "ja-JP", "询价状态_jp", "询价状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.purchaseinquiry.inquirystatus
-            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "zh-CN", "询价状态", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "zh-CN", "询价状态", "询价状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.purchaseinquiry.inquirystatus
-            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "zh-HK", "询价状态_hk", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "zh-HK", "询价状态_hk", "询价状态（字典 sys_normal_disable；1=启用，0=禁用）"),
 
             // entity.purchaseinquiry.convertedstatus
             new TranslationSeedItem("entity.purchaseinquiry.convertedstatus", "en-US", "转价格状态_us", "转价格状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),

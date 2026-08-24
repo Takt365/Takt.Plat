@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeDelegationI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeDelegation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -197,6 +197,24 @@ public class TaktEmployeeDelegationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeedelegation.enddate", "zh-CN", "代理结束时间", "代理结束时间（null=长期有效，直到手动删除）"),
             // entity.employeedelegation.enddate
             new TranslationSeedItem("entity.employeedelegation.enddate", "zh-HK", "代理结束时间_hk", "代理结束时间（null=长期有效，直到手动删除）"),
+
+            // entity.employeedelegation.originalemployee
+            new TranslationSeedItem("entity.employeedelegation.originalemployee", "en-US", "被代理人_us", "被代理人（多对一；外键 OriginalEmployeeId，非 EmployeeId）"),
+            // entity.employeedelegation.originalemployee
+            new TranslationSeedItem("entity.employeedelegation.originalemployee", "ja-JP", "被代理人_jp", "被代理人（多对一；外键 OriginalEmployeeId，非 EmployeeId）"),
+            // entity.employeedelegation.originalemployee
+            new TranslationSeedItem("entity.employeedelegation.originalemployee", "zh-CN", "被代理人", "被代理人（多对一；外键 OriginalEmployeeId，非 EmployeeId）"),
+            // entity.employeedelegation.originalemployee
+            new TranslationSeedItem("entity.employeedelegation.originalemployee", "zh-HK", "被代理人_hk", "被代理人（多对一；外键 OriginalEmployeeId，非 EmployeeId）"),
+
+            // entity.employeedelegation.proxyemployee
+            new TranslationSeedItem("entity.employeedelegation.proxyemployee", "en-US", "代理人_us", "代理人（多对一；外键 ProxyEmployeeId，非 EmployeeId）"),
+            // entity.employeedelegation.proxyemployee
+            new TranslationSeedItem("entity.employeedelegation.proxyemployee", "ja-JP", "代理人_jp", "代理人（多对一；外键 ProxyEmployeeId，非 EmployeeId）"),
+            // entity.employeedelegation.proxyemployee
+            new TranslationSeedItem("entity.employeedelegation.proxyemployee", "zh-CN", "代理人", "代理人（多对一；外键 ProxyEmployeeId，非 EmployeeId）"),
+            // entity.employeedelegation.proxyemployee
+            new TranslationSeedItem("entity.employeedelegation.proxyemployee", "zh-HK", "代理人_hk", "代理人（多对一；外键 ProxyEmployeeId，非 EmployeeId）"),
         };
     }
 

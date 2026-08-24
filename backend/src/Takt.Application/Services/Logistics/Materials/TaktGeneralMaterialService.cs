@@ -637,13 +637,13 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.GrossWeight.HasValue == true)
         {
-            var grossWeight = queryDto.GrossWeight;
+            var grossWeight = queryDto.GrossWeight.Value;
             exp = exp.And(x => x.GrossWeight == grossWeight);
         }
 
         if (queryDto?.NetWeight.HasValue == true)
         {
-            var netWeight = queryDto.NetWeight;
+            var netWeight = queryDto.NetWeight.Value;
             exp = exp.And(x => x.NetWeight == netWeight);
         }
 
@@ -655,7 +655,7 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.Volume.HasValue == true)
         {
-            var volume = queryDto.Volume;
+            var volume = queryDto.Volume.Value;
             exp = exp.And(x => x.Volume == volume);
         }
 
@@ -721,7 +721,7 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.GrGiSlipQuantity.HasValue == true)
         {
-            var grGiSlipQuantity = queryDto.GrGiSlipQuantity;
+            var grGiSlipQuantity = queryDto.GrGiSlipQuantity.Value;
             exp = exp.And(x => x.GrGiSlipQuantity == grGiSlipQuantity);
         }
 
@@ -775,19 +775,19 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.Length.HasValue == true)
         {
-            var length = queryDto.Length;
+            var length = queryDto.Length.Value;
             exp = exp.And(x => x.Length == length);
         }
 
         if (queryDto?.Width.HasValue == true)
         {
-            var width = queryDto.Width;
+            var width = queryDto.Width.Value;
             exp = exp.And(x => x.Width == width);
         }
 
         if (queryDto?.Height.HasValue == true)
         {
-            var height = queryDto.Height;
+            var height = queryDto.Height.Value;
             exp = exp.And(x => x.Height == height);
         }
 
@@ -823,7 +823,7 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.AllowedPackagingWeight.HasValue == true)
         {
-            var allowedPackagingWeight = queryDto.AllowedPackagingWeight;
+            var allowedPackagingWeight = queryDto.AllowedPackagingWeight.Value;
             exp = exp.And(x => x.AllowedPackagingWeight == allowedPackagingWeight);
         }
 
@@ -835,7 +835,7 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.AllowedPackagingVolume.HasValue == true)
         {
-            var allowedPackagingVolume = queryDto.AllowedPackagingVolume;
+            var allowedPackagingVolume = queryDto.AllowedPackagingVolume.Value;
             exp = exp.And(x => x.AllowedPackagingVolume == allowedPackagingVolume);
         }
 
@@ -847,13 +847,13 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.ExcessWeightTolerance.HasValue == true)
         {
-            var excessWeightTolerance = queryDto.ExcessWeightTolerance;
+            var excessWeightTolerance = queryDto.ExcessWeightTolerance.Value;
             exp = exp.And(x => x.ExcessWeightTolerance == excessWeightTolerance);
         }
 
         if (queryDto?.ExcessVolumeTolerance.HasValue == true)
         {
-            var excessVolumeTolerance = queryDto.ExcessVolumeTolerance;
+            var excessVolumeTolerance = queryDto.ExcessVolumeTolerance.Value;
             exp = exp.And(x => x.ExcessVolumeTolerance == excessVolumeTolerance);
         }
 
@@ -889,13 +889,13 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.MaximumLevelByVolume.HasValue == true)
         {
-            var maximumLevelByVolume = queryDto.MaximumLevelByVolume;
+            var maximumLevelByVolume = queryDto.MaximumLevelByVolume.Value;
             exp = exp.And(x => x.MaximumLevelByVolume == maximumLevelByVolume);
         }
 
         if (queryDto?.StackingFactor.HasValue == true)
         {
-            var stackingFactor = queryDto.StackingFactor;
+            var stackingFactor = queryDto.StackingFactor.Value;
             exp = exp.And(x => x.StackingFactor == stackingFactor);
         }
 
@@ -991,19 +991,19 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.MinimumRemainingShelfLife.HasValue == true)
         {
-            var minimumRemainingShelfLife = queryDto.MinimumRemainingShelfLife;
+            var minimumRemainingShelfLife = queryDto.MinimumRemainingShelfLife.Value;
             exp = exp.And(x => x.MinimumRemainingShelfLife == minimumRemainingShelfLife);
         }
 
         if (queryDto?.TotalShelfLife.HasValue == true)
         {
-            var totalShelfLife = queryDto.TotalShelfLife;
+            var totalShelfLife = queryDto.TotalShelfLife.Value;
             exp = exp.And(x => x.TotalShelfLife == totalShelfLife);
         }
 
         if (queryDto?.StoragePercentage.HasValue == true)
         {
-            var storagePercentage = queryDto.StoragePercentage;
+            var storagePercentage = queryDto.StoragePercentage.Value;
             exp = exp.And(x => x.StoragePercentage == storagePercentage);
         }
 
@@ -1015,13 +1015,13 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.NetContents.HasValue == true)
         {
-            var netContents = queryDto.NetContents;
+            var netContents = queryDto.NetContents.Value;
             exp = exp.And(x => x.NetContents == netContents);
         }
 
         if (queryDto?.ComparisonPriceUnit.HasValue == true)
         {
-            var comparisonPriceUnit = queryDto.ComparisonPriceUnit;
+            var comparisonPriceUnit = queryDto.ComparisonPriceUnit.Value;
             exp = exp.And(x => x.ComparisonPriceUnit == comparisonPriceUnit);
         }
 
@@ -1033,7 +1033,7 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.GrossContents.HasValue == true)
         {
-            var grossContents = queryDto.GrossContents;
+            var grossContents = queryDto.GrossContents.Value;
             exp = exp.And(x => x.GrossContents == grossContents);
         }
 
@@ -1291,31 +1291,31 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.MaximumAllowedCapacity.HasValue == true)
         {
-            var maximumAllowedCapacity = queryDto.MaximumAllowedCapacity;
+            var maximumAllowedCapacity = queryDto.MaximumAllowedCapacity.Value;
             exp = exp.And(x => x.MaximumAllowedCapacity == maximumAllowedCapacity);
         }
 
         if (queryDto?.OvercapacityTolerance.HasValue == true)
         {
-            var overcapacityTolerance = queryDto.OvercapacityTolerance;
+            var overcapacityTolerance = queryDto.OvercapacityTolerance.Value;
             exp = exp.And(x => x.OvercapacityTolerance == overcapacityTolerance);
         }
 
         if (queryDto?.MaximumPackingLength.HasValue == true)
         {
-            var maximumPackingLength = queryDto.MaximumPackingLength;
+            var maximumPackingLength = queryDto.MaximumPackingLength.Value;
             exp = exp.And(x => x.MaximumPackingLength == maximumPackingLength);
         }
 
         if (queryDto?.MaximumPackingWidth.HasValue == true)
         {
-            var maximumPackingWidth = queryDto.MaximumPackingWidth;
+            var maximumPackingWidth = queryDto.MaximumPackingWidth.Value;
             exp = exp.And(x => x.MaximumPackingWidth == maximumPackingWidth);
         }
 
         if (queryDto?.MaximumPackingHeight.HasValue == true)
         {
-            var maximumPackingHeight = queryDto.MaximumPackingHeight;
+            var maximumPackingHeight = queryDto.MaximumPackingHeight.Value;
             exp = exp.And(x => x.MaximumPackingHeight == maximumPackingHeight);
         }
 
@@ -1339,7 +1339,7 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.QuarantinePeriod.HasValue == true)
         {
-            var quarantinePeriod = queryDto.QuarantinePeriod;
+            var quarantinePeriod = queryDto.QuarantinePeriod.Value;
             exp = exp.And(x => x.QuarantinePeriod == quarantinePeriod);
         }
 
@@ -1693,61 +1693,61 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
 
         if (queryDto?.ValidFromDateStart.HasValue == true)
         {
-            var validFromDateStart = queryDto.ValidFromDateStart;
+            var validFromDateStart = queryDto.ValidFromDateStart.Value;
             exp = exp.And(x => x.ValidFromDate >= validFromDateStart);
         }
 
         if (queryDto?.ValidFromDateEnd.HasValue == true)
         {
-            var validFromDateEnd = queryDto.ValidFromDateEnd;
+            var validFromDateEnd = queryDto.ValidFromDateEnd.Value;
             exp = exp.And(x => x.ValidFromDate <= validFromDateEnd);
         }
 
         if (queryDto?.ValidToDateStart.HasValue == true)
         {
-            var validToDateStart = queryDto.ValidToDateStart;
+            var validToDateStart = queryDto.ValidToDateStart.Value;
             exp = exp.And(x => x.ValidToDate >= validToDateStart);
         }
 
         if (queryDto?.ValidToDateEnd.HasValue == true)
         {
-            var validToDateEnd = queryDto.ValidToDateEnd;
+            var validToDateEnd = queryDto.ValidToDateEnd.Value;
             exp = exp.And(x => x.ValidToDate <= validToDateEnd);
         }
 
         if (queryDto?.CrossPlantStatusValidFromStart.HasValue == true)
         {
-            var crossPlantStatusValidFromStart = queryDto.CrossPlantStatusValidFromStart;
+            var crossPlantStatusValidFromStart = queryDto.CrossPlantStatusValidFromStart.Value;
             exp = exp.And(x => x.CrossPlantStatusValidFrom >= crossPlantStatusValidFromStart);
         }
 
         if (queryDto?.CrossPlantStatusValidFromEnd.HasValue == true)
         {
-            var crossPlantStatusValidFromEnd = queryDto.CrossPlantStatusValidFromEnd;
+            var crossPlantStatusValidFromEnd = queryDto.CrossPlantStatusValidFromEnd.Value;
             exp = exp.And(x => x.CrossPlantStatusValidFrom <= crossPlantStatusValidFromEnd);
         }
 
         if (queryDto?.CrossDistributionStatusValidFromStart.HasValue == true)
         {
-            var crossDistributionStatusValidFromStart = queryDto.CrossDistributionStatusValidFromStart;
+            var crossDistributionStatusValidFromStart = queryDto.CrossDistributionStatusValidFromStart.Value;
             exp = exp.And(x => x.CrossDistributionStatusValidFrom >= crossDistributionStatusValidFromStart);
         }
 
         if (queryDto?.CrossDistributionStatusValidFromEnd.HasValue == true)
         {
-            var crossDistributionStatusValidFromEnd = queryDto.CrossDistributionStatusValidFromEnd;
+            var crossDistributionStatusValidFromEnd = queryDto.CrossDistributionStatusValidFromEnd.Value;
             exp = exp.And(x => x.CrossDistributionStatusValidFrom <= crossDistributionStatusValidFromEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

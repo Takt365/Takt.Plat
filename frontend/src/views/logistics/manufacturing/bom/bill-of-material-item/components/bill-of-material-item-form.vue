@@ -223,7 +223,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isOptional"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isOptional')"
                 />
               </a-form-item>
@@ -235,7 +235,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isPhantom"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isPhantom')"
                 />
               </a-form-item>
@@ -247,7 +247,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isObsolete"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
@@ -388,7 +388,7 @@
       <template #cell-isEnabled="{ record }">
         <TaktSelect
           v-model:value="record.isEnabled"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="billOfMaterialSubstitutePi.ph('isEnabled')"
@@ -399,7 +399,7 @@
       <template #cell-isObsolete="{ record }">
         <TaktSelect
           v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="billOfMaterialSubstitutePi.ph('isObsolete')"

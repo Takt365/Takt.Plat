@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktDefectGroupI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDefectGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,31 +154,31 @@ public class TaktDefectGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.defectgroup.contactemail", "zh-HK", "联系邮箱_hk", "联系邮箱"),
 
             // entity.defectgroup.isbuiltin
-            new TranslationSeedItem("entity.defectgroup.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.defectgroup.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.defectgroup.isbuiltin
-            new TranslationSeedItem("entity.defectgroup.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.defectgroup.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.defectgroup.isbuiltin
-            new TranslationSeedItem("entity.defectgroup.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.defectgroup.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.defectgroup.isbuiltin
-            new TranslationSeedItem("entity.defectgroup.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.defectgroup.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
 
             // entity.defectgroup.sortorder
-            new TranslationSeedItem("entity.defectgroup.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.defectgroup.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.defectgroup.sortorder
-            new TranslationSeedItem("entity.defectgroup.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.defectgroup.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.defectgroup.sortorder
-            new TranslationSeedItem("entity.defectgroup.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.defectgroup.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.defectgroup.sortorder
-            new TranslationSeedItem("entity.defectgroup.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.defectgroup.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.defectgroup.groupstatus
-            new TranslationSeedItem("entity.defectgroup.groupstatus", "en-US", "不良组状态_us", "不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.defectgroup.groupstatus", "en-US", "不良组状态_us", "不良组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.defectgroup.groupstatus
-            new TranslationSeedItem("entity.defectgroup.groupstatus", "ja-JP", "不良组状态_jp", "不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.defectgroup.groupstatus", "ja-JP", "不良组状态_jp", "不良组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.defectgroup.groupstatus
-            new TranslationSeedItem("entity.defectgroup.groupstatus", "zh-CN", "不良组状态", "不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.defectgroup.groupstatus", "zh-CN", "不良组状态", "不良组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.defectgroup.groupstatus
-            new TranslationSeedItem("entity.defectgroup.groupstatus", "zh-HK", "不良组状态_hk", "不良组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.defectgroup.groupstatus", "zh-HK", "不良组状态_hk", "不良组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

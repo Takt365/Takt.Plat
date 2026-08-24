@@ -43,7 +43,7 @@ public sealed class TaktAuthLoginLogWriteRequest
     public string? CompanyCode { get; init; }
 
     /// <summary>用户名或 client_id</summary>
-    public string Username { get; init; } = string.Empty;
+    public string UserName { get; init; } = string.Empty;
 
     /// <summary>结果说明</summary>
     public string? Message { get; init; }
@@ -76,7 +76,7 @@ public sealed class TaktAuthFlowStepRequest
     public long? UserId { get; init; }
 
     /// <summary>用户名</summary>
-    public string? Username { get; init; }
+    public string? UserName { get; init; }
 
     /// <summary>租户编码</summary>
     public string? TenantCode { get; init; }
@@ -164,7 +164,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         TaktUserContext.StashAuditOperator(
             httpContext,
             request.UserId,
-            request.Username,
+            request.UserName,
             BuildAuthAuditContextRemark(request));
 
         var client = TaktHttpAuditHelper.ResolveClientLogContext(httpContext);
@@ -177,7 +177,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             Module = LogModule,
             Action = request.Phase,
             UserId = request.UserId?.ToString(),
-            Username = ResolveLoginLogUsername(request.Username),
+            UserName = ResolveLoginLogUserName(request.UserName),
             TenantCode = string.IsNullOrWhiteSpace(request.TenantCode) ? null : request.TenantCode,
             CompanyCode = request.CompanyCode,
             Route = path,
@@ -200,9 +200,9 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             {
                 TaktLogger.Information(
                     logContext,
-                    "认证登录 [{Phase}] 成功: 用户={Username}, 租户={TenantCode}, 方式={LoginType}, 说明={Message}, 耗时={ElapsedMs}ms",
+                    "认证登录 [{Phase}] 成功: 用户={UserName}, 租户={TenantCode}, 方式={LoginType}, 说明={Message}, 耗时={ElapsedMs}ms",
                     request.Phase,
-                    request.Username,
+                    request.UserName,
                     request.TenantCode,
                     request.LoginType,
                     request.Message ?? string.Empty,
@@ -212,9 +212,9 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             {
                 TaktLogger.Warning(
                     logContext,
-                    "认证登录 [{Phase}] 失败: 用户={Username}, 租户={TenantCode}, 方式={LoginType}, 结果={LoginResult}, 说明={Message}, 耗时={ElapsedMs}ms",
+                    "认证登录 [{Phase}] 失败: 用户={UserName}, 租户={TenantCode}, 方式={LoginType}, 结果={LoginResult}, 说明={Message}, 耗时={ElapsedMs}ms",
                     request.Phase,
-                    request.Username,
+                    request.UserName,
                     request.TenantCode,
                     request.LoginType,
                     request.LoginResult,
@@ -236,11 +236,11 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
                 if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(companyCode))
                 {
                     TaktLogger.Debug(
-                        "[AuthLoginLog] 跳过登录日志表写入：租户或公司未解析 Phase={Phase}, Tenant={TenantCode}, Company={CompanyCode}, Username={Username}",
+                        "[AuthLoginLog] 跳过登录日志表写入：租户或公司未解析 Phase={Phase}, Tenant={TenantCode}, Company={CompanyCode}, UserName={UserName}",
                         request.Phase,
                         tenantCode ?? string.Empty,
                         companyCode ?? string.Empty,
-                        request.Username);
+                        request.UserName);
                 }
                 else
                 {
@@ -249,7 +249,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
                         new TaktLoginLog
                         {
                             CompanyCode = companyCode,
-                            Username = ResolveLoginLogUsername(request.Username),
+                            UserName = ResolveLoginLogUserName(request.UserName),
                             LoginType = request.LoginType,
                             LoginResult = request.LoginResult,
                             LoginMessage = BuildPersistMessage(request),
@@ -268,9 +268,9 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             {
                 TaktLogger.Warning(
                     ex,
-                    "[AuthLoginLog] 持久化登录日志失败: Phase={Phase}, Username={Username}",
+                    "[AuthLoginLog] 持久化登录日志失败: Phase={Phase}, UserName={UserName}",
                     request.Phase,
-                    request.Username);
+                    request.UserName);
             }
         }
 
@@ -287,7 +287,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
                         tenantCode,
                         companyCode,
                         request.UserId.Value,
-                        request.Username,
+                        request.UserName,
                         cancellationToken: cancellationToken);
                 }
             }
@@ -376,7 +376,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             return;
         }
 
-        if (request.UserId is not > 0 && IsUnknownOrEmptySignOutUsername(request.Username))
+        if (request.UserId is not > 0 && IsUnknownOrEmptySignOutUserName(request.UserName))
         {
             return;
         }
@@ -392,22 +392,22 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         }
 
         var logoutAt = DateTime.Now;
-        var username = NormalizeSignOutUsername(request.Username);
-        if (string.IsNullOrEmpty(username)
+        var UserName = NormalizeSignOutUserName(request.UserName);
+        if (string.IsNullOrEmpty(UserName)
             && request.UserId is > 0)
         {
-            username = await _loginLogTenantWriter.ResolveUsernameByUserIdAsync(
+            UserName = await _loginLogTenantWriter.ResolveUserNameByUserIdAsync(
                 tenantCode,
                 request.UserId.Value,
                 cancellationToken);
         }
 
-        if (!string.IsNullOrEmpty(username))
+        if (!string.IsNullOrEmpty(UserName))
         {
             var updatedCount = await _loginLogTenantWriter.CloseOpenLoginSessionAsync(
                 tenantCode,
                 companyCode,
-                username,
+                UserName,
                 logoutAt,
                 request.UserId,
                 cancellationToken);
@@ -415,10 +415,10 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             if (updatedCount == 0)
             {
                 TaktLogger.Debug(
-                    "[AuthLoginLog] 登出未匹配未关闭登录会话 Tenant={TenantCode}, Company={CompanyCode}, Username={Username}",
+                    "[AuthLoginLog] 登出未匹配未关闭登录会话 Tenant={TenantCode}, Company={CompanyCode}, UserName={UserName}",
                     tenantCode,
                     companyCode,
-                    username);
+                    UserName);
             }
         }
 
@@ -453,17 +453,17 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     /// <summary>
     /// 登出用户名是否为空或 unknown
     /// </summary>
-    /// <param name="username">原始用户名</param>
+    /// <param name="UserName">原始用户名</param>
     /// <returns>无法用于匹配登录日志时为 true</returns>
-    private static bool IsUnknownOrEmptySignOutUsername(string? username)
+    private static bool IsUnknownOrEmptySignOutUserName(string? UserName)
     {
-        if (string.IsNullOrWhiteSpace(username))
+        if (string.IsNullOrWhiteSpace(UserName))
         {
             return true;
         }
 
         return string.Equals(
-            username.Trim(),
+            UserName.Trim(),
             TaktConstants.AuditUserName.Unknown,
             StringComparison.OrdinalIgnoreCase);
     }
@@ -471,16 +471,16 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     /// <summary>
     /// 规范化登出匹配用登录名（小写）
     /// </summary>
-    /// <param name="username">原始用户名</param>
+    /// <param name="UserName">原始用户名</param>
     /// <returns>小写登录名；无效时返回 null</returns>
-    private static string? NormalizeSignOutUsername(string? username)
+    private static string? NormalizeSignOutUserName(string? UserName)
     {
-        if (IsUnknownOrEmptySignOutUsername(username))
+        if (IsUnknownOrEmptySignOutUserName(UserName))
         {
             return null;
         }
 
-        return username!.Trim().ToLowerInvariant();
+        return UserName!.Trim().ToLowerInvariant();
     }
 
     /// <summary>
@@ -513,7 +513,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             Module = LogModule,
             Action = request.Phase,
             UserId = request.UserId?.ToString(),
-            Username = request.Username,
+            UserName = request.UserName,
             TenantCode = string.IsNullOrWhiteSpace(request.TenantCode) ? null : request.TenantCode,
             CompanyCode = request.CompanyCode,
             Route = path,
@@ -535,9 +535,9 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             {
                 TaktLogger.Information(
                     logContext,
-                    "认证流程 [{Phase}] 成功: 用户={Username}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
+                    "认证流程 [{Phase}] 成功: 用户={UserName}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
                     request.Phase,
-                    request.Username ?? string.Empty,
+                    request.UserName ?? string.Empty,
                     request.TenantCode ?? string.Empty,
                     request.Message ?? string.Empty,
                     request.ElapsedMs);
@@ -546,9 +546,9 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             {
                 TaktLogger.Warning(
                     logContext,
-                    "认证流程 [{Phase}] 失败: 用户={Username}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
+                    "认证流程 [{Phase}] 失败: 用户={UserName}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
                     request.Phase,
-                    request.Username ?? string.Empty,
+                    request.UserName ?? string.Empty,
                     request.TenantCode ?? string.Empty,
                     request.Message ?? string.Empty,
                     request.ElapsedMs);
@@ -612,13 +612,13 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     /// <summary>
     /// 登录日志落库用户名（空则 unknown）
     /// </summary>
-    /// <param name="username">原始用户名</param>
+    /// <param name="UserName">原始用户名</param>
     /// <returns>小写登录名或 unknown</returns>
-    private static string ResolveLoginLogUsername(string? username)
+    private static string ResolveLoginLogUserName(string? UserName)
     {
-        return string.IsNullOrWhiteSpace(username)
+        return string.IsNullOrWhiteSpace(UserName)
             ? TaktConstants.AuditUserName.Unknown
-            : username.Trim().ToLowerInvariant();
+            : UserName.Trim().ToLowerInvariant();
     }
 
     /// <summary>
@@ -629,7 +629,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     private static string ResolveLoginLogRemark(TaktAuthLoginLogWriteRequest request)
     {
         if (request.LoginType == TaktConstants.LoginType.SignOut
-            && string.IsNullOrWhiteSpace(request.Username))
+            && string.IsNullOrWhiteSpace(request.UserName))
         {
             return TaktAuditContextRemarks.BuildSignOutUnknownUser(request.Phase, request.Message);
         }
@@ -645,7 +645,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     private static string? BuildAuthAuditContextRemark(TaktAuthLoginLogWriteRequest request)
     {
         if (request.LoginType != TaktConstants.LoginType.SignOut
-            || !string.IsNullOrWhiteSpace(request.Username))
+            || !string.IsNullOrWhiteSpace(request.UserName))
         {
             return null;
         }

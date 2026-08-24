@@ -41,7 +41,7 @@ public class TaktFileDto : TaktCompanyDtoBase
     public string FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+    /// 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string FileName { get; set; } = string.Empty;
 
@@ -107,7 +107,7 @@ public class TaktFileDto : TaktCompanyDtoBase
     public DateTime? LastDownloadTime { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     public int IsPublic { get; set; } = 0;
 
@@ -132,7 +132,7 @@ public class TaktFileDto : TaktCompanyDtoBase
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int FileStatus { get; set; } = 0;
 
@@ -174,7 +174,7 @@ public class TaktFileQueryDto : TaktPagedQuery
     public string? FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+    /// 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string? FileName { get; set; } = string.Empty;
 
@@ -245,7 +245,7 @@ public class TaktFileQueryDto : TaktPagedQuery
     public DateTime? LastDownloadTimeEnd { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     public int? IsPublic { get; set; }
 
@@ -270,7 +270,7 @@ public class TaktFileQueryDto : TaktPagedQuery
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? FileStatus { get; set; }
 
@@ -332,9 +332,9 @@ public class TaktFileCreateDto
     public string FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+    /// 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
-    [Required(ErrorMessage = "文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）不能为空")]
+    [Required(ErrorMessage = "文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）不能为空")]
     public string FileName { get; set; } = string.Empty;
 
     /// <summary>
@@ -404,7 +404,7 @@ public class TaktFileCreateDto
     public DateTime? LastDownloadTime { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     public int IsPublic { get; set; } = 0;
 
@@ -433,7 +433,7 @@ public class TaktFileCreateDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int FileStatus { get; set; } = 0;
 
@@ -487,9 +487,9 @@ public class TaktFileStatusDto
     public long FileId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int FileStatus { get; set; } = 0;
 }
 
@@ -511,7 +511,7 @@ public class TaktFilePublicDto
     public long FileId { get; set; }
 
     /// <summary>
-    /// 是否公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 是否公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     [Required(ErrorMessage = "是否公开不能为空")]
     public int IsPublic { get; set; } = 0;
@@ -537,12 +537,12 @@ public class TaktFileUploadMetaDto
     public string? FileTags { get; set; }
 
     /// <summary>
-    /// 是否公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// 是否公开（字典 sys_public_type；0=公开，1=私有）
     /// </summary>
     public int IsPublic { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? FileStatus { get; set; }
 
@@ -764,7 +764,7 @@ public class TaktFileTemplateDto
     public string? FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+    /// 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string? FileName { get; set; } = string.Empty;
 
@@ -830,7 +830,7 @@ public class TaktFileTemplateDto
     public DateTime? LastDownloadTime { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     public int? IsPublic { get; set; }
 
@@ -855,7 +855,7 @@ public class TaktFileTemplateDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? FileStatus { get; set; }
 
@@ -903,7 +903,7 @@ public class TaktFileImportDto
     public string? FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+    /// 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string? FileName { get; set; } = string.Empty;
 
@@ -969,7 +969,7 @@ public class TaktFileImportDto
     public DateTime? LastDownloadTime { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     public int? IsPublic { get; set; }
 
@@ -994,7 +994,7 @@ public class TaktFileImportDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? FileStatus { get; set; }
 
@@ -1037,7 +1037,7 @@ public class TaktFileExportDto
     public string FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+    /// 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string FileName { get; set; } = string.Empty;
 
@@ -1103,7 +1103,7 @@ public class TaktFileExportDto
     public DateTime? LastDownloadTime { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     public int IsPublic { get; set; } = 0;
 
@@ -1128,7 +1128,7 @@ public class TaktFileExportDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int FileStatus { get; set; } = 0;
 

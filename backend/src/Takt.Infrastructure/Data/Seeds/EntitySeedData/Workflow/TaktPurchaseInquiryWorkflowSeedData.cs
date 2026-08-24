@@ -75,7 +75,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
             database.CompanyCodes,
             companies,
             c => c.CompanyCode);
-        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "admin");
+        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "admin");
         if (adminUser == null)
         {
             return (0, 0);
@@ -94,7 +94,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
             updateCount += fu;
             var processContent = BuildProcessContent(
                 adminUser.Id,
-                adminUser.Nickname ?? adminUser.Username);
+                adminUser.NickName ?? adminUser.UserName);
             var (_, si, su) = await UpsertSchemeAsync(
                 schemeRepository,
                 tenantCode,

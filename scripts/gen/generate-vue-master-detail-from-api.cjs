@@ -38,7 +38,6 @@ const {
   buildGeneratedFormTemplateBody,
   buildMasterDetailFormTypeImportLines,
   buildFormTabsScopedStyleBlock,
-  hasScopeContextFormFields,
   pascalToCamel,
   fieldsUseDictSelect,
   buildDictDataStoreImportLine,
@@ -67,6 +66,9 @@ const {
   buildEntityNumericCoerceHelper,
   entityRowRecordTypeName,
   entityI18nComposableFileName,
+  hasScopeContextFormFields,
+  resolveScopeFormFieldPresence,
+  buildScopeContextFormScriptFragments,
 } = require('./generate-vue-common.cjs');
 const {
   generateMasterDetailLrIndexScript,
@@ -172,6 +174,7 @@ function processManyToOneAssociationViews(childEntityShort, options, registry) {
       masterBundle.fullCtx.viewModulePath,
       masterBundle.fullCtx.modulePath,
       masterChildren,
+      assoc.masterPascal,
     );
     const plan = plans.find((item) => item.childMeta.childPascal === childMeta.childPascal);
     if (!plan) {
@@ -224,6 +227,7 @@ function processChildMasterMultiNavViews(entityShort, options, registry) {
     masterBundle.fullCtx.viewModulePath,
     masterBundle.fullCtx.modulePath,
     children,
+    entityShort,
   );
   if (!plans.length) {
     return { skipped: true };
@@ -868,47 +872,15 @@ ${formTemplate.body}
 ${mdFormParts.editableBlocks}`;
   const needsTaktSelect = formFields.some((f) => f.htmlType === 'select' && f.dictType)
     || formFields.some((f) => f.htmlType === 'apiSelect' && f.apiUrl)
+    || formFields.some((f) => f.htmlType === 'numberingRule')
     || mdFormParts.needsTaktSelect;
   const hasScopeContextFields = hasScopeContextFormFields(formFields, masterDetailChildren)
     || hasMasterDetailChildren;
-  const scopeStoreImports = hasScopeContextFields
-    ? "import { useTenantStore } from '@/stores/identity/tenant'\nimport { useUserStore } from '@/stores/identity/user'\n"
-    : '';
-  const scopeStoreScript = hasScopeContextFields ? `
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-}
-` : '';
-  const scopeContextWatch = hasScopeContextFields ? `
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.${entityIdField}
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-` : '';
+  const scopePresence = resolveScopeFormFieldPresence(formFields, masterDetailChildren);
+  const scopeFragments = buildScopeContextFormScriptFragments(scopePresence, entityIdField, entityPascal);
+  const scopeStoreImports = hasScopeContextFields ? scopeFragments.imports : '';
+  const scopeStoreScript = hasScopeContextFields ? scopeFragments.script : '';
+  const scopeContextWatch = hasScopeContextFields ? scopeFragments.watch : '';
   const { masterTypeImport } = buildMasterDetailFormTypeImportLines({
     entityPascal,
     entityKebab,
@@ -981,11 +953,13 @@ import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 ${buildEntityI18nFormImportBlock(entityPascal, viewEntityKebab)}
 ${masterTypeImport}
-${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
+${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${formScriptFragments.fileUploadImportLine}${formScriptFragments.numberingImportLine || ''}${scopeStoreImports}
 ${formScriptState}
 ${formScriptFragments.defaultsBlock}
 ${formScriptFragments.normalizerBlock}
 ${formScriptFragments.dictBootstrap}
+${formScriptFragments.fileUploadBootstrap}
+${formScriptFragments.numberingBootstrap || ''}
 ${formScriptFragments.watchBlock}
 ${scopeContextWatch}
 /** 表单校验规则（与 FluentValidation 必填对齐） */
@@ -1051,7 +1025,11 @@ function processMasterDetailApiModule(apiFilePath, options, registry) {
     return { skipped: true };
   }
   const allChildren = bundle.fullCtx.fields.masterDetailChildren || [];
-  const viewChildren = filterStandaloneMenuChildren(allChildren, bundle.fullCtx.modulePath);
+  const viewChildren = filterStandaloneMenuChildren(
+    allChildren,
+    bundle.fullCtx.modulePath,
+    bundle.entityShort,
+  );
   if (!viewChildren.length) {
     console.log(`⏭️  跳过（子实体均有独立菜单，主实体走单表 CRUD）: ${bundle.rel}`);
     return { skipped: true };
@@ -1066,6 +1044,7 @@ function processMasterDetailApiModule(apiFilePath, options, registry) {
     bundle.fullCtx.viewModulePath,
     bundle.fullCtx.modulePath,
     allChildren,
+    bundle.entityShort,
   );
   if (!plans.length) {
     console.log(`⏭️  跳过（无可用菜单导航的主子视图）: ${bundle.rel}`);
@@ -1075,7 +1054,8 @@ function processMasterDetailApiModule(apiFilePath, options, registry) {
   console.log(`  菜单导航主子视图: ${plans.length} 个 ← ${plans.map((p) => p.viewModulePath).join(', ')}`);
   console.log(`  entityScope: ${bundle.fullCtx.fields.entityScope} ← Takt${bundle.entityShort}`);
   plans.forEach((plan) => {
-    const childFields = cloneFieldMetaWithMasterDetailChildren(bundle.fullCtx.fields, [plan.childMeta]);
+    const planChildren = [plan.childMeta];
+    const childFields = cloneFieldMetaWithMasterDetailChildren(bundle.fullCtx.fields, planChildren);
     const childCtx = { ...bundle.fullCtx, fields: childFields };
     if (plan.viewModulePath === bundle.fullCtx.viewModulePath) {
       console.log(`  ▶ 主菜单主子: ${plan.viewModulePath}（Takt${plan.childMeta.childPascal}）`);
@@ -1111,6 +1091,7 @@ function printMasterDetailUsage() {
   - 视图目录数 = 菜单 ComponentPath 数（主菜单 + 与子表 viewChildKebab 路径一致的子导航菜单）
   - 主菜单绑定「尚无独立 ComponentPath 菜单」的首个 eligible 子表；子实体有独立实体菜单则不计入主表主子规划
   - 子实体在 shouldExcludeVueGeneration 排除列表者，虽有菜单仍视为主表子导航（非独立实体页）
+  - 特例：人事 Employee / 日常 News — 主菜单单表 CRUD；各子表独立菜单页为「主表 + 该子表明细」主子视图（不改普通主子表规则）
 
 示例:
   node scripts/generate-vue-master-detail-from-api.cjs --DictType

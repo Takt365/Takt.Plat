@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：TaktNewsService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心应用服务实现
 // 
@@ -30,12 +30,6 @@ namespace Takt.Application.Services.Routine.NewsCenter;
 public class TaktNewsService : TaktServiceBase, ITaktNewsService
 {
     private readonly ITaktApprovalRepository<TaktNews> _newsRepository;
-    private readonly ITaktCompanyRepository<TaktNewsAttachment> _newsAttachmentRepository;
-    private readonly ITaktApprovalRepository<TaktNewsComment> _newsCommentRepository;
-    private readonly ITaktCompanyRepository<TaktNewsLike> _newsLikeRepository;
-    private readonly ITaktCompanyRepository<TaktNewsRead> _newsReadRepository;
-    private readonly ITaktCompanyRepository<TaktNewsFavorite> _newsFavoriteRepository;
-    private readonly ITaktCompanyRepository<TaktNewsShare> _newsShareRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -43,24 +37,12 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
     /// 构造函数
     /// </summary>
     /// <param name="newsRepository">新闻中心仓储</param>
-    /// <param name="newsAttachmentRepository">NewsAttachment仓储</param>
-    /// <param name="newsCommentRepository">NewsComment仓储</param>
-    /// <param name="newsLikeRepository">NewsLike仓储</param>
-    /// <param name="newsReadRepository">NewsRead仓储</param>
-    /// <param name="newsFavoriteRepository">NewsFavorite仓储</param>
-    /// <param name="newsShareRepository">NewsShare仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktNewsService(
         ITaktApprovalRepository<TaktNews> newsRepository,
-        ITaktCompanyRepository<TaktNewsAttachment> newsAttachmentRepository,
-        ITaktApprovalRepository<TaktNewsComment> newsCommentRepository,
-        ITaktCompanyRepository<TaktNewsLike> newsLikeRepository,
-        ITaktCompanyRepository<TaktNewsRead> newsReadRepository,
-        ITaktCompanyRepository<TaktNewsFavorite> newsFavoriteRepository,
-        ITaktCompanyRepository<TaktNewsShare> newsShareRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -68,23 +50,25 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
         : base(userContext, localizationService)
     {
         _newsRepository = newsRepository;
-        _newsAttachmentRepository = newsAttachmentRepository;
-        _newsCommentRepository = newsCommentRepository;
-        _newsLikeRepository = newsLikeRepository;
-        _newsReadRepository = newsReadRepository;
-        _newsFavoriteRepository = newsFavoriteRepository;
-        _newsShareRepository = newsShareRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取新闻中心列表（分页）
+    /// 获取新闻中心列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktNewsDto>> GetNewsListAsync(TaktNewsQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktNewsDto>.Create(
+                new List<TaktNewsDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _newsRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -109,9 +93,8 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
         {
             return null;
         }
-        var dto = entity.Adapt<TaktNewsDto>();
-        await FillNewsDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktNewsDto>();
+    }
 
     /// <summary>
     /// 获取新闻中心选项列表
@@ -126,8 +109,8 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.DeptName ?? e.Id.ToString(),
+            DictValue = e.NewsCode,
+            DictLabel = e.DeptName ?? e.NewsCode,
         }).ToList();
     }
 
@@ -154,7 +137,6 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
             entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.DeptId.GetValueOrDefault(), maxSort);
         }
         entity = await _newsRepository.CreateAsync(entity);
-                await SaveNewsChildrenAsync(entity, dto);
         return await GetNewsByIdAsync(entity.Id) ?? entity.Adapt<TaktNewsDto>();
     }
 
@@ -181,7 +163,6 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
             throw new TaktBusinessException("新闻中心的NewsCode已存在");
         }
         await _newsRepository.UpdateAsync(entity);
-                await SaveNewsChildrenAsync(entity, dto);
         return await GetNewsByIdAsync(id) ?? throw new TaktBusinessException("新闻中心不存在");
     }
 
@@ -192,17 +173,6 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
     /// <returns>任务</returns>
     public async Task DeleteNewsByIdAsync(long id)
     {
-        var entity = await _newsRepository.GetByIdAsync(id);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("新闻中心不存在或已删除");
-        }
-        await _newsAttachmentRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        await _newsCommentRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        await _newsLikeRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        await _newsReadRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        await _newsFavoriteRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        await _newsShareRepository.DeleteAsync(x => x.NewsId == entity.Id);
         var deleted = await _newsRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -338,7 +308,15 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportNewsAsync(TaktNewsQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktNewsQueryDto());
+        var queryDto = query ?? new TaktNewsQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktNewsExportDto>(),
+                sheetName ?? "新闻中心数据",
+                fileName ?? "新闻中心导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _newsRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -355,229 +333,6 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
-    /// <summary>
-    /// 填充新闻中心详情（加载 OneToMany 子表：新闻中心附件、新闻中心评论、新闻中心点赞记录、新闻中心阅读记录、新闻中心收藏记录、新闻中心分享记录）
-    /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
-    /// <returns>任务</returns>
-    private async Task FillNewsDetailsAsync(TaktNewsDto dto, TaktNews entity)
-    {
-        if (dto == null)
-        {
-            return;
-        }
-        // 新闻中心附件 → dto.Attachments
-        var attachments = await _newsAttachmentRepository.GetListAsync(x => x.NewsId == entity.Id);
-        dto.Attachments = attachments.Adapt<List<TaktNewsAttachmentDto>>();
-        // 新闻中心评论 → dto.Comments
-        var comments = await _newsCommentRepository.GetListAsync(x => x.NewsId == entity.Id);
-        dto.Comments = comments.Adapt<List<TaktNewsCommentDto>>();
-        // 新闻中心点赞记录 → dto.Likes
-        var likes = await _newsLikeRepository.GetListAsync(x => x.NewsId == entity.Id);
-        dto.Likes = likes.Adapt<List<TaktNewsLikeDto>>();
-        // 新闻中心阅读记录 → dto.Reads
-        var reads = await _newsReadRepository.GetListAsync(x => x.NewsId == entity.Id);
-        dto.Reads = reads.Adapt<List<TaktNewsReadDto>>();
-        // 新闻中心收藏记录 → dto.Favorites
-        var favorites = await _newsFavoriteRepository.GetListAsync(x => x.NewsId == entity.Id);
-        dto.Favorites = favorites.Adapt<List<TaktNewsFavoriteDto>>();
-        // 新闻中心分享记录 → dto.Shares
-        var shares = await _newsShareRepository.GetListAsync(x => x.NewsId == entity.Id);
-        dto.Shares = shares.Adapt<List<TaktNewsShareDto>>();
-    }
-
-    /// <summary>
-    /// 保存新闻中心子表级联（新闻中心附件、新闻中心评论、新闻中心点赞记录、新闻中心阅读记录、新闻中心收藏记录、新闻中心分享记录；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveNewsChildrenAsync(TaktNews entity, TaktNewsCreateDto dto)
-    {
-        // 新闻中心附件（Attachments）
-        if (dto.Attachments is not { Count: > 0 })
-        {
-            await _newsAttachmentRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        }
-        else
-        {
-            var attachments = dto.Attachments.Adapt<List<TaktNewsAttachment>>();
-            foreach (var child in attachments)
-            {
-                child.NewsId = entity.Id;
-            }
-            var attachmentsNeedSort = attachments.Where(c => c.SortOrder <= 0).ToList();
-            if (attachmentsNeedSort.Count > 0)
-            {
-                var maxSort = await _newsAttachmentRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.NewsId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, attachmentsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in attachments)
-                {
-                    if (child.SortOrder <= 0)
-                    {
-                        child.SortOrder = sortSeq[sortIdx++];
-                    }
-                }
-            }
-            await _newsAttachmentRepository.DeleteAsync(x => x.NewsId == entity.Id);
-            foreach (var child in attachments)
-            {
-            }
-            await _newsAttachmentRepository.CreateRangeAsync(attachments);
-        }
-        // 新闻中心评论（Comments）
-        if (dto.Comments is not { Count: > 0 })
-        {
-            await _newsCommentRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        }
-        else
-        {
-            var comments = dto.Comments.Adapt<List<TaktNewsComment>>();
-            foreach (var child in comments)
-            {
-                child.NewsId = entity.Id;
-            }
-            await _newsCommentRepository.DeleteAsync(x => x.NewsId == entity.Id);
-            foreach (var child in comments)
-            {
-            }
-            await _newsCommentRepository.CreateRangeAsync(comments);
-        }
-        // 新闻中心点赞记录（Likes）
-        if (dto.Likes is not { Count: > 0 })
-        {
-            await _newsLikeRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        }
-        else
-        {
-            var likes = dto.Likes.Adapt<List<TaktNewsLike>>();
-            foreach (var child in likes)
-            {
-                child.NewsId = entity.Id;
-            }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < likes.Count; i++)
-                        {
-                            var key = $"{likes[i].CompanyCode}|{likes[i].NewsId}|{likes[i].UserId}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"新闻中心点赞记录第{i + 1}项与本次提交的其他项重复（CompanyCode、NewsId、UserId）");
-                            }
-                        }
-            await _newsLikeRepository.DeleteAsync(x => x.NewsId == entity.Id);
-            foreach (var child in likes)
-            {
-            var isUnique_ix_news_like_unique = await _uniqueValidator.IsUniqueAsync(
-                _newsLikeRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.NewsId == child.NewsId
-                    && x.UserId == child.UserId);
-            if (!isUnique_ix_news_like_unique)
-            {
-                throw new TaktBusinessException("新闻中心点赞记录的CompanyCode、NewsId、UserId已存在");
-            }
-            }
-            await _newsLikeRepository.CreateRangeAsync(likes);
-        }
-        // 新闻中心阅读记录（Reads）
-        if (dto.Reads is not { Count: > 0 })
-        {
-            await _newsReadRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        }
-        else
-        {
-            var reads = dto.Reads.Adapt<List<TaktNewsRead>>();
-            foreach (var child in reads)
-            {
-                child.NewsId = entity.Id;
-            }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < reads.Count; i++)
-                        {
-                            var key = $"{reads[i].CompanyCode}|{reads[i].NewsId}|{reads[i].UserId}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"新闻中心阅读记录第{i + 1}项与本次提交的其他项重复（CompanyCode、NewsId、UserId）");
-                            }
-                        }
-            await _newsReadRepository.DeleteAsync(x => x.NewsId == entity.Id);
-            foreach (var child in reads)
-            {
-            var isUnique_ix_news_read_unique = await _uniqueValidator.IsUniqueAsync(
-                _newsReadRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.NewsId == child.NewsId
-                    && x.UserId == child.UserId);
-            if (!isUnique_ix_news_read_unique)
-            {
-                throw new TaktBusinessException("新闻中心阅读记录的CompanyCode、NewsId、UserId已存在");
-            }
-            }
-            await _newsReadRepository.CreateRangeAsync(reads);
-        }
-        // 新闻中心收藏记录（Favorites）
-        if (dto.Favorites is not { Count: > 0 })
-        {
-            await _newsFavoriteRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        }
-        else
-        {
-            var favorites = dto.Favorites.Adapt<List<TaktNewsFavorite>>();
-            foreach (var child in favorites)
-            {
-                child.NewsId = entity.Id;
-            }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < favorites.Count; i++)
-                        {
-                            var key = $"{favorites[i].CompanyCode}|{favorites[i].NewsId}|{favorites[i].UserId}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"新闻中心收藏记录第{i + 1}项与本次提交的其他项重复（CompanyCode、NewsId、UserId）");
-                            }
-                        }
-            await _newsFavoriteRepository.DeleteAsync(x => x.NewsId == entity.Id);
-            foreach (var child in favorites)
-            {
-            var isUnique_ix_news_favorite_unique = await _uniqueValidator.IsUniqueAsync(
-                _newsFavoriteRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.NewsId == child.NewsId
-                    && x.UserId == child.UserId);
-            if (!isUnique_ix_news_favorite_unique)
-            {
-                throw new TaktBusinessException("新闻中心收藏记录的CompanyCode、NewsId、UserId已存在");
-            }
-            }
-            await _newsFavoriteRepository.CreateRangeAsync(favorites);
-        }
-        // 新闻中心分享记录（Shares）
-        if (dto.Shares is not { Count: > 0 })
-        {
-            await _newsShareRepository.DeleteAsync(x => x.NewsId == entity.Id);
-        }
-        else
-        {
-            var shares = dto.Shares.Adapt<List<TaktNewsShare>>();
-            foreach (var child in shares)
-            {
-                child.NewsId = entity.Id;
-            }
-            await _newsShareRepository.DeleteAsync(x => x.NewsId == entity.Id);
-            foreach (var child in shares)
-            {
-            }
-            await _newsShareRepository.CreateRangeAsync(shares);
-        }
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -590,207 +345,379 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
     {
         var exp = Expressionable.Create<TaktNews>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.NewsCode != null && x.NewsCode.Contains(keywords))
-                || SqlFunc.ToString(x.NewsCategory).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.NewsCode != null && x.NewsCode.Contains(keywords))
                 || (x.NewsTitle != null && x.NewsTitle.Contains(keywords))
                 || (x.NewsSummary != null && x.NewsSummary.Contains(keywords))
                 || (x.NewsTags != null && x.NewsTags.Contains(keywords))
                 || (x.NewsContent != null && x.NewsContent.Contains(keywords))
                 || (x.NewsCoverImage != null && x.NewsCoverImage.Contains(keywords))
-                || SqlFunc.ToString(x.NewsIsTop).Contains(keywords)
-                || SqlFunc.ToString(x.NewsIsRecommended).Contains(keywords)
-                || SqlFunc.ToString(x.NewsReadCount).Contains(keywords)
-                || SqlFunc.ToString(x.NewsLikeCount).Contains(keywords)
-                || SqlFunc.ToString(x.NewsCommentCount).Contains(keywords)
-                || SqlFunc.ToString(x.NewsFavoriteCount).Contains(keywords)
-                || SqlFunc.ToString(x.NewsShareCount).Contains(keywords)
-                || SqlFunc.ToString(x.NewsAttachmentCount).Contains(keywords)
-                || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
-                || SqlFunc.ToString(x.PublisherId).Contains(keywords)
                 || (x.PublisherName != null && x.PublisherName.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.NewsStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.TargetDepartments != null && x.TargetDepartments.Contains(keywords))
+                || (x.TargetUsers != null && x.TargetUsers.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.NewsEffectiveTime).Contains(keywords)
-                || SqlFunc.ToString(x.NewsExpireTime).Contains(keywords)
-                || SqlFunc.ToString(x.NewsPublishTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NewsCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.NewsCode != null && x.NewsCode.Contains(queryDto.NewsCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.NewsCategory.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsCategory == queryDto.NewsCategory);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.NewsTitle))
-        {
-            exp = exp.And(x => x.NewsTitle != null && x.NewsTitle.Contains(queryDto.NewsTitle));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.NewsSummary))
-        {
-            exp = exp.And(x => x.NewsSummary != null && x.NewsSummary.Contains(queryDto.NewsSummary));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.NewsTags))
-        {
-            exp = exp.And(x => x.NewsTags != null && x.NewsTags.Contains(queryDto.NewsTags));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.NewsContent))
-        {
-            exp = exp.And(x => x.NewsContent != null && x.NewsContent.Contains(queryDto.NewsContent));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.NewsCoverImage))
-        {
-            exp = exp.And(x => x.NewsCoverImage != null && x.NewsCoverImage.Contains(queryDto.NewsCoverImage));
-        }
-
-        if (queryDto?.NewsIsTop.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsIsTop == queryDto.NewsIsTop);
-        }
-
-        if (queryDto?.NewsIsRecommended.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsIsRecommended == queryDto.NewsIsRecommended);
-        }
-
-        if (queryDto?.NewsReadCount.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsReadCount == queryDto.NewsReadCount);
-        }
-
-        if (queryDto?.NewsLikeCount.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsLikeCount == queryDto.NewsLikeCount);
-        }
-
-        if (queryDto?.NewsCommentCount.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsCommentCount == queryDto.NewsCommentCount);
-        }
-
-        if (queryDto?.NewsFavoriteCount.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsFavoriteCount == queryDto.NewsFavoriteCount);
-        }
-
-        if (queryDto?.NewsShareCount.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsShareCount == queryDto.NewsShareCount);
-        }
-
-        if (queryDto?.NewsAttachmentCount.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsAttachmentCount == queryDto.NewsAttachmentCount);
-        }
-
-        if (queryDto?.DeptId.HasValue == true)
-        {
-            exp = exp.And(x => x.DeptId == queryDto.DeptId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DeptName))
-        {
-            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(queryDto.DeptName));
-        }
-
-        if (queryDto?.PublisherId.HasValue == true)
-        {
-            exp = exp.And(x => x.PublisherId == queryDto.PublisherId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PublisherName))
-        {
-            exp = exp.And(x => x.PublisherName != null && x.PublisherName.Contains(queryDto.PublisherName));
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
-        }
-
-        if (queryDto?.NewsStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsStatus == queryDto.NewsStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.EffectiveTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsEffectiveTime >= queryDto.EffectiveTimeStart);
-        }
-
-        if (queryDto?.EffectiveTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsEffectiveTime <= queryDto.EffectiveTimeEnd);
-        }
-
-        if (queryDto?.ExpireTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsExpireTime >= queryDto.ExpireTimeStart);
-        }
-
-        if (queryDto?.ExpireTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsExpireTime <= queryDto.ExpireTimeEnd);
-        }
-
-        if (queryDto?.PublishTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsPublishTime >= queryDto.PublishTimeStart);
-        }
-
-        if (queryDto?.PublishTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.NewsPublishTime <= queryDto.PublishTimeEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.NewsCode))
+        {
+            var newsCode = queryDto.NewsCode;
+            exp = exp.And(x => x.NewsCode != null && x.NewsCode.Contains(newsCode));
+        }
+
+        if (queryDto?.NewsCategory.HasValue == true)
+        {
+            var newsCategory = queryDto.NewsCategory.Value;
+            exp = exp.And(x => x.NewsCategory == newsCategory);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NewsTitle))
+        {
+            var newsTitle = queryDto.NewsTitle;
+            exp = exp.And(x => x.NewsTitle != null && x.NewsTitle.Contains(newsTitle));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NewsSummary))
+        {
+            var newsSummary = queryDto.NewsSummary;
+            exp = exp.And(x => x.NewsSummary != null && x.NewsSummary.Contains(newsSummary));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NewsTags))
+        {
+            var newsTags = queryDto.NewsTags;
+            exp = exp.And(x => x.NewsTags != null && x.NewsTags.Contains(newsTags));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NewsContent))
+        {
+            var newsContent = queryDto.NewsContent;
+            exp = exp.And(x => x.NewsContent != null && x.NewsContent.Contains(newsContent));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NewsCoverImage))
+        {
+            var newsCoverImage = queryDto.NewsCoverImage;
+            exp = exp.And(x => x.NewsCoverImage != null && x.NewsCoverImage.Contains(newsCoverImage));
+        }
+
+        if (queryDto?.NewsIsTop.HasValue == true)
+        {
+            var newsIsTop = queryDto.NewsIsTop.Value;
+            exp = exp.And(x => x.NewsIsTop == newsIsTop);
+        }
+
+        if (queryDto?.NewsIsRecommended.HasValue == true)
+        {
+            var newsIsRecommended = queryDto.NewsIsRecommended.Value;
+            exp = exp.And(x => x.NewsIsRecommended == newsIsRecommended);
+        }
+
+        if (queryDto?.NewsReadCount.HasValue == true)
+        {
+            var newsReadCount = queryDto.NewsReadCount.Value;
+            exp = exp.And(x => x.NewsReadCount == newsReadCount);
+        }
+
+        if (queryDto?.NewsLikeCount.HasValue == true)
+        {
+            var newsLikeCount = queryDto.NewsLikeCount.Value;
+            exp = exp.And(x => x.NewsLikeCount == newsLikeCount);
+        }
+
+        if (queryDto?.NewsCommentCount.HasValue == true)
+        {
+            var newsCommentCount = queryDto.NewsCommentCount.Value;
+            exp = exp.And(x => x.NewsCommentCount == newsCommentCount);
+        }
+
+        if (queryDto?.NewsFavoriteCount.HasValue == true)
+        {
+            var newsFavoriteCount = queryDto.NewsFavoriteCount.Value;
+            exp = exp.And(x => x.NewsFavoriteCount == newsFavoriteCount);
+        }
+
+        if (queryDto?.NewsShareCount.HasValue == true)
+        {
+            var newsShareCount = queryDto.NewsShareCount.Value;
+            exp = exp.And(x => x.NewsShareCount == newsShareCount);
+        }
+
+        if (queryDto?.DeptId.HasValue == true)
+        {
+            var deptId = queryDto.DeptId.Value;
+            exp = exp.And(x => x.DeptId == deptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
+        {
+            var deptName = queryDto.DeptName;
+            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptName));
+        }
+
+        if (queryDto?.PublisherId.HasValue == true)
+        {
+            var publisherId = queryDto.PublisherId.Value;
+            exp = exp.And(x => x.PublisherId == publisherId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PublisherName))
+        {
+            var publisherName = queryDto.PublisherName;
+            exp = exp.And(x => x.PublisherName != null && x.PublisherName.Contains(publisherName));
+        }
+
+        if (queryDto?.TargetScope.HasValue == true)
+        {
+            var targetScope = queryDto.TargetScope.Value;
+            exp = exp.And(x => x.TargetScope == targetScope);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TargetDepartments))
+        {
+            var targetDepartments = queryDto.TargetDepartments;
+            exp = exp.And(x => x.TargetDepartments != null && x.TargetDepartments.Contains(targetDepartments));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TargetUsers))
+        {
+            var targetUsers = queryDto.TargetUsers;
+            exp = exp.And(x => x.TargetUsers != null && x.TargetUsers.Contains(targetUsers));
+        }
+
+        if (queryDto?.SortOrder.HasValue == true)
+        {
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
+        }
+
+        if (queryDto?.NewsStatus.HasValue == true)
+        {
+            var newsStatus = queryDto.NewsStatus.Value;
+            exp = exp.And(x => x.NewsStatus == newsStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.NewsEffectiveTimeStart.HasValue == true)
+        {
+            var newsEffectiveTimeStart = queryDto.NewsEffectiveTimeStart.Value;
+            exp = exp.And(x => x.NewsEffectiveTime >= newsEffectiveTimeStart);
+        }
+
+        if (queryDto?.NewsEffectiveTimeEnd.HasValue == true)
+        {
+            var newsEffectiveTimeEnd = queryDto.NewsEffectiveTimeEnd.Value;
+            exp = exp.And(x => x.NewsEffectiveTime <= newsEffectiveTimeEnd);
+        }
+
+        if (queryDto?.NewsExpireTimeStart.HasValue == true)
+        {
+            var newsExpireTimeStart = queryDto.NewsExpireTimeStart.Value;
+            exp = exp.And(x => x.NewsExpireTime >= newsExpireTimeStart);
+        }
+
+        if (queryDto?.NewsExpireTimeEnd.HasValue == true)
+        {
+            var newsExpireTimeEnd = queryDto.NewsExpireTimeEnd.Value;
+            exp = exp.And(x => x.NewsExpireTime <= newsExpireTimeEnd);
+        }
+
+        if (queryDto?.NewsPublishTimeStart.HasValue == true)
+        {
+            var newsPublishTimeStart = queryDto.NewsPublishTimeStart.Value;
+            exp = exp.And(x => x.NewsPublishTime >= newsPublishTimeStart);
+        }
+
+        if (queryDto?.NewsPublishTimeEnd.HasValue == true)
+        {
+            var newsPublishTimeEnd = queryDto.NewsPublishTimeEnd.Value;
+            exp = exp.And(x => x.NewsPublishTime <= newsPublishTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktNewsQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NewsCode))
+        {
+            return true;
+        }
+        if (queryDto.NewsCategory.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NewsTitle))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NewsSummary))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NewsTags))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NewsContent))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NewsCoverImage))
+        {
+            return true;
+        }
+        if (queryDto.NewsIsTop.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsIsRecommended.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsReadCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsLikeCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsCommentCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsFavoriteCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsShareCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
+        {
+            return true;
+        }
+        if (queryDto.PublisherId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PublisherName))
+        {
+            return true;
+        }
+        if (queryDto.TargetScope.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TargetDepartments))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TargetUsers))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.NewsEffectiveTimeStart.HasValue || queryDto.NewsEffectiveTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsExpireTimeStart.HasValue || queryDto.NewsExpireTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NewsPublishTimeStart.HasValue || queryDto.NewsPublishTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

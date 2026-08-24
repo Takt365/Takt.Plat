@@ -141,7 +141,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.inDatabase ?? ''"
-                      dict-type="sys_yes_no_type"
+                      dict-type="sys_yes_no"
                       :placeholder="tf('placeholder.indatabase')"
                       style="width: 100%"
                       disabled
@@ -762,7 +762,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.isGenMenu ?? ''"
-                      dict-type="sys_yes_no_type"
+                      dict-type="sys_yes_no"
                       :placeholder="t('common.page.form.placeholder.selectonly')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.isGenMenu = parseSelectToOptionalNumber(v) }"
@@ -806,7 +806,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.isGenTranslation ?? ''"
-                      dict-type="sys_yes_no_type"
+                      dict-type="sys_yes_no"
                       :placeholder="t('common.page.form.placeholder.selectonly')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.isGenTranslation = parseSelectToOptionalNumber(v) }"
@@ -925,7 +925,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.isUseTabs ?? ''"
-                      dict-type="sys_yes_no_type"
+                      dict-type="sys_yes_no"
                       :placeholder="t('common.page.form.placeholder.selectonly')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.isUseTabs = parseSelectToOptionalNumber(v) }"
@@ -1573,7 +1573,7 @@ const columnRowSelection = computed(() => ({
 let clientTempColumnSeq = 0
 /** 字段列表加载中 */
 const columnLoading = ref(false)
-/** 字典数据 Pinia（gen_function_type、sys_yes_no_type 等） */
+/** 字典数据 Pinia（gen_function_type、sys_yes_no 等） */
 const dictDataStore = useDictDataStore()
 /** 当前用户 Pinia（默认 genAuthor） */
 const userStore = useUserStore()
@@ -1700,9 +1700,9 @@ const filteredGenFunctionOptions = computed(() => {
   })
 })
 
-/** 是否（sys_yes_no_type）下拉，value 为 number */
+/** 是否（sys_yes_no）下拉，value 为 number */
 const sysYesNoOptions = computed(() =>
-  getDictSelectOptions('sys_yes_no_type').map((opt: TaktDictSelectOption) => ({
+  getDictSelectOptions('sys_yes_no').map((opt: TaktDictSelectOption) => ({
     label: opt.label,
     value: Number(opt.value),
   }))
@@ -1928,7 +1928,7 @@ function optionalStringParam(v: unknown): string | undefined {
  * @returns {string | undefined} 用户名
  */
 function readCurrentUserDisplayName(): string | undefined {
-  const name = asTrimmedString(userStore.username)
+  const name = asTrimmedString(userStore.userName)
   return name || undefined
 }
 

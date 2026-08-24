@@ -266,7 +266,7 @@
       <a-form-item :label="t('entity.salaryformula.formulastatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.formulaStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryformula.formulastatus') })"
           allow-clear
         />

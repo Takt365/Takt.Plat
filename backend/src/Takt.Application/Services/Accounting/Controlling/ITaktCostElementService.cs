@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：ITaktCostElementService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素应用服务接口
 // 
@@ -36,23 +36,18 @@ public interface ITaktCostElementService
     Task<TaktCostElementDto?> GetCostElementByIdAsync(long id);
 
     /// <summary>
-    /// 获取成本要素树形选项列表（DictValue 为 CostElementCode，DictLabel 为成本要素名称）
+    /// 获取成本要素树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue 为 CostElementCode）
     /// </summary>
-    /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync();
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync(long parentId = 0);
 
     /// <summary>
-    /// 获取成本要素父级树形选项列表（DictValue 为 Id，用于 ParentId 选择）
+    /// 获取成本要素树形列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetCostElementParentTreeOptionsAsync();
-
-    /// <summary>
-    /// 获取成本要素树形列表
-    /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     Task<List<TaktCostElementTreeDto>> GetCostElementTreeAsync(long parentId = 0, bool includeDisabled = false);
 
     /// <summary>

@@ -151,7 +151,7 @@ public class TaktPackagingMaterialDto : TaktCompanyDtoBase
     public string? PackagingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -303,7 +303,7 @@ public class TaktPackagingMaterialQueryDto : TaktPagedQuery
     public string? PackagingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -529,7 +529,7 @@ public class TaktPackagingMaterialSortDto
     public long PackagingMaterialId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -985,7 +985,7 @@ public class TaktPackagingMaterialExportDto
     public string? PackagingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

@@ -46,7 +46,7 @@ public class TaktMaterialGroupDto : TaktTenantCoreDtoBase
     public string MaterialGroupName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（sort；越小越靠前）
+    /// 排序号（回填）（sort；越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -83,7 +83,7 @@ public class TaktMaterialGroupQueryDto : TaktPagedQuery
     public string? MaterialGroupName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（sort；越小越靠前）
+    /// 排序号（回填）（sort；越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -194,7 +194,7 @@ public class TaktMaterialGroupSortDto
     public long MaterialGroupId { get; set; }
 
     /// <summary>
-    /// 排序号（sort；越小越靠前）
+    /// 排序号（回填）（sort；越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（sort；越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -305,7 +305,7 @@ public class TaktMaterialGroupExportDto
     public string MaterialGroupName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（sort；越小越靠前）
+    /// 排序号（回填）（sort；越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

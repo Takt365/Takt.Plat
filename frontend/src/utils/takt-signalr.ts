@@ -113,12 +113,13 @@ export function normalizeSignalRMessage(raw: unknown): SignalRMessage {
     messageId: messageId || undefined,
     fromUserName: readSignalRPayloadString(payload, 'fromUserName', 'FromUserName'),
     fromUserId: readSignalRPayloadString(payload, 'fromUserId', 'FromUserId') || undefined,
-    fromUserNickname: readSignalRPayloadString(payload, 'fromUserNickname', 'FromUserNickname') || undefined,
+    fromUserNickName: readSignalRPayloadString(payload, 'fromUserNickName', 'FromUserNickName') || undefined,
     toUserName: readSignalRPayloadString(payload, 'toUserName', 'ToUserName'),
     toUserId: readSignalRPayloadString(payload, 'toUserId', 'ToUserId') || undefined,
     messageTitle: readSignalRPayloadString(payload, 'messageTitle', 'MessageTitle') || undefined,
     messageContent: readSignalRPayloadString(payload, 'messageContent', 'MessageContent'),
-    attachments: readSignalRPayloadString(payload, 'attachments', 'Attachments') || undefined,
+    fileName: readSignalRPayloadString(payload, 'fileName', 'FileName') || undefined,
+    accessUrl: readSignalRPayloadString(payload, 'accessUrl', 'AccessUrl') || undefined,
     messageType: readSignalRPayloadString(payload, 'messageType', 'MessageType') || 'system',
     messageGroup: readSignalRPayloadString(payload, 'messageGroup', 'MessageGroup') || 'message',
     sendTime: readSignalRPayloadString(payload, 'sendTime', 'SendTime'),
@@ -137,7 +138,7 @@ export function normalizeMessageStatistics(raw: unknown): MessageStatistics {
     ? raw as Record<string, unknown>
     : {};
   return {
-    userName: readSignalRPayloadString(payload, 'userName', 'UserName'),
+    userName: readSignalRPayloadString(payload, 'userName', 'userName'),
     userId: readSignalRPayloadString(payload, 'userId', 'UserId') || undefined,
     totalCount: readSignalRPayloadNumber(payload, 'totalCount', 'TotalCount', 0),
     readCount: readSignalRPayloadNumber(payload, 'readCount', 'ReadCount', 0),
@@ -201,7 +202,7 @@ export function normalizeFlowTodoCountUpdated(raw: unknown): FlowTodoCountUpdate
   return {
     tenantCode: readSignalRPayloadString(payload, 'tenantCode', 'TenantCode'),
     companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
-    userName: readSignalRPayloadString(payload, 'userName', 'UserName'),
+    userName: readSignalRPayloadString(payload, 'userName', 'userName'),
     userId: readSignalRPayloadString(payload, 'userId', 'UserId') || undefined,
     todoCount: readSignalRPayloadNumber(payload, 'todoCount', 'TodoCount', 0),
     updatedAt: readSignalRPayloadString(payload, 'updatedAt', 'UpdatedAt'),

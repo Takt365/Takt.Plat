@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities.Foundation;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Logging;
 
@@ -32,26 +31,26 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 public class TaktQuartzLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联定时任务 ID
+    /// 关联定时任务 ID（选项 TaktQuartzTasks/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "quartz_task_id", ColumnDescription = "定时任务ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QuartzTaskId { get; set; }
 
     /// <summary>
-    /// 任务名称（执行时快照）
+    /// 任务名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "task_name", ColumnDescription = "任务名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
+    /// 任务组名（字典 sys_quartz_job_group；DictValue=编码）
     /// </summary>
     [SugarColumn(ColumnName = "job_group", ColumnDescription = "任务组名", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "default")]
     public string JobGroup { get; set; } = "default";
 
     /// <summary>
-    /// 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
+    /// 任务类型（字典 sys_quartz_task_type；DictValue=assembly/http/sql）
     /// </summary>
     [SugarColumn(ColumnName = "task_type", ColumnDescription = "任务类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "assembly")]
     public string TaskType { get; set; } = "assembly";
@@ -99,10 +98,10 @@ public class TaktQuartzLog : TaktCompanyEntityBase
     public string ExecuteHost { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行状态（0=失败，1=成功）
+    /// 执行状态（字典 sys_success_fail_status；0=失败 1=成功）
     /// </summary>
     [SugarColumn(ColumnName = "execute_status", ColumnDescription = "执行状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktExecuteStatus ExecuteStatus { get; set; } = TaktExecuteStatus.Failed;
+    public int ExecuteStatus { get; set; } = 0;
 
     // ========================================
     // 导航属性区域

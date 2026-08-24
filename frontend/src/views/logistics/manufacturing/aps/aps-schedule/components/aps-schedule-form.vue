@@ -66,8 +66,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
                   show-count
                   :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.apsScheduleId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -346,12 +345,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.apsschedule.publishusername')"
+                :label="t('entity.apsschedule.publishUserName')"
                 name="publishUserName"
               >
                 <a-input
                   v-model:value="formState.publishUserName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.publishusername') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.publishUserName') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -620,7 +619,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.apsScheduleId
     if (isCreate) {

@@ -105,21 +105,21 @@ public class TaktLoginSessionService : ITaktLoginSessionService
     /// 校验用户名在指定租户库 TaktUser 中是否存在且启用
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>存在且启用为 true</returns>
     public async Task<bool> HasUserLoginAccessInTenantAsync(
         string tenantCode,
-        string username,
+        string UserName,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(username))
+        if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(UserName))
         {
             return false;
         }
 
         var trimmedTenant = tenantCode.Trim();
-        var normalizedUsername = username.Trim().ToLowerInvariant();
+        var normalizedUserName = UserName.Trim().ToLowerInvariant();
 
         try
         {
@@ -128,7 +128,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
                 .AnyAsync(
                     u =>
                         u.TenantCode == trimmedTenant
-                        && u.Username == normalizedUsername
+                        && u.UserName == normalizedUserName
                         && u.UserStatus == 1,
                     cancellationToken);
         }

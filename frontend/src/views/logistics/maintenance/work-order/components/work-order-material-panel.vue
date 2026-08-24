@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getMaintenanceWorkOrderMaterialId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -108,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterMaintenanceWorkOrderId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -166,11 +168,10 @@
       </div>
       <div v-show="isFieldVisible('materialDescription')">
       <a-form-item :label="pi.queryLabel('materialDescription')">
-        <a-input
+        <a-textarea
           v-model:value="advancedQueryForm.materialDescription"
-          :placeholder="pi.queryPh('materialDescription', 'required')"
-          show-count
-          :maxlength="20"
+          :placeholder="pi.queryPh('materialDescription', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -277,7 +278,7 @@
       <a-form-item :label="pi.queryLabel('isObsolete')">
         <TaktSelect
           v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />
@@ -407,7 +408,7 @@ import {
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
-import MaintenanceWorkOrderMaterialForm from './work-order-general-material-form.vue'
+import MaintenanceWorkOrderMaterialForm from './work-order-material-form.vue'
 import { useMaintenanceWorkOrderMasterContext } from '../composables/use-work-order-master-context'
 import {
   getMaintenanceWorkOrderMaterialList,
@@ -496,7 +497,46 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of MAINTENANCEWORKORDERMATERIAL_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.requiredQuantity !== undefined && form.requiredQuantity !== null) {
+    return true
+  }
+  if (form.issuedQuantity !== undefined && form.issuedQuantity !== null) {
+    return true
+  }
+  if (form.unitPrice !== undefined && form.unitPrice !== null) {
+    return true
+  }
+  if (form.amount !== undefined && form.amount !== null) {
+    return true
+  }
+  if (form.issueStatus !== undefined && form.issueStatus !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -512,8 +552,7 @@ function createEmptyAdvancedQueryForm() {
     unitPrice: undefined as number | undefined,
     amount: undefined as number | undefined,
     issueStatus: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -759,8 +798,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:maintenance:equipment:delete',
         onClick: (record: MaintenanceWorkOrderMaterial) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -869,7 +910,7 @@ function onClickRow(record: MaintenanceWorkOrderMaterial) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {MaintenanceWorkOrderMaterialQuery} 查询 DTO
  */
@@ -1145,6 +1186,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportMaintenanceWorkOrderMaterial(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

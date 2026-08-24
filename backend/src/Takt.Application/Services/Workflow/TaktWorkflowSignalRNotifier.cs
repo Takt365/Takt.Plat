@@ -205,7 +205,7 @@ public class TaktWorkflowSignalRNotifier : ITaktWorkflowSignalRNotifier
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
             && x.AssigneeUserId == userId
-            && x.TaskStatus == TaktFlowTaskStatus.Pending);
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Pending);
         if (tasks.Count == 0)
         {
             return 0;
@@ -214,7 +214,7 @@ public class TaktWorkflowSignalRNotifier : ITaktWorkflowSignalRNotifier
         var instanceIds = tasks.Select(x => x.InstanceId).Distinct().ToList();
         var instances = await _flowInstanceRepository.GetListAsync(x =>
             instanceIds.Contains(x.Id)
-            && x.InstanceStatus == TaktFlowInstanceStatus.Running);
+            && x.InstanceStatus == (int)TaktFlowInstanceStatus.Running);
         var runningInstanceIds = instances.Select(x => x.Id).ToHashSet();
         return tasks.Count(task => runningInstanceIds.Contains(task.InstanceId));
     }
@@ -230,14 +230,14 @@ public class TaktWorkflowSignalRNotifier : ITaktWorkflowSignalRNotifier
         IReadOnlyCollection<TaktWorkflowSignalRUserTarget>? additionalUsers)
     {
         var map = new Dictionary<long, TaktWorkflowSignalRUserTarget>();
-        void TryAdd(long userId, string? userName)
+        void TryAdd(long userId, string? UserName)
         {
-            if (userId <= 0 || string.IsNullOrWhiteSpace(userName))
+            if (userId <= 0 || string.IsNullOrWhiteSpace(UserName))
             {
                 return;
             }
 
-            var normalizedName = userName.Trim();
+            var normalizedName = UserName.Trim();
             if (!map.ContainsKey(userId))
             {
                 map[userId] = new TaktWorkflowSignalRUserTarget
@@ -259,7 +259,7 @@ public class TaktWorkflowSignalRNotifier : ITaktWorkflowSignalRNotifier
 
         var pendingTasks = await _flowTaskRepository.GetListAsync(x =>
             x.InstanceId == instance.Id
-            && x.TaskStatus == TaktFlowTaskStatus.Pending);
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Pending);
         foreach (var task in pendingTasks)
         {
             TryAdd(task.AssigneeUserId, task.AssigneeUserName);

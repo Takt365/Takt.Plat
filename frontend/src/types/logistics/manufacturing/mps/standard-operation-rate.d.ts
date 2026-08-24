@@ -50,7 +50,7 @@ export interface StandardOperationRate extends CompanyDtoBase {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用）
    */
   rateStatus?: number;
 
@@ -113,7 +113,7 @@ export interface StandardOperationRateExport {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用）
    */
   rateStatus: number;
 

@@ -41,8 +41,7 @@ export const SOPCONTENT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'select',
-  revisionId: 'select',
+  plantCode: 'optional',
   sopId: 'select',
   contentTitle: 'optional',
   steps: 'optional',
@@ -55,7 +54,6 @@ export type SopContentField = keyof typeof SOPCONTENT_PLACEHOLDER
 export const SOPCONTENT_QUERY_STRING_FIELDS = [
   'cultureCode',
   'plantCode',
-  'revisionId',
   'sopId',
   'contentTitle',
   'createdAtStart',

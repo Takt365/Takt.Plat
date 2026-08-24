@@ -111,7 +111,7 @@ public class TaktMaintenanceNotification : TaktApprovalEntityBase
     /// <summary>
     /// 责任成本中心编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "责任成本中心编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "责任成本中心编码", ColumnDataType = "varchar", Length = 6, IsNullable = true)]
     public string? CostCenterCode { get; set; }
 
     /// <summary>

@@ -32,13 +32,24 @@
                 :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceOrderId"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -81,8 +92,7 @@
                   :placeholder="pi.ph('clientCode')"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceOrderId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -96,7 +106,7 @@
                   :placeholder="pi.ph('clientName1')"
                   show-count
                   :maxlength="140"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -124,8 +134,7 @@
                   :placeholder="pi.ph('serviceContractCode')"
                   show-count
                   :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceOrderId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -153,21 +162,7 @@
                   :placeholder="pi.ph('serviceRequestCode')"
                   show-count
                   :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('orderDate')"
-                name="orderDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.orderDate"
-                  :placeholder="pi.ph('orderDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -181,6 +176,19 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('orderDate')"
+                name="orderDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.orderDate"
+                  :placeholder="pi.ph('orderDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('orderType')"
@@ -294,7 +302,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('actualStartDate')"
                 name="actualStartDate"
@@ -307,16 +325,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('actualEndDate')"
@@ -373,25 +381,10 @@
                 :label="pi.label('companyCode')"
                 name="companyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
                   :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('cultureCode')"
-                name="cultureCode"
-              >
-                <a-input
-                  v-model:value="formState.cultureCode"
-                  :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -449,7 +442,7 @@
  * 服务订单实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/customer-service/order/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useCustomerServiceOrderI18n } from '../composables/use-order-i18n'
@@ -457,7 +450,9 @@ import { useCustomerServiceOrderI18n } from '../composables/use-order-i18n'
 /** 实体字段 i18n */
 const pi = useCustomerServiceOrderI18n()
 import type { CustomerServiceOrderCreate } from '@/types/logistics/customer-service/order'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -470,7 +465,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -483,6 +478,12 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   }
   if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
@@ -512,6 +513,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 customerServiceOrderId 才视为编辑） */
 watch(
@@ -539,7 +547,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.customerServiceOrderId) {
       applyScopeDefaults(formState, true)
@@ -549,13 +557,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'blur'
-    }
-  ],
   serviceOrderCode: [
     {
       required: true,
@@ -567,20 +568,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('clientId'),
-      trigger: 'blur'
-    }
-  ],
-  clientCode: [
-    {
-      required: true,
-      message: pi.ph('clientCode'),
-      trigger: 'blur'
-    }
-  ],
-  clientName1: [
-    {
-      required: true,
-      message: pi.ph('clientName1'),
       trigger: 'blur'
     }
   ],
@@ -689,29 +676,73 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('orderType' in payload) {
     const raworderType = payload.orderType
-    payload.orderType = typeof raworderType === 'number' ? raworderType : Number(raworderType)
+    if (raworderType === undefined || raworderType === null || raworderType === '') {
+      delete payload.orderType
+    } else {
+      const numorderType = typeof raworderType === 'number' ? raworderType : Number(raworderType)
+      if (Number.isFinite(numorderType)) payload.orderType = numorderType
+      else delete payload.orderType
+    }
   }
   if ('orderStatus' in payload) {
     const raworderStatus = payload.orderStatus
-    payload.orderStatus = typeof raworderStatus === 'number' ? raworderStatus : Number(raworderStatus)
+    if (raworderStatus === undefined || raworderStatus === null || raworderStatus === '') {
+      delete payload.orderStatus
+    } else {
+      const numorderStatus = typeof raworderStatus === 'number' ? raworderStatus : Number(raworderStatus)
+      if (Number.isFinite(numorderStatus)) payload.orderStatus = numorderStatus
+      else delete payload.orderStatus
+    }
   }
   if ('totalAmount' in payload) {
     const rawtotalAmount = payload.totalAmount
-    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+    if (rawtotalAmount === undefined || rawtotalAmount === null || rawtotalAmount === '') {
+      delete payload.totalAmount
+    } else {
+      const numtotalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+      if (Number.isFinite(numtotalAmount)) payload.totalAmount = numtotalAmount
+      else delete payload.totalAmount
+    }
   }
   if ('discountAmount' in payload) {
     const rawdiscountAmount = payload.discountAmount
-    payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+    if (rawdiscountAmount === undefined || rawdiscountAmount === null || rawdiscountAmount === '') {
+      delete payload.discountAmount
+    } else {
+      const numdiscountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+      if (Number.isFinite(numdiscountAmount)) payload.discountAmount = numdiscountAmount
+      else delete payload.discountAmount
+    }
   }
   if ('taxAmount' in payload) {
     const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+    if (rawtaxAmount === undefined || rawtaxAmount === null || rawtaxAmount === '') {
+      delete payload.taxAmount
+    } else {
+      const numtaxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+      if (Number.isFinite(numtaxAmount)) payload.taxAmount = numtaxAmount
+      else delete payload.taxAmount
+    }
   }
   if ('actualAmount' in payload) {
     const rawactualAmount = payload.actualAmount
-    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+    if (rawactualAmount === undefined || rawactualAmount === null || rawactualAmount === '') {
+      delete payload.actualAmount
+    } else {
+      const numactualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+      if (Number.isFinite(numactualAmount)) payload.actualAmount = numactualAmount
+      else delete payload.actualAmount
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.customerServiceOrderId) {
+    payload.customerServiceOrderId = props.formData.customerServiceOrderId
+  }
   return payload
 }
 

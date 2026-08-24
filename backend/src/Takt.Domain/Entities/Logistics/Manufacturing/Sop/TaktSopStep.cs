@@ -57,7 +57,7 @@ public class TaktSopStep : TaktCompanyEntityBase
     public string? SafetyAlert { get; set; }
 
     /// <summary>
-    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
+    /// 弹窗（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "safety_popup_required", ColumnDescription = "弹窗", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SafetyPopupRequired { get; set; } = 0;

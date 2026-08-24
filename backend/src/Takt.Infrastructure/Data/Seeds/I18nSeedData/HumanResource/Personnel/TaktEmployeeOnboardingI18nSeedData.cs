@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeOnboarding 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -188,6 +188,15 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeonboarding.todostatus", "zh-CN", "待办状态", "待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）"),
             // entity.employeeonboarding.todostatus
             new TranslationSeedItem("entity.employeeonboarding.todostatus", "zh-HK", "待办状态_hk", "待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）"),
+
+            // entity.employeeonboarding.employee
+            new TranslationSeedItem("entity.employeeonboarding.employee", "en-US", "员工主档_us", "员工主档（多对一；建档回填后可有值）"),
+            // entity.employeeonboarding.employee
+            new TranslationSeedItem("entity.employeeonboarding.employee", "ja-JP", "员工主档_jp", "员工主档（多对一；建档回填后可有值）"),
+            // entity.employeeonboarding.employee
+            new TranslationSeedItem("entity.employeeonboarding.employee", "zh-CN", "员工主档", "员工主档（多对一；建档回填后可有值）"),
+            // entity.employeeonboarding.employee
+            new TranslationSeedItem("entity.employeeonboarding.employee", "zh-HK", "员工主档_hk", "员工主档（多对一；建档回填后可有值）"),
 
             // entity.employeeonboarding.offer
             new TranslationSeedItem("entity.employeeonboarding.offer", "en-US", "录用信息_us", "录用信息"),

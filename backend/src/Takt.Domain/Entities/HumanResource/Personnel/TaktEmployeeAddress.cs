@@ -73,4 +73,14 @@ public class TaktEmployeeAddress : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "address2", ColumnDescription = "地址2", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
     public string? Address2 { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

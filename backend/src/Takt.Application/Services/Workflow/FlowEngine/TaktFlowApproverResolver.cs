@@ -104,7 +104,7 @@ public class TaktFlowApproverResolverService
             list.Add(new TaktFlowResolvedApprover
             {
                 UserId = user.Id,
-                UserName = user.Nickname ?? user.Username
+                UserName = user.NickName ?? user.UserName
             });
         }
         return list;
@@ -128,7 +128,7 @@ public class TaktFlowApproverResolverService
             new()
             {
                 UserId = user.Id,
-                UserName = user.Nickname ?? user.Username
+                UserName = user.NickName ?? user.UserName
             }
         };
     }
@@ -172,7 +172,7 @@ public class TaktFlowApproverResolverService
             result.Add(new TaktFlowResolvedApprover
             {
                 UserId = managerUser.Id,
-                UserName = managerUser.Nickname ?? managerUser.Username
+                UserName = managerUser.NickName ?? managerUser.UserName
             });
             currentEmployeeId = managerEmployeeId.Value;
         }
@@ -209,7 +209,7 @@ public class TaktFlowApproverResolverService
             result.Add(new TaktFlowResolvedApprover
             {
                 UserId = user.Id,
-                UserName = user.Nickname ?? user.Username
+                UserName = user.NickName ?? user.UserName
             });
         }
         return result;
@@ -247,7 +247,7 @@ public class TaktFlowApproverResolverService
                     result.Add(new TaktFlowResolvedApprover
                     {
                         UserId = head.Id,
-                        UserName = head.Nickname ?? head.Username
+                        UserName = head.NickName ?? head.UserName
                     });
                     continue;
                 }
@@ -268,7 +268,7 @@ public class TaktFlowApproverResolverService
                 result.Add(new TaktFlowResolvedApprover
                 {
                     UserId = user.Id,
-                    UserName = user.Nickname ?? user.Username
+                    UserName = user.NickName ?? user.UserName
                 });
             }
         }

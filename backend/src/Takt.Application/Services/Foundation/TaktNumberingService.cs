@@ -34,23 +34,27 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
 {
     private readonly ITaktCompanyRepository<TaktNumbering> _numberingRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktNumberingGenerator _numberingGenerator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="numberingRepository">编码规则仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="numberingGenerator">运行时编码生成器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktNumberingService(
         ITaktCompanyRepository<TaktNumbering> numberingRepository,
         ITaktUniqueValidator uniqueValidator,
+        ITaktNumberingGenerator numberingGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _numberingRepository = numberingRepository;
         _uniqueValidator = uniqueValidator;
+        _numberingGenerator = numberingGenerator;
     }
 
     /// <summary>
@@ -88,16 +92,39 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
+    /// 预览下一个业务编码（不占用流水号、不写库）
+    /// </summary>
+    /// <param name="ruleCode">规则编码</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>预览结果</returns>
+    public async Task<TaktNumberingPreviewDto> PreviewNumberingNextAsync(
+        string ruleCode,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(ruleCode);
+        var model = await _numberingGenerator.PreviewNextAsync(ruleCode.Trim(), cancellationToken);
+        return new TaktNumberingPreviewDto
+        {
+            RuleCode = model.RuleCode ?? ruleCode.Trim(),
+            BusinessCode = model.BusinessCode ?? string.Empty,
+            CurrentSequence = model.CurrentSequence,
+        };
+    }
+
+    /// <summary>
     /// 获取编码规则选项列表
     /// </summary>
+    /// <param name="documentType">单据类型（TaktMenu.MenuName）；有值时仅返回该类型下启用规则</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetNumberingOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetNumberingOptionsAsync(string? documentType = null)
     {
         EnsureThreeLayerContext();
+        var docType = documentType?.Trim();
         var list = await _numberingRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
-                && x.NumberingStatus == 1,
+                && x.NumberingStatus == 1
+                && (string.IsNullOrEmpty(docType) || x.DocumentType == docType),
             x => x.RuleName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption

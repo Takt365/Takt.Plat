@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/sop/step/components -->
 <!-- 文件名称：step-media-panel.vue -->
-<!-- 功能描述：SOP 工步实体主表实体右侧明细 sopStepMedia 独立 CRUD（按主表选中 sopStepId 分页） -->
+<!-- 功能描述：SOP 工步实体主表实体右侧明细 sopStepMedia 独立 CRUD（按主表选中 stepId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -109,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterSopStepId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -139,16 +140,6 @@
           v-model:value="advancedQueryForm.plantCode"
           api-url="TaktPlants/options"
           :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('stepId')">
-      <a-form-item :label="pi.queryLabel('stepId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.stepId"
-          api-url="TaktSopSteps/options"
-          :placeholder="pi.queryPh('stepId', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -677,7 +668,7 @@ function buildListQuery(overrides?: Partial<SopStepMediaQuery>): SopStepMediaQue
   const query: SopStepMediaQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    sopStepId: masterSopStepId.value,
+    stepId: masterSopStepId.value,
     ...overrides,
   }
   if (kw.length > 0) {

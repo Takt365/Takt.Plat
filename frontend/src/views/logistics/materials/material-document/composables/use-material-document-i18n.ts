@@ -20,7 +20,6 @@ export const MATERIALDOCUMENT_SELF_I18N_KEY = buildEntitySelfI18nKey(MATERIALDOC
 
 /** 列表业务列（不含主键） */
 export const MATERIALDOCUMENT_LIST_FIELDS = [
-  'materialDocumentCode',
   'materialDocumentYear',
   'transactionEventType',
   'documentType',
@@ -33,29 +32,12 @@ export const MATERIALDOCUMENT_LIST_FIELDS = [
   'deliveryCode',
   'transactionCode',
   'postedBy',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const MATERIALDOCUMENT_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  materialDocumentCode: 'required',
-  materialDocumentYear: 'required',
-  transactionEventType: 'optional',
-  documentType: 'optional',
-  revaluationType: 'optional',
-  documentDate: 'select',
-  postingDate: 'select',
-  referenceCode: 'optional',
-  headerText: 'optional',
-  billOfLadingCode: 'optional',
-  deliveryCode: 'optional',
-  transactionCode: 'optional',
-  postedBy: 'optional',
-  extField: 'optional',
-  remark: 'optional',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -63,25 +45,7 @@ export type MaterialDocumentField = keyof typeof MATERIALDOCUMENT_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const MATERIALDOCUMENT_QUERY_STRING_FIELDS = [
-  'materialDocumentCode',
-  'materialDocumentYear',
-  'transactionEventType',
-  'documentType',
-  'revaluationType',
-  'documentDateStart',
-  'documentDateEnd',
-  'postingDateStart',
-  'postingDateEnd',
-  'referenceCode',
-  'headerText',
-  'billOfLadingCode',
-  'deliveryCode',
-  'transactionCode',
-  'postedBy',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof MaterialDocumentQuery)[]
 
 export type MaterialDocumentQueryField = (typeof MATERIALDOCUMENT_QUERY_STRING_FIELDS)[number]

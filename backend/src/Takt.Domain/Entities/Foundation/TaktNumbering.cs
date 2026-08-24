@@ -39,14 +39,14 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "rule_name", ColumnDescription = "规则名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string RuleName { get; set; } = string.Empty;
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name；存菜单名称非 Id）
     /// </summary>
-    [SugarColumn(ColumnName = "document_type", ColumnDescription = "单据类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "document_type", ColumnDescription = "单据类型", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
     public string DocumentType { get; set; } = string.Empty;
     /// <summary>
-    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+    /// 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options；与部门简称一致，长度 6）
     /// </summary>
-    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "部门编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "部门编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string DeptCode { get; set; } = string.Empty;
     /// <summary>
     /// 前缀编码（如：PUR、SORD、ANN）
@@ -74,10 +74,10 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "suffix_code", ColumnDescription = "后缀编码", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
     public string? SuffixCode { get; set; }
     /// <summary>
-    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+    /// 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
     /// </summary>
-    [SugarColumn(ColumnName = "reset_period", ColumnDescription = "重置周期", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = "none")]
-    public string ResetPeriod { get; set; } = "none";
+    [SugarColumn(ColumnName = "reset_period", ColumnDescription = "重置周期", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = "None")]
+    public string ResetPeriod { get; set; } = "None";
     /// <summary>
     /// 当前流水（用于记录下一个流水号值）
     /// </summary>
@@ -95,7 +95,7 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "separator", ColumnDescription = "分隔符", ColumnDataType = "varchar", Length = 1, IsNullable = true)]
     public string? Separator { get; set; }
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
@@ -105,7 +105,7 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "numbering_description", ColumnDescription = "描述说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? NumberingDescription { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "numbering_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int NumberingStatus { get; set; } = 1;

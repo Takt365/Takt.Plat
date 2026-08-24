@@ -45,7 +45,7 @@ public class TaktFileUploadScope
     public string? TargetFileName { get; set; }
 
     /// <summary>
-    /// 存储命名规则（字典 sys_storage_naming_config：0=原文件+哈希，1=自动生成，2=自定义）
+    /// 存储命名规则（字典 sys_storage_naming：0=原文件+哈希，1=自动生成，2=自定义）
     /// </summary>
     public int StorageNaming { get; set; } = 0;
 

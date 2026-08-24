@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/mps/production-team/components -->
 <!-- 文件名称：production-team-equipment-panel.vue -->
-<!-- 功能描述：生产班组实体主表实体右侧明细 productionTeamEquipment 独立 CRUD（按主表选中 prodTeamId 分页） -->
+<!-- 功能描述：生产班组实体主表实体右侧明细 productionTeamEquipment 独立 CRUD（按主表选中 productionTeamId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,165 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterProductionTeamId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-manufacturing-mps-production-team-production-team-equipment"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('teamCode')">
-      <a-form-item :label="pi.queryLabel('teamCode')">
-        <a-input
-          v-model:value="advancedQueryForm.teamCode"
-          :placeholder="pi.queryPh('teamCode', 'required')"
-          show-count
-          :maxlength="8"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('prodEquipId')">
-      <a-form-item :label="pi.queryLabel('prodEquipId')">
-        <a-input
-          v-model:value="advancedQueryForm.prodEquipId"
-          :placeholder="pi.queryPh('prodEquipId', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('prodEquipCode')">
-      <a-form-item :label="pi.queryLabel('prodEquipCode')">
-        <a-input
-          v-model:value="advancedQueryForm.prodEquipCode"
-          :placeholder="pi.queryPh('prodEquipCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('equipQuantity')">
-      <a-form-item :label="pi.queryLabel('equipQuantity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.equipQuantity"
-          :placeholder="pi.queryPh('equipQuantity', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('teamEquipStatus')">
-      <a-form-item :label="pi.queryLabel('teamEquipStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.teamEquipStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="pi.queryPh('teamEquipStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isObsolete')">
-      <a-form-item :label="pi.queryLabel('isObsolete')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('isObsolete', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -327,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import ProductionTeamEquipmentForm from './production-team-equipment-form.vue'
 import { useProductionTeamMasterContext } from '../composables/use-production-team-master-context'
 import {
@@ -415,45 +260,6 @@ const formData = ref<Partial<ProductionTeamEquipment>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    lineNumber: undefined as number | undefined,
-    equipQuantity: undefined as number | undefined,
-    teamEquipStatus: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  PRODUCTIONTEAMEQUIPMENT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...PRODUCTIONTEAMEQUIPMENT_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -501,16 +307,6 @@ const columns = computed<TableColumnsType>(() => [
       String(getProductionTeamEquipmentField(record, 'productionTeamEquipmentId') ?? ''),
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'plantCode') ?? ''),
-  },
-  {
     title: pi.label('prodTeamId'),
     dataIndex: 'prodTeamId',
     key: 'prodTeamId',
@@ -519,16 +315,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
       String(getProductionTeamEquipmentField(record, 'prodTeamId') ?? ''),
-  },
-  {
-    title: pi.label('prodTeamName'),
-    dataIndex: 'prodTeamName',
-    key: 'prodTeamName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'prodTeamName') ?? ''),
   },
   {
     title: pi.label('teamCode'),
@@ -559,16 +345,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
       String(getProductionTeamEquipmentField(record, 'prodEquipId') ?? ''),
-  },
-  {
-    title: pi.label('prodEquipName'),
-    dataIndex: 'prodEquipName',
-    key: 'prodEquipName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'prodEquipName') ?? ''),
   },
   {
     title: pi.label('prodEquipCode'),
@@ -610,6 +386,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
       String(getProductionTeamEquipmentField(record, 'isObsolete') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ProductionTeamEquipment }) =>
+      String(getProductionTeamEquipmentField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -627,8 +413,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:mps:production:team:delete',
         onClick: (record: ProductionTeamEquipment) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -737,7 +525,7 @@ function onClickRow(record: ProductionTeamEquipment) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {ProductionTeamEquipmentQuery} 查询 DTO
  */
@@ -747,7 +535,7 @@ function buildListQuery(overrides?: Partial<ProductionTeamEquipmentQuery>): Prod
   const query: ProductionTeamEquipmentQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    prodTeamId: masterProductionTeamId.value,
+    productionTeamId: masterProductionTeamId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -761,18 +549,6 @@ function buildListQuery(overrides?: Partial<ProductionTeamEquipmentQuery>): Prod
   }
   for (const key of PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
-  }
-  if (form.equipQuantity !== undefined && form.equipQuantity !== null) {
-    query.equipQuantity = form.equipQuantity
-  }
-  if (form.teamEquipStatus !== undefined && form.teamEquipStatus !== null) {
-    query.teamEquipStatus = form.teamEquipStatus
-  }
-  if (form.isObsolete !== undefined && form.isObsolete !== null) {
-    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1004,6 +780,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportProductionTeamEquipment(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

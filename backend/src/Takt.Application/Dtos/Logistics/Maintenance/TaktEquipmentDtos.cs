@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktEquipmentDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Equipment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEquipment 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktEquipmentDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EquipmentId { get; set; }
-
 
     /// <summary>
     /// 设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）
@@ -212,7 +211,7 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -222,7 +221,7 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -437,9 +436,8 @@ public class TaktEquipmentCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（不可空）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -695,7 +693,7 @@ public class TaktEquipmentTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -887,7 +885,7 @@ public class TaktEquipmentImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -1080,9 +1078,14 @@ public class TaktEquipmentExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）

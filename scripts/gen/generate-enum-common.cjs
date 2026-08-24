@@ -169,7 +169,7 @@ function contentUsesSharedEnums(content) {
 }
 
 /**
- * 提取用于 Options/Tree「仅启用项」过滤的状态字段元数据（实体 Status 为 int，对齐 sys_normal_disable_status 启用=1）
+ * 提取用于 Options/Tree「仅启用项」过滤的状态字段元数据（实体 Status 为 int，对齐 sys_normal_disable 启用=1）
  * @param {string} entityContent
  * @param {string} [entityShort]
  * @returns {{ field: string, kind: 'int', intEnabled: number }|null}
@@ -185,13 +185,14 @@ function extractPrimaryEnableStatusMeta(entityContent, entityShort = '') {
       field: statusProp.name,
       kind: 'int',
       intEnabled: 1,
+      isEnum: isSharedEnumType(statusProp.bareType) || statusProp.bareType === 'TaktCommonStatus',
     };
   }
   return null;
 }
 
 /**
- * 内置项禁用保护：解析状态字段（int Status / int EmployeeStatus 等；IsBuiltIn 为 int 字典 sys_yes_no_type）
+ * 内置项禁用保护：解析状态字段（int Status / int EmployeeStatus 等；IsBuiltIn 为 int 字典 sys_yes_no）
  * @param {string} entityContent
  * @returns {{ field: string, kind: 'intEnabled'|'employeeResigned' }|null}
  */
@@ -247,7 +248,10 @@ function optionsBlockUsesStaleIntStatusCompare(block, statusMeta, entityScalarPr
   if (new RegExp(`\\bx\\.${statusMeta.field}\\s*==\\s*Takt\\w+\\.`).test(block)) {
     return true;
   }
-  return !new RegExp(`\\bx\\.${statusMeta.field}\\s*==\\s*${enabled}\\b`).test(block);
+  const intCmp = statusMeta.isEnum
+    ? new RegExp(`\\(int\\)\\s*x\\.${statusMeta.field}\\s*==\\s*${enabled}\\b`)
+    : new RegExp(`\\bx\\.${statusMeta.field}\\s*==\\s*${enabled}\\b`);
+  return !intCmp.test(block);
 }
 
 module.exports = {

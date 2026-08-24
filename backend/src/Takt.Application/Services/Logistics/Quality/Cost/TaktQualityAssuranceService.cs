@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务主应用服务实现
 // 
@@ -83,12 +83,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
     }
 
     /// <summary>
-    /// 获取品质业务主列表（分页）
+    /// 获取品质业务主列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktQualityAssuranceDto>> GetQualityAssuranceListAsync(TaktQualityAssuranceQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktQualityAssuranceDto>.Create(
+                new List<TaktQualityAssuranceDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _qualityAssuranceRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -304,7 +312,15 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportQualityAssuranceAsync(TaktQualityAssuranceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityAssuranceQueryDto());
+        var queryDto = query ?? new TaktQualityAssuranceQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktQualityAssuranceExportDto>(),
+                sheetName ?? "品质业务主数据",
+                fileName ?? "品质业务主导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _qualityAssuranceRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -564,6 +580,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             {
                 var childDto = incomingItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityAssuranceCode = entity.QualityAssuranceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -582,13 +603,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                     submittedIds.Add(childDto.QualityAssuranceIncomingId);
                     var isUniqueUpdate_ix_takt_logistics_quality_assurance_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceIncomingRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityAssuranceIncomingId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_assurance_incoming_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务来料检验费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务来料检验费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityAssuranceIncomingId;
@@ -600,12 +620,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_assurance_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceIncomingRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_assurance_incoming_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务来料检验费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务来料检验费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityAssuranceIncoming>();
                     child.Id = 0;
@@ -669,6 +688,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             {
                 var childDto = firstArticleItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityAssuranceCode = entity.QualityAssuranceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -687,13 +711,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                     submittedIds.Add(childDto.QualityAssuranceFirstArticleId);
                     var isUniqueUpdate_ix_takt_logistics_quality_assurance_first_article_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceFirstArticleRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityAssuranceFirstArticleId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_assurance_first_article_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务初期定期检定费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务初期定期检定费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityAssuranceFirstArticleId;
@@ -705,12 +728,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_assurance_first_article_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceFirstArticleRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_assurance_first_article_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务初期定期检定费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务初期定期检定费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityAssuranceFirstArticle>();
                     child.Id = 0;
@@ -774,6 +796,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             {
                 var childDto = calibrationItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityAssuranceCode = entity.QualityAssuranceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -792,13 +819,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                     submittedIds.Add(childDto.QualityAssuranceCalibrationId);
                     var isUniqueUpdate_ix_takt_logistics_quality_assurance_calibration_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceCalibrationRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityAssuranceCalibrationId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_assurance_calibration_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务设备校正费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务设备校正费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityAssuranceCalibrationId;
@@ -810,12 +836,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_assurance_calibration_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceCalibrationRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_assurance_calibration_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务设备校正费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务设备校正费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityAssuranceCalibration>();
                     child.Id = 0;
@@ -879,6 +904,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             {
                 var childDto = otherItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityAssuranceCode = entity.QualityAssuranceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -897,13 +927,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                     submittedIds.Add(childDto.QualityAssuranceOtherId);
                     var isUniqueUpdate_ix_takt_logistics_quality_assurance_other_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceOtherRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityAssuranceOtherId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_assurance_other_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务其他通常业务费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务其他通常业务费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityAssuranceOtherId;
@@ -915,12 +944,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_assurance_other_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceOtherRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_assurance_other_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务其他通常业务费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务其他通常业务费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityAssuranceOther>();
                     child.Id = 0;
@@ -984,6 +1012,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             {
                 var childDto = outgoingItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityAssuranceCode = entity.QualityAssuranceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -1002,13 +1035,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                     submittedIds.Add(childDto.QualityAssuranceOutgoingId);
                     var isUniqueUpdate_ix_takt_logistics_quality_assurance_outgoing_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceOutgoingRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityAssuranceOutgoingId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_assurance_outgoing_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务出货检验费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务出货检验费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityAssuranceOutgoingId;
@@ -1020,12 +1052,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_assurance_outgoing_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceOutgoingRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_assurance_outgoing_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务出货检验费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务出货检验费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityAssuranceOutgoing>();
                     child.Id = 0;
@@ -1089,6 +1120,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             {
                 var childDto = reliabilityItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityAssuranceCode = entity.QualityAssuranceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -1107,13 +1143,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                     submittedIds.Add(childDto.QualityAssuranceReliabilityId);
                     var isUniqueUpdate_ix_takt_logistics_quality_assurance_reliability_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceReliabilityRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityAssuranceReliabilityId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_assurance_reliability_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务信赖性评价ORT费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务信赖性评价ORT费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityAssuranceReliabilityId;
@@ -1125,12 +1160,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_assurance_reliability_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceReliabilityRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_assurance_reliability_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务信赖性评价ORT费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务信赖性评价ORT费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityAssuranceReliability>();
                     child.Id = 0;
@@ -1194,6 +1228,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             {
                 var childDto = customerResponseItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityAssuranceCode = entity.QualityAssuranceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -1212,13 +1251,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                     submittedIds.Add(childDto.QualityAssuranceCustomerResponseId);
                     var isUniqueUpdate_ix_takt_logistics_quality_assurance_customer_response_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceCustomerResponseRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityAssuranceCustomerResponseId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_assurance_customer_response_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务顾客品质要求对应费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务顾客品质要求对应费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityAssuranceCustomerResponseId;
@@ -1230,12 +1268,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_assurance_customer_response_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityAssuranceCustomerResponseRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityAssuranceId == x.QualityAssuranceId
+                        x => x.QualityAssuranceId == x.QualityAssuranceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_assurance_customer_response_line_unique)
                     {
-                        throw new TaktBusinessException("品质业务顾客品质要求对应费用明细的CompanyCode、QualityAssuranceId、LineNumber已存在");
+                        throw new TaktBusinessException("品质业务顾客品质要求对应费用明细的QualityAssuranceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityAssuranceCustomerResponse>();
                     child.Id = 0;
@@ -1284,90 +1321,167 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
     {
         var exp = Expressionable.Create<TaktQualityAssurance>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(keywords))
                 || (x.AssuranceMonth != null && x.AssuranceMonth.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.DebitNoteCode != null && x.DebitNoteCode.Contains(keywords))
                 || (x.Recorder != null && x.Recorder.Contains(keywords))
-                || SqlFunc.ToString(x.TotalQualityCost).Contains(keywords)
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityAssuranceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(queryDto.QualityAssuranceCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssuranceMonth))
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityAssuranceCode))
         {
-            exp = exp.And(x => x.AssuranceMonth != null && x.AssuranceMonth.Contains(queryDto.AssuranceMonth));
+            var qualityAssuranceCode = queryDto.QualityAssuranceCode;
+            exp = exp.And(x => x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(qualityAssuranceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssuranceMonth))
         {
-            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
+            var assuranceMonth = queryDto.AssuranceMonth;
+            exp = exp.And(x => x.AssuranceMonth != null && x.AssuranceMonth.Contains(assuranceMonth));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DebitNoteCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.DebitNoteCode != null && x.DebitNoteCode.Contains(queryDto.DebitNoteCode));
+            var customerName1 = queryDto.CustomerName1;
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(customerName1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Recorder))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DebitNoteCode))
         {
-            exp = exp.And(x => x.Recorder != null && x.Recorder.Contains(queryDto.Recorder));
+            var debitNoteCode = queryDto.DebitNoteCode;
+            exp = exp.And(x => x.DebitNoteCode != null && x.DebitNoteCode.Contains(debitNoteCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Recorder))
+        {
+            var recorder = queryDto.Recorder;
+            exp = exp.And(x => x.Recorder != null && x.Recorder.Contains(recorder));
         }
 
         if (queryDto?.TotalQualityCost.HasValue == true)
         {
-            exp = exp.And(x => x.TotalQualityCost == queryDto.TotalQualityCost);
+            var totalQualityCost = queryDto.TotalQualityCost.Value;
+            exp = exp.And(x => x.TotalQualityCost == totalQualityCost);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktQualityAssuranceQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.QualityAssuranceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AssuranceMonth))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DebitNoteCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Recorder))
+        {
+            return true;
+        }
+        if (queryDto.TotalQualityCost.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -95,7 +95,7 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "execute_params", ColumnDescription = "执行参数", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? ExecuteParams { get; set; }
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "concurrent", ColumnDescription = "并发", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int Concurrent { get; set; } = 0;

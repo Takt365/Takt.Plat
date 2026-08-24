@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：source-ec-detail.ts
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   SourceEcDetail,
   SourceEcDetailCreate,
+  SourceEcDetailObsolete,
   SourceEcDetailUpdate
 } from '@/types/logistics/manufacturing/engineering-change/source-ec-detail';
 
@@ -105,6 +106,19 @@ export function deleteSourceEcDetailBatch(ids: string[]): Promise<void> {
     url: `${SOURCE_EC_DETAIL_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新设变来源子作废状态
+ * @param {SourceEcDetailObsolete} dto 作废 DTO
+ * @returns {Promise<SourceEcDetail>} 设变来源子DTO
+ */
+export function updateSourceEcDetailObsolete(dto: SourceEcDetailObsolete): Promise<SourceEcDetail> {
+  return request<SourceEcDetail>({
+    url: `${SOURCE_EC_DETAIL_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

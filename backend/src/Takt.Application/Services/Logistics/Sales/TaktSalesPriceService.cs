@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceService.cs
-// 创建时间：2026-08-06
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格应用服务实现
 // 
@@ -378,6 +378,12 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
             {
                 var childDto = itemsForSave[i];
                 childDto.SalesPriceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.SalesPriceCode = entity.SalesPriceCode;
+                childDto.PriceType = entity.PriceType;
                 if (childDto.SalesPriceItemId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.SalesPriceItemId, out var target))
@@ -433,7 +439,8 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SalesPriceCode != null && x.SalesPriceCode.Contains(keywords))
                 || (x.PriceType != null && x.PriceType.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
@@ -443,10 +450,15 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.SalesQuotationCode != null && x.SalesQuotationCode.Contains(keywords))
                 || (x.VariableKey != null && x.VariableKey.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
@@ -499,19 +511,19 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
 
         if (queryDto?.GrBasedInvoiceInspection.HasValue == true)
         {
-            var grBasedInvoiceInspection = queryDto.GrBasedInvoiceInspection;
+            var grBasedInvoiceInspection = queryDto.GrBasedInvoiceInspection.Value;
             exp = exp.And(x => x.GrBasedInvoiceInspection == grBasedInvoiceInspection);
         }
 
         if (queryDto?.PricingDateControl.HasValue == true)
         {
-            var pricingDateControl = queryDto.PricingDateControl;
+            var pricingDateControl = queryDto.PricingDateControl.Value;
             exp = exp.And(x => x.PricingDateControl == pricingDateControl);
         }
 
         if (queryDto?.SalesQuotationId.HasValue == true)
         {
-            var salesQuotationId = queryDto.SalesQuotationId;
+            var salesQuotationId = queryDto.SalesQuotationId.Value;
             exp = exp.And(x => x.SalesQuotationId == salesQuotationId);
         }
 
@@ -541,43 +553,38 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
 
         if (queryDto?.ValidFromStart.HasValue == true)
         {
-            var validFromStart = queryDto.ValidFromStart;
+            var validFromStart = queryDto.ValidFromStart.Value;
             exp = exp.And(x => x.ValidFrom >= validFromStart);
         }
 
         if (queryDto?.ValidFromEnd.HasValue == true)
         {
-            var validFromEnd = queryDto.ValidFromEnd;
+            var validFromEnd = queryDto.ValidFromEnd.Value;
             exp = exp.And(x => x.ValidFrom <= validFromEnd);
         }
 
         if (queryDto?.ValidToStart.HasValue == true)
         {
-            var validToStart = queryDto.ValidToStart;
+            var validToStart = queryDto.ValidToStart.Value;
             exp = exp.And(x => x.ValidTo >= validToStart);
         }
 
         if (queryDto?.ValidToEnd.HasValue == true)
         {
-            var validToEnd = queryDto.ValidToEnd;
+            var validToEnd = queryDto.ValidToEnd.Value;
             exp = exp.And(x => x.ValidTo <= validToEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         return exp.ToExpression();
@@ -595,6 +602,10 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
             return true;
         }

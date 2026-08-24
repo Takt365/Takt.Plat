@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecStepI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopExecStep 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktSopExecStepI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexecstep.confirmedat", "zh-HK", "确认时间_hk", "确认时间"),
 
             // entity.sopexecstep.blocknextstep
-            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "en-US", "是否禁止下一步_us", "是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "en-US", "是否禁止下一步_us", "是否禁止下一步（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopexecstep.blocknextstep
-            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "ja-JP", "是否禁止下一步_jp", "是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "ja-JP", "是否禁止下一步_jp", "是否禁止下一步（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopexecstep.blocknextstep
-            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "zh-CN", "是否禁止下一步", "是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "zh-CN", "是否禁止下一步", "是否禁止下一步（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopexecstep.blocknextstep
-            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "zh-HK", "是否禁止下一步_hk", "是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopexecstep.blocknextstep", "zh-HK", "是否禁止下一步_hk", "是否禁止下一步（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.sopexecstep.exec
             new TranslationSeedItem("entity.sopexecstep.exec", "en-US", "执行追溯_us", "执行追溯"),

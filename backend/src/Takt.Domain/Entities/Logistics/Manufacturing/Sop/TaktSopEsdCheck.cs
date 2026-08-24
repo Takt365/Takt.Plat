@@ -60,13 +60,13 @@ public class TaktSopEsdCheck : TaktCompanyEntityBase
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 达标（字典 sys_yes_no_type；0=否，1=是）
+    /// 达标（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_compliant", ColumnDescription = "达标", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsCompliant { get; set; } = 1;
 
     /// <summary>
-    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
+    /// 锁屏（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "lock_screen_triggered", ColumnDescription = "锁屏", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LockScreenTriggered { get; set; } = 0;

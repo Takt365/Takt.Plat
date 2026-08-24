@@ -62,7 +62,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("foundation:culture:list", "翻译列表")]
+    [TaktPermission("foundation:i18n:list", "翻译列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTranslationListAsync([FromQuery] TaktTranslationQueryDto queryDto)
     {
@@ -82,7 +82,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">翻译ID</param>
     /// <returns>翻译DTO</returns>
-    [TaktPermission("foundation:culture:query", "翻译详情")]
+    [TaktPermission("foundation:i18n:query", "翻译详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTranslationByIdAsync(long id)
     {
@@ -105,7 +105,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// 获取翻译选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("foundation:culture:query", "翻译选项")]
+    [TaktPermission("foundation:i18n:query", "翻译选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTranslationOptionsAsync()
     {
@@ -125,7 +125,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>翻译DTO</returns>
-    [TaktPermission("foundation:culture:create", "创建翻译")]
+    [TaktPermission("foundation:i18n:create", "创建翻译")]
     [HttpPost]
     public async Task<IActionResult> CreateTranslationAsync([FromBody] TaktTranslationCreateDto dto)
     {
@@ -146,7 +146,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// <param name="id">翻译ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>翻译DTO</returns>
-    [TaktPermission("foundation:culture:update", "更新翻译")]
+    [TaktPermission("foundation:i18n:update", "更新翻译")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTranslationAsync(long id, [FromBody] TaktTranslationUpdateDto dto)
     {
@@ -166,7 +166,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">翻译ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:culture:delete", "删除翻译")]
+    [TaktPermission("foundation:i18n:delete", "删除翻译")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTranslationByIdAsync(long id)
     {
@@ -186,7 +186,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:culture:delete", "批量删除翻译")]
+    [TaktPermission("foundation:i18n:delete", "批量删除翻译")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTranslationBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -205,7 +205,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:culture:import", "获取翻译导入模板")]
+    [TaktPermission("foundation:i18n:import", "获取翻译导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetTranslationTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -225,7 +225,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("foundation:culture:import", "导入翻译")]
+    [TaktPermission("foundation:i18n:import", "导入翻译")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportTranslationAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -255,7 +255,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// 导出翻译
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:culture:export", "导出翻译")]
+    [TaktPermission("foundation:i18n:export", "导出翻译")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTranslationAsync([FromQuery] TaktTranslationQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
@@ -273,7 +273,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// <summary>
     /// 获取翻译转置列表（分页）
     /// </summary>
-    [TaktPermission("foundation:culture:query", "查询翻译转置列表")]
+    [TaktPermission("foundation:i18n:query", "查询翻译转置列表")]
     [HttpGet("transposed")]
     public async Task<IActionResult> GetTranslationTransposedListAsync([FromQuery] TaktTranslationTransposedQueryDto queryDto)
     {
@@ -291,7 +291,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// <summary>
     /// 批量保存翻译转置数据
     /// </summary>
-    [TaktPermission("foundation:culture:edit", "保存翻译转置数据")]
+    [TaktPermission("foundation:i18n:edit", "保存翻译转置数据")]
     [HttpPost("transposed/batch")]
     public async Task<IActionResult> SaveTranslationTransposedBatchAsync([FromBody] TaktTranslationTransposedBatchDto dto)
     {

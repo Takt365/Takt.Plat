@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableSelectionDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableSelection 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableSelection 生成，请按需审阅）
 // 
@@ -82,7 +82,7 @@ public class TaktConfigurableSelectionDto : TaktCompanyDtoBase
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（SQVI 筛选项展示顺序）
+    /// 排序号（回填）（SQVI 筛选项展示顺序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -110,7 +110,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -119,11 +119,11 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -166,7 +166,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（SQVI 筛选项展示顺序）
+    /// 排序号（回填）（SQVI 筛选项展示顺序）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -215,11 +215,11 @@ public class TaktConfigurableSelectionCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -274,12 +274,6 @@ public class TaktConfigurableSelectionCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
-
-
-    /// <summary>
-    /// SortOrder
-    /// </summary>
-    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -320,9 +314,9 @@ public class TaktConfigurableSelectionSortDto
     public long ConfigurableSelectionId { get; set; }
 
     /// <summary>
-    /// 排序号（SQVI 筛选项展示顺序）
+    /// 排序号（回填）（SQVI 筛选项展示顺序）
     /// </summary>
-    [Required(ErrorMessage = "排序号（SQVI 筛选项展示顺序）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（SQVI 筛选项展示顺序）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -350,11 +344,11 @@ public class TaktConfigurableSelectionTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -428,11 +422,11 @@ public class TaktConfigurableSelectionImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -484,12 +478,6 @@ public class TaktConfigurableSelectionImportDto
     /// </summary>
     public string? Remark { get; set; }
 
-
-
-    /// <summary>
-    /// SortOrder
-    /// </summary>
-    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -512,6 +500,16 @@ public class TaktConfigurableSelectionExportDto
     /// 公司代码
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
@@ -555,7 +553,7 @@ public class TaktConfigurableSelectionExportDto
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（SQVI 筛选项展示顺序）
+    /// 排序号（回填）（SQVI 筛选项展示顺序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

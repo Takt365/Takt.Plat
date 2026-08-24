@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceParticipant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,6 +99,15 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
             // entity.conferenceparticipant.conferenceid
             new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "zh-HK", "会议ID_hk", "会议 ID（选项 TaktConferences/options；DictValue=Id）"),
 
+            // entity.conferenceparticipant.linenumber
+            new TranslationSeedItem("entity.conferenceparticipant.linenumber", "en-US", "行号_us", "行号（固定步长=10）"),
+            // entity.conferenceparticipant.linenumber
+            new TranslationSeedItem("entity.conferenceparticipant.linenumber", "ja-JP", "行号_jp", "行号（固定步长=10）"),
+            // entity.conferenceparticipant.linenumber
+            new TranslationSeedItem("entity.conferenceparticipant.linenumber", "zh-CN", "行号", "行号（固定步长=10）"),
+            // entity.conferenceparticipant.linenumber
+            new TranslationSeedItem("entity.conferenceparticipant.linenumber", "zh-HK", "行号_hk", "行号（固定步长=10）"),
+
             // entity.conferenceparticipant.userid
             new TranslationSeedItem("entity.conferenceparticipant.userid", "en-US", "用户ID_us", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.conferenceparticipant.userid
@@ -109,13 +118,13 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceparticipant.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.conferenceparticipant.username
-            new TranslationSeedItem("entity.conferenceparticipant.username", "en-US", "用户姓名_us", "用户姓名"),
+            new TranslationSeedItem("entity.conferenceparticipant.username", "en-US", "用户姓名_us", "用户姓名（冗余字段，便于查询）"),
             // entity.conferenceparticipant.username
-            new TranslationSeedItem("entity.conferenceparticipant.username", "ja-JP", "用户姓名_jp", "用户姓名"),
+            new TranslationSeedItem("entity.conferenceparticipant.username", "ja-JP", "用户姓名_jp", "用户姓名（冗余字段，便于查询）"),
             // entity.conferenceparticipant.username
-            new TranslationSeedItem("entity.conferenceparticipant.username", "zh-CN", "用户姓名", "用户姓名"),
+            new TranslationSeedItem("entity.conferenceparticipant.username", "zh-CN", "用户姓名", "用户姓名（冗余字段，便于查询）"),
             // entity.conferenceparticipant.username
-            new TranslationSeedItem("entity.conferenceparticipant.username", "zh-HK", "用户姓名_hk", "用户姓名"),
+            new TranslationSeedItem("entity.conferenceparticipant.username", "zh-HK", "用户姓名_hk", "用户姓名（冗余字段，便于查询）"),
 
             // entity.conferenceparticipant.participantrole
             new TranslationSeedItem("entity.conferenceparticipant.participantrole", "en-US", "参与角色_us", "参与角色（字典 routine_conference_participant_role；0=参会人 1=主持人 2=记录人 3=嘉宾）"),
@@ -161,6 +170,15 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceparticipant.attendancestatus", "zh-CN", "出席状态", "出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）"),
             // entity.conferenceparticipant.attendancestatus
             new TranslationSeedItem("entity.conferenceparticipant.attendancestatus", "zh-HK", "出席状态_hk", "出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）"),
+
+            // entity.conferenceparticipant.isobsolete
+            new TranslationSeedItem("entity.conferenceparticipant.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.conferenceparticipant.isobsolete
+            new TranslationSeedItem("entity.conferenceparticipant.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.conferenceparticipant.isobsolete
+            new TranslationSeedItem("entity.conferenceparticipant.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.conferenceparticipant.isobsolete
+            new TranslationSeedItem("entity.conferenceparticipant.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.conferenceparticipant.conference
             new TranslationSeedItem("entity.conferenceparticipant.conference", "en-US", "会议_us", "会议（主表）"),

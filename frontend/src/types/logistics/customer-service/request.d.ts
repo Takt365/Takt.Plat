@@ -94,7 +94,7 @@ export interface CustomerServiceRequest extends CompanyDtoBase {
   sourceChannel: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority: number;
 
@@ -254,7 +254,7 @@ export interface CustomerServiceRequestQuery extends TaktPagedQuery {
   sourceChannel?: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority?: number;
 
@@ -428,7 +428,7 @@ export interface CustomerServiceRequestCreate {
   sourceChannel: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority: number;
 
@@ -630,7 +630,7 @@ export interface CustomerServiceRequestTemplate {
   sourceChannel?: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority?: number;
 
@@ -779,7 +779,7 @@ export interface CustomerServiceRequestImport {
   sourceChannel?: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority?: number;
 
@@ -923,7 +923,7 @@ export interface CustomerServiceRequestExport {
   sourceChannel: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority: number;
 

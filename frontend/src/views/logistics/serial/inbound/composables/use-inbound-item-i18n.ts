@@ -24,20 +24,33 @@ export const SERIALINBOUNDITEM_LIST_FIELDS = [
   'inboundCode',
   'lineNumber',
   'inboundSerialCode',
-  'inbound',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const SERIALINBOUNDITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'inboundId',
+  'inboundCode',
+  'lineNumber',
+  'inboundSerialCode',
+  'isObsolete',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const SERIALINBOUNDITEM_SUMMARY_SUM_FIELDS = [
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SERIALINBOUNDITEM_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  inboundId: 'select',
-  inboundCode: 'required',
+  cultureCode: 'optional',
+  inboundCode: 'optional',
   lineNumber: 'select',
   inboundSerialCode: 'required',
-  extField: 'optional',
-  remark: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -45,7 +58,6 @@ export type SerialInboundItemField = keyof typeof SERIALINBOUNDITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SERIALINBOUNDITEM_QUERY_STRING_FIELDS = [
-  'inboundId',
   'inboundCode',
   'inboundSerialCode',
   'createdAtStart',
@@ -56,12 +68,13 @@ export const SERIALINBOUNDITEM_QUERY_STRING_FIELDS = [
 
 export type SerialInboundItemQueryField =
   | (typeof SERIALINBOUNDITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber'
+  | 'lineNumber' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SERIALINBOUNDITEM_QUERY_FIELDS: readonly SerialInboundItemQueryField[] = [
   ...SERIALINBOUNDITEM_QUERY_STRING_FIELDS,
   'lineNumber',
+  'isObsolete',
 ]
 
 /**

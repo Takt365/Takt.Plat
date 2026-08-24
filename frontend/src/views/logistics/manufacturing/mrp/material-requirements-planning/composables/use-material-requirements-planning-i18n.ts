@@ -20,7 +20,6 @@ export const MATERIALREQUIREMENTSPLANNING_SELF_I18N_KEY = buildEntitySelfI18nKey
 
 /** 列表业务列（不含主键） */
 export const MATERIALREQUIREMENTSPLANNING_LIST_FIELDS = [
-  'plantCode',
   'materialRequirementsPlanningCode',
   'masterProductionScheduleId',
   'mpsCode',
@@ -37,32 +36,12 @@ export const MATERIALREQUIREMENTSPLANNING_LIST_FIELDS = [
   'purchasePlanId',
   'purchasePlanCode',
   'planDescription',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const MATERIALREQUIREMENTSPLANNING_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  materialRequirementsPlanningCode: 'required',
-  masterProductionScheduleId: 'optional',
-  mpsCode: 'optional',
-  masterDemandScheduleId: 'optional',
-  mdsCode: 'optional',
-  planDate: 'select',
-  planPeriodStart: 'select',
-  planPeriodEnd: 'select',
-  plannerId: 'optional',
-  planBy: 'select',
-  runStatus: 'select',
-  productionPlanId: 'optional',
-  productionPlanCode: 'optional',
-  purchasePlanId: 'optional',
-  purchasePlanCode: 'optional',
-  planDescription: 'optional',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -70,48 +49,13 @@ export type MaterialRequirementsPlanningField = keyof typeof MATERIALREQUIREMENT
 
 /** 高级查询可 trim 的字符串字段 */
 export const MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'materialRequirementsPlanningCode',
-  'masterProductionScheduleId',
-  'mpsCode',
-  'masterDemandScheduleId',
-  'mdsCode',
-  'planDateStart',
-  'planDateEnd',
-  'planPeriodStartStart',
-  'planPeriodStartEnd',
-  'planPeriodEndStart',
-  'planPeriodEndEnd',
-  'plannerId',
-  'planBy',
-  'productionPlanId',
-  'productionPlanCode',
-  'purchasePlanId',
-  'purchasePlanCode',
-  'planDescription',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof MaterialRequirementsPlanningQuery)[]
 
-export type MaterialRequirementsPlanningQueryField =
-  | (typeof MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS)[number]
-  | 'runStatus' | 'approvalStatus'
+export type MaterialRequirementsPlanningQueryField = (typeof MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const MATERIALREQUIREMENTSPLANNING_QUERY_FIELDS: readonly MaterialRequirementsPlanningQueryField[] = [
-  ...MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS,
-  'runStatus',
-  'approvalStatus',
-]
+export const MATERIALREQUIREMENTSPLANNING_QUERY_FIELDS: readonly MaterialRequirementsPlanningQueryField[] = [...MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS]
 
 /**
  * 物料需求计划 MRP 头表字段 i18n：index / material-requirements-planning-form 统一入口

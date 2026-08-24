@@ -70,7 +70,7 @@ export function resolveCultureIcon(option: TaktSelectOption): string | undefined
 }
 
 /**
- * 默认语言（extLabel = IsDefault，字典 sys_yes_no_type；1=是）
+ * 默认语言（extLabel = IsDefault，字典 sys_yes_no；1=是）
  * @param option 语言选项
  */
 export function resolveCultureIsDefault(option: TaktSelectOption): boolean {
@@ -304,7 +304,7 @@ export const useLocaleStore = defineStore('locale', () => {
     cultureCode: string,
     _context?: {
       tenantCode?: string;
-      username?: string;
+      userName?: string;
       companyCode?: string;
       previewKey?: string;
     },

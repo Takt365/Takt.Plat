@@ -38,7 +38,7 @@ public class TaktLoginLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 用户名（登录账号）
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
@@ -120,7 +120,7 @@ public class TaktLoginLogQueryDto : TaktPagedQuery
     /// <summary>
     /// 用户名（登录账号）
     /// </summary>
-    public string? Username { get; set; } = string.Empty;
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
@@ -226,7 +226,7 @@ public class TaktLoginLogCreateDto
     /// 用户名（登录账号）
     /// </summary>
     [Required(ErrorMessage = "用户名（登录账号）不能为空")]
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
@@ -337,7 +337,7 @@ public class TaktLoginLogExportDto
     /// <summary>
     /// 用户名（登录账号）
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）

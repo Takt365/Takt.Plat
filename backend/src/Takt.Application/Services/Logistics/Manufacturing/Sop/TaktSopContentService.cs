@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopContentService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP多语言正文应用服务实现
 // 
@@ -353,6 +353,10 @@ public class TaktSopContentService : TaktServiceBase, ITaktSopContentService
             {
                 var childDto = stepsForSave[i];
                 childDto.ContentId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
                 if (childDto.SopStepId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.SopStepId, out var target))
@@ -426,13 +430,13 @@ public class TaktSopContentService : TaktServiceBase, ITaktSopContentService
 
         if (queryDto?.RevisionId.HasValue == true)
         {
-            var revisionId = queryDto.RevisionId;
+            var revisionId = queryDto.RevisionId.Value;
             exp = exp.And(x => x.RevisionId == revisionId);
         }
 
         if (queryDto?.SopId.HasValue == true)
         {
-            var sopId = queryDto.SopId;
+            var sopId = queryDto.SopId.Value;
             exp = exp.And(x => x.SopId == sopId);
         }
 
@@ -456,13 +460,13 @@ public class TaktSopContentService : TaktServiceBase, ITaktSopContentService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

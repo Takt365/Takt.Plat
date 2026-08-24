@@ -82,7 +82,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
@@ -231,7 +231,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public DateTime? ActualEndDateEnd { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
@@ -394,7 +394,7 @@ public class TaktProductionOrderCreateDto
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
@@ -576,7 +576,7 @@ public class TaktProductionOrderTemplateDto
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
@@ -710,7 +710,7 @@ public class TaktProductionOrderImportDto
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
@@ -845,7 +845,7 @@ public class TaktProductionOrderExportDto
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 

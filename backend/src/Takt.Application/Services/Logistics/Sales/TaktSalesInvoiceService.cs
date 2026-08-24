@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceService.cs
-// 创建时间：2026-08-10
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票应用服务实现
 // 
@@ -397,6 +397,14 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             {
                 var childDto = itemsForSave[i];
                 childDto.SalesInvoiceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.BillingDocumentCode = entity.BillingDocumentCode;
+                childDto.Division = entity.Division;
+                childDto.DocumentCategory = entity.DocumentCategory;
+                childDto.PostedBy = entity.PostedBy;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -489,7 +497,9 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.BillingDocumentCode != null && x.BillingDocumentCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.BillingDocumentCode != null && x.BillingDocumentCode.Contains(keywords))
                 || (x.BillingType != null && x.BillingType.Contains(keywords))
                 || (x.BillingCategory != null && x.BillingCategory.Contains(keywords))
                 || (x.DocumentCategory != null && x.DocumentCategory.Contains(keywords))
@@ -523,10 +533,21 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
                 || (x.PaymentReference != null && x.PaymentReference.Contains(keywords))
                 || (x.ReversalReason != null && x.ReversalReason.Contains(keywords))
                 || (x.PostedBy != null && x.PostedBy.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.BillingDocumentCode))
@@ -615,7 +636,7 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
 
         if (queryDto?.AccountingExchangeRate.HasValue == true)
         {
-            var accountingExchangeRate = queryDto.AccountingExchangeRate;
+            var accountingExchangeRate = queryDto.AccountingExchangeRate.Value;
             exp = exp.And(x => x.AccountingExchangeRate == accountingExchangeRate);
         }
 
@@ -639,7 +660,7 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
 
         if (queryDto?.NetAmount.HasValue == true)
         {
-            var netAmount = queryDto.NetAmount;
+            var netAmount = queryDto.NetAmount.Value;
             exp = exp.And(x => x.NetAmount == netAmount);
         }
 
@@ -759,50 +780,39 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
 
         if (queryDto?.BillingDateStart.HasValue == true)
         {
-            var billingDateStart = queryDto.BillingDateStart;
+            var billingDateStart = queryDto.BillingDateStart.Value;
             exp = exp.And(x => x.BillingDate >= billingDateStart);
         }
 
         if (queryDto?.BillingDateEnd.HasValue == true)
         {
-            var billingDateEnd = queryDto.BillingDateEnd;
+            var billingDateEnd = queryDto.BillingDateEnd.Value;
             exp = exp.And(x => x.BillingDate <= billingDateEnd);
         }
 
         if (queryDto?.ExchangeRateDateStart.HasValue == true)
         {
-            var exchangeRateDateStart = queryDto.ExchangeRateDateStart;
+            var exchangeRateDateStart = queryDto.ExchangeRateDateStart.Value;
             exp = exp.And(x => x.ExchangeRateDate >= exchangeRateDateStart);
         }
 
         if (queryDto?.ExchangeRateDateEnd.HasValue == true)
         {
-            var exchangeRateDateEnd = queryDto.ExchangeRateDateEnd;
+            var exchangeRateDateEnd = queryDto.ExchangeRateDateEnd.Value;
             exp = exp.And(x => x.ExchangeRateDate <= exchangeRateDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -819,6 +829,14 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }

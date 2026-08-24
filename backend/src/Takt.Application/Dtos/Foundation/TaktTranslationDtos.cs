@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktTranslationDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Translation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTranslation 生成，请按需审阅）
 // 
@@ -22,13 +22,12 @@ namespace Takt.Application.Dtos.Foundation;
 // ========================================
 
 /// <summary>
-/// 翻译实体 存储系统界面的多语言翻译文本 租户级实体：翻译数据在租户内共享，不需要公司隔离
+/// 翻译实体 存储系统界面的多语言翻译文本 租户级实体：翻译数据在租户内共享，不需要公司隔离 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// 对应前端 TaktTranslationDto
-/// 继承 TaktTenantCoreDtoBase（组合 4）
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
 public class TaktTranslationDto : TaktTenantCoreDtoBase
 {
-
     /// <summary>
     /// TranslationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -43,12 +42,7 @@ public class TaktTranslationDto : TaktTenantCoreDtoBase
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文化名称（填充字段）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     public string? CultureName { get; set; }
 
@@ -63,7 +57,7 @@ public class TaktTranslationDto : TaktTenantCoreDtoBase
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 资源分组（选项 TaktMenus/tree-options,DictValue=Id）
     /// </summary>
     public string ResourceGroup { get; set; } = string.Empty;
 
@@ -101,15 +95,10 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化ID（关联 TaktCulture.Id）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CultureId { get; set; }
-
-    /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -122,7 +111,7 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     public string? TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 资源分组（选项 TaktMenus/tree-options,DictValue=Id）
     /// </summary>
     public string? ResourceGroup { get; set; } = string.Empty;
 
@@ -172,7 +161,7 @@ public class TaktTranslationCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化ID（关联 TaktCulture.Id）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
@@ -190,9 +179,9 @@ public class TaktTranslationCreateDto
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 资源分组（选项 TaktMenus/tree-options,DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）不能为空")]
+    [Required(ErrorMessage = "资源分组（选项 TaktMenus/tree-options,DictValue=Id）不能为空")]
     public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
@@ -253,7 +242,7 @@ public class TaktTranslationTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化ID（关联 TaktCulture.Id）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CultureId { get; set; }
@@ -269,7 +258,7 @@ public class TaktTranslationTemplateDto
     public string? TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 资源分组（选项 TaktMenus/tree-options,DictValue=Id）
     /// </summary>
     public string? ResourceGroup { get; set; } = string.Empty;
 
@@ -306,7 +295,7 @@ public class TaktTranslationImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化ID（关联 TaktCulture.Id）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CultureId { get; set; }
@@ -322,7 +311,7 @@ public class TaktTranslationImportDto
     public string? TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 资源分组（选项 TaktMenus/tree-options,DictValue=Id）
     /// </summary>
     public string? ResourceGroup { get; set; } = string.Empty;
 
@@ -371,11 +360,6 @@ public class TaktTranslationExportDto
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
@@ -386,7 +370,7 @@ public class TaktTranslationExportDto
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 资源分组（选项 TaktMenus/tree-options,DictValue=Id）
     /// </summary>
     public string ResourceGroup { get; set; } = string.Empty;
 
@@ -532,12 +516,13 @@ public class TaktTranslationTransposedBatchDto
     public List<TaktTranslationTransposedDto> Rows { get; set; } = new();
 }
 
+// <takt:hand-maintained-begin>
 // ========================================
-// Translation 前端动态 messages（vue-i18n 扁平键）
+// 前端 i18n 消息包
 // ========================================
 
 /// <summary>
-/// 指定文化下前端翻译键值包（供 SPA mergeLocaleMessage）
+/// 指定语言的前端翻译消息包 DTO
 /// </summary>
 public class TaktTranslationMessagesDto
 {
@@ -551,3 +536,4 @@ public class TaktTranslationMessagesDto
     /// </summary>
     public Dictionary<string, string> Messages { get; set; } = new();
 }
+// <takt:hand-maintained-end>

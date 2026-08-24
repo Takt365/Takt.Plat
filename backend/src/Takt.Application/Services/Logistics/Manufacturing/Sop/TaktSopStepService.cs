@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP工步应用服务实现
 // 
@@ -334,6 +334,10 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
             {
                 var childDto = mediaListForSave[i];
                 childDto.StepId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
                 if (childDto.SopStepMediaId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.SopStepMediaId, out var target))
@@ -395,6 +399,10 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
             {
                 var childDto = checkItemsForSave[i];
                 childDto.StepId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
                 if (childDto.SopStepCheckItemId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.SopStepCheckItemId, out var target))
@@ -470,13 +478,13 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
 
         if (queryDto?.ContentId.HasValue == true)
         {
-            var contentId = queryDto.ContentId;
+            var contentId = queryDto.ContentId.Value;
             exp = exp.And(x => x.ContentId == contentId);
         }
 
         if (queryDto?.StepNo.HasValue == true)
         {
-            var stepNo = queryDto.StepNo;
+            var stepNo = queryDto.StepNo.Value;
             exp = exp.And(x => x.StepNo == stepNo);
         }
 
@@ -500,7 +508,7 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
 
         if (queryDto?.SafetyPopupRequired.HasValue == true)
         {
-            var safetyPopupRequired = queryDto.SafetyPopupRequired;
+            var safetyPopupRequired = queryDto.SafetyPopupRequired.Value;
             exp = exp.And(x => x.SafetyPopupRequired == safetyPopupRequired);
         }
 
@@ -518,13 +526,13 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

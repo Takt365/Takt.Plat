@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { Warehouse } from '@/types/logistics/materials/warehouse'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type WarehouseRowRecord = Warehouse | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface WarehouseMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<Warehouse | null>
+  selectedMasterRow: Ref<WarehouseRowRecord | null>
 }
 
 const warehouseMasterContextKey: InjectionKey<WarehouseMasterContext> = Symbol('warehouseMasterContext')
@@ -22,7 +25,7 @@ const warehouseMasterContextKey: InjectionKey<WarehouseMasterContext> = Symbol('
  * @returns {WarehouseMasterContext} 主表上下文
  */
 export function provideWarehouseMasterContext(): WarehouseMasterContext {
-  const selectedMasterRow = ref<Warehouse | null>(null)
+  const selectedMasterRow = ref<WarehouseRowRecord | null>(null)
   const ctx: WarehouseMasterContext = { selectedMasterRow }
   provide(warehouseMasterContextKey, ctx)
   return ctx

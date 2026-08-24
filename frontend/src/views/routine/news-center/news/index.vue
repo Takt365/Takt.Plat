@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/news-center/news -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="p-4 flex flex-col min-h-0 h-full">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -52,48 +52,74 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getNewsId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="newsId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
+    <!-- 表格 -->
+    <TaktSingleTable
+      entity-scope="approval"
+      :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'newsId'"
+      table-mode="single"
+      :data-source="dataSource"
+      :loading="loading"
+      :stripe="true"
+      :virtual="true"
+      :row-key="getNewsId"
+      :row-selection="rowSelection"
+      :custom-row="onClickRow"
+
+      @change="handleTableChange"
+      @resize-column="handleResizeColumn"
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'newsStatus'">
+        <template v-if="column.key === 'newsCategory'">
           <TaktDictTag
-            :value="getNewsField(record, 'newsStatus')"
+            :value="getNewsDictValue(record, 'newsCategory')"
+            dict-type="sys_news_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'newsIsTop'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'newsIsTop')"
+            dict-type="sys_yes_no"
+          />
+        </template>
+        <template v-else-if="column.key === 'newsIsRecommended'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'newsIsRecommended')"
+            dict-type="sys_yes_no"
+          />
+        </template>
+        <template v-else-if="column.key === 'targetScope'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'targetScope')"
+            dict-type="sys_publish_scope"
+          />
+        </template>
+        <template v-else-if="column.key === 'newsStatus'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'newsStatus')"
             dict-type="sys_publish_status"
           />
         </template>
       </template>
-      <template #detail>
-        <NewsAttachmentPanel
-          ref="newsAttachmentPanelRef"
-          class="h-full min-h-0 flex-1"
-        />
-      </template>
-    </TaktMasterDetailTableLr>
+
+    </TaktSingleTable>
+
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
+    <TaktPagination
+      v-model:current="currentPage"
+      v-model:page-size="pageSize"
+      :total="total"
+      @change="handlePaginationChange"
+      @show-size-change="handlePaginationSizeChange"
+    />
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="1100px"
+      width="50%"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -117,11 +143,31 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('newsCode')">
-      <a-form-item :label="t('entity.news.code')">
+      <a-form-item :label="pi.queryLabel('newsCode')">
         <a-input
           v-model:value="advancedQueryForm.newsCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.code') })"
+          :placeholder="pi.queryPh('newsCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -129,19 +175,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('newsCategory')">
-      <a-form-item :label="t('entity.news.category')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('newsCategory')">
+        <TaktSelect
           v-model:value="advancedQueryForm.newsCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.category') })"
-          style="width: 100%"
+          dict-type="sys_news_type"
+          :placeholder="pi.queryPh('newsCategory', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('newsTitle')">
-      <a-form-item :label="t('entity.news.title')">
+      <a-form-item :label="pi.queryLabel('newsTitle')">
         <a-input
           v-model:value="advancedQueryForm.newsTitle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.title') })"
+          :placeholder="pi.queryPh('newsTitle', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -149,21 +196,21 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('newsSummary')">
-      <a-form-item :label="t('entity.news.summary')">
+      <a-form-item :label="pi.queryLabel('newsSummary')">
         <a-input
           v-model:value="advancedQueryForm.newsSummary"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.summary') })"
+          :placeholder="pi.queryPh('newsSummary', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('tags')">
-      <a-form-item :label="t('entity.news.tags')">
+      <div v-show="isFieldVisible('newsTags')">
+      <a-form-item :label="pi.queryLabel('newsTags')">
         <a-input
-          v-model:value="advancedQueryForm.tags"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.tags') })"
+          v-model:value="advancedQueryForm.newsTags"
+          :placeholder="pi.queryPh('newsTags', 'required')"
           show-count
           :maxlength="500"
           allow-clear
@@ -171,154 +218,155 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('newsContent')">
-      <a-form-item :label="t('entity.news.content')">
+      <a-form-item :label="pi.queryLabel('newsContent')">
         <a-textarea
           v-model:value="advancedQueryForm.newsContent"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.news.content') })"
+          :placeholder="pi.queryPh('newsContent', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('newsCoverImage')">
-      <a-form-item :label="t('entity.news.coverimage')">
+      <a-form-item :label="pi.queryLabel('newsCoverImage')">
         <a-input
           v-model:value="advancedQueryForm.newsCoverImage"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.coverimage') })"
+          :placeholder="pi.queryPh('newsCoverImage', 'required')"
           show-count
           :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isTop')">
-      <a-form-item :label="t('entity.news.istop')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isTop"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.istop') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('newsIsTop')">
+      <a-form-item :label="pi.queryLabel('newsIsTop')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.newsIsTop"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('newsIsTop', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isRecommended')">
-      <a-form-item :label="t('entity.news.isrecommended')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isRecommended"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.isrecommended') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('newsIsRecommended')">
+      <a-form-item :label="pi.queryLabel('newsIsRecommended')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.newsIsRecommended"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('newsIsRecommended', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveTimeStart')">
-      <a-form-item :label="t('entity.news.effectivetimestart')">
+      <div v-show="isFieldVisible('newsEffectiveTimeStart')">
+      <a-form-item :label="pi.queryLabel('newsEffectiveTimeStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.effectivetimestart') })"
+          v-model:value="advancedQueryForm.newsEffectiveTimeStart"
+          :placeholder="pi.queryPh('newsEffectiveTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveTimeEnd')">
-      <a-form-item :label="t('entity.news.effectivetimeend')">
+      <div v-show="isFieldVisible('newsEffectiveTimeEnd')">
+      <a-form-item :label="pi.queryLabel('newsEffectiveTimeEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.effectivetimeend') })"
+          v-model:value="advancedQueryForm.newsEffectiveTimeEnd"
+          :placeholder="pi.queryPh('newsEffectiveTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('expireTimeStart')">
-      <a-form-item :label="t('entity.news.expiretimestart')">
+      <div v-show="isFieldVisible('newsExpireTimeStart')">
+      <a-form-item :label="pi.queryLabel('newsExpireTimeStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.expireTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.expiretimestart') })"
+          v-model:value="advancedQueryForm.newsExpireTimeStart"
+          :placeholder="pi.queryPh('newsExpireTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('expireTimeEnd')">
-      <a-form-item :label="t('entity.news.expiretimeend')">
+      <div v-show="isFieldVisible('newsExpireTimeEnd')">
+      <a-form-item :label="pi.queryLabel('newsExpireTimeEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.expireTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.expiretimeend') })"
+          v-model:value="advancedQueryForm.newsExpireTimeEnd"
+          :placeholder="pi.queryPh('newsExpireTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('readCount')">
-      <a-form-item :label="t('entity.news.readcount')">
+      <div v-show="isFieldVisible('newsReadCount')">
+      <a-form-item :label="pi.queryLabel('newsReadCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.readCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.readcount') })"
+          v-model:value="advancedQueryForm.newsReadCount"
+          :placeholder="pi.queryPh('newsReadCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('likeCount')">
-      <a-form-item :label="t('entity.news.likecount')">
+      <div v-show="isFieldVisible('newsLikeCount')">
+      <a-form-item :label="pi.queryLabel('newsLikeCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.likeCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.likecount') })"
+          v-model:value="advancedQueryForm.newsLikeCount"
+          :placeholder="pi.queryPh('newsLikeCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('commentCount')">
-      <a-form-item :label="t('entity.news.commentcount')">
+      <div v-show="isFieldVisible('newsCommentCount')">
+      <a-form-item :label="pi.queryLabel('newsCommentCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.commentCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.commentcount') })"
+          v-model:value="advancedQueryForm.newsCommentCount"
+          :placeholder="pi.queryPh('newsCommentCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('favoriteCount')">
-      <a-form-item :label="t('entity.news.favoritecount')">
+      <div v-show="isFieldVisible('newsFavoriteCount')">
+      <a-form-item :label="pi.queryLabel('newsFavoriteCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.favoriteCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.favoritecount') })"
+          v-model:value="advancedQueryForm.newsFavoriteCount"
+          :placeholder="pi.queryPh('newsFavoriteCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('shareCount')">
-      <a-form-item :label="t('entity.news.sharecount')">
+      <div v-show="isFieldVisible('newsShareCount')">
+      <a-form-item :label="pi.queryLabel('newsShareCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.shareCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.sharecount') })"
+          v-model:value="advancedQueryForm.newsShareCount"
+          :placeholder="pi.queryPh('newsShareCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachmentCount')">
-      <a-form-item :label="t('entity.news.attachmentcount')">
+      <div v-show="isFieldVisible('newsAttachmentCount')">
+      <a-form-item :label="pi.queryLabel('newsAttachmentCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.attachmentCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.attachmentcount') })"
+          v-model:value="advancedQueryForm.newsAttachmentCount"
+          :placeholder="pi.queryPh('newsAttachmentCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.news.deptid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('deptId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktDepts/tree-options"
+          :placeholder="pi.queryPh('deptId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="t('entity.news.deptname')">
+      <a-form-item :label="pi.queryLabel('deptName')">
         <a-input
           v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptname') })"
+          :placeholder="pi.queryPh('deptName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -326,72 +374,103 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publisherId')">
-      <a-form-item :label="t('entity.news.publisherid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('publisherId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.publisherId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publisherid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktUsers/options"
+          :placeholder="pi.queryPh('publisherId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publisherName')">
-      <a-form-item :label="t('entity.news.publishername')">
+      <a-form-item :label="pi.queryLabel('publisherName')">
         <a-input
           v-model:value="advancedQueryForm.publisherName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publishername') })"
+          :placeholder="pi.queryPh('publisherName', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('publishTimeStart')">
-      <a-form-item :label="t('entity.news.publishtimestart')">
+      <div v-show="isFieldVisible('newsPublishTimeStart')">
+      <a-form-item :label="pi.queryLabel('newsPublishTimeStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.publishTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.publishtimestart') })"
+          v-model:value="advancedQueryForm.newsPublishTimeStart"
+          :placeholder="pi.queryPh('newsPublishTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('publishTimeEnd')">
-      <a-form-item :label="t('entity.news.publishtimeend')">
+      <div v-show="isFieldVisible('newsPublishTimeEnd')">
+      <a-form-item :label="pi.queryLabel('newsPublishTimeEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.publishTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.publishtimeend') })"
+          v-model:value="advancedQueryForm.newsPublishTimeEnd"
+          :placeholder="pi.queryPh('newsPublishTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('targetScope')">
+      <a-form-item :label="pi.queryLabel('targetScope')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.targetScope"
+          dict-type="sys_publish_scope"
+          :placeholder="pi.queryPh('targetScope', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('targetDepartments')">
+      <a-form-item :label="pi.queryLabel('targetDepartments')">
+        <a-input
+          v-model:value="advancedQueryForm.targetDepartments"
+          :placeholder="pi.queryPh('targetDepartments', 'optional')"
+          show-count
+          :maxlength="1000"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('targetUsers')">
+      <a-form-item :label="pi.queryLabel('targetUsers')">
+        <a-input
+          v-model:value="advancedQueryForm.targetUsers"
+          :placeholder="pi.queryPh('targetUsers', 'optional')"
+          show-count
+          :maxlength="2000"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('newsStatus')">
-      <a-form-item :label="t('entity.news.status')">
+      <a-form-item :label="pi.queryLabel('newsStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.newsStatus"
           dict-type="sys_publish_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.status') })"
+          :placeholder="pi.queryPh('newsStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.news.approvalstatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.approvalstatus') })"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.news.initiatorid')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.initiatorid') })"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -399,10 +478,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.news.initiatedatstart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.initiatedatstart') })"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -410,20 +489,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.news.initiatedatend')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.initiatedatend') })"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.news.approvedby')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.approvedby') })"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -431,10 +510,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.news.approvedatstart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.approvedatstart') })"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -442,20 +521,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.news.approvedatend')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.approvedatend') })"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.news.flowinstanceid')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.flowinstanceid') })"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -463,10 +542,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -474,10 +553,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -499,7 +578,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -513,10 +592,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -530,14 +609,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.news._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.news._self"
+        v-if="importVisible"
+        :entity-i18n-key="NEWS_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -565,7 +645,7 @@
 
 <script setup lang="ts">
 /**
- * 新闻中心主实体 支持分类、置顶、推荐、社交统计管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 新闻中心主实体 支持分类、置顶、推荐、社交统计管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/news-center/news
  */
 import { ref, computed, onMounted } from 'vue'
@@ -575,22 +655,33 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import NewsForm from './components/news-form.vue'
-import NewsAttachmentPanel from './components/news-attachment-panel.vue'
-import { provideNewsMasterContext } from './composables/use-news-master-context'
 import { getNewsList, getNewsById, createNews, updateNews, deleteNewsById, deleteNewsBatch, getNewsTemplate, importNews, exportNews, updateNewsStatus } from '@/api/routine/news-center/news'
 import type { News, NewsQuery } from '@/types/routine/news-center/news'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useNewsI18n,
+  NEWS_LIST_FIELDS,
+  NEWS_QUERY_STRING_FIELDS,
+  NEWS_QUERY_FIELDS,
+  NEWS_SELF_I18N_KEY,
+} from './composables/use-news-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useNewsI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type NewsRowRecord = News | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktNews')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.news._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -606,9 +697,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<News | null>(null)
+const selectedRow = ref<NewsRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<News[]>([])
+const selectedRows = ref<NewsRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -625,87 +716,90 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of NEWS_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.newsCategory !== undefined && form.newsCategory !== null) {
+    return true
+  }
+  if (form.newsIsTop !== undefined && form.newsIsTop !== null) {
+    return true
+  }
+  if (form.newsIsRecommended !== undefined && form.newsIsRecommended !== null) {
+    return true
+  }
+  if (form.newsReadCount !== undefined && form.newsReadCount !== null) {
+    return true
+  }
+  if (form.newsLikeCount !== undefined && form.newsLikeCount !== null) {
+    return true
+  }
+  if (form.newsCommentCount !== undefined && form.newsCommentCount !== null) {
+    return true
+  }
+  if (form.newsFavoriteCount !== undefined && form.newsFavoriteCount !== null) {
+    return true
+  }
+  if (form.newsShareCount !== undefined && form.newsShareCount !== null) {
+    return true
+  }
+  if (form.newsAttachmentCount !== undefined && form.newsAttachmentCount !== null) {
+    return true
+  }
+  if (form.targetScope !== undefined && form.targetScope !== null) {
+    return true
+  }
+  if (form.newsStatus !== undefined && form.newsStatus !== null) {
+    return true
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(NEWS_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof NEWS_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    newsCategory: undefined as number | undefined,
+    newsIsTop: undefined as number | undefined,
+    newsIsRecommended: undefined as number | undefined,
+    newsReadCount: undefined as number | undefined,
+    newsLikeCount: undefined as number | undefined,
+    newsCommentCount: undefined as number | undefined,
+    newsFavoriteCount: undefined as number | undefined,
+    newsShareCount: undefined as number | undefined,
+    newsAttachmentCount: undefined as number | undefined,
+    targetScope: undefined as number | undefined,
+    newsStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  newsCode: '',
-  newsCategory: undefined as number | undefined,
-  newsTitle: '',
-  newsSummary: '',
-  tags: '',
-  newsContent: '',
-  newsCoverImage: '',
-  isTop: undefined as number | undefined,
-  isRecommended: undefined as number | undefined,
-  effectiveTimeStart: '',
-  effectiveTimeEnd: '',
-  expireTimeStart: '',
-  expireTimeEnd: '',
-  readCount: undefined as number | undefined,
-  likeCount: undefined as number | undefined,
-  commentCount: undefined as number | undefined,
-  favoriteCount: undefined as number | undefined,
-  shareCount: undefined as number | undefined,
-  attachmentCount: undefined as number | undefined,
-  deptId: '',
-  deptName: '',
-  publisherId: '',
-  publisherName: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
-  newsStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'newsCode', label: t('entity.news.code') },
-  { key: 'newsCategory', label: t('entity.news.category') },
-  { key: 'newsTitle', label: t('entity.news.title') },
-  { key: 'newsSummary', label: t('entity.news.summary') },
-  { key: 'tags', label: t('entity.news.tags') },
-  { key: 'newsContent', label: t('entity.news.content') },
-  { key: 'newsCoverImage', label: t('entity.news.coverimage') },
-  { key: 'isTop', label: t('entity.news.istop') },
-  { key: 'isRecommended', label: t('entity.news.isrecommended') },
-  { key: 'effectiveTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.news.effectivetime')) },
-  { key: 'effectiveTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.news.effectivetime')) },
-  { key: 'expireTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.news.expiretime')) },
-  { key: 'expireTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.news.expiretime')) },
-  { key: 'readCount', label: t('entity.news.readcount') },
-  { key: 'likeCount', label: t('entity.news.likecount') },
-  { key: 'commentCount', label: t('entity.news.commentcount') },
-  { key: 'favoriteCount', label: t('entity.news.favoritecount') },
-  { key: 'shareCount', label: t('entity.news.sharecount') },
-  { key: 'attachmentCount', label: t('entity.news.attachmentcount') },
-  { key: 'deptId', label: t('entity.news.deptid') },
-  { key: 'deptName', label: t('entity.news.deptname') },
-  { key: 'publisherId', label: t('entity.news.publisherid') },
-  { key: 'publisherName', label: t('entity.news.publishername') },
-  { key: 'publishTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.news.publishtime')) },
-  { key: 'publishTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.news.publishtime')) },
-  { key: 'newsStatus', label: t('entity.news.status') },
-  { key: 'approvalStatus', label: t('entity.news.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.news.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.news.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.news.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.news.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.news.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.news.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.news.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  NEWS_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -723,12 +817,10 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-/** 主表选中行上下文（右侧明细面板读取） */
-const { selectedMasterRow } = provideNewsMasterContext()
-const newsAttachmentPanelRef = ref<InstanceType<typeof NewsAttachmentPanel> | null>(null)
+
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {NewsQuery} 查询 DTO
  */
@@ -749,343 +841,81 @@ function buildListQuery(overrides?: Partial<NewsQuery>): NewsQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('newsCode', form.newsCode)
+  for (const key of NEWS_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.newsCategory !== undefined && form.newsCategory !== null) {
     query.newsCategory = form.newsCategory
   }
-  assignTrimmed('newsTitle', form.newsTitle)
-  assignTrimmed('newsSummary', form.newsSummary)
-  assignTrimmed('tags', form.tags)
-  assignTrimmed('newsContent', form.newsContent)
-  assignTrimmed('newsCoverImage', form.newsCoverImage)
-  if (form.isTop !== undefined && form.isTop !== null) {
-    query.isTop = form.isTop
+  if (form.newsIsTop !== undefined && form.newsIsTop !== null) {
+    query.newsIsTop = form.newsIsTop
   }
-  if (form.isRecommended !== undefined && form.isRecommended !== null) {
-    query.isRecommended = form.isRecommended
+  if (form.newsIsRecommended !== undefined && form.newsIsRecommended !== null) {
+    query.newsIsRecommended = form.newsIsRecommended
   }
-  assignTrimmed('effectiveTimeStart', form.effectiveTimeStart)
-  assignTrimmed('effectiveTimeEnd', form.effectiveTimeEnd)
-  assignTrimmed('expireTimeStart', form.expireTimeStart)
-  assignTrimmed('expireTimeEnd', form.expireTimeEnd)
-  if (form.readCount !== undefined && form.readCount !== null) {
-    query.readCount = form.readCount
+  if (form.newsReadCount !== undefined && form.newsReadCount !== null) {
+    query.newsReadCount = form.newsReadCount
   }
-  if (form.likeCount !== undefined && form.likeCount !== null) {
-    query.likeCount = form.likeCount
+  if (form.newsLikeCount !== undefined && form.newsLikeCount !== null) {
+    query.newsLikeCount = form.newsLikeCount
   }
-  if (form.commentCount !== undefined && form.commentCount !== null) {
-    query.commentCount = form.commentCount
+  if (form.newsCommentCount !== undefined && form.newsCommentCount !== null) {
+    query.newsCommentCount = form.newsCommentCount
   }
-  if (form.favoriteCount !== undefined && form.favoriteCount !== null) {
-    query.favoriteCount = form.favoriteCount
+  if (form.newsFavoriteCount !== undefined && form.newsFavoriteCount !== null) {
+    query.newsFavoriteCount = form.newsFavoriteCount
   }
-  if (form.shareCount !== undefined && form.shareCount !== null) {
-    query.shareCount = form.shareCount
+  if (form.newsShareCount !== undefined && form.newsShareCount !== null) {
+    query.newsShareCount = form.newsShareCount
   }
-  if (form.attachmentCount !== undefined && form.attachmentCount !== null) {
-    query.attachmentCount = form.attachmentCount
+  if (form.newsAttachmentCount !== undefined && form.newsAttachmentCount !== null) {
+    query.newsAttachmentCount = form.newsAttachmentCount
   }
-  assignTrimmed('deptId', form.deptId)
-  assignTrimmed('deptName', form.deptName)
-  assignTrimmed('publisherId', form.publisherId)
-  assignTrimmed('publisherName', form.publisherName)
-  assignTrimmed('publishTimeStart', form.publishTimeStart)
-  assignTrimmed('publishTimeEnd', form.publishTimeEnd)
+  if (form.targetScope !== undefined && form.targetScope !== null) {
+    query.targetScope = form.targetScope
+  }
   if (form.newsStatus !== undefined && form.newsStatus !== null) {
     query.newsStatus = form.newsStatus
   }
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 主表行点击选中 key（左右主子表高亮） */
-const selectedMasterKey = ref('')
-
-/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: News | null) {
-  selectedMasterRow.value = record
-  selectedMasterKey.value = record ? getNewsId(record) : ''
-}
 
 /**
- * 左右主子表：主表行选中
- * @param record 主表行
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
  */
-function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as News
-  const key = getNewsId(row)
-  selectedRowKeys.value = [key]
-  selectedRows.value = [row]
-  selectedRow.value = row
-  syncMasterSelection(row)
-}
-
-/**
- * 主表分页变更（v-model 已同步页码与 pageSize）
- * @param _page 页码
- * @param _pageSize 每页条数
- */
-function handleMasterPaginationChange(_page: number, _pageSize: number) {
-  loadData()
-}
-
-/** 加载主表详情并回填当前页 dataSource */
-async function loadNewsDetail(record: News): Promise<News | null> {
-  const id = getNewsId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getNewsById(id)
-    const index = dataSource.value.findIndex((row) => getNewsId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as News
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
+function buildNewsListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
   }
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'newsId',
-    key: 'newsId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsId') ?? ''
-  },
-  {
-    title: t('entity.news.code'),
-    dataIndex: 'newsCode',
-    key: 'newsCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCode') ?? ''
-  },
-  {
-    title: t('entity.news.category'),
-    dataIndex: 'newsCategory',
-    key: 'newsCategory',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCategory') ?? ''
-  },
-  {
-    title: t('entity.news.title'),
-    dataIndex: 'newsTitle',
-    key: 'newsTitle',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsTitle') ?? ''
-  },
-  {
-    title: t('entity.news.summary'),
-    dataIndex: 'newsSummary',
-    key: 'newsSummary',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsSummary') ?? ''
-  },
-  {
-    title: t('entity.news.tags'),
-    dataIndex: 'tags',
-    key: 'tags',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'tags') ?? ''
-  },
-  {
-    title: t('entity.news.content'),
-    dataIndex: 'newsContent',
-    key: 'newsContent',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsContent') ?? ''
-  },
-  {
-    title: t('entity.news.coverimage'),
-    dataIndex: 'newsCoverImage',
-    key: 'newsCoverImage',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCoverImage') ?? ''
-  },
-  {
-    title: t('entity.news.istop'),
-    dataIndex: 'isTop',
-    key: 'isTop',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'isTop') ?? ''
-  },
-  {
-    title: t('entity.news.isrecommended'),
-    dataIndex: 'isRecommended',
-    key: 'isRecommended',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'isRecommended') ?? ''
-  },
-  {
-    title: t('entity.news.effectivetime'),
-    dataIndex: 'effectiveTime',
-    key: 'effectiveTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'effectiveTime') ?? ''
-  },
-  {
-    title: t('entity.news.expiretime'),
-    dataIndex: 'expireTime',
-    key: 'expireTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'expireTime') ?? ''
-  },
-  {
-    title: t('entity.news.readcount'),
-    dataIndex: 'readCount',
-    key: 'readCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'readCount') ?? ''
-  },
-  {
-    title: t('entity.news.likecount'),
-    dataIndex: 'likeCount',
-    key: 'likeCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'likeCount') ?? ''
-  },
-  {
-    title: t('entity.news.commentcount'),
-    dataIndex: 'commentCount',
-    key: 'commentCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'commentCount') ?? ''
-  },
-  {
-    title: t('entity.news.favoritecount'),
-    dataIndex: 'favoriteCount',
-    key: 'favoriteCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'favoriteCount') ?? ''
-  },
-  {
-    title: t('entity.news.sharecount'),
-    dataIndex: 'shareCount',
-    key: 'shareCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'shareCount') ?? ''
-  },
-  {
-    title: t('entity.news.attachmentcount'),
-    dataIndex: 'attachmentCount',
-    key: 'attachmentCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'attachmentCount') ?? ''
-  },
-  {
-    title: t('entity.news.deptid'),
-    dataIndex: 'deptId',
-    key: 'deptId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'deptId') ?? ''
-  },
-  {
-    title: t('entity.news.deptname'),
-    dataIndex: 'deptName',
-    key: 'deptName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'deptName') ?? ''
-  },
-  {
-    title: t('entity.news.publisherid'),
-    dataIndex: 'publisherId',
-    key: 'publisherId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'publisherId') ?? ''
-  },
-  {
-    title: t('entity.news.publishername'),
-    dataIndex: 'publisherName',
-    key: 'publisherName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'publisherName') ?? ''
-  },
-  {
-    title: t('entity.news.publishtime'),
-    dataIndex: 'publishTime',
-    key: 'publishTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'publishTime') ?? ''
-  },
-  {
-    title: t('entity.news.status'),
-    dataIndex: 'newsStatus',
-    key: 'newsStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+  buildNewsListColumn('newsId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...NEWS_LIST_FIELDS.map((key) => buildNewsListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -1094,7 +924,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'routine:news:center:update',
-        onClick: (record: News) => handleEdit(record)
+        onClick: (record: NewsRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1102,53 +932,81 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'routine:news:center:delete',
-        onClick: (record: News) => handleDeleteOne(record)
+        onClick: (record: NewsRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getNewsId = (record: any): string => record?.[entityIdName] ?? ''
+const getNewsId = (record: NewsRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getNewsField = (record: any, field: string): any => record?.[field]
+const getNewsDictValue = (
+  record: NewsRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: News[]) => {
+  onChange: (keys: (string | number)[], rows: NewsRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
-    if (rows.length === 1 && rows[0]) {
-      syncMasterSelection(rows[0])
-    } else if (rows.length === 0) {
-      syncMasterSelection(null)
-    }
   },
-  onSelect: (record: News, selected: boolean) => {
+  onSelect: (record: NewsRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-      syncMasterSelection(record)
     } else if (selectedRow.value && getNewsId(selectedRow.value) === getNewsId(record)) {
       selectedRow.value = null
-      syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: News[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: NewsRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
-    syncMasterSelection(selectedRow.value)
   }
 }))
+
+/** 行点击切换选中（与 rowSelection 联动） */
+const onClickRow = (record: NewsRowRecord) => ({
+  onClick: () => {
+    const key = getNewsId(record)
+    const index = selectedRowKeys.value.indexOf(key)
+    if (index > -1) {
+      selectedRowKeys.value.splice(index, 1)
+    } else {
+      selectedRowKeys.value.push(key)
+    }
+    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getNewsId(item)))
+    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
+    if (rowSelection.value.onChange) {
+      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
+    }
+  }
+})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getNewsList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1174,65 +1032,32 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  newsCode: '',
-  newsCategory: undefined as number | undefined,
-  newsTitle: '',
-  newsSummary: '',
-  tags: '',
-  newsContent: '',
-  newsCoverImage: '',
-  isTop: undefined as number | undefined,
-  isRecommended: undefined as number | undefined,
-  effectiveTimeStart: '',
-  effectiveTimeEnd: '',
-  expireTimeStart: '',
-  expireTimeEnd: '',
-  readCount: undefined as number | undefined,
-  likeCount: undefined as number | undefined,
-  commentCount: undefined as number | undefined,
-  favoriteCount: undefined as number | undefined,
-  shareCount: undefined as number | undefined,
-  attachmentCount: undefined as number | undefined,
-  deptId: '',
-  deptName: '',
-  publisherId: '',
-  publisherName: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
-  newsStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.news._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: News) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.news._self') })
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: NewsRowRecord) {
+  const id = getNewsId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
-    const detail = await loadNewsDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
+    const detail = await getNewsById(id)
+    formData.value = detail ?? ({ ...record } as Partial<News>)
     formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
   } finally {
     formLoading.value = false
   }
@@ -1243,7 +1068,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.news._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1261,17 +1086,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateNews(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.news._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createNews(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.news._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
-    if (selectedMasterKey.value) {
-  newsAttachmentPanelRef.value?.reload?.()
-    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1295,15 +1117,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importNews(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importNews(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1314,6 +1139,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportNews(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1337,28 +1165,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.news._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[News] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.news._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: News) {
+async function handleDeleteOne(record: NewsRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.news._self'), name: t('common.tip.this.target', { target: t('entity.news._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteNewsById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.news._self') }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1366,22 +1190,18 @@ async function handleDeleteOne(record: News) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.news._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.news._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteNewsBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.news._self') }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1399,46 +1219,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  newsCode: '',
-  newsCategory: undefined as number | undefined,
-  newsTitle: '',
-  newsSummary: '',
-  tags: '',
-  newsContent: '',
-  newsCoverImage: '',
-  isTop: undefined as number | undefined,
-  isRecommended: undefined as number | undefined,
-  effectiveTimeStart: '',
-  effectiveTimeEnd: '',
-  expireTimeStart: '',
-  expireTimeEnd: '',
-  readCount: undefined as number | undefined,
-  likeCount: undefined as number | undefined,
-  commentCount: undefined as number | undefined,
-  favoriteCount: undefined as number | undefined,
-  shareCount: undefined as number | undefined,
-  attachmentCount: undefined as number | undefined,
-  deptId: '',
-  deptName: '',
-  publisherId: '',
-  publisherName: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
-  newsStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */
@@ -1465,4 +1246,17 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
+/** 分页页码变更 */
+function handlePaginationChange(page: number, size: number) {
+  currentPage.value = page
+  pageSize.value = size
+  loadData()
+}
+
+/** 分页每页条数变更（重置到第 1 页） */
+function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
+  pageSize.value = size
+  loadData()
+}
 </script>

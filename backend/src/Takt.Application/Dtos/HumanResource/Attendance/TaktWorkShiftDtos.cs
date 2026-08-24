@@ -37,7 +37,7 @@ public class TaktWorkShiftDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -89,7 +89,7 @@ public class TaktWorkShiftQueryDto : TaktPagedQuery
     public string? EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? CrossMidnight { get; set; }
 
@@ -99,7 +99,7 @@ public class TaktWorkShiftQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -174,7 +174,7 @@ public class TaktWorkShiftCreateDto
     public string EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int CrossMidnight { get; set; } = 0;
 
@@ -234,7 +234,7 @@ public class TaktWorkShiftSortDto
     public long WorkShiftId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -285,7 +285,7 @@ public class TaktWorkShiftTemplateDto
     public string? EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? CrossMidnight { get; set; }
 
@@ -348,7 +348,7 @@ public class TaktWorkShiftImportDto
     public string? EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? CrossMidnight { get; set; }
 
@@ -411,7 +411,7 @@ public class TaktWorkShiftExportDto
     public string EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int CrossMidnight { get; set; } = 0;
 
@@ -421,7 +421,7 @@ public class TaktWorkShiftExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktPlantService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂应用服务实现
 // 
@@ -573,13 +573,13 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
 
         if (queryDto?.RegisteredCapital.HasValue == true)
         {
-            var registeredCapital = queryDto.RegisteredCapital;
+            var registeredCapital = queryDto.RegisteredCapital.Value;
             exp = exp.And(x => x.RegisteredCapital == registeredCapital);
         }
 
         if (queryDto?.PlantExistence.HasValue == true)
         {
-            var plantExistence = queryDto.PlantExistence;
+            var plantExistence = queryDto.PlantExistence.Value;
             exp = exp.And(x => x.PlantExistence == plantExistence);
         }
 
@@ -669,13 +669,13 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.PlantStatus.HasValue == true)
         {
-            var plantStatus = queryDto.PlantStatus;
+            var plantStatus = queryDto.PlantStatus.Value;
             exp = exp.And(x => x.PlantStatus == plantStatus);
         }
 
@@ -693,37 +693,37 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
 
         if (queryDto?.EstablishmentDateStart.HasValue == true)
         {
-            var establishmentDateStart = queryDto.EstablishmentDateStart;
+            var establishmentDateStart = queryDto.EstablishmentDateStart.Value;
             exp = exp.And(x => x.EstablishmentDate >= establishmentDateStart);
         }
 
         if (queryDto?.EstablishmentDateEnd.HasValue == true)
         {
-            var establishmentDateEnd = queryDto.EstablishmentDateEnd;
+            var establishmentDateEnd = queryDto.EstablishmentDateEnd.Value;
             exp = exp.And(x => x.EstablishmentDate <= establishmentDateEnd);
         }
 
         if (queryDto?.ClosingDateStart.HasValue == true)
         {
-            var closingDateStart = queryDto.ClosingDateStart;
+            var closingDateStart = queryDto.ClosingDateStart.Value;
             exp = exp.And(x => x.ClosingDate >= closingDateStart);
         }
 
         if (queryDto?.ClosingDateEnd.HasValue == true)
         {
-            var closingDateEnd = queryDto.ClosingDateEnd;
+            var closingDateEnd = queryDto.ClosingDateEnd.Value;
             exp = exp.And(x => x.ClosingDate <= closingDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

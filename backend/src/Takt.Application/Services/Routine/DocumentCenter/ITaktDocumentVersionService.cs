@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.DocumentCenter
 // 文件名称：ITaktDocumentVersionService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文管文档版本应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktDocumentVersionService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteDocumentVersionBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新文管文档版本作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktDocumentVersionDto> UpdateDocumentVersionObsoleteAsync(TaktDocumentVersionObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

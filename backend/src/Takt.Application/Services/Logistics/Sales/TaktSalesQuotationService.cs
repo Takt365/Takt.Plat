@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesQuotationService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售报价应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     }
 
     /// <summary>
-    /// 获取销售报价列表（分页）
+    /// 获取销售报价列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSalesQuotationDto>> GetSalesQuotationListAsync(TaktSalesQuotationQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSalesQuotationDto>.Create(
+                new List<TaktSalesQuotationDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _salesQuotationRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -119,7 +127,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     public async Task<TaktSalesQuotationDto> CreateSalesQuotationAsync(TaktSalesQuotationCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesQuotation>();
-        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_quotation_code_unique = await _uniqueValidator.IsUniqueAsync(
             _salesQuotationRepository,
             x => x.PlantCode == entity.PlantCode
@@ -147,7 +154,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             throw new TaktBusinessException("销售报价不存在");
         }
         dto.Adapt(entity);
-        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_quotation_code_unique = await _uniqueValidator.IsUniqueAsync(
             _salesQuotationRepository,
             x => x.PlantCode == entity.PlantCode
@@ -253,7 +259,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             try
             {
                 var entity = rows[i].Adapt<TaktSalesQuotation>();
-                entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
                 var importKey = $"{entity.PlantCode}|{entity.SalesQuotationCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -288,7 +293,15 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSalesQuotationAsync(TaktSalesQuotationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSalesQuotationQueryDto());
+        var queryDto = query ?? new TaktSalesQuotationQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSalesQuotationExportDto>(),
+                sheetName ?? "销售报价数据",
+                fileName ?? "销售报价导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _salesQuotationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -387,6 +400,11 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             {
                 var childDto = itemsForSave[i];
                 childDto.SalesQuotationId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.SalesQuotationCode = entity.SalesQuotationCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -405,13 +423,12 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                     submittedIds.Add(childDto.SalesQuotationItemId);
                     var isUniqueUpdate_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _salesQuotationItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SalesQuotationId == x.SalesQuotationId
+                        x => x.SalesQuotationId == x.SalesQuotationId
                 && x.LineNumber == x.LineNumber,
                         childDto.SalesQuotationItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_sales_quotation_item_line_unique)
                     {
-                        throw new TaktBusinessException("销售报价明细的CompanyCode、SalesQuotationId、LineNumber已存在");
+                        throw new TaktBusinessException("销售报价明细的SalesQuotationId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.SalesQuotationItemId;
@@ -423,12 +440,11 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                 {
                     var isUniqueCreate_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _salesQuotationItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SalesQuotationId == x.SalesQuotationId
+                        x => x.SalesQuotationId == x.SalesQuotationId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_sales_quotation_item_line_unique)
                     {
-                        throw new TaktBusinessException("销售报价明细的CompanyCode、SalesQuotationId、LineNumber已存在");
+                        throw new TaktBusinessException("销售报价明细的SalesQuotationId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktSalesQuotationItem>();
                     child.Id = 0;
@@ -477,148 +493,270 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     {
         var exp = Expressionable.Create<TaktSalesQuotation>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SalesQuotationCode != null && x.SalesQuotationCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.SalesBy != null && x.SalesBy.Contains(keywords))
-                || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
-                || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
-                || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
+                || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.QuotationStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.QuotationDate).Contains(keywords)
-                || SqlFunc.ToString(x.ValidUntilDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesQuotationCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.SalesQuotationCode != null && x.SalesQuotationCode.Contains(queryDto.SalesQuotationCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesQuotationCode))
         {
-            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
+            var salesQuotationCode = queryDto.SalesQuotationCode;
+            exp = exp.And(x => x.SalesQuotationCode != null && x.SalesQuotationCode.Contains(salesQuotationCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerCode))
         {
-            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
+            var customerCode = queryDto.CustomerCode;
+            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(customerCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.SalesBy != null && x.SalesBy.Contains(queryDto.SalesBy));
+            var customerName1 = queryDto.CustomerName1;
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(customerName1));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesBy))
+        {
+            var salesBy = queryDto.SalesBy;
+            exp = exp.And(x => x.SalesBy != null && x.SalesBy.Contains(salesBy));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalQuantity == queryDto.TotalQuantity);
+            var totalQuantity = queryDto.TotalQuantity.Value;
+            exp = exp.And(x => x.TotalQuantity == totalQuantity);
         }
 
         if (queryDto?.TotalAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TotalAmount == queryDto.TotalAmount);
+            var totalAmount = queryDto.TotalAmount.Value;
+            exp = exp.And(x => x.TotalAmount == totalAmount);
         }
 
         if (queryDto?.DiscountAmount.HasValue == true)
         {
-            exp = exp.And(x => x.DiscountAmount == queryDto.DiscountAmount);
+            var discountAmount = queryDto.DiscountAmount.Value;
+            exp = exp.And(x => x.DiscountAmount == discountAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxCode))
+        {
+            var taxCode = queryDto.TaxCode;
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(taxCode));
         }
 
         if (queryDto?.TaxRate.HasValue == true)
         {
-            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
+            var taxRate = queryDto.TaxRate.Value;
+            exp = exp.And(x => x.TaxRate == taxRate);
         }
 
         if (queryDto?.TaxAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
+            var taxAmount = queryDto.TaxAmount.Value;
+            exp = exp.And(x => x.TaxAmount == taxAmount);
         }
 
         if (queryDto?.ActualAmount.HasValue == true)
         {
-            exp = exp.And(x => x.ActualAmount == queryDto.ActualAmount);
+            var actualAmount = queryDto.ActualAmount.Value;
+            exp = exp.And(x => x.ActualAmount == actualAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesOrderCode))
         {
-            exp = exp.And(x => x.SalesOrderCode != null && x.SalesOrderCode.Contains(queryDto.SalesOrderCode));
+            var salesOrderCode = queryDto.SalesOrderCode;
+            exp = exp.And(x => x.SalesOrderCode != null && x.SalesOrderCode.Contains(salesOrderCode));
         }
 
         if (queryDto?.QuotationStatus.HasValue == true)
         {
-            exp = exp.And(x => x.QuotationStatus == queryDto.QuotationStatus);
+            var quotationStatus = queryDto.QuotationStatus.Value;
+            exp = exp.And(x => x.QuotationStatus == quotationStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.QuotationDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.QuotationDate >= queryDto.QuotationDateStart);
+            var quotationDateStart = queryDto.QuotationDateStart.Value;
+            exp = exp.And(x => x.QuotationDate >= quotationDateStart);
         }
 
         if (queryDto?.QuotationDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.QuotationDate <= queryDto.QuotationDateEnd);
+            var quotationDateEnd = queryDto.QuotationDateEnd.Value;
+            exp = exp.And(x => x.QuotationDate <= quotationDateEnd);
         }
 
         if (queryDto?.ValidUntilDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidUntilDate >= queryDto.ValidUntilDateStart);
+            var validUntilDateStart = queryDto.ValidUntilDateStart.Value;
+            exp = exp.And(x => x.ValidUntilDate >= validUntilDateStart);
         }
 
         if (queryDto?.ValidUntilDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidUntilDate <= queryDto.ValidUntilDateEnd);
+            var validUntilDateEnd = queryDto.ValidUntilDateEnd.Value;
+            exp = exp.And(x => x.ValidUntilDate <= validUntilDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSalesQuotationQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesQuotationCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesBy))
+        {
+            return true;
+        }
+        if (queryDto.TotalQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DiscountAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxCode))
+        {
+            return true;
+        }
+        if (queryDto.TaxRate.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TaxAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.QuotationStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.QuotationDateStart.HasValue || queryDto.QuotationDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ValidUntilDateStart.HasValue || queryDto.ValidUntilDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

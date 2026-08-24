@@ -54,12 +54,12 @@ public class TaktPayScale : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "max_salary", ColumnDescription = "上限金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal MaxSalary { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "scale_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ScaleStatus { get; set; } = 1;

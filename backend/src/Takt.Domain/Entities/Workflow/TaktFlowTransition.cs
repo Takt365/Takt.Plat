@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Workflow;
 
@@ -25,52 +24,52 @@ namespace Takt.Domain.Entities.Workflow;
 public class TaktFlowTransition : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = false)]
     public long InstanceId { get; set; }
     /// <summary>
-    /// 节点 ID
+    /// 节点 ID（设计器 nodeId）
     /// </summary>
     [SugarColumn(ColumnName = "activity_id", ColumnDescription = "节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? ActivityId { get; set; }
     /// <summary>
-    /// 节点名称
+    /// 节点名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "activity_name", ColumnDescription = "节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? ActivityName { get; set; }
     /// <summary>
-    /// 节点类型（如 userTask、start、end）
+    /// 节点类型（设计器 nodeType 语义；运行时文本）
     /// </summary>
     [SugarColumn(ColumnName = "activity_type", ColumnDescription = "节点类型", ColumnDataType = "varchar", Length = 32, IsNullable = true)]
     public string? ActivityType { get; set; }
     /// <summary>
-    /// 源节点 ID
+    /// 源节点 ID（设计器 nodeId）
     /// </summary>
     [SugarColumn(ColumnName = "from_node_id", ColumnDescription = "源节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? FromNodeId { get; set; }
     /// <summary>
-    /// 源节点名称
+    /// 源节点名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "from_node_name", ColumnDescription = "源节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? FromNodeName { get; set; }
     /// <summary>
-    /// 目标节点 ID
+    /// 目标节点 ID（设计器 nodeId）
     /// </summary>
     [SugarColumn(ColumnName = "to_node_id", ColumnDescription = "目标节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? ToNodeId { get; set; }
     /// <summary>
-    /// 目标节点名称
+    /// 目标节点名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "to_node_name", ColumnDescription = "目标节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? ToNodeName { get; set; }
     /// <summary>
-    /// 操作人 ID
+    /// 操作人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "transition_user_id", ColumnDescription = "操作人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long TransitionUserId { get; set; }
     /// <summary>
-    /// 操作人姓名
+    /// 操作人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "transition_user_name", ColumnDescription = "操作人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? TransitionUserName { get; set; }
@@ -95,10 +94,10 @@ public class TaktFlowTransition : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "transition_comment", ColumnDescription = "操作意见", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? TransitionComment { get; set; }
     /// <summary>
-    /// 动作类型
+    /// 动作类型（字典 sys_flow_action_type；0=发起 1=通过 2=驳回 3=撤回 4=转办 5=加签 6=减签 7=挂起 8=恢复 9=终止 10=抄送）
     /// </summary>
     [SugarColumn(ColumnName = "action_type", ColumnDescription = "动作类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktFlowActionType ActionType { get; set; } = TaktFlowActionType.Start;
+    public int ActionType { get; set; } = 0;
     // ========================================
     // 导航属性区域
     // ========================================

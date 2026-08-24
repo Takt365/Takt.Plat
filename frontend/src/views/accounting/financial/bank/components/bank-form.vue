@@ -36,6 +36,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -236,7 +237,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pobkCurAc"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('pobkCurAc')"
                 />
               </a-form-item>
@@ -354,7 +355,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.sddB2b"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('sddB2b')"
                 />
               </a-form-item>
@@ -366,7 +367,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.sddCore"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('sddCore')"
                 />
               </a-form-item>

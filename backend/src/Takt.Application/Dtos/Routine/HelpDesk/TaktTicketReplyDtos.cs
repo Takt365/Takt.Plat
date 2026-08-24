@@ -73,7 +73,7 @@ public class TaktTicketReplyDto : TaktCompanyDtoBase
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no；1=是 0=否，仅客服可见）
     /// </summary>
     public int IsInternal { get; set; } = 0;
 
@@ -148,7 +148,7 @@ public class TaktTicketReplyQueryDto : TaktPagedQuery
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no；1=是 0=否，仅客服可见）
     /// </summary>
     public int? IsInternal { get; set; }
 
@@ -241,7 +241,7 @@ public class TaktTicketReplyCreateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no；1=是 0=否，仅客服可见）
     /// </summary>
     public int IsInternal { get; set; } = 0;
 
@@ -339,7 +339,7 @@ public class TaktTicketReplyTemplateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no；1=是 0=否，仅客服可见）
     /// </summary>
     public int? IsInternal { get; set; }
 
@@ -413,7 +413,7 @@ public class TaktTicketReplyImportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no；1=是 0=否，仅客服可见）
     /// </summary>
     public int? IsInternal { get; set; }
 
@@ -483,7 +483,7 @@ public class TaktTicketReplyExportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no；1=是 0=否，仅客服可见）
     /// </summary>
     public int IsInternal { get; set; } = 0;
 

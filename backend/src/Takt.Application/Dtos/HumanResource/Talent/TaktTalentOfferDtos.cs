@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Talent
 // 文件名称：TaktTalentOfferDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentOffer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTalentOffer 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Talent;
 // ========================================
 
 /// <summary>
-/// 录用信息（审批单，状态见 TaktApprovalEntityBase.ApprovalStatus）
+/// 录用信息（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// 对应前端 TaktTalentOfferDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -36,39 +36,39 @@ public class TaktTalentOfferDto : TaktApprovalDtoBase
     public long TalentOfferId { get; set; }
 
     /// <summary>
-    /// 职位发布ID（用人需求→职位发布→录用）
+    /// 职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long JobPostingId { get; set; }
 
     /// <summary>
-    /// 职位发布名称（填充字段）
+    /// 职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）
     /// </summary>
     public string? JobPostingName { get; set; }
 
     /// <summary>
     /// 录用编码（租户+公司内业务编码）
     /// </summary>
-    public string OfferNo { get; set; } = string.Empty;
+    public string OfferCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）
+    /// 录用日期（确认录用/发 offer）
     /// </summary>
     public DateTime HireDate { get; set; }
 
     /// <summary>
-    /// 关联员工ID（录用通过并建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 关联员工名称（填充字段）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     public string? EmployeeName { get; set; }
 
     /// <summary>
-    /// 拟录用部门ID
+    /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
@@ -79,7 +79,7 @@ public class TaktTalentOfferDto : TaktApprovalDtoBase
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 拟录用岗位ID
+    /// 拟录用岗位（选项 TaktPosts/options，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -124,7 +124,7 @@ public class TaktTalentOfferQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -133,13 +133,13 @@ public class TaktTalentOfferQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 职位发布ID（用人需求→职位发布→录用）
+    /// 职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? JobPostingId { get; set; }
@@ -147,26 +147,26 @@ public class TaktTalentOfferQueryDto : TaktPagedQuery
     /// <summary>
     /// 录用编码（租户+公司内业务编码）
     /// </summary>
-    public string? OfferNo { get; set; } = string.Empty;
+    public string? OfferCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）（范围查询-开始）
+    /// 录用日期（确认录用/发 offer）（范围查询-开始）
     /// </summary>
     public DateTime? HireDateStart { get; set; }
 
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）（范围查询-结束）
+    /// 录用日期（确认录用/发 offer）（范围查询-结束）
     /// </summary>
     public DateTime? HireDateEnd { get; set; }
 
     /// <summary>
-    /// 关联员工ID（录用通过并建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 拟录用部门ID
+    /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -177,7 +177,7 @@ public class TaktTalentOfferQueryDto : TaktPagedQuery
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 拟录用岗位ID
+    /// 拟录用岗位（选项 TaktPosts/options，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -254,11 +254,6 @@ public class TaktTalentOfferQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 录用编码（租户+公司内业务编码）
-    /// </summary>
-    public string OfferCode { get; set; } = string.Empty;
 }
 
 // ========================================
@@ -285,14 +280,13 @@ public class TaktTalentOfferCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 职位发布ID（用人需求→职位发布→录用）
+    /// 职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long JobPostingId { get; set; }
@@ -301,21 +295,21 @@ public class TaktTalentOfferCreateDto
     /// 录用编码（租户+公司内业务编码）
     /// </summary>
     [Required(ErrorMessage = "录用编码（租户+公司内业务编码）不能为空")]
-    public string OfferNo { get; set; } = string.Empty;
+    public string OfferCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）
+    /// 录用日期（确认录用/发 offer）
     /// </summary>
     public DateTime HireDate { get; set; }
 
     /// <summary>
-    /// 关联员工ID（录用通过并建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 拟录用部门ID
+    /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
@@ -323,11 +317,10 @@ public class TaktTalentOfferCreateDto
     /// <summary>
     /// 拟录用部门名称
     /// </summary>
-    [Required(ErrorMessage = "拟录用部门名称不能为空")]
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 拟录用岗位ID
+    /// 拟录用岗位（选项 TaktPosts/options，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -377,6 +370,11 @@ public class TaktTalentOfferUpdateDto : TaktTalentOfferCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TalentOfferId { get; set; }
 
+    /// <summary>
+    /// 入职待办（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeOnboardingUpdateDto>? EmployeeOnboardings { get; set; }
+
 }
 
 // ========================================
@@ -403,13 +401,13 @@ public class TaktTalentOfferTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 职位发布ID（用人需求→职位发布→录用）
+    /// 职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? JobPostingId { get; set; }
@@ -417,21 +415,21 @@ public class TaktTalentOfferTemplateDto
     /// <summary>
     /// 录用编码（租户+公司内业务编码）
     /// </summary>
-    public string? OfferNo { get; set; } = string.Empty;
+    public string? OfferCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）
+    /// 录用日期（确认录用/发 offer）
     /// </summary>
     public DateTime? HireDate { get; set; }
 
     /// <summary>
-    /// 关联员工ID（录用通过并建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 拟录用部门ID
+    /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -442,7 +440,7 @@ public class TaktTalentOfferTemplateDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 拟录用岗位ID
+    /// 拟录用岗位（选项 TaktPosts/options，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -494,14 +492,13 @@ public class TaktTalentOfferImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 职位发布ID（用人需求→职位发布→录用）
+    /// 职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? JobPostingId { get; set; }
@@ -509,21 +506,21 @@ public class TaktTalentOfferImportDto
     /// <summary>
     /// 录用编码（租户+公司内业务编码）
     /// </summary>
-    public string? OfferNo { get; set; } = string.Empty;
+    public string? OfferCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）
+    /// 录用日期（确认录用/发 offer）
     /// </summary>
     public DateTime? HireDate { get; set; }
 
     /// <summary>
-    /// 关联员工ID（录用通过并建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 拟录用部门ID
+    /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -534,7 +531,7 @@ public class TaktTalentOfferImportDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 拟录用岗位ID
+    /// 拟录用岗位（选项 TaktPosts/options，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -583,7 +580,22 @@ public class TaktTalentOfferExportDto
     public long TalentOfferId { get; set; }
 
     /// <summary>
-    /// 职位发布ID（用人需求→职位发布→录用）
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long JobPostingId { get; set; }
@@ -591,21 +603,21 @@ public class TaktTalentOfferExportDto
     /// <summary>
     /// 录用编码（租户+公司内业务编码）
     /// </summary>
-    public string OfferNo { get; set; } = string.Empty;
+    public string OfferCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）
+    /// 录用日期（确认录用/发 offer）
     /// </summary>
     public DateTime HireDate { get; set; }
 
     /// <summary>
-    /// 关联员工ID（录用通过并建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 拟录用部门ID
+    /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
@@ -616,7 +628,7 @@ public class TaktTalentOfferExportDto
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 拟录用岗位ID
+    /// 拟录用岗位（选项 TaktPosts/options，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }

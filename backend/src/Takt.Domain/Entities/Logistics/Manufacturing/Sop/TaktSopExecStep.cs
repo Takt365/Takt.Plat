@@ -77,7 +77,7 @@ public class TaktSopExecStep : TaktCompanyEntityBase
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否禁止下一步（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "block_next_step", ColumnDescription = "是否禁止下一步", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BlockNextStep { get; set; } = 0;

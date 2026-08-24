@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsShareDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：NewsShare 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNewsShare 生成，请按需审阅）
 // 
@@ -47,13 +47,18 @@ public class TaktNewsShareDto : TaktCompanyDtoBase
     public string? NewsName { get; set; }
 
     /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
     /// 分享人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
 
     /// <summary>
-    /// 分享人姓名
+    /// 分享人姓名（冗余字段，便于查询）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
@@ -66,6 +71,11 @@ public class TaktNewsShareDto : TaktCompanyDtoBase
     /// 分享时间
     /// </summary>
     public DateTime ShareTime { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 新闻（主表）
@@ -91,7 +101,7 @@ public class TaktNewsShareQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -100,16 +110,21 @@ public class TaktNewsShareQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 分享人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -118,7 +133,7 @@ public class TaktNewsShareQueryDto : TaktPagedQuery
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 分享人姓名
+    /// 分享人姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -136,6 +151,11 @@ public class TaktNewsShareQueryDto : TaktPagedQuery
     /// 分享时间（范围查询-结束）
     /// </summary>
     public DateTime? ShareTimeEnd { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -182,16 +202,21 @@ public class TaktNewsShareCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 分享人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -200,9 +225,8 @@ public class TaktNewsShareCreateDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 分享人姓名
+    /// 分享人姓名（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "分享人姓名不能为空")]
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
@@ -214,6 +238,11 @@ public class TaktNewsShareCreateDto
     /// 分享时间
     /// </summary>
     public DateTime ShareTime { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -248,6 +277,29 @@ public class TaktNewsShareUpdateDto : TaktNewsShareCreateDto
 }
 
 // ========================================
+// NewsShare 作废 DTO
+// ========================================
+
+/// <summary>
+/// NewsShare 作废/撤销作废 DTO
+/// </summary>
+public class TaktNewsShareObsoleteDto
+{
+    /// <summary>
+    /// NewsShareID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long NewsShareId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -271,16 +323,21 @@ public class TaktNewsShareTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 分享人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -289,7 +346,7 @@ public class TaktNewsShareTemplateDto
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 分享人姓名
+    /// 分享人姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -302,6 +359,11 @@ public class TaktNewsShareTemplateDto
     /// 分享时间
     /// </summary>
     public DateTime? ShareTime { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -335,16 +397,21 @@ public class TaktNewsShareImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 分享人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -353,7 +420,7 @@ public class TaktNewsShareImportDto
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 分享人姓名
+    /// 分享人姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -366,6 +433,11 @@ public class TaktNewsShareImportDto
     /// 分享时间
     /// </summary>
     public DateTime? ShareTime { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -401,10 +473,25 @@ public class TaktNewsShareExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 分享人 ID（选项 TaktUsers/options；DictValue=Id）
@@ -413,7 +500,7 @@ public class TaktNewsShareExportDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 分享人姓名
+    /// 分享人姓名（冗余字段，便于查询）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
@@ -426,6 +513,11 @@ public class TaktNewsShareExportDto
     /// 分享时间
     /// </summary>
     public DateTime ShareTime { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

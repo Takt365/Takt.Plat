@@ -101,7 +101,7 @@
         <template v-else-if="column.key === 'isInspection'">
           <TaktDictTag
             :value="getRoutingItemDictValue(record, 'isInspection')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'processSegmentType'">
@@ -113,7 +113,7 @@
         <template v-else-if="column.key === 'isObsolete'">
           <TaktDictTag
             :value="getRoutingItemDictValue(record, 'isObsolete')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -292,7 +292,7 @@
       <a-form-item :label="pi.queryLabel('isInspection')">
         <TaktSelect
           v-model:value="advancedQueryForm.isInspection"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isInspection', 'select')"
           allow-clear
         />
@@ -333,7 +333,7 @@
       <a-form-item :label="pi.queryLabel('isObsolete')">
         <TaktSelect
           v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />

@@ -62,7 +62,7 @@ public class TaktStandardOperationRateDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int RateStatus { get; set; } = 0;
 
@@ -134,7 +134,7 @@ public class TaktStandardOperationRateQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int? RateStatus { get; set; }
 
@@ -216,7 +216,7 @@ public class TaktStandardOperationRateCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int RateStatus { get; set; } = 0;
 
@@ -270,9 +270,9 @@ public class TaktStandardOperationRateStatusDto
     public long StandardOperationRateId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用，1=启用）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；0=禁用，1=启用）不能为空")]
     public int RateStatus { get; set; } = 0;
 }
 
@@ -331,7 +331,7 @@ public class TaktStandardOperationRateTemplateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int? RateStatus { get; set; }
 
@@ -398,7 +398,7 @@ public class TaktStandardOperationRateImportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int? RateStatus { get; set; }
 
@@ -466,7 +466,7 @@ public class TaktStandardOperationRateExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int RateStatus { get; set; } = 0;
 

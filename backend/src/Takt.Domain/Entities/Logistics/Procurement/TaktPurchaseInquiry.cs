@@ -119,7 +119,7 @@ public class TaktPurchaseInquiry : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "inquiry_reason", ColumnDescription = "询价原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? InquiryReason { get; set; }
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "inquiry_status", ColumnDescription = "询价状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int InquiryStatus { get; set; } = 1;

@@ -28,9 +28,9 @@ public sealed class TaktStatQueryBuildRequest
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否 SELECT DISTINCT（sys_yes_no_type，1=是）
+    /// 是否 SELECT DISTINCT（sys_yes_no，1=是）
     /// </summary>
-    public int DistinctRows { get; set; } = 0;
+    public int DistinctRows { get; set; } = 1;
 
     /// <summary>
     /// 数据源表
@@ -85,12 +85,12 @@ public sealed class TaktStatQuerySourceItem
     public string TableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否主表（sys_yes_no_type，1=是）
+    /// 是否主表（sys_yes_no，1=是）
     /// </summary>
     public int IsPrimary { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; }
 }
@@ -126,7 +126,7 @@ public sealed class TaktStatQueryJoinItem
     public string RightColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; }
 }
@@ -162,12 +162,12 @@ public sealed class TaktStatQueryFieldItem
     public int AggregateFunc { get; set; } = 0;
 
     /// <summary>
-    /// 是否可见（sys_yes_no_type，1=是）
+    /// 是否可见（sys_yes_no，1=是）
     /// </summary>
     public int IsVisible { get; set; } = 1;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; }
 }
@@ -198,12 +198,12 @@ public sealed class TaktStatQuerySelectionItem
     public int FilterOperator { get; set; } = 7;
 
     /// <summary>
-    /// 是否必填（sys_yes_no_type，1=是）
+    /// 是否必填（sys_yes_no，1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（运行时取值键）
+    /// 排序号（回填）（运行时取值键）
     /// </summary>
     public int SortOrder { get; set; }
 }
@@ -245,7 +245,7 @@ public sealed class TaktStatQueryGroupByItem
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; }
 }
@@ -271,7 +271,7 @@ public sealed class TaktStatQueryOrderByItem
     public int SortDirection { get; set; } = 1;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; }
 }

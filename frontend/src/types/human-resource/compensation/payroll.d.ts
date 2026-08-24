@@ -83,7 +83,7 @@ export interface PayrollExport {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   payrollStatus: number;
 

@@ -44,7 +44,7 @@ export default {
           placeholder: "请输入租户编码",
         },
       },
-      username: {
+      userName: {
         label: "用户名",
         placeholder: "请输入用户名",
         or: {
@@ -76,7 +76,7 @@ export default {
         required: "请输入租户编码",
         invalid: "租户编码须为 3 位数字",
       },
-      username: {
+      userName: {
         required: "请输入用户名",
         invalid: "用户名格式不正确",
         or: {

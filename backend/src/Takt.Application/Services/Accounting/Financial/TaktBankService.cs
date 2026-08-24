@@ -420,7 +420,7 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
 
         if (queryDto?.PobkCurAc.HasValue == true)
         {
-            var pobkCurAc = queryDto.PobkCurAc;
+            var pobkCurAc = queryDto.PobkCurAc.Value;
             exp = exp.And(x => x.PobkCurAc == pobkCurAc);
         }
 
@@ -468,19 +468,19 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
 
         if (queryDto?.SddB2b.HasValue == true)
         {
-            var sddB2b = queryDto.SddB2b;
+            var sddB2b = queryDto.SddB2b.Value;
             exp = exp.And(x => x.SddB2b == sddB2b);
         }
 
         if (queryDto?.SddCore.HasValue == true)
         {
-            var sddCore = queryDto.SddCore;
+            var sddCore = queryDto.SddCore.Value;
             exp = exp.And(x => x.SddCore == sddCore);
         }
 
         if (queryDto?.SddRtrans.HasValue == true)
         {
-            var sddRtrans = queryDto.SddRtrans;
+            var sddRtrans = queryDto.SddRtrans.Value;
             exp = exp.And(x => x.SddRtrans == sddRtrans);
         }
 
@@ -510,13 +510,13 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

@@ -65,7 +65,7 @@ export interface WorkShiftQuery extends TaktPagedQuery {
   endTime?: string;
 
   /**
-   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no；0=否 1=是）
    */
   crossMidnight?: number;
 
@@ -147,7 +147,7 @@ export interface WorkShiftCreate {
   endTime: string;
 
   /**
-   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no；0=否 1=是）
    */
   crossMidnight: number;
 
@@ -240,7 +240,7 @@ export interface WorkShiftTemplate {
   endTime?: string;
 
   /**
-   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no；0=否 1=是）
    */
   crossMidnight?: number;
 
@@ -307,7 +307,7 @@ export interface WorkShiftImport {
   endTime?: string;
 
   /**
-   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no；0=否 1=是）
    */
   crossMidnight?: number;
 
@@ -366,7 +366,7 @@ export interface WorkShiftExport {
   endTime: string;
 
   /**
-   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no；0=否 1=是）
    */
   crossMidnight: number;
 

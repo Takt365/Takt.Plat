@@ -77,13 +77,13 @@
         <template v-if="column.key === 'isLocked'">
           <TaktDictTag
             :value="getSopRevisionDictValue(record, 'isLocked')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'forceLeaderAck'">
           <TaktDictTag
             :value="getSopRevisionDictValue(record, 'forceLeaderAck')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'revisionStatus'">
@@ -212,7 +212,7 @@
       <a-form-item :label="pi.queryLabel('isLocked')">
         <TaktSelect
           v-model:value="advancedQueryForm.isLocked"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isLocked', 'select')"
           allow-clear
         />
@@ -222,7 +222,7 @@
       <a-form-item :label="pi.queryLabel('forceLeaderAck')">
         <TaktSelect
           v-model:value="advancedQueryForm.forceLeaderAck"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('forceLeaderAck', 'select')"
           allow-clear
         />

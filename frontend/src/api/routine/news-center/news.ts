@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/news-center
 // 文件名称：news.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/news-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -25,9 +25,9 @@ import type {
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
- * @description TaktNewses
+ * @description TaktNews
  */
-const NEWS_API_BASE = 'TaktNewses';
+const NEWS_API_BASE = 'TaktNews';
 
 // ========================================
 // 基础 CRUD
@@ -112,7 +112,7 @@ export function deleteNewsBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新新闻中心状态
- * @param {NewsStatus} dto 状态 DTO（TaktNewsStatus 枚举）
+ * @param {NewsStatus} dto 状态 DTO
  * @returns {Promise<News>} 新闻中心DTO
  */
 export function updateNewsStatus(dto: NewsStatus): Promise<News> {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：source-ec.d.ts
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 设变来源主表实体。
+ * 设变来源明细列表
  * 对应前端 TaktSourceEcDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SourceEc
@@ -44,7 +44,7 @@ export interface SourceEc extends CompanyDtoBase {
   sourceTitle: string;
 
   /**
-   * 状态
+   * 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
    */
   sourceStatus: string;
 
@@ -54,7 +54,7 @@ export interface SourceEc extends CompanyDtoBase {
   sourceIssueDate: string;
 
   /**
-   * TCJ担当
+   * TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
    */
   sourceTcjOwner?: string;
 
@@ -170,6 +170,7 @@ export interface SourceEc extends CompanyDtoBase {
 
 }
 
+
 /**
  * SourceEc 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -183,7 +184,17 @@ export interface SourceEcQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -203,7 +214,7 @@ export interface SourceEcQuery extends TaktPagedQuery {
   sourceTitle?: string;
 
   /**
-   * 状态
+   * 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
    */
   sourceStatus?: string;
 
@@ -218,7 +229,7 @@ export interface SourceEcQuery extends TaktPagedQuery {
   sourceIssueDateEnd?: string;
 
   /**
-   * TCJ担当
+   * TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
    */
   sourceTcjOwner?: string;
 
@@ -349,6 +360,7 @@ export interface SourceEcQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建SourceEc DTO
  * 对应前端 SourceEcCreate
@@ -361,7 +373,17 @@ export interface SourceEcCreate {
   tenantCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -381,7 +403,7 @@ export interface SourceEcCreate {
   sourceTitle: string;
 
   /**
-   * 状态
+   * 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
    */
   sourceStatus: string;
 
@@ -391,7 +413,7 @@ export interface SourceEcCreate {
   sourceIssueDate: string;
 
   /**
-   * TCJ担当
+   * TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
    */
   sourceTcjOwner?: string;
 
@@ -517,6 +539,7 @@ export interface SourceEcCreate {
 
 }
 
+
 /**
  * 更新SourceEc DTO
  * 继承 TaktSourceEcCreateDto，添加 SourceEcId 字段
@@ -529,7 +552,13 @@ export interface SourceEcUpdate extends SourceEcCreate {
    */
   sourceEcId: string;
 
+  /**
+   * 设变来源明细列表（子表，级联保存）
+   */
+  sourceEcDetails?: any;
+
 }
+
 
 /**
  * SourceEc 状态更新 DTO
@@ -543,11 +572,12 @@ export interface SourceEcStatus {
   sourceEcId: string;
 
   /**
-   * 状态
+   * 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
    */
   sourceStatus: string;
 
 }
+
 
 /**
  * SourceEc 导入模板行 DTO
@@ -561,7 +591,17 @@ export interface SourceEcTemplate {
   tenantCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -581,7 +621,7 @@ export interface SourceEcTemplate {
   sourceTitle?: string;
 
   /**
-   * 状态
+   * 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
    */
   sourceStatus?: string;
 
@@ -591,7 +631,7 @@ export interface SourceEcTemplate {
   sourceIssueDate?: string;
 
   /**
-   * TCJ担当
+   * TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
    */
   sourceTcjOwner?: string;
 
@@ -716,6 +756,7 @@ export interface SourceEcTemplate {
   remark?: string;
 
 }
+
 
 /**
  * SourceEc 导入 DTO（独立实现，不继承 TemplateDto）
@@ -729,7 +770,17 @@ export interface SourceEcImport {
   tenantCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -749,7 +800,7 @@ export interface SourceEcImport {
   sourceTitle?: string;
 
   /**
-   * 状态
+   * 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
    */
   sourceStatus?: string;
 
@@ -759,7 +810,7 @@ export interface SourceEcImport {
   sourceIssueDate?: string;
 
   /**
-   * TCJ担当
+   * TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
    */
   sourceTcjOwner?: string;
 
@@ -885,6 +936,7 @@ export interface SourceEcImport {
 
 }
 
+
 /**
  * SourceEc 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 SourceEcExport
@@ -895,6 +947,21 @@ export interface SourceEcExport {
    * SourceEcID
    */
   sourceEcId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 设变号码
@@ -912,7 +979,7 @@ export interface SourceEcExport {
   sourceTitle: string;
 
   /**
-   * 状态
+   * 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
    */
   sourceStatus: string;
 
@@ -922,7 +989,7 @@ export interface SourceEcExport {
   sourceIssueDate: string;
 
   /**
-   * TCJ担当
+   * TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
    */
   sourceTcjOwner?: string;
 

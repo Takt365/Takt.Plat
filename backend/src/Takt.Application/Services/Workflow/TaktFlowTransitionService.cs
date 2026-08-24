@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Workflow
 // 文件名称：TaktFlowTransitionService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程流转历史应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Workflow;
 
@@ -52,12 +51,20 @@ public class TaktFlowTransitionService : TaktServiceBase, ITaktFlowTransitionSer
     }
 
     /// <summary>
-    /// 获取流程流转历史列表（分页）
+    /// 获取流程流转历史列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktFlowTransitionDto>> GetFlowTransitionListAsync(TaktFlowTransitionQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktFlowTransitionDto>.Create(
+                new List<TaktFlowTransitionDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _flowTransitionRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -98,8 +105,8 @@ public class TaktFlowTransitionService : TaktServiceBase, ITaktFlowTransitionSer
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ActivityName ?? e.Id.ToString(),
+            DictValue = e.ActivityName ?? string.Empty,
+            DictLabel = e.ActivityName ?? string.Empty,
         }).ToList();
     }
 
@@ -221,7 +228,15 @@ public class TaktFlowTransitionService : TaktServiceBase, ITaktFlowTransitionSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportFlowTransitionAsync(TaktFlowTransitionQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktFlowTransitionQueryDto());
+        var queryDto = query ?? new TaktFlowTransitionQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktFlowTransitionExportDto>(),
+                sheetName ?? "流程流转历史数据",
+                fileName ?? "流程流转历史导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _flowTransitionRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -250,11 +265,12 @@ public class TaktFlowTransitionService : TaktServiceBase, ITaktFlowTransitionSer
     {
         var exp = Expressionable.Create<TaktFlowTransition>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.InstanceId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ActivityId != null && x.ActivityId.Contains(keywords))
                 || (x.ActivityName != null && x.ActivityName.Contains(keywords))
                 || (x.ActivityType != null && x.ActivityType.Contains(keywords))
@@ -262,136 +278,249 @@ public class TaktFlowTransitionService : TaktServiceBase, ITaktFlowTransitionSer
                 || (x.FromNodeName != null && x.FromNodeName.Contains(keywords))
                 || (x.ToNodeId != null && x.ToNodeId.Contains(keywords))
                 || (x.ToNodeName != null && x.ToNodeName.Contains(keywords))
-                || SqlFunc.ToString(x.TransitionUserId).Contains(keywords)
                 || (x.TransitionUserName != null && x.TransitionUserName.Contains(keywords))
-                || SqlFunc.ToString(x.DurationMs).Contains(keywords)
                 || (x.TransitionComment != null && x.TransitionComment.Contains(keywords))
-                || SqlFunc.ToString(x.ActionType).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.StartTime).Contains(keywords)
-                || SqlFunc.ToString(x.TransitionTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.InstanceId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.InstanceId == queryDto.InstanceId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ActivityId))
-        {
-            exp = exp.And(x => x.ActivityId != null && x.ActivityId.Contains(queryDto.ActivityId));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ActivityName))
-        {
-            exp = exp.And(x => x.ActivityName != null && x.ActivityName.Contains(queryDto.ActivityName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ActivityType))
-        {
-            exp = exp.And(x => x.ActivityType != null && x.ActivityType.Contains(queryDto.ActivityType));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FromNodeId))
-        {
-            exp = exp.And(x => x.FromNodeId != null && x.FromNodeId.Contains(queryDto.FromNodeId));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FromNodeName))
-        {
-            exp = exp.And(x => x.FromNodeName != null && x.FromNodeName.Contains(queryDto.FromNodeName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ToNodeId))
-        {
-            exp = exp.And(x => x.ToNodeId != null && x.ToNodeId.Contains(queryDto.ToNodeId));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ToNodeName))
-        {
-            exp = exp.And(x => x.ToNodeName != null && x.ToNodeName.Contains(queryDto.ToNodeName));
-        }
-
-        if (queryDto?.TransitionUserId.HasValue == true)
-        {
-            exp = exp.And(x => x.TransitionUserId == queryDto.TransitionUserId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TransitionUserName))
-        {
-            exp = exp.And(x => x.TransitionUserName != null && x.TransitionUserName.Contains(queryDto.TransitionUserName));
-        }
-
-        if (queryDto?.DurationMs.HasValue == true)
-        {
-            exp = exp.And(x => x.DurationMs == queryDto.DurationMs);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TransitionComment))
-        {
-            exp = exp.And(x => x.TransitionComment != null && x.TransitionComment.Contains(queryDto.TransitionComment));
-        }
-
-        if (queryDto?.ActionType.HasValue == true)
-        {
-            exp = exp.And(x => x.ActionType == queryDto.ActionType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.StartTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.StartTime >= queryDto.StartTimeStart);
-        }
-
-        if (queryDto?.StartTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.StartTime <= queryDto.StartTimeEnd);
-        }
-
-        if (queryDto?.TransitionTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.TransitionTime >= queryDto.TransitionTimeStart);
-        }
-
-        if (queryDto?.TransitionTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.TransitionTime <= queryDto.TransitionTimeEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.InstanceId.HasValue == true)
+        {
+            var instanceId = queryDto.InstanceId.Value;
+            exp = exp.And(x => x.InstanceId == instanceId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ActivityId))
+        {
+            var activityId = queryDto.ActivityId;
+            exp = exp.And(x => x.ActivityId != null && x.ActivityId.Contains(activityId));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ActivityName))
+        {
+            var activityName = queryDto.ActivityName;
+            exp = exp.And(x => x.ActivityName != null && x.ActivityName.Contains(activityName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ActivityType))
+        {
+            var activityType = queryDto.ActivityType;
+            exp = exp.And(x => x.ActivityType != null && x.ActivityType.Contains(activityType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.FromNodeId))
+        {
+            var fromNodeId = queryDto.FromNodeId;
+            exp = exp.And(x => x.FromNodeId != null && x.FromNodeId.Contains(fromNodeId));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.FromNodeName))
+        {
+            var fromNodeName = queryDto.FromNodeName;
+            exp = exp.And(x => x.FromNodeName != null && x.FromNodeName.Contains(fromNodeName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ToNodeId))
+        {
+            var toNodeId = queryDto.ToNodeId;
+            exp = exp.And(x => x.ToNodeId != null && x.ToNodeId.Contains(toNodeId));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ToNodeName))
+        {
+            var toNodeName = queryDto.ToNodeName;
+            exp = exp.And(x => x.ToNodeName != null && x.ToNodeName.Contains(toNodeName));
+        }
+
+        if (queryDto?.TransitionUserId.HasValue == true)
+        {
+            var transitionUserId = queryDto.TransitionUserId.Value;
+            exp = exp.And(x => x.TransitionUserId == transitionUserId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TransitionUserName))
+        {
+            var transitionUserName = queryDto.TransitionUserName;
+            exp = exp.And(x => x.TransitionUserName != null && x.TransitionUserName.Contains(transitionUserName));
+        }
+
+        if (queryDto?.DurationMs.HasValue == true)
+        {
+            var durationMs = queryDto.DurationMs.Value;
+            exp = exp.And(x => x.DurationMs == durationMs);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TransitionComment))
+        {
+            var transitionComment = queryDto.TransitionComment;
+            exp = exp.And(x => x.TransitionComment != null && x.TransitionComment.Contains(transitionComment));
+        }
+
+        if (queryDto?.ActionType.HasValue == true)
+        {
+            var actionType = queryDto.ActionType.Value;
+            exp = exp.And(x => x.ActionType == (int)actionType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.StartTimeStart.HasValue == true)
+        {
+            var startTimeStart = queryDto.StartTimeStart.Value;
+            exp = exp.And(x => x.StartTime >= startTimeStart);
+        }
+
+        if (queryDto?.StartTimeEnd.HasValue == true)
+        {
+            var startTimeEnd = queryDto.StartTimeEnd.Value;
+            exp = exp.And(x => x.StartTime <= startTimeEnd);
+        }
+
+        if (queryDto?.TransitionTimeStart.HasValue == true)
+        {
+            var transitionTimeStart = queryDto.TransitionTimeStart.Value;
+            exp = exp.And(x => x.TransitionTime >= transitionTimeStart);
+        }
+
+        if (queryDto?.TransitionTimeEnd.HasValue == true)
+        {
+            var transitionTimeEnd = queryDto.TransitionTimeEnd.Value;
+            exp = exp.And(x => x.TransitionTime <= transitionTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktFlowTransitionQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.InstanceId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ActivityId))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ActivityName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ActivityType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FromNodeId))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FromNodeName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ToNodeId))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ToNodeName))
+        {
+            return true;
+        }
+        if (queryDto.TransitionUserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TransitionUserName))
+        {
+            return true;
+        }
+        if (queryDto.DurationMs.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TransitionComment))
+        {
+            return true;
+        }
+        if (queryDto.ActionType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.StartTimeStart.HasValue || queryDto.StartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TransitionTimeStart.HasValue || queryDto.TransitionTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

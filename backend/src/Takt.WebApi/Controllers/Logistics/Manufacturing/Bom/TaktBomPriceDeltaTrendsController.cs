@@ -4,7 +4,7 @@
 // 文件名称：TaktBomPriceDeltaTrendsController.cs
 // 创建时间：2026-08-13
 // 创建人：Takt365(Cursor AI)
-// 功能描述：成本差异推移控制器（独立菜单 list/export/plant-options）
+// 功能描述：成本差异推移控制器（独立菜单 list/export）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,7 +15,6 @@ using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
 using Takt.Application.Services.Logistics.Manufacturing.Bom;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
-using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
 
@@ -35,24 +34,6 @@ public class TaktBomPriceDeltaTrendsController : TaktControllerBase
     public TaktBomPriceDeltaTrendsController(ITaktBomPriceDeltaTrendService service)
     {
         _service = service;
-    }
-
-    /// <summary>
-    /// 工厂选项
-    /// </summary>
-    /// <returns>下拉选项</returns>
-    [HttpGet("plant-options")]
-    public async Task<IActionResult> GetBomPriceDeltaTrendPlantOptionsAsync()
-    {
-        try
-        {
-            var result = await _service.GetBomPriceDeltaTrendPlantOptionsAsync();
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
     }
 
     /// <summary>

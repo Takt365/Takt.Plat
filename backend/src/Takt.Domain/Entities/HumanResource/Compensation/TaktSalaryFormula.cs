@@ -92,7 +92,7 @@ public class TaktSalaryFormula : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "执行顺序", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "formula_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FormulaStatus { get; set; } = 1;

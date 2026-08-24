@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeFamily 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -172,13 +172,22 @@ public class TaktEmployeeFamilyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeefamily.birthdate", "zh-HK", "出生日期_hk", "出生日期"),
 
             // entity.employeefamily.isemergencycontact
-            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "en-US", "是否紧急联系人_us", "是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "en-US", "是否紧急联系人_us", "是否紧急联系人（字典 sys_yes_no；0=否 1=是）"),
             // entity.employeefamily.isemergencycontact
-            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "ja-JP", "是否紧急联系人_jp", "是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "ja-JP", "是否紧急联系人_jp", "是否紧急联系人（字典 sys_yes_no；0=否 1=是）"),
             // entity.employeefamily.isemergencycontact
-            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "zh-CN", "是否紧急联系人", "是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "zh-CN", "是否紧急联系人", "是否紧急联系人（字典 sys_yes_no；0=否 1=是）"),
             // entity.employeefamily.isemergencycontact
-            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "zh-HK", "是否紧急联系人_hk", "是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "zh-HK", "是否紧急联系人_hk", "是否紧急联系人（字典 sys_yes_no；0=否 1=是）"),
+
+            // entity.employeefamily.employee
+            new TranslationSeedItem("entity.employeefamily.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeefamily.employee
+            new TranslationSeedItem("entity.employeefamily.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeefamily.employee
+            new TranslationSeedItem("entity.employeefamily.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeefamily.employee
+            new TranslationSeedItem("entity.employeefamily.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

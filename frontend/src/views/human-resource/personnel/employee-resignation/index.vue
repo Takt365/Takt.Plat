@@ -2,29 +2,49 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-resignation -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：员工离职办理记录管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：员工实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="p-4">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="human:resource:personnel:employee:resignation:create"
-      update-permission="human:resource:personnel:employee:resignation:update"
-      delete-permission="human:resource:personnel:employee:resignation:delete"
-      import-permission="human:resource:personnel:employee:resignation:import"
-      export-permission="human:resource:personnel:employee:resignation:export"
+  <div class="p-4 flex flex-col min-h-0 h-full">
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getEmployeeId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="employeeId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="human:resource:personnel:employee:create"
+      update-permission="human:resource:personnel:employee:update"
+      delete-permission="human:resource:personnel:employee:delete"
+      import-permission="human:resource:personnel:employee:import"
+      export-permission="human:resource:personnel:employee:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -50,49 +70,73 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 表格 -->
-    <TaktSingleTable
-      entity-scope="approval"
-      :columns="columns"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'employeeResignationId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getEmployeeResignationId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
-    >
-
-    </TaktSingleTable>
-
-    <!-- 分页（服务端分页，外置 TaktPagination） -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'gender'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'gender')"
+            dict-type="sys_user_gender_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'nativePlace'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'nativePlace')"
+            dict-type="hr_native_place_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'ethnicity'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'ethnicity')"
+            dict-type="hr_ethnic_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'politicalAffiliation'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'politicalAffiliation')"
+            dict-type="hr_political_affiliation"
+          />
+        </template>
+        <template v-else-if="column.key === 'maritalStatus'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'maritalStatus')"
+            dict-type="hr_marital_status"
+          />
+        </template>
+        <template v-else-if="column.key === 'employeeStatus'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'employeeStatus')"
+            dict-type="hr_employee_status"
+          />
+        </template>
+        <template v-else-if="column.key === 'isBuiltIn'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'isBuiltIn')"
+            dict-type="sys_yes_no"
+          />
+        </template>
+      </template>
+      <template #detail>
+        <EmployeeResignationPanel
+          ref="employeeResignationPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <EmployeeResignationForm
-        :key="formData?.employeeResignationId ?? 'create'"
+      <EmployeeForm
+        :key="formData?.employeeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,197 +153,187 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeresignation.employeeid')">
-        <a-input
-          v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.employeeid') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('resignationType')">
-      <a-form-item :label="t('entity.employeeresignation.resignationtype')">
-        <a-input-number
-          v-model:value="advancedQueryForm.resignationType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.resignationtype') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('applyDateStart')">
-      <a-form-item :label="t('entity.employeeresignation.applydatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.applyDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.applydatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('applyDateEnd')">
-      <a-form-item :label="t('entity.employeeresignation.applydateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.applyDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.applydateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lastWorkDateStart')">
-      <a-form-item :label="t('entity.employeeresignation.lastworkdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.lastWorkDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.lastworkdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lastWorkDateEnd')">
-      <a-form-item :label="t('entity.employeeresignation.lastworkdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.lastWorkDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.lastworkdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('terminationDateStart')">
-      <a-form-item :label="t('entity.employeeresignation.terminationdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.terminationDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.terminationdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('terminationDateEnd')">
-      <a-form-item :label="t('entity.employeeresignation.terminationdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.terminationDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.terminationdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('reason')">
-      <a-form-item :label="t('entity.employeeresignation.reason')">
+      <div v-show="isFieldVisible('employeeCode')">
+      <a-form-item :label="pi.queryLabel('employeeCode')">
         <a-input
-          v-model:value="advancedQueryForm.reason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.reason') })"
+          v-model:value="advancedQueryForm.employeeCode"
+          :placeholder="pi.queryPh('employeeCode', 'required')"
+          show-count
+          :maxlength="6"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeName')">
+      <a-form-item :label="pi.queryLabel('employeeName')">
+        <a-input
+          v-model:value="advancedQueryForm.employeeName"
+          :placeholder="pi.queryPh('employeeName', 'required')"
+          show-count
+          :maxlength="80"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('gender')">
+      <a-form-item :label="pi.queryLabel('gender')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.gender"
+          dict-type="sys_user_gender_category"
+          :placeholder="pi.queryPh('gender', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('birthDateStart')">
+      <a-form-item :label="pi.queryLabel('birthDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.birthDateStart"
+          :placeholder="pi.queryPh('birthDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('birthDateEnd')">
+      <a-form-item :label="pi.queryLabel('birthDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.birthDateEnd"
+          :placeholder="pi.queryPh('birthDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('idCardCode')">
+      <a-form-item :label="pi.queryLabel('idCardCode')">
+        <a-input
+          v-model:value="advancedQueryForm.idCardCode"
+          :placeholder="pi.queryPh('idCardCode', 'required')"
+          show-count
+          :maxlength="18"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('mobile')">
+      <a-form-item :label="pi.queryLabel('mobile')">
+        <a-input
+          v-model:value="advancedQueryForm.mobile"
+          :placeholder="pi.queryPh('mobile', 'required')"
+          show-count
+          :maxlength="11"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('email')">
+      <a-form-item :label="pi.queryLabel('email')">
+        <a-input
+          v-model:value="advancedQueryForm.email"
+          :placeholder="pi.queryPh('email', 'required')"
+          show-count
+          :maxlength="100"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('nativePlace')">
+      <a-form-item :label="pi.queryLabel('nativePlace')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.nativePlace"
+          dict-type="hr_native_place_code"
+          :placeholder="pi.queryPh('nativePlace', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ethnicity')">
+      <a-form-item :label="pi.queryLabel('ethnicity')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.ethnicity"
+          dict-type="hr_ethnic_code"
+          :placeholder="pi.queryPh('ethnicity', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('politicalAffiliation')">
+      <a-form-item :label="pi.queryLabel('politicalAffiliation')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.politicalAffiliation"
+          dict-type="hr_political_affiliation"
+          :placeholder="pi.queryPh('politicalAffiliation', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maritalStatus')">
+      <a-form-item :label="pi.queryLabel('maritalStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.maritalStatus"
+          dict-type="hr_marital_status"
+          :placeholder="pi.queryPh('maritalStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeStatus')">
+      <a-form-item :label="pi.queryLabel('employeeStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.employeeStatus"
+          dict-type="hr_employee_status"
+          :placeholder="pi.queryPh('employeeStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isBuiltIn')">
+      <a-form-item :label="pi.queryLabel('isBuiltIn')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isBuiltIn"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isBuiltIn', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('avatar')">
+      <a-form-item :label="pi.queryLabel('avatar')">
+        <a-input
+          v-model:value="advancedQueryForm.avatar"
+          :placeholder="pi.queryPh('avatar', 'required')"
           show-count
           :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('handoverNotes')">
-      <a-form-item :label="t('entity.employeeresignation.handovernotes')">
-        <a-textarea
-          v-model:value="advancedQueryForm.handoverNotes"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeeresignation.handovernotes') })"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.employeeresignation.approvalstatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.approvalStatus"
-          dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.approvalstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.employeeresignation.initiatorid')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.initiatorid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.employeeresignation.initiatedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.initiatedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.employeeresignation.initiatedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.initiatedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.employeeresignation.approvedby')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.approvedby') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.employeeresignation.approvedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.approvedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.employeeresignation.approvedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeresignation.approvedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.employeeresignation.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeresignation.flowinstanceid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -307,10 +341,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -332,7 +366,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -346,10 +380,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -363,14 +397,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeresignation._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeresignation._self"
+        v-if="importVisible"
+        :entity-i18n-key="EMPLOYEE_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -386,10 +421,10 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'employeeResignationId'"
+      :id-column-key="'employeeId'"
       :action-column-key="'action'"
-      entity-scope="approval"
-      table-mode="single"
+      entity-scope="company"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -398,7 +433,7 @@
 
 <script setup lang="ts">
 /**
- * 员工离职办理记录管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 员工实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-resignation
  */
 import { ref, computed, onMounted } from 'vue'
@@ -407,20 +442,35 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import EmployeeResignationForm from './components/employee-resignation-form.vue'
-import { getEmployeeResignationList, getEmployeeResignationById, createEmployeeResignation, updateEmployeeResignation, deleteEmployeeResignationById, deleteEmployeeResignationBatch, getEmployeeResignationTemplate, importEmployeeResignation, exportEmployeeResignation } from '@/api/human-resource/personnel/employee-resignation'
-import type { EmployeeResignation, EmployeeResignationQuery } from '@/types/human-resource/personnel/employee-resignation'
+import EmployeeForm from './components/employee-form.vue'
+import EmployeeResignationPanel from './components/employee-resignation-panel.vue'
+import { provideEmployeeMasterContext, type EmployeeRowRecord } from './composables/use-employee-master-context'
+import { getEmployeeList, getEmployeeById, createEmployee, updateEmployee, deleteEmployeeById, deleteEmployeeBatch, getEmployeeTemplate, importEmployee, exportEmployee, updateEmployeeStatus } from '@/api/human-resource/personnel/employee'
+import type { Employee, EmployeeQuery } from '@/types/human-resource/personnel/employee'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useEmployeeI18n,
+  EMPLOYEE_LIST_FIELDS,
+  EMPLOYEE_QUERY_STRING_FIELDS,
+  EMPLOYEE_QUERY_FIELDS,
+  EMPLOYEE_SELF_I18N_KEY,
+} from './composables/use-employee-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useEmployeeI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktEmployeeResignation')
+const excelNames = taktExcelEntityNames('TaktEmployee')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeresignation._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -428,7 +478,7 @@ const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
 /** 分页列表数据 */
-const dataSource = ref<EmployeeResignation[]>([])
+const dataSource = ref<Employee[]>([])
 /** 当前页码 */
 const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
@@ -436,9 +486,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<EmployeeResignation | null>(null)
+const selectedRow = ref<EmployeeRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<EmployeeResignation[]>([])
+const selectedRows = ref<EmployeeRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -447,7 +497,7 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeResignation> | null>(null)
+const formData = ref<Partial<Employee> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
@@ -455,55 +505,66 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of EMPLOYEE_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.gender !== undefined && form.gender !== null) {
+    return true
+  }
+  if (form.ethnicity !== undefined && form.ethnicity !== null) {
+    return true
+  }
+  if (form.politicalAffiliation !== undefined && form.politicalAffiliation !== null) {
+    return true
+  }
+  if (form.maritalStatus !== undefined && form.maritalStatus !== null) {
+    return true
+  }
+  if (form.employeeStatus !== undefined && form.employeeStatus !== null) {
+    return true
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(EMPLOYEE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof EMPLOYEE_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    gender: undefined as number | undefined,
+    ethnicity: undefined as number | undefined,
+    politicalAffiliation: undefined as number | undefined,
+    maritalStatus: undefined as number | undefined,
+    employeeStatus: undefined as number | undefined,
+    isBuiltIn: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  employeeId: '',
-  resignationType: undefined as number | undefined,
-  applyDateStart: '',
-  applyDateEnd: '',
-  lastWorkDateStart: '',
-  lastWorkDateEnd: '',
-  terminationDateStart: '',
-  terminationDateEnd: '',
-  reason: '',
-  handoverNotes: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.employeeresignation.employeeid') },
-  { key: 'resignationType', label: t('entity.employeeresignation.resignationtype') },
-  { key: 'applyDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeresignation.applydate')) },
-  { key: 'applyDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeresignation.applydate')) },
-  { key: 'lastWorkDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeresignation.lastworkdate')) },
-  { key: 'lastWorkDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeresignation.lastworkdate')) },
-  { key: 'terminationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeresignation.terminationdate')) },
-  { key: 'terminationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeresignation.terminationdate')) },
-  { key: 'reason', label: t('entity.employeeresignation.reason') },
-  { key: 'handoverNotes', label: t('entity.employeeresignation.handovernotes') },
-  { key: 'approvalStatus', label: t('entity.employeeresignation.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.employeeresignation.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.employeeresignation.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.employeeresignation.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.employeeresignation.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.employeeresignation.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.employeeresignation.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.employeeresignation.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  EMPLOYEE_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -513,21 +574,27 @@ const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
-const entityIdName = 'employeeResignationId'
+const entityIdName = 'employeeId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideEmployeeMasterContext()
+const employeeResignationPanelRef = ref<InstanceType<typeof EmployeeResignationPanel> | null>(null)
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
- * @returns {EmployeeResignationQuery} 查询 DTO
+ * @returns {EmployeeQuery} 查询 DTO
  */
-function buildListQuery(overrides?: Partial<EmployeeResignationQuery>): EmployeeResignationQuery {
+function buildListQuery(overrides?: Partial<EmployeeQuery>): EmployeeQuery {
   const form = advancedQueryForm.value
   const kw = (queryKeyword.value ?? '').trim()
-  const query: EmployeeResignationQuery = {
+  const query: EmployeeQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
     ...overrides,
@@ -535,120 +602,223 @@ function buildListQuery(overrides?: Partial<EmployeeResignationQuery>): Employee
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: keyof EmployeeResignationQuery, value: string | undefined) => {
+  const assignTrimmed = (key: keyof EmployeeQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
       query[key] = v as never
     }
   }
-  assignTrimmed('employeeId', form.employeeId)
-  if (form.resignationType !== undefined && form.resignationType !== null) {
-    query.resignationType = form.resignationType
+  for (const key of EMPLOYEE_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('applyDateStart', form.applyDateStart)
-  assignTrimmed('applyDateEnd', form.applyDateEnd)
-  assignTrimmed('lastWorkDateStart', form.lastWorkDateStart)
-  assignTrimmed('lastWorkDateEnd', form.lastWorkDateEnd)
-  assignTrimmed('terminationDateStart', form.terminationDateStart)
-  assignTrimmed('terminationDateEnd', form.terminationDateEnd)
-  assignTrimmed('reason', form.reason)
-  assignTrimmed('handoverNotes', form.handoverNotes)
-  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
-    query.approvalStatus = form.approvalStatus
+  if (form.gender !== undefined && form.gender !== null) {
+    query.gender = form.gender
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.ethnicity !== undefined && form.ethnicity !== null) {
+    query.ethnicity = form.ethnicity
+  }
+  if (form.politicalAffiliation !== undefined && form.politicalAffiliation !== null) {
+    query.politicalAffiliation = form.politicalAffiliation
+  }
+  if (form.maritalStatus !== undefined && form.maritalStatus !== null) {
+    query.maritalStatus = form.maritalStatus
+  }
+  if (form.employeeStatus !== undefined && form.employeeStatus !== null) {
+    query.employeeStatus = form.employeeStatus
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    query.isBuiltIn = form.isBuiltIn
+  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
+
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: EmployeeRowRecord | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getEmployeeId(record) : ''
+}
+
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as EmployeeRowRecord
+  const key = getEmployeeId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
+}
+
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
+
+/** 加载主表详情并回填当前页 dataSource */
+async function loadEmployeeDetail(record: EmployeeRowRecord): Promise<Employee | null> {
+  const id = getEmployeeId(record)
+  if (!id) {
+    return null
+  }
+  try {
+    const detail = await getEmployeeById(id)
+    const index = dataSource.value.findIndex((row) => getEmployeeId(row) === id)
+    if (index !== -1) {
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Employee
+    }
+    return detail
+  } catch (error: any) {
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    return null
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'employeeResignationId',
-    key: 'employeeResignationId',
+    dataIndex: 'employeeId',
+    key: 'employeeId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'employeeResignationId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeresignation.employeeid'),
-    dataIndex: 'employeeId',
-    key: 'employeeId',
+    title: pi.label('employeeCode'),
+    dataIndex: 'employeeCode',
+    key: 'employeeCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'employeeId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'employeeCode') ?? ''
   },
   {
-    title: t('entity.employeeresignation.resignationtype'),
-    dataIndex: 'resignationType',
-    key: 'resignationType',
+    title: pi.label('employeeName'),
+    dataIndex: 'employeeName',
+    key: 'employeeName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'resignationType') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'employeeName') ?? ''
   },
   {
-    title: t('entity.employeeresignation.applydate'),
-    dataIndex: 'applyDate',
-    key: 'applyDate',
+    title: pi.label('gender'),
+    dataIndex: 'gender',
+    key: 'gender',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'applyDate') ?? ''
   },
   {
-    title: t('entity.employeeresignation.lastworkdate'),
-    dataIndex: 'lastWorkDate',
-    key: 'lastWorkDate',
+    title: pi.label('birthDate'),
+    dataIndex: 'birthDate',
+    key: 'birthDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'lastWorkDate') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'birthDate') ?? ''
   },
   {
-    title: t('entity.employeeresignation.terminationdate'),
-    dataIndex: 'terminationDate',
-    key: 'terminationDate',
+    title: pi.label('idCardCode'),
+    dataIndex: 'idCardCode',
+    key: 'idCardCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'terminationDate') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'idCardCode') ?? ''
   },
   {
-    title: t('entity.employeeresignation.reason'),
-    dataIndex: 'reason',
-    key: 'reason',
+    title: pi.label('mobile'),
+    dataIndex: 'mobile',
+    key: 'mobile',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'reason') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'mobile') ?? ''
   },
   {
-    title: t('entity.employeeresignation.handovernotes'),
-    dataIndex: 'handoverNotes',
-    key: 'handoverNotes',
+    title: pi.label('email'),
+    dataIndex: 'email',
+    key: 'email',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeResignationField(record, 'handoverNotes') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'email') ?? ''
+  },
+  {
+    title: pi.label('nativePlace'),
+    dataIndex: 'nativePlace',
+    key: 'nativePlace',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('ethnicity'),
+    dataIndex: 'ethnicity',
+    key: 'ethnicity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('politicalAffiliation'),
+    dataIndex: 'politicalAffiliation',
+    key: 'politicalAffiliation',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('maritalStatus'),
+    dataIndex: 'maritalStatus',
+    key: 'maritalStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('employeeStatus'),
+    dataIndex: 'employeeStatus',
+    key: 'employeeStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('isBuiltIn'),
+    dataIndex: 'isBuiltIn',
+    key: 'isBuiltIn',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('avatar'),
+    dataIndex: 'avatar',
+    key: 'avatar',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'avatar') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -657,77 +827,91 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:resignation:update',
-        onClick: (record: EmployeeResignation) => handleEdit(record)
+        permission: 'human:resource:personnel:employee:update',
+        onClick: (record: EmployeeRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:resignation:delete',
-        onClick: (record: EmployeeResignation) => handleDeleteOne(record)
+        permission: 'human:resource:personnel:employee:delete',
+        onClick: (record: EmployeeRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getEmployeeResignationId = (record: any): string => record?.[entityIdName] ?? ''
+const getEmployeeId = (record: EmployeeRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
-const getEmployeeResignationField = (record: any, field: string): any => record?.[field]
+const getEmployeeField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getEmployeeDictValue = (
+  record: EmployeeRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: EmployeeResignation[]) => {
+  onChange: (keys: (string | number)[], rows: EmployeeRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
-  onSelect: (record: EmployeeResignation, selected: boolean) => {
+  onSelect: (record: EmployeeRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (selectedRow.value && getEmployeeResignationId(selectedRow.value) === getEmployeeResignationId(record)) {
+      syncMasterSelection(record)
+    } else if (selectedRow.value && getEmployeeId(selectedRow.value) === getEmployeeId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: EmployeeResignation[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EmployeeRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: EmployeeResignation) => ({
-  onClick: () => {
-    const key = getEmployeeResignationId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getEmployeeResignationId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const res = await getEmployeeResignationList(buildListQuery())
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
+    const res = await getEmployeeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[EmployeeResignation] 加载数据失败', { error })
+    logger.error('[Employee] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -749,24 +933,23 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  employeeId: '',
-  resignationType: undefined as number | undefined,
-  applyDateStart: '',
-  applyDateEnd: '',
-  lastWorkDateStart: '',
-  lastWorkDateEnd: '',
-  terminationDateStart: '',
-  terminationDateEnd: '',
-  reason: '',
-  handoverNotes: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
+  cultureCode: '',
+  plantCode: '',
+  employeeCode: '',
+  employeeName: '',
+  gender: undefined as number | undefined,
+  birthDateStart: '',
+  birthDateEnd: '',
+  idCardCode: '',
+  mobile: '',
+  email: '',
+  nativePlace: '',
+  ethnicity: undefined as number | undefined,
+  politicalAffiliation: undefined as number | undefined,
+  maritalStatus: undefined as number | undefined,
+  employeeStatus: undefined as number | undefined,
+  isBuiltIn: undefined as number | undefined,
+  avatar: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -778,24 +961,30 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeresignation._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: EmployeeResignation) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeresignation._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
+async function handleEdit(record: EmployeeRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await loadEmployeeDetail(record)
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeresignation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -812,15 +1001,18 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateEmployeeResignation(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeresignation._self') }))
+      await updateEmployee(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
-      await createEmployeeResignation(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeresignation._self') }))
+      await createEmployee(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  employeeResignationPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -840,19 +1032,26 @@ function handleImport() {
 
 /** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getEmployeeResignationTemplate(sheetName, fileName)
+  const res = await getEmployeeTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEmployeeResignation(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEmployee(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    employeeResignationPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -863,7 +1062,10 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const exportMeta = await exportEmployeeResignation(
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
+    const exportMeta = await exportEmployee(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
       excelNames.fileBase
@@ -886,24 +1088,28 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeresignation._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
-    logger.error('[EmployeeResignation] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeresignation._self') }))
+    logger.error('[Employee] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: EmployeeResignation) {
+async function handleDeleteOne(record: EmployeeRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeresignation._self'), name: t('common.tip.this.target', { target: t('entity.employeeresignation._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteEmployeeResignationById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeresignation._self') }))
+      await deleteEmployeeById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -911,18 +1117,22 @@ async function handleDeleteOne(record: EmployeeResignation) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeresignation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeresignation._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteEmployeeResignationBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeresignation._self') }))
+      await deleteEmployeeBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -941,24 +1151,23 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  employeeId: '',
-  resignationType: undefined as number | undefined,
-  applyDateStart: '',
-  applyDateEnd: '',
-  lastWorkDateStart: '',
-  lastWorkDateEnd: '',
-  terminationDateStart: '',
-  terminationDateEnd: '',
-  reason: '',
-  handoverNotes: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
+  cultureCode: '',
+  plantCode: '',
+  employeeCode: '',
+  employeeName: '',
+  gender: undefined as number | undefined,
+  birthDateStart: '',
+  birthDateEnd: '',
+  idCardCode: '',
+  mobile: '',
+  email: '',
+  nativePlace: '',
+  ethnicity: undefined as number | undefined,
+  politicalAffiliation: undefined as number | undefined,
+  maritalStatus: undefined as number | undefined,
+  employeeStatus: undefined as number | undefined,
+  isBuiltIn: undefined as number | undefined,
+  avatar: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -990,17 +1199,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number, size: number) {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-/** 分页每页条数变更（重置到第 1 页） */
-function handlePaginationSizeChange(_current: number, size: number) {
-  currentPage.value = getTaktDefaultPageIndex()
-  pageSize.value = size
-  loadData()
-}
 </script>

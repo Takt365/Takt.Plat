@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopRevisionDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopRevision 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopRevision 生成，请按需审阅）
 // 
@@ -73,12 +73,12 @@ public class TaktSopRevisionDto : TaktCompanyDtoBase
     public string? EcnName { get; set; }
 
     /// <summary>
-    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsLocked { get; set; } = 0;
 
     /// <summary>
-    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int ForceLeaderAck { get; set; } = 0;
 
@@ -122,7 +122,7 @@ public class TaktSopRevisionQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -164,12 +164,12 @@ public class TaktSopRevisionQueryDto : TaktPagedQuery
     public long? EcnId { get; set; }
 
     /// <summary>
-    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsLocked { get; set; }
 
     /// <summary>
-    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? ForceLeaderAck { get; set; }
 
@@ -262,12 +262,12 @@ public class TaktSopRevisionCreateDto
     public long? EcnId { get; set; }
 
     /// <summary>
-    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsLocked { get; set; } = 0;
 
     /// <summary>
-    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int ForceLeaderAck { get; set; } = 0;
 
@@ -404,12 +404,12 @@ public class TaktSopRevisionTemplateDto
     public long? EcnId { get; set; }
 
     /// <summary>
-    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsLocked { get; set; }
 
     /// <summary>
-    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? ForceLeaderAck { get; set; }
 
@@ -493,12 +493,12 @@ public class TaktSopRevisionImportDto
     public long? EcnId { get; set; }
 
     /// <summary>
-    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsLocked { get; set; }
 
     /// <summary>
-    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? ForceLeaderAck { get; set; }
 
@@ -556,6 +556,11 @@ public class TaktSopRevisionExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// SOP 文档头 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -583,12 +588,12 @@ public class TaktSopRevisionExportDto
     public long? EcnId { get; set; }
 
     /// <summary>
-    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsLocked { get; set; } = 0;
 
     /// <summary>
-    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int ForceLeaderAck { get; set; } = 0;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Conference 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConference 生成，请按需审阅）
 // 
@@ -162,7 +162,7 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -171,11 +171,11 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议编码（租户+公司内唯一）
     /// </summary>
@@ -377,16 +377,21 @@ public class TaktConferenceCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议编码（租户+公司内唯一）
     /// </summary>
     [Required(ErrorMessage = "会议编码（租户+公司内唯一）不能为空")]
     public string ConferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 编码规则编码（表单选会议类型后自动取号；对应 TaktNumbering.RuleCode；不落库）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
 
     /// <summary>
     /// 会议标题
@@ -448,7 +453,6 @@ public class TaktConferenceCreateDto
     /// <summary>
     /// 组织人姓名
     /// </summary>
-    [Required(ErrorMessage = "组织人姓名不能为空")]
     public string OrganizerName { get; set; } = string.Empty;
 
     /// <summary>
@@ -578,11 +582,11 @@ public class TaktConferenceTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议编码（租户+公司内唯一）
     /// </summary>
@@ -723,11 +727,11 @@ public class TaktConferenceImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议编码（租户+公司内唯一）
     /// </summary>
@@ -863,6 +867,21 @@ public class TaktConferenceExportDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议编码（租户+公司内唯一）

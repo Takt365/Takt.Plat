@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktDefectGroupService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：不良组主数据应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
     }
 
     /// <summary>
-    /// 获取不良组主数据列表（分页）
+    /// 获取不良组主数据列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktDefectGroupDto>> GetDefectGroupListAsync(TaktDefectGroupQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktDefectGroupDto>.Create(
+                new List<TaktDefectGroupDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _defectGroupRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,8 +109,8 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.DefectGroupName ?? e.Id.ToString(),
+            DictValue = e.DefectGroupCode,
+            DictLabel = e.DefectGroupName ?? e.DefectGroupCode,
         }).ToList();
     }
 
@@ -327,7 +335,15 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportDefectGroupAsync(TaktDefectGroupQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktDefectGroupQueryDto());
+        var queryDto = query ?? new TaktDefectGroupQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktDefectGroupExportDto>(),
+                sheetName ?? "不良组主数据数据",
+                fileName ?? "不良组主数据导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _defectGroupRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -356,109 +372,196 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
     {
         var exp = Expressionable.Create<TaktDefectGroup>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.DefectCategory).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.DefectGroupCode != null && x.DefectGroupCode.Contains(keywords))
                 || (x.DefectGroupName != null && x.DefectGroupName.Contains(keywords))
                 || (x.DefectGroupDescription != null && x.DefectGroupDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ResponsibleUserId).Contains(keywords)
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.GroupStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.DefectCategory.HasValue == true)
         {
-            exp = exp.And(x => x.DefectCategory == queryDto.DefectCategory);
+            var defectCategory = queryDto.DefectCategory.Value;
+            exp = exp.And(x => x.DefectCategory == defectCategory);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DefectGroupCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectGroupCode))
         {
-            exp = exp.And(x => x.DefectGroupCode != null && x.DefectGroupCode.Contains(queryDto.DefectGroupCode));
+            var defectGroupCode = queryDto.DefectGroupCode;
+            exp = exp.And(x => x.DefectGroupCode != null && x.DefectGroupCode.Contains(defectGroupCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DefectGroupName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectGroupName))
         {
-            exp = exp.And(x => x.DefectGroupName != null && x.DefectGroupName.Contains(queryDto.DefectGroupName));
+            var defectGroupName = queryDto.DefectGroupName;
+            exp = exp.And(x => x.DefectGroupName != null && x.DefectGroupName.Contains(defectGroupName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DefectGroupDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectGroupDescription))
         {
-            exp = exp.And(x => x.DefectGroupDescription != null && x.DefectGroupDescription.Contains(queryDto.DefectGroupDescription));
+            var defectGroupDescription = queryDto.DefectGroupDescription;
+            exp = exp.And(x => x.DefectGroupDescription != null && x.DefectGroupDescription.Contains(defectGroupDescription));
         }
 
         if (queryDto?.ResponsibleUserId.HasValue == true)
         {
-            exp = exp.And(x => x.ResponsibleUserId == queryDto.ResponsibleUserId);
+            var responsibleUserId = queryDto.ResponsibleUserId.Value;
+            exp = exp.And(x => x.ResponsibleUserId == responsibleUserId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactPhone))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {
-            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(queryDto.ContactPhone));
+            var contactPhone = queryDto.ContactPhone;
+            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(contactPhone));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactEmail))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactEmail))
         {
-            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(queryDto.ContactEmail));
+            var contactEmail = queryDto.ContactEmail;
+            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(contactEmail));
         }
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.GroupStatus.HasValue == true)
         {
-            exp = exp.And(x => x.GroupStatus == queryDto.GroupStatus);
+            var groupStatus = queryDto.GroupStatus.Value;
+            exp = exp.And(x => x.GroupStatus == groupStatus);
         }
 
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktDefectGroupQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.DefectCategory.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectGroupCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectGroupName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectGroupDescription))
+        {
+            return true;
+        }
+        if (queryDto.ResponsibleUserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactPhone))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactEmail))
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GroupStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

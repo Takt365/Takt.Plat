@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/human-resource/personnel/employee-contract/composables
 // 文件名称：use-employee-contract-i18n.ts
-// 功能描述：员工劳动合同字段清单 + useEmployeeContractI18n（字段名映射一次，文案由 entity.employeecontract.* 种子动态解析）
+// 功能描述：EmployeeContract字段清单 + useEmployeeContractI18n（字段名映射一次，文案由 entity.employeecontract.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -33,14 +33,35 @@ export const EMPLOYEECONTRACT_LIST_FIELDS = [
   'contractStatus',
 ] as const
 
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const EMPLOYEECONTRACT_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'employeeId',
+  'employeeCode',
+  'employeeName',
+  'contractCode',
+  'contractType',
+  'startDate',
+  'endDate',
+  'probationEndDate',
+  'signDate',
+  'signCompany',
+  'contractStatus',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const EMPLOYEECONTRACT_SUMMARY_SUM_FIELDS = [
+  'contractType',
+  'contractStatus',
+] as const
+
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const EMPLOYEECONTRACT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  employeeId: 'select',
-  employeeCode: 'required',
-  employeeName: 'required',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  employeeName: 'optional',
   contractCode: 'required',
   contractType: 'select',
   startDate: 'select',
@@ -49,9 +70,6 @@ export const EMPLOYEECONTRACT_PLACEHOLDER = {
   signDate: 'optional',
   signCompany: 'optional',
   contractStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -59,7 +77,8 @@ export type EmployeeContractField = keyof typeof EMPLOYEECONTRACT_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const EMPLOYEECONTRACT_QUERY_STRING_FIELDS = [
-  'employeeId',
+  'cultureCode',
+  'plantCode',
   'employeeCode',
   'employeeName',
   'contractCode',
@@ -90,7 +109,7 @@ export const EMPLOYEECONTRACT_QUERY_FIELDS: readonly EmployeeContractQueryField[
 ]
 
 /**
- * 员工劳动合同字段 i18n：index / employee-contract-form 统一入口
+ * EmployeeContract字段 i18n：index / employee-contract-form 统一入口
  */
 export function useEmployeeContractI18n() {
   const ef = useEntityFieldI18n(EMPLOYEECONTRACT_ENTITY_SLUG)

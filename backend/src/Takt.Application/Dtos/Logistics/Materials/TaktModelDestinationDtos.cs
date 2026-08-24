@@ -66,7 +66,7 @@ public class TaktModelDestinationDto : TaktTenantCoreDtoBase
     public string DestinationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -118,7 +118,7 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     public string? DestinationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -243,7 +243,7 @@ public class TaktModelDestinationSortDto
     public long ModelDestinationId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -404,7 +404,7 @@ public class TaktModelDestinationExportDto
     public string DestinationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

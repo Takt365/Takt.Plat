@@ -20,7 +20,6 @@ export const PURCHASEFORECAST_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASEFOR
 
 /** 列表业务列（不含主键） */
 export const PURCHASEFORECAST_LIST_FIELDS = [
-  'plantCode',
   'purchaseForecastCode',
   'planDate',
   'sendDate',
@@ -42,37 +41,12 @@ export const PURCHASEFORECAST_LIST_FIELDS = [
   'planStatus',
   'convertedStatus',
   'planDescription',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEFORECAST_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  purchaseForecastCode: 'required',
-  planDate: 'select',
-  sendDate: 'select',
-  sendVersionNo: 'select',
-  salesProduct: 'required',
-  productCategoryCode: 'select',
-  profitCenterCode: 'optional',
-  modelCode: 'optional',
-  materialCode: 'select',
-  materialDescription: 'optional',
-  supplierCode: 'optional',
-  supplierName1: 'optional',
-  plannerId: 'optional',
-  planBy: 'select',
-  totalQuantity: 'select',
-  totalAmount: 'select',
-  convertedQuantity: 'select',
-  convertedAmount: 'select',
-  planStatus: 'select',
-  convertedStatus: 'select',
-  planDescription: 'optional',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -80,52 +54,13 @@ export type PurchaseForecastField = keyof typeof PURCHASEFORECAST_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEFORECAST_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'purchaseForecastCode',
-  'planDateStart',
-  'planDateEnd',
-  'sendDateStart',
-  'sendDateEnd',
-  'salesProduct',
-  'productCategoryCode',
-  'profitCenterCode',
-  'modelCode',
-  'materialCode',
-  'materialDescription',
-  'supplierCode',
-  'supplierName1',
-  'plannerId',
-  'planBy',
-  'planDescription',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchaseForecastQuery)[]
 
-export type PurchaseForecastQueryField =
-  | (typeof PURCHASEFORECAST_QUERY_STRING_FIELDS)[number]
-  | 'sendVersionNo' | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'planStatus' | 'convertedStatus' | 'approvalStatus'
+export type PurchaseForecastQueryField = (typeof PURCHASEFORECAST_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEFORECAST_QUERY_FIELDS: readonly PurchaseForecastQueryField[] = [
-  ...PURCHASEFORECAST_QUERY_STRING_FIELDS,
-  'sendVersionNo',
-  'totalQuantity',
-  'totalAmount',
-  'convertedQuantity',
-  'convertedAmount',
-  'planStatus',
-  'convertedStatus',
-  'approvalStatus',
-]
+export const PURCHASEFORECAST_QUERY_FIELDS: readonly PurchaseForecastQueryField[] = [...PURCHASEFORECAST_QUERY_STRING_FIELDS]
 
 /**
  * Takt采购预测实体字段 i18n：index / purchase-forecast-form 统一入口

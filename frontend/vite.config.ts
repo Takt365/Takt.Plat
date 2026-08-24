@@ -36,7 +36,7 @@ import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
-import { vitePluginLogger } from './src/config/vite-dev-plugin';
+import { vitePluginLogger } from './src/config/vite-dev-plugin.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -513,7 +513,7 @@ export default defineConfig(({ mode }) => {
     },
 
     optimizeDeps: {
-      include: ['cron-parser'],
+      include: ['cron-parser', '@umoteam/editor'],
     },
 
     server: {

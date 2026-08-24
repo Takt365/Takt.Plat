@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：admin-division.d.ts
-// 创建时间：2026-08-06
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,9 +16,9 @@ import type {
 } from '@/types/common';
 
 /**
- * 行政区划实体（租户级共享；世界通用六级树） 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type） 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤
+ * 行政区划实体（租户级共享；世界通用六级树） 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type） 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
  * 对应前端 TaktAdminDivisionDto
- * 继承 TaktTenantCoreDtoBase（组合 4）
+ * 继承 TaktTenantCoreDtoBase
  * 对应前端 AdminDivision
  * @description 对应后端 TaktAdminDivisionDto
  */
@@ -59,7 +59,7 @@ export interface AdminDivision extends TenantCoreDtoBase {
   divisionPath: string;
 
   /**
-   * 是否叶子节点（字典 sys_yes_no_type）
+   * 是否叶子节点（字典 sys_yes_no）
    */
   isLeaf: number;
 
@@ -79,21 +79,22 @@ export interface AdminDivision extends TenantCoreDtoBase {
   phoneCode: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；内置项禁止删除）
+   * 内置（字典 sys_yes_no；内置项禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder: number;
 
   /**
-   * 区划状态（字典 sys_normal_disable_status）
+   * 区划状态（字典 sys_normal_disable）
    */
   divisionStatus: number;
 
 }
+
 
 /**
  * AdminDivision 树形列表/树选择 DTO（含子节点）
@@ -103,11 +104,12 @@ export interface AdminDivision extends TenantCoreDtoBase {
  */
 export interface AdminDivisionTree extends AdminDivision {
   /**
-   * 子节点
+   * 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
    */
-  children: AdminDivisionTree[];
+  children?: AdminDivisionTree[];
 
 }
+
 
 /**
  * AdminDivision 分页查询 DTO
@@ -152,7 +154,7 @@ export interface AdminDivisionQuery extends TaktPagedQuery {
   divisionPath?: string;
 
   /**
-   * 是否叶子节点（字典 sys_yes_no_type）
+   * 是否叶子节点（字典 sys_yes_no）
    */
   isLeaf?: number;
 
@@ -172,17 +174,17 @@ export interface AdminDivisionQuery extends TaktPagedQuery {
   phoneCode?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；内置项禁止删除）
+   * 内置（字典 sys_yes_no；内置项禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder?: number;
 
   /**
-   * 区划状态（字典 sys_normal_disable_status）
+   * 区划状态（字典 sys_normal_disable）
    */
   divisionStatus?: number;
 
@@ -207,6 +209,7 @@ export interface AdminDivisionQuery extends TaktPagedQuery {
   remark?: string;
 
 }
+
 
 /**
  * 创建AdminDivision DTO
@@ -260,12 +263,12 @@ export interface AdminDivisionCreate {
   phoneCode: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；内置项禁止删除）
+   * 内置（字典 sys_yes_no；内置项禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 区划状态（字典 sys_normal_disable_status）
+   * 区划状态（字典 sys_normal_disable）
    */
   divisionStatus: number;
 
@@ -281,6 +284,7 @@ export interface AdminDivisionCreate {
 
 }
 
+
 /**
  * 更新AdminDivision DTO
  * 继承 TaktAdminDivisionCreateDto，添加 AdminDivisionId 字段
@@ -295,6 +299,7 @@ export interface AdminDivisionUpdate extends AdminDivisionCreate {
 
 }
 
+
 /**
  * AdminDivision 状态更新 DTO
  * 对应前端 AdminDivisionStatus
@@ -307,11 +312,12 @@ export interface AdminDivisionStatus {
   adminDivisionId: string;
 
   /**
-   * 区划状态（字典 sys_normal_disable_status）
+   * 区划状态（字典 sys_normal_disable）
    */
   divisionStatus: number;
 
 }
+
 
 /**
  * AdminDivision 排序更新 DTO
@@ -325,11 +331,12 @@ export interface AdminDivisionSort {
   adminDivisionId: string;
 
   /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder: number;
 
 }
+
 
 /**
  * AdminDivision 导入模板行 DTO
@@ -383,12 +390,12 @@ export interface AdminDivisionTemplate {
   phoneCode?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；内置项禁止删除）
+   * 内置（字典 sys_yes_no；内置项禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 区划状态（字典 sys_normal_disable_status）
+   * 区划状态（字典 sys_normal_disable）
    */
   divisionStatus?: number;
 
@@ -403,6 +410,7 @@ export interface AdminDivisionTemplate {
   remark?: string;
 
 }
+
 
 /**
  * AdminDivision 导入 DTO（独立实现，不继承 TemplateDto）
@@ -456,12 +464,12 @@ export interface AdminDivisionImport {
   phoneCode?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；内置项禁止删除）
+   * 内置（字典 sys_yes_no；内置项禁止删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 区划状态（字典 sys_normal_disable_status）
+   * 区划状态（字典 sys_normal_disable）
    */
   divisionStatus?: number;
 
@@ -476,6 +484,7 @@ export interface AdminDivisionImport {
   remark?: string;
 
 }
+
 
 /**
  * AdminDivision 导出 DTO（独立实现，不继承响应 Dto）
@@ -519,7 +528,7 @@ export interface AdminDivisionExport {
   divisionPath: string;
 
   /**
-   * 是否叶子节点（字典 sys_yes_no_type）
+   * 是否叶子节点（字典 sys_yes_no）
    */
   isLeaf: number;
 
@@ -539,17 +548,17 @@ export interface AdminDivisionExport {
   phoneCode: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；内置项禁止删除）
+   * 内置（字典 sys_yes_no；内置项禁止删除）
    */
   isBuiltIn: number;
 
   /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder: number;
 
   /**
-   * 区划状态（字典 sys_normal_disable_status）
+   * 区划状态（字典 sys_normal_disable）
    */
   divisionStatus: number;
 

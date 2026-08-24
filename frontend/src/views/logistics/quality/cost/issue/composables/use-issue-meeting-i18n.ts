@@ -20,7 +20,6 @@ export const QUALITYISSUEMEETING_SELF_I18N_KEY = buildEntitySelfI18nKey(QUALITYI
 
 /** 列表业务列（不含主键） */
 export const QUALITYISSUEMEETING_LIST_FIELDS = [
-  'qualityIssueId',
   'qualityIssueCode',
   'lineNumber',
   'directManpowerCostPerMinute',
@@ -37,11 +36,11 @@ export const QUALITYISSUEMEETING_LIST_FIELDS = [
   'otherApparatusCost',
   'meetingRecorder',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const QUALITYISSUEMEETING_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'qualityIssueId',
   'qualityIssueCode',
   'lineNumber',
   'directManpowerCostPerMinute',
@@ -79,24 +78,7 @@ export const QUALITYISSUEMEETING_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const QUALITYISSUEMEETING_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  directManpowerCostPerMinute: 'select',
-  indirectManpowerCostPerMinute: 'select',
-  meetingInvestigationContent: 'optional',
-  meetingInvestigationCost: 'select',
-  meetingTimeMinutes: 'select',
-  directParticipantCount: 'select',
-  indirectParticipantCount: 'select',
-  investigationWorkTimeMinutes: 'select',
-  travelCost: 'select',
-  otherExpenses: 'select',
-  otherWorkTimeMinutes: 'select',
-  otherApparatusCost: 'select',
-  meetingRecorder: 'optional',
-  isObsolete: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -104,36 +86,13 @@ export type QualityIssueMeetingField = keyof typeof QUALITYISSUEMEETING_PLACEHOL
 
 /** 高级查询可 trim 的字符串字段 */
 export const QUALITYISSUEMEETING_QUERY_STRING_FIELDS = [
-  'qualityIssueCode',
-  'meetingInvestigationContent',
-  'meetingRecorder',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof QualityIssueMeetingQuery)[]
 
-export type QualityIssueMeetingQueryField =
-  | (typeof QUALITYISSUEMEETING_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'directManpowerCostPerMinute' | 'indirectManpowerCostPerMinute' | 'meetingInvestigationCost' | 'meetingTimeMinutes' | 'directParticipantCount' | 'indirectParticipantCount' | 'investigationWorkTimeMinutes' | 'travelCost' | 'otherExpenses' | 'otherWorkTimeMinutes' | 'otherApparatusCost' | 'isObsolete'
+export type QualityIssueMeetingQueryField = (typeof QUALITYISSUEMEETING_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const QUALITYISSUEMEETING_QUERY_FIELDS: readonly QualityIssueMeetingQueryField[] = [
-  ...QUALITYISSUEMEETING_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'directManpowerCostPerMinute',
-  'indirectManpowerCostPerMinute',
-  'meetingInvestigationCost',
-  'meetingTimeMinutes',
-  'directParticipantCount',
-  'indirectParticipantCount',
-  'investigationWorkTimeMinutes',
-  'travelCost',
-  'otherExpenses',
-  'otherWorkTimeMinutes',
-  'otherApparatusCost',
-  'isObsolete',
-]
+export const QUALITYISSUEMEETING_QUERY_FIELDS: readonly QualityIssueMeetingQueryField[] = [...QUALITYISSUEMEETING_QUERY_STRING_FIELDS]
 
 /**
  * QualityIssueMeeting字段 i18n：index / issue-meeting-form 统一入口

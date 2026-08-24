@@ -148,7 +148,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.exchangeRateStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('exchangeRateStatus')"
                 />
               </a-form-item>

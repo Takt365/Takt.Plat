@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecStepService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP工步执行明细应用服务实现
 // 
@@ -282,6 +282,22 @@ public class TaktSopExecStepService : TaktServiceBase, ITaktSopExecStepService
             throw new TaktBusinessException("SOP工位执行不存在");
         }
         entity.ExecId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -321,37 +337,37 @@ public class TaktSopExecStepService : TaktServiceBase, ITaktSopExecStepService
 
         if (queryDto?.ExecId.HasValue == true)
         {
-            var execId = queryDto.ExecId;
+            var execId = queryDto.ExecId.Value;
             exp = exp.And(x => x.ExecId == execId);
         }
 
         if (queryDto?.StepId.HasValue == true)
         {
-            var stepId = queryDto.StepId;
+            var stepId = queryDto.StepId.Value;
             exp = exp.And(x => x.StepId == stepId);
         }
 
         if (queryDto?.StepNo.HasValue == true)
         {
-            var stepNo = queryDto.StepNo;
+            var stepNo = queryDto.StepNo.Value;
             exp = exp.And(x => x.StepNo == stepNo);
         }
 
         if (queryDto?.StepResult.HasValue == true)
         {
-            var stepResult = queryDto.StepResult;
+            var stepResult = queryDto.StepResult.Value;
             exp = exp.And(x => x.StepResult == stepResult);
         }
 
         if (queryDto?.ConfirmedBy.HasValue == true)
         {
-            var confirmedBy = queryDto.ConfirmedBy;
+            var confirmedBy = queryDto.ConfirmedBy.Value;
             exp = exp.And(x => x.ConfirmedBy == confirmedBy);
         }
 
         if (queryDto?.BlockNextStep.HasValue == true)
         {
-            var blockNextStep = queryDto.BlockNextStep;
+            var blockNextStep = queryDto.BlockNextStep.Value;
             exp = exp.And(x => x.BlockNextStep == blockNextStep);
         }
 
@@ -369,49 +385,49 @@ public class TaktSopExecStepService : TaktServiceBase, ITaktSopExecStepService
 
         if (queryDto?.StartedAtStart.HasValue == true)
         {
-            var startedAtStart = queryDto.StartedAtStart;
+            var startedAtStart = queryDto.StartedAtStart.Value;
             exp = exp.And(x => x.StartedAt >= startedAtStart);
         }
 
         if (queryDto?.StartedAtEnd.HasValue == true)
         {
-            var startedAtEnd = queryDto.StartedAtEnd;
+            var startedAtEnd = queryDto.StartedAtEnd.Value;
             exp = exp.And(x => x.StartedAt <= startedAtEnd);
         }
 
         if (queryDto?.EndedAtStart.HasValue == true)
         {
-            var endedAtStart = queryDto.EndedAtStart;
+            var endedAtStart = queryDto.EndedAtStart.Value;
             exp = exp.And(x => x.EndedAt >= endedAtStart);
         }
 
         if (queryDto?.EndedAtEnd.HasValue == true)
         {
-            var endedAtEnd = queryDto.EndedAtEnd;
+            var endedAtEnd = queryDto.EndedAtEnd.Value;
             exp = exp.And(x => x.EndedAt <= endedAtEnd);
         }
 
         if (queryDto?.ConfirmedAtStart.HasValue == true)
         {
-            var confirmedAtStart = queryDto.ConfirmedAtStart;
+            var confirmedAtStart = queryDto.ConfirmedAtStart.Value;
             exp = exp.And(x => x.ConfirmedAt >= confirmedAtStart);
         }
 
         if (queryDto?.ConfirmedAtEnd.HasValue == true)
         {
-            var confirmedAtEnd = queryDto.ConfirmedAtEnd;
+            var confirmedAtEnd = queryDto.ConfirmedAtEnd.Value;
             exp = exp.And(x => x.ConfirmedAt <= confirmedAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

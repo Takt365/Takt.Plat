@@ -69,7 +69,7 @@ export interface Configurable extends CompanyDtoBase {
   maxQueryRows?: number;
 
   /**
-   * 公开（字典 sys_is_public_type；0=公开，1=私有）
+   * 公开（字典 sys_public_type；0=公开，1=私有）
    */
   isPublic?: number;
 
@@ -147,6 +147,11 @@ export interface ConfigurableExport {
   reportCode: string;
 
   /**
+   * 编码规则编码（表单选规则后取号；对应 TaktNumbering.RuleCode；不落库）
+   */
+  numberingRuleCode?: string;
+
+  /**
    * 报表名称
    */
   reportName: string;
@@ -177,7 +182,7 @@ export interface ConfigurableExport {
   maxQueryRows: number;
 
   /**
-   * 公开（字典 sys_is_public_type；0=公开，1=私有）
+   * 公开（字典 sys_public_type；0=公开，1=私有）
    */
   isPublic: number;
 

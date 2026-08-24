@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktCultureService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：区域应用服务实现
 // 
@@ -385,6 +385,9 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
             {
                 var childDto = translationListForSave[i];
                 childDto.CultureId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+
+
                 if (childDto.TranslationId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.TranslationId, out var target))
@@ -435,18 +438,12 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
         if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords!.Trim();
-            exp = exp.And(x => (x.CultureCode != null && x.CultureCode.Contains(keywords))
-                || (x.NativeName != null && x.NativeName.Contains(keywords))
+            exp = exp.And(x =>
+                (x.NativeName != null && x.NativeName.Contains(keywords))
                 || (x.Icon != null && x.Icon.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
-        {
-            var cultureCode = queryDto.CultureCode;
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.NativeName))
@@ -463,13 +460,13 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
 
         if (queryDto?.IsDefault.HasValue == true)
         {
-            var isDefault = queryDto.IsDefault;
+            var isDefault = queryDto.IsDefault.Value;
             exp = exp.And(x => x.IsDefault == isDefault);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
@@ -487,13 +484,13 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
@@ -512,10 +509,6 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
-        {
-            return true;
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
             return true;
         }

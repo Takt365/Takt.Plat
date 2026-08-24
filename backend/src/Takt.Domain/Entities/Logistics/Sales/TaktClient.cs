@@ -188,7 +188,7 @@ public class TaktClient : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "nielsen_indicator", ColumnDescription = "尼尔森标识", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "")]
     public string NielsenIndicator { get; set; } = string.Empty;
     /// <summary>
-    /// 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+    /// 中心记帐冻结（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "central_posting_block", ColumnDescription = "中心记帐冻结", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CentralPostingBlock { get; set; } = 0;
@@ -203,7 +203,7 @@ public class TaktClient : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "headquarters", ColumnDescription = "总部", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "")]
     public string Headquarters { get; set; } = string.Empty;
     /// <summary>
-    /// 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "clearing_with_vendor", ColumnDescription = "具有供应商的清算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ClearingWithVendor { get; set; } = 0;
@@ -268,12 +268,12 @@ public class TaktClient : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "evaluation_score", ColumnDescription = "评价分数", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal EvaluationScore { get; set; } = 0;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 客户端状态（字典 sys_normal_disable_status）
+    /// 客户端状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "client_status", ColumnDescription = "客户端状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ClientStatus { get; set; } = 1;

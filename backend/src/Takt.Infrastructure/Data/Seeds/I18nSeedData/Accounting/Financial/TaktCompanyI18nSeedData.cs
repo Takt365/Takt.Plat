@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCompanyI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -469,22 +469,22 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.company.financialmanagementarea", "zh-HK", "财务管理范围_hk", "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
 
             // entity.company.sortorder
-            new TranslationSeedItem("entity.company.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.company.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.company.sortorder
-            new TranslationSeedItem("entity.company.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.company.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.company.sortorder
-            new TranslationSeedItem("entity.company.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.company.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.company.sortorder
-            new TranslationSeedItem("entity.company.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.company.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.company.status
-            new TranslationSeedItem("entity.company.status", "en-US", "公司状态_us", "公司状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.company.status", "en-US", "公司状态_us", "公司状态（字典 sys_normal_disable）"),
             // entity.company.status
-            new TranslationSeedItem("entity.company.status", "ja-JP", "公司状态_jp", "公司状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.company.status", "ja-JP", "公司状态_jp", "公司状态（字典 sys_normal_disable）"),
             // entity.company.status
-            new TranslationSeedItem("entity.company.status", "zh-CN", "公司状态", "公司状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.company.status", "zh-CN", "公司状态", "公司状态（字典 sys_normal_disable）"),
             // entity.company.status
-            new TranslationSeedItem("entity.company.status", "zh-HK", "公司状态_hk", "公司状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.company.status", "zh-HK", "公司状态_hk", "公司状态（字典 sys_normal_disable）"),
 
             // entity.company.rolecompanies
             new TranslationSeedItem("entity.company.rolecompanies", "en-US", "可访问该公司的角色关联_us", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),

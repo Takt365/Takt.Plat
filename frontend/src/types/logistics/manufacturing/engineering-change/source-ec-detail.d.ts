@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：source-ec-detail.d.ts
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 设变来源子表实体。
+ * 设变来源子表
  * 对应前端 TaktSourceEcDetailDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SourceEcDetail
@@ -29,7 +29,7 @@ export interface SourceEcDetail extends CompanyDtoBase {
   sourceEcDetailId: string;
 
   /**
-   * 主ID
+   * 主ID（选项 TaktSourceEcs/options；DictValue=Id）
    */
   sourceEcId: string;
 
@@ -37,6 +37,16 @@ export interface SourceEcDetail extends CompanyDtoBase {
    * 主名称（填充字段）
    */
   sourceEcName?: string;
+
+  /**
+   * 设变号码（冗余字段，便于查询）
+   */
+  sourceEcCode: string;
+
+  /**
+   * 行号（固定步长=10）
+   */
+  lineNumber: number;
 
   /**
    * 完成品
@@ -94,22 +104,22 @@ export interface SourceEcDetail extends CompanyDtoBase {
   sourceBomCode?: string;
 
   /**
-   * 兼容性
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
    */
-  SourceCompatibility?: string;
+  sourceCompatibility?: string;
 
   /**
-   * 区分
+   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示
+   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
-  SourceInstruction?: string;
+  sourceInstruction?: string;
 
   /**
-   * 旧物料处理
+   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
   sourceLegacyPartDisposition?: string;
 
@@ -119,11 +129,17 @@ export interface SourceEcDetail extends CompanyDtoBase {
   sourceBomEffectiveDate?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 设变来源主表 （主表：TaktSourceEc）
    */
   sourceEc?: SourceEc;
 
 }
+
 
 /**
  * SourceEcDetail 分页查询 DTO
@@ -138,14 +154,34 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 主ID
+   * 主ID（选项 TaktSourceEcs/options；DictValue=Id）
    */
   sourceEcId?: string;
+
+  /**
+   * 设变号码（冗余字段，便于查询）
+   */
+  sourceEcCode?: string;
+
+  /**
+   * 行号（固定步长=10）
+   */
+  lineNumber?: number;
 
   /**
    * 完成品
@@ -203,22 +239,22 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   sourceBomCode?: string;
 
   /**
-   * 兼容性
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
    */
-  SourceCompatibility?: string;
+  sourceCompatibility?: string;
 
   /**
-   * 区分
+   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示
+   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
-  SourceInstruction?: string;
+  sourceInstruction?: string;
 
   /**
-   * 旧物料处理
+   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
   sourceLegacyPartDisposition?: string;
 
@@ -231,6 +267,11 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
    * BOM生效日期（范围查询-结束）
    */
   sourceBomEffectiveDateEnd?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -254,6 +295,7 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建SourceEcDetail DTO
  * 对应前端 SourceEcDetailCreate
@@ -266,14 +308,34 @@ export interface SourceEcDetailCreate {
   tenantCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
   /**
-   * 主ID
+   * 主ID（选项 TaktSourceEcs/options；DictValue=Id）
    */
   sourceEcId: string;
+
+  /**
+   * 设变号码（冗余字段，便于查询）
+   */
+  sourceEcCode: string;
+
+  /**
+   * 行号（固定步长=10）
+   */
+  lineNumber: number;
 
   /**
    * 完成品
@@ -331,22 +393,22 @@ export interface SourceEcDetailCreate {
   sourceBomCode?: string;
 
   /**
-   * 兼容性
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
    */
-  SourceCompatibility?: string;
+  sourceCompatibility?: string;
 
   /**
-   * 区分
+   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示
+   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
-  SourceInstruction?: string;
+  sourceInstruction?: string;
 
   /**
-   * 旧物料处理
+   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
   sourceLegacyPartDisposition?: string;
 
@@ -354,6 +416,11 @@ export interface SourceEcDetailCreate {
    * BOM生效日期
    */
   sourceBomEffectiveDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -366,6 +433,7 @@ export interface SourceEcDetailCreate {
   remark?: string;
 
 }
+
 
 /**
  * 更新SourceEcDetail DTO
@@ -381,6 +449,26 @@ export interface SourceEcDetailUpdate extends SourceEcDetailCreate {
 
 }
 
+
+/**
+ * SourceEcDetail 作废/撤销作废 DTO
+ * 对应前端 SourceEcDetailObsolete
+ * @description 对应后端 TaktSourceEcDetailObsoleteDto
+ */
+export interface SourceEcDetailObsolete {
+  /**
+   * SourceEcDetailID
+   */
+  sourceEcDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
 /**
  * SourceEcDetail 导入模板行 DTO
  * 对应前端 SourceEcDetailTemplate
@@ -393,14 +481,34 @@ export interface SourceEcDetailTemplate {
   tenantCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
   /**
-   * 主ID
+   * 主ID（选项 TaktSourceEcs/options；DictValue=Id）
    */
   sourceEcId?: string;
+
+  /**
+   * 设变号码（冗余字段，便于查询）
+   */
+  sourceEcCode?: string;
+
+  /**
+   * 行号（固定步长=10）
+   */
+  lineNumber?: number;
 
   /**
    * 完成品
@@ -458,22 +566,22 @@ export interface SourceEcDetailTemplate {
   sourceBomCode?: string;
 
   /**
-   * 兼容性
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
    */
-  SourceCompatibility?: string;
+  sourceCompatibility?: string;
 
   /**
-   * 区分
+   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示
+   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
-  SourceInstruction?: string;
+  sourceInstruction?: string;
 
   /**
-   * 旧物料处理
+   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
   sourceLegacyPartDisposition?: string;
 
@@ -481,6 +589,11 @@ export interface SourceEcDetailTemplate {
    * BOM生效日期
    */
   sourceBomEffectiveDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -493,6 +606,7 @@ export interface SourceEcDetailTemplate {
   remark?: string;
 
 }
+
 
 /**
  * SourceEcDetail 导入 DTO（独立实现，不继承 TemplateDto）
@@ -506,14 +620,34 @@ export interface SourceEcDetailImport {
   tenantCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
   /**
-   * 主ID
+   * 主ID（选项 TaktSourceEcs/options；DictValue=Id）
    */
   sourceEcId?: string;
+
+  /**
+   * 设变号码（冗余字段，便于查询）
+   */
+  sourceEcCode?: string;
+
+  /**
+   * 行号（固定步长=10）
+   */
+  lineNumber?: number;
 
   /**
    * 完成品
@@ -571,22 +705,22 @@ export interface SourceEcDetailImport {
   sourceBomCode?: string;
 
   /**
-   * 兼容性
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
    */
-  SourceCompatibility?: string;
+  sourceCompatibility?: string;
 
   /**
-   * 区分
+   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示
+   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
-  SourceInstruction?: string;
+  sourceInstruction?: string;
 
   /**
-   * 旧物料处理
+   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
   sourceLegacyPartDisposition?: string;
 
@@ -594,6 +728,11 @@ export interface SourceEcDetailImport {
    * BOM生效日期
    */
   sourceBomEffectiveDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -607,6 +746,7 @@ export interface SourceEcDetailImport {
 
 }
 
+
 /**
  * SourceEcDetail 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 SourceEcDetailExport
@@ -619,9 +759,34 @@ export interface SourceEcDetailExport {
   sourceEcDetailId: string;
 
   /**
-   * 主ID
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
+   * 主ID（选项 TaktSourceEcs/options；DictValue=Id）
    */
   sourceEcId: string;
+
+  /**
+   * 设变号码（冗余字段，便于查询）
+   */
+  sourceEcCode: string;
+
+  /**
+   * 行号（固定步长=10）
+   */
+  lineNumber: number;
 
   /**
    * 完成品
@@ -679,22 +844,22 @@ export interface SourceEcDetailExport {
   sourceBomCode?: string;
 
   /**
-   * 兼容性
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
    */
-  SourceCompatibility?: string;
+  sourceCompatibility?: string;
 
   /**
-   * 区分
+   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示
+   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
-  SourceInstruction?: string;
+  sourceInstruction?: string;
 
   /**
-   * 旧物料处理
+   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
   sourceLegacyPartDisposition?: string;
 
@@ -702,6 +867,11 @@ export interface SourceEcDetailExport {
    * BOM生效日期
    */
   sourceBomEffectiveDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

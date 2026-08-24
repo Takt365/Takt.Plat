@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktBonusPlanI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBonusPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktBonusPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bonusplan.description", "zh-HK", "方案说明_hk", "方案说明"),
 
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
         };
     }
 

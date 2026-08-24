@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktClientService.cs
-// 创建时间：2026-08-06
+// 创建时间：2026-08-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户端信息应用服务实现
 // 
@@ -122,7 +122,6 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
     public async Task<TaktClientDto> CreateClientAsync(TaktClientCreateDto dto)
     {
         var entity = dto.Adapt<TaktClient>();
-        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_client_client_code_unique = await _uniqueValidator.IsUniqueAsync(
             _clientRepository,
             x => x.PlantCode == entity.PlantCode
@@ -156,7 +155,6 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
             throw new TaktBusinessException("客户端信息不存在");
         }
         dto.Adapt(entity);
-        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_client_client_code_unique = await _uniqueValidator.IsUniqueAsync(
             _clientRepository,
             x => x.PlantCode == entity.PlantCode
@@ -275,7 +273,6 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
             try
             {
                 var entity = rows[i].Adapt<TaktClient>();
-                entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
                 var importKey = $"{entity.PlantCode}|{entity.ClientCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -356,15 +353,16 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ClientCode != null && x.ClientCode.Contains(keywords))
                 || (x.ClientName1 != null && x.ClientName1.Contains(keywords))
                 || (x.ClientName2 != null && x.ClientName2.Contains(keywords))
                 || (x.ClientShortName != null && x.ClientShortName.Contains(keywords))
                 || (x.EnterpriseNature != null && x.EnterpriseNature.Contains(keywords))
                 || (x.IndustryAttribute != null && x.IndustryAttribute.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ClientTaxNumber != null && x.ClientTaxNumber.Contains(keywords))
+                || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.RegistrationCountry != null && x.RegistrationCountry.Contains(keywords))
                 || (x.RegistrationProvince != null && x.RegistrationProvince.Contains(keywords))
                 || (x.RegistrationCity != null && x.RegistrationCity.Contains(keywords))
@@ -401,6 +399,12 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
             );
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
@@ -433,7 +437,7 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
 
         if (queryDto?.ClientType.HasValue == true)
         {
-            var clientType = queryDto.ClientType;
+            var clientType = queryDto.ClientType.Value;
             exp = exp.And(x => x.ClientType == clientType);
         }
 
@@ -449,21 +453,21 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
             exp = exp.And(x => x.IndustryAttribute != null && x.IndustryAttribute.Contains(industryAttribute));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
-        {
-            var cultureCode = queryDto.CultureCode;
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
-        }
-
         if (!string.IsNullOrWhiteSpace(queryDto?.ClientTaxNumber))
         {
             var clientTaxNumber = queryDto.ClientTaxNumber;
             exp = exp.And(x => x.ClientTaxNumber != null && x.ClientTaxNumber.Contains(clientTaxNumber));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxCode))
+        {
+            var taxCode = queryDto.TaxCode;
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(taxCode));
+        }
+
         if (queryDto?.TaxRate.HasValue == true)
         {
-            var taxRate = queryDto.TaxRate;
+            var taxRate = queryDto.TaxRate.Value;
             exp = exp.And(x => x.TaxRate == taxRate);
         }
 
@@ -595,7 +599,7 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
 
         if (queryDto?.CentralPostingBlock.HasValue == true)
         {
-            var centralPostingBlock = queryDto.CentralPostingBlock;
+            var centralPostingBlock = queryDto.CentralPostingBlock.Value;
             exp = exp.And(x => x.CentralPostingBlock == centralPostingBlock);
         }
 
@@ -613,7 +617,7 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
 
         if (queryDto?.ClearingWithVendor.HasValue == true)
         {
-            var clearingWithVendor = queryDto.ClearingWithVendor;
+            var clearingWithVendor = queryDto.ClearingWithVendor.Value;
             exp = exp.And(x => x.ClearingWithVendor == clearingWithVendor);
         }
 
@@ -625,7 +629,7 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
 
         if (queryDto?.PaymentMethod.HasValue == true)
         {
-            var paymentMethod = queryDto.PaymentMethod;
+            var paymentMethod = queryDto.PaymentMethod.Value;
             exp = exp.And(x => x.PaymentMethod == paymentMethod);
         }
 
@@ -661,7 +665,7 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
 
         if (queryDto?.SalesChannel.HasValue == true)
         {
-            var salesChannel = queryDto.SalesChannel;
+            var salesChannel = queryDto.SalesChannel.Value;
             exp = exp.And(x => x.SalesChannel == salesChannel);
         }
 
@@ -679,25 +683,25 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
 
         if (queryDto?.ClientLevel.HasValue == true)
         {
-            var clientLevel = queryDto.ClientLevel;
+            var clientLevel = queryDto.ClientLevel.Value;
             exp = exp.And(x => x.ClientLevel == clientLevel);
         }
 
         if (queryDto?.EvaluationScore.HasValue == true)
         {
-            var evaluationScore = queryDto.EvaluationScore;
+            var evaluationScore = queryDto.EvaluationScore.Value;
             exp = exp.And(x => x.EvaluationScore == evaluationScore);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.ClientStatus.HasValue == true)
         {
-            var clientStatus = queryDto.ClientStatus;
+            var clientStatus = queryDto.ClientStatus.Value;
             exp = exp.And(x => x.ClientStatus == clientStatus);
         }
 
@@ -715,13 +719,13 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
@@ -740,6 +744,10 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
             return true;
         }
@@ -775,11 +783,11 @@ public class TaktClientService : TaktServiceBase, ITaktClientService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.ClientTaxNumber))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ClientTaxNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxCode))
         {
             return true;
         }

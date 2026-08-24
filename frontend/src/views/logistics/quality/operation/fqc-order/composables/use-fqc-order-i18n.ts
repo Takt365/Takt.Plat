@@ -20,7 +20,6 @@ export const FQCORDER_SELF_I18N_KEY = buildEntitySelfI18nKey(FQCORDER_ENTITY_SLU
 
 /** 列表业务列（不含主键） */
 export const FQCORDER_LIST_FIELDS = [
-  'plantCode',
   'sourceCode',
   'inspectionDate',
   'fqcOrderCode',
@@ -34,29 +33,12 @@ export const FQCORDER_LIST_FIELDS = [
   'judgeDate',
   'judgeDescription',
   'judgeStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const FQCORDER_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  sourceCode: 'select',
-  inspectionDate: 'optional',
-  fqcOrderCode: 'required',
-  customerCode: 'optional',
-  totalWarehouseQuantity: 'select',
-  totalSampleQuantity: 'select',
-  totalQualifiedQuantity: 'select',
-  totalUnqualifiedQuantity: 'select',
-  totalInspectionReturnQuantity: 'select',
-  judgeBy: 'optional',
-  judgeDate: 'optional',
-  judgeDescription: 'optional',
-  judgeStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -64,36 +46,13 @@ export type FqcOrderField = keyof typeof FQCORDER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const FQCORDER_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'sourceCode',
-  'inspectionDateStart',
-  'inspectionDateEnd',
-  'fqcOrderCode',
-  'customerCode',
-  'judgeBy',
-  'judgeDateStart',
-  'judgeDateEnd',
-  'judgeDescription',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof FqcOrderQuery)[]
 
-export type FqcOrderQueryField =
-  | (typeof FQCORDER_QUERY_STRING_FIELDS)[number]
-  | 'totalWarehouseQuantity' | 'totalSampleQuantity' | 'totalQualifiedQuantity' | 'totalUnqualifiedQuantity' | 'totalInspectionReturnQuantity' | 'judgeStatus'
+export type FqcOrderQueryField = (typeof FQCORDER_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const FQCORDER_QUERY_FIELDS: readonly FqcOrderQueryField[] = [
-  ...FQCORDER_QUERY_STRING_FIELDS,
-  'totalWarehouseQuantity',
-  'totalSampleQuantity',
-  'totalQualifiedQuantity',
-  'totalUnqualifiedQuantity',
-  'totalInspectionReturnQuantity',
-  'judgeStatus',
-]
+export const FQCORDER_QUERY_FIELDS: readonly FqcOrderQueryField[] = [...FQCORDER_QUERY_STRING_FIELDS]
 
 /**
  * FQC出货检验单实体字段 i18n：index / fqc-order-form 统一入口

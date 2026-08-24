@@ -238,7 +238,7 @@
       <a-form-item :label="pi.queryLabel('exchangeRateStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.exchangeRateStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('exchangeRateStatus', 'select')"
           allow-clear
         />

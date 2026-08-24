@@ -99,6 +99,10 @@ node scripts/generate-all.cjs --Holiday --dry-run
 - [ ] entity.* i18n 种子与列标题 t('entity.*')
 - [ ] 树表/排除实体：13-vue-view + 14-vue-form 手工页
 - [ ] 12-crud 11 项能力 + 08 双端分页
+- [ ] 「xxx内容」表单为 takt-rich-editor（非 textarea）
+- [ ] fileName + accessUrl 成对时为 takt-upload-file（排除 TaktFile）
+- [ ] 「自动通过 TaktNumbering」无 MIME：规则下拉 + 只读编码；CreateDto.NumberingRuleCode；Service 注入 ITaktNumberingGenerator
+- [ ] 「自动通过 TaktNumbering」含 MIME：不生成表单规则控件（上传引擎 MIME→FD-F*）
 - [ ] 03-format-blank-lines
 ```
 

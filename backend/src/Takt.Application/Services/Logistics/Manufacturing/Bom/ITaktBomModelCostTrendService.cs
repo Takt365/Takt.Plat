@@ -11,13 +11,12 @@
 // ========================================
 
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
 /// <summary>
 /// BOM 机种成本推移分析服务（读 BOM 成本本表；与产品推移 / CRUD 分离）。
-/// 工厂/机种选项可引用 ITaktBomMaterialCostAnalysisService；物料（X+F 组件）选项由本服务提供。
+/// 查询栏工厂/期间/机种/物料选项统一走 ITaktBomMaterialCostAnalysisService。
 /// </summary>
 public interface ITaktBomModelCostTrendService
 {
@@ -40,20 +39,4 @@ public interface ITaktBomModelCostTrendService
         TaktBomModelCostTrendQueryDto query,
         string? sheetName = null,
         string? fileName = null);
-
-    /// <summary>
-    /// 机种选项（分析：工厂 + 期间最后月头表机种去重；❌ 非 CRUD 主数据 TaktModelDestination）
-    /// </summary>
-    /// <param name="queryDto">工厂与 FocusPeriod（yyyy-MM）</param>
-    /// <returns>下拉选项 DictValue=ModelCode</returns>
-    Task<List<TaktSelectOption>> GetBomModelCostTrendModelOptionsAsync(
-        TaktBomModelCostTrendOptionsQueryDto queryDto);
-
-    /// <summary>
-    /// 物料/组件选项（工厂 + 期间最后月 + ProductionRelated=X + PurchaseType=F + 未删除去重；支持 keyword 远程搜索）
-    /// </summary>
-    /// <param name="queryDto">工厂、FocusPeriod、可选 Keyword</param>
-    /// <returns>下拉选项 DictValue=ComponentCode</returns>
-    Task<List<TaktSelectOption>> GetBomModelCostTrendComponentOptionsAsync(
-        TaktBomModelCostTrendOptionsQueryDto queryDto);
 }

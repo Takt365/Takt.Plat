@@ -23,19 +23,19 @@ namespace Takt.Domain.Entities.Identity;
 [SugarTable("takt_identity_user", "用户表")]
 [SugarIndex("ix_user_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_user_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_user_username_unique", nameof(TenantCode), OrderByType.Asc, nameof(Username), OrderByType.Asc, true)]
+[SugarIndex("ix_user_name_unique", nameof(TenantCode), OrderByType.Asc, nameof(UserName), OrderByType.Asc, true)]
 public class TaktUser : TaktTenantCultureEntityBase
 {
     /// <summary>
-    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）
     /// </summary>
-    [SugarColumn(ColumnName = "username", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
-    public string Username { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    public string UserName { get; set; } = string.Empty;
     /// <summary>
-    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// 昵称（显示名称，2–40 位）
     /// </summary>
-    [SugarColumn(ColumnName = "nickname", ColumnDescription = "昵称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string Nickname { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "nick_name", ColumnDescription = "昵称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string NickName { get; set; } = string.Empty;
     /// <summary>
     /// 用户类型（字典 sys_user_type）
     /// </summary>
@@ -47,12 +47,13 @@ public class TaktUser : TaktTenantCultureEntityBase
     [SugarColumn(ColumnName = "password_hash", ColumnDescription = "密码哈希", ColumnDataType = "varchar", Length = 255, IsNullable = false)]
     public string PasswordHash { get; set; } = string.Empty;
     /// <summary>
-    /// 关联的员工ID（必须关联人事档案）
+    /// 关联的员工ID（（选项 TaktUsers/options；DictValue=Id,必须关联人事档案）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
@@ -87,7 +88,7 @@ public class TaktUser : TaktTenantCultureEntityBase
     [SugarColumn(ColumnName = "locked_until", ColumnDescription = "锁定时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? LockedUntil { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "user_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int UserStatus { get; set; } = 1;

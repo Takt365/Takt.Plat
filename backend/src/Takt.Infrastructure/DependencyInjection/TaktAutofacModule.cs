@@ -124,6 +124,14 @@ public class TaktAutofacModule : Autofac.Module
         builder.RegisterType<Takt.Application.Services.Logistics.Manufacturing.EngineeringChange.TaktEcExecPersistence>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<Takt.Application.Services.Logistics.Sales.TaktSalesPriceTrendMonthlyAnalysisBuilder>()
+            .As<Takt.Application.Services.Logistics.Sales.ITaktSalesPriceTrendMonthlyAnalysisBuilder>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Application.Services.Logistics.Procurement.TaktPurchasePriceTrendMonthlyAnalysisBuilder>()
+            .As<Takt.Application.Services.Logistics.Procurement.ITaktPurchasePriceTrendMonthlyAnalysisBuilder>()
+            .InstancePerLifetimeScope();
+
         builder.RegisterType<TaktLineNumberGenerator>()
             .As<ITaktLineNumberGenerator>()
             .SingleInstance();

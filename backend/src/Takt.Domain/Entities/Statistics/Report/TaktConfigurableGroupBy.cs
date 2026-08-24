@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.Statistics.Report;
 public class TaktConfigurableGroupBy : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联报表主表 ID（主子表关系）
+    /// 关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "configurable_id", ColumnDescription = "报表主表ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -43,7 +43,7 @@ public class TaktConfigurableGroupBy : TaktCompanyEntityBase
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（GROUP BY 列顺序）
+    /// 排序号（回填）（GROUP BY 列顺序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

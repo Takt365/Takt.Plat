@@ -32,6 +32,11 @@ public class TaktDocumentVersion : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DocumentId { get; set; }
     /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    public int LineNumber { get; set; } = 10;
+    /// <summary>
     /// 版本号
     /// </summary>
     [SugarColumn(ColumnName = "version_no", ColumnDescription = "版本号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
@@ -42,36 +47,11 @@ public class TaktDocumentVersion : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "version_note", ColumnDescription = "版本说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? VersionNote { get; set; }
     /// <summary>
-    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id；上传下载元数据在 TaktFile）
     /// </summary>
     [SugarColumn(ColumnName = "file_id", ColumnDescription = "文件ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FileId { get; set; }
-    /// <summary>
-    /// 文件名称
-    /// </summary>
-    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string FileName { get; set; } = string.Empty;
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    [SugarColumn(ColumnName = "file_path", ColumnDescription = "文件路径", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
-    public string FilePath { get; set; } = string.Empty;
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [SugarColumn(ColumnName = "file_size", ColumnDescription = "文件大小", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
-    public long FileSize { get; set; } = 0;
-    /// <summary>
-    /// 文件类型（MIME）
-    /// </summary>
-    [SugarColumn(ColumnName = "file_type", ColumnDescription = "文件类型", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? FileType { get; set; }
-    /// <summary>
-    /// 文件扩展名
-    /// </summary>
-    [SugarColumn(ColumnName = "file_extension", ColumnDescription = "文件扩展名", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
-    public string? FileExtension { get; set; }
     /// <summary>
     /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
@@ -79,7 +59,7 @@ public class TaktDocumentVersion : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisedBy { get; set; }
     /// <summary>
-    /// 修订人姓名
+    /// 修订人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "revised_by_name", ColumnDescription = "修订人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? RevisedByName { get; set; }
@@ -88,6 +68,11 @@ public class TaktDocumentVersion : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "revised_at", ColumnDescription = "修订时间", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime RevisedAt { get; set; } = DateTime.Now;
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     // ========================================
     // 导航属性区域

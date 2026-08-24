@@ -68,7 +68,7 @@ import {
   RiSortNumberDesc,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import { getBomMaterialCostAnalysisPlantOptions } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
+import { getBomCostOptionPlantOptions } from '@/api/logistics/manufacturing/bom/cost-option'
 import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
 import ModelCostTrendQueryForm from './components/model-cost-trend-query-form.vue'
@@ -255,7 +255,7 @@ async function applyDefaultPlantFromCompany(): Promise<void> {
   let matched: string | undefined
   if (related) {
     try {
-      const plants = await getBomMaterialCostAnalysisPlantOptions()
+      const plants = await getBomCostOptionPlantOptions()
       const hit = (plants ?? []).find(
         (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
       )

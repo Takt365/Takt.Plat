@@ -66,7 +66,7 @@ public class TaktNotificationHub : Hub
         try
         {
             RequireResolvedLoginUser();
-            var userName = _userContext.UserName!.Trim();
+            var UserName = _userContext.UserName!.Trim();
             var userId = _userContext.UserId!.Value;
             var companyCode = await ResolveCompanyCodeAsync();
             var connectionId = Context.ConnectionId ?? string.Empty;
@@ -74,16 +74,16 @@ public class TaktNotificationHub : Hub
             var (connectIp, connectLocation) = TaktHttpAuditHelper.ResolveClientIpAndLocation(httpContext);
             var connectTime = DateTime.Now;
 
-            await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
+            await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, UserName));
             await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.NotificationsGroup(companyCode));
 
             // OnlineMessage 仅由 ConnectHub 推送一次；此处只同步消息统计
-            await _signalRDispatchService.PushMessageStatisticsToUserAsync(companyCode, userName, userId);
+            await _signalRDispatchService.PushMessageStatisticsToUserAsync(companyCode, UserName, userId);
 
             TaktSignalRLogging.LogHubConnected(
                 nameof(TaktNotificationHub),
                 connectionId,
-                userName,
+                UserName,
                 userId,
                 companyCode,
                 _userContext.TenantCode,
@@ -109,17 +109,17 @@ public class TaktNotificationHub : Hub
         try
         {
             RequireResolvedLoginUser();
-            var userName = _userContext.UserName!.Trim();
+            var UserName = _userContext.UserName!.Trim();
             var companyCode = await ResolveCompanyCodeAsync();
             var connectionId = Context.ConnectionId ?? string.Empty;
 
-            await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
+            await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, UserName));
             await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.NotificationsGroup(companyCode));
 
             TaktSignalRLogging.LogHubDisconnected(
                 nameof(TaktNotificationHub),
                 connectionId,
-                userName,
+                UserName,
                 _userContext.UserId,
                 companyCode,
                 _userContext.TenantCode,
@@ -261,8 +261,8 @@ public class TaktNotificationHub : Hub
             });
 
             var companyCode = await ResolveCompanyCodeAsync();
-            var userName = _userContext.UserName!.Trim();
-            await _signalRDispatchService.PushMessageStatisticsToUserAsync(companyCode, userName, _userContext.UserId);
+            var UserName = _userContext.UserName!.Trim();
+            await _signalRDispatchService.PushMessageStatisticsToUserAsync(companyCode, UserName, _userContext.UserId);
         }
         catch (Exception ex)
         {
@@ -278,8 +278,8 @@ public class TaktNotificationHub : Hub
     public async Task<int> GetUnreadCount()
     {
         RequireResolvedLoginUser();
-        var userName = _userContext.UserName!.Trim();
-        return await _messageService.GetUnreadMessageCountAsync(userName);
+        var UserName = _userContext.UserName!.Trim();
+        return await _messageService.GetUnreadMessageCountAsync(UserName);
     }
 
     /// <summary>
@@ -287,8 +287,8 @@ public class TaktNotificationHub : Hub
     /// </summary>
     private void RequireResolvedLoginUser()
     {
-        var (userId, userName) = ResolveUserFromContext();
-        if (!userId.HasValue || userId.Value <= 0 || string.IsNullOrWhiteSpace(userName))
+        var (userId, UserName) = ResolveUserFromContext();
+        if (!userId.HasValue || userId.Value <= 0 || string.IsNullOrWhiteSpace(UserName))
         {
             throw new HubException("无法解析当前登录用户，请重新登录后重试。");
         }
@@ -301,12 +301,12 @@ public class TaktNotificationHub : Hub
     private async Task<string> ResolveCompanyCodeAsync()
     {
         RequireResolvedLoginUser();
-        var (userId, userName) = ResolveUserFromContext();
+        var (userId, UserName) = ResolveUserFromContext();
         return await TaktSignalRHubCompanyResolver.ResolveAsync(
             _userContext,
             _authService,
             userId!.Value,
-            userName!);
+            UserName!);
     }
 
     /// <summary>

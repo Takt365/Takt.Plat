@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktExpenseDetailDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ExpenseDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktExpenseDetail 生成，请按需审阅）
 // 
@@ -89,7 +89,7 @@ public class TaktExpenseDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// 发票号码
     /// </summary>
-    public string? InvoiceNo { get; set; } = string.Empty;
+    public string? InvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用发生日期
@@ -97,7 +97,7 @@ public class TaktExpenseDetailDto : TaktCompanyDtoBase
     public DateTime? ExpenseDetailDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -119,7 +119,7 @@ public class TaktExpenseDetailQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -128,11 +128,11 @@ public class TaktExpenseDetailQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 费用单 ID（主子表关系）
     /// </summary>
@@ -182,7 +182,7 @@ public class TaktExpenseDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// 发票号码
     /// </summary>
-    public string? InvoiceNo { get; set; } = string.Empty;
+    public string? InvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用发生日期（范围查询-开始）
@@ -195,7 +195,7 @@ public class TaktExpenseDetailQueryDto : TaktPagedQuery
     public DateTime? ExpenseDetailDateEnd { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -218,11 +218,6 @@ public class TaktExpenseDetailQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 发票号码
-    /// </summary>
-    public string? InvoiceCode { get; set; }
 }
 
 // ========================================
@@ -249,12 +244,11 @@ public class TaktExpenseDetailCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 费用单 ID（主子表关系）
     /// </summary>
@@ -264,7 +258,6 @@ public class TaktExpenseDetailCreateDto
     /// <summary>
     /// 费用单编码（冗余，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "费用单编码（冗余，便于查询）不能为空")]
     public string ExpenseCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -307,7 +300,7 @@ public class TaktExpenseDetailCreateDto
     /// <summary>
     /// 发票号码
     /// </summary>
-    public string? InvoiceNo { get; set; } = string.Empty;
+    public string? InvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用发生日期
@@ -315,7 +308,7 @@ public class TaktExpenseDetailCreateDto
     public DateTime? ExpenseDetailDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -369,7 +362,7 @@ public class TaktExpenseDetailObsoleteDto
     public long ExpenseDetailId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -398,11 +391,11 @@ public class TaktExpenseDetailTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 费用单 ID（主子表关系）
     /// </summary>
@@ -452,7 +445,7 @@ public class TaktExpenseDetailTemplateDto
     /// <summary>
     /// 发票号码
     /// </summary>
-    public string? InvoiceNo { get; set; } = string.Empty;
+    public string? InvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用发生日期
@@ -460,7 +453,7 @@ public class TaktExpenseDetailTemplateDto
     public DateTime? ExpenseDetailDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -496,12 +489,11 @@ public class TaktExpenseDetailImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 费用单 ID（主子表关系）
     /// </summary>
@@ -551,7 +543,7 @@ public class TaktExpenseDetailImportDto
     /// <summary>
     /// 发票号码
     /// </summary>
-    public string? InvoiceNo { get; set; } = string.Empty;
+    public string? InvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用发生日期
@@ -559,7 +551,7 @@ public class TaktExpenseDetailImportDto
     public DateTime? ExpenseDetailDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -595,6 +587,16 @@ public class TaktExpenseDetailExportDto
     /// 公司代码
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用单 ID（主子表关系）
@@ -645,7 +647,7 @@ public class TaktExpenseDetailExportDto
     /// <summary>
     /// 发票号码
     /// </summary>
-    public string? InvoiceNo { get; set; } = string.Empty;
+    public string? InvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用发生日期
@@ -653,7 +655,7 @@ public class TaktExpenseDetailExportDto
     public DateTime? ExpenseDetailDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

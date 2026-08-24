@@ -703,15 +703,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingField(record, 'routingId') ?? ''
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoutingField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('workCenter'),
     dataIndex: 'workCenter',
     key: 'workCenter',

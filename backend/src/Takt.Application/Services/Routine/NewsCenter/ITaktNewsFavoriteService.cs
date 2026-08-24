@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：ITaktNewsFavoriteService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心收藏记录应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktNewsFavoriteService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteNewsFavoriteBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新新闻中心收藏记录作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktNewsFavoriteDto> UpdateNewsFavoriteObsoleteAsync(TaktNewsFavoriteObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

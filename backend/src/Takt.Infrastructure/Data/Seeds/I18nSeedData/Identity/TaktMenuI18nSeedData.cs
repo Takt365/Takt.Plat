@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMenu 实体字段国际化种子（已对齐前端 locales：src/locales/identity/menu）
 // 
@@ -154,13 +154,13 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.menu.path", "zh-HK", "菜单路径_hk", "菜单路径（如：/100/1000/1001/，用于快速查询子菜单）"),
 
             // entity.menu.isleaf
-            new TranslationSeedItem("entity.menu.isleaf", "en-US", "是否叶子节点_us", "是否叶子节点（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.menu.isleaf", "en-US", "是否叶子节点_us", "是否叶子节点（字典 sys_yes_no；0=否，1=是）"),
             // entity.menu.isleaf
-            new TranslationSeedItem("entity.menu.isleaf", "ja-JP", "是否叶子节点_jp", "是否叶子节点（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.menu.isleaf", "ja-JP", "是否叶子节点_jp", "是否叶子节点（字典 sys_yes_no；0=否，1=是）"),
             // entity.menu.isleaf
-            new TranslationSeedItem("entity.menu.isleaf", "zh-CN", "是否叶子节点", "是否叶子节点（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.menu.isleaf", "zh-CN", "是否叶子节点", "是否叶子节点（字典 sys_yes_no；0=否，1=是）"),
             // entity.menu.isleaf
-            new TranslationSeedItem("entity.menu.isleaf", "zh-HK", "是否叶子节点_hk", "是否叶子节点（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.menu.isleaf", "zh-HK", "是否叶子节点_hk", "是否叶子节点（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.menu.type
             new TranslationSeedItem("entity.menu.type", "en-US", "菜单类型_us", "菜单类型（字典 sys_menu_type；0=目录，1=菜单，2=按钮）"),
@@ -199,13 +199,13 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.menu.component", "zh-HK", "组件路径_hk", "组件路径（前端组件路径）"),
 
             // entity.menu.isexternal
-            new TranslationSeedItem("entity.menu.isexternal", "en-US", "是否外部链接_us", "是否外部链接（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.menu.isexternal", "en-US", "是否外部链接_us", "是否外部链接（字典 sys_yes_no）"),
             // entity.menu.isexternal
-            new TranslationSeedItem("entity.menu.isexternal", "ja-JP", "是否外部链接_jp", "是否外部链接（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.menu.isexternal", "ja-JP", "是否外部链接_jp", "是否外部链接（字典 sys_yes_no）"),
             // entity.menu.isexternal
-            new TranslationSeedItem("entity.menu.isexternal", "zh-CN", "是否外部链接", "是否外部链接（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.menu.isexternal", "zh-CN", "是否外部链接", "是否外部链接（字典 sys_yes_no）"),
             // entity.menu.isexternal
-            new TranslationSeedItem("entity.menu.isexternal", "zh-HK", "是否外部链接_hk", "是否外部链接（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.menu.isexternal", "zh-HK", "是否外部链接_hk", "是否外部链接（字典 sys_yes_no）"),
 
             // entity.menu.linkurl
             new TranslationSeedItem("entity.menu.linkurl", "en-US", "外部链接地址_us", "外部链接地址"),
@@ -217,31 +217,31 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.menu.linkurl", "zh-HK", "外部链接地址_hk", "外部链接地址"),
 
             // entity.menu.iscached
-            new TranslationSeedItem("entity.menu.iscached", "en-US", "是否缓存_us", "是否缓存（字典 sys_yes_no_type；前端 keep-alive）"),
+            new TranslationSeedItem("entity.menu.iscached", "en-US", "是否缓存_us", "是否缓存（字典 sys_yes_no；前端 keep-alive）"),
             // entity.menu.iscached
-            new TranslationSeedItem("entity.menu.iscached", "ja-JP", "是否缓存_jp", "是否缓存（字典 sys_yes_no_type；前端 keep-alive）"),
+            new TranslationSeedItem("entity.menu.iscached", "ja-JP", "是否缓存_jp", "是否缓存（字典 sys_yes_no；前端 keep-alive）"),
             // entity.menu.iscached
-            new TranslationSeedItem("entity.menu.iscached", "zh-CN", "是否缓存", "是否缓存（字典 sys_yes_no_type；前端 keep-alive）"),
+            new TranslationSeedItem("entity.menu.iscached", "zh-CN", "是否缓存", "是否缓存（字典 sys_yes_no；前端 keep-alive）"),
             // entity.menu.iscached
-            new TranslationSeedItem("entity.menu.iscached", "zh-HK", "是否缓存_hk", "是否缓存（字典 sys_yes_no_type；前端 keep-alive）"),
+            new TranslationSeedItem("entity.menu.iscached", "zh-HK", "是否缓存_hk", "是否缓存（字典 sys_yes_no；前端 keep-alive）"),
 
             // entity.menu.isvisible
-            new TranslationSeedItem("entity.menu.isvisible", "en-US", "是否显示_us", "是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）"),
+            new TranslationSeedItem("entity.menu.isvisible", "en-US", "是否显示_us", "是否显示（字典 sys_yes_no；0=隐藏，1=显示）"),
             // entity.menu.isvisible
-            new TranslationSeedItem("entity.menu.isvisible", "ja-JP", "是否显示_jp", "是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）"),
+            new TranslationSeedItem("entity.menu.isvisible", "ja-JP", "是否显示_jp", "是否显示（字典 sys_yes_no；0=隐藏，1=显示）"),
             // entity.menu.isvisible
-            new TranslationSeedItem("entity.menu.isvisible", "zh-CN", "是否显示", "是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）"),
+            new TranslationSeedItem("entity.menu.isvisible", "zh-CN", "是否显示", "是否显示（字典 sys_yes_no；0=隐藏，1=显示）"),
             // entity.menu.isvisible
-            new TranslationSeedItem("entity.menu.isvisible", "zh-HK", "是否显示_hk", "是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）"),
+            new TranslationSeedItem("entity.menu.isvisible", "zh-HK", "是否显示_hk", "是否显示（字典 sys_yes_no；0=隐藏，1=显示）"),
 
             // entity.menu.isbuiltin
-            new TranslationSeedItem("entity.menu.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）"),
+            new TranslationSeedItem("entity.menu.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；种子菜单为内置，不允许删除）"),
             // entity.menu.isbuiltin
-            new TranslationSeedItem("entity.menu.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）"),
+            new TranslationSeedItem("entity.menu.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；种子菜单为内置，不允许删除）"),
             // entity.menu.isbuiltin
-            new TranslationSeedItem("entity.menu.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）"),
+            new TranslationSeedItem("entity.menu.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；种子菜单为内置，不允许删除）"),
             // entity.menu.isbuiltin
-            new TranslationSeedItem("entity.menu.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）"),
+            new TranslationSeedItem("entity.menu.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；种子菜单为内置，不允许删除）"),
 
             // entity.menu.description
             new TranslationSeedItem("entity.menu.description", "en-US", "菜单描述_us", "菜单描述"),
@@ -253,22 +253,22 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.menu.description", "zh-HK", "菜单描述_hk", "菜单描述"),
 
             // entity.menu.sortorder
-            new TranslationSeedItem("entity.menu.sortorder", "en-US", "排序号_us", "排序号（同级菜单排序）"),
+            new TranslationSeedItem("entity.menu.sortorder", "en-US", "排序号_us", "排序号（回填）（同级菜单排序）"),
             // entity.menu.sortorder
-            new TranslationSeedItem("entity.menu.sortorder", "ja-JP", "排序号_jp", "排序号（同级菜单排序）"),
+            new TranslationSeedItem("entity.menu.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（同级菜单排序）"),
             // entity.menu.sortorder
-            new TranslationSeedItem("entity.menu.sortorder", "zh-CN", "排序号", "排序号（同级菜单排序）"),
+            new TranslationSeedItem("entity.menu.sortorder", "zh-CN", "排序号", "排序号（回填）（同级菜单排序）"),
             // entity.menu.sortorder
-            new TranslationSeedItem("entity.menu.sortorder", "zh-HK", "排序号_hk", "排序号（同级菜单排序）"),
+            new TranslationSeedItem("entity.menu.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（同级菜单排序）"),
 
             // entity.menu.status
-            new TranslationSeedItem("entity.menu.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.menu.status", "en-US", "状态_us", "状态（字典 sys_normal_disable）"),
             // entity.menu.status
-            new TranslationSeedItem("entity.menu.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.menu.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable）"),
             // entity.menu.status
-            new TranslationSeedItem("entity.menu.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.menu.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
             // entity.menu.status
-            new TranslationSeedItem("entity.menu.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.menu.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable）"),
 
             // entity.menu.rolemenus
             new TranslationSeedItem("entity.menu.rolemenus", "en-US", "拥有该菜单权限的角色关联_us", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),

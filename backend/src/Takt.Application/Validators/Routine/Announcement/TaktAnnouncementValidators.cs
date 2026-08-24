@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.Announcement
 // 文件名称：TaktAnnouncementValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Announcement 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktAnnouncement 生成，请按需审阅）
 // 
@@ -49,9 +49,6 @@ public class TaktAnnouncementCreateValidator : AbstractValidator<TaktAnnouncemen
             .MaximumLength(200).WithMessage("公告标题长度不能超过200个字符");
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("公告内容不能为空");
-        RuleFor(x => x.TargetScope)
-            .NotEmpty().WithMessage("目标范围不能为空")
-            .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -95,9 +92,6 @@ public class TaktAnnouncementUpdateValidator : AbstractValidator<TaktAnnouncemen
             .MaximumLength(200).WithMessage("公告标题长度不能超过200个字符");
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("公告内容不能为空");
-        RuleFor(x => x.TargetScope)
-            .NotEmpty().WithMessage("目标范围不能为空")
-            .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -135,9 +129,6 @@ public class TaktAnnouncementImportValidator : AbstractValidator<TaktAnnouncemen
             .MaximumLength(200).WithMessage("公告标题长度不能超过200个字符");
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("公告内容不能为空");
-        RuleFor(x => x.TargetScope)
-            .NotEmpty().WithMessage("目标范围不能为空")
-            .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

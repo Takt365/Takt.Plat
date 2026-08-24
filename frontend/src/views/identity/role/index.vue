@@ -192,7 +192,7 @@
       <a-form-item :label="t('entity.role.isbuiltin')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.role.isbuiltin') })"
           allow-clear
         />
@@ -202,7 +202,7 @@
       <a-form-item :label="t('entity.role.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.roleStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.role.status') })"
           allow-clear
         />
@@ -657,7 +657,7 @@ function handleSearch() {
 }
 
 /**
- * 表格行内切换角色状态（sys_normal_disable_status：1=启用，0=禁用）
+ * 表格行内切换角色状态（sys_normal_disable：1=启用，0=禁用）
  * @param record 当前行
  * @param checked 开关是否选中（启用）
  */
@@ -684,7 +684,7 @@ async function handleRoleStatusChange(record: Role, checked: boolean) {
 }
 
 /**
- * 表格行内切换内置（sys_yes_no_type：1=是，0=否；已为内置时不可取消）
+ * 表格行内切换内置（sys_yes_no：1=是，0=否；已为内置时不可取消）
  * @param record 当前行
  * @param checked 开关是否选中（内置）
  */

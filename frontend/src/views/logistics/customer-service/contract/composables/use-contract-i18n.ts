@@ -44,13 +44,13 @@ export const CUSTOMERSERVICECONTRACT_LIST_FIELDS = [
 export const CUSTOMERSERVICECONTRACT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'required',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   serviceContractCode: 'required',
   contractName: 'required',
   clientId: 'required',
-  clientCode: 'required',
-  clientName1: 'required',
+  clientCode: 'optional',
+  clientName1: 'optional',
   contractType: 'select',
   contractStatus: 'select',
   signDate: 'optional',
@@ -72,6 +72,7 @@ export type CustomerServiceContractField = keyof typeof CUSTOMERSERVICECONTRACT_
 
 /** 高级查询可 trim 的字符串字段 */
 export const CUSTOMERSERVICECONTRACT_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'serviceContractCode',
   'contractName',

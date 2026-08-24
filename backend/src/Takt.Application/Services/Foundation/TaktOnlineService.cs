@@ -679,10 +679,10 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
     /// 设置指定自然日累计时长（覆盖写入，避免重复累加）
     /// </summary>
     /// <param name="userId">用户 ID</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="statDate">自然日</param>
     /// <param name="durationSeconds">当日累计秒数</param>
-    private async Task SetDailyDurationAsync(long userId, string userName, DateTime statDate, int durationSeconds)
+    private async Task SetDailyDurationAsync(long userId, string UserName, DateTime statDate, int durationSeconds)
     {
         if (durationSeconds < 0)
         {
@@ -708,7 +708,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
                 TenantCode = CurrentTenantCode,
                 CompanyCode = CurrentCompanyCode,
                 UserId = userId,
-                UserName = userName.Trim(),
+                UserName = UserName.Trim(),
                 StatDate = normalizedStatDate,
                 DurationSeconds = durationSeconds,
             });
@@ -720,7 +720,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
             return;
         }
 
-        existing.UserName = userName.Trim();
+        existing.UserName = UserName.Trim();
         existing.DurationSeconds = durationSeconds;
         existing.UpdatedAt = DateTime.Now;
         await _durationLogRepository.UpdateAsync(existing);

@@ -37,7 +37,7 @@ public class TaktBonusPlanDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -120,7 +120,7 @@ public class TaktBonusPlanQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -220,7 +220,7 @@ public class TaktBonusPlanCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -274,9 +274,9 @@ public class TaktBonusPlanStatusDto
     public long BonusPlanId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int PlanStatus { get; set; } = 0;
 }
 
@@ -351,7 +351,7 @@ public class TaktBonusPlanTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -435,7 +435,7 @@ public class TaktBonusPlanImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -519,7 +519,7 @@ public class TaktBonusPlanExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 

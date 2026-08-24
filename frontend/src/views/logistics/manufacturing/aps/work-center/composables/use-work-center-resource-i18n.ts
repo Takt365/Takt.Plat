@@ -20,7 +20,6 @@ export const WORKCENTERRESOURCE_SELF_I18N_KEY = buildEntitySelfI18nKey(WORKCENTE
 
 /** 列表业务列（不含主键） */
 export const WORKCENTERRESOURCE_LIST_FIELDS = [
-  'workCenterId',
   'workCenterCode',
   'resourceCode',
   'resourceName',
@@ -28,11 +27,11 @@ export const WORKCENTERRESOURCE_LIST_FIELDS = [
   'parallelCapacity',
   'efficiencyRate',
   'resourceStatus',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const WORKCENTERRESOURCE_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'workCenterId',
   'workCenterCode',
   'resourceCode',
   'resourceName',
@@ -53,16 +52,7 @@ export const WORKCENTERRESOURCE_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const WORKCENTERRESOURCE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  resourceCode: 'required',
-  resourceName: 'required',
-  resourceType: 'select',
-  parallelCapacity: 'select',
-  efficiencyRate: 'select',
-  resourceStatus: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -70,27 +60,13 @@ export type WorkCenterResourceField = keyof typeof WORKCENTERRESOURCE_PLACEHOLDE
 
 /** 高级查询可 trim 的字符串字段 */
 export const WORKCENTERRESOURCE_QUERY_STRING_FIELDS = [
-  'workCenterCode',
-  'resourceCode',
-  'resourceName',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof WorkCenterResourceQuery)[]
 
-export type WorkCenterResourceQueryField =
-  | (typeof WORKCENTERRESOURCE_QUERY_STRING_FIELDS)[number]
-  | 'resourceType' | 'parallelCapacity' | 'efficiencyRate' | 'resourceStatus'
+export type WorkCenterResourceQueryField = (typeof WORKCENTERRESOURCE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const WORKCENTERRESOURCE_QUERY_FIELDS: readonly WorkCenterResourceQueryField[] = [
-  ...WORKCENTERRESOURCE_QUERY_STRING_FIELDS,
-  'resourceType',
-  'parallelCapacity',
-  'efficiencyRate',
-  'resourceStatus',
-]
+export const WORKCENTERRESOURCE_QUERY_FIELDS: readonly WorkCenterResourceQueryField[] = [...WORKCENTERRESOURCE_QUERY_STRING_FIELDS]
 
 /**
  * WorkCenterResource字段 i18n：index / work-center-resource-form 统一入口

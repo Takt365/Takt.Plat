@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Report
 // 文件名称：TaktConfigurableJoinService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自定义报表关联应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Statistics.Report;
 
@@ -56,12 +55,20 @@ public class TaktConfigurableJoinService : TaktServiceBase, ITaktConfigurableJoi
     }
 
     /// <summary>
-    /// 获取自定义报表关联列表（分页）
+    /// 获取自定义报表关联列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktConfigurableJoinDto>> GetConfigurableJoinListAsync(TaktConfigurableJoinQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktConfigurableJoinDto>.Create(
+                new List<TaktConfigurableJoinDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _configurableJoinRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -102,8 +109,8 @@ public class TaktConfigurableJoinService : TaktServiceBase, ITaktConfigurableJoi
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.LeftColumnName ?? e.Id.ToString(),
+            DictValue = e.LeftColumnName,
+            DictLabel = e.LeftColumnName,
         }).ToList();
     }
 
@@ -256,7 +263,15 @@ public class TaktConfigurableJoinService : TaktServiceBase, ITaktConfigurableJoi
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportConfigurableJoinAsync(TaktConfigurableJoinQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktConfigurableJoinQueryDto());
+        var queryDto = query ?? new TaktConfigurableJoinQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktConfigurableJoinExportDto>(),
+                sheetName ?? "自定义报表关联数据",
+                fileName ?? "自定义报表关联导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _configurableJoinRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -285,90 +300,165 @@ public class TaktConfigurableJoinService : TaktServiceBase, ITaktConfigurableJoi
     {
         var exp = Expressionable.Create<TaktConfigurableJoin>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.ConfigurableId).Contains(keywords)
-                || SqlFunc.ToString(x.JoinType).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.LeftSourceAlias != null && x.LeftSourceAlias.Contains(keywords))
                 || (x.LeftColumnName != null && x.LeftColumnName.Contains(keywords))
                 || (x.RightSourceAlias != null && x.RightSourceAlias.Contains(keywords))
                 || (x.RightColumnName != null && x.RightColumnName.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.ConfigurableId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.ConfigurableId == queryDto.ConfigurableId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.JoinType.HasValue == true)
-        {
-            exp = exp.And(x => x.JoinType == queryDto.JoinType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.LeftSourceAlias))
-        {
-            exp = exp.And(x => x.LeftSourceAlias != null && x.LeftSourceAlias.Contains(queryDto.LeftSourceAlias));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.LeftColumnName))
-        {
-            exp = exp.And(x => x.LeftColumnName != null && x.LeftColumnName.Contains(queryDto.LeftColumnName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RightSourceAlias))
-        {
-            exp = exp.And(x => x.RightSourceAlias != null && x.RightSourceAlias.Contains(queryDto.RightSourceAlias));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RightColumnName))
-        {
-            exp = exp.And(x => x.RightColumnName != null && x.RightColumnName.Contains(queryDto.RightColumnName));
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.ConfigurableId.HasValue == true)
+        {
+            var configurableId = queryDto.ConfigurableId.Value;
+            exp = exp.And(x => x.ConfigurableId == configurableId);
+        }
+
+        if (queryDto?.JoinType.HasValue == true)
+        {
+            var joinType = queryDto.JoinType.Value;
+            exp = exp.And(x => x.JoinType == joinType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.LeftSourceAlias))
+        {
+            var leftSourceAlias = queryDto.LeftSourceAlias;
+            exp = exp.And(x => x.LeftSourceAlias != null && x.LeftSourceAlias.Contains(leftSourceAlias));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.LeftColumnName))
+        {
+            var leftColumnName = queryDto.LeftColumnName;
+            exp = exp.And(x => x.LeftColumnName != null && x.LeftColumnName.Contains(leftColumnName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RightSourceAlias))
+        {
+            var rightSourceAlias = queryDto.RightSourceAlias;
+            exp = exp.And(x => x.RightSourceAlias != null && x.RightSourceAlias.Contains(rightSourceAlias));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RightColumnName))
+        {
+            var rightColumnName = queryDto.RightColumnName;
+            exp = exp.And(x => x.RightColumnName != null && x.RightColumnName.Contains(rightColumnName));
+        }
+
+        if (queryDto?.SortOrder.HasValue == true)
+        {
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktConfigurableJoinQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.ConfigurableId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.JoinType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.LeftSourceAlias))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.LeftColumnName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RightSourceAlias))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RightColumnName))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

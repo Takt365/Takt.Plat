@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeOnboarding 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeOnboarding 生成，请按需审阅）
 // 
@@ -49,7 +49,7 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     /// <summary>
     /// 待办单号（租户+公司内业务编码）
     /// </summary>
-    public string TodoNo { get; set; } = string.Empty;
+    public string TodoCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
@@ -104,6 +104,12 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     public int TodoStatus { get; set; } = 0;
 
     /// <summary>
+    /// 员工主档（多对一；建档回填后可有值）
+    /// （主表：TaktEmployee）
+    /// </summary>
+    public TaktEmployeeDto? Employee { get; set; }
+
+    /// <summary>
     /// 录用信息
     /// （主表：TaktTalentOffer）
     /// </summary>
@@ -133,7 +139,7 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -142,11 +148,11 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
@@ -156,7 +162,7 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     /// <summary>
     /// 待办单号（租户+公司内业务编码）
     /// </summary>
-    public string? TodoNo { get; set; } = string.Empty;
+    public string? TodoCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）（范围查询-开始）
@@ -229,11 +235,6 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 待办单号（租户+公司内业务编码）
-    /// </summary>
-    public string TodoCode { get; set; } = string.Empty;
 }
 
 // ========================================
@@ -260,12 +261,11 @@ public class TaktEmployeeOnboardingCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
@@ -276,7 +276,7 @@ public class TaktEmployeeOnboardingCreateDto
     /// 待办单号（租户+公司内业务编码）
     /// </summary>
     [Required(ErrorMessage = "待办单号（租户+公司内业务编码）不能为空")]
-    public string TodoNo { get; set; } = string.Empty;
+    public string TodoCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
@@ -406,11 +406,11 @@ public class TaktEmployeeOnboardingTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
@@ -420,7 +420,7 @@ public class TaktEmployeeOnboardingTemplateDto
     /// <summary>
     /// 待办单号（租户+公司内业务编码）
     /// </summary>
-    public string? TodoNo { get; set; } = string.Empty;
+    public string? TodoCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
@@ -501,12 +501,11 @@ public class TaktEmployeeOnboardingImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
@@ -516,7 +515,7 @@ public class TaktEmployeeOnboardingImportDto
     /// <summary>
     /// 待办单号（租户+公司内业务编码）
     /// </summary>
-    public string? TodoNo { get; set; } = string.Empty;
+    public string? TodoCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
@@ -599,6 +598,16 @@ public class TaktEmployeeOnboardingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -607,7 +616,7 @@ public class TaktEmployeeOnboardingExportDto
     /// <summary>
     /// 待办单号（租户+公司内业务编码）
     /// </summary>
-    public string TodoNo { get; set; } = string.Empty;
+    public string TodoCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）

@@ -69,4 +69,14 @@ public class TaktEmployeeResignation : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "handover_notes", ColumnDescription = "工作交接说明", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? HandoverNotes { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktProductionOrderI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -172,13 +172,13 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionorder.actualenddate", "zh-HK", "实际完成日期_hk", "实际完成日期"),
 
             // entity.productionorder.priority
-            new TranslationSeedItem("entity.productionorder.priority", "en-US", "优先级_us", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
+            new TranslationSeedItem("entity.productionorder.priority", "en-US", "优先级_us", "优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）"),
             // entity.productionorder.priority
-            new TranslationSeedItem("entity.productionorder.priority", "ja-JP", "优先级_jp", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
+            new TranslationSeedItem("entity.productionorder.priority", "ja-JP", "优先级_jp", "优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）"),
             // entity.productionorder.priority
-            new TranslationSeedItem("entity.productionorder.priority", "zh-CN", "优先级", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
+            new TranslationSeedItem("entity.productionorder.priority", "zh-CN", "优先级", "优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）"),
             // entity.productionorder.priority
-            new TranslationSeedItem("entity.productionorder.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
+            new TranslationSeedItem("entity.productionorder.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）"),
 
             // entity.productionorder.workcenter
             new TranslationSeedItem("entity.productionorder.workcenter", "en-US", "工作中心_us", "工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConference 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference._self", "zh-HK", "会议中心主信息_hk", "实体名称"),
 
             // entity.conference.code
-            new TranslationSeedItem("entity.conference.code", "en-US", "会议编码_us", "会议编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.conference.code", "en-US", "会议编码_us", "会议编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 会议编码规则生成并展示，非手输；单据类型菜单：会议中心）"),
             // entity.conference.code
-            new TranslationSeedItem("entity.conference.code", "ja-JP", "会议编码_jp", "会议编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.conference.code", "ja-JP", "会议编码_jp", "会议编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 会议编码规则生成并展示，非手输；单据类型菜单：会议中心）"),
             // entity.conference.code
-            new TranslationSeedItem("entity.conference.code", "zh-CN", "会议编码", "会议编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.conference.code", "zh-CN", "会议编码", "会议编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 会议编码规则生成并展示，非手输；单据类型菜单：会议中心）"),
             // entity.conference.code
-            new TranslationSeedItem("entity.conference.code", "zh-HK", "会议编码_hk", "会议编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.conference.code", "zh-HK", "会议编码_hk", "会议编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 会议编码规则生成并展示，非手输；单据类型菜单：会议中心）"),
 
             // entity.conference.title
             new TranslationSeedItem("entity.conference.title", "en-US", "会议标题_us", "会议标题"),
@@ -199,31 +199,31 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.organizerid", "zh-HK", "组织人ID_hk", "组织人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.conference.organizername
-            new TranslationSeedItem("entity.conference.organizername", "en-US", "组织人姓名_us", "组织人姓名"),
+            new TranslationSeedItem("entity.conference.organizername", "en-US", "组织人姓名_us", "组织人姓名（冗余字段，便于查询）"),
             // entity.conference.organizername
-            new TranslationSeedItem("entity.conference.organizername", "ja-JP", "组织人姓名_jp", "组织人姓名"),
+            new TranslationSeedItem("entity.conference.organizername", "ja-JP", "组织人姓名_jp", "组织人姓名（冗余字段，便于查询）"),
             // entity.conference.organizername
-            new TranslationSeedItem("entity.conference.organizername", "zh-CN", "组织人姓名", "组织人姓名"),
+            new TranslationSeedItem("entity.conference.organizername", "zh-CN", "组织人姓名", "组织人姓名（冗余字段，便于查询）"),
             // entity.conference.organizername
-            new TranslationSeedItem("entity.conference.organizername", "zh-HK", "组织人姓名_hk", "组织人姓名"),
+            new TranslationSeedItem("entity.conference.organizername", "zh-HK", "组织人姓名_hk", "组织人姓名（冗余字段，便于查询）"),
 
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "en-US", "主办部门ID_us", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.conference.deptid", "en-US", "主办部门ID_us", "主办部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "ja-JP", "主办部门ID_jp", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.conference.deptid", "ja-JP", "主办部门ID_jp", "主办部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "zh-CN", "主办部门ID", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.conference.deptid", "zh-CN", "主办部门ID", "主办部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "zh-HK", "主办部门ID_hk", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.conference.deptid", "zh-HK", "主办部门ID_hk", "主办部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
 
             // entity.conference.deptname
-            new TranslationSeedItem("entity.conference.deptname", "en-US", "主办部门名称_us", "主办部门名称"),
+            new TranslationSeedItem("entity.conference.deptname", "en-US", "主办部门名称_us", "主办部门名称（冗余字段，便于查询）"),
             // entity.conference.deptname
-            new TranslationSeedItem("entity.conference.deptname", "ja-JP", "主办部门名称_jp", "主办部门名称"),
+            new TranslationSeedItem("entity.conference.deptname", "ja-JP", "主办部门名称_jp", "主办部门名称（冗余字段，便于查询）"),
             // entity.conference.deptname
-            new TranslationSeedItem("entity.conference.deptname", "zh-CN", "主办部门名称", "主办部门名称"),
+            new TranslationSeedItem("entity.conference.deptname", "zh-CN", "主办部门名称", "主办部门名称（冗余字段，便于查询）"),
             // entity.conference.deptname
-            new TranslationSeedItem("entity.conference.deptname", "zh-HK", "主办部门名称_hk", "主办部门名称"),
+            new TranslationSeedItem("entity.conference.deptname", "zh-HK", "主办部门名称_hk", "主办部门名称（冗余字段，便于查询）"),
 
             // entity.conference.maxparticipants
             new TranslationSeedItem("entity.conference.maxparticipants", "en-US", "最大参会人数_us", "最大参会人数（0 表示不限）"),
@@ -253,13 +253,13 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.roomid", "zh-HK", "会议室ID_hk", "会议室 ID（选项 TaktConferenceRooms/options；DictValue=Id）"),
 
             // entity.conference.roomname
-            new TranslationSeedItem("entity.conference.roomname", "en-US", "会议室名称_us", "会议室名称（冗余快照）"),
+            new TranslationSeedItem("entity.conference.roomname", "en-US", "会议室名称_us", "会议室名称（冗余字段，便于查询）"),
             // entity.conference.roomname
-            new TranslationSeedItem("entity.conference.roomname", "ja-JP", "会议室名称_jp", "会议室名称（冗余快照）"),
+            new TranslationSeedItem("entity.conference.roomname", "ja-JP", "会议室名称_jp", "会议室名称（冗余字段，便于查询）"),
             // entity.conference.roomname
-            new TranslationSeedItem("entity.conference.roomname", "zh-CN", "会议室名称", "会议室名称（冗余快照）"),
+            new TranslationSeedItem("entity.conference.roomname", "zh-CN", "会议室名称", "会议室名称（冗余字段，便于查询）"),
             // entity.conference.roomname
-            new TranslationSeedItem("entity.conference.roomname", "zh-HK", "会议室名称_hk", "会议室名称（冗余快照）"),
+            new TranslationSeedItem("entity.conference.roomname", "zh-HK", "会议室名称_hk", "会议室名称（冗余字段，便于查询）"),
 
             // entity.conference.status
             new TranslationSeedItem("entity.conference.status", "en-US", "会议状态_us", "会议状态（字典 routine_conference_status；0=草稿 1=已排期 2=进行中 3=已结束 4=已取消）"),

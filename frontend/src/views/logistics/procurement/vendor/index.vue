@@ -97,16 +97,16 @@
             dict-type="sys_industry_attribute_type"
           />
         </template>
-        <template v-else-if="column.key === 'defaultCulture'">
+        <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
-            :value="getVendorDictValue(record, 'defaultCulture')"
-            dict-type="sys_culture_code"
+            :value="getVendorDictValue(record, 'taxCode')"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getVendorDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_rate_param"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'registrationCountry'">
@@ -124,7 +124,7 @@
         <template v-else-if="column.key === 'clearingWithCustomer'">
           <TaktDictTag
             :value="getVendorDictValue(record, 'clearingWithCustomer')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'paymentMethod'">
@@ -142,7 +142,7 @@
         <template v-else-if="column.key === 'grBasedInvoiceInspection'">
           <TaktDictTag
             :value="getVendorDictValue(record, 'grBasedInvoiceInspection')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'incoterms1'">
@@ -154,7 +154,7 @@
         <template v-else-if="column.key === 'automaticPurchaseOrder'">
           <TaktDictTag
             :value="getVendorDictValue(record, 'automaticPurchaseOrder')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'pricingDateControl'">
@@ -166,7 +166,7 @@
         <template v-else-if="column.key === 'evaluatedReceiptSettlement'">
           <TaktDictTag
             :value="getVendorDictValue(record, 'evaluatedReceiptSettlement')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'creditLevel'">
@@ -222,6 +222,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
@@ -306,16 +316,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('defaultCulture')">
-      <a-form-item :label="pi.queryLabel('defaultCulture')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.defaultCulture"
-          dict-type="sys_culture_code"
-          :placeholder="pi.queryPh('defaultCulture', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('vendorTaxNumber')">
       <a-form-item :label="pi.queryLabel('vendorTaxNumber')">
         <a-input
@@ -327,11 +327,21 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('taxRate')">
       <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_rate_param"
+          dict-type="accounting_tax_code"
           :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
@@ -498,7 +508,7 @@
       <a-form-item :label="pi.queryLabel('clearingWithCustomer')">
         <TaktSelect
           v-model:value="advancedQueryForm.clearingWithCustomer"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('clearingWithCustomer', 'select')"
           allow-clear
         />
@@ -560,7 +570,7 @@
       <a-form-item :label="pi.queryLabel('grBasedInvoiceInspection')">
         <TaktSelect
           v-model:value="advancedQueryForm.grBasedInvoiceInspection"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('grBasedInvoiceInspection', 'select')"
           allow-clear
         />
@@ -591,7 +601,7 @@
       <a-form-item :label="pi.queryLabel('automaticPurchaseOrder')">
         <TaktSelect
           v-model:value="advancedQueryForm.automaticPurchaseOrder"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('automaticPurchaseOrder', 'select')"
           allow-clear
         />
@@ -630,7 +640,7 @@
       <a-form-item :label="pi.queryLabel('evaluatedReceiptSettlement')">
         <TaktSelect
           v-model:value="advancedQueryForm.evaluatedReceiptSettlement"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('evaluatedReceiptSettlement', 'select')"
           allow-clear
         />
@@ -710,7 +720,7 @@
       <a-form-item :label="pi.queryLabel('vendorStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.vendorStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('vendorStatus', 'select')"
           allow-clear
         />
@@ -1001,6 +1011,7 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
@@ -1077,6 +1088,7 @@ onMounted(async () => {
   loadData()
 })
 
+
 /**
  * 构建列表标准文本列
  * @param key 列 key / dataIndex
@@ -1151,6 +1163,8 @@ const toVendorNumber = (value: string | number | undefined | null): number => {
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

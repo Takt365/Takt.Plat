@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/organization
 // 文件名称：dept.ts
-// 创建时间：2026-08-21
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/organization 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -166,6 +166,21 @@ export function updateDeptSort(dto: DeptSort): Promise<Dept> {
 export function getDeptTreeOptions(parentId: string): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${DEPT_API_BASE}/tree-options`,
+    method: 'get',
+    params: {
+      parentId
+    },
+  });
+}
+
+/**
+ * 获取部门 ISO 编码树形选项列表（懒加载：DictValue=IsoCode）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
+ * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
+ */
+export function getDeptIsoTreeOptions(parentId: string): Promise<TaktTreeSelectOption[]> {
+  return request<TaktTreeSelectOption[]>({
+    url: `${DEPT_API_BASE}/iso-tree-options`,
     method: 'get',
     params: {
       parentId

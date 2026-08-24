@@ -33,17 +33,17 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 public class TaktTrackingLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
-    /// </summary>
-    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = TaktConstants.AuditUserName.Unknown)]
-    public string UserName { get; set; } = TaktConstants.AuditUserName.Unknown;
-
-    /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（冗余字段，便于查询）
+    /// </summary>
+    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = TaktConstants.AuditUserName.Unknown)]
+    public string UserName { get; set; } = TaktConstants.AuditUserName.Unknown;
 
     /// <summary>
     /// 事件类型（如 longtask）
@@ -82,7 +82,7 @@ public class TaktTrackingLog : TaktCompanyEntityBase
     public string EntryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 追踪级别（1=warn 2=error，前端阈值映射）
+    /// 追踪级别（字典 sys_tracking_level；1=warn 2=error）
     /// </summary>
     [SugarColumn(ColumnName = "tracking_level", ColumnDescription = "追踪级别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int TrackingLevel { get; set; } = 1;

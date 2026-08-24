@@ -20,67 +20,13 @@ export const CUSTOMERSATISFACTIONSURVEY_SELF_I18N_KEY = buildEntitySelfI18nKey(C
 
 /** 列表业务列（不含主键） */
 export const CUSTOMERSATISFACTIONSURVEY_LIST_FIELDS = [
-  'customerSatisfactionSurveyCode',
-  'customerId',
-  'customerName1',
-  'customerCode',
-  'surveyDate',
-  'surveyMethod',
-  'surveyType',
-  'surveyPeriod',
-  'surveyorBy',
-  'customerContact',
-  'customerPhone',
-  'overallSatisfaction',
-  'totalScore',
-  'qualityScore',
-  'deliveryScore',
-  'serviceScore',
-  'priceScore',
-  'technicalScore',
-  'customerPraise',
-  'customerFeedback',
-  'improvementPlan',
-  'relatedComplaintId',
-  'attachments',
-  'surveyStatus',
-  'plantCode',
   'followUpStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const CUSTOMERSATISFACTIONSURVEY_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  customerSatisfactionSurveyCode: 'required',
-  customerId: 'select',
-  customerName1: 'required',
-  customerCode: 'optional',
-  surveyDate: 'select',
-  surveyMethod: 'select',
-  surveyType: 'select',
-  surveyPeriod: 'select',
-  surveyorBy: 'optional',
-  customerContact: 'optional',
-  customerPhone: 'optional',
-  overallSatisfaction: 'select',
-  totalScore: 'optional',
-  qualityScore: 'optional',
-  deliveryScore: 'optional',
-  serviceScore: 'optional',
-  priceScore: 'optional',
-  technicalScore: 'optional',
-  customerPraise: 'optional',
-  customerFeedback: 'optional',
-  improvementPlan: 'optional',
-  relatedComplaintId: 'optional',
-  attachments: 'optional',
-  surveyStatus: 'select',
-  plantCode: 'select',
-  followUpStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -88,47 +34,13 @@ export type CustomerSatisfactionSurveyField = keyof typeof CUSTOMERSATISFACTIONS
 
 /** 高级查询可 trim 的字符串字段 */
 export const CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS = [
-  'customerSatisfactionSurveyCode',
-  'customerId',
-  'customerName1',
-  'customerCode',
-  'surveyDateStart',
-  'surveyDateEnd',
-  'surveyorBy',
-  'customerContact',
-  'customerPhone',
-  'customerPraise',
-  'customerFeedback',
-  'improvementPlan',
-  'relatedComplaintId',
-  'attachments',
-  'plantCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof CustomerSatisfactionSurveyQuery)[]
 
-export type CustomerSatisfactionSurveyQueryField =
-  | (typeof CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS)[number]
-  | 'surveyMethod' | 'surveyType' | 'surveyPeriod' | 'overallSatisfaction' | 'totalScore' | 'qualityScore' | 'deliveryScore' | 'serviceScore' | 'priceScore' | 'technicalScore' | 'surveyStatus' | 'followUpStatus'
+export type CustomerSatisfactionSurveyQueryField = (typeof CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const CUSTOMERSATISFACTIONSURVEY_QUERY_FIELDS: readonly CustomerSatisfactionSurveyQueryField[] = [
-  ...CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS,
-  'surveyMethod',
-  'surveyType',
-  'surveyPeriod',
-  'overallSatisfaction',
-  'totalScore',
-  'qualityScore',
-  'deliveryScore',
-  'serviceScore',
-  'priceScore',
-  'technicalScore',
-  'surveyStatus',
-  'followUpStatus',
-]
+export const CUSTOMERSATISFACTIONSURVEY_QUERY_FIELDS: readonly CustomerSatisfactionSurveyQueryField[] = [...CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS]
 
 /**
  * 客户满意度调查表主表实体字段 i18n：index / customer-satisfaction-survey-form 统一入口

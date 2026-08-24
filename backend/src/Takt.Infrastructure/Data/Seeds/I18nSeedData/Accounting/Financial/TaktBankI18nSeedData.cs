@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktBankI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBank 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -208,13 +208,13 @@ public class TaktBankI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bank.group", "zh-HK", "银行组_hk", "银行组（；CHAR 2）"),
 
             // entity.bank.pobkcurac
-            new TranslationSeedItem("entity.bank.pobkcurac", "en-US", "邮政银行往来账户_us", "邮政银行往来账户（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.pobkcurac", "en-US", "邮政银行往来账户_us", "邮政银行往来账户（字典 sys_yes_no）"),
             // entity.bank.pobkcurac
-            new TranslationSeedItem("entity.bank.pobkcurac", "ja-JP", "邮政银行往来账户_jp", "邮政银行往来账户（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.pobkcurac", "ja-JP", "邮政银行往来账户_jp", "邮政银行往来账户（字典 sys_yes_no）"),
             // entity.bank.pobkcurac
-            new TranslationSeedItem("entity.bank.pobkcurac", "zh-CN", "邮政银行往来账户", "邮政银行往来账户（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.pobkcurac", "zh-CN", "邮政银行往来账户", "邮政银行往来账户（字典 sys_yes_no）"),
             // entity.bank.pobkcurac
-            new TranslationSeedItem("entity.bank.pobkcurac", "zh-HK", "邮政银行往来账户_hk", "邮政银行往来账户（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.pobkcurac", "zh-HK", "邮政银行往来账户_hk", "邮政银行往来账户（字典 sys_yes_no）"),
 
             // entity.bank.number
             new TranslationSeedItem("entity.bank.number", "en-US", "银行编码_us", "银行编码（；CHAR 15）"),
@@ -280,22 +280,22 @@ public class TaktBankI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bank.ibanrule", "zh-HK", "IBAN规则_hk", "IBAN 规则（CHAR 6）"),
 
             // entity.bank.sddb2b
-            new TranslationSeedItem("entity.bank.sddb2b", "en-US", "企业间_us", "企业间（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddb2b", "en-US", "企业间_us", "企业间（字典 sys_yes_no）"),
             // entity.bank.sddb2b
-            new TranslationSeedItem("entity.bank.sddb2b", "ja-JP", "企业间_jp", "企业间（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddb2b", "ja-JP", "企业间_jp", "企业间（字典 sys_yes_no）"),
             // entity.bank.sddb2b
-            new TranslationSeedItem("entity.bank.sddb2b", "zh-CN", "企业间", "企业间（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddb2b", "zh-CN", "企业间", "企业间（字典 sys_yes_no）"),
             // entity.bank.sddb2b
-            new TranslationSeedItem("entity.bank.sddb2b", "zh-HK", "企业间_hk", "企业间（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddb2b", "zh-HK", "企业间_hk", "企业间（字典 sys_yes_no）"),
 
             // entity.bank.sddcore
-            new TranslationSeedItem("entity.bank.sddcore", "en-US", "核心个人_us", "核心个人（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddcore", "en-US", "核心个人_us", "核心个人（字典 sys_yes_no）"),
             // entity.bank.sddcore
-            new TranslationSeedItem("entity.bank.sddcore", "ja-JP", "核心个人_jp", "核心个人（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddcore", "ja-JP", "核心个人_jp", "核心个人（字典 sys_yes_no）"),
             // entity.bank.sddcore
-            new TranslationSeedItem("entity.bank.sddcore", "zh-CN", "核心个人", "核心个人（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddcore", "zh-CN", "核心个人", "核心个人（字典 sys_yes_no）"),
             // entity.bank.sddcore
-            new TranslationSeedItem("entity.bank.sddcore", "zh-HK", "核心个人_hk", "核心个人（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.bank.sddcore", "zh-HK", "核心个人_hk", "核心个人（字典 sys_yes_no）"),
 
             // entity.bank.sddrtrans
             new TranslationSeedItem("entity.bank.sddrtrans", "en-US", "SEPA拒付交易支持标识_us", "SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）"),

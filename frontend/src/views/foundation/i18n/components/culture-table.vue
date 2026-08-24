@@ -53,7 +53,7 @@
       />
       <div class="culture-table-list-wrap min-h-0 flex-1">
         <TaktSingleTable
-          entity-scope="tenant"
+          entity-scope="tenant-core"
           table-mode="single"
           :scroll="tableScroll"
           :columns="columns"
@@ -70,7 +70,7 @@
             <template v-if="column.key === 'isDefault'">
               <TaktDictTag
                 :value="record.isDefault"
-                dict-type="sys_yes_no_type"
+                dict-type="sys_yes_no"
               />
             </template>
           </template>
@@ -137,7 +137,7 @@
         <a-form-item :label="t('entity.culture.isdefault')">
           <TaktSelect
             v-model:value="advancedQueryForm.isDefault"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
             :placeholder="t('common.page.form.placeholder.select', { field: t('entity.culture.isdefault') })"
             allow-clear
           />
@@ -190,7 +190,7 @@
   <!-- 列设置 -->
   <TaktColumnDrawer
     v-model:open="columnSettingVisible"
-    entity-scope="tenant"
+    entity-scope="tenant-core"
     table-mode="single"
     :columns="columns"
     :checked-keys="visibleColumnKeys"

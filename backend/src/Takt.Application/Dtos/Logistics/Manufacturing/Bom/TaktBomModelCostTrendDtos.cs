@@ -81,36 +81,9 @@ public class TaktBomModelCostTrendQueryDto : TaktPagedQuery
     public string? SortBy { get; set; }
 
     /// <summary>
-    /// 合并模式：summary=材料成本推移；detail=差异组件推移；
-    /// 机种/物料以期间最后月为选项与默认范围，明细只查期间内
+    /// 合并模式：summary=材料成本推移；detail=差异组件推移
     /// </summary>
     public string? MergeMode { get; set; }
-}
-
-/// <summary>
-/// 机种成本推移下拉选项查询（机种/物料均按期间最后月）
-/// </summary>
-public class TaktBomModelCostTrendOptionsQueryDto
-{
-    /// <summary>
-    /// 工厂代码（必填）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 期间最后月 yyyy-MM（必填；与查询栏期间止一致）
-    /// </summary>
-    public string FocusPeriod { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料类型（本表 MaterialType；空=不过滤；仅机种 options 使用）
-    /// </summary>
-    public string? MaterialType { get; set; }
-
-    /// <summary>
-    /// 远程搜索关键字（物料 options：组件编码/描述模糊；可空=返回全部去重项）
-    /// </summary>
-    public string? Keyword { get; set; }
 }
 
 /// <summary>

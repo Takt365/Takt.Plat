@@ -181,7 +181,7 @@
       <a-form-item :label="t('entity.payscale.scalestatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.scaleStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.payscale.scalestatus') })"
           allow-clear
         />

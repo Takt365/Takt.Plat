@@ -75,7 +75,7 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
             database.CompanyCodes,
             companies,
             c => c.CompanyCode);
-        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "admin");
+        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "admin");
         if (adminUser == null)
         {
             return (0, 0);
@@ -94,7 +94,7 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
             updateCount += fu;
             var processContent = BuildProcessContent(
                 adminUser.Id,
-                adminUser.Nickname ?? adminUser.Username);
+                adminUser.NickName ?? adminUser.UserName);
             var (_, si, su) = await UpsertSchemeAsync(
                 schemeRepository,
                 tenantCode,
@@ -142,7 +142,7 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
             new { field = "announcementType", title = "公告类型", type = "select", props = new { dictType = "sys_announcement_category" } },
             new { field = "summary", title = "摘要", type = "textarea", props = new { rows = 2 } },
             new { field = "content", title = "公告内容", type = "textarea", props = new { rows = 6 } },
-            new { field = "targetScope", title = "目标范围", type = "select", props = new { options = new[] { new { label = "全员", value = "all" }, new { label = "本公司", value = "company" } } } },
+            new { field = "targetScope", title = "目标范围", type = "select", props = new { dictType = "sys_publish_scope" } },
             new { field = "isTop", title = "置顶", type = "select", props = new { options = new[] { new { label = "否", value = "0" }, new { label = "是", value = "1" } } } }
         };
         return JsonConvert.SerializeObject(rules, JsonSettings);
@@ -158,7 +158,7 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
                 new { dbColumnName = "announcement_type", csharpColumnName = "announcementType", columnDescription = "公告类型", dataType = "int", displayType = "select" },
                 new { dbColumnName = "summary", csharpColumnName = "summary", columnDescription = "摘要", dataType = "nvarchar", displayType = "textarea" },
                 new { dbColumnName = "content", csharpColumnName = "content", columnDescription = "内容", dataType = "ntext", displayType = "textarea" },
-                new { dbColumnName = "target_scope", csharpColumnName = "targetScope", columnDescription = "目标范围", dataType = "varchar", displayType = "select" },
+                new { dbColumnName = "target_scope", csharpColumnName = "targetScope", columnDescription = "目标范围", dataType = "int", displayType = "select" },
                 new { dbColumnName = "is_top", csharpColumnName = "isTop", columnDescription = "置顶", dataType = "int", displayType = "select" }
             },
             business = new

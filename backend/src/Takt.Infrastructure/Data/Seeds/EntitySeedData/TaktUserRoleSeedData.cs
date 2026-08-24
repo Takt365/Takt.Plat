@@ -64,7 +64,7 @@ public class TaktUserRoleSeedData : ITaktSeedDataCoordinator
                 userRepository,
                 roleRepository,
                 tenantCode,
-                userRoleData.Username,
+                userRoleData.UserName,
                 userRoleData.RoleCode);
         }
         
@@ -76,7 +76,7 @@ public class TaktUserRoleSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 获取标准用户-角色关联列表
     /// </summary>
-    private static List<(string Username, string RoleCode)> GetStandardUserRoles()
+    private static List<(string UserName, string RoleCode)> GetStandardUserRoles()
     {
         return new List<(string, string)>
         {
@@ -94,14 +94,14 @@ public class TaktUserRoleSeedData : ITaktSeedDataCoordinator
         ITaktTenantSeedRepository<TaktUser> userRepository,
         ITaktTenantSeedRepository<TaktRole> roleRepository,
         string tenantCode,
-        string username,
+        string UserName,
         string roleCode)
     {
         // 1. 查找用户ID
-        var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == username);
+        var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == UserName);
         if (user == null)
         {
-            TaktLogger.Warning("用户 {TenantCode}/{Username} 不存在，跳过角色关联", tenantCode, username);
+            TaktLogger.Warning("用户 {TenantCode}/{UserName} 不存在，跳过角色关联", tenantCode, UserName);
             return 0;
         }
 

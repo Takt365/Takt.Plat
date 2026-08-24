@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Talent
 // 文件名称：TaktTalentJobPostingDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentJobPosting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTalentJobPosting 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     public long TalentJobPostingId { get; set; }
 
     /// <summary>
-    /// 用人需求ID
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 用人需求名称（填充字段）
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     public string? StaffingRequirementName { get; set; }
 
@@ -72,7 +72,7 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）
+    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int PublishChannel { get; set; } = 0;
 
@@ -82,7 +82,7 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int PostingStatus { get; set; } = 0;
 
@@ -116,7 +116,7 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -125,13 +125,13 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 用人需求ID
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StaffingRequirementId { get; set; }
@@ -177,7 +177,7 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     public DateTime? CloseDateEnd { get; set; }
 
     /// <summary>
-    /// 发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）
+    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int? PublishChannel { get; set; }
 
@@ -187,7 +187,7 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int? PostingStatus { get; set; }
 
@@ -236,14 +236,13 @@ public class TaktTalentJobPostingCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 用人需求ID
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StaffingRequirementId { get; set; }
@@ -276,7 +275,7 @@ public class TaktTalentJobPostingCreateDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）
+    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int PublishChannel { get; set; } = 0;
 
@@ -286,7 +285,7 @@ public class TaktTalentJobPostingCreateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int PostingStatus { get; set; } = 0;
 
@@ -325,6 +324,11 @@ public class TaktTalentJobPostingUpdateDto : TaktTalentJobPostingCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TalentJobPostingId { get; set; }
 
+    /// <summary>
+    /// 录用信息（子表，级联保存）
+    /// </summary>
+    public new List<TaktTalentOfferUpdateDto>? TalentOffers { get; set; }
+
 }
 
 // ========================================
@@ -345,9 +349,9 @@ public class TaktTalentJobPostingStatusDto
     public long TalentJobPostingId { get; set; }
 
     /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
-    [Required(ErrorMessage = "发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）不能为空")]
+    [Required(ErrorMessage = "发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）不能为空")]
     public int PostingStatus { get; set; } = 0;
 }
 
@@ -375,13 +379,13 @@ public class TaktTalentJobPostingTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 用人需求ID
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StaffingRequirementId { get; set; }
@@ -412,7 +416,7 @@ public class TaktTalentJobPostingTemplateDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）
+    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int? PublishChannel { get; set; }
 
@@ -422,7 +426,7 @@ public class TaktTalentJobPostingTemplateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int? PostingStatus { get; set; }
 
@@ -463,14 +467,13 @@ public class TaktTalentJobPostingImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 用人需求ID
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StaffingRequirementId { get; set; }
@@ -501,7 +504,7 @@ public class TaktTalentJobPostingImportDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）
+    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int? PublishChannel { get; set; }
 
@@ -511,7 +514,7 @@ public class TaktTalentJobPostingImportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int? PostingStatus { get; set; }
 
@@ -554,7 +557,17 @@ public class TaktTalentJobPostingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用人需求ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StaffingRequirementId { get; set; }
@@ -585,7 +598,7 @@ public class TaktTalentJobPostingExportDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）
+    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int PublishChannel { get; set; } = 0;
 
@@ -595,7 +608,7 @@ public class TaktTalentJobPostingExportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int PostingStatus { get; set; } = 0;
 

@@ -28,12 +28,10 @@ export const ADMINDIVISION_LIST_FIELDS = [
   'divisionPath',
   'isLeaf',
   'postalCode',
-  'cultureCode',
   'currencyCode',
   'phoneCode',
   'isBuiltIn',
   'divisionStatus',
-  'relatedPlant',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -45,14 +43,12 @@ export const ADMINDIVISION_PLACEHOLDER = {
   parentId: 'required',
   divisionPath: 'required',
   postalCode: 'optional',
-  cultureCode: 'select',
   currencyCode: 'select',
   phoneCode: 'required',
   isBuiltIn: 'select',
   divisionStatus: 'select',
   extField: 'optional',
   remark: 'optional',
-  relatedPlant: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -66,7 +62,6 @@ export const ADMINDIVISION_QUERY_STRING_FIELDS = [
   'parentId',
   'divisionPath',
   'postalCode',
-  'cultureCode',
   'currencyCode',
   'phoneCode',
   'createdAtStart',

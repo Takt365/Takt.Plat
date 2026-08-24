@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     }
 
     /// <summary>
-    /// 获取设变明细列表（分页）
+    /// 获取设变明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEcDetailDto>> GetEcDetailListAsync(TaktEcDetailQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEcDetailDto>.Create(
+                new List<TaktEcDetailDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _ecDetailRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -100,13 +108,13 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     {
         EnsureThreeLayerContext();
         var list = await _ecDetailRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.EcCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EcCode ?? e.Id.ToString(),
+            DictValue = e.EcCode,
+            DictLabel = e.EcCode,
         }).ToList();
     }
 
@@ -133,7 +141,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             var maxLine = await _ecDetailRepository.GetMaxIntAsync(
                 x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcId == entity.EcId,
                 x => x.LineNumber);
-            var businessCode = entity.EcId.ToString();
+            var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecDetailRepository.CreateAsync(entity);
@@ -287,7 +295,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                     var maxLine = await _ecDetailRepository.GetMaxIntAsync(
                         x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcId == entity.EcId,
                         x => x.LineNumber);
-                    var businessCode = entity.EcId.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecDetailRepository.CreateAsync(entity);
@@ -311,7 +319,15 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEcDetailAsync(TaktEcDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEcDetailQueryDto());
+        var queryDto = query ?? new TaktEcDetailQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEcDetailExportDto>(),
+                sheetName ?? "设变明细数据",
+                fileName ?? "设变明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _ecDetailRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -349,6 +365,26 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             throw new TaktBusinessException("设变技术课主不存在");
         }
         entity.EcId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.EcCode))
+        {
+            entity.EcCode = master.EcCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -372,239 +408,430 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EcId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EcCode != null && x.EcCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.EcBomLineCode != null && x.EcBomLineCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcBomItem != null && x.EcBomItem.Contains(keywords))
                 || (x.EcBomItemText != null && x.EcBomItemText.Contains(keywords))
                 || (x.EcBomSubItem != null && x.EcBomSubItem.Contains(keywords))
                 || (x.EcBomSubItemText != null && x.EcBomSubItemText.Contains(keywords))
-                || SqlFunc.ToString(x.IsEndOfLine).Contains(keywords)
                 || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
                 || (x.EcOldText != null && x.EcOldText.Contains(keywords))
-                || SqlFunc.ToString(x.EcOldUsage).Contains(keywords)
                 || (x.EcOldPosition != null && x.EcOldPosition.Contains(keywords))
-                || SqlFunc.ToString(x.EcOldStock).Contains(keywords)
                 || (x.EcOldWarehouse != null && x.EcOldWarehouse.Contains(keywords))
-                || SqlFunc.ToString(x.IsOldProcurement).Contains(keywords)
-                || SqlFunc.ToString(x.IsOldCheck).Contains(keywords)
                 || (x.EcNewItem != null && x.EcNewItem.Contains(keywords))
                 || (x.EcNewText != null && x.EcNewText.Contains(keywords))
-                || SqlFunc.ToString(x.EcNewUsage).Contains(keywords)
                 || (x.EcNewPosition != null && x.EcNewPosition.Contains(keywords))
-                || SqlFunc.ToString(x.EcNewStock).Contains(keywords)
                 || (x.EcNewWarehouse != null && x.EcNewWarehouse.Contains(keywords))
-                || SqlFunc.ToString(x.IsNewProcurement).Contains(keywords)
-                || SqlFunc.ToString(x.IsNewCheck).Contains(keywords)
                 || (x.EcIsCompatible != null && x.EcIsCompatible.Contains(keywords))
                 || (x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(keywords))
                 || (x.EcInstruction != null && x.EcInstruction.Contains(keywords))
                 || (x.EcLegacyPartDisposition != null && x.EcLegacyPartDisposition.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EcBomDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.EcId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.EcId == queryDto.EcId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcCode))
-        {
-            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcBomLineCode))
-        {
-            exp = exp.And(x => x.EcBomLineCode != null && x.EcBomLineCode.Contains(queryDto.EcBomLineCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcModel))
-        {
-            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcBomItem))
-        {
-            exp = exp.And(x => x.EcBomItem != null && x.EcBomItem.Contains(queryDto.EcBomItem));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcBomItemText))
-        {
-            exp = exp.And(x => x.EcBomItemText != null && x.EcBomItemText.Contains(queryDto.EcBomItemText));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcBomSubItem))
-        {
-            exp = exp.And(x => x.EcBomSubItem != null && x.EcBomSubItem.Contains(queryDto.EcBomSubItem));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcBomSubItemText))
-        {
-            exp = exp.And(x => x.EcBomSubItemText != null && x.EcBomSubItemText.Contains(queryDto.EcBomSubItemText));
-        }
-
-        if (queryDto?.IsEndOfLine.HasValue == true)
-        {
-            exp = exp.And(x => x.IsEndOfLine == queryDto.IsEndOfLine);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcOldItem))
-        {
-            exp = exp.And(x => x.EcOldItem != null && x.EcOldItem.Contains(queryDto.EcOldItem));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcOldText))
-        {
-            exp = exp.And(x => x.EcOldText != null && x.EcOldText.Contains(queryDto.EcOldText));
-        }
-
-        if (queryDto?.EcOldUsage.HasValue == true)
-        {
-            exp = exp.And(x => x.EcOldUsage == queryDto.EcOldUsage);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcOldPosition))
-        {
-            exp = exp.And(x => x.EcOldPosition != null && x.EcOldPosition.Contains(queryDto.EcOldPosition));
-        }
-
-        if (queryDto?.EcOldStock.HasValue == true)
-        {
-            exp = exp.And(x => x.EcOldStock == queryDto.EcOldStock);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcOldWarehouse))
-        {
-            exp = exp.And(x => x.EcOldWarehouse != null && x.EcOldWarehouse.Contains(queryDto.EcOldWarehouse));
-        }
-
-        if (queryDto?.IsOldProcurement.HasValue == true)
-        {
-            exp = exp.And(x => x.IsOldProcurement == queryDto.IsOldProcurement);
-        }
-
-        if (queryDto?.IsOldCheck.HasValue == true)
-        {
-            exp = exp.And(x => x.IsOldCheck == queryDto.IsOldCheck);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcNewItem))
-        {
-            exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(queryDto.EcNewItem));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcNewText))
-        {
-            exp = exp.And(x => x.EcNewText != null && x.EcNewText.Contains(queryDto.EcNewText));
-        }
-
-        if (queryDto?.EcNewUsage.HasValue == true)
-        {
-            exp = exp.And(x => x.EcNewUsage == queryDto.EcNewUsage);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcNewPosition))
-        {
-            exp = exp.And(x => x.EcNewPosition != null && x.EcNewPosition.Contains(queryDto.EcNewPosition));
-        }
-
-        if (queryDto?.EcNewStock.HasValue == true)
-        {
-            exp = exp.And(x => x.EcNewStock == queryDto.EcNewStock);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcNewWarehouse))
-        {
-            exp = exp.And(x => x.EcNewWarehouse != null && x.EcNewWarehouse.Contains(queryDto.EcNewWarehouse));
-        }
-
-        if (queryDto?.IsNewProcurement.HasValue == true)
-        {
-            exp = exp.And(x => x.IsNewProcurement == queryDto.IsNewProcurement);
-        }
-
-        if (queryDto?.IsNewCheck.HasValue == true)
-        {
-            exp = exp.And(x => x.IsNewCheck == queryDto.IsNewCheck);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcIsCompatible))
-        {
-            exp = exp.And(x => x.EcIsCompatible != null && x.EcIsCompatible.Contains(queryDto.EcIsCompatible));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcSecondDistinction))
-        {
-            exp = exp.And(x => x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(queryDto.EcSecondDistinction));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcInstruction))
-        {
-            exp = exp.And(x => x.EcInstruction != null && x.EcInstruction.Contains(queryDto.EcInstruction));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcLegacyPartDisposition))
-        {
-            exp = exp.And(x => x.EcLegacyPartDisposition != null && x.EcLegacyPartDisposition.Contains(queryDto.EcLegacyPartDisposition));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.EcBomDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EcBomDate >= queryDto.EcBomDateStart);
-        }
-
-        if (queryDto?.EcBomDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EcBomDate <= queryDto.EcBomDateEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.EcId.HasValue == true)
+        {
+            var ecId = queryDto.EcId.Value;
+            exp = exp.And(x => x.EcId == ecId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcCode))
+        {
+            var ecCode = queryDto.EcCode;
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(ecCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcBomLineCode))
+        {
+            var ecBomLineCode = queryDto.EcBomLineCode;
+            exp = exp.And(x => x.EcBomLineCode != null && x.EcBomLineCode.Contains(ecBomLineCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcModel))
+        {
+            var ecModel = queryDto.EcModel;
+            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(ecModel));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcBomItem))
+        {
+            var ecBomItem = queryDto.EcBomItem;
+            exp = exp.And(x => x.EcBomItem != null && x.EcBomItem.Contains(ecBomItem));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcBomItemText))
+        {
+            var ecBomItemText = queryDto.EcBomItemText;
+            exp = exp.And(x => x.EcBomItemText != null && x.EcBomItemText.Contains(ecBomItemText));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcBomSubItem))
+        {
+            var ecBomSubItem = queryDto.EcBomSubItem;
+            exp = exp.And(x => x.EcBomSubItem != null && x.EcBomSubItem.Contains(ecBomSubItem));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcBomSubItemText))
+        {
+            var ecBomSubItemText = queryDto.EcBomSubItemText;
+            exp = exp.And(x => x.EcBomSubItemText != null && x.EcBomSubItemText.Contains(ecBomSubItemText));
+        }
+
+        if (queryDto?.IsEndOfLine.HasValue == true)
+        {
+            var isEndOfLine = queryDto.IsEndOfLine.Value;
+            exp = exp.And(x => x.IsEndOfLine == isEndOfLine);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcOldItem))
+        {
+            var ecOldItem = queryDto.EcOldItem;
+            exp = exp.And(x => x.EcOldItem != null && x.EcOldItem.Contains(ecOldItem));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcOldText))
+        {
+            var ecOldText = queryDto.EcOldText;
+            exp = exp.And(x => x.EcOldText != null && x.EcOldText.Contains(ecOldText));
+        }
+
+        if (queryDto?.EcOldUsage.HasValue == true)
+        {
+            var ecOldUsage = queryDto.EcOldUsage.Value;
+            exp = exp.And(x => x.EcOldUsage == ecOldUsage);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcOldPosition))
+        {
+            var ecOldPosition = queryDto.EcOldPosition;
+            exp = exp.And(x => x.EcOldPosition != null && x.EcOldPosition.Contains(ecOldPosition));
+        }
+
+        if (queryDto?.EcOldStock.HasValue == true)
+        {
+            var ecOldStock = queryDto.EcOldStock.Value;
+            exp = exp.And(x => x.EcOldStock == ecOldStock);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcOldWarehouse))
+        {
+            var ecOldWarehouse = queryDto.EcOldWarehouse;
+            exp = exp.And(x => x.EcOldWarehouse != null && x.EcOldWarehouse.Contains(ecOldWarehouse));
+        }
+
+        if (queryDto?.IsOldProcurement.HasValue == true)
+        {
+            var isOldProcurement = queryDto.IsOldProcurement.Value;
+            exp = exp.And(x => x.IsOldProcurement == isOldProcurement);
+        }
+
+        if (queryDto?.IsOldCheck.HasValue == true)
+        {
+            var isOldCheck = queryDto.IsOldCheck.Value;
+            exp = exp.And(x => x.IsOldCheck == isOldCheck);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNewItem))
+        {
+            var ecNewItem = queryDto.EcNewItem;
+            exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(ecNewItem));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNewText))
+        {
+            var ecNewText = queryDto.EcNewText;
+            exp = exp.And(x => x.EcNewText != null && x.EcNewText.Contains(ecNewText));
+        }
+
+        if (queryDto?.EcNewUsage.HasValue == true)
+        {
+            var ecNewUsage = queryDto.EcNewUsage.Value;
+            exp = exp.And(x => x.EcNewUsage == ecNewUsage);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNewPosition))
+        {
+            var ecNewPosition = queryDto.EcNewPosition;
+            exp = exp.And(x => x.EcNewPosition != null && x.EcNewPosition.Contains(ecNewPosition));
+        }
+
+        if (queryDto?.EcNewStock.HasValue == true)
+        {
+            var ecNewStock = queryDto.EcNewStock.Value;
+            exp = exp.And(x => x.EcNewStock == ecNewStock);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNewWarehouse))
+        {
+            var ecNewWarehouse = queryDto.EcNewWarehouse;
+            exp = exp.And(x => x.EcNewWarehouse != null && x.EcNewWarehouse.Contains(ecNewWarehouse));
+        }
+
+        if (queryDto?.IsNewProcurement.HasValue == true)
+        {
+            var isNewProcurement = queryDto.IsNewProcurement.Value;
+            exp = exp.And(x => x.IsNewProcurement == isNewProcurement);
+        }
+
+        if (queryDto?.IsNewCheck.HasValue == true)
+        {
+            var isNewCheck = queryDto.IsNewCheck.Value;
+            exp = exp.And(x => x.IsNewCheck == isNewCheck);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcIsCompatible))
+        {
+            var ecIsCompatible = queryDto.EcIsCompatible;
+            exp = exp.And(x => x.EcIsCompatible != null && x.EcIsCompatible.Contains(ecIsCompatible));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcSecondDistinction))
+        {
+            var ecSecondDistinction = queryDto.EcSecondDistinction;
+            exp = exp.And(x => x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(ecSecondDistinction));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcInstruction))
+        {
+            var ecInstruction = queryDto.EcInstruction;
+            exp = exp.And(x => x.EcInstruction != null && x.EcInstruction.Contains(ecInstruction));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcLegacyPartDisposition))
+        {
+            var ecLegacyPartDisposition = queryDto.EcLegacyPartDisposition;
+            exp = exp.And(x => x.EcLegacyPartDisposition != null && x.EcLegacyPartDisposition.Contains(ecLegacyPartDisposition));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.EcBomDateStart.HasValue == true)
+        {
+            var ecBomDateStart = queryDto.EcBomDateStart.Value;
+            exp = exp.And(x => x.EcBomDate >= ecBomDateStart);
+        }
+
+        if (queryDto?.EcBomDateEnd.HasValue == true)
+        {
+            var ecBomDateEnd = queryDto.EcBomDateEnd.Value;
+            exp = exp.And(x => x.EcBomDate <= ecBomDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEcDetailQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.EcId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcBomLineCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcModel))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcBomItem))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcBomItemText))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcBomSubItem))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcBomSubItemText))
+        {
+            return true;
+        }
+        if (queryDto.IsEndOfLine.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcOldItem))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcOldText))
+        {
+            return true;
+        }
+        if (queryDto.EcOldUsage.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcOldPosition))
+        {
+            return true;
+        }
+        if (queryDto.EcOldStock.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcOldWarehouse))
+        {
+            return true;
+        }
+        if (queryDto.IsOldProcurement.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsOldCheck.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNewItem))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNewText))
+        {
+            return true;
+        }
+        if (queryDto.EcNewUsage.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNewPosition))
+        {
+            return true;
+        }
+        if (queryDto.EcNewStock.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNewWarehouse))
+        {
+            return true;
+        }
+        if (queryDto.IsNewProcurement.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsNewCheck.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcIsCompatible))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcSecondDistinction))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcInstruction))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcLegacyPartDisposition))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EcBomDateStart.HasValue || queryDto.EcBomDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

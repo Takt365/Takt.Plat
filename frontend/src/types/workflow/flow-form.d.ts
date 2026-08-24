@@ -127,6 +127,11 @@ export interface FlowFormExport {
   formCode: string;
 
   /**
+   * 编码规则编码（按表单分类选规则取号；对应 TaktNumbering.RuleCode；不落库）
+   */
+  numberingRuleCode?: string;
+
+  /**
    * 表单名称
    */
   formName: string;

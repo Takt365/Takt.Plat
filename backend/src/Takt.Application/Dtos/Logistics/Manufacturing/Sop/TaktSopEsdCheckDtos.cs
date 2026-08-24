@@ -80,12 +80,12 @@ public class TaktSopEsdCheckDto : TaktCompanyDtoBase
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 达标（字典 sys_yes_no_type；0=否，1=是）
+    /// 达标（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsCompliant { get; set; } = 0;
 
     /// <summary>
-    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
+    /// 锁屏（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int LockScreenTriggered { get; set; } = 0;
 
@@ -161,12 +161,12 @@ public class TaktSopEsdCheckQueryDto : TaktPagedQuery
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 达标（字典 sys_yes_no_type；0=否，1=是）
+    /// 达标（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsCompliant { get; set; }
 
     /// <summary>
-    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
+    /// 锁屏（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? LockScreenTriggered { get; set; }
 
@@ -260,12 +260,12 @@ public class TaktSopEsdCheckCreateDto
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 达标（字典 sys_yes_no_type；0=否，1=是）
+    /// 达标（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsCompliant { get; set; } = 0;
 
     /// <summary>
-    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
+    /// 锁屏（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int LockScreenTriggered { get; set; } = 0;
 
@@ -364,12 +364,12 @@ public class TaktSopEsdCheckTemplateDto
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 达标（字典 sys_yes_no_type；0=否，1=是）
+    /// 达标（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsCompliant { get; set; }
 
     /// <summary>
-    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
+    /// 锁屏（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? LockScreenTriggered { get; set; }
 
@@ -444,12 +444,12 @@ public class TaktSopEsdCheckImportDto
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 达标（字典 sys_yes_no_type；0=否，1=是）
+    /// 达标（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsCompliant { get; set; }
 
     /// <summary>
-    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
+    /// 锁屏（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? LockScreenTriggered { get; set; }
 
@@ -525,12 +525,12 @@ public class TaktSopEsdCheckExportDto
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 达标（字典 sys_yes_no_type；0=否，1=是）
+    /// 达标（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsCompliant { get; set; } = 0;
 
     /// <summary>
-    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
+    /// 锁屏（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int LockScreenTriggered { get; set; } = 0;
 

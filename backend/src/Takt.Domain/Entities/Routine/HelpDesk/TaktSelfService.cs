@@ -56,12 +56,12 @@ public class TaktSelfService : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? Attachments { get; set; }
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "self_service_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SelfServiceStatus { get; set; } = 1;

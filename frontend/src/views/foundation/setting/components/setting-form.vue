@@ -22,31 +22,45 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.setting.key')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('settingKey')"
                 name="settingKey"
               >
                 <a-input
                   v-model:value="formState.settingKey"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.key') })"
+                  :placeholder="pi.ph('settingKey')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -55,12 +69,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.setting.value')"
+                :label="pi.label('settingValue')"
                 name="settingValue"
               >
                 <a-input
                   v-model:value="formState.settingValue"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.value') })"
+                  :placeholder="pi.ph('settingValue')"
                   show-count
                   :maxlength="4000"
                   allow-clear
@@ -69,12 +83,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.setting.name')"
+                :label="pi.label('settingName')"
                 name="settingName"
               >
                 <a-input
                   v-model:value="formState.settingName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.name') })"
+                  :placeholder="pi.ph('settingName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -83,49 +97,61 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.setting.description')"
+                :label="pi.label('settingDescription')"
                 name="settingDescription"
               >
                 <a-textarea
                   v-model:value="formState.settingDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.setting.description') })"
+                  :placeholder="pi.ph('settingDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.setting.group')"
+                :label="pi.label('settingGroup')"
                 name="settingGroup"
               >
                 <TaktSelect
                   v-model:value="formState.settingGroup"
                   dict-type="sys_resource_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.group') })"
+                  :placeholder="pi.ph('settingGroup')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.setting.valuetype')"
+                :label="pi.label('valueType')"
                 name="valueType"
               >
                 <TaktSelect
                   v-model:value="formState.valueType"
                   dict-type="gen_display_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.valuetype') })"
+                  :placeholder="pi.ph('valueType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.setting.isbuiltin')"
+                :label="pi.label('isBuiltIn')"
                 name="isBuiltIn"
               >
                 <TaktSelect
                   v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isbuiltin') })"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isBuiltIn')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isReadonly')"
+                name="isReadonly"
+              >
+                <TaktSelect
+                  v-model:value="formState.isReadonly"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isReadonly')"
                 />
               </a-form-item>
             </a-col>
@@ -134,44 +160,69 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.setting.status')"
-                name="settingStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.settingStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.status') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.setting.isreadonly')"
-                name="isReadonly"
-              >
-                <TaktSelect
-                  v-model:value="formState.isReadonly"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isreadonly') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.setting.isencrypted')"
+                :label="pi.label('isEncrypted')"
                 name="isEncrypted"
               >
                 <TaktSelect
                   v-model:value="formState.isEncrypted"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isencrypted') })"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isEncrypted')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('settingStatus')"
+                name="settingStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.settingStatus"
+                  dict-type="sys_normal_disable"
+                  :placeholder="pi.ph('settingStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -188,7 +239,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -203,12 +254,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -231,6 +282,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSettingI18n } from '../composables/use-setting-i18n'
+
+/** 实体字段 i18n */
+const pi = useSettingI18n()
 import type { SettingCreate } from '@/types/foundation/setting'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -241,37 +296,38 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","settingKey","settingValue","settingName","settingDescription","settingGroup","valueType","isBuiltIn","isReadonly","isEncrypted","settingStatus","extField","remark"]
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -291,10 +347,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  settingGroup: 'frontend',
-  valueType: 'input',
-  settingStatus: 1,
-  isBuiltIn: 0
+  isBuiltIn: 0,
+  settingStatus: 1
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -336,10 +390,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.settingId
-    if (isCreate) {
+    if (!props.formData?.settingId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -350,35 +403,39 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   settingKey: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.setting.key') }),
+      message: pi.ph('settingKey'),
       trigger: 'blur'
     }
   ],
   settingName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.setting.name') }),
+      message: pi.ph('settingName'),
       trigger: 'blur'
     }
   ],
-  settingGroup: [{
-    required: true,
-    message: t('common.page.form.placeholder.select', { field: t('entity.setting.group') }),
-    trigger: 'change'
-  }],
-  valueType: [{
-    required: true,
-    message: t('common.page.form.placeholder.select', { field: t('entity.setting.valuetype') }),
-    trigger: 'change'
-  }],
+  settingGroup: [
+    {
+      required: true,
+      message: pi.ph('settingGroup'),
+      trigger: 'change'
+    }
+  ],
+  valueType: [
+    {
+      required: true,
+      message: pi.ph('valueType'),
+      trigger: 'change'
+    }
+  ],
   isBuiltIn: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.isbuiltin') }))
+        return Promise.reject(pi.ph('isBuiltIn'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.isbuiltin') }))
+        return Promise.reject(pi.ph('isBuiltIn'))
       }
       return Promise.resolve()
     },
@@ -387,11 +444,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isReadonly: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.isreadonly') }))
+        return Promise.reject(pi.ph('isReadonly'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.isreadonly') }))
+        return Promise.reject(pi.ph('isReadonly'))
       }
       return Promise.resolve()
     },
@@ -400,19 +457,27 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isEncrypted: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.isencrypted') }))
+        return Promise.reject(pi.ph('isEncrypted'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.isencrypted') }))
+        return Promise.reject(pi.ph('isEncrypted'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
   settingStatus: [{
-    required: true,
-    message: t('common.page.form.placeholder.select', { field: t('entity.setting.status') }),
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('settingStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('settingStatus'))
+      }
+      return Promise.resolve()
+    },
     trigger: 'change'
   }],
 }))
@@ -428,21 +493,53 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn
-    payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+    if (rawisBuiltIn === undefined || rawisBuiltIn === null || rawisBuiltIn === '') {
+      delete payload.isBuiltIn
+    } else {
+      const numisBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+      if (Number.isFinite(numisBuiltIn)) payload.isBuiltIn = numisBuiltIn
+      else delete payload.isBuiltIn
+    }
   }
   if ('isReadonly' in payload) {
     const rawisReadonly = payload.isReadonly
-    payload.isReadonly = typeof rawisReadonly === 'number' ? rawisReadonly : Number(rawisReadonly)
+    if (rawisReadonly === undefined || rawisReadonly === null || rawisReadonly === '') {
+      delete payload.isReadonly
+    } else {
+      const numisReadonly = typeof rawisReadonly === 'number' ? rawisReadonly : Number(rawisReadonly)
+      if (Number.isFinite(numisReadonly)) payload.isReadonly = numisReadonly
+      else delete payload.isReadonly
+    }
   }
   if ('isEncrypted' in payload) {
     const rawisEncrypted = payload.isEncrypted
-    payload.isEncrypted = typeof rawisEncrypted === 'number' ? rawisEncrypted : Number(rawisEncrypted)
+    if (rawisEncrypted === undefined || rawisEncrypted === null || rawisEncrypted === '') {
+      delete payload.isEncrypted
+    } else {
+      const numisEncrypted = typeof rawisEncrypted === 'number' ? rawisEncrypted : Number(rawisEncrypted)
+      if (Number.isFinite(numisEncrypted)) payload.isEncrypted = numisEncrypted
+      else delete payload.isEncrypted
+    }
   }
   if ('settingStatus' in payload) {
-    const rawSettingStatus = payload.settingStatus
-    payload.settingStatus = typeof rawSettingStatus === 'number' ? rawSettingStatus : Number(rawSettingStatus)
+    const rawsettingStatus = payload.settingStatus
+    if (rawsettingStatus === undefined || rawsettingStatus === null || rawsettingStatus === '') {
+      delete payload.settingStatus
+    } else {
+      const numsettingStatus = typeof rawsettingStatus === 'number' ? rawsettingStatus : Number(rawsettingStatus)
+      if (Number.isFinite(numsettingStatus)) payload.settingStatus = numsettingStatus
+      else delete payload.settingStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.settingId) {
+    payload.settingId = props.formData.settingId
+  }
   return payload
 }
 

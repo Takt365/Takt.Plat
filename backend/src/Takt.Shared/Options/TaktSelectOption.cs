@@ -67,7 +67,7 @@ public class TaktSelectOption
     public int? ListClass { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

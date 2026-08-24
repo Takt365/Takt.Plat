@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktSettingService.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：系统设置应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
     }
 
     /// <summary>
-    /// 获取系统设置列表（分页）
+    /// 获取系统设置列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSettingDto>> GetSettingListAsync(TaktSettingQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSettingDto>.Create(
+                new List<TaktSettingDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _settingRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -96,13 +104,13 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
     {
         EnsureThreeLayerContext();
         var list = await _settingRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SettingStatus == 1,
             x => x.SettingName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.SettingName ?? e.Id.ToString(),
+            DictValue = e.SettingName,
+            DictLabel = e.SettingName,
         }).ToList();
     }
 
@@ -218,6 +226,10 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
         {
             throw new TaktBusinessException("系统设置不存在");
         }
+        if (entity.IsBuiltIn == 1 && dto.SettingStatus != 1)
+        {
+            throw new TaktBusinessException("不允许禁用内置系统设置");
+        }
         entity.SettingStatus = dto.SettingStatus;
         await _settingRepository.UpdateAsync(entity);
         return await GetSettingByIdAsync(dto.SettingId) ?? throw new TaktBusinessException("系统设置不存在");
@@ -236,6 +248,31 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
             throw new TaktBusinessException("系统设置不存在");
         }
         entity.SortOrder = dto.SortOrder;
+        await _settingRepository.UpdateAsync(entity);
+        return await GetSettingByIdAsync(dto.SettingId) ?? throw new TaktBusinessException("系统设置不存在");
+    }
+
+    /// <summary>
+    /// 更新系统设置内置
+    /// </summary>
+    /// <param name="dto">内置 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSettingDto> UpdateSettingBuiltInAsync(TaktSettingBuiltInDto dto)
+    {
+        var entity = await _settingRepository.GetByIdAsync(dto.SettingId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("系统设置不存在");
+        }
+        if (dto.IsBuiltIn is not 0 and not 1)
+        {
+            throw new TaktBusinessException("内置必须为字典 sys_yes_no 合法值（0=否，1=是）");
+        }
+        if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
+        {
+            throw new TaktBusinessException("不允许取消内置系统设置标识");
+        }
+        entity.IsBuiltIn = dto.IsBuiltIn;
         await _settingRepository.UpdateAsync(entity);
         return await GetSettingByIdAsync(dto.SettingId) ?? throw new TaktBusinessException("系统设置不存在");
     }
@@ -318,7 +355,15 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSettingAsync(TaktSettingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSettingQueryDto());
+        var queryDto = query ?? new TaktSettingQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSettingExportDto>(),
+                sheetName ?? "系统设置数据",
+                fileName ?? "系统设置导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _settingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -347,114 +392,207 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
     {
         var exp = Expressionable.Create<TaktSetting>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.SettingKey != null && x.SettingKey.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.SettingKey != null && x.SettingKey.Contains(keywords))
                 || (x.SettingValue != null && x.SettingValue.Contains(keywords))
                 || (x.SettingName != null && x.SettingName.Contains(keywords))
                 || (x.SettingDescription != null && x.SettingDescription.Contains(keywords))
                 || (x.SettingGroup != null && x.SettingGroup.Contains(keywords))
                 || (x.ValueType != null && x.ValueType.Contains(keywords))
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.IsReadonly).Contains(keywords)
-                || SqlFunc.ToString(x.IsEncrypted).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.SettingStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SettingKey))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.SettingKey != null && x.SettingKey.Contains(queryDto.SettingKey));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SettingValue))
-        {
-            exp = exp.And(x => x.SettingValue != null && x.SettingValue.Contains(queryDto.SettingValue));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.SettingName))
-        {
-            exp = exp.And(x => x.SettingName != null && x.SettingName.Contains(queryDto.SettingName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.SettingDescription))
-        {
-            exp = exp.And(x => x.SettingDescription != null && x.SettingDescription.Contains(queryDto.SettingDescription));
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.SettingGroup))
-        {
-            exp = exp.And(x => x.SettingGroup == queryDto.SettingGroup);
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.ValueType))
-        {
-            exp = exp.And(x => x.ValueType == queryDto.ValueType);
-        }
-
-        if (queryDto?.IsBuiltIn.HasValue == true)
-        {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
-        }
-
-        if (queryDto?.IsReadonly.HasValue == true)
-        {
-            exp = exp.And(x => x.IsReadonly == queryDto.IsReadonly);
-        }
-
-        if (queryDto?.IsEncrypted.HasValue == true)
-        {
-            exp = exp.And(x => x.IsEncrypted == queryDto.IsEncrypted);
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
-        }
-
-        if (queryDto?.SettingStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.SettingStatus == queryDto.SettingStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.SettingKey))
+        {
+            var settingKey = queryDto.SettingKey;
+            exp = exp.And(x => x.SettingKey != null && x.SettingKey.Contains(settingKey));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SettingValue))
+        {
+            var settingValue = queryDto.SettingValue;
+            exp = exp.And(x => x.SettingValue != null && x.SettingValue.Contains(settingValue));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SettingName))
+        {
+            var settingName = queryDto.SettingName;
+            exp = exp.And(x => x.SettingName != null && x.SettingName.Contains(settingName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SettingDescription))
+        {
+            var settingDescription = queryDto.SettingDescription;
+            exp = exp.And(x => x.SettingDescription != null && x.SettingDescription.Contains(settingDescription));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SettingGroup))
+        {
+            var settingGroup = queryDto.SettingGroup;
+            exp = exp.And(x => x.SettingGroup != null && x.SettingGroup.Contains(settingGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ValueType))
+        {
+            var valueType = queryDto.ValueType;
+            exp = exp.And(x => x.ValueType != null && x.ValueType.Contains(valueType));
+        }
+
+        if (queryDto?.IsBuiltIn.HasValue == true)
+        {
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
+        }
+
+        if (queryDto?.IsReadonly.HasValue == true)
+        {
+            var isReadonly = queryDto.IsReadonly.Value;
+            exp = exp.And(x => x.IsReadonly == isReadonly);
+        }
+
+        if (queryDto?.IsEncrypted.HasValue == true)
+        {
+            var isEncrypted = queryDto.IsEncrypted.Value;
+            exp = exp.And(x => x.IsEncrypted == isEncrypted);
+        }
+
+        if (queryDto?.SortOrder.HasValue == true)
+        {
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
+        }
+
+        if (queryDto?.SettingStatus.HasValue == true)
+        {
+            var settingStatus = queryDto.SettingStatus.Value;
+            exp = exp.And(x => x.SettingStatus == settingStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSettingQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SettingKey))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SettingValue))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SettingName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SettingDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SettingGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ValueType))
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsReadonly.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsEncrypted.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SettingStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

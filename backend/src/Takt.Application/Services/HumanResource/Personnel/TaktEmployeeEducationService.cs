@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工教育经历应用服务实现
 // 
@@ -30,33 +30,45 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducationService
 {
     private readonly ITaktCompanyRepository<TaktEmployeeEducation> _employeeEducationRepository;
+    private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeEducationRepository">员工教育经历仓储</param>
+    /// <param name="employeeRepository">员工仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeEducationService(
         ITaktCompanyRepository<TaktEmployeeEducation> employeeEducationRepository,
+        ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeEducationRepository = employeeEducationRepository;
+        _employeeRepository = employeeRepository;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取员工教育经历列表（分页）
+    /// 获取员工教育经历列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEmployeeEducationDto>> GetEmployeeEducationListAsync(TaktEmployeeEducationQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEmployeeEducationDto>.Create(
+                new List<TaktEmployeeEducationDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _employeeEducationRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,6 +122,7 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
     public async Task<TaktEmployeeEducationDto> CreateEmployeeEducationAsync(TaktEmployeeEducationCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployeeEducation>();
+        await StampEmployeeEducationEmployeeAsync(entity, dto);
         entity = await _employeeEducationRepository.CreateAsync(entity);
         return await GetEmployeeEducationByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeEducationDto>();
     }
@@ -128,6 +141,7 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
             throw new TaktBusinessException("员工教育经历不存在");
         }
         dto.Adapt(entity);
+        await StampEmployeeEducationEmployeeAsync(entity, dto);
         await _employeeEducationRepository.UpdateAsync(entity);
         return await GetEmployeeEducationByIdAsync(id) ?? throw new TaktBusinessException("员工教育经历不存在");
     }
@@ -199,6 +213,8 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
             try
             {
                 var entity = rows[i].Adapt<TaktEmployeeEducation>();
+                var importDto = rows[i].Adapt<TaktEmployeeEducationCreateDto>();
+                await StampEmployeeEducationEmployeeAsync(entity, importDto);
                 await _employeeEducationRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -220,7 +236,15 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeEducationAsync(TaktEmployeeEducationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmployeeEducationQueryDto());
+        var queryDto = query ?? new TaktEmployeeEducationQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEmployeeEducationExportDto>(),
+                sheetName ?? "员工教育经历数据",
+                fileName ?? "员工教育经历导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _employeeEducationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -237,6 +261,53 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步员工教育经历主表外键（ManyToOne → 员工）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampEmployeeEducationEmployeeAsync(TaktEmployeeEducation entity, TaktEmployeeEducationCreateDto dto)
+    {
+        if (dto.EmployeeId <= 0)
+        {
+            return;
+        }
+        var master = await _employeeRepository.GetByIdAsync(dto.EmployeeId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("员工不存在");
+        }
+        entity.EmployeeId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeCode))
+        {
+            entity.EmployeeCode = master.EmployeeCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeName))
+        {
+            entity.EmployeeName = master.EmployeeName;
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -249,124 +320,218 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
     {
         var exp = Expressionable.Create<TaktEmployeeEducation>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || (x.SchoolName != null && x.SchoolName.Contains(keywords))
-                || SqlFunc.ToString(x.EducationLevel).Contains(keywords)
-                || SqlFunc.ToString(x.DegreeLevel).Contains(keywords)
                 || (x.MajorName != null && x.MajorName.Contains(keywords))
                 || (x.CertificateCode != null && x.CertificateCode.Contains(keywords))
-                || SqlFunc.ToString(x.IsHighest).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.StartDate).Contains(keywords)
-                || SqlFunc.ToString(x.EndDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.EmployeeId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
-        {
-            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
-        {
-            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.SchoolName))
-        {
-            exp = exp.And(x => x.SchoolName != null && x.SchoolName.Contains(queryDto.SchoolName));
-        }
-
-        if (queryDto?.EducationLevel.HasValue == true)
-        {
-            exp = exp.And(x => x.EducationLevel == queryDto.EducationLevel);
-        }
-
-        if (queryDto?.DegreeLevel.HasValue == true)
-        {
-            exp = exp.And(x => x.DegreeLevel == queryDto.DegreeLevel);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MajorName))
-        {
-            exp = exp.And(x => x.MajorName != null && x.MajorName.Contains(queryDto.MajorName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CertificateCode))
-        {
-            exp = exp.And(x => x.CertificateCode != null && x.CertificateCode.Contains(queryDto.CertificateCode));
-        }
-
-        if (queryDto?.IsHighest.HasValue == true)
-        {
-            exp = exp.And(x => x.IsHighest == queryDto.IsHighest);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.StartDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.StartDate >= queryDto.StartDateStart);
-        }
-
-        if (queryDto?.StartDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.StartDate <= queryDto.StartDateEnd);
-        }
-
-        if (queryDto?.EndDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EndDate >= queryDto.EndDateStart);
-        }
-
-        if (queryDto?.EndDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EndDate <= queryDto.EndDateEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.EmployeeId.HasValue == true)
+        {
+            var employeeId = queryDto.EmployeeId.Value;
+            exp = exp.And(x => x.EmployeeId == employeeId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeCode))
+        {
+            var employeeCode = queryDto.EmployeeCode;
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(employeeCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeName))
+        {
+            var employeeName = queryDto.EmployeeName;
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SchoolName))
+        {
+            var schoolName = queryDto.SchoolName;
+            exp = exp.And(x => x.SchoolName != null && x.SchoolName.Contains(schoolName));
+        }
+
+        if (queryDto?.EducationLevel.HasValue == true)
+        {
+            var educationLevel = queryDto.EducationLevel.Value;
+            exp = exp.And(x => x.EducationLevel == educationLevel);
+        }
+
+        if (queryDto?.DegreeLevel.HasValue == true)
+        {
+            var degreeLevel = queryDto.DegreeLevel.Value;
+            exp = exp.And(x => x.DegreeLevel == degreeLevel);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MajorName))
+        {
+            var majorName = queryDto.MajorName;
+            exp = exp.And(x => x.MajorName != null && x.MajorName.Contains(majorName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CertificateCode))
+        {
+            var certificateCode = queryDto.CertificateCode;
+            exp = exp.And(x => x.CertificateCode != null && x.CertificateCode.Contains(certificateCode));
+        }
+
+        if (queryDto?.IsHighest.HasValue == true)
+        {
+            var isHighest = queryDto.IsHighest.Value;
+            exp = exp.And(x => x.IsHighest == isHighest);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.StartDateStart.HasValue == true)
+        {
+            var startDateStart = queryDto.StartDateStart.Value;
+            exp = exp.And(x => x.StartDate >= startDateStart);
+        }
+
+        if (queryDto?.StartDateEnd.HasValue == true)
+        {
+            var startDateEnd = queryDto.StartDateEnd.Value;
+            exp = exp.And(x => x.StartDate <= startDateEnd);
+        }
+
+        if (queryDto?.EndDateStart.HasValue == true)
+        {
+            var endDateStart = queryDto.EndDateStart.Value;
+            exp = exp.And(x => x.EndDate >= endDateStart);
+        }
+
+        if (queryDto?.EndDateEnd.HasValue == true)
+        {
+            var endDateEnd = queryDto.EndDateEnd.Value;
+            exp = exp.And(x => x.EndDate <= endDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEmployeeEducationQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.EmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SchoolName))
+        {
+            return true;
+        }
+        if (queryDto.EducationLevel.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DegreeLevel.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MajorName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CertificateCode))
+        {
+            return true;
+        }
+        if (queryDto.IsHighest.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.StartDateStart.HasValue || queryDto.StartDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EndDateStart.HasValue || queryDto.EndDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

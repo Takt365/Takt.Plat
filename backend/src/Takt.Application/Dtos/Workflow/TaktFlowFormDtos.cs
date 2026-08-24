@@ -91,7 +91,7 @@ public class TaktFlowFormDto : TaktCompanyDtoBase
     public string? RelatedFormField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -188,7 +188,7 @@ public class TaktFlowFormQueryDto : TaktPagedQuery
     public string? RelatedFormField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -252,6 +252,11 @@ public class TaktFlowFormCreateDto
     /// </summary>
     [Required(ErrorMessage = "表单编码（公司内唯一）不能为空")]
     public string FormCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 编码规则编码（按表单分类选规则取号；对应 TaktNumbering.RuleCode；不落库）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
 
     /// <summary>
     /// 表单名称
@@ -390,7 +395,7 @@ public class TaktFlowFormSortDto
     public long FlowFormId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -677,7 +682,7 @@ public class TaktFlowFormExportDto
     public string? RelatedFormField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktEmpSalaryI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmpSalary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktEmpSalaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.empsalary.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.empsalary.status", "en-US", "状态_us", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.empsalary.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.empsalary.status", "zh-CN", "状态", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.empsalary.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
         };
     }
 

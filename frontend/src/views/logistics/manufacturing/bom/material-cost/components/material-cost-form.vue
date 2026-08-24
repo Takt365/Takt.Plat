@@ -36,7 +36,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.bomMaterialCostId"
+                  disabled
                 />
               </a-form-item>
             </a-col>

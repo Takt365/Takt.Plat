@@ -88,7 +88,7 @@
         <template v-else-if="column.key === 'postLevel'">
           <TaktDictTag
             :value="getPostDictValue(record, 'postLevel')"
-            dict-type="sys_post_level_category"
+            dict-type="sys_post_level"
           />
         </template>
         <template v-else-if="column.key === 'educationRequired'">
@@ -100,7 +100,7 @@
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getPostDictValue(record, 'isBuiltIn')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -221,7 +221,7 @@
       <a-form-item :label="pi.queryLabel('postLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.postLevel"
-          dict-type="sys_post_level_category"
+          dict-type="sys_post_level"
           :placeholder="pi.queryPh('postLevel', 'select')"
           allow-clear
         />
@@ -308,7 +308,7 @@
       <a-form-item :label="pi.queryLabel('isBuiltIn')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBuiltIn', 'select')"
           allow-clear
         />
@@ -328,7 +328,7 @@
       <a-form-item :label="pi.queryLabel('postStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.postStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('postStatus', 'select')"
           allow-clear
         />

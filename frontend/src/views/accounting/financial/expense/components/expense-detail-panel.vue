@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,204 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterExpenseId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-accounting-financial-expense-expense-detail"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('expenseCode')">
-      <a-form-item :label="pi.queryLabel('expenseCode')">
-        <a-input
-          v-model:value="advancedQueryForm.expenseCode"
-          :placeholder="pi.queryPh('expenseCode', 'required')"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('allocationCategory')">
-      <a-form-item :label="pi.queryLabel('allocationCategory')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.allocationCategory"
-          dict-type="logistics_allocation_category"
-          :placeholder="pi.queryPh('allocationCategory', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itemName')">
-      <a-form-item :label="pi.queryLabel('itemName')">
-        <a-input
-          v-model:value="advancedQueryForm.itemName"
-          :placeholder="pi.queryPh('itemName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itemDescription')">
-      <a-form-item :label="pi.queryLabel('itemDescription')">
-        <a-textarea
-          v-model:value="advancedQueryForm.itemDescription"
-          :placeholder="pi.queryPh('itemDescription', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itemQuantity')">
-      <a-form-item :label="pi.queryLabel('itemQuantity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.itemQuantity"
-          :placeholder="pi.queryPh('itemQuantity', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itemAmount')">
-      <a-form-item :label="pi.queryLabel('itemAmount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.itemAmount"
-          :placeholder="pi.queryPh('itemAmount', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('accountTitle')">
-      <a-form-item :label="pi.queryLabel('accountTitle')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.accountTitle"
-          api-url="TaktAccountTitles/options"
-          :placeholder="pi.queryPh('accountTitle', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('invoiceCode')">
-      <a-form-item :label="pi.queryLabel('invoiceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.invoiceCode"
-          :placeholder="pi.queryPh('invoiceCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('expenseDetailDateStart')">
-      <a-form-item :label="pi.queryLabel('expenseDetailDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.expenseDetailDateStart"
-          :placeholder="pi.queryPh('expenseDetailDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('expenseDetailDateEnd')">
-      <a-form-item :label="pi.queryLabel('expenseDetailDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.expenseDetailDateEnd"
-          :placeholder="pi.queryPh('expenseDetailDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isObsolete')">
-      <a-form-item :label="pi.queryLabel('isObsolete')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('isObsolete', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -366,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import ExpenseDetailForm from './expense-detail-form.vue'
 import { useExpenseMasterContext } from '../composables/use-expense-master-context'
 import {
@@ -454,45 +260,6 @@ const formData = ref<Partial<ExpenseDetail>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(EXPENSEDETAIL_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof EXPENSEDETAIL_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    lineNumber: undefined as number | undefined,
-    itemQuantity: undefined as number | undefined,
-    itemAmount: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  EXPENSEDETAIL_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...EXPENSEDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -538,16 +305,6 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: ExpenseDetail }) =>
       String(getExpenseDetailField(record, 'expenseDetailId') ?? ''),
-  },
-  {
-    title: pi.label('expenseId'),
-    dataIndex: 'expenseId',
-    key: 'expenseId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: ExpenseDetail }) =>
-      String(getExpenseDetailField(record, 'expenseId') ?? ''),
   },
   {
     title: pi.label('expenseCode'),
@@ -659,6 +416,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: ExpenseDetail }) =>
       String(getExpenseDetailField(record, 'isObsolete') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ExpenseDetail }) =>
+      String(getExpenseDetailField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -676,8 +443,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'accounting:financial:expense:delete',
         onClick: (record: ExpenseDetail) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -786,7 +555,7 @@ function onClickRow(record: ExpenseDetail) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {ExpenseDetailQuery} 查询 DTO
  */
@@ -810,18 +579,6 @@ function buildListQuery(overrides?: Partial<ExpenseDetailQuery>): ExpenseDetailQ
   }
   for (const key of EXPENSEDETAIL_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
-  }
-  if (form.itemQuantity !== undefined && form.itemQuantity !== null) {
-    query.itemQuantity = form.itemQuantity
-  }
-  if (form.itemAmount !== undefined && form.itemAmount !== null) {
-    query.itemAmount = form.itemAmount
-  }
-  if (form.isObsolete !== undefined && form.isObsolete !== null) {
-    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1053,6 +810,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportExpenseDetail(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

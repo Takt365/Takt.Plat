@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { IpqcOrder } from '@/types/logistics/quality/operation/ipqc-order'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type IpqcOrderRowRecord = IpqcOrder | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface IpqcOrderMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<IpqcOrder | null>
+  selectedMasterRow: Ref<IpqcOrderRowRecord | null>
 }
 
 const ipqcOrderMasterContextKey: InjectionKey<IpqcOrderMasterContext> = Symbol('ipqc-orderMasterContext')
@@ -22,7 +25,7 @@ const ipqcOrderMasterContextKey: InjectionKey<IpqcOrderMasterContext> = Symbol('
  * @returns {IpqcOrderMasterContext} 主表上下文
  */
 export function provideIpqcOrderMasterContext(): IpqcOrderMasterContext {
-  const selectedMasterRow = ref<IpqcOrder | null>(null)
+  const selectedMasterRow = ref<IpqcOrderRowRecord | null>(null)
   const ctx: IpqcOrderMasterContext = { selectedMasterRow }
   provide(ipqcOrderMasterContextKey, ctx)
   return ctx

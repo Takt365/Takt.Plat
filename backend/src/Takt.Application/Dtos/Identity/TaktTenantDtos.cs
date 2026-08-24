@@ -66,12 +66,12 @@ public class TaktTenantDto : TaktTenantCoreDtoBase
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int TenantStatus { get; set; } = 0;
 
@@ -132,12 +132,12 @@ public class TaktTenantQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? TenantStatus { get; set; }
 
@@ -208,12 +208,12 @@ public class TaktTenantCreateDto
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int TenantStatus { get; set; } = 0;
 
@@ -272,9 +272,9 @@ public class TaktTenantStatusDto
     public long TenantId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int TenantStatus { get; set; } = 0;
 }
 
@@ -322,12 +322,12 @@ public class TaktTenantTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? TenantStatus { get; set; }
 
@@ -388,12 +388,12 @@ public class TaktTenantImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? TenantStatus { get; set; }
 
@@ -461,12 +461,12 @@ public class TaktTenantExportDto
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int TenantStatus { get; set; } = 0;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktCustomerDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Customer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomer 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Sales;
 // ========================================
 
 /// <summary>
-/// Takt客户信息实体
+/// Takt客户信息实体 <para>业务唯一键：TenantCode+CompanyCode+CustomerCode（PlantCode 为业务字段，不参与唯一）。</para>
 /// 对应前端 TaktCustomerDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -34,7 +34,6 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
-
 
     /// <summary>
     /// 客户编码（唯一索引）
@@ -192,7 +191,7 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public string NielsenIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+    /// 中心记帐冻结（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int CentralPostingBlock { get; set; } = 0;
 
@@ -207,7 +206,7 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public string Headquarters { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int ClearingWithVendor { get; set; } = 0;
 
@@ -277,12 +276,12 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 客户状态（字典 sys_normal_disable_status）
+    /// 客户状态（字典 sys_normal_disable）
     /// </summary>
     public int CustomerStatus { get; set; } = 0;
 
@@ -304,7 +303,7 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -474,7 +473,7 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public string? NielsenIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+    /// 中心记帐冻结（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? CentralPostingBlock { get; set; }
 
@@ -489,7 +488,7 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public string? Headquarters { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? ClearingWithVendor { get; set; }
 
@@ -559,12 +558,12 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public decimal? EvaluationScore { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 客户状态（字典 sys_normal_disable_status）
+    /// 客户状态（字典 sys_normal_disable）
     /// </summary>
     public int? CustomerStatus { get; set; }
 
@@ -614,9 +613,8 @@ public class TaktCustomerCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -788,7 +786,7 @@ public class TaktCustomerCreateDto
     public string NielsenIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+    /// 中心记帐冻结（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int CentralPostingBlock { get; set; } = 0;
 
@@ -805,7 +803,7 @@ public class TaktCustomerCreateDto
     public string Headquarters { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int ClearingWithVendor { get; set; } = 0;
 
@@ -881,7 +879,7 @@ public class TaktCustomerCreateDto
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 客户状态（字典 sys_normal_disable_status）
+    /// 客户状态（字典 sys_normal_disable）
     /// </summary>
     public int CustomerStatus { get; set; } = 0;
 
@@ -935,9 +933,9 @@ public class TaktCustomerStatusDto
     public long CustomerId { get; set; }
 
     /// <summary>
-    /// 客户状态（字典 sys_normal_disable_status）
+    /// 客户状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "客户状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "客户状态（字典 sys_normal_disable）不能为空")]
     public int CustomerStatus { get; set; } = 0;
 }
 
@@ -959,9 +957,9 @@ public class TaktCustomerSortDto
     public long CustomerId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -990,7 +988,7 @@ public class TaktCustomerTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -1150,7 +1148,7 @@ public class TaktCustomerTemplateDto
     public string? NielsenIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+    /// 中心记帐冻结（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? CentralPostingBlock { get; set; }
 
@@ -1165,7 +1163,7 @@ public class TaktCustomerTemplateDto
     public string? Headquarters { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? ClearingWithVendor { get; set; }
 
@@ -1235,7 +1233,7 @@ public class TaktCustomerTemplateDto
     public decimal? EvaluationScore { get; set; }
 
     /// <summary>
-    /// 客户状态（字典 sys_normal_disable_status）
+    /// 客户状态（字典 sys_normal_disable）
     /// </summary>
     public int? CustomerStatus { get; set; }
 
@@ -1272,7 +1270,7 @@ public class TaktCustomerImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -1432,7 +1430,7 @@ public class TaktCustomerImportDto
     public string? NielsenIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+    /// 中心记帐冻结（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? CentralPostingBlock { get; set; }
 
@@ -1447,7 +1445,7 @@ public class TaktCustomerImportDto
     public string? Headquarters { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? ClearingWithVendor { get; set; }
 
@@ -1517,7 +1515,7 @@ public class TaktCustomerImportDto
     public decimal? EvaluationScore { get; set; }
 
     /// <summary>
-    /// 客户状态（字典 sys_normal_disable_status）
+    /// 客户状态（字典 sys_normal_disable）
     /// </summary>
     public int? CustomerStatus { get; set; }
 
@@ -1558,6 +1556,11 @@ public class TaktCustomerExportDto
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户编码（唯一索引）
@@ -1715,7 +1718,7 @@ public class TaktCustomerExportDto
     public string NielsenIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+    /// 中心记帐冻结（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int CentralPostingBlock { get; set; } = 0;
 
@@ -1730,7 +1733,7 @@ public class TaktCustomerExportDto
     public string Headquarters { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int ClearingWithVendor { get; set; } = 0;
 
@@ -1800,12 +1803,12 @@ public class TaktCustomerExportDto
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 客户状态（字典 sys_normal_disable_status）
+    /// 客户状态（字典 sys_normal_disable）
     /// </summary>
     public int CustomerStatus { get; set; } = 0;
 

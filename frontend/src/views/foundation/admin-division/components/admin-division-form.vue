@@ -44,7 +44,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('countryCode')"
                 name="countryCode"
@@ -57,7 +57,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('divisionCode')"
                 name="divisionCode"
@@ -72,7 +72,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('divisionName')"
                 name="divisionName"
@@ -86,7 +86,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('divisionPath')"
                 name="divisionPath"
@@ -100,7 +100,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('postalCode')"
                 name="postalCode"
@@ -115,20 +115,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('cultureCode')"
-                name="cultureCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.cultureCode"
-                  dict-type="sys_culture_code"
-                  :placeholder="pi.ph('cultureCode')"
-                  :disabled="!!formData?.adminDivisionId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('currencyCode')"
                 name="currencyCode"
@@ -141,7 +128,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('phoneCode')"
                 name="phoneCode"
@@ -156,26 +143,26 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('isBuiltIn')"
                 name="isBuiltIn"
               >
                 <TaktSelect
                   v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isBuiltIn')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('divisionStatus')"
                 name="divisionStatus"
               >
                 <TaktSelect
                   v-model:value="formState.divisionStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('divisionStatus')"
                 />
               </a-form-item>
@@ -282,7 +269,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -293,17 +280,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","countryCode","divisionCode","divisionName","divisionPath","postalCode","cultureCode","currencyCode","phoneCode","isBuiltIn","divisionStatus","extField","remark"]
+const formFields = ["tenantCode","countryCode","divisionCode","divisionName","divisionPath","postalCode","currencyCode","phoneCode","isBuiltIn","divisionStatus","extField","remark"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -324,10 +312,10 @@ const formState = reactive<Record<string, any>>({ parentId: '0' })
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   countryCode: "CN",
-  cultureCode: "ZH-CN",
   currencyCode: "CNY",
   isBuiltIn: 0
 }
+
 
 /** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
 function normalizeTreeParentId(target: Record<string, unknown>) {
@@ -419,13 +407,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('divisionPath'),
       trigger: 'blur'
-    }
-  ],
-  cultureCode: [
-    {
-      required: true,
-      message: pi.ph('cultureCode'),
-      trigger: 'change'
     }
   ],
   currencyCode: [

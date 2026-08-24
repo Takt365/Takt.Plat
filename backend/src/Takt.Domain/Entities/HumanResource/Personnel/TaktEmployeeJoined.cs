@@ -104,4 +104,20 @@ public class TaktEmployeeJoined : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "direct_manager_name", ColumnDescription = "直属上级姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? DirectManagerName { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
+
+    /// <summary>
+    /// 直属上级员工（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(DirectManagerId))]
+    public TaktEmployee? DirectManager { get; set; }
 }

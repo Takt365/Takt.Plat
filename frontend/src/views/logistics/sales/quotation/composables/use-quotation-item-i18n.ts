@@ -36,6 +36,7 @@ export const SALESQUOTATIONITEM_LIST_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'quotationAmount',
   'isObsolete',
 ] as const
 
@@ -57,6 +58,7 @@ export const SALESQUOTATIONITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'quotationAmount',
   'isObsolete',
   'action',
 ] as const
@@ -71,6 +73,7 @@ export const SALESQUOTATIONITEM_SUMMARY_SUM_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'quotationAmount',
   'isObsolete',
 ] as const
 
@@ -78,7 +81,8 @@ export const SALESQUOTATIONITEM_SUMMARY_SUM_FIELDS = [
 export const SALESQUOTATIONITEM_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
   materialDescription: 'optional',
@@ -92,6 +96,7 @@ export const SALESQUOTATIONITEM_PLACEHOLDER = {
   taxIncludedAmount: 'select',
   untaxedAmount: 'select',
   taxAmount: 'select',
+  quotationAmount: 'select',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -100,6 +105,8 @@ export type SalesQuotationItemField = keyof typeof SALESQUOTATIONITEM_PLACEHOLDE
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESQUOTATIONITEM_QUERY_STRING_FIELDS = [
+  'cultureCode',
+  'plantCode',
   'salesQuotationCode',
   'materialCode',
   'materialDescription',
@@ -113,7 +120,7 @@ export const SALESQUOTATIONITEM_QUERY_STRING_FIELDS = [
 
 export type SalesQuotationItemQueryField =
   | (typeof SALESQUOTATIONITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'quotationQuantity' | 'salesPerUnit' | 'quotationUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'isObsolete'
+  | 'lineNumber' | 'quotationQuantity' | 'salesPerUnit' | 'quotationUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'quotationAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESQUOTATIONITEM_QUERY_FIELDS: readonly SalesQuotationItemQueryField[] = [
@@ -127,6 +134,7 @@ export const SALESQUOTATIONITEM_QUERY_FIELDS: readonly SalesQuotationItemQueryFi
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'quotationAmount',
   'isObsolete',
 ]
 

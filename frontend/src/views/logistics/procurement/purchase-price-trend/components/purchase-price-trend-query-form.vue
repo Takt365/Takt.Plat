@@ -147,7 +147,7 @@ const priceTypeSelectKey = ref(0)
 const supplierSelectKey = ref(0)
 /** 物料下拉刷新键 */
 const materialSelectKey = ref(0)
-/** 推移本表级联选项 URL（TaktPurchaseTrendPrices） */
+/** 推移本表级联选项 URL（TaktPurchasePriceTrends） */
 const plantOptionsUrl = getPurchasePriceTrendPlantOptionsUrl()
 const priceTypeOptionsUrl = getPurchasePriceTrendPriceTypeOptionsUrl()
 const supplierOptionsUrl = getPurchasePriceTrendSupplierOptionsUrl()

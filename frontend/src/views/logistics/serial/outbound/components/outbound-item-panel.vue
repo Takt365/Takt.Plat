@@ -2,15 +2,12 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/serial/outbound/components -->
 <!-- 文件名称：outbound-item-panel.vue -->
-<!-- 功能描述：序列号出库主表实体主表实体右侧明细 serialOutboundItem 独立 CRUD（按主表选中 serialOutboundId 分页） -->
+<!-- 功能描述：序列号出库主表实体主表实体右侧明细 serialOutboundItem 独立 CRUD（按主表选中 outboundId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
 <template>
   <div class="outbound-item-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ pi.self() }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -55,7 +52,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="outbound-item-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="outbound-item-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getSerialOutboundItemId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -74,11 +75,27 @@
         :total="total"
         scroll-layout="masterDetailLr"
         table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -92,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterSerialOutboundId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -106,23 +124,13 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('outboundId')">
-      <a-form-item :label="pi.queryLabel('outboundId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.outboundId"
-          api-url="TaktSerialOutbounds/options"
-          :placeholder="pi.queryPh('outboundId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('outboundCode')">
       <a-form-item :label="pi.queryLabel('outboundCode')">
         <a-input
           v-model:value="advancedQueryForm.outboundCode"
           :placeholder="pi.queryPh('outboundCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
@@ -173,6 +181,16 @@
           v-model:value="advancedQueryForm.referenceInboundLineNumber"
           :placeholder="pi.queryPh('referenceInboundLineNumber', 'required')"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -281,14 +299,23 @@
  * 序列号出库主表实体子表 serialOutboundItem 右栏面板
  * @module views/logistics/serial/outbound/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import SerialOutboundItemForm from './outbound-item-form.vue'
@@ -308,7 +335,8 @@ import type { SerialOutboundItem, SerialOutboundItemQuery } from '@/types/logist
 
 import {
   useSerialOutboundItemI18n,
-  SERIALOUTBOUNDITEM_LIST_FIELDS,
+  SERIALOUTBOUNDITEM_DEFAULT_VISIBLE_COLUMN_KEYS,
+  SERIALOUTBOUNDITEM_SUMMARY_SUM_FIELDS,
   SERIALOUTBOUNDITEM_QUERY_STRING_FIELDS,
   SERIALOUTBOUNDITEM_QUERY_FIELDS,
   SERIALOUTBOUNDITEM_SELF_I18N_KEY,
@@ -328,6 +356,41 @@ const searchPlaceholder = computed(
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<SerialOutboundItem[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -344,7 +407,34 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SERIALOUTBOUNDITEM_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.referenceInboundLineNumber !== undefined && form.referenceInboundLineNumber !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -356,7 +446,7 @@ function createEmptyAdvancedQueryForm() {
     ...form,
     lineNumber: undefined as number | undefined,
     referenceInboundLineNumber: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -380,8 +470,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
-/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...SERIALOUTBOUNDITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -392,7 +482,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...SERIALOUTBOUNDITEM_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
@@ -496,14 +586,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSerialOutboundItemField(record, 'referenceInboundLineNumber') ?? ''),
   },
   {
-    title: pi.label('outbound'),
-    dataIndex: 'outbound',
-    key: 'outbound',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SerialOutboundItem }) =>
-      String(getSerialOutboundItemField(record, 'outbound') ?? ''),
+      String(getSerialOutboundItemField(record, 'isObsolete') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -522,9 +612,80 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:serial:outbound:delete',
         onClick: (record: SerialOutboundItem) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'serialOutboundItemId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(SERIALOUTBOUNDITEM_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    SERIALOUTBOUNDITEM_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof SERIALOUTBOUNDITEM_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of SERIALOUTBOUNDITEM_SUMMARY_SUM_FIELDS) {
+      const num = Number(getSerialOutboundItemField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: SerialOutboundItem[]) => {
@@ -563,7 +724,7 @@ function onClickRow(record: SerialOutboundItem) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SerialOutboundItemQuery} 查询 DTO
  */
@@ -573,7 +734,7 @@ function buildListQuery(overrides?: Partial<SerialOutboundItemQuery>): SerialOut
   const query: SerialOutboundItemQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    serialOutboundId: masterSerialOutboundId.value,
+    outboundId: masterSerialOutboundId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -593,6 +754,9 @@ function buildListQuery(overrides?: Partial<SerialOutboundItemQuery>): SerialOut
   }
   if (form.referenceInboundLineNumber !== undefined && form.referenceInboundLineNumber !== null) {
     query.referenceInboundLineNumber = form.referenceInboundLineNumber
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -633,6 +797,36 @@ watch(masterSerialOutboundId, () => {
 
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
+
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
 
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
@@ -794,6 +988,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSerialOutboundItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

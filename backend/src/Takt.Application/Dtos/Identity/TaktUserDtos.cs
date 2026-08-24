@@ -36,14 +36,14 @@ public class TaktUserDto : TaktTenantCultureDtoBase
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// 昵称（显示名称，2–40 位）
     /// </summary>
-    public string Nickname { get; set; } = string.Empty;
+    public string NickName { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户类型（字典 sys_user_type）
@@ -67,7 +67,7 @@ public class TaktUserDto : TaktTenantCultureDtoBase
     public string? EmployeeName { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -102,7 +102,7 @@ public class TaktUserDto : TaktTenantCultureDtoBase
     public DateTime? LockedUntil { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int UserStatus { get; set; } = 0;
 
@@ -157,14 +157,14 @@ public class TaktUserQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）
     /// </summary>
-    public string? Username { get; set; } = string.Empty;
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// 昵称（显示名称，2–40 位）
     /// </summary>
-    public string Nickname { get; set; } = string.Empty;
+    public string NickName { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户类型（字典 sys_user_type）
@@ -188,7 +188,7 @@ public class TaktUserQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -233,7 +233,7 @@ public class TaktUserQueryDto : TaktPagedQuery
     public DateTime? LockedUntilEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? UserStatus { get; set; }
 
@@ -278,15 +278,15 @@ public class TaktUserCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）
     /// </summary>
-    [Required(ErrorMessage = "用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）不能为空")]
-    public string Username { get; set; } = string.Empty;
+    [Required(ErrorMessage = "用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）不能为空")]
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// 昵称（显示名称，2–40 位）
     /// </summary>
-    public string Nickname { get; set; } = string.Empty;
+    public string NickName { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户类型（字典 sys_user_type）
@@ -311,7 +311,7 @@ public class TaktUserCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -321,7 +321,7 @@ public class TaktUserCreateDto
     public int PasswordExpireDays { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int UserStatus { get; set; } = 0;
 
@@ -390,9 +390,9 @@ public class TaktUserStatusDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int UserStatus { get; set; } = 0;
 }
 
@@ -410,14 +410,14 @@ public class TaktUserTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）
     /// </summary>
-    public string? Username { get; set; } = string.Empty;
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// 昵称（显示名称，2–40 位）
     /// </summary>
-    public string Nickname { get; set; } = string.Empty;
+    public string NickName { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户类型（字典 sys_user_type）
@@ -441,7 +441,7 @@ public class TaktUserTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -451,7 +451,7 @@ public class TaktUserTemplateDto
     public int? PasswordExpireDays { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? UserStatus { get; set; }
 
@@ -492,14 +492,14 @@ public class TaktUserImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）
     /// </summary>
-    public string? Username { get; set; } = string.Empty;
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// 昵称（显示名称，2–40 位）
     /// </summary>
-    public string Nickname { get; set; } = string.Empty;
+    public string NickName { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户类型（字典 sys_user_type）
@@ -538,7 +538,7 @@ public class TaktUserImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -548,7 +548,7 @@ public class TaktUserImportDto
     public int? PasswordExpireDays { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? UserStatus { get; set; }
 
@@ -596,14 +596,14 @@ public class TaktUserExportDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// 昵称（显示名称，2–40 位）
     /// </summary>
-    public string Nickname { get; set; } = string.Empty;
+    public string NickName { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户类型（字典 sys_user_type）
@@ -647,7 +647,7 @@ public class TaktUserExportDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -682,7 +682,7 @@ public class TaktUserExportDto
     public DateTime? LockedUntil { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int UserStatus { get; set; } = 0;
 
@@ -772,7 +772,7 @@ public class TaktForgotPasswordDto
     /// 用户名或邮箱
     /// </summary>
     [Required(ErrorMessage = "用户名或邮箱不能为空")]
-    public string UsernameOrEmail { get; set; } = string.Empty;
+    public string UserNameOrEmail { get; set; } = string.Empty;
 }
 
 /// <summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktProductionPlanI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -217,13 +217,13 @@ public class TaktProductionPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionplan.convertedamount", "zh-HK", "已转工单采购金额_hk", "已转工单/采购金额"),
 
             // entity.productionplan.planstatus
-            new TranslationSeedItem("entity.productionplan.planstatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.productionplan.planstatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.productionplan.planstatus
-            new TranslationSeedItem("entity.productionplan.planstatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.productionplan.planstatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.productionplan.planstatus
-            new TranslationSeedItem("entity.productionplan.planstatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.productionplan.planstatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.productionplan.planstatus
-            new TranslationSeedItem("entity.productionplan.planstatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.productionplan.planstatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
 
             // entity.productionplan.convertedstatus
             new TranslationSeedItem("entity.productionplan.convertedstatus", "en-US", "转单状态_us", "转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),

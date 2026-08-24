@@ -187,7 +187,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.empSalaryStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empsalary.status') })"
                 />
               </a-form-item>
@@ -202,7 +202,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empsalary.relatedplant') })"
                   show-count
                   :maxlength="4"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -359,7 +359,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.empSalaryId
     if (isCreate) {

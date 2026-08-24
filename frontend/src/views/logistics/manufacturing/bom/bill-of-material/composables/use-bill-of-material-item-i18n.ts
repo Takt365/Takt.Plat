@@ -78,7 +78,8 @@ export const BILLOFMATERIALITEM_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  bomCode: 'required',
+  plantCode: 'optional',
+  bomCode: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
   materialDescription: 'optional',
@@ -95,7 +96,6 @@ export const BILLOFMATERIALITEM_PLACEHOLDER = {
   isPhantom: 'select',
   isObsolete: 'select',
   substitutes: 'optional',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -104,6 +104,7 @@ export type BillOfMaterialItemField = keyof typeof BILLOFMATERIALITEM_PLACEHOLDE
 /** 高级查询可 trim 的字符串字段 */
 export const BILLOFMATERIALITEM_QUERY_STRING_FIELDS = [
   'cultureCode',
+  'plantCode',
   'bomCode',
   'materialCode',
   'materialDescription',

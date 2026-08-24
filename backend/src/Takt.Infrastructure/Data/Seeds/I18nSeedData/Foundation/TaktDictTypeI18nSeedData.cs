@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictTypeI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictType 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,31 +127,31 @@ public class TaktDictTypeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dicttype.dictscript", "zh-HK", "SQL脚本_hk", "SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder"),
 
             // entity.dicttype.isbuiltin
-            new TranslationSeedItem("entity.dicttype.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dicttype.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.dicttype.isbuiltin
-            new TranslationSeedItem("entity.dicttype.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dicttype.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.dicttype.isbuiltin
-            new TranslationSeedItem("entity.dicttype.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dicttype.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.dicttype.isbuiltin
-            new TranslationSeedItem("entity.dicttype.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dicttype.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.dicttype.sortorder
-            new TranslationSeedItem("entity.dicttype.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.dicttype.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.dicttype.sortorder
-            new TranslationSeedItem("entity.dicttype.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.dicttype.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.dicttype.sortorder
-            new TranslationSeedItem("entity.dicttype.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.dicttype.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.dicttype.sortorder
-            new TranslationSeedItem("entity.dicttype.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.dicttype.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.dicttype.dictstatus
-            new TranslationSeedItem("entity.dicttype.dictstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.dicttype.dictstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.dicttype.dictstatus
-            new TranslationSeedItem("entity.dicttype.dictstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.dicttype.dictstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.dicttype.dictstatus
-            new TranslationSeedItem("entity.dicttype.dictstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.dicttype.dictstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.dicttype.dictstatus
-            new TranslationSeedItem("entity.dicttype.dictstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.dicttype.dictstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
 
             // entity.dicttype.dictdatalist
             new TranslationSeedItem("entity.dicttype.dictdatalist", "en-US", "字典数据列表_us", "字典数据列表（一对多关联）"),

@@ -60,9 +60,10 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'instanceStatus'">
-          <a-tag :color="statusColor((record as FlowInstanceTableRow).instanceStatus)">
-            {{ statusText((record as FlowInstanceTableRow).instanceStatus) }}
-          </a-tag>
+          <TaktDictTag
+            :value="(record as FlowInstanceTableRow).instanceStatus"
+            dict-type="sys_flow_status"
+          />
         </template>
       </template>
     </TaktSingleTable>
@@ -162,19 +163,13 @@
         <a-input v-model:value="advancedQueryForm.processKey" />
       </a-form-item>
       <a-form-item :label="t('entity.flowinstance.instancestatus')">
-        <a-select
-          v-model:value="advancedQueryForm.instanceStatus"
+        <TaktSelect
+          v-model="advancedQueryForm.instanceStatus"
+          dict-type="sys_flow_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowinstance.instancestatus') })"
           allow-clear
-        >
-          <a-select-option
-            v-for="(label, val) in statusOptions"
-            :key="val"
-            :value="Number(val)"
-          >
-            {{ label }}
-          </a-select-option>
-        </a-select>
+          :show-search="true"
+        />
       </a-form-item>
     </TaktQueryDrawer>
 
@@ -299,15 +294,6 @@ function getSorterInfo(sorter: unknown): TableSorterInfo {
 const userStore = useUserStore()
 const currentUserId = computed(() => userStore.userInfo?.userId ?? '')
 
-const statusOptions = computed(() => ({
-  0: t('workflow.instance.page.status.0'),
-  1: t('workflow.instance.page.status.1'),
-  2: t('workflow.instance.page.status.2'),
-  3: t('workflow.instance.page.status.3'),
-  4: t('workflow.instance.page.status.4'),
-  5: t('workflow.instance.page.status.5')
-}))
-
 const getInstanceId = (record: unknown): string => {
   if (!record || typeof record !== 'object') return ''
   const row = record as { flowInstanceId?: unknown; instanceId?: unknown }
@@ -372,7 +358,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowinstance.startusername'),
+    title: t('entity.flowinstance.startUserName'),
     dataIndex: 'startUserName',
     key: 'startUserName',
     width: 100
@@ -484,17 +470,6 @@ const onClickRow = (record: FlowInstanceTableRow) => ({
     if (rowSelection.value.onChange) rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
   }
 })
-
-/** 实例状态码转展示文案 */
-function statusText(s: number): string {
-  return t(`workflow.instance.page.status.${s}`) || t('workflow.instance.page.status.unknown')
-}
-
-/** 实例状态对应 Tag 颜色 */
-function statusColor(s: number): string {
-  const m: Record<number, string> = { 0: 'processing', 1: 'success', 2: 'error', 3: 'warning', 4: 'default' }
-  return m[s] ?? 'default'
-}
 
 /** 判断当前用户是否为该实例发起人 */
 function isStarter(r: FlowInstanceTableRow): boolean {

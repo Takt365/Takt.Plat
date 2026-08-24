@@ -64,13 +64,13 @@ public class TaktSopWorkstation : TaktCompanyEntityBase
     public int ProcessSegmentType { get; set; } = 1;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_status", ColumnDescription = "启用状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int WorkstationStatus { get; set; } = 1;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

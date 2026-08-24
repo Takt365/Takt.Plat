@@ -66,12 +66,12 @@ public class TaktSelfServiceDto : TaktCompanyDtoBase
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int SelfServiceStatus { get; set; } = 0;
 
@@ -138,12 +138,12 @@ public class TaktSelfServiceQueryDto : TaktPagedQuery
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
 
@@ -229,7 +229,7 @@ public class TaktSelfServiceCreateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int SelfServiceStatus { get; set; } = 0;
 
@@ -283,9 +283,9 @@ public class TaktSelfServiceStatusDto
     public long SelfServiceId { get; set; }
 
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
+    [Required(ErrorMessage = "自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）不能为空")]
     public int SelfServiceStatus { get; set; } = 0;
 }
 
@@ -307,7 +307,7 @@ public class TaktSelfServiceSortDto
     public long SelfServiceId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -373,7 +373,7 @@ public class TaktSelfServiceTemplateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
 
@@ -445,7 +445,7 @@ public class TaktSelfServiceImportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
 
@@ -513,12 +513,12 @@ public class TaktSelfServiceExportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int SelfServiceStatus { get; set; } = 0;
 

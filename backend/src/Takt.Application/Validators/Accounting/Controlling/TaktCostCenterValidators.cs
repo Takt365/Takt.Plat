@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Controlling
 // 文件名称：TaktCostCenterValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostCenter 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCostCenter 生成，请按需审阅）
 // 
@@ -36,14 +36,14 @@ public class TaktCostCenterCreateValidator : AbstractValidator<TaktCostCenterCre
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(4).WithMessage("成本中心编码长度不能超过4个字符");
+            .MaximumLength(6).WithMessage("成本中心编码长度不能超过6个字符");
         RuleFor(x => x.CostCenterName)
             .NotEmpty().WithMessage("成本中心名称不能为空")
             .MaximumLength(100).WithMessage("成本中心名称长度不能超过100个字符");
@@ -52,7 +52,7 @@ public class TaktCostCenterCreateValidator : AbstractValidator<TaktCostCenterCre
         RuleFor(x => x.ManagerId)
             .GreaterThanOrEqualTo(0).WithMessage("负责人用户 ID不能为负数");
         RuleFor(x => x.DeptId)
-            .GreaterThanOrEqualTo(0).WithMessage("所属部门 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("所属部门不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -83,14 +83,14 @@ public class TaktCostCenterUpdateValidator : AbstractValidator<TaktCostCenterUpd
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(4).WithMessage("成本中心编码长度不能超过4个字符");
+            .MaximumLength(6).WithMessage("成本中心编码长度不能超过6个字符");
         RuleFor(x => x.CostCenterName)
             .NotEmpty().WithMessage("成本中心名称不能为空")
             .MaximumLength(100).WithMessage("成本中心名称长度不能超过100个字符");
@@ -99,7 +99,7 @@ public class TaktCostCenterUpdateValidator : AbstractValidator<TaktCostCenterUpd
         RuleFor(x => x.ManagerId)
             .GreaterThanOrEqualTo(0).WithMessage("负责人用户 ID不能为负数");
         RuleFor(x => x.DeptId)
-            .GreaterThanOrEqualTo(0).WithMessage("所属部门 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("所属部门不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -131,7 +131,7 @@ public class TaktCostCenterImportValidator : AbstractValidator<TaktCostCenterImp
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(4).WithMessage("成本中心编码长度不能超过4个字符");
+            .MaximumLength(6).WithMessage("成本中心编码长度不能超过6个字符");
         RuleFor(x => x.CostCenterName)
             .NotEmpty().WithMessage("成本中心名称不能为空")
             .MaximumLength(100).WithMessage("成本中心名称长度不能超过100个字符");
@@ -140,7 +140,7 @@ public class TaktCostCenterImportValidator : AbstractValidator<TaktCostCenterImp
         RuleFor(x => x.ManagerId)
             .GreaterThanOrEqualTo(0).WithMessage("负责人用户 ID不能为负数");
         RuleFor(x => x.DeptId)
-            .GreaterThanOrEqualTo(0).WithMessage("所属部门 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("所属部门不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

@@ -18,6 +18,7 @@ const {
   buildMenuIndex,
   buildMasterDetailChildRegistry,
   loadVueModuleContext,
+  isChildNavMasterDetailMaster,
   writeVueModuleOutputs,
   fieldLabelTExpr,
   fieldPlaceholderTExpr,
@@ -695,11 +696,14 @@ function generateCrudFormVue(ctx) {
   const formTabCount = computeFormTabCount(formFields);
   const formContentClassExpr = buildFormContentClassExpr(useFormTabs, formTabCount);
   const omitFormFieldsArray = useFormTabs && formTabCount > 1;
-  const needsTaktSelect = formFields.some((f) => f.htmlType === 'select' && f.dictType) || mdFormParts.needsTaktSelect;
+  const needsTaktSelect = formFields.some((f) =>
+    (f.htmlType === 'select' && f.dictType)
+    || f.htmlType === 'apiSelect'
+    || f.htmlType === 'numberingRule') || mdFormParts.needsTaktSelect;
   const masterDetailChildren = fields.masterDetailChildren || [];
   const hasScopeContextFields = hasScopeContextFormFields(formFields, masterDetailChildren);
   const scopePresence = resolveScopeFormFieldPresence(formFields, masterDetailChildren);
-  const scopeFragments = buildScopeContextFormScriptFragments(scopePresence, entityIdField);
+  const scopeFragments = buildScopeContextFormScriptFragments(scopePresence, entityIdField, entityPascal);
   const scopeStoreImports = hasScopeContextFields ? scopeFragments.imports : '';
   const scopeStoreScript = hasScopeContextFields ? scopeFragments.script : '';
   const scopeContextWatch = hasScopeContextFields ? scopeFragments.watch : '';
@@ -770,11 +774,13 @@ ${formScriptFragments.vueImportLine}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 ${buildEntityI18nFormImportBlock(entityPascal, viewEntityKebab)}${masterTypeImport}
-${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
+${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${formScriptFragments.fileUploadImportLine}${formScriptFragments.numberingImportLine || ''}${scopeStoreImports}
 ${formScriptState}
 ${formScriptFragments.defaultsBlock}
 ${formScriptFragments.normalizerBlock}
 ${formScriptFragments.dictBootstrap}
+${formScriptFragments.fileUploadBootstrap}
+${formScriptFragments.numberingBootstrap || ''}
 ${formScriptFragments.watchBlock}
 ${scopeContextWatch}
 /** 表单校验规则（与 FluentValidation 必填对齐） */
@@ -812,11 +818,15 @@ ${buildFormTabsScopedStyleBlock(useFormTabs)}
 }
 /**
  * 是否标准单表 CRUD（非树、非主子表主实体）
+ * 特例：Employee / News 虽有 OneToMany 子表，主菜单页仍走单表 CRUD（子表菜单另生主子视图）
  * @param {object} bundle loadVueModuleContext 返回值
  */
 function isCrudEntity(bundle) {
   if (bundle.isTreeEntity) {
     return false;
+  }
+  if (isChildNavMasterDetailMaster(bundle.entityShort)) {
+    return Boolean(bundle.capsMerged.hasGetList || bundle.capsMerged.hasCreate || bundle.capsMerged.hasUpdate);
   }
   if (bundle.isMasterDetailEntity) {
     return false;
@@ -844,7 +854,16 @@ function processCrudApiModule(apiFilePath, options, registry) {
   }
   console.log(`  标准 CRUD: ${bundle.fullCtx.caps.apiGetList || bundle.fullCtx.caps.apiCreate}`);
   console.log(`  entityScope: ${bundle.fullCtx.fields.entityScope} ← Takt${bundle.entityShort}`);
-  const crudCtx = bundle.fullCtx;
+  // Employee / News：表单不内嵌子表（子表由各菜单主子页维护）
+  const crudCtx = isChildNavMasterDetailMaster(bundle.entityShort)
+    ? {
+        ...bundle.fullCtx,
+        fields: { ...bundle.fullCtx.fields, masterDetailChildren: [] },
+      }
+    : bundle.fullCtx;
+  if (isChildNavMasterDetailMaster(bundle.entityShort)) {
+    console.log(`  ${bundle.entityShort}：主菜单单表 CRUD（不含主子内嵌；子表见各子菜单主子视图）`);
+  }
   const indexContent = generateCrudIndexVue(crudCtx);
   const formContent = bundle.needsForm ? generateCrudFormVue(crudCtx) : '';
   const listCols = crudCtx.fields.listFields.filter((f) => f.name !== crudCtx.caps.entityIdName);

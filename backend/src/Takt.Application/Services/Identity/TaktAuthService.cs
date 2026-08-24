@@ -134,26 +134,26 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// 登录前预览：解析用户默认公司、用户 CultureCode 与公司 CultureCode（与假日无关）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">登录用户名</param>
+    /// <param name="UserName">登录用户名</param>
     /// <returns>公司编码、用户/公司默认语言；解析失败时字段为空</returns>
-    public async Task<TaktLoginPreviewLocaleDto> GetLoginPreviewLocaleAsync(string tenantCode, string username)
+    public async Task<TaktLoginPreviewLocaleDto> GetLoginPreviewLocaleAsync(string tenantCode, string UserName)
     {
         var stopwatch = Stopwatch.StartNew();
         var result = new TaktLoginPreviewLocaleDto();
-        if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(username))
+        if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(UserName))
         {
             return result;
         }
 
         var effectiveTenant = tenantCode.Trim();
-        var trimmedUsername = username.Trim();
+        var trimmedUserName = UserName.Trim();
 
         if (!await _loginSessionService.ValidateLoginTenantCodeAsync(effectiveTenant))
         {
             WriteAuthFlowLog(
                 TaktAuthLoginPhases.LoginPreviewLocale,
                 0,
-                trimmedUsername,
+                trimmedUserName,
                 effectiveTenant,
                 null,
                 false,
@@ -167,14 +167,14 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
 
         var user = await _userRepository.FirstAsync(u =>
             u.TenantCode == effectiveTenant
-            && u.Username == trimmedUsername
+            && u.UserName == trimmedUserName
             && u.UserStatus == 1);
         if (user == null)
         {
             WriteAuthFlowLog(
                 TaktAuthLoginPhases.LoginPreviewLocale,
                 0,
-                trimmedUsername,
+                trimmedUserName,
                 effectiveTenant,
                 null,
                 false,
@@ -190,7 +190,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         WriteAuthFlowLog(
             TaktAuthLoginPhases.LoginPreviewLocale,
             user.Id,
-            trimmedUsername,
+            trimmedUserName,
             effectiveTenant,
             null,
             true,
@@ -208,7 +208,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             WriteAuthFlowLog(
                 TaktAuthLoginPhases.LoginPreviewLocale,
                 user.Id,
-                trimmedUsername,
+                trimmedUserName,
                 effectiveTenant,
                 null,
                 false,
@@ -225,7 +225,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         WriteAuthFlowLog(
             TaktAuthLoginPhases.LoginPreviewLocale,
             user.Id,
-            trimmedUsername,
+            trimmedUserName,
             effectiveTenant,
             companyCode,
             true,
@@ -292,53 +292,53 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// 校验用户名在指定租户下是否具备登录权限（不校验密码）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <returns>有权限为 true</returns>
-    public Task<bool> ValidateUserTenantAccessAsync(string tenantCode, string username)
+    public Task<bool> ValidateUserTenantAccessAsync(string tenantCode, string UserName)
     {
-        return _loginSessionService.HasUserLoginAccessInTenantAsync(tenantCode, username);
+        return _loginSessionService.HasUserLoginAccessInTenantAsync(tenantCode, UserName);
     }
 
     /// <summary>
     /// 校验租户权限通过后验证密码
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="password">明文密码</param>
     /// <returns>用户 ID；失败返回 null</returns>
-    public async Task<long?> ValidateUserPasswordAsync(string tenantCode, string username, string password)
+    public async Task<long?> ValidateUserPasswordAsync(string tenantCode, string UserName, string password)
     {
-        if (!await ValidateUserTenantAccessAsync(tenantCode, username))
+        if (!await ValidateUserTenantAccessAsync(tenantCode, UserName))
         {
-            LogWarning($"租户登录权限不足: TenantCode={tenantCode}, Username={username}");
+            LogWarning($"租户登录权限不足: TenantCode={tenantCode}, UserName={UserName}");
             return null;
         }
 
-        return await ValidateUserPasswordCoreAsync(tenantCode, username, password);
+        return await ValidateUserPasswordCoreAsync(tenantCode, UserName, password);
     }
 
     /// <summary>
     /// 仅校验密码（调用方须已单独通过 ValidateUserTenantAccessAsync）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="password">密码</param>
     /// <returns>用户 ID；密码错误返回 null</returns>
-    public Task<long?> ValidateUserPasswordOnlyAsync(string tenantCode, string username, string password)
+    public Task<long?> ValidateUserPasswordOnlyAsync(string tenantCode, string UserName, string password)
     {
-        return ValidateUserPasswordCoreAsync(tenantCode, username, password);
+        return ValidateUserPasswordCoreAsync(tenantCode, UserName, password);
     }
 
     /// <summary>
     /// 验证用户登录凭据（租户权限 + 密码）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="password">密码</param>
     /// <returns>用户 ID；验证失败返回 null</returns>
-    public async Task<long?> ValidateUserAsync(string tenantCode, string username, string password)
+    public async Task<long?> ValidateUserAsync(string tenantCode, string UserName, string password)
     {
-        var authResult = await AuthenticateLoginCredentialsAsync(tenantCode, username, password);
+        var authResult = await AuthenticateLoginCredentialsAsync(tenantCode, UserName, password);
         return authResult.Status == TaktLoginCredentialStatus.Success ? authResult.UserId : null;
     }
 
@@ -346,29 +346,29 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// 登录凭据统一校验（租户权限、锁定、密码；成功时清零失败计数）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="plainPassword">明文密码</param>
     /// <returns>校验结果（含锁定态）</returns>
     public async Task<TaktLoginCredentialResult> AuthenticateLoginCredentialsAsync(
         string tenantCode,
-        string username,
+        string UserName,
         string plainPassword)
     {
         var trimmedTenant = tenantCode.Trim();
-        var normalizedUsername = username.Trim().ToLowerInvariant();
+        var normalizedUserName = UserName.Trim().ToLowerInvariant();
 
-        if (!await ValidateUserTenantAccessAsync(trimmedTenant, normalizedUsername))
+        if (!await ValidateUserTenantAccessAsync(trimmedTenant, normalizedUserName))
         {
-            LogWarning($"登录凭据校验失败（无租户权限）: TenantCode={trimmedTenant}, Username={normalizedUsername}");
+            LogWarning($"登录凭据校验失败（无租户权限）: TenantCode={trimmedTenant}, UserName={normalizedUserName}");
             return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
         }
 
         var user = await _userRepository.FirstAsync(u =>
-            u.TenantCode == trimmedTenant && u.Username == normalizedUsername);
+            u.TenantCode == trimmedTenant && u.UserName == normalizedUserName);
 
         if (user == null)
         {
-            LogWarning($"登录凭据校验失败（用户不存在）: TenantCode={trimmedTenant}, Username={normalizedUsername}");
+            LogWarning($"登录凭据校验失败（用户不存在）: TenantCode={trimmedTenant}, UserName={normalizedUserName}");
             return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
         }
 
@@ -384,19 +384,19 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
 
         if (!TaktEncryptHelper.VerifyPassword(plainPassword, user.PasswordHash))
         {
-            LogWarning($"登录凭据校验失败（密码错误）: UserId={user.Id}, Username={normalizedUsername}");
+            LogWarning($"登录凭据校验失败（密码错误）: UserId={user.Id}, UserName={normalizedUserName}");
             await RecordLoginFailureAsync(user);
             return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
         }
 
         if (user.UserStatus != 1)
         {
-            LogWarning($"登录凭据校验失败（账号停用）: UserId={user.Id}, Username={normalizedUsername}");
+            LogWarning($"登录凭据校验失败（账号停用）: UserId={user.Id}, UserName={normalizedUserName}");
             return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
         }
 
         await ClearLoginFailureStateAsync(user);
-        LogInformation("登录凭据校验成功: UserId={UserId}, Username={Username}", user.Id, normalizedUsername);
+        LogInformation("登录凭据校验成功: UserId={UserId}, UserName={UserName}", user.Id, normalizedUserName);
         return new TaktLoginCredentialResult
         {
             Status = TaktLoginCredentialStatus.Success,
@@ -408,12 +408,12 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// 校验密码（内部统一走 AuthenticateLoginCredentialsAsync）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="password">明文密码</param>
     /// <returns>用户 ID；失败返回 null</returns>
-    private async Task<long?> ValidateUserPasswordCoreAsync(string tenantCode, string username, string password)
+    private async Task<long?> ValidateUserPasswordCoreAsync(string tenantCode, string UserName, string password)
     {
-        var result = await AuthenticateLoginCredentialsAsync(tenantCode, username, password);
+        var result = await AuthenticateLoginCredentialsAsync(tenantCode, UserName, password);
         return result.Status == TaktLoginCredentialStatus.Success ? result.UserId : null;
     }
 
@@ -508,7 +508,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
 
         var candidate = !string.IsNullOrWhiteSpace(requestedCompanyCode)
             ? requestedCompanyCode.Trim()
-            : await ResolveUserDefaultCompanyCodeAsync(userId, effectiveTenant, user.Username);
+            : await ResolveUserDefaultCompanyCodeAsync(userId, effectiveTenant, user.UserName);
 
         if (string.IsNullOrWhiteSpace(candidate)
             || !await IsEnabledCompanyAsync(effectiveTenant, candidate))
@@ -567,11 +567,11 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名（保留参数，供诊断日志扩展）</param>
+    /// <param name="UserName">用户名（保留参数，供诊断日志扩展）</param>
     /// <returns>公司代码；无默认关联时返回 null</returns>
-    public async Task<string?> ResolveUserDefaultCompanyCodeAsync(long userId, string tenantCode, string? username = null)
+    public async Task<string?> ResolveUserDefaultCompanyCodeAsync(long userId, string tenantCode, string? UserName = null)
     {
-        _ = username;
+        _ = UserName;
         if (string.IsNullOrWhiteSpace(tenantCode))
         {
             return null;
@@ -749,12 +749,12 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
 
         var companiesStopwatch = Stopwatch.StartNew();
         var accessibleCompanies = await GetAccessibleCompanyCodesAsync(userId, tenantCode);
-        var companyCode = await ResolveCurrentActiveCompanyCodeAsync(userId, tenantCode, user.Username);
+        var companyCode = await ResolveCurrentActiveCompanyCodeAsync(userId, tenantCode, user.UserName);
         var (companySample, companyTotal) = TaktLogFormatter.SampleForLog(accessibleCompanies, AuthLogSampleSize);
         WriteAuthFlowLog(
             TaktAuthLoginPhases.UserProfile,
             userId,
-            user.Username,
+            user.UserName,
             tenantCode,
             companyCode,
             true,
@@ -774,7 +774,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         WriteAuthFlowLog(
             TaktAuthLoginPhases.UserPermissions,
             userId,
-            user.Username,
+            user.UserName,
             tenantCode,
             companyCode,
             true,
@@ -796,7 +796,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         WriteAuthFlowLog(
             TaktAuthLoginPhases.UserMenus,
             userId,
-            user.Username,
+            user.UserName,
             tenantCode,
             companyCode,
             true,
@@ -818,7 +818,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         WriteAuthFlowLog(
             TaktAuthLoginPhases.UserRoutes,
             userId,
-            user.Username,
+            user.UserName,
             tenantCode,
             companyCode,
             true,
@@ -833,7 +833,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         WriteAuthFlowLog(
             TaktAuthLoginPhases.UserProfile,
             userId,
-            user.Username,
+            user.UserName,
             tenantCode,
             companyCode,
             true,
@@ -880,8 +880,8 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         return new TaktUserInfoResponseDto
         {
             UserId = user.Id,
-            Username = user.Username,
-            Nickname = user.Nickname,
+            UserName = user.UserName,
+            NickName = user.NickName,
             UserType = user.UserType,
             EmployeeId = user.EmployeeId,
             EmployeeName = employeeName,
@@ -913,7 +913,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// </summary>
     /// <param name="phase">认证阶段标识</param>
     /// <param name="userId">用户 ID</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="isSuccess">是否成功</param>
@@ -923,7 +923,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     private static void WriteAuthFlowLog(
         string phase,
         long userId,
-        string username,
+        string UserName,
         string tenantCode,
         string? companyCode,
         bool isSuccess,
@@ -936,7 +936,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             Module = "identity/auth",
             Action = phase,
             UserId = userId > 0 ? userId.ToString() : null,
-            Username = string.IsNullOrWhiteSpace(username) ? null : username,
+            UserName = string.IsNullOrWhiteSpace(UserName) ? null : UserName,
             TenantCode = tenantCode,
             CompanyCode = companyCode,
             Extra = detail == null
@@ -954,9 +954,9 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             {
                 TaktLogger.Information(
                     logContext,
-                    "认证流程 [{Phase}] 成功: 用户={Username}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
+                    "认证流程 [{Phase}] 成功: 用户={UserName}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
                     phase,
-                    username,
+                    UserName,
                     tenantCode,
                     message,
                     elapsedMs);
@@ -965,9 +965,9 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             {
                 TaktLogger.Warning(
                     logContext,
-                    "认证流程 [{Phase}] 失败: 用户={Username}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
+                    "认证流程 [{Phase}] 失败: 用户={UserName}, 租户={TenantCode}, 说明={Message}, 耗时={ElapsedMs}ms",
                     phase,
-                    username,
+                    UserName,
                     tenantCode,
                     message,
                     elapsedMs);
@@ -1108,15 +1108,15 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名（保留供诊断扩展）</param>
+    /// <param name="UserName">用户名（保留供诊断扩展）</param>
     /// <returns>生效公司编码；无可用公司时返回空字符串</returns>
     public async Task<string> ResolveCurrentActiveCompanyCodeAsync(
         long userId,
         string tenantCode,
-        string? username = null)
+        string? UserName = null)
     {
         var accessibleCompanies = await GetAccessibleCompanyCodesAsync(userId, tenantCode);
-        var defaultCompanyCode = await ResolveUserDefaultCompanyCodeAsync(userId, tenantCode, username);
+        var defaultCompanyCode = await ResolveUserDefaultCompanyCodeAsync(userId, tenantCode, UserName);
         return ResolveActiveCompanyCode(
             accessibleCompanies,
             _userContext?.RequestCompanyCode,

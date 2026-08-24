@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Organization
 // 文件名称：TaktDeptValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Dept 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktDept 生成，请按需审阅）
 // 
@@ -36,32 +36,35 @@ public class TaktDeptCreateValidator : AbstractValidator<TaktDeptCreateDto>
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.HeadUserId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.HeadUserId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
         RuleFor(x => x.DeptShortName)
             .NotEmpty().WithMessage("部门简称不能为空")
             .MaximumLength(6).WithMessage("部门简称长度不能超过6个字符");
-        RuleFor(x => x.DeptName)
-            .NotEmpty().WithMessage("部门名称不能为空")
-            .MaximumLength(100).WithMessage("部门名称长度不能超过100个字符");
+        RuleFor(x => x.DeptName1)
+            .NotEmpty().WithMessage("部门名称1不能为空")
+            .MaximumLength(40).WithMessage("部门名称1长度不能超过40个字符");
+        RuleFor(x => x.DeptName2)
+            .NotEmpty().WithMessage("部门名称2不能为空")
+            .MaximumLength(70).WithMessage("部门名称2长度不能超过70个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父部门不能为负数");
         RuleFor(x => x.IsoCode)
             .NotEmpty().WithMessage("ISO 编码不能为空")
-            .MaximumLength(3).WithMessage("ISO 编码长度不能超过3个字符");
+            .MaximumLength(6).WithMessage("ISO 编码长度不能超过6个字符");
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(4).WithMessage("成本中心编码长度不能超过4个字符");
+            .MaximumLength(6).WithMessage("成本中心编码长度不能超过6个字符");
         RuleFor(x => x.HeadUserId)
             .GreaterThanOrEqualTo(0).WithMessage("部门负责人不能为负数");
         RuleFor(x => x.HeadUserName)
-            .NotEmpty().WithMessage("部门负责人名称不能为空")
+            .NotEmpty().WithMessage("部门负责人名称不能为空").When(x => x.HeadUserId <= 0)
             .MaximumLength(40).WithMessage("部门负责人名称长度不能超过40个字符");
         RuleFor(x => x.Phone)
             .NotEmpty().WithMessage("联系电话不能为空")
@@ -106,32 +109,35 @@ public class TaktDeptUpdateValidator : AbstractValidator<TaktDeptUpdateDto>
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.HeadUserId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.HeadUserId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
         RuleFor(x => x.DeptShortName)
             .NotEmpty().WithMessage("部门简称不能为空")
             .MaximumLength(6).WithMessage("部门简称长度不能超过6个字符");
-        RuleFor(x => x.DeptName)
-            .NotEmpty().WithMessage("部门名称不能为空")
-            .MaximumLength(100).WithMessage("部门名称长度不能超过100个字符");
+        RuleFor(x => x.DeptName1)
+            .NotEmpty().WithMessage("部门名称1不能为空")
+            .MaximumLength(40).WithMessage("部门名称1长度不能超过40个字符");
+        RuleFor(x => x.DeptName2)
+            .NotEmpty().WithMessage("部门名称2不能为空")
+            .MaximumLength(70).WithMessage("部门名称2长度不能超过70个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父部门不能为负数");
         RuleFor(x => x.IsoCode)
             .NotEmpty().WithMessage("ISO 编码不能为空")
-            .MaximumLength(3).WithMessage("ISO 编码长度不能超过3个字符");
+            .MaximumLength(6).WithMessage("ISO 编码长度不能超过6个字符");
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(4).WithMessage("成本中心编码长度不能超过4个字符");
+            .MaximumLength(6).WithMessage("成本中心编码长度不能超过6个字符");
         RuleFor(x => x.HeadUserId)
             .GreaterThanOrEqualTo(0).WithMessage("部门负责人不能为负数");
         RuleFor(x => x.HeadUserName)
-            .NotEmpty().WithMessage("部门负责人名称不能为空")
+            .NotEmpty().WithMessage("部门负责人名称不能为空").When(x => x.HeadUserId <= 0)
             .MaximumLength(40).WithMessage("部门负责人名称长度不能超过40个字符");
         RuleFor(x => x.Phone)
             .NotEmpty().WithMessage("联系电话不能为空")
@@ -177,21 +183,24 @@ public class TaktDeptImportValidator : AbstractValidator<TaktDeptImportDto>
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
         RuleFor(x => x.DeptShortName)
             .NotEmpty().WithMessage("部门简称不能为空")
             .MaximumLength(6).WithMessage("部门简称长度不能超过6个字符");
-        RuleFor(x => x.DeptName)
-            .NotEmpty().WithMessage("部门名称不能为空")
-            .MaximumLength(100).WithMessage("部门名称长度不能超过100个字符");
+        RuleFor(x => x.DeptName1)
+            .NotEmpty().WithMessage("部门名称1不能为空")
+            .MaximumLength(40).WithMessage("部门名称1长度不能超过40个字符");
+        RuleFor(x => x.DeptName2)
+            .NotEmpty().WithMessage("部门名称2不能为空")
+            .MaximumLength(70).WithMessage("部门名称2长度不能超过70个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父部门不能为负数");
         RuleFor(x => x.IsoCode)
             .NotEmpty().WithMessage("ISO 编码不能为空")
-            .MaximumLength(3).WithMessage("ISO 编码长度不能超过3个字符");
+            .MaximumLength(6).WithMessage("ISO 编码长度不能超过6个字符");
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(4).WithMessage("成本中心编码长度不能超过4个字符");
+            .MaximumLength(6).WithMessage("成本中心编码长度不能超过6个字符");
         RuleFor(x => x.HeadUserId)
             .GreaterThanOrEqualTo(0).WithMessage("部门负责人不能为负数");
         RuleFor(x => x.HeadUserName)

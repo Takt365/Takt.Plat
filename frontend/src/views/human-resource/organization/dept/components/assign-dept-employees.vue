@@ -141,7 +141,7 @@ async function loadDeptEmployees() {
     loading.value = true
     optionsLoading.value = true
     deptId.value = String(dept.deptId)
-    deptInfo.value = `${dept.deptName ?? ''}${dept.deptCode ? `（${dept.deptCode}）` : ''}`
+    deptInfo.value = `${dept.deptName1 ?? ''}${dept.deptCode ? `（${dept.deptCode}）` : ''}`
     const [allEmployees, employeeDepts] = await Promise.all([
       getEmployeeOptions(),
       getDeptEmployeeIds(deptId.value)

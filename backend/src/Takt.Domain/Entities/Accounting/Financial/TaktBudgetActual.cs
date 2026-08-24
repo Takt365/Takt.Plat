@@ -35,7 +35,7 @@ public class TaktBudgetActual : TaktCompanyEntityBase
     /// <summary>
     /// 成本中心编码（选项 TaktCostCenters/options；空串表示公司级）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "成本中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "成本中心编码", ColumnDataType = "nvarchar", Length = 6, IsNullable = false, DefaultValue = "")]
     public string CostCenterCode { get; set; } = string.Empty;
     /// <summary>
     /// 成本中心名称（冗余）
@@ -113,7 +113,7 @@ public class TaktBudgetActual : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

@@ -67,7 +67,7 @@ public class TaktAdminDivision : TaktTenantCoreEntityBase
     public string DivisionPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（字典 sys_yes_no_type）
+    /// 是否叶子节点（字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "is_leaf", ColumnDescription = "是否叶子节点", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsLeaf { get; set; } = 0;
@@ -92,19 +92,19 @@ public class TaktAdminDivision : TaktTenantCoreEntityBase
     public string PhoneCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；内置项禁止删除）
+    /// 内置（字典 sys_yes_no；内置项禁止删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 区划状态（字典 sys_normal_disable_status）
+    /// 区划状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "division_status", ColumnDescription = "区划状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int DivisionStatus { get; set; } = 1;

@@ -4,7 +4,7 @@
 // 文件名称：purchase-price-trend.ts
 // 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：采购价格月推移 / 机种推移转置分析 API
+// 功能描述：采购价格推移转置分析 API
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -12,20 +12,19 @@
 
 import request from '@/api/request';
 import type {
-  PurchasePriceModelTrendResult,
-  PurchasePriceMonthlyTrendQuery,
-  PurchasePriceMonthlyTrendResult,
+  PurchasePriceTrendQuery,
+  PurchasePriceTrendResult,
 } from '@/types/logistics/procurement/purchase-price-trend';
 
-/** API 路由前缀（对应 TaktPurchaseTrendPricesController） */
-const PURCHASE_TREND_PRICE_API_BASE = 'TaktPurchaseTrendPrices';
+/** API 路由前缀（对应 TaktPurchasePriceTrendsController） */
+const PURCHASE_PRICE_TREND_API_BASE = 'TaktPurchasePriceTrends';
 
 /**
  * 推移查询栏：本表工厂去重选项 URL（供 TaktSelect api-url）
  * @returns {string} 相对 API 路径
  */
 export function getPurchasePriceTrendPlantOptionsUrl(): string {
-  return `${PURCHASE_TREND_PRICE_API_BASE}/plant-options`;
+  return `${PURCHASE_PRICE_TREND_API_BASE}/plant-options`;
 }
 
 /**
@@ -33,7 +32,7 @@ export function getPurchasePriceTrendPlantOptionsUrl(): string {
  * @returns {string} 相对 API 路径
  */
 export function getPurchasePriceTrendPriceTypeOptionsUrl(): string {
-  return `${PURCHASE_TREND_PRICE_API_BASE}/price-type-options`;
+  return `${PURCHASE_PRICE_TREND_API_BASE}/price-type-options`;
 }
 
 /**
@@ -41,7 +40,7 @@ export function getPurchasePriceTrendPriceTypeOptionsUrl(): string {
  * @returns {string} 相对 API 路径
  */
 export function getPurchasePriceTrendSupplierOptionsUrl(): string {
-  return `${PURCHASE_TREND_PRICE_API_BASE}/supplier-options`;
+  return `${PURCHASE_PRICE_TREND_API_BASE}/supplier-options`;
 }
 
 /**
@@ -49,59 +48,19 @@ export function getPurchasePriceTrendSupplierOptionsUrl(): string {
  * @returns {string} 相对 API 路径
  */
 export function getPurchasePriceTrendMaterialOptionsUrl(): string {
-  return `${PURCHASE_TREND_PRICE_API_BASE}/material-options`;
+  return `${PURCHASE_PRICE_TREND_API_BASE}/material-options`;
 }
 
 /**
- * 采购价格月推移转置分析
- * @param {PurchasePriceMonthlyTrendQuery} queryDto 查询条件
- * @returns {Promise<PurchasePriceMonthlyTrendResult>} 转置结果
+ * 采购价格推移转置分析
+ * @param {PurchasePriceTrendQuery} queryDto 查询条件
+ * @returns {Promise<PurchasePriceTrendResult>} 转置结果
  */
-export function getPurchasePriceMonthlyTrendAnalysis(
-  queryDto: PurchasePriceMonthlyTrendQuery
-): Promise<PurchasePriceMonthlyTrendResult> {
-  return request<PurchasePriceMonthlyTrendResult>({
-    url: `${PURCHASE_TREND_PRICE_API_BASE}/monthly-trend-analysis`,
-    method: 'get',
-    params: queryDto,
-  });
-}
-
-/**
- * 导出采购价格月推移转置分析
- * @param {PurchasePriceMonthlyTrendQuery} query 查询条件
- * @param {string} [sheetName] 工作表名
- * @param {string} [exportName] 导出文件名
- * @returns {Promise<Blob>} Excel 文件
- */
-export function exportPurchasePriceMonthlyTrendAnalysis(
-  query: PurchasePriceMonthlyTrendQuery,
-  sheetName?: string,
-  exportName?: string
-): Promise<Blob> {
-  return request<Blob>({
-    url: `${PURCHASE_TREND_PRICE_API_BASE}/monthly-trend-analysis/export`,
-    method: 'get',
-    params: {
-      ...query,
-      sheetName,
-      exportName,
-    },
-    responseType: 'blob',
-    returnBinaryMeta: true,
-  });
-}
-
-/**
- * 采购机种价格推移分析
- * @param {PurchasePriceMonthlyTrendQuery} queryDto 查询条件
- * @returns {Promise<PurchasePriceModelTrendResult>} 分析结果
- */
-export function getPurchasePriceModelTrendAnalysis(
-  queryDto: PurchasePriceMonthlyTrendQuery
-): Promise<PurchasePriceModelTrendResult> {
-  return request<PurchasePriceModelTrendResult>({
-    url: `${PURCHASE_TREND_PRICE_API_BASE}/model-trend-analysis`,
+export function getPurchasePriceTrendAnalysis(
+  queryDto: PurchasePriceTrendQuery
+): Promise<PurchasePriceTrendResult> {
+  return request<PurchasePriceTrendResult>({
+    url: `${PURCHASE_PRICE_TREND_API_BASE}/trend-analysis`,
     method: 'get',
     params: queryDto,
     timeout: 120000,
@@ -109,19 +68,19 @@ export function getPurchasePriceModelTrendAnalysis(
 }
 
 /**
- * 导出采购机种价格推移分析
- * @param {PurchasePriceMonthlyTrendQuery} query 查询条件
+ * 导出采购价格推移转置分析
+ * @param {PurchasePriceTrendQuery} query 查询条件
  * @param {string} [sheetName] 工作表名
  * @param {string} [exportName] 导出文件名
  * @returns {Promise<Blob>} Excel 文件
  */
-export function exportPurchasePriceModelTrendAnalysis(
-  query: PurchasePriceMonthlyTrendQuery,
+export function exportPurchasePriceTrendAnalysis(
+  query: PurchasePriceTrendQuery,
   sheetName?: string,
   exportName?: string
 ): Promise<Blob> {
   return request<Blob>({
-    url: `${PURCHASE_TREND_PRICE_API_BASE}/model-trend-analysis/export`,
+    url: `${PURCHASE_PRICE_TREND_API_BASE}/trend-analysis/export`,
     method: 'get',
     params: {
       ...query,

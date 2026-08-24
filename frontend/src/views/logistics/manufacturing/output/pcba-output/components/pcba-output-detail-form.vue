@@ -21,23 +21,34 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('prodOrderCode')"
-                name="prodOrderCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.prodOrderCode"
-                  :placeholder="pi.ph('prodOrderCode')"
-                  show-count
-                  :maxlength="12"
-                  allow-clear
-                  :disabled="!!formData?.pcbaOutputDetailId"
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -141,6 +152,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('pcbBoardType')"
@@ -155,16 +176,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('panelSide')"
@@ -278,6 +289,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('switchCount')"
@@ -290,16 +311,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('switchTime')"
@@ -393,8 +404,45 @@
               >
                 <TaktSelect
                   v-model:value="formState.isObsolete"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -421,15 +469,47 @@ const pi = usePcbaOutputDetailI18n()
 import type { PcbaOutputDetailCreate } from '@/types/logistics/manufacturing/output/pcba-output-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","timePeriod","teamCode","prodEquipCode","directLabor","indirectLabor","shiftNo","stdShorts","pcbBoardType","panelSide","batchQty","dailyCompletedQty","serialCode","defectCount","downtimeMinutes","downtimeReason","downtimeDescription","repairMinutes","switchCount","switchTime","stopTime","totalMinutes","unachievedReason","unachievedDescription","confirmMinutes","mixedProd","isObsolete"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","timePeriod","teamCode","prodEquipCode","directLabor","indirectLabor","shiftNo","stdShorts","pcbBoardType","panelSide","batchQty","dailyCompletedQty","serialCode","defectCount","downtimeMinutes","downtimeReason","downtimeDescription","repairMinutes","switchCount","switchTime","stopTime","totalMinutes","unachievedReason","unachievedDescription","confirmMinutes","mixedProd","isObsolete"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -438,12 +518,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -471,6 +554,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -479,21 +563,25 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.pcbaOutputDetailId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  prodOrderCode: [
-    {
-      required: true,
-      message: pi.ph('prodOrderCode'),
-      trigger: 'blur'
-    }
-  ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -770,74 +858,204 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+    if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
+      delete payload.lineNumber
+    } else {
+      const numlineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+      if (Number.isFinite(numlineNumber)) payload.lineNumber = numlineNumber
+      else delete payload.lineNumber
+    }
   }
   if ('directLabor' in payload) {
     const rawdirectLabor = payload.directLabor
-    payload.directLabor = typeof rawdirectLabor === 'number' ? rawdirectLabor : Number(rawdirectLabor)
+    if (rawdirectLabor === undefined || rawdirectLabor === null || rawdirectLabor === '') {
+      delete payload.directLabor
+    } else {
+      const numdirectLabor = typeof rawdirectLabor === 'number' ? rawdirectLabor : Number(rawdirectLabor)
+      if (Number.isFinite(numdirectLabor)) payload.directLabor = numdirectLabor
+      else delete payload.directLabor
+    }
   }
   if ('indirectLabor' in payload) {
     const rawindirectLabor = payload.indirectLabor
-    payload.indirectLabor = typeof rawindirectLabor === 'number' ? rawindirectLabor : Number(rawindirectLabor)
+    if (rawindirectLabor === undefined || rawindirectLabor === null || rawindirectLabor === '') {
+      delete payload.indirectLabor
+    } else {
+      const numindirectLabor = typeof rawindirectLabor === 'number' ? rawindirectLabor : Number(rawindirectLabor)
+      if (Number.isFinite(numindirectLabor)) payload.indirectLabor = numindirectLabor
+      else delete payload.indirectLabor
+    }
   }
   if ('shiftNo' in payload) {
     const rawshiftNo = payload.shiftNo
-    payload.shiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+    if (rawshiftNo === undefined || rawshiftNo === null || rawshiftNo === '') {
+      delete payload.shiftNo
+    } else {
+      const numshiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+      if (Number.isFinite(numshiftNo)) payload.shiftNo = numshiftNo
+      else delete payload.shiftNo
+    }
   }
   if ('stdShorts' in payload) {
     const rawstdShorts = payload.stdShorts
-    payload.stdShorts = typeof rawstdShorts === 'number' ? rawstdShorts : Number(rawstdShorts)
+    if (rawstdShorts === undefined || rawstdShorts === null || rawstdShorts === '') {
+      delete payload.stdShorts
+    } else {
+      const numstdShorts = typeof rawstdShorts === 'number' ? rawstdShorts : Number(rawstdShorts)
+      if (Number.isFinite(numstdShorts)) payload.stdShorts = numstdShorts
+      else delete payload.stdShorts
+    }
   }
   if ('batchQty' in payload) {
     const rawbatchQty = payload.batchQty
-    payload.batchQty = typeof rawbatchQty === 'number' ? rawbatchQty : Number(rawbatchQty)
+    if (rawbatchQty === undefined || rawbatchQty === null || rawbatchQty === '') {
+      delete payload.batchQty
+    } else {
+      const numbatchQty = typeof rawbatchQty === 'number' ? rawbatchQty : Number(rawbatchQty)
+      if (Number.isFinite(numbatchQty)) payload.batchQty = numbatchQty
+      else delete payload.batchQty
+    }
   }
   if ('dailyCompletedQty' in payload) {
     const rawdailyCompletedQty = payload.dailyCompletedQty
-    payload.dailyCompletedQty = typeof rawdailyCompletedQty === 'number' ? rawdailyCompletedQty : Number(rawdailyCompletedQty)
+    if (rawdailyCompletedQty === undefined || rawdailyCompletedQty === null || rawdailyCompletedQty === '') {
+      delete payload.dailyCompletedQty
+    } else {
+      const numdailyCompletedQty = typeof rawdailyCompletedQty === 'number' ? rawdailyCompletedQty : Number(rawdailyCompletedQty)
+      if (Number.isFinite(numdailyCompletedQty)) payload.dailyCompletedQty = numdailyCompletedQty
+      else delete payload.dailyCompletedQty
+    }
   }
   if ('defectCount' in payload) {
     const rawdefectCount = payload.defectCount
-    payload.defectCount = typeof rawdefectCount === 'number' ? rawdefectCount : Number(rawdefectCount)
+    if (rawdefectCount === undefined || rawdefectCount === null || rawdefectCount === '') {
+      delete payload.defectCount
+    } else {
+      const numdefectCount = typeof rawdefectCount === 'number' ? rawdefectCount : Number(rawdefectCount)
+      if (Number.isFinite(numdefectCount)) payload.defectCount = numdefectCount
+      else delete payload.defectCount
+    }
   }
   if ('downtimeMinutes' in payload) {
     const rawdowntimeMinutes = payload.downtimeMinutes
-    payload.downtimeMinutes = typeof rawdowntimeMinutes === 'number' ? rawdowntimeMinutes : Number(rawdowntimeMinutes)
+    if (rawdowntimeMinutes === undefined || rawdowntimeMinutes === null || rawdowntimeMinutes === '') {
+      delete payload.downtimeMinutes
+    } else {
+      const numdowntimeMinutes = typeof rawdowntimeMinutes === 'number' ? rawdowntimeMinutes : Number(rawdowntimeMinutes)
+      if (Number.isFinite(numdowntimeMinutes)) payload.downtimeMinutes = numdowntimeMinutes
+      else delete payload.downtimeMinutes
+    }
   }
   if ('repairMinutes' in payload) {
     const rawrepairMinutes = payload.repairMinutes
-    payload.repairMinutes = typeof rawrepairMinutes === 'number' ? rawrepairMinutes : Number(rawrepairMinutes)
+    if (rawrepairMinutes === undefined || rawrepairMinutes === null || rawrepairMinutes === '') {
+      delete payload.repairMinutes
+    } else {
+      const numrepairMinutes = typeof rawrepairMinutes === 'number' ? rawrepairMinutes : Number(rawrepairMinutes)
+      if (Number.isFinite(numrepairMinutes)) payload.repairMinutes = numrepairMinutes
+      else delete payload.repairMinutes
+    }
   }
   if ('switchCount' in payload) {
     const rawswitchCount = payload.switchCount
-    payload.switchCount = typeof rawswitchCount === 'number' ? rawswitchCount : Number(rawswitchCount)
+    if (rawswitchCount === undefined || rawswitchCount === null || rawswitchCount === '') {
+      delete payload.switchCount
+    } else {
+      const numswitchCount = typeof rawswitchCount === 'number' ? rawswitchCount : Number(rawswitchCount)
+      if (Number.isFinite(numswitchCount)) payload.switchCount = numswitchCount
+      else delete payload.switchCount
+    }
   }
   if ('switchTime' in payload) {
     const rawswitchTime = payload.switchTime
-    payload.switchTime = typeof rawswitchTime === 'number' ? rawswitchTime : Number(rawswitchTime)
+    if (rawswitchTime === undefined || rawswitchTime === null || rawswitchTime === '') {
+      delete payload.switchTime
+    } else {
+      const numswitchTime = typeof rawswitchTime === 'number' ? rawswitchTime : Number(rawswitchTime)
+      if (Number.isFinite(numswitchTime)) payload.switchTime = numswitchTime
+      else delete payload.switchTime
+    }
   }
   if ('stopTime' in payload) {
     const rawstopTime = payload.stopTime
-    payload.stopTime = typeof rawstopTime === 'number' ? rawstopTime : Number(rawstopTime)
+    if (rawstopTime === undefined || rawstopTime === null || rawstopTime === '') {
+      delete payload.stopTime
+    } else {
+      const numstopTime = typeof rawstopTime === 'number' ? rawstopTime : Number(rawstopTime)
+      if (Number.isFinite(numstopTime)) payload.stopTime = numstopTime
+      else delete payload.stopTime
+    }
   }
   if ('totalMinutes' in payload) {
     const rawtotalMinutes = payload.totalMinutes
-    payload.totalMinutes = typeof rawtotalMinutes === 'number' ? rawtotalMinutes : Number(rawtotalMinutes)
+    if (rawtotalMinutes === undefined || rawtotalMinutes === null || rawtotalMinutes === '') {
+      delete payload.totalMinutes
+    } else {
+      const numtotalMinutes = typeof rawtotalMinutes === 'number' ? rawtotalMinutes : Number(rawtotalMinutes)
+      if (Number.isFinite(numtotalMinutes)) payload.totalMinutes = numtotalMinutes
+      else delete payload.totalMinutes
+    }
   }
   if ('confirmMinutes' in payload) {
     const rawconfirmMinutes = payload.confirmMinutes
-    payload.confirmMinutes = typeof rawconfirmMinutes === 'number' ? rawconfirmMinutes : Number(rawconfirmMinutes)
+    if (rawconfirmMinutes === undefined || rawconfirmMinutes === null || rawconfirmMinutes === '') {
+      delete payload.confirmMinutes
+    } else {
+      const numconfirmMinutes = typeof rawconfirmMinutes === 'number' ? rawconfirmMinutes : Number(rawconfirmMinutes)
+      if (Number.isFinite(numconfirmMinutes)) payload.confirmMinutes = numconfirmMinutes
+      else delete payload.confirmMinutes
+    }
   }
   if ('mixedProd' in payload) {
     const rawmixedProd = payload.mixedProd
-    payload.mixedProd = typeof rawmixedProd === 'number' ? rawmixedProd : Number(rawmixedProd)
+    if (rawmixedProd === undefined || rawmixedProd === null || rawmixedProd === '') {
+      delete payload.mixedProd
+    } else {
+      const nummixedProd = typeof rawmixedProd === 'number' ? rawmixedProd : Number(rawmixedProd)
+      if (Number.isFinite(nummixedProd)) payload.mixedProd = nummixedProd
+      else delete payload.mixedProd
+    }
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete
-    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+    if (rawisObsolete === undefined || rawisObsolete === null || rawisObsolete === '') {
+      delete payload.isObsolete
+    } else {
+      const numisObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+      if (Number.isFinite(numisObsolete)) payload.isObsolete = numisObsolete
+      else delete payload.isObsolete
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.pcbaOutputDetailId) {
+    payload.pcbaOutputDetailId = props.formData.pcbaOutputDetailId
+  }
   payload.pcbaOutputId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.pcbaOutputCode ?? masterRow.PcbaOutputCode
+    const masterName = masterRow.pcbaOutputName ?? masterRow.PcbaOutputName
+    if (masterCode != null && masterCode !== '' && !payload.pcbaOutputCode) {
+      payload.pcbaOutputCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.pcbaOutputName) {
+      payload.pcbaOutputName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -848,6 +1066,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.pcbaOutputDetailId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

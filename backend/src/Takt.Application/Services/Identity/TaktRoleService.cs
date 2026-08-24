@@ -279,7 +279,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
         }
         if (dto.IsBuiltIn is not 0 and not 1)
         {
-            throw new TaktBusinessException("内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
+            throw new TaktBusinessException("内置必须为字典 sys_yes_no 合法值（0=否，1=是）");
         }
         if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
         {

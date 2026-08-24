@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktArchiveLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktArchiveLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktArchiveLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.archivelog.deletedcount", "zh-HK", "删除数量_hk", "源侧删除数量（热区清理等；无删除则为 0）"),
 
             // entity.archivelog.runstatus
-            new TranslationSeedItem("entity.archivelog.runstatus", "en-US", "运行状态_us", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.archivelog.runstatus", "en-US", "运行状态_us", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
             // entity.archivelog.runstatus
-            new TranslationSeedItem("entity.archivelog.runstatus", "ja-JP", "运行状态_jp", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.archivelog.runstatus", "ja-JP", "运行状态_jp", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
             // entity.archivelog.runstatus
-            new TranslationSeedItem("entity.archivelog.runstatus", "zh-CN", "运行状态", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.archivelog.runstatus", "zh-CN", "运行状态", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
             // entity.archivelog.runstatus
-            new TranslationSeedItem("entity.archivelog.runstatus", "zh-HK", "运行状态_hk", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.archivelog.runstatus", "zh-HK", "运行状态_hk", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
 
             // entity.archivelog.errormessage
             new TranslationSeedItem("entity.archivelog.errormessage", "en-US", "错误信息_us", "失败错误信息"),

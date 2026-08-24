@@ -87,6 +87,33 @@ function applyFormDefaults(target: Record<string, unknown>) {
   Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
+import { useTenantStore } from '@/stores/identity/tenant'
+
+/** Pinia：租户上下文（工厂默认取当前公司 RelatedPlant） */
+const tenantStore = useTenantStore()
+
+/**
+ * 上下文隔离字段：PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+}
+
+/** 公司切换时，新增态同步工厂默认值 */
+watch(
+  () => tenantStore.currentCompanyRelatedPlant,
+  () => {
+    if (!props.formData?.bomMaterialCostItemId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
+
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
 const dictDataStore = useDictDataStore()
 
@@ -111,6 +138,7 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState, true)
       formRef.value?.clearValidate()
     }
   },
@@ -349,6 +377,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState, !props.formData?.bomMaterialCostItemId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

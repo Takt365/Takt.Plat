@@ -25,7 +25,7 @@
       master-table-mode="masterDetailMaster"
       master-scroll-layout="masterDetailLr"
       :master-total="total"
-      master-entity-scope="tenant"
+      master-entity-scope="tenant-core"
       @master-change="handleTableChange"
       @master-resize-column="handleResizeColumn"
       @master-pagination-change="handleMasterPaginationChange"
@@ -40,11 +40,11 @@
           @reset="handleReset"
         />
         <TaktToolsBar
-      create-permission="foundation:culture:create"
-      update-permission="foundation:culture:update"
-      delete-permission="foundation:culture:delete"
-      import-permission="foundation:culture:import"
-      export-permission="foundation:culture:export"
+      create-permission="foundation:i18n:create"
+      update-permission="foundation:i18n:update"
+      delete-permission="foundation:i18n:delete"
+      import-permission="foundation:i18n:import"
+      export-permission="foundation:i18n:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -74,16 +74,10 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'cultureCode'">
-          <TaktDictTag
-            :value="getCultureDictValue(record, 'cultureCode')"
-            dict-type="sys_culture_code"
-          />
-        </template>
-        <template v-else-if="column.key === 'isDefault'">
+        <template v-if="column.key === 'isDefault'">
           <TaktDictTag
             :value="getCultureDictValue(record, 'isDefault')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -123,16 +117,6 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="pi.queryLabel('relatedPlant')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.relatedPlant"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('relatedPlant', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('cultureCode')">
       <a-form-item :label="pi.queryLabel('cultureCode')">
         <TaktSelect
@@ -169,7 +153,7 @@
       <a-form-item :label="pi.queryLabel('isDefault')">
         <TaktSelect
           v-model:value="advancedQueryForm.isDefault"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isDefault', 'select')"
           allow-clear
         />
@@ -269,7 +253,7 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'cultureId'"
       :action-column-key="'action'"
-      entity-scope="tenant"
+      entity-scope="tenant-core"
       table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
@@ -513,14 +497,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCultureField(record, 'cultureId') ?? ''
   },
   {
-    title: pi.label('cultureCode'),
-    dataIndex: 'cultureCode',
-    key: 'cultureCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
     title: pi.label('nativeName'),
     dataIndex: 'nativeName',
     key: 'nativeName',
@@ -553,7 +529,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'foundation:culture:update',
+        permission: 'foundation:i18n:update',
         onClick: (record: CultureRowRecord) => handleEdit(record)
       },
       {
@@ -561,7 +537,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'foundation:culture:delete',
+        permission: 'foundation:i18n:delete',
         onClick: (record: CultureRowRecord) => handleDeleteOne(record)
       }
     ]
@@ -658,17 +634,7 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  relatedPlant: '',
-  cultureCode: '',
-  nativeName: '',
-  icon: '',
-  isDefault: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
@@ -864,17 +830,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  relatedPlant: '',
-  cultureCode: '',
-  nativeName: '',
-  icon: '',
-  isDefault: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

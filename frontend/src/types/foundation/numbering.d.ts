@@ -39,12 +39,12 @@ export interface Numbering extends CompanyDtoBase {
   ruleName: string;
 
   /**
-   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
    */
   documentType: string;
 
   /**
-   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+   * 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
    */
   deptCode: string;
 
@@ -74,7 +74,7 @@ export interface Numbering extends CompanyDtoBase {
   suffixCode?: string;
 
   /**
-   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+   * 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
    */
   resetPeriod: string;
 
@@ -94,12 +94,12 @@ export interface Numbering extends CompanyDtoBase {
   separator?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   numberingStatus: number;
 
@@ -144,12 +144,12 @@ export interface NumberingQuery extends TaktPagedQuery {
   ruleName?: string;
 
   /**
-   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
    */
   documentType?: string;
 
   /**
-   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+   * 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
    */
   deptCode?: string;
 
@@ -179,7 +179,7 @@ export interface NumberingQuery extends TaktPagedQuery {
   suffixCode?: string;
 
   /**
-   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+   * 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
    */
   resetPeriod?: string;
 
@@ -199,12 +199,12 @@ export interface NumberingQuery extends TaktPagedQuery {
   separator?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   numberingStatus?: number;
 
@@ -276,12 +276,12 @@ export interface NumberingCreate {
   ruleName: string;
 
   /**
-   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
    */
   documentType: string;
 
   /**
-   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+   * 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
    */
   deptCode: string;
 
@@ -311,7 +311,7 @@ export interface NumberingCreate {
   suffixCode?: string;
 
   /**
-   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+   * 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
    */
   resetPeriod: string;
 
@@ -331,12 +331,12 @@ export interface NumberingCreate {
   separator?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   numberingStatus: number;
 
@@ -385,7 +385,7 @@ export interface NumberingStatus {
   numberingId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   numberingStatus: number;
 
@@ -424,12 +424,12 @@ export interface NumberingTemplate {
   ruleName?: string;
 
   /**
-   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
    */
   documentType?: string;
 
   /**
-   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+   * 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
    */
   deptCode?: string;
 
@@ -459,7 +459,7 @@ export interface NumberingTemplate {
   suffixCode?: string;
 
   /**
-   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+   * 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
    */
   resetPeriod?: string;
 
@@ -479,12 +479,12 @@ export interface NumberingTemplate {
   separator?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   numberingStatus?: number;
 
@@ -546,12 +546,12 @@ export interface NumberingImport {
   ruleName?: string;
 
   /**
-   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
    */
   documentType?: string;
 
   /**
-   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+   * 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
    */
   deptCode?: string;
 
@@ -581,7 +581,7 @@ export interface NumberingImport {
   suffixCode?: string;
 
   /**
-   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+   * 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
    */
   resetPeriod?: string;
 
@@ -601,12 +601,12 @@ export interface NumberingImport {
   separator?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   numberingStatus?: number;
 
@@ -655,12 +655,12 @@ export interface NumberingExport {
   ruleName: string;
 
   /**
-   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
    */
   documentType: string;
 
   /**
-   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
+   * 部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options）
    */
   deptCode: string;
 
@@ -690,7 +690,7 @@ export interface NumberingExport {
   suffixCode?: string;
 
   /**
-   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
+   * 重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）
    */
   resetPeriod: string;
 
@@ -710,12 +710,12 @@ export interface NumberingExport {
   separator?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   numberingStatus: number;
 

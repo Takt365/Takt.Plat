@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.Announcement
 // 文件名称：TaktAnnouncementI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAnnouncement 实体字段国际化种子（已对齐前端 locales：src/locales/routine/announcement）
 // 
@@ -91,13 +91,13 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement._self", "zh-HK", "公告通知信息_hk", "实体名称"),
 
             // entity.announcement.code
-            new TranslationSeedItem("entity.announcement.code", "en-US", "公告编码_us", "公告编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.announcement.code", "en-US", "公告编码_us", "公告编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 公告编码规则生成并展示，非手输；单据类型菜单：公告通知）"),
             // entity.announcement.code
-            new TranslationSeedItem("entity.announcement.code", "ja-JP", "公告编码_jp", "公告编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.announcement.code", "ja-JP", "公告编码_jp", "公告编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 公告编码规则生成并展示，非手输；单据类型菜单：公告通知）"),
             // entity.announcement.code
-            new TranslationSeedItem("entity.announcement.code", "zh-CN", "公告编码", "公告编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.announcement.code", "zh-CN", "公告编码", "公告编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 公告编码规则生成并展示，非手输；单据类型菜单：公告通知）"),
             // entity.announcement.code
-            new TranslationSeedItem("entity.announcement.code", "zh-HK", "公告编码_hk", "公告编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.announcement.code", "zh-HK", "公告编码_hk", "公告编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 公告编码规则生成并展示，非手输；单据类型菜单：公告通知）"),
 
             // entity.announcement.title
             new TranslationSeedItem("entity.announcement.title", "en-US", "公告标题_us", "公告标题"),
@@ -144,14 +144,23 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             // entity.announcement.tags
             new TranslationSeedItem("entity.announcement.tags", "zh-HK", "标签_hk", "标签（逗号分隔或 JSON 数组存储）"),
 
-            // entity.announcement.attachments
-            new TranslationSeedItem("entity.announcement.attachments", "en-US", "附件路径_us", "附件路径（多个附件用逗号分隔）"),
-            // entity.announcement.attachments
-            new TranslationSeedItem("entity.announcement.attachments", "ja-JP", "附件路径_jp", "附件路径（多个附件用逗号分隔）"),
-            // entity.announcement.attachments
-            new TranslationSeedItem("entity.announcement.attachments", "zh-CN", "附件路径", "附件路径（多个附件用逗号分隔）"),
-            // entity.announcement.attachments
-            new TranslationSeedItem("entity.announcement.attachments", "zh-HK", "附件路径_hk", "附件路径（多个附件用逗号分隔）"),
+            // entity.announcement.filename
+            new TranslationSeedItem("entity.announcement.filename", "en-US", "文件名称_us", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.announcement.filename
+            new TranslationSeedItem("entity.announcement.filename", "ja-JP", "文件名称_jp", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.announcement.filename
+            new TranslationSeedItem("entity.announcement.filename", "zh-CN", "文件名称", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.announcement.filename
+            new TranslationSeedItem("entity.announcement.filename", "zh-HK", "文件名称_hk", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+
+            // entity.announcement.accessurl
+            new TranslationSeedItem("entity.announcement.accessurl", "en-US", "访问地址_us", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.announcement.accessurl
+            new TranslationSeedItem("entity.announcement.accessurl", "ja-JP", "访问地址_jp", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.announcement.accessurl
+            new TranslationSeedItem("entity.announcement.accessurl", "zh-CN", "访问地址", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.announcement.accessurl
+            new TranslationSeedItem("entity.announcement.accessurl", "zh-HK", "访问地址_hk", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
 
             // entity.announcement.publishtime
             new TranslationSeedItem("entity.announcement.publishtime", "en-US", "发布时间_us", "发布时间（定时发布时使用）"),
@@ -163,22 +172,22 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement.publishtime", "zh-HK", "发布时间_hk", "发布时间（定时发布时使用）"),
 
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "en-US", "定时发布_us", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "en-US", "定时发布_us", "定时发布（字典 sys_yes_no；0=否 1=是）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "ja-JP", "定时发布_jp", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "ja-JP", "定时发布_jp", "定时发布（字典 sys_yes_no；0=否 1=是）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "zh-CN", "定时发布", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "zh-CN", "定时发布", "定时发布（字典 sys_yes_no；0=否 1=是）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "zh-HK", "定时发布_hk", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "zh-HK", "定时发布_hk", "定时发布（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "en-US", "置顶_us", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "en-US", "置顶_us", "置顶（字典 sys_yes_no；0=否 1=是）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "ja-JP", "置顶_jp", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "ja-JP", "置顶_jp", "置顶（字典 sys_yes_no；0=否 1=是）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "zh-CN", "置顶", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "zh-CN", "置顶", "置顶（字典 sys_yes_no；0=否 1=是）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "zh-HK", "置顶_hk", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "zh-HK", "置顶_hk", "置顶（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.announcement.toppriority
             new TranslationSeedItem("entity.announcement.toppriority", "en-US", "置顶优先级_us", "置顶优先级（数字越大越靠前）"),
@@ -208,31 +217,31 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement.viewcount", "zh-HK", "查看次数_hk", "查看次数"),
 
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "en-US", "目标范围_us", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "en-US", "目标范围_us", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "ja-JP", "目标范围_jp", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "ja-JP", "目标范围_jp", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "zh-CN", "目标范围", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "zh-CN", "目标范围", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "zh-HK", "目标范围_hk", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "zh-HK", "目标范围_hk", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
 
             // entity.announcement.targetdepartments
-            new TranslationSeedItem("entity.announcement.targetdepartments", "en-US", "目标部门编码_us", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetdepartments", "en-US", "目标部门编码_us", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
             // entity.announcement.targetdepartments
-            new TranslationSeedItem("entity.announcement.targetdepartments", "ja-JP", "目标部门编码_jp", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetdepartments", "ja-JP", "目标部门编码_jp", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
             // entity.announcement.targetdepartments
-            new TranslationSeedItem("entity.announcement.targetdepartments", "zh-CN", "目标部门编码", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetdepartments", "zh-CN", "目标部门编码", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
             // entity.announcement.targetdepartments
-            new TranslationSeedItem("entity.announcement.targetdepartments", "zh-HK", "目标部门编码_hk", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetdepartments", "zh-HK", "目标部门编码_hk", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
 
             // entity.announcement.targetusers
-            new TranslationSeedItem("entity.announcement.targetusers", "en-US", "目标用户ID_us", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetusers", "en-US", "目标用户名_us", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
             // entity.announcement.targetusers
-            new TranslationSeedItem("entity.announcement.targetusers", "ja-JP", "目标用户ID_jp", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetusers", "ja-JP", "目标用户名_jp", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
             // entity.announcement.targetusers
-            new TranslationSeedItem("entity.announcement.targetusers", "zh-CN", "目标用户ID", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetusers", "zh-CN", "目标用户名", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
             // entity.announcement.targetusers
-            new TranslationSeedItem("entity.announcement.targetusers", "zh-HK", "目标用户ID_hk", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetusers", "zh-HK", "目标用户名_hk", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
 
             // entity.announcement.status
             new TranslationSeedItem("entity.announcement.status", "en-US", "状态_us", "状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),

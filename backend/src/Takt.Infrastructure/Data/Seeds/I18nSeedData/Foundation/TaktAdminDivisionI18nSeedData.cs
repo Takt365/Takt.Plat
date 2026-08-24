@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktAdminDivisionI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAdminDivision 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktAdminDivisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.admindivision.divisionpath", "zh-HK", "区划路径_hk", "区划路径（如 /1/3/5/，用于快速查询子孙）"),
 
             // entity.admindivision.isleaf
-            new TranslationSeedItem("entity.admindivision.isleaf", "en-US", "是否叶子节点_us", "是否叶子节点（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.admindivision.isleaf", "en-US", "是否叶子节点_us", "是否叶子节点（字典 sys_yes_no）"),
             // entity.admindivision.isleaf
-            new TranslationSeedItem("entity.admindivision.isleaf", "ja-JP", "是否叶子节点_jp", "是否叶子节点（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.admindivision.isleaf", "ja-JP", "是否叶子节点_jp", "是否叶子节点（字典 sys_yes_no）"),
             // entity.admindivision.isleaf
-            new TranslationSeedItem("entity.admindivision.isleaf", "zh-CN", "是否叶子节点", "是否叶子节点（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.admindivision.isleaf", "zh-CN", "是否叶子节点", "是否叶子节点（字典 sys_yes_no）"),
             // entity.admindivision.isleaf
-            new TranslationSeedItem("entity.admindivision.isleaf", "zh-HK", "是否叶子节点_hk", "是否叶子节点（字典 sys_yes_no_type）"),
+            new TranslationSeedItem("entity.admindivision.isleaf", "zh-HK", "是否叶子节点_hk", "是否叶子节点（字典 sys_yes_no）"),
 
             // entity.admindivision.postalcode
             new TranslationSeedItem("entity.admindivision.postalcode", "en-US", "邮政编码_us", "邮政编码（可选；部分国家区划关联邮编）"),
@@ -181,31 +181,31 @@ public class TaktAdminDivisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.admindivision.phonecode", "zh-HK", "电话区号_hk", "电话区号（国际电话区号，如 +86、+81）"),
 
             // entity.admindivision.isbuiltin
-            new TranslationSeedItem("entity.admindivision.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；内置项禁止删除）"),
+            new TranslationSeedItem("entity.admindivision.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；内置项禁止删除）"),
             // entity.admindivision.isbuiltin
-            new TranslationSeedItem("entity.admindivision.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；内置项禁止删除）"),
+            new TranslationSeedItem("entity.admindivision.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；内置项禁止删除）"),
             // entity.admindivision.isbuiltin
-            new TranslationSeedItem("entity.admindivision.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；内置项禁止删除）"),
+            new TranslationSeedItem("entity.admindivision.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；内置项禁止删除）"),
             // entity.admindivision.isbuiltin
-            new TranslationSeedItem("entity.admindivision.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；内置项禁止删除）"),
+            new TranslationSeedItem("entity.admindivision.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；内置项禁止删除）"),
 
             // entity.admindivision.sortorder
-            new TranslationSeedItem("entity.admindivision.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.admindivision.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.admindivision.sortorder
-            new TranslationSeedItem("entity.admindivision.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.admindivision.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.admindivision.sortorder
-            new TranslationSeedItem("entity.admindivision.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.admindivision.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.admindivision.sortorder
-            new TranslationSeedItem("entity.admindivision.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.admindivision.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.admindivision.divisionstatus
-            new TranslationSeedItem("entity.admindivision.divisionstatus", "en-US", "区划状态_us", "区划状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.admindivision.divisionstatus", "en-US", "区划状态_us", "区划状态（字典 sys_normal_disable）"),
             // entity.admindivision.divisionstatus
-            new TranslationSeedItem("entity.admindivision.divisionstatus", "ja-JP", "区划状态_jp", "区划状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.admindivision.divisionstatus", "ja-JP", "区划状态_jp", "区划状态（字典 sys_normal_disable）"),
             // entity.admindivision.divisionstatus
-            new TranslationSeedItem("entity.admindivision.divisionstatus", "zh-CN", "区划状态", "区划状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.admindivision.divisionstatus", "zh-CN", "区划状态", "区划状态（字典 sys_normal_disable）"),
             // entity.admindivision.divisionstatus
-            new TranslationSeedItem("entity.admindivision.divisionstatus", "zh-HK", "区划状态_hk", "区划状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.admindivision.divisionstatus", "zh-HK", "区划状态_hk", "区划状态（字典 sys_normal_disable）"),
         };
     }
 

@@ -112,7 +112,7 @@ public class TaktBalanceSheetDto : TaktCompanyDtoBase
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前；应与报表印刷顺序一致）
+    /// 排序号（回填）（越小越靠前；应与报表印刷顺序一致）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -229,7 +229,7 @@ public class TaktBalanceSheetQueryDto : TaktPagedQuery
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前；应与报表印刷顺序一致）
+    /// 排序号（回填）（越小越靠前；应与报表印刷顺序一致）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -448,7 +448,7 @@ public class TaktBalanceSheetSortDto
     public long BalanceSheetId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；应与报表印刷顺序一致）
+    /// 排序号（回填）（越小越靠前；应与报表印刷顺序一致）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前；应与报表印刷顺序一致）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -795,7 +795,7 @@ public class TaktBalanceSheetExportDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前；应与报表印刷顺序一致）
+    /// 排序号（回填）（越小越靠前；应与报表印刷顺序一致）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

@@ -16,62 +16,11 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="order-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="pi.ph('remark')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="salesOrderItemTableRef"
@@ -85,63 +34,7 @@
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
-    >
-      <template #cell-materialCode="{ record }">
-        <TaktSelect
-          v-model:value="record.materialCode"
-          api-url="TaktMaterialPlants/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesOrderItemPi.queryPh('materialCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-salesUnit="{ record }">
-        <TaktSelect
-          v-model:value="record.salesUnit"
-          dict-type="logistics_unit_of_measure_code"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesOrderItemPi.ph('salesUnit')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-salesPerUnit="{ record }">
-        <TaktSelect
-          v-model:value="record.salesPerUnit"
-          dict-type="logistics_price_unit_param"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesOrderItemPi.ph('salesPerUnit')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-deliveryStatus="{ record }">
-        <TaktSelect
-          v-model:value="record.deliveryStatus"
-          dict-type="logistics_delivery_status"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesOrderItemPi.ph('deliveryStatus')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-isObsolete="{ record }">
-        <TaktSelect
-          v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesOrderItemPi.ph('isObsolete')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-    </TaktEditableTable>
+    >    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -150,7 +43,7 @@
  * Takt销售订单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/order/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useSalesOrderI18n } from '../composables/use-order-i18n'
@@ -159,53 +52,17 @@ import { useSalesOrderI18n } from '../composables/use-order-i18n'
 const pi = useSalesOrderI18n()
 
 import type { SalesOrderCreate } from '@/types/logistics/sales/order'
-import { applyTaxRateFromTaxCode } from '@/utils/tax-code'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture || 'zh-CN'
-  }
-}
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","plantCode","salesOrderCode","customerCode","customerName1","orderDate","requiredDeliveryDate","actualDeliveryDate","salesBy","totalQuantity","totalAmount","discountAmount","currencyCode","exchangeRate","taxCode","taxRate","taxAmount","actualAmount","shippedQuantity","shippedAmount","receivedAmount","deliveryMethod","paymentMethod","deliveryAddress","cultureCode","orderStatus","deliveryStatus","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useSalesOrderItemI18n } from '../composables/use-order-item-i18n'
 
 const salesOrderItemPi = useSalesOrderItemI18n()
-
-/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
-function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
-  return triggerNode?.ownerDocument?.body ?? document.body
-}
 
 const childSalesOrderItemRows = ref<Record<string, unknown>[]>([])
 const salesOrderItemTableRef = ref<{
@@ -214,98 +71,10 @@ const salesOrderItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
-/** 是否已持久化的子表行 */
-function isPersistedSalesOrderItemRow(row: Record<string, unknown>): boolean {
-  const id = row.salesOrderItemId
-  if (id == null || id === '') {
-    return false
-  }
-  return String(id) !== '0'
-}
-
-/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
-function allocateNextSalesOrderItemLineNumber(): number {
-  const rows = salesOrderItemTableRef.value?.getRows?.() ?? childSalesOrderItemRows.value
-  return resolveNextDetailLineNumber(0, rows)
-}
-
 /** 子表 salesOrderItem 可编辑列 */
 const salesOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'lineNumber',
-    title: salesOrderItemPi.label('lineNumber'),
-    width: 140,
-  },
-  {
-    key: 'materialCode',
-    title: salesOrderItemPi.label('materialCode'),
-    width: 140,
-  },
-  {
-    key: 'salesUnit',
-    title: salesOrderItemPi.label('salesUnit'),
-    width: 140,
-  },
-  {
-    key: 'orderQuantity',
-    title: salesOrderItemPi.label('orderQuantity'),
-    width: 140,
-  },
-  {
-    key: 'shippedQuantity',
-    title: salesOrderItemPi.label('shippedQuantity'),
-    width: 140,
-  },
-  {
-    key: 'salesPerUnit',
-    title: salesOrderItemPi.label('salesPerUnit'),
-    width: 140,
-  },
-  {
-    key: 'salesUnitPrice',
-    title: salesOrderItemPi.label('salesUnitPrice'),
-    width: 140,
-  },
-  {
-    key: 'discountRate',
-    title: salesOrderItemPi.label('discountRate'),
-    width: 140,
-  },
-  {
-    key: 'discountAmount',
-    title: salesOrderItemPi.label('discountAmount'),
-    width: 140,
-  },
-  {
-    key: 'taxIncludedAmount',
-    title: salesOrderItemPi.label('taxIncludedAmount'),
-    width: 140,
-  },
-  {
-    key: 'untaxedAmount',
-    title: salesOrderItemPi.label('untaxedAmount'),
-    width: 140,
-  },
-  {
-    key: 'taxAmount',
-    title: salesOrderItemPi.label('taxAmount'),
-    width: 140,
-  },
-  {
-    key: 'salesAmount',
-    title: salesOrderItemPi.label('salesAmount'),
-    width: 140,
-  },
-  {
-    key: 'deliveryStatus',
-    title: salesOrderItemPi.label('deliveryStatus'),
-    width: 140,
-  },
-  {
-    key: 'isObsolete',
-    title: salesOrderItemPi.label('isObsolete'),
-    width: 140,
-  }])
+,
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesOrderCreate & { salesOrderId?: string }> | null | undefined) {
@@ -315,21 +84,7 @@ function syncChildRowsFromFormData(val: Partial<SalesOrderCreate & { salesOrderI
 
 function createDefaultSalesOrderItemRow(): Record<string, unknown> {
   return {
-    lineNumber: allocateNextSalesOrderItemLineNumber(),
-    materialCode: '',
-    salesUnit: '',
-    orderQuantity: 0,
-    shippedQuantity: 0,
-    salesPerUnit: 0,
-    salesUnitPrice: 0,
-    discountRate: 0,
-    discountAmount: 0,
-    taxIncludedAmount: 0,
-    untaxedAmount: 0,
-    taxAmount: 0,
-    salesAmount: 0,
-    deliveryStatus: 0,
-    isObsolete: 0,
+
   }
 }
 
@@ -339,21 +94,13 @@ function buildSubmitPayload() {
   const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: salesOrderItemTableRef.value?.getRows?.() ?? childSalesOrderItemRows.value.map((row) => {
-      const normalized = {
-        ...row,
-        tenantCode: tenantStore.tenantCode,
-        companyCode: tenantStore.companyCode,
-        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        salesOrderId: masterId,
-      }
-      if (isUpdate && isPersistedSalesOrderItemRow(row)) {
-        normalized.salesOrderItemId = row.salesOrderItemId
-      } else {
-        delete normalized.salesOrderItemId
-      }
-      return normalized
-    }),
+    items: salesOrderItemTableRef.value?.getRows?.() ?? childSalesOrderItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+      salesOrderId: masterId,
+    })),
   }
 }
 
@@ -373,30 +120,11 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  currencyCode: "CNY",
-  cultureCode: "zh-CN",
-  taxCode: "J2",
-  taxRate: 13,
-  deliveryMethod: 0,
-  paymentMethod: 0,
-  orderStatus: 1,
-  deliveryStatus: 0
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 salesOrderId 才视为编辑） */
 watch(
@@ -405,11 +133,10 @@ watch(
     if (val?.salesOrderId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-      delete (next as any).items
+    delete (next as any).items
       applyScopeDefaults(next)
       Object.assign(formState, next)
-      formState.taxRate = applyTaxRateFromTaxCode(formState.taxCode, formState.taxRate ?? 13)
-      syncChildRowsFromFormData(val)
+    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -424,243 +151,9 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.salesOrderId
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  salesOrderCode: [
-    {
-      required: true,
-      message: pi.ph('salesOrderCode'),
-      trigger: 'blur'
-    }
-  ],
-  customerCode: [
-    {
-      required: true,
-      message: pi.ph('customerCode'),
-      trigger: 'change'
-    }
-  ],
-  customerName1: [
-    {
-      required: true,
-      message: pi.ph('customerName1'),
-      trigger: 'blur'
-    }
-  ],
-  orderDate: [
-    {
-      required: true,
-      message: pi.ph('orderDate'),
-      trigger: 'change'
-    }
-  ],
-  totalQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  discountAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('discountAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('discountAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  currencyCode: [
-    {
-      required: true,
-      message: pi.ph('currencyCode'),
-      trigger: 'change'
-    }
-  ],
-  exchangeRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('exchangeRate'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('exchangeRate'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxRate'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxRate'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  actualAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('actualAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('actualAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  shippedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('shippedQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('shippedQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  shippedAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('shippedAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('shippedAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  receivedAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('receivedAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('receivedAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  deliveryMethod: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('deliveryMethod'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('deliveryMethod'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  paymentMethod: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('paymentMethod'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('paymentMethod'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  orderStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('orderStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('orderStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  deliveryStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('deliveryStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('deliveryStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -671,91 +164,13 @@ async function validate() {
 }
 
 /** 映射为 Create/Update DTO */
-
-/**
- * 税码变更时回填税率
- * @param {string | number | undefined} value 税码
- * @returns {void}
- */
-
-/**
- * 区域文化变更：重选税码默认项并回填税率
- * @param {string | number | undefined} value 区域文化
- * @returns {void}
- */
-function handleCultureCodeChange(value: string | number | undefined) {
-  const culture = value == null ? '' : String(value)
-  formState.cultureCode = culture
-  const defaultTax = dictDataStore.getDictDefaultValue('accounting_tax_code', 'dictValue', culture)
-  formState.taxCode = defaultTax == null ? '' : String(defaultTax)
-  formState.taxRate = applyTaxRateFromTaxCode(formState.taxCode, formState.taxRate ?? 13)
-}
-
-function handleTaxCodeChange(value: string | number | undefined) {
-  const code = value == null ? '' : String(value)
-  formState.taxCode = code
-  formState.taxRate = applyTaxRateFromTaxCode(code, formState.taxRate ?? 13)
-}
-
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('totalQuantity' in payload) {
-    const rawtotalQuantity = payload.totalQuantity
-    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
-  }
-  if ('totalAmount' in payload) {
-    const rawtotalAmount = payload.totalAmount
-    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
-  }
-  if ('discountAmount' in payload) {
-    const rawdiscountAmount = payload.discountAmount
-    payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
-  }
-  if ('exchangeRate' in payload) {
-    const rawexchangeRate = payload.exchangeRate
-    payload.exchangeRate = typeof rawexchangeRate === 'number' ? rawexchangeRate : Number(rawexchangeRate)
-  }
-  if ('taxRate' in payload) {
-    const rawtaxRate = payload.taxRate
-    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
-  }
-  if ('taxAmount' in payload) {
-    const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
-  }
-  if ('actualAmount' in payload) {
-    const rawactualAmount = payload.actualAmount
-    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
-  }
-  if ('shippedQuantity' in payload) {
-    const rawshippedQuantity = payload.shippedQuantity
-    payload.shippedQuantity = typeof rawshippedQuantity === 'number' ? rawshippedQuantity : Number(rawshippedQuantity)
-  }
-  if ('shippedAmount' in payload) {
-    const rawshippedAmount = payload.shippedAmount
-    payload.shippedAmount = typeof rawshippedAmount === 'number' ? rawshippedAmount : Number(rawshippedAmount)
-  }
-  if ('receivedAmount' in payload) {
-    const rawreceivedAmount = payload.receivedAmount
-    payload.receivedAmount = typeof rawreceivedAmount === 'number' ? rawreceivedAmount : Number(rawreceivedAmount)
-  }
-  if ('deliveryMethod' in payload) {
-    const rawdeliveryMethod = payload.deliveryMethod
-    payload.deliveryMethod = typeof rawdeliveryMethod === 'number' ? rawdeliveryMethod : Number(rawdeliveryMethod)
-  }
-  if ('paymentMethod' in payload) {
-    const rawpaymentMethod = payload.paymentMethod
-    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
-  }
-  if ('orderStatus' in payload) {
-    const raworderStatus = payload.orderStatus
-    payload.orderStatus = typeof raworderStatus === 'number' ? raworderStatus : Number(raworderStatus)
-  }
-  if ('deliveryStatus' in payload) {
-    const rawdeliveryStatus = payload.deliveryStatus
-    payload.deliveryStatus = typeof rawdeliveryStatus === 'number' ? rawdeliveryStatus : Number(rawdeliveryStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.salesOrderId) {
+    payload.salesOrderId = props.formData.salesOrderId
+  }
   return payload
 }
 
@@ -769,19 +184,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesOrderId)
   childSalesOrderItemRows.value = []
   salesOrderItemTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

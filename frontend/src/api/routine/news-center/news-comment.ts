@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/news-center
 // 文件名称：news-comment.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/news-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   NewsComment,
   NewsCommentCreate,
+  NewsCommentObsolete,
   NewsCommentStatus,
   NewsCommentTree,
   NewsCommentUpdate
@@ -59,9 +60,9 @@ export function getNewsCommentById(id: string): Promise<NewsComment> {
 }
 
 /**
- * 获取新闻中心评论树形列表
- * @param {string} parentId parentId
- * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
+ * 获取新闻中心评论树形列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 字段）
  * @returns {Promise<NewsCommentTree[]>} 树形数据
  */
 export function getNewsCommentTree(parentId: string, includeDisabled: boolean): Promise<NewsCommentTree[]> {
@@ -140,18 +141,35 @@ export function updateNewsCommentStatus(dto: NewsCommentStatus): Promise<NewsCom
   });
 }
 
+/**
+ * 更新新闻中心评论作废状态
+ * @param {NewsCommentObsolete} dto 作废 DTO
+ * @returns {Promise<NewsComment>} 新闻中心评论DTO
+ */
+export function updateNewsCommentObsolete(dto: NewsCommentObsolete): Promise<NewsComment> {
+  return request<NewsComment>({
+    url: `${NEWS_COMMENT_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
+  });
+}
+
 // ========================================
 // 选项
 // ========================================
 
 /**
- * 获取新闻评论树形选项列表
+ * 获取新闻中心评论树形选项列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
  * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
  */
-export function getNewsCommentTreeOptions(): Promise<TaktTreeSelectOption[]> {
+export function getNewsCommentTreeOptions(parentId: string): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${NEWS_COMMENT_API_BASE}/tree-options`,
     method: 'get',
+    params: {
+      parentId
+    },
   });
 }
 

@@ -125,7 +125,7 @@ export const useHeaderNotificationStore = defineStore('headerNotification', () =
     return {
       title: translateLocaleMessage('common.page.signalr.new.message'),
       content: formatPrivateMessageNotificationContent(
-        message.fromUserNickname,
+        message.fromUserNickName,
         message.fromUserName,
         message.messageContent,
       ),

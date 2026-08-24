@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssuePcbaReworkService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题PCBA不良改修费用明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
     }
 
     /// <summary>
-    /// 获取质量问题PCBA不良改修费用明细列表（分页）
+    /// 获取质量问题PCBA不良改修费用明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktQualityIssuePcbaReworkDto>> GetQualityIssuePcbaReworkListAsync(TaktQualityIssuePcbaReworkQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktQualityIssuePcbaReworkDto>.Create(
+                new List<TaktQualityIssuePcbaReworkDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _qualityIssuePcbaReworkRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -311,7 +319,15 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportQualityIssuePcbaReworkAsync(TaktQualityIssuePcbaReworkQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityIssuePcbaReworkQueryDto());
+        var queryDto = query ?? new TaktQualityIssuePcbaReworkQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktQualityIssuePcbaReworkExportDto>(),
+                sheetName ?? "质量问题PCBA不良改修费用明细数据",
+                fileName ?? "质量问题PCBA不良改修费用明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _qualityIssuePcbaReworkRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -349,6 +365,26 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
             throw new TaktBusinessException("品质问题应对主不存在");
         }
         entity.QualityIssueId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.QualityIssueCode))
+        {
+            entity.QualityIssueCode = master.QualityIssueCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -372,150 +408,272 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QualityIssueId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.QualityIssueCode != null && x.QualityIssueCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.PcbaDefectParts != null && x.PcbaDefectParts.Contains(keywords))
-                || SqlFunc.ToString(x.PcbaReworkCost).Contains(keywords)
-                || SqlFunc.ToString(x.PcbaReworkTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.PcbaReinspectionTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.PcbaTravelCost).Contains(keywords)
-                || SqlFunc.ToString(x.PcbaWarehouseCost).Contains(keywords)
-                || SqlFunc.ToString(x.PcbaOtherExpenses).Contains(keywords)
                 || (x.PcbaReworkNote != null && x.PcbaReworkNote.Contains(keywords))
-                || SqlFunc.ToString(x.PcbaScrapCost).Contains(keywords)
                 || (x.PcbaCustomerName1 != null && x.PcbaCustomerName1.Contains(keywords))
                 || (x.PcbaDebitNoteCode != null && x.PcbaDebitNoteCode.Contains(keywords))
-                || SqlFunc.ToString(x.PcbaOtherExpenses2).Contains(keywords)
                 || (x.PcbaNote != null && x.PcbaNote.Contains(keywords))
                 || (x.PcbaRecorder != null && x.PcbaRecorder.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.QualityIssueId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.QualityIssueId == queryDto.QualityIssueId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityIssueCode))
-        {
-            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(queryDto.QualityIssueCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PcbaDefectParts))
-        {
-            exp = exp.And(x => x.PcbaDefectParts != null && x.PcbaDefectParts.Contains(queryDto.PcbaDefectParts));
-        }
-
-        if (queryDto?.PcbaReworkCost.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaReworkCost == queryDto.PcbaReworkCost);
-        }
-
-        if (queryDto?.PcbaReworkTimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaReworkTimeMinutes == queryDto.PcbaReworkTimeMinutes);
-        }
-
-        if (queryDto?.PcbaReinspectionTimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaReinspectionTimeMinutes == queryDto.PcbaReinspectionTimeMinutes);
-        }
-
-        if (queryDto?.PcbaTravelCost.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaTravelCost == queryDto.PcbaTravelCost);
-        }
-
-        if (queryDto?.PcbaWarehouseCost.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaWarehouseCost == queryDto.PcbaWarehouseCost);
-        }
-
-        if (queryDto?.PcbaOtherExpenses.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaOtherExpenses == queryDto.PcbaOtherExpenses);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PcbaReworkNote))
-        {
-            exp = exp.And(x => x.PcbaReworkNote != null && x.PcbaReworkNote.Contains(queryDto.PcbaReworkNote));
-        }
-
-        if (queryDto?.PcbaScrapCost.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaScrapCost == queryDto.PcbaScrapCost);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PcbaCustomerName1))
-        {
-            exp = exp.And(x => x.PcbaCustomerName1 != null && x.PcbaCustomerName1.Contains(queryDto.PcbaCustomerName1));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PcbaDebitNoteCode))
-        {
-            exp = exp.And(x => x.PcbaDebitNoteCode != null && x.PcbaDebitNoteCode.Contains(queryDto.PcbaDebitNoteCode));
-        }
-
-        if (queryDto?.PcbaOtherExpenses2.HasValue == true)
-        {
-            exp = exp.And(x => x.PcbaOtherExpenses2 == queryDto.PcbaOtherExpenses2);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PcbaNote))
-        {
-            exp = exp.And(x => x.PcbaNote != null && x.PcbaNote.Contains(queryDto.PcbaNote));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PcbaRecorder))
-        {
-            exp = exp.And(x => x.PcbaRecorder != null && x.PcbaRecorder.Contains(queryDto.PcbaRecorder));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.QualityIssueId.HasValue == true)
+        {
+            var qualityIssueId = queryDto.QualityIssueId.Value;
+            exp = exp.And(x => x.QualityIssueId == qualityIssueId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityIssueCode))
+        {
+            var qualityIssueCode = queryDto.QualityIssueCode;
+            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(qualityIssueCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbaDefectParts))
+        {
+            var pcbaDefectParts = queryDto.PcbaDefectParts;
+            exp = exp.And(x => x.PcbaDefectParts != null && x.PcbaDefectParts.Contains(pcbaDefectParts));
+        }
+
+        if (queryDto?.PcbaReworkCost.HasValue == true)
+        {
+            var pcbaReworkCost = queryDto.PcbaReworkCost.Value;
+            exp = exp.And(x => x.PcbaReworkCost == pcbaReworkCost);
+        }
+
+        if (queryDto?.PcbaReworkTimeMinutes.HasValue == true)
+        {
+            var pcbaReworkTimeMinutes = queryDto.PcbaReworkTimeMinutes.Value;
+            exp = exp.And(x => x.PcbaReworkTimeMinutes == pcbaReworkTimeMinutes);
+        }
+
+        if (queryDto?.PcbaReinspectionTimeMinutes.HasValue == true)
+        {
+            var pcbaReinspectionTimeMinutes = queryDto.PcbaReinspectionTimeMinutes.Value;
+            exp = exp.And(x => x.PcbaReinspectionTimeMinutes == pcbaReinspectionTimeMinutes);
+        }
+
+        if (queryDto?.PcbaTravelCost.HasValue == true)
+        {
+            var pcbaTravelCost = queryDto.PcbaTravelCost.Value;
+            exp = exp.And(x => x.PcbaTravelCost == pcbaTravelCost);
+        }
+
+        if (queryDto?.PcbaWarehouseCost.HasValue == true)
+        {
+            var pcbaWarehouseCost = queryDto.PcbaWarehouseCost.Value;
+            exp = exp.And(x => x.PcbaWarehouseCost == pcbaWarehouseCost);
+        }
+
+        if (queryDto?.PcbaOtherExpenses.HasValue == true)
+        {
+            var pcbaOtherExpenses = queryDto.PcbaOtherExpenses.Value;
+            exp = exp.And(x => x.PcbaOtherExpenses == pcbaOtherExpenses);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbaReworkNote))
+        {
+            var pcbaReworkNote = queryDto.PcbaReworkNote;
+            exp = exp.And(x => x.PcbaReworkNote != null && x.PcbaReworkNote.Contains(pcbaReworkNote));
+        }
+
+        if (queryDto?.PcbaScrapCost.HasValue == true)
+        {
+            var pcbaScrapCost = queryDto.PcbaScrapCost.Value;
+            exp = exp.And(x => x.PcbaScrapCost == pcbaScrapCost);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbaCustomerName1))
+        {
+            var pcbaCustomerName1 = queryDto.PcbaCustomerName1;
+            exp = exp.And(x => x.PcbaCustomerName1 != null && x.PcbaCustomerName1.Contains(pcbaCustomerName1));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbaDebitNoteCode))
+        {
+            var pcbaDebitNoteCode = queryDto.PcbaDebitNoteCode;
+            exp = exp.And(x => x.PcbaDebitNoteCode != null && x.PcbaDebitNoteCode.Contains(pcbaDebitNoteCode));
+        }
+
+        if (queryDto?.PcbaOtherExpenses2.HasValue == true)
+        {
+            var pcbaOtherExpenses2 = queryDto.PcbaOtherExpenses2.Value;
+            exp = exp.And(x => x.PcbaOtherExpenses2 == pcbaOtherExpenses2);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbaNote))
+        {
+            var pcbaNote = queryDto.PcbaNote;
+            exp = exp.And(x => x.PcbaNote != null && x.PcbaNote.Contains(pcbaNote));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbaRecorder))
+        {
+            var pcbaRecorder = queryDto.PcbaRecorder;
+            exp = exp.And(x => x.PcbaRecorder != null && x.PcbaRecorder.Contains(pcbaRecorder));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktQualityIssuePcbaReworkQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.QualityIssueId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.QualityIssueCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbaDefectParts))
+        {
+            return true;
+        }
+        if (queryDto.PcbaReworkCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PcbaReworkTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PcbaReinspectionTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PcbaTravelCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PcbaWarehouseCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PcbaOtherExpenses.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbaReworkNote))
+        {
+            return true;
+        }
+        if (queryDto.PcbaScrapCost.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbaCustomerName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbaDebitNoteCode))
+        {
+            return true;
+        }
+        if (queryDto.PcbaOtherExpenses2.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbaNote))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbaRecorder))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -103,7 +103,7 @@ public class TaktBalanceSheet : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";
     /// <summary>
-    /// 排序号（越小越靠前；应与报表印刷顺序一致）
+    /// 排序号（回填）（越小越靠前；应与报表印刷顺序一致）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

@@ -22,7 +22,7 @@ export type TaktSupportedOssProvider = (typeof TAKT_SUPPORTED_OSS_PROVIDERS)[num
 
 /**
  * 判断 OSS 提供商是否已被后端实现
- * @param value 字典 sys_oss_provider_type 的 dictValue
+ * @param value 字典 sys_oss_provider 的 dictValue
  * @returns 是否支持
  */
 export function isSupportedOssProvider(value: string | null | undefined): value is TaktSupportedOssProvider {
@@ -57,9 +57,9 @@ export function normalizeOssProvider(value: unknown): TaktSupportedOssProvider {
 export interface TaktFileStorageConfigPayload {
   /** 上传路径（一级目录菜单 RoutePath 首段，如 uploads/human-resource） */
   uploadPath?: string;
-  /** 存储命名规则（字典 sys_storage_naming_config：0/1/2） */
+  /** 存储命名规则（字典 sys_storage_naming：0/1/2） */
   storageNaming?: string | number;
-  /** OSS 提供商标识（字典 sys_oss_provider_type；StorageType=1） */
+  /** OSS 提供商标识（字典 sys_oss_provider；StorageType=1） */
   ossProvider?: string;
   /** FTP 提供商标识（字典 sys_ftp_provider_type；StorageType=2） */
   ftpProvider?: string;

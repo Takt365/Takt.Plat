@@ -31,7 +31,6 @@ export const COSTCENTER_LIST_FIELDS = [
   'costCenterLevel',
   'validFrom',
   'validTo',
-  'plantCode',
   'costCenterStatus',
 ] as const
 
@@ -39,8 +38,7 @@ export const COSTCENTER_LIST_FIELDS = [
 export const COSTCENTER_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  costCenterCode: 'required',
+  cultureCode: 'optional',
   costCenterName: 'required',
   parentId: 'required',
   costCenterType: 'select',

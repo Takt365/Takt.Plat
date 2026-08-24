@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制程检验单应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
     }
 
     /// <summary>
-    /// 获取制程检验单列表（分页）
+    /// 获取制程检验单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktIpqcOrderDto>> GetIpqcOrderListAsync(TaktIpqcOrderQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktIpqcOrderDto>.Create(
+                new List<TaktIpqcOrderDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _ipqcOrderRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -106,8 +114,8 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ProcessName ?? e.Id.ToString(),
+            DictValue = e.IpqcOrderCode,
+            DictLabel = e.ProcessName ?? e.IpqcOrderCode,
         }).ToList();
     }
 
@@ -285,7 +293,15 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportIpqcOrderAsync(TaktIpqcOrderQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktIpqcOrderQueryDto());
+        var queryDto = query ?? new TaktIpqcOrderQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktIpqcOrderExportDto>(),
+                sheetName ?? "制程检验单数据",
+                fileName ?? "制程检验单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _ipqcOrderRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -299,6 +315,44 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
             exportData,
             sheetName ?? "制程检验单数据",
             fileName ?? "制程检验单导出.xlsx");
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取 IPQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>IPQC 检验统计</returns>
+    public async Task<TaktIpqcOrderStatDto> GetIpqcOrderStatAsync(TaktQualityStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.InspectionDateStart,
+            queryDto.InspectionDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktIpqcOrder, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InspectionDate != null
+            && x.InspectionDate >= start
+            && x.InspectionDate <= end;
+        var monthOrderCount = await _ipqcOrderRepository.CountAsync(predicate);
+        var monthSampleQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalSampleQuantity, predicate);
+        var monthQualifiedQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalQualifiedQuantity, predicate);
+        var monthUnqualifiedQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalUnqualifiedQuantity, predicate);
+        return new TaktIpqcOrderStatDto
+        {
+            StatMonth = statMonth,
+            MonthOrderCount = monthOrderCount,
+            MonthSampleQuantity = monthSampleQuantity,
+            MonthQualifiedQuantity = monthQualifiedQuantity,
+            MonthUnqualifiedQuantity = monthUnqualifiedQuantity,
+            MonthPassRatePercent = TaktQualityStatHelper.CalculatePassRatePercent(monthQualifiedQuantity, monthSampleQuantity),
+        };
     }
 
     // ========================================
@@ -356,9 +410,9 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
     {
         // 制程检验单明细（Items）
         List<TaktIpqcOrderItemUpdateDto>? itemsForSave;
-        if (dto is TaktIpqcOrderUpdateDto updateDto && updateDto.Items != null)
+        if (dto is TaktIpqcOrderUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            itemsForSave = updateDto.Items;
+            itemsForSave = updateDtoForItems.Items;
         }
         else if (dto.Items != null)
         {
@@ -384,6 +438,11 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
             {
                 var childDto = itemsForSave[i];
                 childDto.IpqcOrderId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.IpqcOrderCode = entity.IpqcOrderCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -402,13 +461,12 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
                     submittedIds.Add(childDto.IpqcOrderItemId);
                     var isUniqueUpdate_ix_takt_logistics_quality_ipqc_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _ipqcOrderItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.IpqcOrderId == x.IpqcOrderId
+                        x => x.IpqcOrderId == x.IpqcOrderId
                 && x.LineNumber == x.LineNumber,
                         childDto.IpqcOrderItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_ipqc_order_item_order_line_unique)
                     {
-                        throw new TaktBusinessException("制程检验单明细的CompanyCode、IpqcOrderId、LineNumber已存在");
+                        throw new TaktBusinessException("制程检验单明细的IpqcOrderId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.IpqcOrderItemId;
@@ -420,12 +478,11 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_ipqc_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _ipqcOrderItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.IpqcOrderId == x.IpqcOrderId
+                        x => x.IpqcOrderId == x.IpqcOrderId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_ipqc_order_item_order_line_unique)
                     {
-                        throw new TaktBusinessException("制程检验单明细的CompanyCode、IpqcOrderId、LineNumber已存在");
+                        throw new TaktBusinessException("制程检验单明细的IpqcOrderId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktIpqcOrderItem>();
                     child.Id = 0;
@@ -461,41 +518,6 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
             }
         }
     }
-
-    /// <summary>
-    /// 获取 IPQC 检验统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>IPQC 检验统计</returns>
-    public async Task<TaktIpqcOrderStatDto> GetIpqcOrderStatAsync(TaktQualityStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.InspectionDateStart,
-            queryDto.InspectionDateEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktIpqcOrder, bool>> predicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.InspectionDate != null
-            && x.InspectionDate >= start
-            && x.InspectionDate <= end;
-        var monthOrderCount = await _ipqcOrderRepository.CountAsync(predicate);
-        var monthSampleQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalSampleQuantity, predicate);
-        var monthQualifiedQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalQualifiedQuantity, predicate);
-        var monthUnqualifiedQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalUnqualifiedQuantity, predicate);
-        return new TaktIpqcOrderStatDto
-        {
-            StatMonth = statMonth,
-            MonthOrderCount = monthOrderCount,
-            MonthSampleQuantity = monthSampleQuantity,
-            MonthQualifiedQuantity = monthQualifiedQuantity,
-            MonthUnqualifiedQuantity = monthUnqualifiedQuantity,
-            MonthPassRatePercent = TaktQualityStatHelper.CalculatePassRatePercent(monthQualifiedQuantity, monthSampleQuantity),
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -509,143 +531,249 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
     {
         var exp = Expressionable.Create<TaktIpqcOrder>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SourceCode != null && x.SourceCode.Contains(keywords))
                 || (x.IpqcOrderCode != null && x.IpqcOrderCode.Contains(keywords))
                 || (x.ProcessCode != null && x.ProcessCode.Contains(keywords))
                 || (x.ProcessName != null && x.ProcessName.Contains(keywords))
-                || SqlFunc.ToString(x.TotalProductionQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalSampleQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalQualifiedQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalUnqualifiedQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalInspectionReturnQuantity).Contains(keywords)
                 || (x.JudgeBy != null && x.JudgeBy.Contains(keywords))
                 || (x.JudgeDescription != null && x.JudgeDescription.Contains(keywords))
-                || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
-                || SqlFunc.ToString(x.JudgeDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.SourceCode != null && x.SourceCode.Contains(queryDto.SourceCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IpqcOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceCode))
         {
-            exp = exp.And(x => x.IpqcOrderCode != null && x.IpqcOrderCode.Contains(queryDto.IpqcOrderCode));
+            var sourceCode = queryDto.SourceCode;
+            exp = exp.And(x => x.SourceCode != null && x.SourceCode.Contains(sourceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProcessCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IpqcOrderCode))
         {
-            exp = exp.And(x => x.ProcessCode != null && x.ProcessCode.Contains(queryDto.ProcessCode));
+            var ipqcOrderCode = queryDto.IpqcOrderCode;
+            exp = exp.And(x => x.IpqcOrderCode != null && x.IpqcOrderCode.Contains(ipqcOrderCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProcessName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProcessCode))
         {
-            exp = exp.And(x => x.ProcessName != null && x.ProcessName.Contains(queryDto.ProcessName));
+            var processCode = queryDto.ProcessCode;
+            exp = exp.And(x => x.ProcessCode != null && x.ProcessCode.Contains(processCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProcessName))
+        {
+            var processName = queryDto.ProcessName;
+            exp = exp.And(x => x.ProcessName != null && x.ProcessName.Contains(processName));
         }
 
         if (queryDto?.TotalProductionQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalProductionQuantity == queryDto.TotalProductionQuantity);
+            var totalProductionQuantity = queryDto.TotalProductionQuantity.Value;
+            exp = exp.And(x => x.TotalProductionQuantity == totalProductionQuantity);
         }
 
         if (queryDto?.TotalSampleQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalSampleQuantity == queryDto.TotalSampleQuantity);
+            var totalSampleQuantity = queryDto.TotalSampleQuantity.Value;
+            exp = exp.And(x => x.TotalSampleQuantity == totalSampleQuantity);
         }
 
         if (queryDto?.TotalQualifiedQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalQualifiedQuantity == queryDto.TotalQualifiedQuantity);
+            var totalQualifiedQuantity = queryDto.TotalQualifiedQuantity.Value;
+            exp = exp.And(x => x.TotalQualifiedQuantity == totalQualifiedQuantity);
         }
 
         if (queryDto?.TotalUnqualifiedQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalUnqualifiedQuantity == queryDto.TotalUnqualifiedQuantity);
+            var totalUnqualifiedQuantity = queryDto.TotalUnqualifiedQuantity.Value;
+            exp = exp.And(x => x.TotalUnqualifiedQuantity == totalUnqualifiedQuantity);
         }
 
         if (queryDto?.TotalInspectionReturnQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalInspectionReturnQuantity == queryDto.TotalInspectionReturnQuantity);
+            var totalInspectionReturnQuantity = queryDto.TotalInspectionReturnQuantity.Value;
+            exp = exp.And(x => x.TotalInspectionReturnQuantity == totalInspectionReturnQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JudgeBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.JudgeBy))
         {
-            exp = exp.And(x => x.JudgeBy != null && x.JudgeBy.Contains(queryDto.JudgeBy));
+            var judgeBy = queryDto.JudgeBy;
+            exp = exp.And(x => x.JudgeBy != null && x.JudgeBy.Contains(judgeBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JudgeDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.JudgeDescription))
         {
-            exp = exp.And(x => x.JudgeDescription != null && x.JudgeDescription.Contains(queryDto.JudgeDescription));
+            var judgeDescription = queryDto.JudgeDescription;
+            exp = exp.And(x => x.JudgeDescription != null && x.JudgeDescription.Contains(judgeDescription));
         }
 
         if (queryDto?.JudgeStatus.HasValue == true)
         {
-            exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
+            var judgeStatus = queryDto.JudgeStatus.Value;
+            exp = exp.And(x => x.JudgeStatus == judgeStatus);
         }
 
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.InspectionDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.InspectionDate >= queryDto.InspectionDateStart);
+            var inspectionDateStart = queryDto.InspectionDateStart.Value;
+            exp = exp.And(x => x.InspectionDate >= inspectionDateStart);
         }
 
         if (queryDto?.InspectionDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.InspectionDate <= queryDto.InspectionDateEnd);
+            var inspectionDateEnd = queryDto.InspectionDateEnd.Value;
+            exp = exp.And(x => x.InspectionDate <= inspectionDateEnd);
         }
 
         if (queryDto?.JudgeDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.JudgeDate >= queryDto.JudgeDateStart);
+            var judgeDateStart = queryDto.JudgeDateStart.Value;
+            exp = exp.And(x => x.JudgeDate >= judgeDateStart);
         }
 
         if (queryDto?.JudgeDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.JudgeDate <= queryDto.JudgeDateEnd);
+            var judgeDateEnd = queryDto.JudgeDateEnd.Value;
+            exp = exp.And(x => x.JudgeDate <= judgeDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktIpqcOrderQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IpqcOrderCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProcessCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProcessName))
+        {
+            return true;
+        }
+        if (queryDto.TotalProductionQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalSampleQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalQualifiedQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalUnqualifiedQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalInspectionReturnQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.JudgeBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.JudgeDescription))
+        {
+            return true;
+        }
+        if (queryDto.JudgeStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.InspectionDateStart.HasValue || queryDto.InspectionDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.JudgeDateStart.HasValue || queryDto.JudgeDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

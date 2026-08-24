@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopRevisionService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP版本应用服务实现
 // 
@@ -370,6 +370,10 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
             {
                 var childDto = contentsForSave[i];
                 childDto.RevisionId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
                 if (childDto.SopContentId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.SopContentId, out var target))
@@ -445,7 +449,7 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
 
         if (queryDto?.SopId.HasValue == true)
         {
-            var sopId = queryDto.SopId;
+            var sopId = queryDto.SopId.Value;
             exp = exp.And(x => x.SopId == sopId);
         }
 
@@ -469,31 +473,31 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
 
         if (queryDto?.EcnId.HasValue == true)
         {
-            var ecnId = queryDto.EcnId;
+            var ecnId = queryDto.EcnId.Value;
             exp = exp.And(x => x.EcnId == ecnId);
         }
 
         if (queryDto?.IsLocked.HasValue == true)
         {
-            var isLocked = queryDto.IsLocked;
+            var isLocked = queryDto.IsLocked.Value;
             exp = exp.And(x => x.IsLocked == isLocked);
         }
 
         if (queryDto?.ForceLeaderAck.HasValue == true)
         {
-            var forceLeaderAck = queryDto.ForceLeaderAck;
+            var forceLeaderAck = queryDto.ForceLeaderAck.Value;
             exp = exp.And(x => x.ForceLeaderAck == forceLeaderAck);
         }
 
         if (queryDto?.RevisionStatus.HasValue == true)
         {
-            var revisionStatus = queryDto.RevisionStatus;
+            var revisionStatus = queryDto.RevisionStatus.Value;
             exp = exp.And(x => x.RevisionStatus == revisionStatus);
         }
 
         if (queryDto?.EffectiveRule.HasValue == true)
         {
-            var effectiveRule = queryDto.EffectiveRule;
+            var effectiveRule = queryDto.EffectiveRule.Value;
             exp = exp.And(x => x.EffectiveRule == effectiveRule);
         }
 
@@ -511,13 +515,13 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

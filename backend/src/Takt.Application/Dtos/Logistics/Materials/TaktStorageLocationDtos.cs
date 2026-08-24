@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktStorageLocationDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：StorageLocation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktStorageLocation 生成，请按需审阅）
 // 
@@ -35,6 +35,16 @@ public class TaktStorageLocationDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StorageLocationId { get; set; }
 
+    /// <summary>
+    /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WarehouseId { get; set; }
+
+    /// <summary>
+    /// 仓库 名称（填充字段）
+    /// </summary>
+    public string? WarehouseName { get; set; }
 
     /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
@@ -57,17 +67,17 @@ public class TaktStorageLocationDto : TaktCompanyDtoBase
     public int LocationType { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int LocationStatus { get; set; } = 0;
 
@@ -95,7 +105,7 @@ public class TaktStorageLocationQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -105,15 +115,15 @@ public class TaktStorageLocationQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WarehouseId { get; set; }
-
-    /// <summary>
-    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
@@ -136,17 +146,17 @@ public class TaktStorageLocationQueryDto : TaktPagedQuery
     public int? LocationType { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? LocationStatus { get; set; }
 
@@ -196,21 +206,19 @@ public class TaktStorageLocationCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WarehouseId { get; set; }
 
     /// <summary>
-    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    [Required(ErrorMessage = "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
     /// </summary>
-    [Required(ErrorMessage = "仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）不能为空")]
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -231,12 +239,12 @@ public class TaktStorageLocationCreateDto
     public int LocationType { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int LocationStatus { get; set; } = 0;
 
@@ -290,9 +298,9 @@ public class TaktStorageLocationStatusDto
     public long StorageLocationId { get; set; }
 
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
+    [Required(ErrorMessage = "库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）不能为空")]
     public int LocationStatus { get; set; } = 0;
 }
 
@@ -314,9 +322,9 @@ public class TaktStorageLocationSortDto
     public long StorageLocationId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -345,15 +353,15 @@ public class TaktStorageLocationTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WarehouseId { get; set; }
-
-    /// <summary>
-    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
@@ -376,12 +384,12 @@ public class TaktStorageLocationTemplateDto
     public int? LocationType { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? LocationStatus { get; set; }
 
@@ -418,15 +426,15 @@ public class TaktStorageLocationImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WarehouseId { get; set; }
-
-    /// <summary>
-    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
@@ -449,12 +457,12 @@ public class TaktStorageLocationImportDto
     public int? LocationType { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? LocationStatus { get; set; }
 
@@ -492,15 +500,20 @@ public class TaktStorageLocationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WarehouseId { get; set; }
-
-    /// <summary>
-    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
@@ -523,17 +536,17 @@ public class TaktStorageLocationExportDto
     public int LocationType { get; set; } = 0;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 库位状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int LocationStatus { get; set; } = 0;
 

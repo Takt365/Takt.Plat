@@ -5,7 +5,7 @@
 // 功能描述：ITSM 紧急度×影响范围 → 优先级矩阵，与后端 TaktTicketPriorityHelper 对齐
 // ========================================
 
-/** ITSM 3×3 优先级矩阵 [urgency-1][impact-1] → sys_priority_level_category */
+/** ITSM 3×3 优先级矩阵 [urgency-1][impact-1] → sys_priority_level */
 const PRIORITY_MATRIX: readonly (readonly number[])[] = [
   [1, 2, 3],
   [2, 3, 4],
@@ -25,7 +25,7 @@ export function normalizeTicketLevel(level: number | null | undefined): number {
 }
 
 /**
- * 根据 ITSM 3×3 矩阵计算优先级（字典 sys_priority_level_category）。
+ * 根据 ITSM 3×3 矩阵计算优先级（字典 sys_priority_level）。
  * @param urgency 紧急度 1～3
  * @param impact 影响范围 1～3
  * @returns 优先级 1～4

@@ -91,7 +91,7 @@ public class TaktCustomerServiceRequest : TaktCompanyEntityBase
     public int SourceChannel { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level）
     /// </summary>
     [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
     public int Priority { get; set; } = 3;
@@ -164,7 +164,7 @@ public class TaktCustomerServiceRequest : TaktCompanyEntityBase
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

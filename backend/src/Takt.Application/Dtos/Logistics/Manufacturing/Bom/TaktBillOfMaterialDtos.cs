@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterial 生成，请按需审阅）
 // 
@@ -35,7 +35,6 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BillOfMaterialId { get; set; }
 
-
     /// <summary>
     /// BOM编码（业务单据号，便于检索，非唯一键）
     /// </summary>
@@ -52,7 +51,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料描述（回填：随物料）
+    /// 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? ParentMaterialDescription { get; set; } = string.Empty;
 
@@ -97,7 +96,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -130,7 +129,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -160,7 +159,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public string? ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料描述（回填：随物料）
+    /// 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? ParentMaterialDescription { get; set; } = string.Empty;
 
@@ -215,7 +214,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -270,9 +269,8 @@ public class TaktBillOfMaterialCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -294,7 +292,7 @@ public class TaktBillOfMaterialCreateDto
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料描述（回填：随物料）
+    /// 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? ParentMaterialDescription { get; set; } = string.Empty;
 
@@ -430,9 +428,9 @@ public class TaktBillOfMaterialSortDto
     public long BillOfMaterialId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -461,7 +459,7 @@ public class TaktBillOfMaterialTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -481,7 +479,7 @@ public class TaktBillOfMaterialTemplateDto
     public string? ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料描述（回填：随物料）
+    /// 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? ParentMaterialDescription { get; set; } = string.Empty;
 
@@ -568,7 +566,7 @@ public class TaktBillOfMaterialImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -588,7 +586,7 @@ public class TaktBillOfMaterialImportDto
     public string? ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料描述（回填：随物料）
+    /// 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? ParentMaterialDescription { get; set; } = string.Empty;
 
@@ -681,6 +679,11 @@ public class TaktBillOfMaterialExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// BOM编码（业务单据号，便于检索，非唯一键）
     /// </summary>
     public string BomCode { get; set; } = string.Empty;
@@ -696,7 +699,7 @@ public class TaktBillOfMaterialExportDto
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料描述（回填：随物料）
+    /// 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     public string? ParentMaterialDescription { get; set; } = string.Empty;
 
@@ -741,7 +744,7 @@ public class TaktBillOfMaterialExportDto
     public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

@@ -47,9 +47,9 @@ public class TaktSignalRPrivateMessagePush
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者昵称（由用户表 Nickname 解析）
+    /// 发送者昵称（由用户表 NickName 解析）
     /// </summary>
-    public string? FromUserNickname { get; set; }
+    public string? FromUserNickName { get; set; }
 
     /// <summary>
     /// 接收者用户名
@@ -73,9 +73,14 @@ public class TaktSignalRPrivateMessagePush
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; }
+    public string? FileName { get; set; }
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; }
 
     /// <summary>
     /// 消息类型（字典 sys_message_type DictValue）
@@ -83,7 +88,7 @@ public class TaktSignalRPrivateMessagePush
     public string MessageType { get; set; } = "text";
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group_category DictValue）
+    /// 消息分组（字典 sys_message_group DictValue）
     /// </summary>
     public string MessageGroup { get; set; } = "message";
 
@@ -134,7 +139,7 @@ public class TaktSignalRBroadcastPush
     public string MessageType { get; set; } = "system";
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group_category DictValue）
+    /// 消息分组（字典 sys_message_group DictValue）
     /// </summary>
     public string MessageGroup { get; set; } = "message";
 

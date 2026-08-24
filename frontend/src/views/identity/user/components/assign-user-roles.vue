@@ -146,7 +146,7 @@ async function loadUserRoles() {
       message.error(t('common.validation.not.found', { field: `${t('entity.user._self')} ID` }))
       return
     }
-    userInfo.value = `${u.username || u.userName || ''}（${u.nickname || u.nickName || ''}）`
+    userInfo.value = `${u.userName || u.userName || ''}（${u.nickName || u.nickName || ''}）`
     const [allRoles, userRoles] = await Promise.all([
       getRoleOptions(),
       getUserRoleIds(String(userId))

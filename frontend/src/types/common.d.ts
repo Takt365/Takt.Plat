@@ -113,9 +113,9 @@ export interface UseLoginFieldSyncOptions {
   /** 写回规范化租户编码 */
   setTenantCode: (code: string) => void;
   /** 读取用户名 */
-  getUsername: () => string;
+  getUserName: () => string;
   /** 写回规范化用户名 */
-  setUsername: (username: string) => void;
+  setUserName: (userName: string) => void;
   /** 登录表单实例 */
   formRef: Ref<FormInstance | undefined>;
 }

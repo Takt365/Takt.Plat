@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -84,20 +84,38 @@ public class TaktSourceEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceecdetail._self
             new TranslationSeedItem("entity.sourceecdetail._self", "en-US", "Source Ec Detail Information_us", "实体名称"),
             // entity.sourceecdetail._self
-            new TranslationSeedItem("entity.sourceecdetail._self", "ja-JP", "设变来源主表信息_jp", "实体名称"),
+            new TranslationSeedItem("entity.sourceecdetail._self", "ja-JP", "设变来源子表信息_jp", "实体名称"),
             // entity.sourceecdetail._self
-            new TranslationSeedItem("entity.sourceecdetail._self", "zh-CN", "设变来源主表信息", "实体名称"),
+            new TranslationSeedItem("entity.sourceecdetail._self", "zh-CN", "设变来源子表信息", "实体名称"),
             // entity.sourceecdetail._self
-            new TranslationSeedItem("entity.sourceecdetail._self", "zh-HK", "设变来源主表信息_hk", "实体名称"),
+            new TranslationSeedItem("entity.sourceecdetail._self", "zh-HK", "设变来源子表信息_hk", "实体名称"),
 
             // entity.sourceecdetail.sourceecid
-            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "en-US", "主ID_us", "主ID"),
+            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "en-US", "主ID_us", "主ID（选项 TaktSourceEcs/options；DictValue=Id）"),
             // entity.sourceecdetail.sourceecid
-            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "ja-JP", "主ID_jp", "主ID"),
+            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "ja-JP", "主ID_jp", "主ID（选项 TaktSourceEcs/options；DictValue=Id）"),
             // entity.sourceecdetail.sourceecid
-            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "zh-CN", "主ID", "主ID"),
+            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "zh-CN", "主ID", "主ID（选项 TaktSourceEcs/options；DictValue=Id）"),
             // entity.sourceecdetail.sourceecid
-            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "zh-HK", "主ID_hk", "主ID"),
+            new TranslationSeedItem("entity.sourceecdetail.sourceecid", "zh-HK", "主ID_hk", "主ID（选项 TaktSourceEcs/options；DictValue=Id）"),
+
+            // entity.sourceecdetail.sourceeccode
+            new TranslationSeedItem("entity.sourceecdetail.sourceeccode", "en-US", "设变号码_us", "设变号码（冗余字段，便于查询）"),
+            // entity.sourceecdetail.sourceeccode
+            new TranslationSeedItem("entity.sourceecdetail.sourceeccode", "ja-JP", "设变号码_jp", "设变号码（冗余字段，便于查询）"),
+            // entity.sourceecdetail.sourceeccode
+            new TranslationSeedItem("entity.sourceecdetail.sourceeccode", "zh-CN", "设变号码", "设变号码（冗余字段，便于查询）"),
+            // entity.sourceecdetail.sourceeccode
+            new TranslationSeedItem("entity.sourceecdetail.sourceeccode", "zh-HK", "设变号码_hk", "设变号码（冗余字段，便于查询）"),
+
+            // entity.sourceecdetail.linenumber
+            new TranslationSeedItem("entity.sourceecdetail.linenumber", "en-US", "行号_us", "行号（固定步长=10）"),
+            // entity.sourceecdetail.linenumber
+            new TranslationSeedItem("entity.sourceecdetail.linenumber", "ja-JP", "行号_jp", "行号（固定步长=10）"),
+            // entity.sourceecdetail.linenumber
+            new TranslationSeedItem("entity.sourceecdetail.linenumber", "zh-CN", "行号", "行号（固定步长=10）"),
+            // entity.sourceecdetail.linenumber
+            new TranslationSeedItem("entity.sourceecdetail.linenumber", "zh-HK", "行号_hk", "行号（固定步长=10）"),
 
             // entity.sourceecdetail.sourcefinishedproduct
             new TranslationSeedItem("entity.sourceecdetail.sourcefinishedproduct", "en-US", "完成品_us", "完成品"),
@@ -242,6 +260,15 @@ public class TaktSourceEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceecdetail.sourcebomeffectivedate", "zh-CN", "BOM生效日期", "BOM生效日期"),
             // entity.sourceecdetail.sourcebomeffectivedate
             new TranslationSeedItem("entity.sourceecdetail.sourcebomeffectivedate", "zh-HK", "BOM生效日期_hk", "BOM生效日期"),
+
+            // entity.sourceecdetail.isobsolete
+            new TranslationSeedItem("entity.sourceecdetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.sourceecdetail.isobsolete
+            new TranslationSeedItem("entity.sourceecdetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.sourceecdetail.isobsolete
+            new TranslationSeedItem("entity.sourceecdetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.sourceecdetail.isobsolete
+            new TranslationSeedItem("entity.sourceecdetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.sourceecdetail.sourceec
             new TranslationSeedItem("entity.sourceecdetail.sourceec", "en-US", "设变来源主表_us", "设变来源主表"),

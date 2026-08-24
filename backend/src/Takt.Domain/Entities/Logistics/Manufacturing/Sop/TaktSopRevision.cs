@@ -58,13 +58,13 @@ public class TaktSopRevision : TaktCompanyEntityBase
     public long? EcnId { get; set; }
 
     /// <summary>
-    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_locked", ColumnDescription = "是否锁定", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsLocked { get; set; } = 0;
 
     /// <summary>
-    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "force_leader_ack", ColumnDescription = "是否强制班组长确认", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ForceLeaderAck { get; set; } = 0;

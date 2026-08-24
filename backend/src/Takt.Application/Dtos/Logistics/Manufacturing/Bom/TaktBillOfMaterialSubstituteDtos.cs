@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterialSubstitute 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterialSubstitute 生成，请按需审阅）
 // 
@@ -114,7 +114,7 @@ public class TaktBillOfMaterialSubstituteDto : TaktCompanyDtoBase
     public decimal UsageRatio { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是，字典 sys_yes_no_type）
+    /// 是否启用（0=否，1=是，字典 sys_yes_no）
     /// </summary>
     public int IsEnabled { get; set; } = 0;
 
@@ -129,7 +129,7 @@ public class TaktBillOfMaterialSubstituteDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -163,7 +163,7 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -172,11 +172,11 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -241,7 +241,7 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     public decimal? UsageRatio { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是，字典 sys_yes_no_type）
+    /// 是否启用（0=否，1=是，字典 sys_yes_no）
     /// </summary>
     public int? IsEnabled { get; set; }
 
@@ -266,7 +266,7 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -315,11 +315,11 @@ public class TaktBillOfMaterialSubstituteCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -358,7 +358,6 @@ public class TaktBillOfMaterialSubstituteCreateDto
     /// <summary>
     /// 替代物料编码（冗余）
     /// </summary>
-    [Required(ErrorMessage = "替代物料编码（冗余）不能为空")]
     public string SubstituteMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -388,7 +387,7 @@ public class TaktBillOfMaterialSubstituteCreateDto
     public decimal UsageRatio { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是，字典 sys_yes_no_type）
+    /// 是否启用（0=否，1=是，字典 sys_yes_no）
     /// </summary>
     public int IsEnabled { get; set; } = 0;
 
@@ -403,7 +402,7 @@ public class TaktBillOfMaterialSubstituteCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -457,7 +456,7 @@ public class TaktBillOfMaterialSubstituteObsoleteDto
     public long BillOfMaterialSubstituteId { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; }
 }
@@ -486,11 +485,11 @@ public class TaktBillOfMaterialSubstituteTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -555,7 +554,7 @@ public class TaktBillOfMaterialSubstituteTemplateDto
     public decimal? UsageRatio { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是，字典 sys_yes_no_type）
+    /// 是否启用（0=否，1=是，字典 sys_yes_no）
     /// </summary>
     public int? IsEnabled { get; set; }
 
@@ -570,7 +569,7 @@ public class TaktBillOfMaterialSubstituteTemplateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -606,11 +605,11 @@ public class TaktBillOfMaterialSubstituteImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -675,7 +674,7 @@ public class TaktBillOfMaterialSubstituteImportDto
     public decimal? UsageRatio { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是，字典 sys_yes_no_type）
+    /// 是否启用（0=否，1=是，字典 sys_yes_no）
     /// </summary>
     public int? IsEnabled { get; set; }
 
@@ -690,7 +689,7 @@ public class TaktBillOfMaterialSubstituteImportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -726,6 +725,16 @@ public class TaktBillOfMaterialSubstituteExportDto
     /// 公司代码
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -791,7 +800,7 @@ public class TaktBillOfMaterialSubstituteExportDto
     public decimal UsageRatio { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是，字典 sys_yes_no_type）
+    /// 是否启用（0=否，1=是，字典 sys_yes_no）
     /// </summary>
     public int IsEnabled { get; set; } = 0;
 
@@ -806,7 +815,7 @@ public class TaktBillOfMaterialSubstituteExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

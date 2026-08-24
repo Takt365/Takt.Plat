@@ -24,32 +24,32 @@ namespace Takt.Domain.Entities.Workflow;
 public class TaktFlowAddSign : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = false)]
     public long InstanceId { get; set; }
     /// <summary>
-    /// 加签节点 ID
+    /// 加签节点 ID（设计器 nodeId；与实例 CurrentActivityId 一致）
     /// </summary>
     [SugarColumn(ColumnName = "node_id", ColumnDescription = "节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = false)]
     public string NodeId { get; set; } = string.Empty;
     /// <summary>
-    /// 加签人 ID
+    /// 加签人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sign_user_id", ColumnDescription = "加签人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long SignUserId { get; set; }
     /// <summary>
-    /// 加签人姓名
+    /// 加签人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "sign_user_name", ColumnDescription = "加签人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? SignUserName { get; set; }
     /// <summary>
-    /// 加签方式（sequential / all / one，与前端 approveType 一致）
+    /// 加签方式（字典 sys_flow_add_sign_type；DictValue=sequential、all、one）
     /// </summary>
     [SugarColumn(ColumnName = "sign_type", ColumnDescription = "加签方式", ColumnDataType = "varchar", Length = 32, IsNullable = false, DefaultValue = "sequential")]
     public string SignType { get; set; } = "sequential";
     /// <summary>
-    /// 完成后是否回到加签节点
+    /// 完成后是否回到加签节点（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "return_to_sign_node", ColumnDescription = "回到加签节点", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReturnToSignNode { get; set; }
@@ -59,7 +59,7 @@ public class TaktFlowAddSign : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "reason", ColumnDescription = "加签原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? Reason { get; set; }
     /// <summary>
-    /// 是否已处理（含减签）
+    /// 是否已处理（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_handled", ColumnDescription = "是否已处理", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsHandled { get; set; }

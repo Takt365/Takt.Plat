@@ -20,7 +20,6 @@ export const SUPPLIEREVALUATIONITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SUPPL
 
 /** 列表业务列（不含主键） */
 export const SUPPLIEREVALUATIONITEM_LIST_FIELDS = [
-  'evaluationId',
   'supplierEvaluationCode',
   'lineNumber',
   'categoryType',
@@ -37,11 +36,11 @@ export const SUPPLIEREVALUATIONITEM_LIST_FIELDS = [
   'rectificationDeadline',
   'rectificationStatus',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const SUPPLIEREVALUATIONITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'evaluationId',
   'supplierEvaluationCode',
   'lineNumber',
   'categoryType',
@@ -74,26 +73,7 @@ export const SUPPLIEREVALUATIONITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SUPPLIEREVALUATIONITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  evaluationId: 'select',
-  lineNumber: 'select',
-  categoryType: 'select',
-  itemName: 'required',
-  itemDescription: 'optional',
-  weight: 'select',
-  scoringStandard: 'optional',
-  score: 'optional',
-  ratingLevel: 'optional',
-  evaluationComment: 'optional',
-  existingIssues: 'optional',
-  improvementRequirement: 'optional',
-  rectificationRequired: 'select',
-  rectificationDeadline: 'optional',
-  rectificationStatus: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -101,37 +81,13 @@ export type SupplierEvaluationItemField = keyof typeof SUPPLIEREVALUATIONITEM_PL
 
 /** 高级查询可 trim 的字符串字段 */
 export const SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS = [
-  'evaluationId',
-  'itemName',
-  'itemDescription',
-  'scoringStandard',
-  'evaluationComment',
-  'existingIssues',
-  'improvementRequirement',
-  'rectificationDeadlineStart',
-  'rectificationDeadlineEnd',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SupplierEvaluationItemQuery)[]
 
-export type SupplierEvaluationItemQueryField =
-  | (typeof SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'categoryType' | 'weight' | 'score' | 'ratingLevel' | 'rectificationRequired' | 'rectificationStatus' | 'isObsolete'
+export type SupplierEvaluationItemQueryField = (typeof SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SUPPLIEREVALUATIONITEM_QUERY_FIELDS: readonly SupplierEvaluationItemQueryField[] = [
-  ...SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'categoryType',
-  'weight',
-  'score',
-  'ratingLevel',
-  'rectificationRequired',
-  'rectificationStatus',
-  'isObsolete',
-]
+export const SUPPLIEREVALUATIONITEM_QUERY_FIELDS: readonly SupplierEvaluationItemQueryField[] = [...SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS]
 
 /**
  * SupplierEvaluationItem字段 i18n：index / supplier-evaluation-item-form 统一入口

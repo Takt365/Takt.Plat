@@ -108,352 +108,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('materialRequirementsPlanningId')">
-      <a-form-item :label="pi.queryLabel('materialRequirementsPlanningId')">
-        <a-input
-          v-model:value="advancedQueryForm.materialRequirementsPlanningId"
-          :placeholder="pi.queryPh('materialRequirementsPlanningId', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialRequirementsPlanningCode')">
-      <a-form-item :label="pi.queryLabel('materialRequirementsPlanningCode')">
-        <a-input
-          v-model:value="advancedQueryForm.materialRequirementsPlanningCode"
-          :placeholder="pi.queryPh('materialRequirementsPlanningCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleCode')">
-      <a-form-item :label="pi.queryLabel('scheduleCode')">
-        <a-input
-          v-model:value="advancedQueryForm.scheduleCode"
-          :placeholder="pi.queryPh('scheduleCode', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleName')">
-      <a-form-item :label="pi.queryLabel('scheduleName')">
-        <a-input
-          v-model:value="advancedQueryForm.scheduleName"
-          :placeholder="pi.queryPh('scheduleName', 'required')"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleType')">
-      <a-form-item :label="pi.queryLabel('scheduleType')">
-        <a-input-number
-          v-model:value="advancedQueryForm.scheduleType"
-          :placeholder="pi.queryPh('scheduleType', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planDateStart')">
-      <a-form-item :label="pi.queryLabel('planDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planDateStart"
-          :placeholder="pi.queryPh('planDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planDateEnd')">
-      <a-form-item :label="pi.queryLabel('planDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planDateEnd"
-          :placeholder="pi.queryPh('planDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planStartTimeStart')">
-      <a-form-item :label="pi.queryLabel('planStartTimeStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planStartTimeStart"
-          :placeholder="pi.queryPh('planStartTimeStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planStartTimeEnd')">
-      <a-form-item :label="pi.queryLabel('planStartTimeEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planStartTimeEnd"
-          :placeholder="pi.queryPh('planStartTimeEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planEndTimeStart')">
-      <a-form-item :label="pi.queryLabel('planEndTimeStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planEndTimeStart"
-          :placeholder="pi.queryPh('planEndTimeStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planEndTimeEnd')">
-      <a-form-item :label="pi.queryLabel('planEndTimeEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planEndTimeEnd"
-          :placeholder="pi.queryPh('planEndTimeEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planCycle')">
-      <a-form-item :label="pi.queryLabel('planCycle')">
-        <a-input-number
-          v-model:value="advancedQueryForm.planCycle"
-          :placeholder="pi.queryPh('planCycle', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('workshopCode')">
-      <a-form-item :label="pi.queryLabel('workshopCode')">
-        <a-input
-          v-model:value="advancedQueryForm.workshopCode"
-          :placeholder="pi.queryPh('workshopCode', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('workshopName')">
-      <a-form-item :label="pi.queryLabel('workshopName')">
-        <a-input
-          v-model:value="advancedQueryForm.workshopName"
-          :placeholder="pi.queryPh('workshopName', 'required')"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productionLineCode')">
-      <a-form-item :label="pi.queryLabel('productionLineCode')">
-        <a-input
-          v-model:value="advancedQueryForm.productionLineCode"
-          :placeholder="pi.queryPh('productionLineCode', 'required')"
-          show-count
-          :maxlength="8"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productionLineName')">
-      <a-form-item :label="pi.queryLabel('productionLineName')">
-        <a-input
-          v-model:value="advancedQueryForm.productionLineName"
-          :placeholder="pi.queryPh('productionLineName', 'required')"
-          show-count
-          :maxlength="200"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleStrategy')">
-      <a-form-item :label="pi.queryLabel('scheduleStrategy')">
-        <a-input-number
-          v-model:value="advancedQueryForm.scheduleStrategy"
-          :placeholder="pi.queryPh('scheduleStrategy', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleAlgorithm')">
-      <a-form-item :label="pi.queryLabel('scheduleAlgorithm')">
-        <a-input-number
-          v-model:value="advancedQueryForm.scheduleAlgorithm"
-          :placeholder="pi.queryPh('scheduleAlgorithm', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('optimizationObjective')">
-      <a-form-item :label="pi.queryLabel('optimizationObjective')">
-        <a-input-number
-          v-model:value="advancedQueryForm.optimizationObjective"
-          :placeholder="pi.queryPh('optimizationObjective', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleStatus')">
-      <a-form-item :label="pi.queryLabel('scheduleStatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.scheduleStatus"
-          :placeholder="pi.queryPh('scheduleStatus', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannerId')">
-      <a-form-item :label="pi.queryLabel('plannerId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plannerId"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('plannerId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannerName')">
-      <a-form-item :label="pi.queryLabel('plannerName')">
-        <a-input
-          v-model:value="advancedQueryForm.plannerName"
-          :placeholder="pi.queryPh('plannerName', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('publishTimeStart')">
-      <a-form-item :label="pi.queryLabel('publishTimeStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.publishTimeStart"
-          :placeholder="pi.queryPh('publishTimeStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('publishTimeEnd')">
-      <a-form-item :label="pi.queryLabel('publishTimeEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.publishTimeEnd"
-          :placeholder="pi.queryPh('publishTimeEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('publishUserId')">
-      <a-form-item :label="pi.queryLabel('publishUserId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.publishUserId"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('publishUserId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('publishUserName')">
-      <a-form-item :label="pi.queryLabel('publishUserName')">
-        <a-input
-          v-model:value="advancedQueryForm.publishUserName"
-          :placeholder="pi.queryPh('publishUserName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleDescription')">
-      <a-form-item :label="pi.queryLabel('scheduleDescription')">
-        <a-textarea
-          v-model:value="advancedQueryForm.scheduleDescription"
-          :placeholder="pi.queryPh('scheduleDescription', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -513,7 +168,7 @@ import type { ApsSchedule, ApsScheduleQuery } from '@/types/logistics/manufactur
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   useApsScheduleI18n,
@@ -568,7 +223,26 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of APSSCHEDULE_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -578,12 +252,6 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    scheduleType: undefined as number | undefined,
-    planCycle: undefined as number | undefined,
-    scheduleStrategy: undefined as number | undefined,
-    scheduleAlgorithm: undefined as number | undefined,
-    optimizationObjective: undefined as number | undefined,
-    scheduleStatus: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -612,7 +280,7 @@ const { selectedMasterRow } = provideApsScheduleMasterContext()
 const apsScheduleItemPanelRef = ref<InstanceType<typeof ApsScheduleItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {ApsScheduleQuery} 查询 DTO
  */
@@ -636,31 +304,14 @@ function buildListQuery(overrides?: Partial<ApsScheduleQuery>): ApsScheduleQuery
   for (const key of APSSCHEDULE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.scheduleType !== undefined && form.scheduleType !== null) {
-    query.scheduleType = form.scheduleType
-  }
-  if (form.planCycle !== undefined && form.planCycle !== null) {
-    query.planCycle = form.planCycle
-  }
-  if (form.scheduleStrategy !== undefined && form.scheduleStrategy !== null) {
-    query.scheduleStrategy = form.scheduleStrategy
-  }
-  if (form.scheduleAlgorithm !== undefined && form.scheduleAlgorithm !== null) {
-    query.scheduleAlgorithm = form.scheduleAlgorithm
-  }
-  if (form.optimizationObjective !== undefined && form.optimizationObjective !== null) {
-    query.optimizationObjective = form.optimizationObjective
-  }
-  if (form.scheduleStatus !== undefined && form.scheduleStatus !== null) {
-    query.scheduleStatus = form.scheduleStatus
-  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -723,15 +374,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     fixed: 'left',
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'apsScheduleId') ?? ''
-  },
-  {
-    title: pi.label('materialRequirementsPlanningId'),
-    dataIndex: 'materialRequirementsPlanningId',
-    key: 'materialRequirementsPlanningId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'materialRequirementsPlanningId') ?? ''
   },
   {
     title: pi.label('materialRequirementsPlanningCode'),
@@ -940,6 +582,15 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'scheduleDescription') ?? ''
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'remark') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -974,6 +625,8 @@ const getApsScheduleId = (record: ApsScheduleRowRecord): string => {
  */
 const getApsScheduleField = (record: any, field: string): any => record?.[field]
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1006,6 +659,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getApsScheduleList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1032,38 +690,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  materialRequirementsPlanningId: '',
-  materialRequirementsPlanningCode: '',
-  plantCode: '',
-  scheduleCode: '',
-  scheduleName: '',
-  scheduleType: undefined as number | undefined,
-  planDateStart: '',
-  planDateEnd: '',
-  planStartTimeStart: '',
-  planStartTimeEnd: '',
-  planEndTimeStart: '',
-  planEndTimeEnd: '',
-  planCycle: undefined as number | undefined,
-  workshopCode: '',
-  workshopName: '',
-  productionLineCode: '',
-  productionLineName: '',
-  scheduleStrategy: undefined as number | undefined,
-  scheduleAlgorithm: undefined as number | undefined,
-  optimizationObjective: undefined as number | undefined,
-  scheduleStatus: undefined as number | undefined,
-  plannerId: '',
-  plannerName: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
-  publishUserId: '',
-  publishUserName: '',
-  scheduleDescription: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1172,6 +799,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportApsSchedule(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1258,38 +888,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  materialRequirementsPlanningId: '',
-  materialRequirementsPlanningCode: '',
-  plantCode: '',
-  scheduleCode: '',
-  scheduleName: '',
-  scheduleType: undefined as number | undefined,
-  planDateStart: '',
-  planDateEnd: '',
-  planStartTimeStart: '',
-  planStartTimeEnd: '',
-  planEndTimeStart: '',
-  planEndTimeEnd: '',
-  planCycle: undefined as number | undefined,
-  workshopCode: '',
-  workshopName: '',
-  productionLineCode: '',
-  productionLineName: '',
-  scheduleStrategy: undefined as number | undefined,
-  scheduleAlgorithm: undefined as number | undefined,
-  optimizationObjective: undefined as number | undefined,
-  scheduleStatus: undefined as number | undefined,
-  plannerId: '',
-  plannerName: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
-  publishUserId: '',
-  publishUserName: '',
-  scheduleDescription: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

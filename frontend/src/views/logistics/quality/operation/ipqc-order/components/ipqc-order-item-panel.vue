@@ -2,15 +2,12 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/operation/ipqc-order/components -->
 <!-- 文件名称：ipqc-order-item-panel.vue -->
-<!-- 功能描述：IPQC制程检验单实体主表实体右侧明细 ipqcOrderItem 独立 CRUD（按主表选中 defectHandlings 分页） -->
+<!-- 功能描述：IPQC制程检验单实体主表实体右侧明细 ipqcOrderItem 独立 CRUD（按主表选中 ipqcOrderId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
 <template>
   <div class="ipqc-order-item-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.ipqcorderitem._self') }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -55,7 +52,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="ipqc-order-item-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="ipqc-order-item-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getIpqcOrderItemId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -74,11 +75,27 @@
         :total="total"
         scroll-layout="masterDetailLr"
         table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -92,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterIpqcOrderId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -106,53 +124,61 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('ipqcOrderCode')">
-      <a-form-item :label="t('entity.ipqcorderitem.ipqcordercode')">
+      <a-form-item :label="pi.queryLabel('ipqcOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.ipqcOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.ipqcordercode') })"
+          :placeholder="pi.queryPh('ipqcOrderCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="t('entity.ipqcorderitem.linenumber')">
+      <a-form-item :label="pi.queryLabel('lineNumber')">
         <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.linenumber') })"
+          :placeholder="pi.queryPh('lineNumber', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.ipqcorderitem.materialcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('materialCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.materialcode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktGeneralMaterials/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialDescription')">
-      <a-form-item :label="t('entity.ipqcorderitem.materialdescription')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('materialDescription')">
+        <a-textarea
           v-model:value="advancedQueryForm.materialDescription"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.materialdescription') })"
-          show-count
-          :maxlength="20"
+          :placeholder="pi.queryPh('materialDescription', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('batchCode')">
-      <a-form-item :label="t('entity.ipqcorderitem.batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
           v-model:value="advancedQueryForm.batchCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.batchCode') })"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -160,86 +186,84 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionQuantity')">
-      <a-form-item :label="t('entity.ipqcorderitem.productionquantity')">
+      <a-form-item :label="pi.queryLabel('productionQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.productionQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.productionquantity') })"
+          :placeholder="pi.queryPh('productionQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardCode')">
-      <a-form-item :label="t('entity.ipqcorderitem.standardcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('standardCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.standardCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.standardcode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktInspectionStandards/options"
+          :placeholder="pi.queryPh('standardCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeCode')">
-      <a-form-item :label="t('entity.ipqcorderitem.samplingschemecode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('samplingSchemeCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.samplingSchemeCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.samplingschemecode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSamplingSchemes/options"
+          :placeholder="pi.queryPh('samplingSchemeCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionMethod')">
-      <a-form-item :label="t('entity.ipqcorderitem.inspectionmethod')">
+      <a-form-item :label="pi.queryLabel('inspectionMethod')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.inspectionmethod') })"
+          :placeholder="pi.queryPh('inspectionMethod', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sampleQuantity')">
-      <a-form-item :label="t('entity.ipqcorderitem.samplequantity')">
+      <a-form-item :label="pi.queryLabel('sampleQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.sampleQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.samplequantity') })"
+          :placeholder="pi.queryPh('sampleQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualifiedQuantity')">
-      <a-form-item :label="t('entity.ipqcorderitem.qualifiedquantity')">
+      <a-form-item :label="pi.queryLabel('qualifiedQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.qualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.qualifiedquantity') })"
+          :placeholder="pi.queryPh('qualifiedQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('unqualifiedQuantity')">
-      <a-form-item :label="t('entity.ipqcorderitem.unqualifiedquantity')">
+      <a-form-item :label="pi.queryLabel('unqualifiedQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.unqualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.unqualifiedquantity') })"
+          :placeholder="pi.queryPh('unqualifiedQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionReturnQuantity')">
-      <a-form-item :label="t('entity.ipqcorderitem.inspectionreturnquantity')">
+      <a-form-item :label="pi.queryLabel('inspectionReturnQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionReturnQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.inspectionreturnquantity') })"
+          :placeholder="pi.queryPh('inspectionReturnQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sampleSerialCode')">
-      <a-form-item :label="t('entity.ipqcorderitem.sampleserialCode')">
+      <a-form-item :label="pi.queryLabel('sampleSerialCode')">
         <a-input
           v-model:value="advancedQueryForm.sampleSerialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.sampleserialCode') })"
+          :placeholder="pi.queryPh('sampleSerialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -247,20 +271,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDescription')">
-      <a-form-item :label="t('entity.ipqcorderitem.inspectiondescription')">
+      <a-form-item :label="pi.queryLabel('inspectionDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.inspectionDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ipqcorderitem.inspectiondescription') })"
+          :placeholder="pi.queryPh('inspectionDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectorBy')">
-      <a-form-item :label="t('entity.ipqcorderitem.inspectorby')">
+      <a-form-item :label="pi.queryLabel('inspectorBy')">
         <a-input
           v-model:value="advancedQueryForm.inspectorBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.inspectorby') })"
+          :placeholder="pi.queryPh('inspectorBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -268,39 +292,49 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDateStart')">
-      <a-form-item :label="t('entity.ipqcorderitem.inspectiondatestart')">
+      <a-form-item :label="pi.queryLabel('inspectionDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.inspectionDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorderitem.inspectiondatestart') })"
+          :placeholder="pi.queryPh('inspectionDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDateEnd')">
-      <a-form-item :label="t('entity.ipqcorderitem.inspectiondateend')">
+      <a-form-item :label="pi.queryLabel('inspectionDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.inspectionDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorderitem.inspectiondateend') })"
+          :placeholder="pi.queryPh('inspectionDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('judgeStatus')">
-      <a-form-item :label="t('entity.ipqcorderitem.judgestatus')">
+      <a-form-item :label="pi.queryLabel('judgeStatus')">
         <a-input-number
           v-model:value="advancedQueryForm.judgeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorderitem.judgestatus') })"
+          :placeholder="pi.queryPh('judgeStatus', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -308,10 +342,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -333,7 +367,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -347,10 +381,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -363,7 +397,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ipqcorderitem._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -371,7 +405,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.ipqcorderitem._self"
+        :entity-i18n-key="IPQCORDERITEM_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -401,14 +435,23 @@
  * IPQC制程检验单实体子表 ipqcOrderItem 右栏面板
  * @module views/logistics/quality/operation/ipqc-order/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import IpqcOrderItemForm from './ipqc-order-item-form.vue'
@@ -426,6 +469,18 @@ import {
 } from '@/api/logistics/quality/operation/ipqc-order-item'
 import type { IpqcOrderItem, IpqcOrderItemQuery } from '@/types/logistics/quality/operation/ipqc-order-item'
 
+import {
+  useIpqcOrderItemI18n,
+  IPQCORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS,
+  IPQCORDERITEM_SUMMARY_SUM_FIELDS,
+  IPQCORDERITEM_QUERY_STRING_FIELDS,
+  IPQCORDERITEM_QUERY_FIELDS,
+  IPQCORDERITEM_SELF_I18N_KEY,
+} from '../composables/use-ipqc-order-item-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useIpqcOrderItemI18n()
+
 const { t } = useI18n()
 const { selectedMasterRow } = useIpqcOrderMasterContext()
 
@@ -433,10 +488,45 @@ const { selectedMasterRow } = useIpqcOrderMasterContext()
 const excelNames = taktExcelEntityNames('TaktIpqcOrderItem')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ipqcorderitem._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<IpqcOrderItem[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -452,66 +542,79 @@ const formLoading = ref(false)
 const formRef = ref()
 
 const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  ipqcOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  materialCode: '',
-  materialDescription: '',
-  batchCode: '',
-  productionQuantity: undefined as number | undefined,
-  standardCode: '',
-  samplingSchemeCode: '',
-  inspectionMethod: undefined as number | undefined,
-  sampleQuantity: undefined as number | undefined,
-  qualifiedQuantity: undefined as number | undefined,
-  unqualifiedQuantity: undefined as number | undefined,
-  inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialCode: '',
-  inspectionDescription: '',
-  inspectorBy: '',
-  inspectionDateStart: '',
-  inspectionDateEnd: '',
-  judgeStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of IPQCORDERITEM_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.productionQuantity !== undefined && form.productionQuantity !== null) {
+    return true
+  }
+  if (form.inspectionMethod !== undefined && form.inspectionMethod !== null) {
+    return true
+  }
+  if (form.sampleQuantity !== undefined && form.sampleQuantity !== null) {
+    return true
+  }
+  if (form.qualifiedQuantity !== undefined && form.qualifiedQuantity !== null) {
+    return true
+  }
+  if (form.unqualifiedQuantity !== undefined && form.unqualifiedQuantity !== null) {
+    return true
+  }
+  if (form.inspectionReturnQuantity !== undefined && form.inspectionReturnQuantity !== null) {
+    return true
+  }
+  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(IPQCORDERITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof IPQCORDERITEM_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    lineNumber: undefined as number | undefined,
+    productionQuantity: undefined as number | undefined,
+    inspectionMethod: undefined as number | undefined,
+    sampleQuantity: undefined as number | undefined,
+    qualifiedQuantity: undefined as number | undefined,
+    unqualifiedQuantity: undefined as number | undefined,
+    inspectionReturnQuantity: undefined as number | undefined,
+    judgeStatus: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,  }
+}
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'ipqcOrderCode', label: t('entity.ipqcorderitem.ipqcordercode') },
-  { key: 'lineNumber', label: t('entity.ipqcorderitem.linenumber') },
-  { key: 'materialCode', label: t('entity.ipqcorderitem.materialcode') },
-  { key: 'materialDescription', label: t('entity.ipqcorderitem.materialdescription') },
-  { key: 'batchCode', label: t('entity.ipqcorderitem.batchCode') },
-  { key: 'productionQuantity', label: t('entity.ipqcorderitem.productionquantity') },
-  { key: 'standardCode', label: t('entity.ipqcorderitem.standardcode') },
-  { key: 'samplingSchemeCode', label: t('entity.ipqcorderitem.samplingschemecode') },
-  { key: 'inspectionMethod', label: t('entity.ipqcorderitem.inspectionmethod') },
-  { key: 'sampleQuantity', label: t('entity.ipqcorderitem.samplequantity') },
-  { key: 'qualifiedQuantity', label: t('entity.ipqcorderitem.qualifiedquantity') },
-  { key: 'unqualifiedQuantity', label: t('entity.ipqcorderitem.unqualifiedquantity') },
-  { key: 'inspectionReturnQuantity', label: t('entity.ipqcorderitem.inspectionreturnquantity') },
-  { key: 'sampleSerialCode', label: t('entity.ipqcorderitem.sampleserialCode') },
-  { key: 'inspectionDescription', label: t('entity.ipqcorderitem.inspectiondescription') },
-  { key: 'inspectorBy', label: t('entity.ipqcorderitem.inspectorby') },
-  { key: 'inspectionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ipqcorderitem.inspectiondate')) },
-  { key: 'inspectionDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ipqcorderitem.inspectiondate')) },
-  { key: 'judgeStatus', label: t('entity.ipqcorderitem.judgestatus') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
+const queryFieldsMeta = computed(() =>
+  IPQCORDERITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -524,35 +627,11 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  ipqcOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  materialCode: '',
-  materialDescription: '',
-  batchCode: '',
-  productionQuantity: undefined as number | undefined,
-  standardCode: '',
-  samplingSchemeCode: '',
-  inspectionMethod: undefined as number | undefined,
-  sampleQuantity: undefined as number | undefined,
-  qualifiedQuantity: undefined as number | undefined,
-  unqualifiedQuantity: undefined as number | undefined,
-  inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialCode: '',
-  inspectionDescription: '',
-  inspectorBy: '',
-  inspectionDateStart: '',
-  inspectionDateEnd: '',
-  judgeStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
-/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...IPQCORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -563,13 +642,16 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...IPQCORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
 const entityIdName = 'ipqcOrderItemId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.ipqcOrderId)
-const masterIpqcOrderId = computed(() => selectedMasterRow.value?.ipqcOrderId ?? '')
+const masterIpqcOrderId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['ipqcOrderId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterIpqcOrderId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -594,7 +676,17 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'ipqcOrderItemId') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.ipqcordercode'),
+    title: pi.label('ipqcOrderId'),
+    dataIndex: 'ipqcOrderId',
+    key: 'ipqcOrderId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IpqcOrderItem }) =>
+      String(getIpqcOrderItemField(record, 'ipqcOrderId') ?? ''),
+  },
+  {
+    title: pi.label('ipqcOrderCode'),
     dataIndex: 'ipqcOrderCode',
     key: 'ipqcOrderCode',
     width: 120,
@@ -604,7 +696,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'ipqcOrderCode') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.linenumber'),
+    title: pi.label('lineNumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 120,
@@ -614,7 +706,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'lineNumber') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.materialcode'),
+    title: pi.label('materialCode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -624,7 +716,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.materialdescription'),
+    title: pi.label('materialDescription'),
     dataIndex: 'materialDescription',
     key: 'materialDescription',
     width: 120,
@@ -634,7 +726,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'materialDescription') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.batchCode'),
+    title: pi.label('batchCode'),
     dataIndex: 'batchCode',
     key: 'batchCode',
     width: 120,
@@ -644,7 +736,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'batchCode') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.productionquantity'),
+    title: pi.label('productionQuantity'),
     dataIndex: 'productionQuantity',
     key: 'productionQuantity',
     width: 120,
@@ -654,7 +746,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'productionQuantity') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.standardcode'),
+    title: pi.label('standardCode'),
     dataIndex: 'standardCode',
     key: 'standardCode',
     width: 120,
@@ -664,7 +756,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'standardCode') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.samplingschemecode'),
+    title: pi.label('samplingSchemeCode'),
     dataIndex: 'samplingSchemeCode',
     key: 'samplingSchemeCode',
     width: 120,
@@ -674,7 +766,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'samplingSchemeCode') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.inspectionmethod'),
+    title: pi.label('inspectionMethod'),
     dataIndex: 'inspectionMethod',
     key: 'inspectionMethod',
     width: 120,
@@ -684,7 +776,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'inspectionMethod') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.samplequantity'),
+    title: pi.label('sampleQuantity'),
     dataIndex: 'sampleQuantity',
     key: 'sampleQuantity',
     width: 120,
@@ -694,7 +786,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'sampleQuantity') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.qualifiedquantity'),
+    title: pi.label('qualifiedQuantity'),
     dataIndex: 'qualifiedQuantity',
     key: 'qualifiedQuantity',
     width: 120,
@@ -704,7 +796,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'qualifiedQuantity') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.unqualifiedquantity'),
+    title: pi.label('unqualifiedQuantity'),
     dataIndex: 'unqualifiedQuantity',
     key: 'unqualifiedQuantity',
     width: 120,
@@ -714,7 +806,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'unqualifiedQuantity') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.inspectionreturnquantity'),
+    title: pi.label('inspectionReturnQuantity'),
     dataIndex: 'inspectionReturnQuantity',
     key: 'inspectionReturnQuantity',
     width: 120,
@@ -724,7 +816,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'inspectionReturnQuantity') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.sampleserialCode'),
+    title: pi.label('sampleSerialCode'),
     dataIndex: 'sampleSerialCode',
     key: 'sampleSerialCode',
     width: 120,
@@ -734,7 +826,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'sampleSerialCode') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.inspectiondescription'),
+    title: pi.label('inspectionDescription'),
     dataIndex: 'inspectionDescription',
     key: 'inspectionDescription',
     width: 120,
@@ -744,7 +836,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'inspectionDescription') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.inspectorby'),
+    title: pi.label('inspectorBy'),
     dataIndex: 'inspectorBy',
     key: 'inspectorBy',
     width: 120,
@@ -754,7 +846,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'inspectorBy') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.inspectiondate'),
+    title: pi.label('inspectionDate'),
     dataIndex: 'inspectionDate',
     key: 'inspectionDate',
     width: 120,
@@ -764,7 +856,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'inspectionDate') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.judgestatus'),
+    title: pi.label('judgeStatus'),
     dataIndex: 'judgeStatus',
     key: 'judgeStatus',
     width: 120,
@@ -774,24 +866,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getIpqcOrderItemField(record, 'judgeStatus') ?? ''),
   },
   {
-    title: t('entity.ipqcorderitem.order'),
-    dataIndex: 'order',
-    key: 'order',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: IpqcOrderItem }) =>
-      String(getIpqcOrderItemField(record, 'order') ?? ''),
-  },
-  {
-    title: t('entity.ipqcorderitem.defecthandlings'),
-    dataIndex: 'defectHandlings',
-    key: 'defectHandlings',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: IpqcOrderItem }) =>
-      String(getIpqcOrderItemField(record, 'defectHandlings') ?? ''),
+      String(getIpqcOrderItemField(record, 'isObsolete') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -810,9 +892,80 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:operation:ipqc:order:delete',
         onClick: (record: IpqcOrderItem) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'ipqcOrderItemId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(IPQCORDERITEM_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    IPQCORDERITEM_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof IPQCORDERITEM_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of IPQCORDERITEM_SUMMARY_SUM_FIELDS) {
+      const num = Number(getIpqcOrderItemField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: IpqcOrderItem[]) => {
@@ -851,7 +1004,7 @@ function onClickRow(record: IpqcOrderItem) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {IpqcOrderItemQuery} 查询 DTO
  */
@@ -861,7 +1014,7 @@ function buildListQuery(overrides?: Partial<IpqcOrderItemQuery>): IpqcOrderItemQ
   const query: IpqcOrderItemQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    defectHandlings: masterIpqcOrderId.value,
+    ipqcOrderId: masterIpqcOrderId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -873,18 +1026,15 @@ function buildListQuery(overrides?: Partial<IpqcOrderItemQuery>): IpqcOrderItemQ
       query[key] = v as never
     }
   }
-  assignTrimmed('ipqcOrderCode', form.ipqcOrderCode)
+  for (const key of IPQCORDERITEM_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('materialDescription', form.materialDescription)
-  assignTrimmed('batchCode', form.batchCode)
   if (form.productionQuantity !== undefined && form.productionQuantity !== null) {
     query.productionQuantity = form.productionQuantity
   }
-  assignTrimmed('standardCode', form.standardCode)
-  assignTrimmed('samplingSchemeCode', form.samplingSchemeCode)
   if (form.inspectionMethod !== undefined && form.inspectionMethod !== null) {
     query.inspectionMethod = form.inspectionMethod
   }
@@ -900,18 +1050,12 @@ function buildListQuery(overrides?: Partial<IpqcOrderItemQuery>): IpqcOrderItemQ
   if (form.inspectionReturnQuantity !== undefined && form.inspectionReturnQuantity !== null) {
     query.inspectionReturnQuantity = form.inspectionReturnQuantity
   }
-  assignTrimmed('sampleSerialCode', form.sampleSerialCode)
-  assignTrimmed('inspectionDescription', form.inspectionDescription)
-  assignTrimmed('inspectorBy', form.inspectorBy)
-  assignTrimmed('inspectionDateStart', form.inspectionDateStart)
-  assignTrimmed('inspectionDateEnd', form.inspectionDateEnd)
   if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
     query.judgeStatus = form.judgeStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
+  }
   return query
 }
 
@@ -952,6 +1096,36 @@ watch(masterIpqcOrderId, () => {
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
 
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
+
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
@@ -968,13 +1142,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ipqcorderitem._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: IpqcOrderItem) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ipqcorderitem._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getIpqcOrderItemById(getIpqcOrderItemId(record))
@@ -991,7 +1165,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.ipqcorderitem._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -1010,10 +1184,10 @@ async function handleFormSubmit() {
     const id = formData.value?.ipqcOrderItemId
     if (id) {
       await updateIpqcOrderItem(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.ipqcorderitem._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createIpqcOrderItem(payload)
-      message.success(t('common.feedback.created', { target: t('entity.ipqcorderitem._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -1030,14 +1204,14 @@ async function handleDeleteOne(record: IpqcOrderItem) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.ipqcorderitem._self'),
-      name: t('common.tip.this.target', { target: t('entity.ipqcorderitem._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteIpqcOrderItemById(getIpqcOrderItemId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.ipqcorderitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1047,14 +1221,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.ipqcorderitem._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.ipqcorderitem._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -1062,7 +1236,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getIpqcOrderItemId(r)).filter(Boolean)
       await deleteIpqcOrderItemBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ipqcorderitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1112,6 +1286,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportIpqcOrderItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1135,10 +1312,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ipqcorderitem._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.ipqcorderitem._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

@@ -69,7 +69,7 @@ export interface ExchangeRate extends TenantCoreDtoBase {
   validTo: string;
 
   /**
-   * 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   exchangeRateStatus: number;
 
@@ -138,7 +138,7 @@ export interface ExchangeRateQuery extends TaktPagedQuery {
   validToEnd?: string;
 
   /**
-   * 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   exchangeRateStatus?: number;
 
@@ -216,7 +216,7 @@ export interface ExchangeRateCreate {
   validTo: string;
 
   /**
-   * 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   exchangeRateStatus: number;
 
@@ -258,7 +258,7 @@ export interface ExchangeRateStatus {
   exchangeRateId: string;
 
   /**
-   * 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   exchangeRateStatus: number;
 
@@ -316,7 +316,7 @@ export interface ExchangeRateTemplate {
   validTo?: string;
 
   /**
-   * 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   exchangeRateStatus?: number;
 
@@ -384,7 +384,7 @@ export interface ExchangeRateImport {
   validTo?: string;
 
   /**
-   * 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   exchangeRateStatus?: number;
 
@@ -452,7 +452,7 @@ export interface ExchangeRateExport {
   validTo: string;
 
   /**
-   * 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   exchangeRateStatus: number;
 

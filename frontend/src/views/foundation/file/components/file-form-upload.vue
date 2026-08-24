@@ -89,7 +89,7 @@
           <a-form-item :label="t('entity.file.ispublic')" name="isPublic">
             <TaktSelect
               v-model:value="formState.isPublic"
-              dict-type="sys_is_public_type"
+              dict-type="sys_public_type"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.file.ispublic') })"
               size="small"
             />
@@ -99,7 +99,7 @@
           <a-form-item :label="t('entity.file.status')" name="fileStatus">
             <TaktSelect
               v-model:value="formState.fileStatus"
-              dict-type="sys_normal_disable_status"
+              dict-type="sys_normal_disable"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.file.status') })"
               size="small"
             />
@@ -212,7 +212,7 @@ const menuStore = useMenuStore()
 /** OSS 提供商下拉（仅后端已实现的 aliyun） */
 const ossProviderSelectOptions = computed(() =>
   filterOssProviderSelectOptions(
-    dictDataStore.getDictOptionsForSelect('sys_oss_provider_type', {
+    dictDataStore.getDictOptionsForSelect('sys_oss_provider', {
       labelField: 'dictLabel',
       valueField: 'dictValue',
     }),
@@ -221,12 +221,12 @@ const ossProviderSelectOptions = computed(() =>
 /** 存储相关表单项（uploadPath 完全由一级菜单推导，替代已删除的 sys_upload_path） */
 type StorageSelectField =
   | { name: 'uploadPath'; labelKey: 'entity.file.path'; menuUploadPath: true }
-  | { name: 'storageNaming'; labelKey: 'entity.file.name'; dictType: 'sys_storage_naming_config' }
+  | { name: 'storageNaming'; labelKey: 'entity.file.name'; dictType: 'sys_storage_naming' }
   | { name: 'storageType'; labelKey: 'entity.file.storagetype'; dictType: 'sys_storage_type' }
 
 const storageSelectFields: StorageSelectField[] = [
   { name: 'uploadPath', labelKey: 'entity.file.path', menuUploadPath: true },
-  { name: 'storageNaming', dictType: 'sys_storage_naming_config', labelKey: 'entity.file.name' },
+  { name: 'storageNaming', dictType: 'sys_storage_naming', labelKey: 'entity.file.name' },
   { name: 'storageType', dictType: 'sys_storage_type', labelKey: 'entity.file.storagetype' }]
 
 /**
@@ -309,7 +309,7 @@ const chunkUploadCanResume = computed(
     chunkUploadStatus.value === TaktFileChunkUploadStatus.Paused
     || chunkUploadStatus.value === TaktFileChunkUploadStatus.Error
 )
-/** 是否选中存储命名「自定义」（字典 sys_storage_naming_config=2） */
+/** 是否选中存储命名「自定义」（字典 sys_storage_naming=2） */
 const isCustomStorageNaming = computed(() => coerceStorageType(formState.storageNaming) === 2)
 /** 当前存储类型（字典 sys_storage_type） */
 const selectedStorageType = computed(() => coerceStorageType(formState.storageType))

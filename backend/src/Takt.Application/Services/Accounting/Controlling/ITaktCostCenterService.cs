@@ -36,10 +36,11 @@ public interface ITaktCostCenterService
     Task<TaktCostCenterDto?> GetCostCenterByIdAsync(long id);
 
     /// <summary>
-    /// 获取成本中心树形选项列表（DictValue 为 CostCenterCode，DictLabel 为成本中心名称）
+    /// 获取成本中心树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync();
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync(long parentId = 0);
 
     /// <summary>
     /// 获取成本中心树形列表

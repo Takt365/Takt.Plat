@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：assy-output-detail.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   AssyOutputDetail,
   AssyOutputDetailCreate,
+  AssyOutputDetailObsolete,
   AssyOutputDetailUpdate
 } from '@/types/logistics/manufacturing/output/assy-output-detail';
 
@@ -105,6 +106,19 @@ export function deleteAssyOutputDetailBatch(ids: string[]): Promise<void> {
     url: `${ASSY_OUTPUT_DETAIL_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新组立日报明细作废状态
+ * @param {AssyOutputDetailObsolete} dto 作废 DTO
+ * @returns {Promise<AssyOutputDetail>} 组立日报明细DTO
+ */
+export function updateAssyOutputDetailObsolete(dto: AssyOutputDetailObsolete): Promise<AssyOutputDetail> {
+  return request<AssyOutputDetail>({
+    url: `${ASSY_OUTPUT_DETAIL_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

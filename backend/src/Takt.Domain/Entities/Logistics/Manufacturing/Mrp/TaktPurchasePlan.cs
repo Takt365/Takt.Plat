@@ -125,7 +125,7 @@ public class TaktPurchasePlan : TaktApprovalEntityBase
     public decimal ConvertedAmount { get; set; } = 0;
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
+    /// 计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "plan_status", ColumnDescription = "计划状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PlanStatus { get; set; } = 1;

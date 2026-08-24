@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktSettingsController.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：系统设置控制器
 // 
@@ -183,7 +183,7 @@ public class TaktSettingsController : TaktControllerBase
     /// <summary>
     /// 更新系统设置状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>系统设置DTO</returns>
     [TaktPermission("foundation:setting:update", "更新系统设置状态")]
     [HttpPut("status")]

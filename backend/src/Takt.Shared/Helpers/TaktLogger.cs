@@ -53,7 +53,7 @@ public static class TaktLogger
             Module = moduleName,
             Action = context?.Action,
             UserId = context?.UserId,
-            Username = context?.Username,
+            UserName = context?.UserName,
             TenantCode = context?.TenantCode,
             CompanyCode = context?.CompanyCode,
             Route = context?.Route,

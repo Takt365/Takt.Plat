@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktTranslationService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：翻译应用服务实现
 // 
@@ -291,6 +291,39 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     }
 
     // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取指定文化下的前端动态翻译键值（扁平 I18nKey → 文本，仅 resource_type=frontend）
+    /// </summary>
+    /// <param name="cultureCode">区域文化编码（BCP47）</param>
+    /// <returns>前端 messages 包</returns>
+    public async Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(cultureCode);
+        var normalized = cultureCode.Trim();
+        var list = await _translationRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CultureCode == normalized
+                && x.ResourceType == "frontend");
+        var messages = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var item in list)
+        {
+            if (string.IsNullOrWhiteSpace(item.I18nKey))
+            {
+                continue;
+            }
+            messages[item.I18nKey] = item.TranslationText ?? string.Empty;
+        }
+        return new TaktTranslationMessagesDto
+        {
+            CultureCode = normalized,
+            Messages = messages
+        };
+    }
+
+    // ========================================
     // 主表外键同步（ManyToOne）
     // ========================================
 
@@ -306,13 +339,17 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
         {
             return;
         }
-        var master = await _cultureRepository.FirstAsync(x => x.Id == dto.CultureId && x.TenantCode == CurrentTenantCode);
+        var master = await _cultureRepository.GetByIdAsync(dto.CultureId);
         if (master == null)
         {
             throw new TaktBusinessException("区域不存在");
         }
         entity.CultureCode = master.CultureCode;
         entity.CultureId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
     }
     // ========================================
     // 转置（多语言表格）
@@ -320,7 +357,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
 
 
     /// <summary>
-    /// 获取转置列头主表（区域文化）
+    /// 获取转置列头主表（区域文化，仅启用项）
     /// </summary>
     private async Task<List<TaktCulture>> GetTransposedMasterCulturesAsync()
     {
@@ -435,35 +472,6 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
         return affected;
     }
 
-    /// <summary>
-    /// 获取指定文化下的前端动态翻译键值（扁平 I18nKey → 文本，仅 resource_type=frontend）
-    /// </summary>
-    /// <param name="cultureCode">区域文化编码（BCP47）</param>
-    /// <returns>前端 messages 包</returns>
-    public async Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(cultureCode);
-        var normalized = cultureCode.Trim();
-        var list = await _translationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CultureCode == normalized
-                && x.ResourceType == "frontend");
-        var messages = new Dictionary<string, string>(StringComparer.Ordinal);
-        foreach (var item in list)
-        {
-            if (string.IsNullOrWhiteSpace(item.I18nKey))
-            {
-                continue;
-            }
-            messages[item.I18nKey] = item.TranslationText ?? string.Empty;
-        }
-        return new TaktTranslationMessagesDto
-        {
-            CultureCode = normalized,
-            Messages = messages
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -480,7 +488,8 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
         if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords!.Trim();
-            exp = exp.And(x => (x.I18nKey != null && x.I18nKey.Contains(keywords))
+            exp = exp.And(x =>
+                (x.I18nKey != null && x.I18nKey.Contains(keywords))
                 || (x.TranslationText != null && x.TranslationText.Contains(keywords))
                 || (x.ResourceGroup != null && x.ResourceGroup.Contains(keywords))
                 || (x.ResourceType != null && x.ResourceType.Contains(keywords))
@@ -492,14 +501,8 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
 
         if (queryDto?.CultureId.HasValue == true)
         {
-            var cultureId = queryDto.CultureId;
+            var cultureId = queryDto.CultureId.Value;
             exp = exp.And(x => x.CultureId == cultureId);
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
-        {
-            var cultureCode = queryDto.CultureCode;
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.I18nKey))
@@ -546,13 +549,13 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
@@ -575,10 +578,6 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
             return true;
         }
         if (queryDto.CultureId.HasValue)
-        {
-            return true;
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
             return true;
         }
@@ -634,6 +633,6 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
                     && (string.IsNullOrEmpty(queryDto.TranslationText) || (translation.TranslationText != null && translation.TranslationText.Contains(queryDto.TranslationText)))
                     && (string.IsNullOrEmpty(queryDto.ResourceGroup) || (translation.ResourceGroup != null && translation.ResourceGroup.Contains(queryDto.ResourceGroup)))
                     && (string.IsNullOrEmpty(queryDto.ResourceType) || (translation.ResourceType != null && translation.ResourceType.Contains(queryDto.ResourceType)))
-                    && (string.IsNullOrEmpty(queryDto.ContextNote) || (translation.ContextNote != null && translation.ContextNote.Contains(queryDto.ContextNote)));
+                    && (string.IsNullOrEmpty(queryDto.ContextNote) || (translation.ContextNote != null && translation.ContextNote.Contains(queryDto.ContextNote)));;
     }
 }

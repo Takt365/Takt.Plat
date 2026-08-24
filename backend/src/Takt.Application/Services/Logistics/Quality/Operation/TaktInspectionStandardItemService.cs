@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：检验标准明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
     }
 
     /// <summary>
-    /// 获取检验标准明细列表（分页）
+    /// 获取检验标准明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktInspectionStandardItemDto>> GetInspectionStandardItemListAsync(TaktInspectionStandardItemQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktInspectionStandardItemDto>.Create(
+                new List<TaktInspectionStandardItemDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _inspectionStandardItemRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -100,13 +108,13 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
     {
         EnsureThreeLayerContext();
         var list = await _inspectionStandardItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.ItemName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ItemName ?? e.Id.ToString(),
+            DictValue = e.ItemCode,
+            DictLabel = e.ItemName ?? e.ItemCode,
         }).ToList();
     }
 
@@ -317,7 +325,15 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportInspectionStandardItemAsync(TaktInspectionStandardItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktInspectionStandardItemQueryDto());
+        var queryDto = query ?? new TaktInspectionStandardItemQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktInspectionStandardItemExportDto>(),
+                sheetName ?? "检验标准明细数据",
+                fileName ?? "检验标准明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _inspectionStandardItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -355,6 +371,22 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
             throw new TaktBusinessException("检验标准不存在");
         }
         entity.InspectionStandardId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -378,17 +410,15 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.InspectionStandardId).Contains(keywords)
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ItemCode != null && x.ItemCode.Contains(keywords))
                 || (x.ItemName != null && x.ItemName.Contains(keywords))
-                || SqlFunc.ToString(x.ItemType).Contains(keywords)
                 || (x.DefectLevel != null && x.DefectLevel.Contains(keywords))
-                || SqlFunc.ToString(x.InspectionMode).Contains(keywords)
                 || (x.StandardValue != null && x.StandardValue.Contains(keywords))
                 || (x.UpperLimit != null && x.UpperLimit.Contains(keywords))
                 || (x.LowerLimit != null && x.LowerLimit.Contains(keywords))
@@ -396,120 +426,239 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
                 || (x.InspectionMethodDescription != null && x.InspectionMethodDescription.Contains(keywords))
                 || (x.AcceptanceCriteria != null && x.AcceptanceCriteria.Contains(keywords))
                 || (x.RejectionCriteria != null && x.RejectionCriteria.Contains(keywords))
-                || SqlFunc.ToString(x.IsQualifiedBasis).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.InspectionStandardId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.InspectionStandardId == queryDto.InspectionStandardId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ItemCode))
-        {
-            exp = exp.And(x => x.ItemCode != null && x.ItemCode.Contains(queryDto.ItemCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ItemName))
-        {
-            exp = exp.And(x => x.ItemName != null && x.ItemName.Contains(queryDto.ItemName));
-        }
-
-        if (queryDto?.ItemType.HasValue == true)
-        {
-            exp = exp.And(x => x.ItemType == queryDto.ItemType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectLevel))
-        {
-            exp = exp.And(x => x.DefectLevel != null && x.DefectLevel.Contains(queryDto.DefectLevel));
-        }
-
-        if (queryDto?.InspectionMode.HasValue == true)
-        {
-            exp = exp.And(x => x.InspectionMode == queryDto.InspectionMode);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.StandardValue))
-        {
-            exp = exp.And(x => x.StandardValue != null && x.StandardValue.Contains(queryDto.StandardValue));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.UpperLimit))
-        {
-            exp = exp.And(x => x.UpperLimit != null && x.UpperLimit.Contains(queryDto.UpperLimit));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.LowerLimit))
-        {
-            exp = exp.And(x => x.LowerLimit != null && x.LowerLimit.Contains(queryDto.LowerLimit));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.InspectionTool))
-        {
-            exp = exp.And(x => x.InspectionTool != null && x.InspectionTool.Contains(queryDto.InspectionTool));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.InspectionMethodDescription))
-        {
-            exp = exp.And(x => x.InspectionMethodDescription != null && x.InspectionMethodDescription.Contains(queryDto.InspectionMethodDescription));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.AcceptanceCriteria))
-        {
-            exp = exp.And(x => x.AcceptanceCriteria != null && x.AcceptanceCriteria.Contains(queryDto.AcceptanceCriteria));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RejectionCriteria))
-        {
-            exp = exp.And(x => x.RejectionCriteria != null && x.RejectionCriteria.Contains(queryDto.RejectionCriteria));
-        }
-
-        if (queryDto?.IsQualifiedBasis.HasValue == true)
-        {
-            exp = exp.And(x => x.IsQualifiedBasis == queryDto.IsQualifiedBasis);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.InspectionStandardId.HasValue == true)
+        {
+            var inspectionStandardId = queryDto.InspectionStandardId.Value;
+            exp = exp.And(x => x.InspectionStandardId == inspectionStandardId);
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ItemCode))
+        {
+            var itemCode = queryDto.ItemCode;
+            exp = exp.And(x => x.ItemCode != null && x.ItemCode.Contains(itemCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ItemName))
+        {
+            var itemName = queryDto.ItemName;
+            exp = exp.And(x => x.ItemName != null && x.ItemName.Contains(itemName));
+        }
+
+        if (queryDto?.ItemType.HasValue == true)
+        {
+            var itemType = queryDto.ItemType.Value;
+            exp = exp.And(x => x.ItemType == itemType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectLevel))
+        {
+            var defectLevel = queryDto.DefectLevel;
+            exp = exp.And(x => x.DefectLevel != null && x.DefectLevel.Contains(defectLevel));
+        }
+
+        if (queryDto?.InspectionMode.HasValue == true)
+        {
+            var inspectionMode = queryDto.InspectionMode.Value;
+            exp = exp.And(x => x.InspectionMode == inspectionMode);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.StandardValue))
+        {
+            var standardValue = queryDto.StandardValue;
+            exp = exp.And(x => x.StandardValue != null && x.StandardValue.Contains(standardValue));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UpperLimit))
+        {
+            var upperLimit = queryDto.UpperLimit;
+            exp = exp.And(x => x.UpperLimit != null && x.UpperLimit.Contains(upperLimit));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.LowerLimit))
+        {
+            var lowerLimit = queryDto.LowerLimit;
+            exp = exp.And(x => x.LowerLimit != null && x.LowerLimit.Contains(lowerLimit));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.InspectionTool))
+        {
+            var inspectionTool = queryDto.InspectionTool;
+            exp = exp.And(x => x.InspectionTool != null && x.InspectionTool.Contains(inspectionTool));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.InspectionMethodDescription))
+        {
+            var inspectionMethodDescription = queryDto.InspectionMethodDescription;
+            exp = exp.And(x => x.InspectionMethodDescription != null && x.InspectionMethodDescription.Contains(inspectionMethodDescription));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptanceCriteria))
+        {
+            var acceptanceCriteria = queryDto.AcceptanceCriteria;
+            exp = exp.And(x => x.AcceptanceCriteria != null && x.AcceptanceCriteria.Contains(acceptanceCriteria));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RejectionCriteria))
+        {
+            var rejectionCriteria = queryDto.RejectionCriteria;
+            exp = exp.And(x => x.RejectionCriteria != null && x.RejectionCriteria.Contains(rejectionCriteria));
+        }
+
+        if (queryDto?.IsQualifiedBasis.HasValue == true)
+        {
+            var isQualifiedBasis = queryDto.IsQualifiedBasis.Value;
+            exp = exp.And(x => x.IsQualifiedBasis == isQualifiedBasis);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktInspectionStandardItemQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.InspectionStandardId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ItemCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ItemName))
+        {
+            return true;
+        }
+        if (queryDto.ItemType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectLevel))
+        {
+            return true;
+        }
+        if (queryDto.InspectionMode.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.StandardValue))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UpperLimit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.LowerLimit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.InspectionTool))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.InspectionMethodDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AcceptanceCriteria))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RejectionCriteria))
+        {
+            return true;
+        }
+        if (queryDto.IsQualifiedBasis.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

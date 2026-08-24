@@ -16,21 +16,34 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变来源主表
+/// 设变来源子表
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_source_detail", "设变来源子表")]
 [SugarIndex("ix_ec_source_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_source_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_source_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 [SugarIndex("ix_ec_source_detail_ecid", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_source_detail_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSourceEcDetail : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 主ID
+    /// 主ID（选项 TaktSourceEcs/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "source_ec_id", ColumnDescription = "主ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SourceEcId { get; set; }
+
+    /// <summary>
+    /// 设变号码（冗余字段，便于查询）
+    /// </summary>
+    [SugarColumn(ColumnName = "source_ec_code", ColumnDescription = "设变号码", Length = 6, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string SourceEcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    public int LineNumber { get; set; } = 10;
 
     /// <summary>
     /// 完成品
@@ -127,6 +140,12 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "source_bom_effective_date", ColumnDescription = "BOM生效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? SourceBomEffectiveDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 设变来源主表

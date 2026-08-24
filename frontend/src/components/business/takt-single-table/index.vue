@@ -174,7 +174,7 @@ interface Props {
   scroll?: { x?: number | string | true; y?: number | string } | undefined
   /**
    * 表格布局场景（决定视口预留与 scroll.y 计算策略）
-   * page：整页列表；treeRight：左树右表；masterDetailLr/Tb*：主子表；editable：表单内嵌可编辑表
+   * page：整页列表；treeLeft/treeRight：左树右表；masterDetailLr/Tb*：主子表；editable：表单内嵌可编辑表
    */
   scrollLayout?: TaktTableScrollLayout
   /** 表格尺寸 */

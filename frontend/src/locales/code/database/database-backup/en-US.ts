@@ -98,7 +98,7 @@ export default {
       schedulerequired: 'Select a run time',
       schedulefuture: 'Run time must be in the future',
       browsefailed: 'Browse failed',
-      ftprequired: 'FTP host, username and password are required',
+      ftprequired: 'FTP host, userName and password are required',
     },
   },
 };

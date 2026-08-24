@@ -26,6 +26,7 @@ const CONTROLLER_PLURAL_OVERRIDES = {
   DataDictAll: 'DataDictAlls',
   Analysis: 'Analyses',
   PerfAnalysis: 'PerfAnalyses',
+  News: 'News',
 };
 
 /**
@@ -271,7 +272,7 @@ function buildSingleEntityChildArgs(options) {
 /**
  * 将 DtoBase / EntityBase 名称映射为表格 entityScope
  * @param {string} baseName
- * @returns {'tenant'|'company'|'approval'}
+ * @returns {'tenant'|'tenant-core'|'tenant-culture'|'tenant-plant'|'company'|'approval'}
  */
 function entityBaseNameToScope(baseName) {
   if (!baseName) {
@@ -282,6 +283,15 @@ function entityBaseNameToScope(baseName) {
   }
   if (baseName.includes('Company')) {
     return 'company';
+  }
+  if (baseName.includes('TenantCore')) {
+    return 'tenant-core';
+  }
+  if (baseName.includes('TenantCulture')) {
+    return 'tenant-culture';
+  }
+  if (baseName.includes('TenantPlant')) {
+    return 'tenant-plant';
   }
   if (baseName.includes('Tenant')) {
     return 'tenant';
@@ -418,6 +428,26 @@ function entityBaseHasCultureCode(entityBase) {
   return (
     normalized === 'TaktTenantEntityBase' || normalized === 'TaktTenantCultureEntityBase'
   );
+}
+
+/**
+ * 实体基类可 Stamp 的隔离列（与 TaktEntityBase 四组合 + 公司/审批一致；不含审计列）
+ * @param {string|null|undefined} entityBase
+ * @returns {readonly string[]}
+ */
+function getIsolationStampFieldNamesForEntityBase(entityBase) {
+  if (isCompanyOrApprovalEntityBase(entityBase)) {
+    return ['TenantCode', 'CompanyCode', 'CultureCode', 'PlantCode'];
+  }
+  /** @type {string[]} */
+  const fields = ['TenantCode'];
+  if (entityBaseHasCultureCode(entityBase)) {
+    fields.push('CultureCode');
+  }
+  if (entityBaseHasRelatedPlant(entityBase)) {
+    fields.push('RelatedPlant');
+  }
+  return fields;
 }
 
 /**
@@ -825,11 +855,16 @@ function resolveTaktModuleInt(moduleName) {
 /**
  * 三个实体基类字段（与 frontend/src/utils/table-columns.ts ENTITY_BASE_FIELDS 保持同步，不含 id）
  */
+const TENANT_CORE_AUDIT_FIELDS = [
+  'tenantCode', 'ExtField', 'remark',
+  'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
+];
+
 const ENTITY_BASE_FIELDS = {
-  tenant: [
-    'tenantCode', 'relatedPlant', 'ExtField', 'remark',
-    'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
-  ],
+  tenant: ['relatedPlant', 'cultureCode', ...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-core': [...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-culture': ['cultureCode', ...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-plant': ['relatedPlant', ...TENANT_CORE_AUDIT_FIELDS],
   company: [
     'tenantCode', 'companyCode', 'cultureCode', 'plantCode', 'ExtField', 'remark',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
@@ -1037,6 +1072,36 @@ function resolvePermissionEntitySlugFromModulePath(entityShort, modulePath) {
   return slug;
 }
 
+/**
+ * 字段 XML 摘要是否声明「前端表单：规则下拉 + 只读编码」
+ * 判定：含「自动通过 … TaktNumbering」；排除 MIME 回填（TaktFileUploadEngine）
+ * @param {string|null|undefined} summaryOrDoc
+ * @returns {boolean}
+ */
+function isTaktNumberingAutoFormFieldSummary(summaryOrDoc) {
+  const text = String(summaryOrDoc || '');
+  if (!/自动通过\s*TaktNumbering/.test(text)) {
+    return false;
+  }
+  if (/\bMIME\b/i.test(text) || /MIME\s*类型/.test(text)) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * 字段 XML 摘要是否声明「上传引擎按 MIME 自动取号」（非表单选规则）
+ * @param {string|null|undefined} summaryOrDoc
+ * @returns {boolean}
+ */
+function isTaktNumberingMimeEngineFieldSummary(summaryOrDoc) {
+  const text = String(summaryOrDoc || '');
+  if (!/自动通过\s*TaktNumbering/.test(text)) {
+    return false;
+  }
+  return /\bMIME\b/i.test(text) || /MIME\s*类型/.test(text);
+}
+
 module.exports = {
   GENERATED_FILE_WRITE_POLICY,
   logGeneratedFileWritePolicy,
@@ -1054,6 +1119,7 @@ module.exports = {
   isCompanyOrApprovalEntityBase,
   entityBaseHasRelatedPlant,
   entityBaseHasCultureCode,
+  getIsolationStampFieldNamesForEntityBase,
   stripEntityBasePkVariant,
   normalizeEntityBaseKind,
   resolveIsolationDtoBase,
@@ -1071,6 +1137,8 @@ module.exports = {
   REPO_ROOT,
   SCRIPTS_DIR,
   SCRIPTS_GEN_DIR,
+  isTaktNumberingAutoFormFieldSummary,
+  isTaktNumberingMimeEngineFieldSummary,
   parseSingleEntityGenerateArgsFromArgv,
   parseSingleEntityGenerateArgs,
   parseAllOnlyGenerateArgsFromArgv,

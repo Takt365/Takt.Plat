@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeReassignment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -215,6 +215,15 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeereassignment.reason", "zh-CN", "调动原因", "调动原因"),
             // entity.employeereassignment.reason
             new TranslationSeedItem("entity.employeereassignment.reason", "zh-HK", "调动原因_hk", "调动原因"),
+
+            // entity.employeereassignment.employee
+            new TranslationSeedItem("entity.employeereassignment.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeereassignment.employee
+            new TranslationSeedItem("entity.employeereassignment.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeereassignment.employee
+            new TranslationSeedItem("entity.employeereassignment.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeereassignment.employee
+            new TranslationSeedItem("entity.employeereassignment.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

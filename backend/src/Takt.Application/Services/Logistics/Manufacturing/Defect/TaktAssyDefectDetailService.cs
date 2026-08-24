@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立不良明细应用服务实现
 // 
@@ -15,7 +15,6 @@ using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Defect;
 using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
-using Takt.Domain.Entities.Logistics.Manufacturing.Output;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -32,10 +31,6 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
 {
     private readonly ITaktCompanyRepository<TaktAssyDefectDetail> _assyDefectDetailRepository;
     private readonly ITaktCompanyRepository<TaktAssyDefect> _assyDefectRepository;
-    private readonly ITaktCompanyRepository<TaktAssyOutput> _assyOutputRepository;
-    private readonly ITaktCompanyRepository<TaktAssyOutputDetail> _assyOutputDetailRepository;
-    private readonly ITaktCompanyRepository<TaktAssyOrderDefect> _assyOrderDefectRepository;
-    private readonly ITaktCompanyRepository<TaktAssyBatchDefect> _assyBatchDefectRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -44,10 +39,6 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     /// </summary>
     /// <param name="assyDefectDetailRepository">组立不良明细仓储</param>
     /// <param name="assyDefectRepository">组立不良日报仓储</param>
-    /// <param name="assyOutputRepository">组立日报仓储</param>
-    /// <param name="assyOutputDetailRepository">组立日报明细仓储</param>
-    /// <param name="assyOrderDefectRepository">工单不良统计仓储</param>
-    /// <param name="assyBatchDefectRepository">批量不良统计仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -55,10 +46,6 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     public TaktAssyDefectDetailService(
         ITaktCompanyRepository<TaktAssyDefectDetail> assyDefectDetailRepository,
         ITaktCompanyRepository<TaktAssyDefect> assyDefectRepository,
-        ITaktCompanyRepository<TaktAssyOutput> assyOutputRepository,
-        ITaktCompanyRepository<TaktAssyOutputDetail> assyOutputDetailRepository,
-        ITaktCompanyRepository<TaktAssyOrderDefect> assyOrderDefectRepository,
-        ITaktCompanyRepository<TaktAssyBatchDefect> assyBatchDefectRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -67,21 +54,25 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     {
         _assyDefectDetailRepository = assyDefectDetailRepository;
         _assyDefectRepository = assyDefectRepository;
-        _assyOutputRepository = assyOutputRepository;
-        _assyOutputDetailRepository = assyOutputDetailRepository;
-        _assyOrderDefectRepository = assyOrderDefectRepository;
-        _assyBatchDefectRepository = assyBatchDefectRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取组立不良明细列表（分页）
+    /// 获取组立不良明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktAssyDefectDetailDto>> GetAssyDefectDetailListAsync(TaktAssyDefectDetailQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktAssyDefectDetailDto>.Create(
+                new List<TaktAssyDefectDetailDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _assyDefectDetailRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -122,8 +113,8 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ProdOrderCode ?? e.Id.ToString(),
+            DictValue = e.ProdOrderCode,
+            DictLabel = e.ProdOrderCode,
         }).ToList();
     }
 
@@ -135,6 +126,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     public async Task<TaktAssyDefectDetailDto> CreateAssyDefectDetailAsync(TaktAssyDefectDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktAssyDefectDetail>();
+        entity.IsObsolete = 0;
         await StampAssyDefectDetailAssyDefectAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_defect_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyDefectDetailRepository,
@@ -152,9 +144,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             var businessCode = entity.AssyDefectId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
-        entity.IsObsolete = 0;
         entity = await _assyDefectDetailRepository.CreateAsync(entity);
-        await SyncFromAssyDefectDetailChangeAsync(entity.AssyDefectId);
         return await GetAssyDefectDetailByIdAsync(entity.Id) ?? entity.Adapt<TaktAssyDefectDetailDto>();
     }
 
@@ -183,31 +173,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             throw new TaktBusinessException("组立不良明细的AssyDefectId、LineNumber已存在");
         }
         await _assyDefectDetailRepository.UpdateAsync(entity);
-        await SyncFromAssyDefectDetailChangeAsync(entity.AssyDefectId);
         return await GetAssyDefectDetailByIdAsync(id) ?? throw new TaktBusinessException("组立不良明细不存在");
-    }
-
-    /// <summary>
-    /// 更新组立不良明细作废状态
-    /// </summary>
-    /// <param name="dto">作废DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktAssyDefectDetailDto> UpdateAssyDefectDetailObsoleteAsync(TaktAssyDefectDetailObsoleteDto dto)
-    {
-        var entity = await _assyDefectDetailRepository.GetByIdAsync(dto.AssyDefectDetailId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("组立不良明细不存在");
-        }
-        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
-        {
-            throw new TaktBusinessException("组立不良明细不存在");
-        }
-        entity.IsObsolete = dto.IsObsolete;
-        await _assyDefectDetailRepository.UpdateAsync(entity);
-        await SyncFromAssyDefectDetailChangeAsync(entity.AssyDefectId);
-        return await GetAssyDefectDetailByIdAsync(dto.AssyDefectDetailId)
-            ?? throw new TaktBusinessException("组立不良明细不存在");
     }
 
     /// <summary>
@@ -230,10 +196,8 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
         {
             throw new TaktBusinessException("组立不良明细已作废");
         }
-        var assyDefectId = entity.AssyDefectId;
         entity.IsObsolete = 1;
         await _assyDefectDetailRepository.UpdateAsync(entity);
-        await SyncFromAssyDefectDetailChangeAsync(assyDefectId);
     }
 
     /// <summary>
@@ -252,6 +216,27 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
         {
             await DeleteAssyDefectDetailByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新组立不良明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktAssyDefectDetailDto> UpdateAssyDefectDetailObsoleteAsync(TaktAssyDefectDetailObsoleteDto dto)
+    {
+        var entity = await _assyDefectDetailRepository.GetByIdAsync(dto.AssyDefectDetailId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("组立不良明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("组立不良明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _assyDefectDetailRepository.UpdateAsync(entity);
+        return await GetAssyDefectDetailByIdAsync(dto.AssyDefectDetailId) ?? throw new TaktBusinessException("组立不良明细不存在");
     }
 
     /// <summary>
@@ -313,7 +298,6 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
                     var businessCode = entity.AssyDefectId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
-                entity.IsObsolete = 0;
                 await _assyDefectDetailRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -335,7 +319,15 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportAssyDefectDetailAsync(TaktAssyDefectDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktAssyDefectDetailQueryDto());
+        var queryDto = query ?? new TaktAssyDefectDetailQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktAssyDefectDetailExportDto>(),
+                sheetName ?? "组立不良明细数据",
+                fileName ?? "组立不良明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _assyDefectDetailRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -349,26 +341,6 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             exportData,
             sheetName ?? "组立不良明细数据",
             fileName ?? "组立不良明细导出.xlsx");
-    }
-
-    /// <summary>
-    /// 组立不良明细变更后重算主表数量并刷新工单/批量不良统计
-    /// </summary>
-    /// <param name="assyDefectId">组立不良日报 ID</param>
-    /// <returns>任务</returns>
-    private async Task SyncFromAssyDefectDetailChangeAsync(long assyDefectId)
-    {
-        EnsureThreeLayerContext();
-        await TaktAssyOutputDefectSyncHelper.SyncFromAssyDefectDetailChangeAsync(
-            _assyOutputRepository,
-            _assyOutputDetailRepository,
-            _assyDefectRepository,
-            _assyDefectDetailRepository,
-            _assyOrderDefectRepository,
-            _assyBatchDefectRepository,
-            assyDefectId,
-            CurrentTenantCode,
-            CurrentCompanyCode);
     }
 
     // ========================================
@@ -393,6 +365,26 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             throw new TaktBusinessException("组立不良日报不存在");
         }
         entity.AssyDefectId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.ProdOrderCode))
+        {
+            entity.ProdOrderCode = master.ProdOrderCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -406,6 +398,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     private static Expression<Func<TaktAssyDefectDetail, bool>> QueryExpression(TaktAssyDefectDetailQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktAssyDefectDetail>();
+
         if (queryDto?.IsObsolete.HasValue == true)
         {
             exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
@@ -415,18 +408,14 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.AssyDefectId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
-                || SqlFunc.ToString(x.GoodQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.DefectCategory != null && x.DefectCategory.Contains(keywords))
-                || SqlFunc.ToString(x.DefectQty).Contains(keywords)
-                || SqlFunc.ToString(x.CumulativeDefectQty).Contains(keywords)
                 || (x.RandomCardCode != null && x.RandomCardCode.Contains(keywords))
                 || (x.OccurrenceEngineering != null && x.OccurrenceEngineering.Contains(keywords))
                 || (x.TestStep != null && x.TestStep.Contains(keywords))
@@ -434,119 +423,239 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
                 || (x.DefectLocation != null && x.DefectLocation.Contains(keywords))
                 || (x.DefectReason != null && x.DefectReason.Contains(keywords))
                 || (x.RepairOperator != null && x.RepairOperator.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.AssyDefectId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.AssyDefectId == queryDto.AssyDefectId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdOrderCode))
-        {
-            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(queryDto.ProdOrderCode));
-        }
-
-        if (queryDto?.ProdActualQty.HasValue == true)
-        {
-            exp = exp.And(x => x.ProdActualQty == queryDto.ProdActualQty);
-        }
-
-        if (queryDto?.GoodQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.GoodQuantity == queryDto.GoodQuantity);
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectCategory))
-        {
-            exp = exp.And(x => x.DefectCategory != null && x.DefectCategory.Contains(queryDto.DefectCategory));
-        }
-
-        if (queryDto?.DefectQty.HasValue == true)
-        {
-            exp = exp.And(x => x.DefectQty == queryDto.DefectQty);
-        }
-
-        if (queryDto?.CumulativeDefectQty.HasValue == true)
-        {
-            exp = exp.And(x => x.CumulativeDefectQty == queryDto.CumulativeDefectQty);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RandomCardCode))
-        {
-            exp = exp.And(x => x.RandomCardCode != null && x.RandomCardCode.Contains(queryDto.RandomCardCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.OccurrenceEngineering))
-        {
-            exp = exp.And(x => x.OccurrenceEngineering != null && x.OccurrenceEngineering.Contains(queryDto.OccurrenceEngineering));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TestStep))
-        {
-            exp = exp.And(x => x.TestStep != null && x.TestStep.Contains(queryDto.TestStep));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectSymptom))
-        {
-            exp = exp.And(x => x.DefectSymptom != null && x.DefectSymptom.Contains(queryDto.DefectSymptom));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectLocation))
-        {
-            exp = exp.And(x => x.DefectLocation != null && x.DefectLocation.Contains(queryDto.DefectLocation));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DefectReason))
-        {
-            exp = exp.And(x => x.DefectReason != null && x.DefectReason.Contains(queryDto.DefectReason));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RepairOperator))
-        {
-            exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(queryDto.RepairOperator));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.AssyDefectId.HasValue == true)
+        {
+            var assyDefectId = queryDto.AssyDefectId.Value;
+            exp = exp.And(x => x.AssyDefectId == assyDefectId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProdOrderCode))
+        {
+            var prodOrderCode = queryDto.ProdOrderCode;
+            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(prodOrderCode));
+        }
+
+        if (queryDto?.ProdActualQty.HasValue == true)
+        {
+            var prodActualQty = queryDto.ProdActualQty.Value;
+            exp = exp.And(x => x.ProdActualQty == prodActualQty);
+        }
+
+        if (queryDto?.GoodQuantity.HasValue == true)
+        {
+            var goodQuantity = queryDto.GoodQuantity.Value;
+            exp = exp.And(x => x.GoodQuantity == goodQuantity);
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectCategory))
+        {
+            var defectCategory = queryDto.DefectCategory;
+            exp = exp.And(x => x.DefectCategory != null && x.DefectCategory.Contains(defectCategory));
+        }
+
+        if (queryDto?.DefectQty.HasValue == true)
+        {
+            var defectQty = queryDto.DefectQty.Value;
+            exp = exp.And(x => x.DefectQty == defectQty);
+        }
+
+        if (queryDto?.CumulativeDefectQty.HasValue == true)
+        {
+            var cumulativeDefectQty = queryDto.CumulativeDefectQty.Value;
+            exp = exp.And(x => x.CumulativeDefectQty == cumulativeDefectQty);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RandomCardCode))
+        {
+            var randomCardCode = queryDto.RandomCardCode;
+            exp = exp.And(x => x.RandomCardCode != null && x.RandomCardCode.Contains(randomCardCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.OccurrenceEngineering))
+        {
+            var occurrenceEngineering = queryDto.OccurrenceEngineering;
+            exp = exp.And(x => x.OccurrenceEngineering != null && x.OccurrenceEngineering.Contains(occurrenceEngineering));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TestStep))
+        {
+            var testStep = queryDto.TestStep;
+            exp = exp.And(x => x.TestStep != null && x.TestStep.Contains(testStep));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectSymptom))
+        {
+            var defectSymptom = queryDto.DefectSymptom;
+            exp = exp.And(x => x.DefectSymptom != null && x.DefectSymptom.Contains(defectSymptom));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectLocation))
+        {
+            var defectLocation = queryDto.DefectLocation;
+            exp = exp.And(x => x.DefectLocation != null && x.DefectLocation.Contains(defectLocation));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DefectReason))
+        {
+            var defectReason = queryDto.DefectReason;
+            exp = exp.And(x => x.DefectReason != null && x.DefectReason.Contains(defectReason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RepairOperator))
+        {
+            var repairOperator = queryDto.RepairOperator;
+            exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(repairOperator));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktAssyDefectDetailQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.AssyDefectId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProdOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.ProdActualQty.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GoodQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectCategory))
+        {
+            return true;
+        }
+        if (queryDto.DefectQty.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CumulativeDefectQty.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RandomCardCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OccurrenceEngineering))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TestStep))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectSymptom))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectLocation))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DefectReason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RepairOperator))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

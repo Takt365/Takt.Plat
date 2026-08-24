@@ -72,7 +72,7 @@
         <template v-if="column.key === 'reportStatus'">
           <TaktDictTag
             :value="getConfigurableField(record, 'reportStatus')"
-            dict-type="sys_normal_disable_status"
+            dict-type="sys_normal_disable"
           />
         </template>
         <template v-else-if="column.key === 'reportDomain'">
@@ -81,7 +81,7 @@
         <template v-else-if="column.key === 'isPublic'">
           <TaktDictTag
             :value="getConfigurableField(record, 'isPublic')"
-            dict-type="sys_is_public_type"
+            dict-type="sys_public_type"
           />
         </template>
       </template>
@@ -196,7 +196,7 @@
       <a-form-item :label="t('entity.configurable.ispublic')">
         <TaktSelect
           v-model:value="advancedQueryForm.isPublic"
-          dict-type="sys_is_public_type"
+          dict-type="sys_public_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.ispublic') })"
           allow-clear
           size="small"
@@ -216,7 +216,7 @@
       <a-form-item :label="t('entity.configurable.reportstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.reportStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.reportstatus') })"
           allow-clear
         />

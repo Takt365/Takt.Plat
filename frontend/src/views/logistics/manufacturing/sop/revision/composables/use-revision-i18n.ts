@@ -36,7 +36,7 @@ export const SOPREVISION_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'select',
+  plantCode: 'optional',
   sopId: 'select',
   revision: 'required',
   fileUrl: 'optional',

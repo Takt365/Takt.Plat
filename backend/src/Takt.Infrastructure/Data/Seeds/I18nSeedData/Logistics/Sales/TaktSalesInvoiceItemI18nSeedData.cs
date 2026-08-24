@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesInvoiceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -595,13 +595,13 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem.postedby", "zh-HK", "已创建的_hk", "已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
 
             // entity.salesinvoiceitem.isobsolete
-            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.salesinvoiceitem.isobsolete
-            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.salesinvoiceitem.isobsolete
-            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.salesinvoiceitem.isobsolete
-            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.salesinvoiceitem.salesinvoice
             new TranslationSeedItem("entity.salesinvoiceitem.salesinvoice", "en-US", "销售发票主表_us", "销售发票主表"),

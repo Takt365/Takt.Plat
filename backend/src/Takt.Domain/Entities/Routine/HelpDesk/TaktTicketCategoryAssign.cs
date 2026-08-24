@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktTicketCategoryAssign : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 分类编码（与 TaktTicket.CategoryCode 对应）
+    /// 分类编码（业务编码；与 TaktTicket.CategoryCode 一致）
     /// </summary>
     [SugarColumn(ColumnName = "category_code", ColumnDescription = "分类编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CategoryCode { get; set; } = string.Empty;
@@ -38,13 +38,13 @@ public class TaktTicketCategoryAssign : TaktCompanyEntityBase
     public long AssigneeId { get; set; }
 
     /// <summary>
-    /// 默认处理人姓名
+    /// 默认处理人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "assignee_name", ColumnDescription = "默认处理人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? AssigneeName { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

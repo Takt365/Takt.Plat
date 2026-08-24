@@ -77,7 +77,7 @@
           >
             <TaktSelect
               v-model:value="mainFormState.isBuiltIn"
-              dict-type="sys_yes_no_type"
+              dict-type="sys_yes_no"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.isbuiltin') })"
               allow-clear
             />
@@ -101,7 +101,7 @@
           >
             <TaktSelect
               v-model:value="mainFormState.dictStatus"
-              dict-type="sys_normal_disable_status"
+              dict-type="sys_normal_disable"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.dictstatus') })"
               allow-clear
             />
@@ -571,6 +571,8 @@ const handleAddDictData = () => {
     dictDataId: `temp_${Date.now()}_${Math.random()}`,
     dictTypeId: '',
     dictTypeCode: mainFormState.dictTypeCode || '',
+    cultureCode: 'mul',
+    tenantCode: '',
     dictLabel: '',
     i18nKey: '',
     dictValue: '',

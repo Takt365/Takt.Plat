@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeResignationService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工离职应用服务实现
 // 
@@ -30,33 +30,45 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResignationService
 {
     private readonly ITaktApprovalRepository<TaktEmployeeResignation> _employeeResignationRepository;
+    private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeResignationRepository">员工离职仓储</param>
+    /// <param name="employeeRepository">员工仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeResignationService(
         ITaktApprovalRepository<TaktEmployeeResignation> employeeResignationRepository,
+        ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeResignationRepository = employeeResignationRepository;
+        _employeeRepository = employeeRepository;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取员工离职列表（分页）
+    /// 获取员工离职列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEmployeeResignationDto>> GetEmployeeResignationListAsync(TaktEmployeeResignationQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEmployeeResignationDto>.Create(
+                new List<TaktEmployeeResignationDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _employeeResignationRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,6 +122,7 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
     public async Task<TaktEmployeeResignationDto> CreateEmployeeResignationAsync(TaktEmployeeResignationCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployeeResignation>();
+        await StampEmployeeResignationEmployeeAsync(entity, dto);
         entity = await _employeeResignationRepository.CreateAsync(entity);
         return await GetEmployeeResignationByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeResignationDto>();
     }
@@ -128,6 +141,7 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
             throw new TaktBusinessException("员工离职不存在");
         }
         dto.Adapt(entity);
+        await StampEmployeeResignationEmployeeAsync(entity, dto);
         await _employeeResignationRepository.UpdateAsync(entity);
         return await GetEmployeeResignationByIdAsync(id) ?? throw new TaktBusinessException("员工离职不存在");
     }
@@ -199,6 +213,8 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
             try
             {
                 var entity = rows[i].Adapt<TaktEmployeeResignation>();
+                var importDto = rows[i].Adapt<TaktEmployeeResignationCreateDto>();
+                await StampEmployeeResignationEmployeeAsync(entity, importDto);
                 await _employeeResignationRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -220,7 +236,15 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeResignationAsync(TaktEmployeeResignationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmployeeResignationQueryDto());
+        var queryDto = query ?? new TaktEmployeeResignationQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEmployeeResignationExportDto>(),
+                sheetName ?? "员工离职数据",
+                fileName ?? "员工离职导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _employeeResignationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -237,6 +261,53 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步员工离职主表外键（ManyToOne → 员工）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampEmployeeResignationEmployeeAsync(TaktEmployeeResignation entity, TaktEmployeeResignationCreateDto dto)
+    {
+        if (dto.EmployeeId <= 0)
+        {
+            return;
+        }
+        var master = await _employeeRepository.GetByIdAsync(dto.EmployeeId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("员工不存在");
+        }
+        entity.EmployeeId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeCode))
+        {
+            entity.EmployeeCode = master.EmployeeCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeName))
+        {
+            entity.EmployeeName = master.EmployeeName;
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -249,117 +320,203 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
     {
         var exp = Expressionable.Create<TaktEmployeeResignation>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
-                || SqlFunc.ToString(x.ResignationType).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
                 || (x.HandoverNotes != null && x.HandoverNotes.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ApplyDate).Contains(keywords)
-                || SqlFunc.ToString(x.LastWorkDate).Contains(keywords)
-                || SqlFunc.ToString(x.TerminationDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.EmployeeId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
-        {
-            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
-        {
-            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
-        }
-
-        if (queryDto?.ResignationType.HasValue == true)
-        {
-            exp = exp.And(x => x.ResignationType == queryDto.ResignationType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Reason))
-        {
-            exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.HandoverNotes))
-        {
-            exp = exp.And(x => x.HandoverNotes != null && x.HandoverNotes.Contains(queryDto.HandoverNotes));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.ApplyDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ApplyDate >= queryDto.ApplyDateStart);
-        }
-
-        if (queryDto?.ApplyDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ApplyDate <= queryDto.ApplyDateEnd);
-        }
-
-        if (queryDto?.LastWorkDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.LastWorkDate >= queryDto.LastWorkDateStart);
-        }
-
-        if (queryDto?.LastWorkDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.LastWorkDate <= queryDto.LastWorkDateEnd);
-        }
-
-        if (queryDto?.TerminationDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.TerminationDate >= queryDto.TerminationDateStart);
-        }
-
-        if (queryDto?.TerminationDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.TerminationDate <= queryDto.TerminationDateEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.EmployeeId.HasValue == true)
+        {
+            var employeeId = queryDto.EmployeeId.Value;
+            exp = exp.And(x => x.EmployeeId == employeeId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeCode))
+        {
+            var employeeCode = queryDto.EmployeeCode;
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(employeeCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeName))
+        {
+            var employeeName = queryDto.EmployeeName;
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
+        }
+
+        if (queryDto?.ResignationType.HasValue == true)
+        {
+            var resignationType = queryDto.ResignationType.Value;
+            exp = exp.And(x => x.ResignationType == resignationType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Reason))
+        {
+            var reason = queryDto.Reason;
+            exp = exp.And(x => x.Reason != null && x.Reason.Contains(reason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandoverNotes))
+        {
+            var handoverNotes = queryDto.HandoverNotes;
+            exp = exp.And(x => x.HandoverNotes != null && x.HandoverNotes.Contains(handoverNotes));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.ApplyDateStart.HasValue == true)
+        {
+            var applyDateStart = queryDto.ApplyDateStart.Value;
+            exp = exp.And(x => x.ApplyDate >= applyDateStart);
+        }
+
+        if (queryDto?.ApplyDateEnd.HasValue == true)
+        {
+            var applyDateEnd = queryDto.ApplyDateEnd.Value;
+            exp = exp.And(x => x.ApplyDate <= applyDateEnd);
+        }
+
+        if (queryDto?.LastWorkDateStart.HasValue == true)
+        {
+            var lastWorkDateStart = queryDto.LastWorkDateStart.Value;
+            exp = exp.And(x => x.LastWorkDate >= lastWorkDateStart);
+        }
+
+        if (queryDto?.LastWorkDateEnd.HasValue == true)
+        {
+            var lastWorkDateEnd = queryDto.LastWorkDateEnd.Value;
+            exp = exp.And(x => x.LastWorkDate <= lastWorkDateEnd);
+        }
+
+        if (queryDto?.TerminationDateStart.HasValue == true)
+        {
+            var terminationDateStart = queryDto.TerminationDateStart.Value;
+            exp = exp.And(x => x.TerminationDate >= terminationDateStart);
+        }
+
+        if (queryDto?.TerminationDateEnd.HasValue == true)
+        {
+            var terminationDateEnd = queryDto.TerminationDateEnd.Value;
+            exp = exp.And(x => x.TerminationDate <= terminationDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEmployeeResignationQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.EmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeName))
+        {
+            return true;
+        }
+        if (queryDto.ResignationType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Reason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HandoverNotes))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ApplyDateStart.HasValue || queryDto.ApplyDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LastWorkDateStart.HasValue || queryDto.LastWorkDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TerminationDateStart.HasValue || queryDto.TerminationDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

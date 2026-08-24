@@ -20,7 +20,6 @@ export const PRODUCTIONPLAN_SELF_I18N_KEY = buildEntitySelfI18nKey(PRODUCTIONPLA
 
 /** 列表业务列（不含主键） */
 export const PRODUCTIONPLAN_LIST_FIELDS = [
-  'plantCode',
   'productionPlanCode',
   'materialRequirementsPlanningId',
   'materialRequirementsPlanningCode',
@@ -38,33 +37,12 @@ export const PRODUCTIONPLAN_LIST_FIELDS = [
   'planStatus',
   'convertedStatus',
   'planDescription',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PRODUCTIONPLAN_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  productionPlanCode: 'required',
-  materialRequirementsPlanningId: 'optional',
-  materialRequirementsPlanningCode: 'optional',
-  salesForecastId: 'optional',
-  salesForecastCode: 'optional',
-  planDate: 'select',
-  planPeriodStart: 'select',
-  planPeriodEnd: 'select',
-  plannerId: 'optional',
-  planBy: 'select',
-  totalQuantity: 'select',
-  totalAmount: 'select',
-  convertedQuantity: 'select',
-  convertedAmount: 'select',
-  planStatus: 'select',
-  convertedStatus: 'select',
-  planDescription: 'optional',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -72,49 +50,13 @@ export type ProductionPlanField = keyof typeof PRODUCTIONPLAN_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PRODUCTIONPLAN_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'productionPlanCode',
-  'materialRequirementsPlanningId',
-  'materialRequirementsPlanningCode',
-  'salesForecastId',
-  'salesForecastCode',
-  'planDateStart',
-  'planDateEnd',
-  'planPeriodStartStart',
-  'planPeriodStartEnd',
-  'planPeriodEndStart',
-  'planPeriodEndEnd',
-  'plannerId',
-  'planBy',
-  'planDescription',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ProductionPlanQuery)[]
 
-export type ProductionPlanQueryField =
-  | (typeof PRODUCTIONPLAN_QUERY_STRING_FIELDS)[number]
-  | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'planStatus' | 'convertedStatus' | 'approvalStatus'
+export type ProductionPlanQueryField = (typeof PRODUCTIONPLAN_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PRODUCTIONPLAN_QUERY_FIELDS: readonly ProductionPlanQueryField[] = [
-  ...PRODUCTIONPLAN_QUERY_STRING_FIELDS,
-  'totalQuantity',
-  'totalAmount',
-  'convertedQuantity',
-  'convertedAmount',
-  'planStatus',
-  'convertedStatus',
-  'approvalStatus',
-]
+export const PRODUCTIONPLAN_QUERY_FIELDS: readonly ProductionPlanQueryField[] = [...PRODUCTIONPLAN_QUERY_STRING_FIELDS]
 
 /**
  * Takt生产计划实体字段 i18n：index / production-plan-form 统一入口

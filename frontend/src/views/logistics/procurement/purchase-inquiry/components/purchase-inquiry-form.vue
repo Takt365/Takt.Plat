@@ -16,62 +16,11 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="purchase-inquiry-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="pi.ph('remark')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="purchaseInquiryItemTableRef"
@@ -85,63 +34,7 @@
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
-    >
-      <template #cell-allocationCategory="{ record }">
-        <TaktSelect
-          v-model:value="record.allocationCategory"
-          dict-type="logistics_allocation_category"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchaseInquiryItemPi.ph('allocationCategory')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-materialCode="{ record }">
-        <TaktSelect
-          v-model:value="record.materialCode"
-          api-url="TaktMaterialPlants/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchaseInquiryItemPi.queryPh('materialCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-inquiryUnit="{ record }">
-        <TaktSelect
-          v-model:value="record.inquiryUnit"
-          dict-type="logistics_unit_of_measure_code"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchaseInquiryItemPi.ph('inquiryUnit')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-purchasePerUnit="{ record }">
-        <TaktSelect
-          v-model:value="record.purchasePerUnit"
-          dict-type="logistics_price_unit_param"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchaseInquiryItemPi.ph('purchasePerUnit')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-isObsolete="{ record }">
-        <TaktSelect
-          v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchaseInquiryItemPi.ph('isObsolete')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-    </TaktEditableTable>
+    >    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -150,7 +43,7 @@
  * 采购询价实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/procurement/purchase-inquiry/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { usePurchaseInquiryI18n } from '../composables/use-purchase-inquiry-i18n'
@@ -159,57 +52,17 @@ import { usePurchaseInquiryI18n } from '../composables/use-purchase-inquiry-i18n
 const pi = usePurchaseInquiryI18n()
 
 import type { PurchaseInquiryCreate } from '@/types/logistics/procurement/purchase-inquiry'
-import { applyTaxRateFromTaxCode } from '@/utils/tax-code'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture || 'zh-CN'
-  }
-  if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
-}
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","plantCode","purchaseInquiryCode","inquiryDate","quoteDeadlineDate","inquiryId","inquiryBy","supplierCode","supplierName1","currencyCode","taxCode","taxRate","taxAmount","paymentMode","chainScheme","totalQuantity","totalAmount","convertedQuantity","convertedAmount","inquiryReason","cultureCode","inquiryStatus","convertedStatus","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { usePurchaseInquiryItemI18n } from '../composables/use-purchase-inquiry-item-i18n'
 
 const purchaseInquiryItemPi = usePurchaseInquiryItemI18n()
-
-/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
-function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
-  return triggerNode?.ownerDocument?.body ?? document.body
-}
 
 const childPurchaseInquiryItemRows = ref<Record<string, unknown>[]>([])
 const purchaseInquiryItemTableRef = ref<{
@@ -218,81 +71,10 @@ const purchaseInquiryItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
-/** 是否已持久化的子表行 */
-function isPersistedPurchaseInquiryItemRow(row: Record<string, unknown>): boolean {
-  const id = row.purchaseInquiryItemId
-  if (id == null || id === '') {
-    return false
-  }
-  return String(id) !== '0'
-}
-
-/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
-function allocateNextPurchaseInquiryItemLineNumber(): number {
-  const rows = purchaseInquiryItemTableRef.value?.getRows?.() ?? childPurchaseInquiryItemRows.value
-  return resolveNextDetailLineNumber(0, rows)
-}
-
 /** 子表 purchaseInquiryItem 可编辑列 */
 const purchaseInquiryItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'lineNumber',
-    title: purchaseInquiryItemPi.label('lineNumber'),
-    width: 140,
-  },
-  {
-    key: 'allocationCategory',
-    title: purchaseInquiryItemPi.label('allocationCategory'),
-    width: 140,
-  },
-  {
-    key: 'materialCode',
-    title: purchaseInquiryItemPi.label('materialCode'),
-    width: 140,
-  },
-  {
-    key: 'inquiryUnit',
-    title: purchaseInquiryItemPi.label('inquiryUnit'),
-    width: 140,
-  },
-  {
-    key: 'inquiryQuantity',
-    title: purchaseInquiryItemPi.label('inquiryQuantity'),
-    width: 140,
-  },
-  {
-    key: 'purchasePerUnit',
-    title: purchaseInquiryItemPi.label('purchasePerUnit'),
-    width: 140,
-  },
-  {
-    key: 'quotedUnitPrice',
-    title: purchaseInquiryItemPi.label('quotedUnitPrice'),
-    editor: 'textarea',
-    rows: 1,
-    placeholder: purchaseInquiryItemPi.ph('quotedUnitPrice'),
-    width: 180,
-  },
-  {
-    key: 'taxIncludedAmount',
-    title: purchaseInquiryItemPi.label('taxIncludedAmount'),
-    width: 140,
-  },
-  {
-    key: 'untaxedAmount',
-    title: purchaseInquiryItemPi.label('untaxedAmount'),
-    width: 140,
-  },
-  {
-    key: 'taxAmount',
-    title: purchaseInquiryItemPi.label('taxAmount'),
-    width: 140,
-  },
-  {
-    key: 'isObsolete',
-    title: purchaseInquiryItemPi.label('isObsolete'),
-    width: 140,
-  }])
+,
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PurchaseInquiryCreate & { purchaseInquiryId?: string }> | null | undefined) {
@@ -302,17 +84,7 @@ function syncChildRowsFromFormData(val: Partial<PurchaseInquiryCreate & { purcha
 
 function createDefaultPurchaseInquiryItemRow(): Record<string, unknown> {
   return {
-    lineNumber: allocateNextPurchaseInquiryItemLineNumber(),
-    allocationCategory: '',
-    materialCode: '',
-    inquiryUnit: '',
-    inquiryQuantity: 0,
-    purchasePerUnit: 0,
-    quotedUnitPrice: 0,
-    taxIncludedAmount: 0,
-    untaxedAmount: 0,
-    taxAmount: 0,
-    isObsolete: 0,
+
   }
 }
 
@@ -322,21 +94,13 @@ function buildSubmitPayload() {
   const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: purchaseInquiryItemTableRef.value?.getRows?.() ?? childPurchaseInquiryItemRows.value.map((row) => {
-      const normalized = {
-        ...row,
-        tenantCode: tenantStore.tenantCode,
-        companyCode: tenantStore.companyCode,
-        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        purchaseInquiryId: masterId,
-      }
-      if (isUpdate && isPersistedPurchaseInquiryItemRow(row)) {
-        normalized.purchaseInquiryItemId = row.purchaseInquiryItemId
-      } else {
-        delete normalized.purchaseInquiryItemId
-      }
-      return normalized
-    }),
+    items: purchaseInquiryItemTableRef.value?.getRows?.() ?? childPurchaseInquiryItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+      purchaseInquiryId: masterId,
+    })),
   }
 }
 
@@ -356,30 +120,11 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  currencyCode: "CNY",
-  cultureCode: "zh-CN",
-  taxCode: "J2",
-  taxRate: 13,
-  paymentMode: "VENDORPAY",
-  chainScheme: 1,
-  inquiryStatus: 1,
-  convertedStatus: 0
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 purchaseInquiryId 才视为编辑） */
 watch(
@@ -388,11 +133,10 @@ watch(
     if (val?.purchaseInquiryId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-      delete (next as any).items
+    delete (next as any).items
       applyScopeDefaults(next)
       Object.assign(formState, next)
-      formState.taxRate = applyTaxRateFromTaxCode(formState.taxCode, formState.taxRate ?? 13)
-      syncChildRowsFromFormData(val)
+    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -407,192 +151,9 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.purchaseInquiryId
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  purchaseInquiryCode: [
-    {
-      required: true,
-      message: pi.ph('purchaseInquiryCode'),
-      trigger: 'blur'
-    }
-  ],
-  inquiryDate: [
-    {
-      required: true,
-      message: pi.ph('inquiryDate'),
-      trigger: 'change'
-    }
-  ],
-  inquiryBy: [
-    {
-      required: true,
-      message: pi.ph('inquiryBy'),
-      trigger: 'blur'
-    }
-  ],
-  supplierCode: [
-    {
-      required: true,
-      message: pi.ph('supplierCode'),
-      trigger: 'change'
-    }
-  ],
-  supplierName1: [
-    {
-      required: true,
-      message: pi.ph('supplierName1'),
-      trigger: 'blur'
-    }
-  ],
-  currencyCode: [
-    {
-      required: true,
-      message: pi.ph('currencyCode'),
-      trigger: 'change'
-    }
-  ],
-  taxRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxRate'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxRate'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  paymentMode: [
-    {
-      required: true,
-      message: pi.ph('paymentMode'),
-      trigger: 'change'
-    }
-  ],
-  chainScheme: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('chainScheme'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('chainScheme'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  convertedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('convertedQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('convertedQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  convertedAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('convertedAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('convertedAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  inquiryStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('inquiryStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('inquiryStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  convertedStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('convertedStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('convertedStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -603,71 +164,13 @@ async function validate() {
 }
 
 /** 映射为 Create/Update DTO */
-
-/**
- * 税码变更时回填税率
- * @param {string | number | undefined} value 税码
- * @returns {void}
- */
-
-/**
- * 区域文化变更：重选税码默认项并回填税率
- * @param {string | number | undefined} value 区域文化
- * @returns {void}
- */
-function handleCultureCodeChange(value: string | number | undefined) {
-  const culture = value == null ? '' : String(value)
-  formState.cultureCode = culture
-  const defaultTax = dictDataStore.getDictDefaultValue('accounting_tax_code', 'dictValue', culture)
-  formState.taxCode = defaultTax == null ? '' : String(defaultTax)
-  formState.taxRate = applyTaxRateFromTaxCode(formState.taxCode, formState.taxRate ?? 13)
-}
-
-function handleTaxCodeChange(value: string | number | undefined) {
-  const code = value == null ? '' : String(value)
-  formState.taxCode = code
-  formState.taxRate = applyTaxRateFromTaxCode(code, formState.taxRate ?? 13)
-}
-
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('taxRate' in payload) {
-    const rawtaxRate = payload.taxRate
-    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
-  }
-  if ('taxAmount' in payload) {
-    const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
-  }
-  if ('chainScheme' in payload) {
-    const rawchainScheme = payload.chainScheme
-    payload.chainScheme = typeof rawchainScheme === 'number' ? rawchainScheme : Number(rawchainScheme)
-  }
-  if ('totalQuantity' in payload) {
-    const rawtotalQuantity = payload.totalQuantity
-    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
-  }
-  if ('totalAmount' in payload) {
-    const rawtotalAmount = payload.totalAmount
-    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
-  }
-  if ('convertedQuantity' in payload) {
-    const rawconvertedQuantity = payload.convertedQuantity
-    payload.convertedQuantity = typeof rawconvertedQuantity === 'number' ? rawconvertedQuantity : Number(rawconvertedQuantity)
-  }
-  if ('convertedAmount' in payload) {
-    const rawconvertedAmount = payload.convertedAmount
-    payload.convertedAmount = typeof rawconvertedAmount === 'number' ? rawconvertedAmount : Number(rawconvertedAmount)
-  }
-  if ('inquiryStatus' in payload) {
-    const rawinquiryStatus = payload.inquiryStatus
-    payload.inquiryStatus = typeof rawinquiryStatus === 'number' ? rawinquiryStatus : Number(rawinquiryStatus)
-  }
-  if ('convertedStatus' in payload) {
-    const rawconvertedStatus = payload.convertedStatus
-    payload.convertedStatus = typeof rawconvertedStatus === 'number' ? rawconvertedStatus : Number(rawconvertedStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.purchaseInquiryId) {
+    payload.purchaseInquiryId = props.formData.purchaseInquiryId
+  }
   return payload
 }
 
@@ -681,19 +184,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.purchaseInquiryId)
   childPurchaseInquiryItemRows.value = []
   purchaseInquiryItemTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

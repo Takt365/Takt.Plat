@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktSettingI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSetting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,49 +145,49 @@ public class TaktSettingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.setting.valuetype", "zh-HK", "值类型_hk", "值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
 
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "en-US", "只读_us", "只读（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "en-US", "只读_us", "只读（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "ja-JP", "只读_jp", "只读（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "ja-JP", "只读_jp", "只读（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "zh-CN", "只读", "只读（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "zh-CN", "只读", "只读（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "zh-HK", "只读_hk", "只读（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "zh-HK", "只读_hk", "只读（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "en-US", "加密_us", "加密（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "en-US", "加密_us", "加密（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "ja-JP", "加密_jp", "加密（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "ja-JP", "加密_jp", "加密（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "zh-CN", "加密", "加密（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "zh-CN", "加密", "加密（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "zh-HK", "加密_hk", "加密（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "zh-HK", "加密_hk", "加密（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.setting.sortorder
-            new TranslationSeedItem("entity.setting.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.setting.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.setting.sortorder
-            new TranslationSeedItem("entity.setting.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.setting.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.setting.sortorder
-            new TranslationSeedItem("entity.setting.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.setting.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.setting.sortorder
-            new TranslationSeedItem("entity.setting.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.setting.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.setting.status
-            new TranslationSeedItem("entity.setting.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.setting.status", "en-US", "状态_us", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.setting.status
-            new TranslationSeedItem("entity.setting.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.setting.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.setting.status
-            new TranslationSeedItem("entity.setting.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.setting.status", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.setting.status
-            new TranslationSeedItem("entity.setting.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.setting.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
         };
     }
 

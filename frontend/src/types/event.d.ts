@@ -55,7 +55,7 @@ export interface Events {
    */
   'user:login': {
     userId: string;
-    username: string;
+    userName: string;
   };
 
   /**

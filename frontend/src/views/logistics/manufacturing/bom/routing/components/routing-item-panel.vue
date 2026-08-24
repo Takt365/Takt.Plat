@@ -109,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterRoutingId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -129,6 +130,16 @@
           v-model:value="advancedQueryForm.cultureCode"
           dict-type="sys_culture_code"
           :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -251,7 +262,7 @@
       <a-form-item :label="pi.queryLabel('isInspection')">
         <TaktSelect
           v-model:value="advancedQueryForm.isInspection"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isInspection', 'select')"
           allow-clear
         />
@@ -292,7 +303,7 @@
       <a-form-item :label="pi.queryLabel('isObsolete')">
         <TaktSelect
           v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />

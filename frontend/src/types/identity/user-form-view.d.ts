@@ -16,9 +16,9 @@ import type { User } from '@/types/identity/user';
  * 父组件传入 `user-form` 的编辑数据：API `User` 字段 + 列表行别名 + 权限回填（可选）
  */
 export type UserFormDataInput = Partial<User> & {
-  /** 登录名别名（`index.vue` 的 `toUserAssignRecord` 由 `username` 补齐） */
+  /** 登录名别名（`index.vue` 的 `toUserAssignRecord` 由 `userName` 补齐） */
   userName?: string;
-  /** 昵称别名（由 `nickname` 补齐） */
+  /** 昵称别名（由 `nickName` 补齐） */
   nickName?: string;
   /** 备注 */
   remark?: string;
@@ -36,12 +36,12 @@ export interface UserFormModel {
   employeeId: string;
 
   /**
-   * 登录用户名（表单字段 userName，提交时映射为 API username）
+   * 登录用户名（表单字段 userName，提交时映射为 API userName）
    */
   userName: string;
 
   /**
-   * 昵称（表单字段 nickName，提交时映射为 API nickname）
+   * 昵称（表单字段 nickName，提交时映射为 API nickName）
    */
   nickName: string;
 
@@ -56,7 +56,7 @@ export interface UserFormModel {
   password: string;
 
   /**
-   * 用户状态（字典 sys_normal_disable_status）
+   * 用户状态（字典 sys_normal_disable）
    */
   userStatus: number;
 

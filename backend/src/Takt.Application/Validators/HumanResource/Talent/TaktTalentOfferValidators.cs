@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Talent
 // 文件名称：TaktTalentOfferValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentOffer 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTalentOffer 生成，请按需审阅）
 // 
@@ -36,19 +36,22 @@ public class TaktTalentOfferCreateValidator : AbstractValidator<TaktTalentOfferC
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布不能为负数");
+        RuleFor(x => x.OfferCode)
+            .NotEmpty().WithMessage("录用编码不能为空")
+            .MaximumLength(20).WithMessage("录用编码长度不能超过20个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("关联员工不能为负数");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("拟录用部门不能为负数");
         RuleFor(x => x.DeptName)
-            .NotEmpty().WithMessage("拟录用部门名称不能为空")
+            .NotEmpty().WithMessage("拟录用部门名称不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(100).WithMessage("拟录用部门名称长度不能超过100个字符");
         RuleFor(x => x.PostId)
             .GreaterThanOrEqualTo(0).WithMessage("拟录用岗位不能为负数");
@@ -82,19 +85,22 @@ public class TaktTalentOfferUpdateValidator : AbstractValidator<TaktTalentOfferU
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布不能为负数");
+        RuleFor(x => x.OfferCode)
+            .NotEmpty().WithMessage("录用编码不能为空")
+            .MaximumLength(20).WithMessage("录用编码长度不能超过20个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("关联员工不能为负数");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("拟录用部门不能为负数");
         RuleFor(x => x.DeptName)
-            .NotEmpty().WithMessage("拟录用部门名称不能为空")
+            .NotEmpty().WithMessage("拟录用部门名称不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(100).WithMessage("拟录用部门名称长度不能超过100个字符");
         RuleFor(x => x.PostId)
             .GreaterThanOrEqualTo(0).WithMessage("拟录用岗位不能为负数");
@@ -129,6 +135,9 @@ public class TaktTalentOfferImportValidator : AbstractValidator<TaktTalentOfferI
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布不能为负数");
+        RuleFor(x => x.OfferCode)
+            .NotEmpty().WithMessage("录用编码不能为空")
+            .MaximumLength(20).WithMessage("录用编码长度不能超过20个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("关联员工不能为负数");
         RuleFor(x => x.DeptId)

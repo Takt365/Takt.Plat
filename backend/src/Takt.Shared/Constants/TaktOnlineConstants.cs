@@ -32,9 +32,9 @@ public static class TaktOnlineConstants
     /// <summary>强退落库消息类型（字典 sys_message_type DictValue）</summary>
     public const string KickMessageType = "system";
 
-    /// <summary>延迟强退预告消息分组（字典 sys_message_group_category DictValue）</summary>
+    /// <summary>延迟强退预告消息分组（字典 sys_message_group DictValue）</summary>
     public const string KickScheduleMessageGroup = "reminder";
 
-    /// <summary>立即/到期强退执行消息分组（字典 sys_message_group_category DictValue）</summary>
+    /// <summary>立即/到期强退执行消息分组（字典 sys_message_group DictValue）</summary>
     public const string KickExecuteMessageGroup = "message";
 }

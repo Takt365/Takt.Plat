@@ -213,7 +213,7 @@ public static class TaktValidationI18nKeys
     public const string FieldApplication = "common.field.application";
 
     /// <summary>用户名或邮箱</summary>
-    public const string FieldUsernameOrEmail = "common.field.username.or.email";
+    public const string FieldUserNameOrEmail = "common.field.UserName.or.email";
 
     /// <summary>文件</summary>
     public const string FieldFile = "common.field.file";

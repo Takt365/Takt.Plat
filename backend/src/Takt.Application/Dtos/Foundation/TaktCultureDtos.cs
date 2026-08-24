@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktCultureDtos.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Culture 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCulture 生成，请按需审阅）
 // 
@@ -22,24 +22,18 @@ namespace Takt.Application.Dtos.Foundation;
 // ========================================
 
 /// <summary>
-/// 区域文化实体 定义系统支持的多语言区域文化，如：zh-CN（简体中文）、en-US（美式英文）、ja-JP（日文）等 租户级实体：区域文化定义在租户内共享，不需要公司隔离
+/// 区域文化实体 定义系统支持的多语言区域文化，如：zh-CN（简体中文）、en-US（美式英文）、ja-JP（日文）等 租户级实体：区域文化定义在租户内共享，不需要公司隔离 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// 对应前端 TaktCultureDto
-/// 继承 TaktTenantCoreDtoBase（组合 4）
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
 public class TaktCultureDto : TaktTenantCoreDtoBase
 {
-
     /// <summary>
     /// CultureID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
-
-    /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -52,12 +46,12 @@ public class TaktCultureDto : TaktTenantCoreDtoBase
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// 默认语言（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int IsDefault { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -85,11 +79,6 @@ public class TaktCultureQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
     /// </summary>
     public string? NativeName { get; set; } = string.Empty;
@@ -100,12 +89,12 @@ public class TaktCultureQueryDto : TaktPagedQuery
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// 默认语言（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int? IsDefault { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -145,12 +134,6 @@ public class TaktCultureCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    [Required(ErrorMessage = "区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）不能为空")]
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
     /// </summary>
     [Required(ErrorMessage = "本地化名称（用该语言显示的自身名称，如：中文、English）不能为空")]
@@ -162,7 +145,7 @@ public class TaktCultureCreateDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// 默认语言（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int IsDefault { get; set; } = 0;
 
@@ -226,9 +209,9 @@ public class TaktCultureSortDto
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -247,11 +230,6 @@ public class TaktCultureTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
     /// </summary>
     public string? NativeName { get; set; } = string.Empty;
@@ -262,7 +240,7 @@ public class TaktCultureTemplateDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// 默认语言（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int? IsDefault { get; set; }
 
@@ -294,11 +272,6 @@ public class TaktCultureImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
     /// </summary>
     public string? NativeName { get; set; } = string.Empty;
@@ -309,7 +282,7 @@ public class TaktCultureImportDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// 默认语言（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int? IsDefault { get; set; }
 
@@ -347,11 +320,6 @@ public class TaktCultureExportDto
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
     /// </summary>
     public string NativeName { get; set; } = string.Empty;
@@ -362,12 +330,12 @@ public class TaktCultureExportDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// 默认语言（字典 sys_yes_no；1=是 0=否）
     /// </summary>
     public int IsDefault { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

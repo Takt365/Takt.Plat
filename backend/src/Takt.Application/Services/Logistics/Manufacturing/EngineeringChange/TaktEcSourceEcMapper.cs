@@ -79,8 +79,8 @@ public static class TaktEcSourceEcMapper
     /// <param name="companyDefaultCulture">公司默认文化</param>
     /// <param name="entryDate">录入日期</param>
     /// <param name="materialsByCode">目标工厂物料字典</param>
-    /// <returns>设变明细更新 DTO 列表</returns>
-    private static List<TaktEcDetailUpdateDto> MapDetails(
+    /// <returns>设变明细创建 DTO 列表</returns>
+    private static List<TaktEcDetailCreateDto> MapDetails(
         IReadOnlyList<TaktSourceEcDetail> sourceDetails,
         string ecCode,
         string tenantCode,
@@ -91,17 +91,16 @@ public static class TaktEcSourceEcMapper
     {
         if (sourceDetails == null || sourceDetails.Count == 0)
         {
-            return new List<TaktEcDetailUpdateDto>();
+            return new List<TaktEcDetailCreateDto>();
         }
         var lineNumber = 0;
-        var result = new List<TaktEcDetailUpdateDto>(sourceDetails.Count);
+        var result = new List<TaktEcDetailCreateDto>(sourceDetails.Count);
         foreach (var detail in sourceDetails)
         {
             lineNumber += 10;
             var bomDate = detail.SourceBomEffectiveDate ?? entryDate;
-            var dto = new TaktEcDetailUpdateDto
+            var dto = new TaktEcDetailCreateDto
             {
-                EcDetailId = 0,
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 CultureCode = companyDefaultCulture ?? string.Empty,

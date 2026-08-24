@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/procurement/purchase-price-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：采购价格推移（物料×月份转置；机种推移见 model-purchase-trend） -->
+<!-- 功能描述：采购价格推移（物料×月份转置；机种推移见 purchase-model-trend） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -45,7 +45,6 @@
       v-model:has-rows="hasRows"
       class="min-h-0 flex-1"
       :trend-filter="trendFilter"
-      active-tab="price"
       :plant-code="plantCode"
       :period-range="periodRange"
       :material-type="materialType"

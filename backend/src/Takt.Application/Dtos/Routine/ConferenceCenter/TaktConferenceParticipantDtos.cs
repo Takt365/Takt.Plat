@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceParticipant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConferenceParticipant 生成，请按需审阅）
 // 
@@ -47,13 +47,18 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public string? ConferenceName { get; set; }
 
     /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
     /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户姓名
+    /// 用户姓名（冗余字段，便于查询）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
@@ -83,6 +88,11 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public int AttendanceStatus { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 会议（主表）
     /// （主表：TaktConference）
     /// </summary>
@@ -106,7 +116,7 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -115,16 +125,21 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
@@ -133,7 +148,7 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 用户姓名
+    /// 用户姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -171,6 +186,11 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int? AttendanceStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -217,16 +237,21 @@ public class TaktConferenceParticipantCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
@@ -235,9 +260,8 @@ public class TaktConferenceParticipantCreateDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户姓名
+    /// 用户姓名（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "用户姓名不能为空")]
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
@@ -264,6 +288,11 @@ public class TaktConferenceParticipantCreateDto
     /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int AttendanceStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -322,6 +351,29 @@ public class TaktConferenceParticipantStatusDto
 }
 
 // ========================================
+// ConferenceParticipant 作废 DTO
+// ========================================
+
+/// <summary>
+/// ConferenceParticipant 作废/撤销作废 DTO
+/// </summary>
+public class TaktConferenceParticipantObsoleteDto
+{
+    /// <summary>
+    /// ConferenceParticipantID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ConferenceParticipantId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -345,16 +397,21 @@ public class TaktConferenceParticipantTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
@@ -363,7 +420,7 @@ public class TaktConferenceParticipantTemplateDto
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 用户姓名
+    /// 用户姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -391,6 +448,11 @@ public class TaktConferenceParticipantTemplateDto
     /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int? AttendanceStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -424,16 +486,21 @@ public class TaktConferenceParticipantImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
@@ -442,7 +509,7 @@ public class TaktConferenceParticipantImportDto
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 用户姓名
+    /// 用户姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -470,6 +537,11 @@ public class TaktConferenceParticipantImportDto
     /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int? AttendanceStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -505,10 +577,25 @@ public class TaktConferenceParticipantExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
@@ -517,7 +604,7 @@ public class TaktConferenceParticipantExportDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户姓名
+    /// 用户姓名（冗余字段，便于查询）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
@@ -545,6 +632,11 @@ public class TaktConferenceParticipantExportDto
     /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int AttendanceStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

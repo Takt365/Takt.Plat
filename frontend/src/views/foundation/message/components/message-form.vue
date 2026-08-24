@@ -18,19 +18,6 @@
     <a-row :gutter="24">
       <a-col :span="12">
         <a-form-item
-          :label="t('entity.message.fromusername')"
-          name="fromUserName"
-        >
-          <a-input
-            v-model:value="formState.fromUserName"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromusername') })"
-            size="small"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item
           :label="t('entity.message.fromuserid')"
           name="fromUserId"
         >
@@ -42,12 +29,25 @@
           />
         </a-form-item>
       </a-col>
+      <a-col :span="12">
+        <a-form-item
+          :label="t('entity.message.fromUserName')"
+          name="fromUserName"
+        >
+          <a-input
+            v-model:value="formState.fromUserName"
+            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromUserName') })"
+            size="small"
+            disabled
+          />
+        </a-form-item>
+      </a-col>
       <a-col
         v-if="isCreate"
         :span="24"
       >
         <a-form-item
-          :label="t('entity.message.tousername')"
+          :label="t('entity.message.toUserName')"
           name="recipientMode"
         >
           <a-radio-group
@@ -92,11 +92,12 @@
         :span="12"
       >
         <a-form-item
-          :label="t('entity.message.tousername')"
-          name="toUserName"
+          :label="t('entity.message.touserid')"
+          name="toUserId"
         >
           <a-input
-            v-model:value="formState.toUserName"
+            v-model:value="formState.toUserId"
+            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.touserid') })"
             size="small"
             disabled
           />
@@ -107,12 +108,11 @@
         :span="12"
       >
         <a-form-item
-          :label="t('entity.message.touserid')"
-          name="toUserId"
+          :label="t('entity.message.toUserName')"
+          name="toUserName"
         >
           <a-input
-            v-model:value="formState.toUserId"
-            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.touserid') })"
+            v-model:value="formState.toUserName"
             size="small"
             disabled
           />
@@ -138,9 +138,27 @@
         >
           <TaktSelect
             v-model:value="formState.messageGroup"
-            dict-type="sys_message_group_category"
+            dict-type="sys_message_group"
             :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.group') })"
             size="small"
+          />
+        </a-form-item>
+      </a-col>
+      <a-col
+        v-if="needsFileUpload"
+        :span="12"
+      >
+        <a-form-item
+          :label="t('entity.message.filename')"
+          name="fileName"
+        >
+          <a-input
+            v-model:value="formState.fileName"
+            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.filename') })"
+            size="small"
+            show-count
+            :maxlength="200"
+            disabled
           />
         </a-form-item>
       </a-col>
@@ -149,34 +167,32 @@
         :span="24"
       >
         <a-form-item
-          :label="t('entity.message.attachments')"
-          name="attachments"
+          :label="t('entity.message.accessurl')"
+          name="accessUrl"
         >
-          <a-upload
-            v-model:file-list="uploadFileList"
-            :accept="uploadAccept"
-            :list-type="uploadListType"
-            :max-count="1"
-            :disabled="loading || fileUploading"
-            :before-upload="handleBeforeFileUpload"
-            @remove="handleFileRemove"
-          >
-            <template v-if="uploadListType === 'picture-card'">
-              <div v-if="uploadFileList.length < 1">
-                <plus-outlined />
-              </div>
-            </template>
-            <a-button
-              v-else
-              size="small"
-              :loading="fileUploading"
-            >
-              {{ t('foundation.message.page.upload.select') }}
-            </a-button>
-          </a-upload>
-          <div class="mt-1 text-xs text-text-secondary">
-            {{ uploadHintText }}
-          </div>
+          <takt-upload-file
+            tabs-type="files"
+            :files-auto-upload="true"
+            :files-multiple="false"
+            :files-max-count="1"
+            :files-disabled="!!loading || fileUploading"
+            :files-max-size="taktFileMaxSizeMb"
+            :files-accept="uploadAccept"
+            :files-hint="uploadHintText"
+            :files-custom-request="handleFilesCustomRequest"
+            v-model:files-file-list="filesFileList"
+            @files:remove="handleFileRemove"
+          />
+          <a-input
+            v-if="formState.accessUrl"
+            v-model:value="formState.accessUrl"
+            class="mt-2"
+            size="small"
+            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.accessurl') })"
+            show-count
+            :maxlength="1000"
+            disabled
+          />
         </a-form-item>
       </a-col>
       <a-col :span="24">
@@ -204,11 +220,9 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { message } from 'ant-design-vue'
-import type { UploadFile, UploadProps } from 'ant-design-vue'
-import { PlusOutlined } from '@ant-design/icons-vue'
+import type { UploadFile } from 'ant-design-vue'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { Message, MessageCreate } from '@/types/foundation/message'
-import type { MessageBatchCreate, MessageAttachmentItem } from '@/types/foundation/message'
+import type { Message, MessageCreate, MessageBatchCreate } from '@/types/foundation/message'
 import { createAndSendMessages } from '@/api/foundation/message'
 import { getFileById } from '@/api/foundation/file'
 import TaktSelect from '@/components/business/takt-select/index.vue'
@@ -256,7 +270,7 @@ const userStore = useUserStore()
 /** Pinia：按钮权限（第二步 SignalR 发送） */
 const permissionStore = usePermissionStore()
 /** CreateDto 字段名列表（与 formState 键对齐；messageTitle 由提交时自动生成） */
-const formFields = ['fromUserName', 'fromUserId', 'toUserName', 'recipientMode', 'toUserIds', 'toUserId', 'isCc', 'messageContent', 'messageType', 'messageGroup', 'attachments']
+const formFields = ['fromUserId', 'fromUserName', 'toUserName', 'recipientMode', 'toUserIds', 'toUserId', 'isCc', 'messageContent', 'messageType', 'messageGroup', 'fileName', 'accessUrl']
 /** TaktYesNo：是 */
 const DEFAULT_IS_CC = 1
 
@@ -266,7 +280,7 @@ const DEFAULT_IS_CC = 1
  * @param force 为 true 时强制覆盖
  */
 function applySenderDefaults(target: Record<string, unknown>, force = false) {
-  const currentUserName = userStore.username || userStore.userInfo?.username || ''
+  const currentUserName = userStore.userName || userStore.userInfo?.userName || ''
   const currentUserId = userStore.userId || (userStore.userInfo?.userId != null ? String(userStore.userInfo.userId) : '')
   if (formFields.includes('fromUserName') && (force || !target.fromUserName)) {
     target.fromUserName = currentUserName
@@ -325,10 +339,10 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 附件上传中 */
 const fileUploading = ref(false)
-/** 已上传附件展示名 */
-const uploadedFileLabel = ref('')
-/** 上传组件文件列表（仅 UI） */
-const uploadFileList = ref<UploadFile[]>([])
+/** takt-upload-file 文件列表 */
+const filesFileList = ref<UploadFile[]>([])
+/** 上传体积上限 MB */
+const taktFileMaxSizeMb = ref(100)
 
 /** 当前消息类型 dictValue */
 /** 当前消息类型（sys_message_type DictValue，来自 TaktSelect） */
@@ -337,16 +351,13 @@ const messageTypeDictValue = computed(() => String(formState.messageType ?? ''))
 /** 多媒体类型须上传附件 */
 const needsFileUpload = computed(() => messageTypeDictValue.value === 'multimedia')
 
-/** 上传 accept（多媒体：图片/音视频/通用文件） */
+/** 上传 accept（多媒体：图片/音视频） */
 const uploadAccept = computed(() => {
   if (messageTypeDictValue.value === 'multimedia') {
     return 'image/*,video/*,audio/*'
   }
-  return undefined
+  return ''
 })
-
-/** 多媒体用文本列表样式上传 */
-const uploadListType = computed<UploadProps['listType']>(() => 'text')
 
 /** 上传区提示文案 */
 const uploadHintText = computed(() => t('foundation.message.page.upload.multimedia.hint'))
@@ -374,7 +385,7 @@ watch(
     }
     Object.assign(formState, next)
     recipientUsers.value = []
-    syncUploadFileListFromState()
+    syncFilesFileListFromFormState()
   },
   { immediate: true, deep: true }
 )
@@ -393,7 +404,7 @@ watch(messageTypeDictValue, (next, prev) => {
 
 /** 用户资料就绪后，新增态同步发送者 */
 watch(
-  () => [userStore.userId, userStore.username, userStore.userInfo?.userId, userStore.userInfo?.username] as const,
+  () => [userStore.userId, userStore.userName, userStore.userInfo?.userId, userStore.userInfo?.userName] as const,
   () => {
     if (isCreate.value) {
       applySenderDefaults(formState, true)
@@ -492,128 +503,97 @@ function resolveRecipientList(): MessageRecipientItem[] {
 }
 
 /**
- * 解析 Attachments JSON
- * @param raw JSON 字符串
- * @returns {MessageAttachmentItem[]} 附件项列表
+ * 按 fileName / accessUrl 同步上传列表展示
  */
-function parseMessageAttachments(raw: unknown): MessageAttachmentItem[] {
-  if (raw == null || typeof raw !== 'string' || !raw.trim()) {
-    return []
-  }
-  try {
-    const parsed = JSON.parse(raw) as unknown
-    if (!Array.isArray(parsed)) {
-      return []
-    }
-    return parsed.filter((item): item is MessageAttachmentItem => {
-      return item != null
-        && typeof item === 'object'
-        && typeof (item as MessageAttachmentItem).accessUrl === 'string'
-        && (item as MessageAttachmentItem).accessUrl.trim() !== ''
-    })
-  } catch {
-    return []
-  }
-}
-
-/**
- * 是否包含有效附件
- * @param raw JSON 字符串
- * @returns {boolean} 是否有附件
- */
-function hasMessageAttachments(raw: unknown): boolean {
-  return parseMessageAttachments(raw).length > 0
-}
-
-/**
- * 根据 formState.attachments 同步上传列表展示
- */
-function syncUploadFileListFromState() {
-  const items = parseMessageAttachments(formState.attachments)
-  const first = items[0]
-  if (!first?.accessUrl) {
-    uploadFileList.value = []
+function syncFilesFileListFromFormState() {
+  const url = String(formState.accessUrl ?? '').trim()
+  if (!url) {
+    filesFileList.value = []
     return
   }
-  const url = first.accessUrl.trim()
-  uploadFileList.value = [{
+  filesFileList.value = [{
     uid: '-1',
-    name: uploadedFileLabel.value || first.fileOriginalName || first.fileName || url.split('/').pop() || 'file',
+    name: String(formState.fileName ?? url.split('/').pop() ?? 'file'),
     status: 'done',
-    url: undefined,
+    url,
   }]
+}
+
+/**
+ * 将 TaktFile 上传结果回填至表单（文件名由上传结果回填，禁止手输）
+ * @param file 本地文件
+ * @param result 上传结果
+ */
+async function applyUploadResultToForm(file: globalThis.File, result: Awaited<ReturnType<typeof uploadTaktFileSmart>>) {
+  let accessUrl = result.accessUrl?.trim() ?? ''
+  if (!accessUrl && result.fileId) {
+    const detail = await getFileById(result.fileId)
+    accessUrl = detail.accessUrl?.trim() ?? ''
+  }
+  if (!accessUrl) {
+    throw new Error('accessUrl empty')
+  }
+  formState.accessUrl = accessUrl
+  formState.fileName = result.fileOriginalName?.trim()
+    || result.fileName?.trim()
+    || file.name
+  formRef.value?.validateFields(['accessUrl', 'fileName']).catch(() => undefined)
+}
+
+/**
+ * takt-upload-file 自定义上传：落库 TaktFile 后回写 accessUrl / fileName
+ * @param options 上传选项
+ */
+async function handleFilesCustomRequest(options: { file: globalThis.File | Blob; onSuccess?: (body: unknown) => void; onError?: (e: Error) => void }) {
+  const file = options.file as globalThis.File
+  if (props.loading || fileUploading.value) {
+    options.onError?.(new Error('busy'))
+    return
+  }
+  fileUploading.value = true
+  try {
+    const result = await uploadTaktFileSmart(file)
+    await applyUploadResultToForm(file, result)
+    syncFilesFileListFromFormState()
+    options.onSuccess?.(result)
+    message.success(t('foundation.message.page.upload.success'))
+  } catch (e) {
+    options.onError?.(e instanceof Error ? e : new Error(String(e)))
+    message.error(t('foundation.message.page.upload.failed'))
+  } finally {
+    fileUploading.value = false
+  }
 }
 
 /**
  * 清空已上传附件
  */
 function clearUploadedFile() {
-  formState.attachments = ''
-  uploadedFileLabel.value = ''
-  uploadFileList.value = []
-}
-
-/**
- * 上传至 TaktFiles 并写入 Attachments JSON
- * @param file 本地文件
- * @returns {Promise<boolean>} 是否拦截默认上传
- */
-async function handleBeforeFileUpload(file: globalThis.File): Promise<boolean> {
-  if (props.loading || fileUploading.value) {
-    return false
-  }
-  fileUploading.value = true
-  try {
-    const result = await uploadTaktFileSmart(file)
-    let accessUrl = result.accessUrl?.trim() ?? ''
-    if (!accessUrl && result.fileId) {
-      const detail = await getFileById(result.fileId)
-      accessUrl = detail.accessUrl?.trim() ?? ''
-    }
-    const fileId = result.fileId?.trim() ?? ''
-    const fileName = result.fileName?.trim() ?? ''
-    if (!accessUrl || !fileId || !fileName) {
-      message.error(t('foundation.message.page.upload.failed'))
-      return false
-    }
-    const item: MessageAttachmentItem = {
-      fileId,
-      fileName,
-      fileOriginalName: result.fileOriginalName,
-      accessUrl,
-      fileSize: result.fileSize != null ? String(result.fileSize) : undefined,
-      fileType: result.fileType,
-      fileExtension: result.fileExtension,
-      sortOrder: 1,
-    }
-    formState.attachments = JSON.stringify([item])
-    uploadedFileLabel.value = result.fileOriginalName || result.fileName || file.name
-    syncUploadFileListFromState()
-    message.success(t('foundation.message.page.upload.success'))
-  } catch {
-    message.error(t('foundation.message.page.upload.failed'))
-    return false
-  } finally {
-    fileUploading.value = false
-  }
-  return false
+  formState.accessUrl = ''
+  formState.fileName = ''
+  filesFileList.value = []
 }
 
 /**
  * 移除已上传附件
- * @returns {boolean} 允许移除
  */
-function handleFileRemove(): boolean {
+function handleFileRemove() {
   clearUploadedFile()
-  return true
 }
+
+watch(
+  () => [formState.fileName, formState.accessUrl],
+  () => {
+    syncFilesFileListFromFormState()
+  }
+)
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   fromUserName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.message.fromusername') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.message.fromUserName') }),
       trigger: 'blur'
     }
   ],
@@ -642,11 +622,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           message: t('common.page.form.placeholder.required', { field: t('entity.message.content') }),
           trigger: 'blur',
         }],
-  attachments: needsFileUpload.value
+  accessUrl: needsFileUpload.value
     ? [
         {
-          validator: async (_rule, value) => {
-            if (hasMessageAttachments(value)) {
+          validator: async () => {
+            if (String(formState.accessUrl ?? '').trim()) {
               return Promise.resolve()
             }
             return Promise.reject(t('foundation.message.page.upload.required'))
@@ -681,15 +661,19 @@ function getMessageBody(): Omit<MessageBatchCreate, 'sendToAll' | 'toUserIds'> {
   const fromUserId = formState.fromUserId != null && String(formState.fromUserId).trim() !== ''
     ? String(formState.fromUserId).trim()
     : undefined
-  const messageAttachments = formState.attachments != null && String(formState.attachments).trim() !== ''
-    ? String(formState.attachments).trim()
+  const fileName = formState.fileName != null && String(formState.fileName).trim() !== ''
+    ? String(formState.fileName).trim()
+    : undefined
+  const accessUrl = formState.accessUrl != null && String(formState.accessUrl).trim() !== ''
+    ? String(formState.accessUrl).trim()
     : undefined
   return {
     fromUserName: formState.fromUserName,
     fromUserId,
     messageTitle: buildAutoMessageTitle(),
     messageContent: formState.messageContent ?? '',
-    messageAttachments,
+    fileName,
+    accessUrl,
     messageType: String(formState.messageType ?? 'system'),
     messageGroup: String(formState.messageGroup ?? 'message'),
     isCc: DEFAULT_IS_CC,

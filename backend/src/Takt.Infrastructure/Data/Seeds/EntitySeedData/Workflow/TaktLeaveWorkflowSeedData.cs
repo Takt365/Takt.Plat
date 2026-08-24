@@ -99,9 +99,9 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TaktLogger.Warning("租户 {TenantCode} 未找到 Database:CompanyCodes 对应的公司，跳过请假工作流种子", tenantCode);
             return (0, 0);
         }
-        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "admin");
-        var demoUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "demo");
-        var guestUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "guest");
+        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "admin");
+        var demoUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "demo");
+        var guestUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "guest");
         if (adminUser == null || demoUser == null || guestUser == null)
         {
             TaktLogger.Warning("租户 {TenantCode} 缺少 admin/demo/guest 用户，跳过请假工作流种子", tenantCode);
@@ -135,9 +135,9 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             updateCount += fu;
             var processContent = BuildProcessContent(
                 adminUser.Id,
-                adminUser.Nickname ?? adminUser.Username,
+                adminUser.NickName ?? adminUser.UserName,
                 guestUser.Id,
-                guestUser.Nickname ?? guestUser.Username);
+                guestUser.NickName ?? guestUser.UserName);
             var (scheme, si, su) = await UpsertLeaveSchemeAsync(
                 schemeRepository,
                 tenantCode,
@@ -352,7 +352,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             employeeId = employee.Id.ToString(),
             employeeName = employee.EmployeeName,
             deptId = dept?.Id.ToString(),
-            deptName = dept?.DeptName,
+            deptName = dept?.DeptName1,
             leaveType,
             startDate = startDate.ToString("yyyy-MM-dd"),
             endDate = endDate.ToString("yyyy-MM-dd"),
@@ -557,7 +557,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 EmployeeId = employee.Id,
                 EmployeeName = employee.EmployeeName,
                 DeptId = dept?.Id,
-                DeptName = dept?.DeptName,
+                DeptName = dept?.DeptName1,
                 LeaveType = leaveType,
                 StartDate = startDate.Date,
                 EndDate = endDate.Date,
@@ -577,7 +577,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         }
         leave.EmployeeName = employee.EmployeeName;
         leave.DeptId = dept?.Id;
-        leave.DeptName = dept?.DeptName;
+        leave.DeptName = dept?.DeptName1;
         leave.LeaveType = leaveType;
         leave.EndDate = endDate.Date;
         leave.Reason = reason;
@@ -627,11 +627,11 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 ProcessName = scheme.ProcessName,
                 DefinitionVersion = scheme.DefinitionVersion,
                 ProcessTitle = processTitle,
-                InstanceStatus = status,
+                InstanceStatus = (int)status,
                 CurrentActivityId = currentActivityId,
                 CurrentActivityName = currentActivityName,
                 StartUserId = starter.Id,
-                StartUserName = starter.Nickname ?? starter.Username,
+                StartUserName = starter.NickName ?? starter.UserName,
                 StartTime = startTime ?? DateTime.Now,
                 EndTime = endTime,
                 BusinessKey = businessKey,
@@ -655,11 +655,11 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         instance.ProcessName = scheme.ProcessName;
         instance.DefinitionVersion = scheme.DefinitionVersion;
         instance.ProcessTitle = processTitle;
-        instance.InstanceStatus = status;
+        instance.InstanceStatus = (int)status;
         instance.CurrentActivityId = currentActivityId;
         instance.CurrentActivityName = currentActivityName;
         instance.StartUserId = starter.Id;
-        instance.StartUserName = starter.Nickname ?? starter.Username;
+        instance.StartUserName = starter.NickName ?? starter.UserName;
         instance.StartTime = startTime ?? instance.StartTime;
         instance.EndTime = endTime;
         instance.BusinessKey = businessKey;
@@ -714,10 +714,10 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             ToNodeId = NodeDeptManager,
             ToNodeName = "直属主管审批",
             TransitionUserId = starter.Id,
-            TransitionUserName = starter.Nickname ?? starter.Username,
+            TransitionUserName = starter.NickName ?? starter.UserName,
             TransitionTime = startTime,
             TransitionComment = "发起",
-            ActionType = TaktFlowActionType.Start,
+            ActionType = (int)TaktFlowActionType.Start,
             PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
@@ -729,9 +729,9 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TaskDefinitionKey = NodeDeptManager,
             TaskName = "直属主管审批",
             AssigneeUserId = manager.Id,
-            AssigneeUserName = manager.Nickname ?? manager.Username,
-            TaskStatus = TaktFlowTaskStatus.Pending,
-            SignType = TaktFlowSignType.Any,
+            AssigneeUserName = manager.NickName ?? manager.UserName,
+            TaskStatus = (int)TaktFlowTaskStatus.Pending,
+            SignType = (int)TaktFlowSignType.Any,
             PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
@@ -764,10 +764,10 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             ToNodeId = NodeDeptManager,
             ToNodeName = "直属主管审批",
             TransitionUserId = starter.Id,
-            TransitionUserName = starter.Nickname ?? starter.Username,
+            TransitionUserName = starter.NickName ?? starter.UserName,
             TransitionTime = startTime,
             TransitionComment = "发起",
-            ActionType = TaktFlowActionType.Start,
+            ActionType = (int)TaktFlowActionType.Start,
             PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
@@ -781,10 +781,10 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             ToNodeId = NodeHrConfirm,
             ToNodeName = "人事确认",
             TransitionUserId = manager.Id,
-            TransitionUserName = manager.Nickname ?? manager.Username,
+            TransitionUserName = manager.NickName ?? manager.UserName,
             TransitionTime = managerDone,
             TransitionComment = "同意",
-            ActionType = TaktFlowActionType.Approve,
+            ActionType = (int)TaktFlowActionType.Approve,
             PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
@@ -798,10 +798,10 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             ToNodeId = null,
             ToNodeName = null,
             TransitionUserId = hrUser.Id,
-            TransitionUserName = hrUser.Nickname ?? hrUser.Username,
+            TransitionUserName = hrUser.NickName ?? hrUser.UserName,
             TransitionTime = hrDone,
             TransitionComment = "同意",
-            ActionType = TaktFlowActionType.Approve,
+            ActionType = (int)TaktFlowActionType.Approve,
             PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
@@ -813,9 +813,9 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TaskDefinitionKey = NodeDeptManager,
             TaskName = "直属主管审批",
             AssigneeUserId = manager.Id,
-            AssigneeUserName = manager.Nickname ?? manager.Username,
-            TaskStatus = TaktFlowTaskStatus.Completed,
-            SignType = TaktFlowSignType.Any,
+            AssigneeUserName = manager.NickName ?? manager.UserName,
+            TaskStatus = (int)TaktFlowTaskStatus.Completed,
+            SignType = (int)TaktFlowSignType.Any,
             CompletedAt = managerDone,
             Comment = "同意",
             PlantCode = instance.PlantCode,
@@ -829,9 +829,9 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TaskDefinitionKey = NodeHrConfirm,
             TaskName = "人事确认",
             AssigneeUserId = hrUser.Id,
-            AssigneeUserName = hrUser.Nickname ?? hrUser.Username,
-            TaskStatus = TaktFlowTaskStatus.Completed,
-            SignType = TaktFlowSignType.Any,
+            AssigneeUserName = hrUser.NickName ?? hrUser.UserName,
+            TaskStatus = (int)TaktFlowTaskStatus.Completed,
+            SignType = (int)TaktFlowSignType.Any,
             CompletedAt = hrDone,
             Comment = "同意",
             PlantCode = instance.PlantCode,

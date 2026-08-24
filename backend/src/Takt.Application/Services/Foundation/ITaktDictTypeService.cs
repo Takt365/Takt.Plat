@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktDictTypeService.cs
-// 创建时间：2026-06-02
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典类型应用服务接口
 // 
@@ -78,18 +78,18 @@ public interface ITaktDictTypeService
     Task<TaktDictTypeDto> UpdateDictTypeStatusAsync(TaktDictTypeStatusDto dto);
 
     /// <summary>
-    /// 更新字典类型内置
-    /// </summary>
-    /// <param name="dto">内置 DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktDictTypeDto> UpdateDictTypeBuiltInAsync(TaktDictTypeBuiltInDto dto);
-
-    /// <summary>
     /// 更新字典类型排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>DTO</returns>
     Task<TaktDictTypeDto> UpdateDictTypeSortAsync(TaktDictTypeSortDto dto);
+
+    /// <summary>
+    /// 更新字典类型内置
+    /// </summary>
+    /// <param name="dto">内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktDictTypeDto> UpdateDictTypeBuiltInAsync(TaktDictTypeBuiltInDto dto);
 
     /// <summary>
     /// 获取导入模板

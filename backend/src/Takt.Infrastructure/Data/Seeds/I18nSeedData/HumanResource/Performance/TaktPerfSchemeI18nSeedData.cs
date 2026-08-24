@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfSchemeI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -208,13 +208,13 @@ public class TaktPerfSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfscheme.standardweight", "zh-HK", "标准权重_hk", "标准权重（%）"),
 
             // entity.perfscheme.sortorder
-            new TranslationSeedItem("entity.perfscheme.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.perfscheme.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.perfscheme.sortorder
-            new TranslationSeedItem("entity.perfscheme.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.perfscheme.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.perfscheme.sortorder
-            new TranslationSeedItem("entity.perfscheme.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.perfscheme.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.perfscheme.sortorder
-            new TranslationSeedItem("entity.perfscheme.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.perfscheme.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.perfscheme.schememetricstatus
             new TranslationSeedItem("entity.perfscheme.schememetricstatus", "en-US", "状态_us", "状态（字典 hr_perf_scheme_metric_status；0=启用 1=停用）"),

@@ -89,7 +89,7 @@
         <template v-else-if="column.key === 'grBasedInvoiceInspection'">
           <TaktDictTag
             :value="getSalesPriceDictValue(record, 'grBasedInvoiceInspection')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'pricingDateControl'">
@@ -135,241 +135,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('salesPriceCode')">
-      <a-form-item :label="pi.queryLabel('salesPriceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.salesPriceCode"
-          :placeholder="pi.queryPh('salesPriceCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('priceType')">
-      <a-form-item :label="pi.queryLabel('priceType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.priceType"
-          dict-type="logistics_price_type"
-          :placeholder="pi.queryPh('priceType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="pi.queryLabel('customerCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.customerCode"
-          api-url="TaktCustomers/options"
-          :placeholder="pi.queryPh('customerCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="pi.queryLabel('materialCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterialPlants/options"
-          :placeholder="pi.queryPh('materialCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialDescription')">
-      <a-form-item :label="pi.queryLabel('materialDescription')">
-        <a-textarea
-          v-model:value="advancedQueryForm.materialDescription"
-          :placeholder="pi.queryPh('materialDescription', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('salesGroup')">
-      <a-form-item :label="pi.queryLabel('salesGroup')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.salesGroup"
-          api-url="TaktSalesGroups/options"
-          :placeholder="pi.queryPh('salesGroup', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taxCode')">
-      <a-form-item :label="pi.queryLabel('taxCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.taxCode"
-          dict-type="accounting_tax_code"
-          :placeholder="pi.queryPh('taxCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('grBasedInvoiceInspection')">
-      <a-form-item :label="pi.queryLabel('grBasedInvoiceInspection')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.grBasedInvoiceInspection"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('grBasedInvoiceInspection', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('pricingDateControl')">
-      <a-form-item :label="pi.queryLabel('pricingDateControl')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.pricingDateControl"
-          dict-type="logistics_pricing_date_control"
-          :placeholder="pi.queryPh('pricingDateControl', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('validFromStart')">
-      <a-form-item :label="pi.queryLabel('validFromStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.validFromStart"
-          :placeholder="pi.queryPh('validFromStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('validFromEnd')">
-      <a-form-item :label="pi.queryLabel('validFromEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.validFromEnd"
-          :placeholder="pi.queryPh('validFromEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('validToStart')">
-      <a-form-item :label="pi.queryLabel('validToStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.validToStart"
-          :placeholder="pi.queryPh('validToStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('validToEnd')">
-      <a-form-item :label="pi.queryLabel('validToEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.validToEnd"
-          :placeholder="pi.queryPh('validToEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('salesQuotationId')">
-      <a-form-item :label="pi.queryLabel('salesQuotationId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.salesQuotationId"
-          api-url="TaktSalesQuotations/options"
-          :placeholder="pi.queryPh('salesQuotationId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('salesQuotationCode')">
-      <a-form-item :label="pi.queryLabel('salesQuotationCode')">
-        <a-input
-          v-model:value="advancedQueryForm.salesQuotationCode"
-          :placeholder="pi.queryPh('salesQuotationCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('variableKey')">
-      <a-form-item :label="pi.queryLabel('variableKey')">
-        <a-input
-          v-model:value="advancedQueryForm.variableKey"
-          :placeholder="pi.queryPh('variableKey', 'required')"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -430,7 +196,7 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   useSalesPriceI18n,
@@ -499,12 +265,7 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
-  if (form.grBasedInvoiceInspection !== undefined && form.grBasedInvoiceInspection !== null) {
-    return true
-  }
-  if (form.pricingDateControl !== undefined && form.pricingDateControl !== null) {
-    return true
-  }
+
   return false
 }
 
@@ -519,8 +280,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    grBasedInvoiceInspection: undefined as number | undefined,
-    pricingDateControl: undefined as number | undefined,  }
+  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -574,12 +334,6 @@ function buildListQuery(overrides?: Partial<SalesPriceQuery>): SalesPriceQuery {
   for (const key of SALESPRICE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.grBasedInvoiceInspection !== undefined && form.grBasedInvoiceInspection !== null) {
-    query.grBasedInvoiceInspection = form.grBasedInvoiceInspection
-  }
-  if (form.pricingDateControl !== undefined && form.pricingDateControl !== null) {
-    query.pricingDateControl = form.pricingDateControl
-  }
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
@@ -588,6 +342,7 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -650,15 +405,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     fixed: 'left',
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesPriceId') ?? ''
-  },
-  {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'plantCode') ?? ''
   },
   {
     title: pi.label('salesPriceCode'),
@@ -782,6 +528,15 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'variableKey') ?? ''
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'remark') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -829,6 +584,8 @@ const getSalesPriceDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -893,27 +650,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  plantCode: '',
-  salesPriceCode: '',
-  priceType: '',
-  customerCode: '',
-  materialCode: '',
-  materialDescription: '',
-  salesGroup: '',
-  taxCode: '',
-  grBasedInvoiceInspection: undefined as number | undefined,
-  pricingDateControl: undefined as number | undefined,
-  validFromStart: '',
-  validFromEnd: '',
-  validToStart: '',
-  validToEnd: '',
-  salesQuotationId: '',
-  salesQuotationCode: '',
-  variableKey: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1111,27 +848,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  plantCode: '',
-  salesPriceCode: '',
-  priceType: '',
-  customerCode: '',
-  materialCode: '',
-  materialDescription: '',
-  salesGroup: '',
-  taxCode: '',
-  grBasedInvoiceInspection: undefined as number | undefined,
-  pricingDateControl: undefined as number | undefined,
-  validFromStart: '',
-  validFromEnd: '',
-  validToStart: '',
-  validToEnd: '',
-  salesQuotationId: '',
-  salesQuotationCode: '',
-  variableKey: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

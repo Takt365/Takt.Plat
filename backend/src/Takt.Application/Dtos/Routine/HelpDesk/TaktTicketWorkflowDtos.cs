@@ -39,12 +39,12 @@ public class TaktTicketSubmitDto
     public string? attachments { get; set; }
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category）
+    /// 紧急度（字典 sys_urgency_level）
     /// </summary>
     public int Urgency { get; set; } = 3;
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category）
+    /// 影响范围（字典 sys_impact_level）
     /// </summary>
     public int Impact { get; set; } = 3;
 

@@ -26,28 +26,58 @@
         force-render
       >
         <div :class="formContentClass">
-
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('parentId')"
+                name="parentId"
+              >
+                <TaktTreeSelect
+                  v-model:value="formState.parentId"
+                  api-url="TaktCostElements/tree-options"
+                  :lazy="true"
+                  :placeholder="pi.ph('parentId')"
+                  allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costelement.code')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costElementCode')"
                 name="costElementCode"
               >
                 <a-input
                   v-model:value="formState.costElementCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.code') })"
+                  :placeholder="pi.ph('costElementCode')"
                   show-count
                   :maxlength="4"
                   allow-clear
@@ -57,12 +87,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costelement.name')"
+                :label="pi.label('costElementName')"
                 name="costElementName"
               >
                 <a-input
                   v-model:value="formState.costElementName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.name') })"
+                  :placeholder="pi.ph('costElementName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -71,63 +101,75 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costelement.category')"
-                name="costElementCategory"
-              >
-                <TaktSelect
-                  v-model:value="formState.costElementCategory"
-                  dict-type="accounting_cost_element_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.category') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.costelement.type')"
+                :label="pi.label('costElementType')"
                 name="costElementType"
               >
                 <TaktSelect
                   v-model:value="formState.costElementType"
                   dict-type="accounting_cost_element_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.type') })"
-                  disabled
+                  :placeholder="pi.ph('costElementType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costelement.level')"
+                :label="pi.label('costElementCategory')"
+                name="costElementCategory"
+              >
+                <TaktSelect
+                  v-model:value="formState.costElementCategory"
+                  dict-type="accounting_cost_element_category"
+                  :placeholder="pi.ph('costElementCategory')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costElementLevel')"
                 name="costElementLevel"
               >
                 <a-input-number
                   v-model:value="formState.costElementLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.level') })"
+                  :placeholder="pi.ph('costElementLevel')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costelement.status')"
-                name="costElementStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.costElementStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.status') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.costelement.validfrom')"
+                :label="pi.label('validFrom')"
                 name="validFrom"
               >
                 <a-date-picker
                   v-model:value="formState.validFrom"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.validfrom') })"
+                  :placeholder="pi.ph('validFrom')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('validTo')"
+                name="validTo"
+              >
+                <a-date-picker
+                  v-model:value="formState.validTo"
+                  :placeholder="pi.ph('validTo')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costElementStatus')"
+                name="costElementStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.costElementStatus"
+                  dict-type="sys_normal_disable"
+                  :placeholder="pi.ph('costElementStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -143,14 +185,28 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.costelement.validto')"
-                name="validTo"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
-                <a-date-picker
-                  v-model:value="formState.validTo"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.validto') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -167,7 +223,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -182,12 +238,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -211,13 +267,17 @@ import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useCostElementI18n } from '../composables/use-cost-element-i18n'
+
+/** 实体字段 i18n */
+const pi = useCostElementI18n()
+
 import type { CostElementCreate } from '@/types/accounting/controlling/cost-element'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
-import { resolveCostElementTypeFromCategory, isValidCostElementKatyp } from '@/utils/takt-cost-element-katyp'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -228,7 +288,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -242,17 +302,21 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
-  if (force || !target.plantCode) {
+  if (formFields.includes('plantCode') && (force || !target.plantCode)) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
+  if (formFields.includes('relatedPlant') && (force || !target.relatedPlant)) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","costElementCode","costElementName","costElementType","costElementCategory","costElementLevel","costElementStatus","validFrom","validTo","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","costElementCode","costElementName","costElementType","costElementCategory","costElementLevel","validFrom","validTo","costElementStatus","extField","remark"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -272,10 +336,11 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({ parentId: '0' })
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  costElementStatus: 1,
-  costElementCategory: 1,
   costElementType: 0,
+  costElementCategory: 1,
+  costElementStatus: 1
 }
+
 
 /** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
 function normalizeTreeParentId(target: Record<string, unknown>) {
@@ -323,22 +388,11 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.costElementId
     if (isCreate) {
       applyScopeDefaults(formState, true)
-    }
-  },
-)
-
-/** KATYP 类别变更时自动推导初级/次级类型 */
-watch(
-  () => formState.costElementCategory,
-  (category) => {
-    const derived = resolveCostElementTypeFromCategory(category)
-    if (derived !== undefined) {
-      formState.costElementType = derived
     }
   },
 )
@@ -348,32 +402,39 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   parentId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.costelement.parentid') }),
+      message: pi.ph('parentId'),
+      trigger: 'change'
+    }
+  ],
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
       trigger: 'change'
     }
   ],
   costElementCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.costelement.code') }),
+      message: pi.ph('costElementCode'),
       trigger: 'blur'
     }
   ],
   costElementName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.costelement.name') }),
+      message: pi.ph('costElementName'),
       trigger: 'blur'
     }
   ],
   costElementType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.type') }))
+        return Promise.reject(pi.ph('costElementType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.type') }))
+        return Promise.reject(pi.ph('costElementType'))
       }
       return Promise.resolve()
     },
@@ -382,10 +443,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   costElementCategory: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.category') }))
+        return Promise.reject(pi.ph('costElementCategory'))
       }
-      if (!isValidCostElementKatyp(value)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.category') }))
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('costElementCategory'))
       }
       return Promise.resolve()
     },
@@ -394,24 +456,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   costElementLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.level') }))
+        return Promise.reject(pi.ph('costElementLevel'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.level') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  costElementStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.status') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.status') }))
+        return Promise.reject(pi.ph('costElementLevel'))
       }
       return Promise.resolve()
     },
@@ -420,17 +469,30 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   validFrom: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.costelement.validfrom') }),
+      message: pi.ph('validFrom'),
       trigger: 'change'
     }
   ],
   validTo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.costelement.validto') }),
+      message: pi.ph('validTo'),
       trigger: 'change'
     }
   ],
+  costElementStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('costElementStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('costElementStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */

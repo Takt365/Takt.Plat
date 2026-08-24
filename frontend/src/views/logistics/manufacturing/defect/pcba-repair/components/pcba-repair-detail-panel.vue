@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getPcbaRepairDetailId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -108,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterPcbaRepairId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -122,13 +124,23 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('prodOrderCode')">
       <a-form-item :label="pi.queryLabel('prodOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.prodOrderCode"
           :placeholder="pi.queryPh('prodOrderCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="12"
           allow-clear
         />
       </a-form-item>
@@ -257,7 +269,7 @@
       <a-form-item :label="pi.queryLabel('isObsolete')">
         <TaktSelect
           v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />
@@ -476,7 +488,37 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PCBAREPAIRDETAIL_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.prodActualQty !== undefined && form.prodActualQty !== null) {
+    return true
+  }
+  if (form.defectQty !== undefined && form.defectQty !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -489,8 +531,7 @@ function createEmptyAdvancedQueryForm() {
     lineNumber: undefined as number | undefined,
     prodActualQty: undefined as number | undefined,
     defectQty: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -726,8 +767,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:defect:pcba:repair:delete',
         onClick: (record: PcbaRepairDetail) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -836,7 +879,7 @@ function onClickRow(record: PcbaRepairDetail) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PcbaRepairDetailQuery} 查询 DTO
  */
@@ -1103,6 +1146,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPcbaRepairDetail(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

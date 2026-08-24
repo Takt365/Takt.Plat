@@ -21,23 +21,34 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('prodOrderCode')"
-                name="prodOrderCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.prodOrderCode"
-                  :placeholder="pi.ph('prodOrderCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaInspectionDetailId"
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -139,6 +150,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('dailyCompletedQty')"
@@ -151,16 +172,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('inspectionQty')"
@@ -194,6 +205,7 @@
                   v-model:value="formState.TeamCode"
                   api-url="TaktProductionTeams/options"
                   :placeholder="pi.ph('TeamCode')"
+                  :disabled="!!formData?.pcbaInspectionDetailId"
                 />
               </a-form-item>
             </a-col>
@@ -273,6 +285,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('defectLocation')"
@@ -285,16 +307,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('isObsolete')"
@@ -302,8 +314,45 @@
               >
                 <TaktSelect
                   v-model:value="formState.isObsolete"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -330,15 +379,45 @@ const pi = usePcbaInspectionDetailI18n()
 import type { PcbaInspectionDetailCreate } from '@/types/logistics/manufacturing/defect/pcba-inspection-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","visualInspectionLine","aoiLine","bSideAssemblyDate","tSideAssemblyDate","shiftNo","inspectorName","dailyCompletedQty","inspectionQty","inspectionStatus","TeamCode","inspectionWorkHours","aoiWorkHours","defectQty","handPlacement","serialNumber","content","defectLocation","isObsolete"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","pcbaBoardType","visualInspectionLine","aoiLine","bSideAssemblyDate","tSideAssemblyDate","shiftNo","inspectorName","dailyCompletedQty","inspectionQty","inspectionStatus","TeamCode","inspectionWorkHours","aoiWorkHours","defectQty","handPlacement","serialNumber","content","defectLocation","isObsolete"]
 
 
 
@@ -349,12 +428,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -387,6 +469,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -395,21 +478,25 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.pcbaInspectionDetailId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  prodOrderCode: [
-    {
-      required: true,
-      message: pi.ph('prodOrderCode'),
-      trigger: 'blur'
-    }
-  ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -540,42 +627,124 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+    if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
+      delete payload.lineNumber
+    } else {
+      const numlineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+      if (Number.isFinite(numlineNumber)) payload.lineNumber = numlineNumber
+      else delete payload.lineNumber
+    }
   }
   if ('shiftNo' in payload) {
     const rawshiftNo = payload.shiftNo
-    payload.shiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+    if (rawshiftNo === undefined || rawshiftNo === null || rawshiftNo === '') {
+      delete payload.shiftNo
+    } else {
+      const numshiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+      if (Number.isFinite(numshiftNo)) payload.shiftNo = numshiftNo
+      else delete payload.shiftNo
+    }
   }
   if ('dailyCompletedQty' in payload) {
     const rawdailyCompletedQty = payload.dailyCompletedQty
-    payload.dailyCompletedQty = typeof rawdailyCompletedQty === 'number' ? rawdailyCompletedQty : Number(rawdailyCompletedQty)
+    if (rawdailyCompletedQty === undefined || rawdailyCompletedQty === null || rawdailyCompletedQty === '') {
+      delete payload.dailyCompletedQty
+    } else {
+      const numdailyCompletedQty = typeof rawdailyCompletedQty === 'number' ? rawdailyCompletedQty : Number(rawdailyCompletedQty)
+      if (Number.isFinite(numdailyCompletedQty)) payload.dailyCompletedQty = numdailyCompletedQty
+      else delete payload.dailyCompletedQty
+    }
   }
   if ('inspectionQty' in payload) {
     const rawinspectionQty = payload.inspectionQty
-    payload.inspectionQty = typeof rawinspectionQty === 'number' ? rawinspectionQty : Number(rawinspectionQty)
+    if (rawinspectionQty === undefined || rawinspectionQty === null || rawinspectionQty === '') {
+      delete payload.inspectionQty
+    } else {
+      const numinspectionQty = typeof rawinspectionQty === 'number' ? rawinspectionQty : Number(rawinspectionQty)
+      if (Number.isFinite(numinspectionQty)) payload.inspectionQty = numinspectionQty
+      else delete payload.inspectionQty
+    }
   }
   if ('inspectionStatus' in payload) {
     const rawinspectionStatus = payload.inspectionStatus
-    payload.inspectionStatus = typeof rawinspectionStatus === 'number' ? rawinspectionStatus : Number(rawinspectionStatus)
+    if (rawinspectionStatus === undefined || rawinspectionStatus === null || rawinspectionStatus === '') {
+      delete payload.inspectionStatus
+    } else {
+      const numinspectionStatus = typeof rawinspectionStatus === 'number' ? rawinspectionStatus : Number(rawinspectionStatus)
+      if (Number.isFinite(numinspectionStatus)) payload.inspectionStatus = numinspectionStatus
+      else delete payload.inspectionStatus
+    }
   }
   if ('inspectionWorkHours' in payload) {
     const rawinspectionWorkHours = payload.inspectionWorkHours
-    payload.inspectionWorkHours = typeof rawinspectionWorkHours === 'number' ? rawinspectionWorkHours : Number(rawinspectionWorkHours)
+    if (rawinspectionWorkHours === undefined || rawinspectionWorkHours === null || rawinspectionWorkHours === '') {
+      delete payload.inspectionWorkHours
+    } else {
+      const numinspectionWorkHours = typeof rawinspectionWorkHours === 'number' ? rawinspectionWorkHours : Number(rawinspectionWorkHours)
+      if (Number.isFinite(numinspectionWorkHours)) payload.inspectionWorkHours = numinspectionWorkHours
+      else delete payload.inspectionWorkHours
+    }
   }
   if ('aoiWorkHours' in payload) {
     const rawaoiWorkHours = payload.aoiWorkHours
-    payload.aoiWorkHours = typeof rawaoiWorkHours === 'number' ? rawaoiWorkHours : Number(rawaoiWorkHours)
+    if (rawaoiWorkHours === undefined || rawaoiWorkHours === null || rawaoiWorkHours === '') {
+      delete payload.aoiWorkHours
+    } else {
+      const numaoiWorkHours = typeof rawaoiWorkHours === 'number' ? rawaoiWorkHours : Number(rawaoiWorkHours)
+      if (Number.isFinite(numaoiWorkHours)) payload.aoiWorkHours = numaoiWorkHours
+      else delete payload.aoiWorkHours
+    }
   }
   if ('defectQty' in payload) {
     const rawdefectQty = payload.defectQty
-    payload.defectQty = typeof rawdefectQty === 'number' ? rawdefectQty : Number(rawdefectQty)
+    if (rawdefectQty === undefined || rawdefectQty === null || rawdefectQty === '') {
+      delete payload.defectQty
+    } else {
+      const numdefectQty = typeof rawdefectQty === 'number' ? rawdefectQty : Number(rawdefectQty)
+      if (Number.isFinite(numdefectQty)) payload.defectQty = numdefectQty
+      else delete payload.defectQty
+    }
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete
-    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+    if (rawisObsolete === undefined || rawisObsolete === null || rawisObsolete === '') {
+      delete payload.isObsolete
+    } else {
+      const numisObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+      if (Number.isFinite(numisObsolete)) payload.isObsolete = numisObsolete
+      else delete payload.isObsolete
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.pcbaInspectionDetailId) {
+    payload.pcbaInspectionDetailId = props.formData.pcbaInspectionDetailId
+  }
   payload.pcbaInspectionId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.pcbaInspectionCode ?? masterRow.PcbaInspectionCode
+    const masterName = masterRow.pcbaInspectionName ?? masterRow.PcbaInspectionName
+    if (masterCode != null && masterCode !== '' && !payload.pcbaInspectionCode) {
+      payload.pcbaInspectionCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.pcbaInspectionName) {
+      payload.pcbaInspectionName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -586,6 +755,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.pcbaInspectionDetailId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

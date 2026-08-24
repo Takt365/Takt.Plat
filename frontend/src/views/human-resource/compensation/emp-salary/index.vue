@@ -234,7 +234,7 @@
       <a-form-item :label="t('entity.empsalary.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.empSalaryStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empsalary.status') })"
           allow-clear
         />

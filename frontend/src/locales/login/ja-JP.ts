@@ -44,7 +44,7 @@ export default {
           placeholder: "テナントコードを入力",
         },
       },
-      username: {
+      userName: {
         label: "ユーザー名",
         placeholder: "ユーザー名を入力",
         or: {
@@ -76,7 +76,7 @@ export default {
         required: "テナントコードを入力してください",
         invalid: "テナントコードは3桁の数字である必要があります",
       },
-      username: {
+      userName: {
         required: "ユーザー名を入力してください",
         invalid: "ユーザー名の形式が正しくありません",
         or: {

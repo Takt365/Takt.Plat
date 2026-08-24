@@ -42,7 +42,7 @@ public class TaktKnowledge : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "knowledge_summary", ColumnDescription = "知识摘要", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? KnowledgeSummary { get; set; }
     /// <summary>
-    /// 分类编码（如 faq/guide 等）
+    /// 分类编码（业务编码；如 faq/guide）
     /// </summary>
     [SugarColumn(ColumnName = "category_code", ColumnDescription = "分类编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CategoryCode { get; set; }
@@ -67,7 +67,7 @@ public class TaktKnowledge : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "unhelpful_count", ColumnDescription = "无帮助评价数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int UnhelpfulCount { get; set; } = 0;
     /// <summary>
-    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 是否已发布（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "knowledge_is_published", ColumnDescription = "是否已发布", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int KnowledgeIsPublished { get; set; } = 0;
@@ -87,7 +87,7 @@ public class TaktKnowledge : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "revised_at", ColumnDescription = "最后修订时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? RevisedAt { get; set; }
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

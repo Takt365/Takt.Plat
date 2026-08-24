@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeSkillI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeSkill 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -170,6 +170,15 @@ public class TaktEmployeeSkillI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeskill.expirydate", "zh-CN", "到期日期", "到期日期"),
             // entity.employeeskill.expirydate
             new TranslationSeedItem("entity.employeeskill.expirydate", "zh-HK", "到期日期_hk", "到期日期"),
+
+            // entity.employeeskill.employee
+            new TranslationSeedItem("entity.employeeskill.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeeskill.employee
+            new TranslationSeedItem("entity.employeeskill.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeeskill.employee
+            new TranslationSeedItem("entity.employeeskill.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeeskill.employee
+            new TranslationSeedItem("entity.employeeskill.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

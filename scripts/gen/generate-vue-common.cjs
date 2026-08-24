@@ -28,6 +28,7 @@ const {
   resolveViewModulePath,
   resolveFrontendOutputRelPath,
   isModuleLeafSameAsEntityKebab,
+  isTaktNumberingAutoFormFieldSummary,
 } = require('./generate-script-common.cjs');
 const {
   shouldExcludeDtoSourceBase,
@@ -234,10 +235,23 @@ const SKIP_FORM_FIELDS = new Set([
   'employeeIds',
 ]);
 
-/** CreateDto 上下文隔离字段（与 generate-dtos-from-entity 固定字段对齐，表单只读自动注入） */
-const SCOPE_FORM_FIELD_NAMES = ['tenantCode', 'companyCode', 'cultureCode'];
+/**
+ * CreateDto 上下文隔离字段（与 generate-dtos-from-entity 固定字段对齐）
+ * 表单只读自动注入 + applyScopeDefaults（工厂=当前公司 RelatedPlant）
+ * Tenant / Company / Plant 实体本身除外（见 SCOPE_FIELD_EDITABLE_ENTITIES）
+ */
+const SCOPE_FORM_FIELD_NAMES = [
+  'tenantCode',
+  'companyCode',
+  'cultureCode',
+  'plantCode',
+  'relatedPlant',
+];
 
-/** 租户/公司实体本身：表单中隔离字段可编辑 */
+/** 与 SCOPE_FORM_FIELD_NAMES 同集：用于检测是否注入 applyScopeDefaults */
+const SCOPE_CONTEXT_DETECT_NAMES = SCOPE_FORM_FIELD_NAMES;
+
+/** 租户/公司/工厂主档实体本身：表单中隔离字段可编辑 */
 const SCOPE_FIELD_EDITABLE_ENTITIES = new Set(['Tenant', 'Company', 'Plant']);
 
 const SKIP_QUERY_FIELDS = new Set([
@@ -250,7 +264,11 @@ const SKIP_QUERY_FIELDS = new Set([
   'sortOrder',
 ]);
 
-const TEXTAREA_NAME_HINTS = ['remark', 'extfield', 'quote', 'description', 'content', 'note', 'greeting', 'address', 'scope'];
+/** 多行文本字段名片段（不含 content：xxx内容走富文本，见 isRichTextContentField） */
+const TEXTAREA_NAME_HINTS = ['remark', 'extfield', 'quote', 'description', 'note', 'greeting', 'address', 'scope'];
+
+/** 非正文 Content 字段：类型/长度/哈希、目录、流程定义 JSON 快照 */
+const RICH_TEXT_CONTENT_NAME_EXCLUDE = /^(contentType|contentLength|contentHash|tableOfContents)$/i;
 
 /** 表单 Tabs 分页标准：每 Tab 最多字段数（满 Tab 时 2 列 × 5 行 = 10 项；不足 10 项时单列） */
 const FORM_TAB_FIELDS_PER_TAB = 10;
@@ -287,7 +305,7 @@ function resolveFormFieldColSpan(field, tabFieldCount) {
   if (tabFieldCount < FORM_TAB_FIELDS_PER_TAB) {
     return 24;
   }
-  if (field.htmlType === 'textarea') {
+  if (isFullWidthFormControl(field)) {
     return 24;
   }
   return 12;
@@ -418,7 +436,7 @@ function renderFormItemLabelColAttrs(field, indent, colSpan, useUnifiedLabelCol 
   if (isExtFieldField(field)) {
     return `\n${indent}  class="takt-form-item-ext-field"\n${indent}  :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"\n${indent}  :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"`;
   }
-  if (field.htmlType === 'textarea') {
+  if (isFullWidthFormControl(field)) {
     return `\n${indent}  :label-col="{ span: 4 }"\n${indent}  :wrapper-col="{ span: 20 }"`;
   }
   return '';
@@ -434,6 +452,12 @@ function renderFormItemLabelColAttrs(field, indent, colSpan, useUnifiedLabelCol 
  */
 function renderFormItemOpening(field, indent = '              ', colSpan = 12, useUnifiedLabelCol = false) {
   const labelColAttrs = renderFormItemLabelColAttrs(field, indent, colSpan, useUnifiedLabelCol);
+  if (field.htmlType === 'numberingRule') {
+    return `${indent}<a-form-item
+${indent}  :label="t('common.page.form.numberingRule')"
+${indent}  name="${field.name}"${labelColAttrs}
+${indent}>`;
+  }
   if (isExtFieldField(field)) {
     return `${indent}<a-form-item
 ${indent}  name="${field.name}"${labelColAttrs}
@@ -490,19 +514,22 @@ function buildRemixIconImportLine(options = {}) {
 }
 
 /**
- * 隔离字段在表单中只读（Tenant / Company 实体本身可编辑）
+ * 隔离字段在表单中只读（Tenant / Company / Plant 主档实体本身可编辑）
  * @param {string} entityPascal
  * @param {string} fieldName
  * @returns {boolean}
  */
-function isScopeFieldReadOnly(entityPascal, fieldName) {
-  if (fieldName === 'cultureCode' && !SCOPE_FIELD_EDITABLE_ENTITIES.has(entityPascal)) {
-    return true;
-  }
+function isScopeFieldReadOnly(entityPascal, fieldName, entityScope) {
   if (!SCOPE_FORM_FIELD_NAMES.includes(fieldName)) {
     return false;
   }
-  return !SCOPE_FIELD_EDITABLE_ENTITIES.has(entityPascal);
+  if (SCOPE_FIELD_EDITABLE_ENTITIES.has(entityPascal)) {
+    return false;
+  }
+  if (fieldName === 'cultureCode' && entityScope === 'tenant-culture') {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -539,7 +566,7 @@ function renderFormCodeEditDisabledAttrs(field, indent, opts = {}) {
 }
 
 /**
- * CreateDto 是否含上下文隔离字段（主表或子表）
+ * CreateDto 是否含上下文隔离字段（主表或子表；含 plantCode/relatedPlant）
  * @param {object[]} formFields
  * @param {object[]} [masterDetailChildren]
  * @returns {boolean}
@@ -550,24 +577,58 @@ function hasScopeContextFormFields(formFields, masterDetailChildren = []) {
 }
 
 /**
- * 从 Create 属性提取租户/公司隔离字段（置于表单首位）
+ * 按 entityScope 决定表单隔离字段名（Culture 业务码 ≠ 隔离 CultureCode）
+ * @param {'tenant'|'tenant-core'|'tenant-culture'|'tenant-plant'|'company'|'approval'} entityScope
+ * @returns {string[]}
+ */
+function isolationFormFieldNamesForEntityScope(entityScope) {
+  switch (entityScope) {
+    case 'tenant-core':
+      return ['tenantCode'];
+    case 'tenant-culture':
+      return ['tenantCode', 'cultureCode'];
+    case 'tenant-plant':
+      return ['tenantCode', 'relatedPlant'];
+    case 'tenant':
+      return ['tenantCode', 'cultureCode', 'relatedPlant'];
+    case 'company':
+    case 'approval':
+      return ['tenantCode', 'companyCode', 'cultureCode', 'plantCode'];
+    default:
+      return SCOPE_FORM_FIELD_NAMES;
+  }
+}
+
+/**
+ * 从 Create 属性提取租户/公司/工厂/区域文化隔离字段（只读展示；主档实体可编辑）
  * @param {object[]} createProperties
  * @param {string} entityPascal
  * @returns {object[]}
  */
 function buildScopeFormFields(createProperties, entityPascal) {
+  const entityScope = resolveEntityScope(entityPascal, '', CONFIG.backendRoot);
+  const isolationNames = isolationFormFieldNamesForEntityScope(entityScope);
   const propsByName = new Map((createProperties || []).map((p) => [p.name, p]));
-  return SCOPE_FORM_FIELD_NAMES
+  return isolationNames
     .filter((name) => propsByName.has(name))
+    .filter((name) => {
+      if (entityPascal === 'Plant' && name === 'plantCode') {
+        return false;
+      }
+      if (entityPascal === 'Company' && name === 'relatedPlant') {
+        return false;
+      }
+      return true;
+    })
     .map((name) => ({
       ...propsByName.get(name),
-      readOnly: isScopeFieldReadOnly(entityPascal, name),
+      readOnly: isScopeFieldReadOnly(entityPascal, name, entityScope),
       optional: true,
     }));
 }
 
 /**
- * 表单控件 disabled 属性（隔离字段展示当前租户/公司；禁止 HTML readonly，与 user-form 对齐）
+ * 表单控件 disabled 属性（隔离字段展示当前租户/公司/工厂/语言；禁止 HTML readonly，与 user-form 对齐）
  * @param {{ readOnly?: boolean, htmlType?: string }} field
  * @param {string} indent
  * @returns {string}
@@ -707,12 +768,15 @@ function resolveScopeFormFieldPresence(formFields, masterDetailChildren = []) {
 }
 
 /**
- * *-form.vue：租户/公司隔离 Pinia 与 applyScopeDefaults（按字段存在性生成）
+ * *-form.vue：租户/公司隔离 Pinia 与 applyScopeDefaults（按字段存在性 + entityScope 生成）
+ * tenant-core：仅 tenantCode；tenant-culture：tenantCode + cultureCode 默认 mul（不回填公司语言）；
+ * tenant：cultureCode 取公司主档语言；tenant-plant：tenantCode + relatedPlant。
  * @param {{ hasTenant: boolean, hasCompany: boolean, hasCultureCode: boolean, hasPlantCode: boolean, hasRelatedPlant: boolean }} presence
  * @param {string} entityIdField
+ * @param {string} [entityPascal]
  * @returns {{ imports: string, script: string, watch: string }}
  */
-function buildScopeContextFormScriptFragments(presence, entityIdField) {
+function buildScopeContextFormScriptFragments(presence, entityIdField, entityPascal = '') {
   const {
     hasTenant,
     hasCompany,
@@ -720,22 +784,23 @@ function buildScopeContextFormScriptFragments(presence, entityIdField) {
     hasPlantCode = false,
     hasRelatedPlant = false,
   } = presence;
-  if (!hasTenant && !hasCompany && !hasCultureCode && !hasPlantCode && !hasRelatedPlant) {
+  const entityScope = entityPascal
+    ? resolveEntityScope(entityPascal, '', CONFIG.backendRoot)
+    : '';
+  const injectCompanyCulture =
+    hasCultureCode && (entityScope === 'tenant' || entityScope === 'company' || entityScope === 'approval');
+  const injectMulCulture = hasCultureCode && entityScope === 'tenant-culture';
+  if (!hasTenant && !hasCompany && !injectCompanyCulture && !injectMulCulture && !hasPlantCode && !hasRelatedPlant) {
     return { imports: '', script: '', watch: '' };
   }
   const imports = ["import { useTenantStore } from '@/stores/identity/tenant'"];
-  if (hasCultureCode) {
+  if (injectCompanyCulture) {
     imports.push("import { useUserStore } from '@/stores/identity/user'");
   }
   const storeLines = [];
-  if (hasTenant || hasCompany || hasPlantCode || hasRelatedPlant) {
-    storeLines.push('/** Pinia：租户上下文 */');
-    storeLines.push('const tenantStore = useTenantStore()');
-  } else if (hasCultureCode) {
-    storeLines.push('/** Pinia：租户上下文（公司区域文化联动） */');
-    storeLines.push('const tenantStore = useTenantStore()');
-  }
-  if (hasCultureCode) {
+  storeLines.push('/** Pinia：租户上下文 */');
+  storeLines.push('const tenantStore = useTenantStore()');
+  if (injectCompanyCulture) {
     storeLines.push('/** Pinia：用户上下文（当前公司 CultureCode 注入源） */');
     storeLines.push('const userStore = useUserStore()');
   }
@@ -750,26 +815,38 @@ function buildScopeContextFormScriptFragments(presence, entityIdField) {
     target.companyCode = tenantStore.companyCode
   }`);
   }
-  if (hasCultureCode) {
+  if (injectMulCulture) {
+    applyLines.push(`  if (force || !target.cultureCode) {
+    target.cultureCode = 'mul'
+  }`);
+  } else if (injectCompanyCulture) {
     applyLines.push(`  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }`);
   }
   if (hasPlantCode) {
     applyLines.push(`  if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }`);
   }
-  if (hasRelatedPlant) {
+  if (hasRelatedPlant && entityScope !== 'tenant-core' && entityScope !== 'tenant-culture') {
     applyLines.push(`  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.relatedPlant = nextPlant
+    }
   }`);
   }
-  const scopeComment = hasCompany
-    ? '租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）'
-    : hasRelatedPlant
-      ? '租户 / RelatedPlant（登录或公司切换注入；关联工厂可选改）'
-      : '租户级实体仅注入 tenantCode，表单只读';
+  const scopeComment = injectMulCulture
+    ? '租户 / CultureCode（默认 mul，不回填公司 UI 语言；无工厂）'
+    : hasCompany
+      ? '租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）'
+      : hasRelatedPlant && entityScope !== 'tenant-core' && entityScope !== 'tenant-culture'
+        ? '租户 / RelatedPlant（登录或公司切换注入；关联工厂可选改）'
+        : '租户级实体仅注入 tenantCode，表单只读';
   const script = `
 ${storeLines.join('\n')}
 
@@ -789,10 +866,10 @@ ${applyLines.join('\n')}
   if (hasCompany) {
     watchSources.push('tenantStore.companyCode');
   }
-  if (hasCultureCode) {
+  if (injectCompanyCulture) {
     watchSources.push('userStore.userInfo?.companyDefaultCulture');
   }
-  if (hasPlantCode || hasRelatedPlant) {
+  if (hasPlantCode || (hasRelatedPlant && entityScope !== 'tenant-core' && entityScope !== 'tenant-culture')) {
     watchSources.push('tenantStore.currentCompanyRelatedPlant');
   }
   const watchExpr = watchSources.length === 1
@@ -856,7 +933,16 @@ function resolveFormPlaceholderKind(field) {
   if (isExtFieldField(field) || field.optional || field.name === 'remark') {
     return 'optional';
   }
-  if (field.htmlType === 'textarea') {
+  if (field.htmlType === 'fileNameReadonly' || field.htmlType === 'fileUpload') {
+    return 'optional';
+  }
+  if (field.htmlType === 'numberingRule') {
+    return 'select';
+  }
+  if (field.htmlType === 'numberingCode') {
+    return 'optional';
+  }
+  if (isFullWidthFormControl(field)) {
     return 'optional';
   }
   if (field.htmlType === 'select' || field.htmlType === 'apiSelect' || field.htmlType === 'date' || field.htmlType === 'switch') {
@@ -1540,8 +1626,8 @@ function isEntityDerivedFormField(doc) {
   return /（冗余|冗余：|（联动|联动：|（回填|回填：|计算结果|（计算结果|固定值|（固定值/.test(doc || '');
 }
 
-/** sys_normal_disable_status：注释含「1=启用…0=禁用」的通用状态字段 */
-const COMMON_STATUS_DICT_TYPE = 'sys_normal_disable_status';
+/** sys_normal_disable：注释含「1=启用…0=禁用」的通用状态字段 */
+const COMMON_STATUS_DICT_TYPE = 'sys_normal_disable';
 /** TaktApprovalEntityBase.ApprovalStatus 及镜像业务状态字段共用 */
 const APPROVAL_STATUS_DICT_TYPE = 'sys_approval_status';
 const CONVERT_STATUS_DICT_TYPE = 'sys_convert_status';
@@ -1558,8 +1644,8 @@ const CONVERT_STATUS_FIELD_NAMES = new Set([
   'convertedStatus',
 ]);
 
-/** sys_yes_no_type：是否/内置等 */
-const YES_NO_DICT_TYPE = 'sys_yes_no_type';
+/** sys_yes_no：是否/内置等 */
+const YES_NO_DICT_TYPE = 'sys_yes_no';
 
 /** 编辑态不锁定：隔离字段 / 外键引用编码（非本实体业务主码） */
 const BUSINESS_CODE_EDIT_LOCK_SKIP_NAMES = new Set([
@@ -1595,7 +1681,7 @@ function isNormalDisableStatusField(field) {
 }
 
 /**
- * 是否为内置 sys_yes_no_type 列（列表用 a-switch）
+ * 是否为内置 sys_yes_no 列（列表用 a-switch）
  * @param {{ name?: string, doc?: string, dictType?: string }} field
  * @returns {boolean}
  */
@@ -1750,11 +1836,235 @@ function resolveDatePickerTemplateAttrs(field, indent = '                ') {
 }
 
 /**
+ * 是否为「xxx内容」正文（表单须 takt-rich-editor）
+ * 判定：字段名 content / XxxContent；或 XML 摘要标题以「内容」结尾；或注释含「富文本 HTML」。
+ * 排除 contentType 等元数据、流程 ProcessContent / 快照、JSON 差异列。
+ * @param {{ name?: string, doc?: string }} field
+ * @returns {boolean}
+ */
+function isRichTextContentField(field) {
+  const name = String(field?.name || '');
+  if (!name || RICH_TEXT_CONTENT_NAME_EXCLUDE.test(name)) {
+    return false;
+  }
+  if (/ProcessContent/i.test(name) || /ContentSnapshot$/i.test(name)) {
+    return false;
+  }
+  if (/^content$/i.test(name) || /Content$/.test(name)) {
+    return true;
+  }
+  const firstLine = String(field?.doc || '')
+    .split(/\n/)
+    .map((line) => line.replace(/^\/\/\/?\s*/, '').replace(/^\*\s*/, '').trim())
+    .find(Boolean) || '';
+  if (!firstLine || /JSON/i.test(firstLine)) {
+    return false;
+  }
+  if (/富文本\s*HTML/.test(firstLine) || /富文本\s*HTML/.test(String(field?.doc || ''))) {
+    return true;
+  }
+  const title = firstLine.replace(/[（(].*$/, '').trim();
+  return /内容$/.test(title);
+}
+
+/**
+ * 是否为 Foundation 文件目录实体（TaktFile → File）。该实体自身维护元数据，不生成业务上传控件。
+ * @param {string} [entityPascal]
+ * @returns {boolean}
+ */
+function isFileCatalogEntity(entityPascal) {
+  return String(entityPascal || '') === 'File';
+}
+
+/**
+ * 业务实体是否同时具备 fileName + accessUrl（须 takt-upload-file；TaktFile 除外）
+ * @param {Array<{ name?: string }>} fields
+ * @param {string} [entityPascal]
+ * @returns {boolean}
+ */
+function hasBusinessFileUploadPair(fields, entityPascal) {
+  if (isFileCatalogEntity(entityPascal)) {
+    return false;
+  }
+  const names = new Set((fields || []).map((f) => f.name));
+  return names.has('fileName') && names.has('accessUrl');
+}
+
+/**
+ * 将 fileName 标为上传后只读回填，accessUrl 标为上传控件
+ * @param {object[]} fields
+ * @param {string} [entityPascal]
+ * @returns {object[]}
+ */
+function applyBusinessFileUploadMeta(fields, entityPascal) {
+  if (!hasBusinessFileUploadPair(fields, entityPascal)) {
+    return fields;
+  }
+  return (fields || []).map((f) => {
+    if (f.name === 'fileName') {
+      return { ...f, htmlType: 'fileNameReadonly' };
+    }
+    if (f.name === 'accessUrl') {
+      return { ...f, htmlType: 'fileUpload' };
+    }
+    return f;
+  });
+}
+
+/**
+ * 字段是否走「编码规则下拉 + 只读业务编码」（实体 XML 含自动通过 TaktNumbering，且非 MIME）
+ * @param {{ name?: string, doc?: string, summary?: string }} field
+ * @returns {boolean}
+ */
+function isTaktNumberingAutoFormField(field) {
+  return isTaktNumberingAutoFormFieldSummary(field?.doc || field?.summary || '');
+}
+
+/**
+ * 实体 PascalCase → 编码规则单据类型（TaktMenu.MenuName）
+ * 与 TaktNumberingSeedData 关联菜单名称一致
+ */
+const NUMBERING_DOCUMENT_TYPE_BY_ENTITY = {
+  Announcement: '公告通知',
+  Conference: '会议中心',
+  Document: '文档管理',
+  News: '新闻',
+  Employee: '员工档案',
+  FlowForm: '表单管理',
+  Configurable: 'SQVI报表',
+};
+
+/**
+ * 从字段 XML 摘要解析单据类型菜单名（单据类型菜单：xxx / 单据类型：xxx）
+ * @param {string} [summary]
+ * @returns {string}
+ */
+function parseNumberingDocumentTypeFromSummary(summary) {
+  const text = String(summary || '');
+  const m = text.match(/单据类型(?:菜单)?[：:]\s*([^\s；;，,）)\]]+)/);
+  return m ? String(m[1]).trim() : '';
+}
+
+/**
+ * 解析表单编码规则下拉应过滤的 DocumentType（MenuName）
+ * @param {object} field
+ * @param {string} [entityPascal]
+ * @returns {string}
+ */
+function resolveNumberingDocumentType(field, entityPascal) {
+  const fromDoc = parseNumberingDocumentTypeFromSummary(field?.doc || field?.summary || '');
+  if (fromDoc) {
+    return fromDoc;
+  }
+  const key = String(entityPascal || '').replace(/^Takt/, '');
+  return NUMBERING_DOCUMENT_TYPE_BY_ENTITY[key] || '';
+}
+
+/**
+ * 表单插入 numberingRuleCode + 将业务编码标为 numberingCode（只读预览）
+ * @param {object[]} fields
+ * @param {string} [entityPascal]
+ * @returns {object[]}
+ */
+function applyTaktNumberingFormMeta(fields, entityPascal) {
+  const list = fields || [];
+  if (!list.some(isTaktNumberingAutoFormField)) {
+    return list;
+  }
+  /** @type {object[]} */
+  const out = [];
+  for (const f of list) {
+    if (!isTaktNumberingAutoFormField(f)) {
+      out.push(f);
+      continue;
+    }
+    const documentType = resolveNumberingDocumentType(f, entityPascal);
+    out.push({
+      name: 'numberingRuleCode',
+      type: 'string',
+      optional: false,
+      htmlType: 'numberingRule',
+      businessCodeField: f.name,
+      documentType,
+      doc: '编码规则（表单选规则后预览业务编码；提交 NumberingRuleCode；不落库）',
+      i18nKey: 'common.page.form.numberingRule',
+      maxLength: 40,
+    });
+    out.push({
+      ...f,
+      htmlType: 'numberingCode',
+      readOnly: true,
+      optional: false,
+    });
+  }
+  return out;
+}
+
+/**
+ * 表单是否含编码规则取号控件
+ * @param {Array<{ htmlType?: string }>} fields
+ * @returns {boolean}
+ */
+function fieldsNeedTaktNumbering(fields) {
+  return (fields || []).some((f) => f.htmlType === 'numberingRule' || f.htmlType === 'numberingCode');
+}
+
+/**
+ * 表单 script：useTaktFormNumbering 接线
+ * @param {Array<{ htmlType?: string, businessCodeField?: string, name?: string }>} fields
+ * @param {string} entityIdField
+ * @returns {string}
+ */
+function buildTaktNumberingFormScriptBlock(fields, entityIdField) {
+  const ruleFields = (fields || []).filter((f) => f.htmlType === 'numberingRule');
+  if (ruleFields.length === 0) {
+    return '';
+  }
+  const wiring = ruleFields.map((f) => {
+    const codeField = f.businessCodeField || 'businessCode';
+    return `useTaktFormNumbering({
+  formState,
+  isEdit: isEditMode,
+  businessCodeField: '${codeField}',
+})`;
+  }).join('\n\n');
+  return `/** 是否编辑态（编码规则取号仅新增） */
+const isEditMode = computed(() => !!props.formData?.${entityIdField})
+
+${wiring}
+`;
+}
+
+/**
+ * 表单是否含业务文件上传控件
+ * @param {Array<{ htmlType?: string }>} fields
+ * @returns {boolean}
+ */
+function fieldsNeedFileUpload(fields) {
+  return (fields || []).some((f) => f.htmlType === 'fileUpload');
+}
+
+/**
+ * 表单是否整行控件（textarea / 富文本 / 文件上传）
+ * @param {{ htmlType?: string }} field
+ * @returns {boolean}
+ */
+function isFullWidthFormControl(field) {
+  return field.htmlType === 'textarea' || field.htmlType === 'richEditor' || field.htmlType === 'fileUpload';
+}
+
+/**
  * 推断表单控件类型
  * @param {{ name: string, type: string, doc: string, isDateTime?: boolean }} field
- * @returns {'apiSelect'|'select'|'textarea'|'date'|'switch'|'input'}
+ * @returns {'apiSelect'|'select'|'textarea'|'richEditor'|'date'|'switch'|'input'}
  */
 function inferHtmlType(field) {
+  if (field.htmlType === 'numberingRule' || field.htmlType === 'numberingCode') {
+    return field.htmlType;
+  }
+  if (isTaktNumberingAutoFormField(field)) {
+    return 'numberingCode';
+  }
   const apiUrl = field.apiUrl || resolveOptionsApiUrl(field);
   if (apiUrl) {
     return 'apiSelect';
@@ -1771,6 +2081,9 @@ function inferHtmlType(field) {
   }
   if (/time$/i.test(field.name) && field.type === 'string' && !/Start$|End$/.test(field.name)) {
     return 'date';
+  }
+  if (isRichTextContentField(field)) {
+    return 'richEditor';
   }
   const lower = field.name.toLowerCase();
   if (TEXTAREA_NAME_HINTS.some((hint) => lower.includes(hint.toLowerCase()))) {
@@ -1964,7 +2277,7 @@ function childTypesFileExists(modulePath, childPascal) {
  * @param {string} childPascal
  * @param {string} [childTypeOverride]
  */
-function buildMasterDetailChildMeta(fieldName, childPascal, childTypeOverride, modulePath = '') {
+function buildMasterDetailChildMeta(fieldName, childPascal, childTypeOverride, modulePath = '', foreignKeyOnChild = '') {
   const { resolveChildEntityFrontendKebab } = require('./generate-master-detail-associations.cjs');
   const childCamel = pascalToCamel(childPascal);
   const childType = childTypeOverride || childPascal;
@@ -1978,6 +2291,8 @@ function buildMasterDetailChildMeta(fieldName, childPascal, childTypeOverride, m
     childI18nSlug: entityClassToSlug(`Takt${childPascal}`),
     childKebab,
     childIdField: `${childCamel}Id`,
+    /** Domain OneToMany nameof 外键（PascalCase，如 OriginalEmployeeId）；空则由 types 推断 */
+    foreignKeyOnChild: foreignKeyOnChild || '',
   };
 }
 
@@ -2045,7 +2360,13 @@ function detectMasterDetailChildrenFromEntity(entityPascal, modulePath = '', int
     .map((nav) => {
       const typesChild = fromTypes.find((c) => c.childPascal === nav.childShort);
       const fieldName = typesChild?.fieldName || pascalToCamel(nav.navPropName);
-      return buildMasterDetailChildMeta(fieldName, nav.childShort, typesChild?.childType, modulePath);
+      return buildMasterDetailChildMeta(
+        fieldName,
+        nav.childShort,
+        typesChild?.childType,
+        modulePath,
+        nav.foreignKeyOnChild,
+      );
     });
 }
 
@@ -2103,13 +2424,27 @@ function resolveChildMenuViewPath(child, modulePath) {
 }
 
 /**
- * 子实体是否已有独立实体菜单页（菜单存在且该实体可独立生成主视图，见 shouldExcludeVueGeneration）
- * @param {object} child
- * @param {string} modulePath
+ * 主菜单为独立单表 CRUD、各子表菜单为「主表 + 该子表明细」子导航主子的主实体
+ * @param {string} [masterPascal]
  * @returns {boolean}
  */
-function childHasStandaloneMenu(child, modulePath) {
-  // 显式登记的独立菜单从实体（即便菜单种子尚未进 MENU_INDEX）
+function isChildNavMasterDetailMaster(masterPascal) {
+  return masterPascal === 'Employee' || masterPascal === 'News';
+}
+
+/**
+ * 子实体是否已有独立实体菜单页（普通主子表：有菜单则不计入主表主子规划）
+ * 特例：主表为人事 Employee / 日常 News 时，子表即使有菜单仍参与规划（生成「子导航主子」）
+ * @param {object} child
+ * @param {string} modulePath
+ * @param {string} [masterPascal] 主表短名（如 Employee、News）
+ * @returns {boolean}
+ */
+function childHasStandaloneMenu(child, modulePath, masterPascal) {
+  // Employee / News：多子表 + 各子表独立菜单 → 仍由主表生成子导航主子视图（须先于 STANDALONE 判断）
+  if (isChildNavMasterDetailMaster(masterPascal)) {
+    return false;
+  }
   if (isStandaloneChildVueEntity(child.childPascal)) {
     return true;
   }
@@ -2126,26 +2461,31 @@ function childHasStandaloneMenu(child, modulePath) {
 }
 
 /**
- * 过滤已有独立实体菜单的子表（不计入主表主子视图规划）
+ * 过滤已有独立实体菜单的子表（不计入主表主子视图规划；Employee 主表除外）
  * @param {object[]} masterDetailChildren
  * @param {string} modulePath
+ * @param {string} [masterPascal]
  * @returns {object[]}
  */
-function filterStandaloneMenuChildren(masterDetailChildren, modulePath) {
-  return (masterDetailChildren || []).filter((child) => !childHasStandaloneMenu(child, modulePath));
+function filterStandaloneMenuChildren(masterDetailChildren, modulePath, masterPascal) {
+  return (masterDetailChildren || []).filter(
+    (child) => !childHasStandaloneMenu(child, modulePath, masterPascal),
+  );
 }
 
 /**
  * 按菜单 ComponentPath 规划主子视图（导航数 = 视图目录数，无额外单表目录）
  * - 主菜单 viewModulePath：绑定「尚无独立 ComponentPath 菜单」的首个子表（OneToMany 顺序）
  * - 其余菜单：ComponentPath 与子表 viewChildKebab 路径一致则各生成 1 个主子视图
+ * - 特例 Employee / News：有独立菜单的子表仍计入规划（仅子导航主子；主菜单页本身为单表 CRUD）
  * @param {string} masterViewModulePath
  * @param {string} modulePath
  * @param {object[]} masterDetailChildren
+ * @param {string} [masterPascal]
  * @returns {Array<{ viewModulePath: string, childMeta: object }>}
  */
-function resolveMasterDetailViewPlans(masterViewModulePath, modulePath, masterDetailChildren) {
-  const eligibleChildren = filterStandaloneMenuChildren(masterDetailChildren, modulePath);
+function resolveMasterDetailViewPlans(masterViewModulePath, modulePath, masterDetailChildren, masterPascal) {
+  const eligibleChildren = filterStandaloneMenuChildren(masterDetailChildren, modulePath, masterPascal);
   if (!eligibleChildren.length) {
     return [];
   }
@@ -2169,6 +2509,12 @@ function resolveMasterDetailViewPlans(masterViewModulePath, modulePath, masterDe
   const defaultChild = eligibleChildren.find(
     (child) => !MENU_INDEX.has(resolveChildMenuViewPath(child, modulePath)),
   ) || eligibleChildren[0];
+  // Employee / News：主菜单页为独立单表 CRUD，不绑定主子；仅各子表菜单生成「子导航主子」
+  if (isChildNavMasterDetailMaster(masterPascal)) {
+    return plans.filter((plan, index, arr) => arr.findIndex(
+      (item) => item.viewModulePath === plan.viewModulePath,
+    ) === index);
+  }
   if (masterViewModulePath) {
     plans.unshift({ viewModulePath: masterViewModulePath, childMeta: defaultChild });
   }
@@ -2185,8 +2531,13 @@ function resolveMasterDetailViewPlans(masterViewModulePath, modulePath, masterDe
  * @param {object} childMeta
  * @returns {string}
  */
-function resolveMasterDetailChildViewPath(masterViewModulePath, modulePath, masterDetailChildren, childMeta) {
-  const plans = resolveMasterDetailViewPlans(masterViewModulePath, modulePath, masterDetailChildren);
+function resolveMasterDetailChildViewPath(masterViewModulePath, modulePath, masterDetailChildren, childMeta, masterPascal) {
+  const plans = resolveMasterDetailViewPlans(
+    masterViewModulePath,
+    modulePath,
+    masterDetailChildren,
+    masterPascal,
+  );
   const hit = plans.find((plan) => plan.childMeta.childPascal === childMeta.childPascal);
   if (hit) {
     return hit.viewModulePath;
@@ -2246,13 +2597,27 @@ function cloneFieldMetaWithMasterDetailChildren(fields, masterDetailChildren) {
 
 /**
  * 子表 Query 中指向主表的外键字段（默认 {masterCamel}Id）
+ * 优先：Domain OneToMany 外键 → types「主子表关系」注释 → {master}Id/{master}Code
  * @param {ReturnType<typeof parseTypeInterfaces>} interfaces
  * @param {string} childPascal
  * @param {string} masterCamel
+ * @param {string} [foreignKeyOnChildPascal] 实体 nameof 外键（PascalCase，如 OriginalEmployeeId）
  */
-function resolveChildMasterFkField(interfaces, childPascal, masterCamel) {
+function resolveChildMasterFkField(interfaces, childPascal, masterCamel, foreignKeyOnChildPascal = '') {
   const create = interfaces.get(`${childPascal}Create`);
   const query = interfaces.get(`${childPascal}Query`);
+  const hasProp = (name) =>
+    Boolean(
+      name
+      && ((query?.properties || []).some((p) => p.name === name)
+        || (create?.properties || []).some((p) => p.name === name)),
+    );
+  if (foreignKeyOnChildPascal) {
+    const fromEntity = pascalToCamel(foreignKeyOnChildPascal);
+    if (hasProp(fromEntity)) {
+      return fromEntity;
+    }
+  }
   const pickMasterFkFromDoc = (properties) => {
     const hit = (properties || []).find((p) => /主子表关系/.test(p.doc || ''));
     return hit?.name || '';
@@ -2262,11 +2627,11 @@ function resolveChildMasterFkField(interfaces, childPascal, masterCamel) {
     return docFk;
   }
   const fkId = `${masterCamel}Id`;
-  if (query?.properties.some((p) => p.name === fkId) || create?.properties.some((p) => p.name === fkId)) {
+  if (hasProp(fkId)) {
     return fkId;
   }
   const fkCode = `${masterCamel}Code`;
-  if (query?.properties.some((p) => p.name === fkCode) || create?.properties.some((p) => p.name === fkCode)) {
+  if (hasProp(fkCode)) {
     return fkCode;
   }
   return fkId;
@@ -2339,11 +2704,29 @@ function collectDomainEntityFiles(rootDir = path.join(CONFIG.backendRoot, 'Takt.
 
 /**
  * 扫描全部 types + Domain 实体，建立「从实体 → 主实体」映射（从实体默认不单独生成单表 Vue；关联主子视图落在 module 平级目录）
+ * 特例：人事 Employee* 子表已由 Employee 认领后，禁止其它主表（如 TalentOffer→EmployeeOnboarding）覆盖
  * @returns {Map<string, { masterPascal: string, fieldName: string }>}
  */
 function buildMasterDetailChildRegistry() {
   /** @type {Map<string, { masterPascal: string, fieldName: string }>} */
   const registry = new Map();
+  /**
+   * @param {string} childShort
+   * @param {string} masterPascal
+   * @param {string} fieldName
+   */
+  function claimChild(childShort, masterPascal, fieldName) {
+    const existing = registry.get(childShort);
+    // 仅人事：Employee 已认领的 Employee* 子表不被其它主表覆盖
+    if (
+      existing?.masterPascal === 'Employee' &&
+      childShort.startsWith('Employee') &&
+      masterPascal !== 'Employee'
+    ) {
+      return;
+    }
+    registry.set(childShort, { masterPascal, fieldName });
+  }
   collectDomainEntityFiles().forEach((entityFile) => {
     const content = fs.readFileSync(entityFile, 'utf-8');
     const classMatch = content.match(/public\s+(?:sealed\s+)?class\s+Takt(\w+)\s*:/);
@@ -2355,10 +2738,7 @@ function buildMasterDetailChildRegistry() {
       if (RBAC_ASSOCIATION_ENTITY_SHORT_NAMES.has(nav.childShort)) {
         return;
       }
-      registry.set(nav.childShort, {
-        masterPascal,
-        fieldName: pascalToCamel(nav.navPropName),
-      });
+      claimChild(nav.childShort, masterPascal, pascalToCamel(nav.navPropName));
     });
   });
   for (const typesFile of collectAllTypesFiles()) {
@@ -2388,13 +2768,19 @@ function buildMasterDetailChildRegistry() {
  * @param {ReturnType<typeof parseTypeInterfaces>} interfaces
  * @param {string} childPascal
  * @param {string} masterCamel
+ * @param {string} [foreignKeyOnChildPascal]
  */
-function buildChildFormFieldProps(interfaces, childPascal, masterCamel) {
+function buildChildFormFieldProps(interfaces, childPascal, masterCamel, foreignKeyOnChildPascal = '') {
   const create = interfaces.get(`${childPascal}Create`);
   if (!create) {
     return [];
   }
-  const masterFkField = resolveChildMasterFkField(interfaces, childPascal, masterCamel);
+  const masterFkField = resolveChildMasterFkField(
+    interfaces,
+    childPascal,
+    masterCamel,
+    foreignKeyOnChildPascal,
+  );
   const masterFkNames = new Set([`${masterCamel}Id`, `${masterCamel}Code`, masterFkField]);
   const scopeFields = buildScopeFormFields(create.properties || [], childPascal);
   const scopeNames = new Set(scopeFields.map((f) => f.name));
@@ -2426,6 +2812,10 @@ function buildChildFormFieldProps(interfaces, childPascal, masterCamel) {
  */
 function getSkipListFields(entityPascal) {
   const skip = new Set(SKIP_LIST_FIELDS);
+  const entityScope = resolveEntityScope(entityPascal, '', CONFIG.backendRoot);
+  if (entityScope === 'tenant-core' || entityScope === 'tenant-plant') {
+    skip.delete('cultureCode');
+  }
   if (entityPascal === 'Tenant') {
     skip.delete('tenantCode');
   }
@@ -2473,7 +2863,7 @@ function buildFieldMeta(ifaceMap, entityPascal, typesFileContent = '', modulePat
   };
   const enrichFormFields = (fields, i18nSlug, metaEntityPascal = entityPascal) => {
     const dateTimeFields = loadEntityDateTimeFields(metaEntityPascal);
-    return fields.map((f) => {
+    const mapped = fields.map((f) => {
       const derived = isEntityDerivedFormField(f.doc);
       const dictType = derived ? '' : resolveDictType(f);
       const isDateTime = dateTimeFields.has(f.name);
@@ -2492,6 +2882,7 @@ function buildFieldMeta(ifaceMap, entityPascal, typesFileContent = '', modulePat
         maxLength: inputMaxLengths.get(f.name) ?? DEFAULT_A_INPUT_MAX_LENGTH,
       });
     });
+    return applyTaktNumberingFormMeta(applyBusinessFileUploadMeta(mapped, metaEntityPascal), metaEntityPascal);
   };
   const listFields = (entity?.properties || []).filter((p) => {
     if (skipListFields.has(p.name) || childFieldNames.has(p.name)) {
@@ -2541,7 +2932,12 @@ function buildFieldMeta(ifaceMap, entityPascal, typesFileContent = '', modulePat
     const childDtsFile = path.join(CONFIG.frontendRoot, CONFIG.typesDir, normalizedModulePath, `${childFileKebab}.d.ts`);
     const childDtsText = fs.existsSync(childDtsFile) ? fs.readFileSync(childDtsFile, 'utf-8') : '';
     const childIfaceMap = childDtsText ? parseTypeInterfaces(childDtsText) : ifaceMap;
-    const childFormRaw = buildChildFormFieldProps(childIfaceMap, child.childPascal, entityCamel);
+    const childFormRaw = buildChildFormFieldProps(
+      childIfaceMap,
+      child.childPascal,
+      entityCamel,
+      child.foreignKeyOnChild || '',
+    );
     const childEntity = ifaceMap.get(child.childType) || childIfaceMap.get(child.childType);
     const childListRaw = (childEntity?.properties || []).filter((p) => {
       if (SKIP_LIST_FIELDS.has(p.name)) {
@@ -2559,7 +2955,12 @@ function buildFieldMeta(ifaceMap, entityPascal, typesFileContent = '', modulePat
       return true;
     });
     const childI18nSlug = child.childI18nSlug || entityClassToSlug(`Takt${child.childPascal}`);
-    const masterFkField = resolveChildMasterFkField(childIfaceMap, child.childPascal, entityCamel);
+    const masterFkField = resolveChildMasterFkField(
+      childIfaceMap,
+      child.childPascal,
+      entityCamel,
+      child.foreignKeyOnChild || '',
+    );
     const masterFkNames = new Set([masterFkField, `${entityCamel}Id`]);
     const childQuery = childIfaceMap.get(`${child.childPascal}Query`);
     const childQueryRaw = (childQuery?.properties || []).filter((p) => {
@@ -2840,6 +3241,25 @@ function renderFormControl(field, modelPrefix, indent = '                ', cont
   const codeEditDisabledAttrs = renderFormCodeEditDisabledAttrs(field, indent, controlOptions);
   const editLockAttrs = readOnlyAttrs || codeEditDisabledAttrs;
   const clearAttr = field.readOnly ? '' : `\n${indent}  allow-clear`;
+  if (field.htmlType === 'numberingRule') {
+    const docType = String(field.documentType || '').replace(/'/g, "\\'");
+    const apiParamsAttr = docType
+      ? `\n${indent}  :api-params="{ documentType: '${docType}' }"`
+      : '';
+    return `${indent}<TaktSelect
+${indent}  v-model:value="${modelPrefix}${field.name}"
+${indent}  api-url="TaktNumberings/options"${apiParamsAttr}
+${indent}  :placeholder="t('common.page.form.placeholder.selectonly')"
+${indent}  :disabled="!!${controlOptions.formDataExpr || 'formData'}?.${controlOptions.entityIdField || 'id'} || loading"
+${indent}/>`;
+  }
+  if (field.htmlType === 'numberingCode') {
+    return `${indent}<a-input
+${indent}  v-model:value="${modelPrefix}${field.name}"
+${indent}  :placeholder="t('common.page.form.numberingCodePreview')"
+${indent}  disabled
+${indent}/>`;
+  }
   if (field.htmlType === 'apiSelect' && field.apiUrl) {
     return `${indent}<TaktSelect
 ${indent}  v-model:value="${modelPrefix}${field.name}"
@@ -2869,6 +3289,41 @@ ${indent}/>`;
 ${indent}  v-model:value="${modelPrefix}${field.name}"
 ${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')}"
 ${indent}  :rows="2"${editLockAttrs}
+${indent}/>`;
+  }
+  if (field.htmlType === 'richEditor') {
+    return `${indent}<takt-rich-editor
+${indent}  v-model:value="${modelPrefix}${field.name}"
+${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')}"${editLockAttrs}
+${indent}/>`;
+  }
+  if (field.htmlType === 'fileNameReadonly') {
+    return `${indent}<a-input
+${indent}  v-model:value="${modelPrefix}${field.name}"
+${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')}"${renderAInputLimitAttrs(field, indent)}
+${indent}  disabled
+${indent}/>`;
+  }
+  if (field.htmlType === 'fileUpload') {
+    return `${indent}<takt-upload-file
+${indent}  tabs-type="files"
+${indent}  :files-auto-upload="true"
+${indent}  :files-multiple="false"
+${indent}  :files-max-count="1"
+${indent}  :files-disabled="!!loading || fileUploading"
+${indent}  :files-max-size="taktFileMaxSizeMb"
+${indent}  :files-accept="taktFileAccept"
+${indent}  :files-hint="t('foundation.file.page.upload.hint', { max: taktFileMaxSizeMb })"
+${indent}  :files-custom-request="handleFilesCustomRequest"
+${indent}  v-model:files-file-list="filesFileList"
+${indent}  @files:remove="handleFileRemove"
+${indent}/>
+${indent}<a-input
+${indent}  v-if="${modelPrefix}accessUrl"
+${indent}  v-model:value="${modelPrefix}accessUrl"
+${indent}  class="mt-2"
+${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')}"${renderAInputLimitAttrs(field, indent)}
+${indent}  disabled
 ${indent}/>`;
   }
   if (field.htmlType === 'date') {
@@ -2934,7 +3389,7 @@ function renderQueryFormItemBody(field) {
         />
       </a-form-item>`;
   }
-  if (field.htmlType === 'textarea') {
+  if (field.htmlType === 'textarea' || field.htmlType === 'richEditor') {
     const placeholderExpr = isExtFieldField(field)
       ? fieldExtFieldPlaceholderTExpr()
       : fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional', 'query');
@@ -3138,11 +3593,24 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
     || MENU_INDEX.get(entityKebab);
   const hasOwnMenuPage = Boolean(menuEntry?.componentPath);
   const masterRef = masterDetailChildRegistry.get(entityShort);
-  if (masterRef && !options.bypassChildRegistrySkip && !isStandaloneChildVueEntity(entityShort) && !hasOwnMenuPage) {
-    console.log(`⏭️  跳过主子表从实体: ${rel}（视图由主表 ${masterRef.masterPascal}.${masterRef.fieldName} 承载）`);
+  // 普通主子表：无独立菜单的从实体跳过（视图由主表承载）；有菜单则按主实体生成独立页
+  // 特例 Employee / News 子表：即使有菜单（或 STANDALONE）也跳过单表页，由主表子导航主子写出
+  const isChildNavMdChild = Boolean(
+    masterRef && isChildNavMasterDetailMaster(masterRef.masterPascal),
+  );
+  if (
+    masterRef &&
+    !options.bypassChildRegistrySkip &&
+    (isChildNavMdChild || !hasOwnMenuPage)
+  ) {
+    console.log(
+      `⏭️  跳过主子表从实体: ${rel}（视图由主表 ${masterRef.masterPascal}.${masterRef.fieldName} 承载` +
+      (isChildNavMdChild && hasOwnMenuPage ? `；${masterRef.masterPascal} 子导航主子` : '') +
+      '）',
+    );
     return { skipped: true };
   }
-  if (masterRef && (isStandaloneChildVueEntity(entityShort) || hasOwnMenuPage)) {
+  if (masterRef && (isStandaloneChildVueEntity(entityShort) || hasOwnMenuPage) && !isChildNavMdChild) {
     console.log(
       `ℹ️  从实体 ${entityShort} 有独立菜单页（${ownMenuPath}），按主实体生成视图` +
       (masterRef ? `（主表 ${masterRef.masterPascal}.${masterRef.fieldName} 展开区可并存）` : ''),
@@ -3189,7 +3657,11 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
     ifaceMap: typesBundle.ifaceMap,
     capsMerged,
     isTreeEntity: entityHasParentId(entityShort, CONFIG.backendRoot) && capsMerged.hasGetTree,
-    isMasterDetailEntity: filterStandaloneMenuChildren(fields.masterDetailChildren, ctx.modulePath).length > 0,
+    isMasterDetailEntity: filterStandaloneMenuChildren(
+      fields.masterDetailChildren,
+      ctx.modulePath,
+      entityShort,
+    ).length > 0,
   };
 }
 
@@ -3292,7 +3764,7 @@ function resolveFormFieldDefaultValue(field, dictDefaults) {
   if (/^isBuiltIn$/i.test(field.name || '')) {
     return 0;
   }
-  if (field.dictType === 'sys_yes_no_type' && /builtin|built_in|isbuiltin/i.test(field.name)) {
+  if (field.dictType === 'sys_yes_no' && /builtin|built_in|isbuiltin/i.test(field.name)) {
     return 0;
   }
   return undefined;
@@ -3332,33 +3804,36 @@ function applyFormDefaults(target: Record<string, unknown>) {
 }
 
 /**
- * resetPeriod 列表/表单归一化脚本（sys_reset_period；兼容 daily/monthly/yearly）
+ * resetPeriod 列表/表单归一化脚本（sys_reset_period；None|Annually|Monthly|Daily）
  * @returns {string}
  */
 function buildResetPeriodNormalizerScriptBlock() {
-  return `/** resetPeriod：后端 legacy 与字典 dictValue 归一化 */
+  return `/** resetPeriod：后端 legacy 与字典 dictValue 归一化（None|Annually|Monthly|Daily） */
 const RESET_PERIOD_TO_DICT: Record<string, string> = {
-  none: 'none',
-  day: 'day',
-  daily: 'day',
-  month: 'month',
-  monthly: 'month',
-  year: 'year',
-  yearly: 'year',
+  none: 'None',
+  annually: 'Annually',
+  year: 'Annually',
+  yearly: 'Annually',
+  monthly: 'Monthly',
+  month: 'Monthly',
+  daily: 'Daily',
+  day: 'Daily',
+  hour: 'Daily',
+  hourly: 'Daily',
 }
 
 /** 编辑回填：归一化为 sys_reset_period dictValue */
 function normalizeResetPeriodForForm(value: unknown): string {
-  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'year')
+  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'None')
   const key = String(value ?? fallback).trim().toLowerCase()
-  return RESET_PERIOD_TO_DICT[key] ?? fallback
+  return RESET_PERIOD_TO_DICT[key] ?? (typeof value === 'string' && value.trim() ? value.trim() : fallback)
 }
 
 /** 提交：与实体 reset_period、字典 sys_reset_period 一致 */
 function normalizeResetPeriodForSubmit(value: unknown): string {
-  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'year')
+  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'None')
   const key = String(value ?? '').trim().toLowerCase()
-  return RESET_PERIOD_TO_DICT[key] ?? fallback
+  return RESET_PERIOD_TO_DICT[key] ?? (typeof value === 'string' && value.trim() ? value.trim() : fallback)
 }
 `;
 }
@@ -3370,7 +3845,7 @@ function normalizeResetPeriodForSubmit(value: unknown): string {
  * @returns {{ script: string, editNormalizeLines: string[], getValuesBody: string }}
  */
 function buildFormSubmitNormalizerScriptBlock(formFields, options = {}) {
-  const { useBuildSubmitPayload = false } = options;
+  const { useBuildSubmitPayload = false, entityIdField = '' } = options;
   const hasResetPeriod = (formFields || []).some((f) => f.name === 'resetPeriod');
   const numberFields = (formFields || []).filter((f) => f.type === 'number' && !f.readOnly);
   /** @type {string[]} */
@@ -3386,20 +3861,50 @@ function buildFormSubmitNormalizerScriptBlock(formFields, options = {}) {
   numberFields.forEach((f) => {
     coerceLines.push(`  if ('${f.name}' in payload) {
     const raw${f.name} = payload.${f.name}
-    payload.${f.name} = typeof raw${f.name} === 'number' ? raw${f.name} : Number(raw${f.name})
+    if (raw${f.name} === undefined || raw${f.name} === null || raw${f.name} === '') {
+      delete payload.${f.name}
+    } else {
+      const num${f.name} = typeof raw${f.name} === 'number' ? raw${f.name} : Number(raw${f.name})
+      if (Number.isFinite(num${f.name})) payload.${f.name} = num${f.name}
+      else delete payload.${f.name}
+    }
   }`);
   });
   const payloadInit = useBuildSubmitPayload
     ? '  const payload = buildSubmitPayload() as Record<string, unknown>'
     : '  const payload = { ...formState }';
   const sortOrderCleanup = `  if ('sortOrder' in payload) delete payload.sortOrder`;
+  const plantFallback = (formFields || []).some((f) => f.name === 'plantCode')
+    ? `  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }`
+    : '';
+  const idEnsure = entityIdField
+    ? `  if (props.formData?.${entityIdField}) {
+    payload.${entityIdField} = props.formData.${entityIdField}
+    delete payload.numberingRuleCode
+  }`
+    : '';
+  const numberingStrip = (formFields || []).some((f) => f.htmlType === 'numberingRule') && !entityIdField
+    ? `  if (payload.numberingRuleCode !== undefined && !String(payload.numberingRuleCode ?? '').trim()) {
+    delete payload.numberingRuleCode
+  }`
+    : '';
   const getValuesBody = coerceLines.length > 0
     ? `${payloadInit}
 ${coerceLines.join('\n')}
 ${sortOrderCleanup}
+${plantFallback}
+${numberingStrip}
+${idEnsure}
   return payload`
     : `${payloadInit}
 ${sortOrderCleanup}
+${plantFallback}
+${numberingStrip}
+${idEnsure}
   return payload`;
   return { script, editNormalizeLines, getValuesBody };
 }
@@ -3412,12 +3917,17 @@ const DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT = {
   masterDetailDetail: 4,
 };
 
-/** 与 table-columns.ts ENTITY_BASE_FIELDS 对齐（小写键，不含 id；plant 居首） */
+const TENANT_CORE_AUDIT_FIELDS = [
+  'tenantCode', 'extField', 'remark', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt',
+  'isDeleted', 'deletedBy', 'deletedAt',
+];
+
+/** 与 table-columns.ts ENTITY_BASE_FIELDS 对齐（小写键，不含 id；有工厂时 plant 居首） */
 const ENTITY_BASE_FIELDS_BY_SCOPE = {
-  tenant: [
-    'relatedPlant', 'cultureCode', 'tenantCode', 'extField', 'remark', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt',
-    'isDeleted', 'deletedBy', 'deletedAt',
-  ],
+  tenant: ['relatedPlant', 'cultureCode', ...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-core': [...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-culture': ['cultureCode', ...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-plant': ['relatedPlant', ...TENANT_CORE_AUDIT_FIELDS],
   company: [
     'plantCode', 'tenantCode', 'companyCode', 'cultureCode', 'extField', 'remark', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt',
     'isDeleted', 'deletedBy', 'deletedAt',
@@ -3432,6 +3942,9 @@ const ENTITY_BASE_FIELDS_BY_SCOPE = {
 /** 与 table-columns.ts ENTITY_SCOPE_PLANT_FIELD 对齐 */
 const ENTITY_SCOPE_PLANT_FIELD = {
   tenant: 'relatedPlant',
+  'tenant-core': undefined,
+  'tenant-culture': undefined,
+  'tenant-plant': 'relatedPlant',
   company: 'plantCode',
   approval: 'plantCode',
 };
@@ -3445,11 +3958,17 @@ const ENTITY_SCOPE_PLANT_FIELD = {
  */
 function extractBusinessListFieldNames(listFields, entityIdName, entityScope = 'company') {
   const baseKeys = new Set(ENTITY_BASE_FIELDS_BY_SCOPE[entityScope] || ENTITY_BASE_FIELDS_BY_SCOPE.company);
-  const plantKey = ENTITY_SCOPE_PLANT_FIELD[entityScope] || ENTITY_SCOPE_PLANT_FIELD.company;
+  const plantKey = ENTITY_SCOPE_PLANT_FIELD[entityScope];
   const keys = [];
   for (const field of listFields || []) {
     const name = field?.name;
-    if (!name || name === entityIdName || name === 'action' || name === plantKey || baseKeys.has(name)) {
+    if (
+      !name ||
+      name === entityIdName ||
+      name === 'action' ||
+      (plantKey && name === plantKey) ||
+      baseKeys.has(name)
+    ) {
       continue;
     }
     keys.push(name);
@@ -3467,9 +3986,14 @@ function extractBusinessListFieldNames(listFields, entityIdName, entityScope = '
  */
 function buildDefaultVisibleColumnKeys(listFields, entityIdName, entityScope = 'company', tableMode = 'single') {
   const count = DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT[tableMode] ?? DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT.single;
-  const plantKey = ENTITY_SCOPE_PLANT_FIELD[entityScope] || ENTITY_SCOPE_PLANT_FIELD.company;
+  const plantKey = ENTITY_SCOPE_PLANT_FIELD[entityScope];
   const businessKeys = extractBusinessListFieldNames(listFields, entityIdName, entityScope).slice(0, Math.max(0, count));
-  return [entityIdName, plantKey, ...businessKeys, 'action'];
+  const keys = [entityIdName];
+  if (plantKey) {
+    keys.push(plantKey);
+  }
+  keys.push(...businessKeys, 'action');
+  return keys;
 }
 
 /**
@@ -3546,19 +4070,23 @@ function buildResetPeriodListMapperScriptBlock(listFields) {
   }
   return `/** 列表 TaktDictTag：resetPeriod 归一化为 sys_reset_period dictValue */
 const RESET_PERIOD_TO_DICT: Record<string, string> = {
-  none: 'none',
-  day: 'day',
-  daily: 'day',
-  month: 'month',
-  monthly: 'month',
-  year: 'year',
-  yearly: 'year',
+  none: 'None',
+  annually: 'Annually',
+  year: 'Annually',
+  yearly: 'Annually',
+  monthly: 'Monthly',
+  month: 'Monthly',
+  daily: 'Daily',
+  day: 'Daily',
+  hour: 'Daily',
+  hourly: 'Daily',
 }
 
 /** @param value 后端 resetPeriod */
 function mapResetPeriodDictValue(value?: string | number | null): string {
-  const key = String(value ?? 'year').trim().toLowerCase()
-  return RESET_PERIOD_TO_DICT[key] ?? 'year'
+  const raw = String(value ?? 'None').trim()
+  const key = raw.toLowerCase()
+  return RESET_PERIOD_TO_DICT[key] ?? raw
 }
 `;
 }
@@ -3729,7 +4257,7 @@ function buildListSwitchHandlersBlock(switchListCols, entityPascal, caps, option
     if (field.switchKind === 'builtin') {
       return `
 /**
- * 行内切换内置（sys_yes_no_type：1=是，0=否）
+ * 行内切换内置（sys_yes_no：1=是，0=否）
  * @param record 当前行
  * @param checked 开关是否选中
  */
@@ -3804,8 +4332,41 @@ function fieldsUseDictSelect(fields) {
  */
 function buildFormRequiredRuleLines(formFields) {
   return formFields
-    .filter((f) => !f.optional && f.name !== 'remark' && !isExtFieldField(f) && !f.readOnly)
+    .filter((f) => {
+      if (f.htmlType === 'numberingRule' || f.htmlType === 'numberingCode') {
+        return true;
+      }
+      return !f.optional && f.name !== 'remark' && !isExtFieldField(f) && !f.readOnly;
+    })
     .map((f) => {
+      if (f.htmlType === 'numberingRule') {
+        return `  numberingRuleCode: [{
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingRuleRequired'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],`;
+      }
+      if (f.htmlType === 'numberingCode') {
+        return `  ${f.name}: [{
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingCodePreview'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],`;
+      }
       const trigger = f.htmlType === 'select' || f.htmlType === 'apiSelect' || f.htmlType === 'date' || f.htmlType === 'switch' ? 'change' : 'blur';
       const placeholderKey = f.htmlType === 'select' || f.htmlType === 'apiSelect' || f.htmlType === 'date'
         ? 'common.page.form.placeholder.select'
@@ -3914,19 +4475,157 @@ ${scopeOnCreate}      formRef.value?.clearValidate()
 }
 
 /**
+ * 业务文件上传：额外 import（message / Upload 类型 / TaktFile API 与策略）
+ * @returns {string}
+ */
+function buildBusinessFileUploadFormImportBlock() {
+  return `import { message } from 'ant-design-vue'
+import type { UploadFile, UploadProps } from 'ant-design-vue'
+import { getFileById } from '@/api/foundation/file'
+import { uploadTaktFileSmart } from '@/utils/takt-file-chunk-upload'
+import {
+  buildTaktFileAcceptAttribute,
+  loadTaktFileUploadBasePolicy,
+  resolveTaktFileMaxSizeMb,
+} from '@/utils/takt-file-upload-policy'
+`;
+}
+
+/**
+ * 业务文件上传：状态、回填 fileName/accessUrl、自定义上传与策略加载
+ * @returns {string}
+ */
+function buildBusinessFileUploadFormScriptBlock() {
+  return `/** 文件上传中 */
+const fileUploading = ref(false)
+/** takt-upload-file 文件列表 */
+const filesFileList = ref<UploadFile[]>([])
+/** 上传 accept */
+const taktFileAccept = ref('')
+/** 上传体积上限 MB */
+const taktFileMaxSizeMb = ref(500)
+
+/**
+ * 按 fileName / accessUrl 同步上传列表展示
+ */
+function syncFilesFileListFromFormState() {
+  const url = String(formState.accessUrl ?? '').trim()
+  if (!url) {
+    filesFileList.value = []
+    return
+  }
+  filesFileList.value = [{
+    uid: '-1',
+    name: String(formState.fileName ?? url.split('/').pop() ?? 'file'),
+    status: 'done',
+    url,
+  }]
+}
+
+/**
+ * 将 TaktFile 上传结果回填至表单（文件名由上传结果回填，禁止手输）
+ * @param file 本地文件
+ * @param result 上传结果
+ */
+async function applyUploadResultToForm(file: globalThis.File, result: Awaited<ReturnType<typeof uploadTaktFileSmart>>) {
+  let accessUrl = result.accessUrl?.trim() ?? ''
+  if (!accessUrl && result.fileId) {
+    const detail = await getFileById(result.fileId)
+    accessUrl = detail.accessUrl?.trim() ?? ''
+  }
+  if (!accessUrl) {
+    throw new Error('accessUrl empty')
+  }
+  formState.accessUrl = accessUrl
+  formState.fileName = result.fileOriginalName?.trim()
+    || result.fileName?.trim()
+    || file.name
+  syncFilesFileListFromFormState()
+  formRef.value?.validateFields(['accessUrl', 'fileName']).catch(() => undefined)
+}
+
+/** takt-upload-file 自定义上传：落库 TaktFile 后回写 accessUrl / fileName */
+const handleFilesCustomRequest: UploadProps['customRequest'] = (options) => {
+  if (props.loading || fileUploading.value) {
+    options.onError?.(new Error('upload disabled'))
+    return
+  }
+  const originFile = options.file as globalThis.File
+  fileUploading.value = true
+  void (async () => {
+    try {
+      const result = await uploadTaktFileSmart(originFile)
+      await applyUploadResultToForm(originFile, result)
+      options.onSuccess?.(result)
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error : new Error(String(error))
+      message.error(t('common.feedback.failed'))
+      options.onError?.(err)
+    } finally {
+      fileUploading.value = false
+    }
+  })()
+}
+
+/** 移除已上传文件 */
+function handleFileRemove() {
+  formState.accessUrl = ''
+  formState.fileName = ''
+  filesFileList.value = []
+}
+
+watch(
+  () => [formState.fileName, formState.accessUrl],
+  () => {
+    syncFilesFileListFromFormState()
+  },
+)
+
+/** 挂载后加载后端上传策略（accept / maxSize） */
+onMounted(() => {
+  void (async () => {
+    try {
+      const policy = await loadTaktFileUploadBasePolicy()
+      taktFileAccept.value = buildTaktFileAcceptAttribute(policy.allowedExtensions ?? [])
+      taktFileMaxSizeMb.value = resolveTaktFileMaxSizeMb(policy)
+    } catch {
+      // 回退默认值；实际上传校验仍由后端 API 返回
+    }
+  })()
+})
+`;
+}
+
+/**
  * 生成 *-form.vue script 段公共片段（三模板共用）
  * @param {object} options
- * @returns {{ vueImportLine: string, dictImportLine: string, dictBootstrap: string, requiredRules: string, watchBlock: string }}
+ * @returns {{ vueImportLine: string, dictImportLine: string, dictBootstrap: string, fileUploadImportLine: string, fileUploadBootstrap: string, requiredRules: string, watchBlock: string }}
  */
 function buildGeneratedFormVueScriptFragments(options) {
   const needsDictSelect = fieldsUseDictSelect(options.formFields);
+  const needsFileUpload = fieldsNeedFileUpload(options.formFields);
+  const needsNumbering = fieldsNeedTaktNumbering(options.formFields);
+  const needsOnMounted = needsDictSelect || needsFileUpload;
+  const fileUploadImportLine = needsFileUpload ? buildBusinessFileUploadFormImportBlock() : '';
+  const fileUploadBootstrap = needsFileUpload ? buildBusinessFileUploadFormScriptBlock() : '';
+  const numberingImportLine = needsNumbering
+    ? "import { useTaktFormNumbering } from '@/composables/use-takt-form-numbering'\n"
+    : '';
+  const numberingBootstrap = needsNumbering
+    ? buildTaktNumberingFormScriptBlock(options.formFields, options.entityIdField || 'id')
+    : '';
   const normalizer = buildFormSubmitNormalizerScriptBlock(options.formFields, {
     useBuildSubmitPayload: !!options.useBuildSubmitPayload,
+    entityIdField: options.entityIdField || '',
   });
   return {
-    vueImportLine: `import { reactive, watch, computed, ref${needsDictSelect ? ', onMounted' : ''} } from 'vue'`,
+    vueImportLine: `import { reactive, watch, computed, ref${needsOnMounted ? ', onMounted' : ''} } from 'vue'`,
     dictImportLine: needsDictSelect ? buildDictDataStoreImportLine() : '',
     dictBootstrap: needsDictSelect ? buildDictDataStoreFormBootstrap() : '',
+    fileUploadImportLine,
+    fileUploadBootstrap,
+    numberingImportLine,
+    numberingBootstrap,
     defaultsBlock: buildFormDefaultsScriptBlock(options.formFields),
     normalizerBlock: normalizer.script,
     getValuesBody: normalizer.getValuesBody,
@@ -3937,7 +4636,6 @@ function buildGeneratedFormVueScriptFragments(options) {
     }),
   };
 }
-
 
 /**
  * index.vue：buildListQuery 函数（列表/导出共用；空查询项不下发，避免 DateTime? 绑定 400）
@@ -4216,6 +4914,7 @@ module.exports = {
   EXT_FIELD_FORM_NAME,
   EXT_FIELD_HINT_I18N_KEY,
   EXT_FIELD_PLACEHOLDER_I18N_KEY,
+  SCOPE_FORM_FIELD_NAMES,
   hasScopeContextFormFields,
   buildScopeFormFields,
   renderReadOnlyControlAttrs,
@@ -4258,6 +4957,7 @@ module.exports = {
   resolveChildMenuViewPath,
   filterStandaloneMenuChildren,
   childHasStandaloneMenu,
+  isChildNavMasterDetailMaster,
   validateMasterDetailChildrenAlignment,
   cloneFieldMetaWithMasterDetailChildren,
   buildFieldMeta,
@@ -4287,6 +4987,14 @@ module.exports = {
   buildEntityDictValueHelper,
   buildEntityNumericCoerceHelper,
   inferHtmlType,
+  isRichTextContentField,
+  hasBusinessFileUploadPair,
+  applyBusinessFileUploadMeta,
+  fieldsNeedFileUpload,
+  isTaktNumberingAutoFormField,
+  applyTaktNumberingFormMeta,
+  fieldsNeedTaktNumbering,
+  buildTaktNumberingFormScriptBlock,
   buildFormRequiredRuleLines,
   buildDictDataStoreImportLine,
   buildDictDataStoreFormBootstrap,

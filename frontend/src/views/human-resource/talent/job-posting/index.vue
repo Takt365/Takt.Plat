@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:talent:job:posting:create"
-      update-permission="human:resource:talent:job:posting:update"
-      delete-permission="human:resource:talent:job:posting:delete"
-      import-permission="human:resource:talent:job:posting:import"
-      export-permission="human:resource:talent:job:posting:export"
+      create-permission="human:resource:talent:staffing:requirement:create"
+      update-permission="human:resource:talent:staffing:requirement:update"
+      delete-permission="human:resource:talent:staffing:requirement:delete"
+      import-permission="human:resource:talent:staffing:requirement:import"
+      export-permission="human:resource:talent:staffing:requirement:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getTalentJobPostingId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -109,204 +110,22 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('staffingRequirementId')">
-      <a-form-item :label="t('entity.talentjobposting.staffingrequirementid')">
-        <a-input
-          v-model:value="advancedQueryForm.staffingRequirementId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentjobposting.staffingrequirementid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postingCode')">
-      <a-form-item :label="t('entity.talentjobposting.postingcode')">
-        <a-input
-          v-model:value="advancedQueryForm.postingCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentjobposting.postingcode') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('title')">
-      <a-form-item :label="t('entity.talentjobposting.title')">
-        <a-input
-          v-model:value="advancedQueryForm.title"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentjobposting.title') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('postingStatus')">
-      <a-form-item :label="t('entity.talentjobposting.postingstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.postingStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentjobposting.postingstatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('publishDateStart')">
-      <a-form-item :label="t('entity.talentjobposting.publishdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.publishDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentjobposting.publishdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('publishDateEnd')">
-      <a-form-item :label="t('entity.talentjobposting.publishdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.publishDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentjobposting.publishdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('openDateStart')">
-      <a-form-item :label="t('entity.talentjobposting.opendatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.openDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentjobposting.opendatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('openDateEnd')">
-      <a-form-item :label="t('entity.talentjobposting.opendateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.openDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentjobposting.opendateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('closeDateStart')">
-      <a-form-item :label="t('entity.talentjobposting.closedatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.closeDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentjobposting.closedatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('closeDateEnd')">
-      <a-form-item :label="t('entity.talentjobposting.closedateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.closeDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentjobposting.closedateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('publishChannel')">
-      <a-form-item :label="t('entity.talentjobposting.publishchannel')">
-        <a-input-number
-          v-model:value="advancedQueryForm.publishChannel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentjobposting.publishchannel') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('reason')">
-      <a-form-item :label="t('entity.talentjobposting.reason')">
-        <a-input
-          v-model:value="advancedQueryForm.reason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentjobposting.reason') })"
-          show-count
-          :maxlength="500"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.talentjobposting._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.talentjobposting._self"
+        v-if="importVisible"
+        :entity-i18n-key="TALENTJOBPOSTING_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -348,15 +167,28 @@ import { getTalentJobPostingList, getTalentJobPostingById, createTalentJobPostin
 import type { TalentJobPosting, TalentJobPostingQuery } from '@/types/human-resource/talent/job-posting'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
+import {
+  useTalentJobPostingI18n,
+  TALENTJOBPOSTING_LIST_FIELDS,
+  TALENTJOBPOSTING_QUERY_STRING_FIELDS,
+  TALENTJOBPOSTING_QUERY_FIELDS,
+  TALENTJOBPOSTING_SELF_I18N_KEY,
+} from './composables/use-job-posting-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useTalentJobPostingI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type TalentJobPostingRowRecord = TalentJobPosting | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktTalentJobPosting')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.talentjobposting._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -372,9 +204,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<TalentJobPosting | null>(null)
+const selectedRow = ref<TalentJobPostingRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<TalentJobPosting[]>([])
+const selectedRows = ref<TalentJobPostingRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -391,43 +223,44 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of TALENTJOBPOSTING_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(TALENTJOBPOSTING_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof TALENTJOBPOSTING_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  staffingRequirementId: '',
-  postingCode: '',
-  title: '',
-  postingStatus: undefined as number | undefined,
-  publishDateStart: '',
-  publishDateEnd: '',
-  openDateStart: '',
-  openDateEnd: '',
-  closeDateStart: '',
-  closeDateEnd: '',
-  publishChannel: undefined as number | undefined,
-  reason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'staffingRequirementId', label: t('entity.talentjobposting.staffingrequirementid') },
-  { key: 'postingCode', label: t('entity.talentjobposting.postingcode') },
-  { key: 'title', label: t('entity.talentjobposting.title') },
-  { key: 'postingStatus', label: t('entity.talentjobposting.postingstatus') },
-  { key: 'publishDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.talentjobposting.publishdate')) },
-  { key: 'publishDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.talentjobposting.publishdate')) },
-  { key: 'openDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.talentjobposting.opendate')) },
-  { key: 'openDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.talentjobposting.opendate')) },
-  { key: 'closeDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.talentjobposting.closedate')) },
-  { key: 'closeDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.talentjobposting.closedate')) },
-  { key: 'publishChannel', label: t('entity.talentjobposting.publishchannel') },
-  { key: 'reason', label: t('entity.talentjobposting.reason') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  TALENTJOBPOSTING_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -443,8 +276,10 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {TalentJobPostingQuery} 查询 DTO
  */
@@ -465,136 +300,44 @@ function buildListQuery(overrides?: Partial<TalentJobPostingQuery>): TalentJobPo
       query[key] = v as never
     }
   }
-  assignTrimmed('staffingRequirementId', form.staffingRequirementId)
-  assignTrimmed('postingCode', form.postingCode)
-  assignTrimmed('title', form.title)
-  if (form.postingStatus !== undefined && form.postingStatus !== null) {
-    query.postingStatus = form.postingStatus
+  for (const key of TALENTJOBPOSTING_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('publishDateStart', form.publishDateStart)
-  assignTrimmed('publishDateEnd', form.publishDateEnd)
-  assignTrimmed('openDateStart', form.openDateStart)
-  assignTrimmed('openDateEnd', form.openDateEnd)
-  assignTrimmed('closeDateStart', form.closeDateStart)
-  assignTrimmed('closeDateEnd', form.closeDateEnd)
-  if (form.publishChannel !== undefined && form.publishChannel !== null) {
-    query.publishChannel = form.publishChannel
-  }
-  assignTrimmed('reason', form.reason)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
+
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildTalentJobPostingListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'talentJobPostingId',
-    key: 'talentJobPostingId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'talentJobPostingId') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.staffingrequirementid'),
-    dataIndex: 'staffingRequirementId',
-    key: 'staffingRequirementId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'staffingRequirementId') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.postingcode'),
-    dataIndex: 'postingCode',
-    key: 'postingCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'postingCode') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.title'),
-    dataIndex: 'title',
-    key: 'title',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'title') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.postingstatus'),
-    dataIndex: 'postingStatus',
-    key: 'postingStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'postingStatus') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.publishdate'),
-    dataIndex: 'publishDate',
-    key: 'publishDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'publishDate') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.opendate'),
-    dataIndex: 'openDate',
-    key: 'openDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'openDate') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.closedate'),
-    dataIndex: 'closeDate',
-    key: 'closeDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'closeDate') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.publishchannel'),
-    dataIndex: 'publishChannel',
-    key: 'publishChannel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'publishChannel') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.reason'),
-    dataIndex: 'reason',
-    key: 'reason',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'reason') ?? ''
-  },
-  {
-    title: t('entity.talentjobposting.staffingrequirement'),
-    dataIndex: 'staffingRequirement',
-    key: 'staffingRequirement',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'staffingRequirement') ?? ''
-  },
+  buildTalentJobPostingListColumn('talentJobPostingId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...TALENTJOBPOSTING_LIST_FIELDS.map((key) => buildTalentJobPostingListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -602,52 +345,51 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:talent:job:posting:update',
-        onClick: (record: TalentJobPosting) => handleEdit(record)
+        permission: 'human:resource:talent:staffing:requirement:update',
+        onClick: (record: TalentJobPostingRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:talent:job:posting:delete',
-        onClick: (record: TalentJobPosting) => handleDeleteOne(record)
+        permission: 'human:resource:talent:staffing:requirement:delete',
+        onClick: (record: TalentJobPostingRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getTalentJobPostingId = (record: any): string => record?.[entityIdName] ?? ''
-/**
- * 读取行字段值
- * @param record 行数据
- * @param field 字段名
- */
-const getTalentJobPostingField = (record: any, field: string): any => record?.[field]
+const getTalentJobPostingId = (record: TalentJobPostingRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: TalentJobPosting[]) => {
+  onChange: (keys: (string | number)[], rows: TalentJobPostingRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: TalentJobPosting, selected: boolean) => {
+  onSelect: (record: TalentJobPostingRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getTalentJobPostingId(selectedRow.value) === getTalentJobPostingId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: TalentJobPosting[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: TalentJobPostingRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: TalentJobPosting) => ({
+const onClickRow = (record: TalentJobPostingRowRecord) => ({
   onClick: () => {
     const key = getTalentJobPostingId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -668,6 +410,11 @@ const onClickRow = (record: TalentJobPosting) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getTalentJobPostingList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -693,48 +440,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  staffingRequirementId: '',
-  postingCode: '',
-  title: '',
-  postingStatus: undefined as number | undefined,
-  publishDateStart: '',
-  publishDateEnd: '',
-  openDateStart: '',
-  openDateEnd: '',
-  closeDateStart: '',
-  closeDateEnd: '',
-  publishChannel: undefined as number | undefined,
-  reason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.talentjobposting._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: TalentJobPosting) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.talentjobposting._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: TalentJobPostingRowRecord) {
+  const id = getTalentJobPostingId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getTalentJobPostingById(id)
+    formData.value = detail ?? ({ ...record } as Partial<TalentJobPosting>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.talentjobposting._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -752,10 +494,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateTalentJobPosting(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.talentjobposting._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createTalentJobPosting(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.talentjobposting._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -783,15 +525,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importTalentJobPosting(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importTalentJobPosting(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -802,6 +547,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportTalentJobPosting(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -825,24 +573,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.talentjobposting._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[TalentJobPosting] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.talentjobposting._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: TalentJobPosting) {
+async function handleDeleteOne(record: TalentJobPostingRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.talentjobposting._self'), name: t('common.tip.this.target', { target: t('entity.talentjobposting._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteTalentJobPostingById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.talentjobposting._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -850,18 +598,18 @@ async function handleDeleteOne(record: TalentJobPosting) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.talentjobposting._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.talentjobposting._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteTalentJobPostingBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.talentjobposting._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -879,24 +627,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  staffingRequirementId: '',
-  postingCode: '',
-  title: '',
-  postingStatus: undefined as number | undefined,
-  publishDateStart: '',
-  publishDateEnd: '',
-  openDateStart: '',
-  openDateEnd: '',
-  closeDateStart: '',
-  closeDateEnd: '',
-  publishChannel: undefined as number | undefined,
-  reason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

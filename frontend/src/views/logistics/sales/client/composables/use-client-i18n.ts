@@ -20,7 +20,6 @@ export const CLIENT_SELF_I18N_KEY = buildEntitySelfI18nKey(CLIENT_ENTITY_SLUG)
 
 /** 列表业务列（不含主键） */
 export const CLIENT_LIST_FIELDS = [
-  'plantCode',
   'clientCode',
   'clientName1',
   'clientName2',
@@ -28,8 +27,8 @@ export const CLIENT_LIST_FIELDS = [
   'clientType',
   'enterpriseNature',
   'industryAttribute',
-  'cultureCode',
   'clientTaxNumber',
+  'taxCode',
   'taxRate',
   'registrationCountry',
   'registrationProvince',
@@ -75,8 +74,8 @@ export const CLIENT_LIST_FIELDS = [
 export const CLIENT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   clientCode: 'required',
   clientName1: 'required',
   clientName2: 'optional',
@@ -84,8 +83,8 @@ export const CLIENT_PLACEHOLDER = {
   clientType: 'select',
   enterpriseNature: 'select',
   industryAttribute: 'select',
-  cultureCode: 'select',
   clientTaxNumber: 'optional',
+  taxCode: 'optional',
   taxRate: 'select',
   registrationCountry: 'optional',
   registrationProvince: 'optional',
@@ -134,6 +133,7 @@ export type ClientField = keyof typeof CLIENT_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const CLIENT_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'clientCode',
   'clientName1',
@@ -141,8 +141,8 @@ export const CLIENT_QUERY_STRING_FIELDS = [
   'clientShortName',
   'enterpriseNature',
   'industryAttribute',
-  'cultureCode',
   'clientTaxNumber',
+  'taxCode',
   'registrationCountry',
   'registrationProvince',
   'registrationCity',

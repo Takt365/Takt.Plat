@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：plant.d.ts
-// 创建时间：2026-08-12
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
+ * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
  * 对应前端 TaktPlantDto
  * 继承 TaktTenantCultureDtoBase
  * 对应前端 Plant
@@ -259,12 +259,12 @@ export interface Plant extends TenantCultureDtoBase {
   relatedCompany: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   plantStatus: number;
 
@@ -529,12 +529,12 @@ export interface PlantQuery extends TaktPagedQuery {
   relatedCompany?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder?: number;
 
   /**
-   * 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   plantStatus?: number;
 
@@ -808,7 +808,7 @@ export interface PlantCreate {
   relatedCompany: string;
 
   /**
-   * 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   plantStatus: number;
 
@@ -852,7 +852,7 @@ export interface PlantStatus {
   plantId: string;
 
   /**
-   * 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   plantStatus: number;
 
@@ -871,7 +871,7 @@ export interface PlantSort {
   plantId: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
@@ -1125,7 +1125,7 @@ export interface PlantTemplate {
   relatedCompany?: string;
 
   /**
-   * 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   plantStatus?: number;
 
@@ -1389,7 +1389,7 @@ export interface PlantImport {
   relatedCompany?: string;
 
   /**
-   * 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   plantStatus?: number;
 
@@ -1653,12 +1653,12 @@ export interface PlantExport {
   relatedCompany: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   plantStatus: number;
 

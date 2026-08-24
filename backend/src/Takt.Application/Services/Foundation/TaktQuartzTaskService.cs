@@ -450,7 +450,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 
         if (queryDto?.TriggerType.HasValue == true)
         {
-            var triggerType = queryDto.TriggerType;
+            var triggerType = queryDto.TriggerType.Value;
             exp = exp.And(x => x.TriggerType == triggerType);
         }
 
@@ -462,7 +462,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 
         if (queryDto?.IntervalSeconds.HasValue == true)
         {
-            var intervalSeconds = queryDto.IntervalSeconds;
+            var intervalSeconds = queryDto.IntervalSeconds.Value;
             exp = exp.And(x => x.IntervalSeconds == intervalSeconds);
         }
 
@@ -474,19 +474,19 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 
         if (queryDto?.Concurrent.HasValue == true)
         {
-            var concurrent = queryDto.Concurrent;
+            var concurrent = queryDto.Concurrent.Value;
             exp = exp.And(x => x.Concurrent == concurrent);
         }
 
         if (queryDto?.MisfirePolicy.HasValue == true)
         {
-            var misfirePolicy = queryDto.MisfirePolicy;
+            var misfirePolicy = queryDto.MisfirePolicy.Value;
             exp = exp.And(x => x.MisfirePolicy == misfirePolicy);
         }
 
         if (queryDto?.ExecuteCount.HasValue == true)
         {
-            var executeCount = queryDto.ExecuteCount;
+            var executeCount = queryDto.ExecuteCount.Value;
             exp = exp.And(x => x.ExecuteCount == executeCount);
         }
 
@@ -498,7 +498,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 
         if (queryDto?.TaskStatus.HasValue == true)
         {
-            var taskStatus = queryDto.TaskStatus;
+            var taskStatus = queryDto.TaskStatus.Value;
             exp = exp.And(x => x.TaskStatus == taskStatus);
         }
 
@@ -516,49 +516,49 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 
         if (queryDto?.FirstRunAtStart.HasValue == true)
         {
-            var firstRunAtStart = queryDto.FirstRunAtStart;
+            var firstRunAtStart = queryDto.FirstRunAtStart.Value;
             exp = exp.And(x => x.FirstRunAt >= firstRunAtStart);
         }
 
         if (queryDto?.FirstRunAtEnd.HasValue == true)
         {
-            var firstRunAtEnd = queryDto.FirstRunAtEnd;
+            var firstRunAtEnd = queryDto.FirstRunAtEnd.Value;
             exp = exp.And(x => x.FirstRunAt <= firstRunAtEnd);
         }
 
         if (queryDto?.LastRunAtStart.HasValue == true)
         {
-            var lastRunAtStart = queryDto.LastRunAtStart;
+            var lastRunAtStart = queryDto.LastRunAtStart.Value;
             exp = exp.And(x => x.LastRunAt >= lastRunAtStart);
         }
 
         if (queryDto?.LastRunAtEnd.HasValue == true)
         {
-            var lastRunAtEnd = queryDto.LastRunAtEnd;
+            var lastRunAtEnd = queryDto.LastRunAtEnd.Value;
             exp = exp.And(x => x.LastRunAt <= lastRunAtEnd);
         }
 
         if (queryDto?.NextRunAtStart.HasValue == true)
         {
-            var nextRunAtStart = queryDto.NextRunAtStart;
+            var nextRunAtStart = queryDto.NextRunAtStart.Value;
             exp = exp.And(x => x.NextRunAt >= nextRunAtStart);
         }
 
         if (queryDto?.NextRunAtEnd.HasValue == true)
         {
-            var nextRunAtEnd = queryDto.NextRunAtEnd;
+            var nextRunAtEnd = queryDto.NextRunAtEnd.Value;
             exp = exp.And(x => x.NextRunAt <= nextRunAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

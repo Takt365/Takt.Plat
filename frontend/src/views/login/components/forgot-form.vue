@@ -62,10 +62,10 @@
           layout="vertical"
           @finish="handleEmailStepSubmit"
         >
-          <a-form-item :label="t('login.page.field.username.or.email.label')" name="userEmail">
+          <a-form-item :label="t('login.page.field.userName.or.email.label')" name="userEmail">
             <a-input
               v-model:value="formState.userEmail"
-              :placeholder="t('login.page.field.username.or.email.placeholder')"
+              :placeholder="t('login.page.field.userName.or.email.placeholder')"
               size="large"
               show-count
               :maxlength="EMAIL_MAX_LENGTH"
@@ -255,7 +255,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userEmail: [
     {
       required: true,
-      message: t('login.page.validate.username.or.email.required'),
+      message: t('login.page.validate.userName.or.email.required'),
       trigger: 'blur',
     },
     {
@@ -265,16 +265,16 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!isValidEmail(trimmed)) {
-          return Promise.reject(t('login.page.validate.username.or.email.invalid'));
+          return Promise.reject(t('login.page.validate.userName.or.email.invalid'));
         }
         if (trimmed.length < EMAIL_MIN_LENGTH) {
           return Promise.reject(
-            t('login.page.validate.username.or.email.too.short', { min: EMAIL_MIN_LENGTH })
+            t('login.page.validate.userName.or.email.too.short', { min: EMAIL_MIN_LENGTH })
           );
         }
         if (trimmed.length > EMAIL_MAX_LENGTH) {
           return Promise.reject(
-            t('login.page.validate.username.or.email.too.long', { max: EMAIL_MAX_LENGTH })
+            t('login.page.validate.userName.or.email.too.long', { max: EMAIL_MAX_LENGTH })
           );
         }
         return Promise.resolve();
@@ -317,7 +317,7 @@ function resolveForgotPasswordErrorMessage(error: unknown): string {
 async function doForgotPasswordAsync(): Promise<void> {
   try {
     loading.value = true;
-    await forgotPassword({ usernameOrEmail: formState.userEmail.trim() });
+    await forgotPassword({ UserNameOrEmail: formState.userEmail.trim() });
     message.success(t('login.page.forgot.email.sent'));
     formState.userEmail = '';
     currentStep.value = FORGOT_STEP_DONE;

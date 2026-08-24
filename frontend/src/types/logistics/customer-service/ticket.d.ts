@@ -109,7 +109,7 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   ticketType: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority: number;
 
@@ -289,7 +289,7 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   ticketType?: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority?: number;
 
@@ -498,7 +498,7 @@ export interface CustomerServiceTicketCreate {
   ticketType: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority: number;
 
@@ -720,7 +720,7 @@ export interface CustomerServiceTicketTemplate {
   ticketType?: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority?: number;
 
@@ -889,7 +889,7 @@ export interface CustomerServiceTicketImport {
   ticketType?: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority?: number;
 
@@ -1053,7 +1053,7 @@ export interface CustomerServiceTicketExport {
   ticketType: number;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level）
    */
   priority: number;
 

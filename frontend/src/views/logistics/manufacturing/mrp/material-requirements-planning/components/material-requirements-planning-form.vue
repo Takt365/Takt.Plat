@@ -16,74 +16,11 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="material-requirements-planning-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="pi.ph('remark')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="materialRequirementsPlanningItemTableRef"
@@ -97,52 +34,7 @@
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
-    >
-      <template #cell-materialCode="{ record }">
-        <TaktSelect
-          v-model:value="record.materialCode"
-          api-url="TaktMaterialPlants/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="materialRequirementsPlanningItemPi.queryPh('materialCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-planUnit="{ record }">
-        <TaktSelect
-          v-model:value="record.planUnit"
-          dict-type="logistics_unit_of_measure_code"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="materialRequirementsPlanningItemPi.ph('planUnit')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-procurementType="{ record }">
-        <TaktSelect
-          v-model:value="record.procurementType"
-          dict-type="logistics_procurement_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="materialRequirementsPlanningItemPi.ph('procurementType')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-isObsolete="{ record }">
-        <TaktSelect
-          v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="materialRequirementsPlanningItemPi.ph('isObsolete')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-    </TaktEditableTable>
+    >    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -160,56 +52,17 @@ import { useMaterialRequirementsPlanningI18n } from '../composables/use-material
 const pi = useMaterialRequirementsPlanningI18n()
 
 import type { MaterialRequirementsPlanningCreate } from '@/types/logistics/manufacturing/mrp/material-requirements-planning'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-  if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
-}
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","materialRequirementsPlanningCode","masterProductionScheduleId","mpsCode","masterDemandScheduleId","mdsCode","planDate","planPeriodStart","planPeriodEnd","plannerId","planBy","runStatus","productionPlanId","productionPlanCode","purchasePlanId","purchasePlanCode","planDescription","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useMaterialRequirementsPlanningItemI18n } from '../composables/use-material-requirements-planning-item-i18n'
 
 const materialRequirementsPlanningItemPi = useMaterialRequirementsPlanningItemI18n()
-
-/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
-function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
-  return triggerNode?.ownerDocument?.body ?? document.body
-}
 
 const childMaterialRequirementsPlanningItemRows = ref<Record<string, unknown>[]>([])
 const materialRequirementsPlanningItemTableRef = ref<{
@@ -218,103 +71,10 @@ const materialRequirementsPlanningItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
-/** 是否已持久化的子表行 */
-function isPersistedMaterialRequirementsPlanningItemRow(row: Record<string, unknown>): boolean {
-  const id = row.materialRequirementsPlanningItemId
-  if (id == null || id === '') {
-    return false
-  }
-  return String(id) !== '0'
-}
-
-/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
-function allocateNextMaterialRequirementsPlanningItemLineNumber(): number {
-  const rows = materialRequirementsPlanningItemTableRef.value?.getRows?.() ?? childMaterialRequirementsPlanningItemRows.value
-  return resolveNextDetailLineNumber(0, rows)
-}
-
 /** 子表 materialRequirementsPlanningItem 可编辑列 */
 const materialRequirementsPlanningItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'lineNumber',
-    title: materialRequirementsPlanningItemPi.label('lineNumber'),
-    width: 140,
-  },
-  {
-    key: 'materialCode',
-    title: materialRequirementsPlanningItemPi.label('materialCode'),
-    width: 140,
-  },
-  {
-    key: 'modelCode',
-    title: materialRequirementsPlanningItemPi.label('modelCode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: materialRequirementsPlanningItemPi.ph('modelCode'),
-  },
-  {
-    key: 'modelName',
-    title: materialRequirementsPlanningItemPi.label('modelName'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: materialRequirementsPlanningItemPi.ph('modelName'),
-  },
-  {
-    key: 'parentMaterialCode',
-    title: materialRequirementsPlanningItemPi.label('parentMaterialCode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: materialRequirementsPlanningItemPi.ph('parentMaterialCode'),
-  },
-  {
-    key: 'bomLevel',
-    title: materialRequirementsPlanningItemPi.label('bomLevel'),
-    width: 140,
-  },
-  {
-    key: 'requirementDate',
-    title: materialRequirementsPlanningItemPi.label('requirementDate'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD',
-    width: 140,
-  },
-  {
-    key: 'planUnit',
-    title: materialRequirementsPlanningItemPi.label('planUnit'),
-    width: 140,
-  },
-  {
-    key: 'grossRequirement',
-    title: materialRequirementsPlanningItemPi.label('grossRequirement'),
-    width: 140,
-  },
-  {
-    key: 'scheduledReceipts',
-    title: materialRequirementsPlanningItemPi.label('scheduledReceipts'),
-    width: 140,
-  },
-  {
-    key: 'onHandQuantity',
-    title: materialRequirementsPlanningItemPi.label('onHandQuantity'),
-    width: 140,
-  },
-  {
-    key: 'projectedOnHand',
-    title: materialRequirementsPlanningItemPi.label('projectedOnHand'),
-    width: 140,
-  },
-  {
-    key: 'netRequirement',
-    title: materialRequirementsPlanningItemPi.label('netRequirement'),
-    width: 140,
-  },
-  {
-    key: 'procurementType',
-    title: materialRequirementsPlanningItemPi.label('procurementType'),
-    width: 140,
-  },
-  {
-    key: 'isObsolete',
-    title: materialRequirementsPlanningItemPi.label('isObsolete'),
-    width: 140,
-  }])
+,
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<MaterialRequirementsPlanningCreate & { materialRequirementsPlanningId?: string }> | null | undefined) {
@@ -324,21 +84,7 @@ function syncChildRowsFromFormData(val: Partial<MaterialRequirementsPlanningCrea
 
 function createDefaultMaterialRequirementsPlanningItemRow(): Record<string, unknown> {
   return {
-    lineNumber: allocateNextMaterialRequirementsPlanningItemLineNumber(),
-    materialCode: '',
-    modelCode: '',
-    modelName: '',
-    parentMaterialCode: '',
-    bomLevel: 0,
-    requirementDate: '',
-    planUnit: '',
-    grossRequirement: 0,
-    scheduledReceipts: 0,
-    onHandQuantity: 0,
-    projectedOnHand: 0,
-    netRequirement: 0,
-    procurementType: 0,
-    isObsolete: 0,
+
   }
 }
 
@@ -348,21 +94,13 @@ function buildSubmitPayload() {
   const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: materialRequirementsPlanningItemTableRef.value?.getRows?.() ?? childMaterialRequirementsPlanningItemRows.value.map((row) => {
-      const normalized = {
-        ...row,
-        tenantCode: tenantStore.tenantCode,
-        companyCode: tenantStore.companyCode,
-        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        materialRequirementsPlanningId: masterId,
-      }
-      if (isUpdate && isPersistedMaterialRequirementsPlanningItemRow(row)) {
-        normalized.materialRequirementsPlanningItemId = row.materialRequirementsPlanningItemId
-      } else {
-        delete normalized.materialRequirementsPlanningItemId
-      }
-      return normalized
-    }),
+    items: materialRequirementsPlanningItemTableRef.value?.getRows?.() ?? childMaterialRequirementsPlanningItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+      materialRequirementsPlanningId: masterId,
+    })),
   }
 }
 
@@ -386,6 +124,7 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 materialRequirementsPlanningId 才视为编辑） */
 watch(
@@ -412,74 +151,9 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.materialRequirementsPlanningId
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  materialRequirementsPlanningCode: [
-    {
-      required: true,
-      message: pi.ph('materialRequirementsPlanningCode'),
-      trigger: 'blur'
-    }
-  ],
-  planDate: [
-    {
-      required: true,
-      message: pi.ph('planDate'),
-      trigger: 'change'
-    }
-  ],
-  planPeriodStart: [
-    {
-      required: true,
-      message: pi.ph('planPeriodStart'),
-      trigger: 'change'
-    }
-  ],
-  planPeriodEnd: [
-    {
-      required: true,
-      message: pi.ph('planPeriodEnd'),
-      trigger: 'change'
-    }
-  ],
-  planBy: [
-    {
-      required: true,
-      message: pi.ph('planBy'),
-      trigger: 'change'
-    }
-  ],
-  runStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('runStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('runStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -492,11 +166,11 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('runStatus' in payload) {
-    const rawrunStatus = payload.runStatus
-    payload.runStatus = typeof rawrunStatus === 'number' ? rawrunStatus : Number(rawrunStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.materialRequirementsPlanningId) {
+    payload.materialRequirementsPlanningId = props.formData.materialRequirementsPlanningId
+  }
   return payload
 }
 
@@ -510,19 +184,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.materialRequirementsPlanningId)
   childMaterialRequirementsPlanningItemRows.value = []
   materialRequirementsPlanningItemTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

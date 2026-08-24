@@ -65,7 +65,7 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "bonus_plan_description", ColumnDescription = "方案说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? BonusPlanDescription { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "plan_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PlanStatus { get; set; } = 1;

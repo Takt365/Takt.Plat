@@ -76,10 +76,11 @@ export function mapLazyTreeNodes<T>(
       isLeaf: leaf,
     }
     if (leaf) {
-      return base
+      return { ...base, isLeaf: true, _hasChildren: false }
     }
-    // 非叶子：不设 children（undefined），Ant Design 才会显示展开并触发 loadData
-    return { ...base, children: undefined }
+    // 非叶子：去掉 children（含 API 空数组），Ant Design 才显示展开并触发 loadData
+    const { children: _omit, ...rest } = base
+    return { ...rest, isLeaf: false, children: undefined, _hasChildren: true }
   })
 }
 
@@ -113,7 +114,8 @@ export function mergeLoadedChildren<T extends Record<string, unknown>>(
         return {
           ...node,
           [childrenField]: [...children],
-          isLeaf: children.length === 0 ? true : false,
+          isLeaf: children.length === 0,
+          _hasChildren: children.length > 0,
         } as T
       }
       const existing = node[childrenField] as T[] | undefined

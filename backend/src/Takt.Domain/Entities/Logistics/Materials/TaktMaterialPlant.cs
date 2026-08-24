@@ -174,12 +174,12 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "storage_location", ColumnDescription = "库位", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string StorageLocation { get; set; } = string.Empty;
     /// <summary>
-    /// 检验（字典 sys_yes_no_type；0=否，1=是）
+    /// 检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_inspection", ColumnDescription = "检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsInspection { get; set; } = 0;
     /// <summary>
-    /// 批次标识（字典 sys_yes_no_type；0=否，1=是）
+    /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_batch", ColumnDescription = "批次标识", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBatch { get; set; } = 0;
@@ -189,7 +189,7 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_end_of_life", ColumnDescription = "停产状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
     public string IsEndOfLife { get; set; } = "Z0";
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "material_status", ColumnDescription = "物料状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int MaterialStatus { get; set; } = 1;

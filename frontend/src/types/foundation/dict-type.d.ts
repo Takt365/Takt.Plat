@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 字典类型实体 用于定义系统中使用的各种字典分类，如：订单状态、用户类型、审批状态等 租户级实体：字典类型在租户内共享，不需要公司隔离
  * 对应前端 TaktDictTypeDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 DictType
  * @description 对应后端 TaktDictTypeDto
  */
-export interface DictType extends TenantDtoBase {
+export interface DictType extends TenantCoreDtoBase {
   /**
    * DictTypeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -49,7 +49,7 @@ export interface DictType extends TenantDtoBase {
   dictScript?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn: number;
 
@@ -59,7 +59,7 @@ export interface DictType extends TenantDtoBase {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   dictStatus: number;
 
@@ -83,11 +83,6 @@ export interface DictTypeQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode?: string;
@@ -108,7 +103,7 @@ export interface DictTypeQuery extends TaktPagedQuery {
   dictScript?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn?: number;
 
@@ -118,7 +113,7 @@ export interface DictTypeQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   dictStatus?: number;
 
@@ -156,11 +151,6 @@ export interface DictTypeCreate {
   tenantCode: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
-
-  /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode: string;
@@ -181,12 +171,12 @@ export interface DictTypeCreate {
   dictScript?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   dictStatus: number;
 
@@ -233,7 +223,7 @@ export interface DictTypeStatus {
   dictTypeId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   dictStatus: number;
 
@@ -251,7 +241,7 @@ export interface DictTypeBuiltIn {
   dictTypeId: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否）
+   * 内置（字典 sys_yes_no；1=是，0=否）
    */
   isBuiltIn: number;
 
@@ -287,11 +277,6 @@ export interface DictTypeTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode?: string;
@@ -312,12 +297,12 @@ export interface DictTypeTemplate {
   dictScript?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   dictStatus?: number;
 
@@ -350,11 +335,6 @@ export interface DictTypeImport {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode?: string;
@@ -375,12 +355,12 @@ export interface DictTypeImport {
   dictScript?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   dictStatus?: number;
 
@@ -433,7 +413,7 @@ export interface DictTypeExport {
   dictScript?: string;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no；0=否 1=是）
    */
   isBuiltIn: number;
 
@@ -443,7 +423,7 @@ export interface DictTypeExport {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用 0=禁用）
    */
   dictStatus: number;
 

@@ -31,17 +31,17 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 public class TaktDurationLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 用户名（登录账号）
-    /// </summary>
-    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（冗余字段，便于查询）
+    /// </summary>
+    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 统计日期（自然日，不含时分秒）

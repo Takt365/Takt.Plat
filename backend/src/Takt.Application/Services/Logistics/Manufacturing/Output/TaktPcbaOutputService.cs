@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报应用服务实现
 // 
@@ -389,6 +389,12 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             {
                 var childDto = pcbaOutputDetailsForSave[i];
                 childDto.PcbaOutputId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.ProdOrderCode = entity.ProdOrderCode;
+                childDto.SerialCode = entity.SerialCode ?? string.Empty;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -481,7 +487,8 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
                 || (x.ProdOrderType != null && x.ProdOrderType.Contains(keywords))
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
@@ -489,10 +496,15 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || (x.SerialCode != null && x.SerialCode.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
@@ -539,7 +551,7 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
 
         if (queryDto?.ProdOrderQty.HasValue == true)
         {
-            var prodOrderQty = queryDto.ProdOrderQty;
+            var prodOrderQty = queryDto.ProdOrderQty.Value;
             exp = exp.And(x => x.ProdOrderQty == prodOrderQty);
         }
 
@@ -563,31 +575,26 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
 
         if (queryDto?.ProdDateStart.HasValue == true)
         {
-            var prodDateStart = queryDto.ProdDateStart;
+            var prodDateStart = queryDto.ProdDateStart.Value;
             exp = exp.And(x => x.ProdDate >= prodDateStart);
         }
 
         if (queryDto?.ProdDateEnd.HasValue == true)
         {
-            var prodDateEnd = queryDto.ProdDateEnd;
+            var prodDateEnd = queryDto.ProdDateEnd.Value;
             exp = exp.And(x => x.ProdDate <= prodDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         return exp.ToExpression();
@@ -605,6 +612,10 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
             return true;
         }

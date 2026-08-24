@@ -134,7 +134,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
     private static IEnumerable<(string PostCode, string PostName, string PostCategory, string PostLevel, int SortOrder, string DeptCode)> GetStandardPosts(string tenantCode, string companyCode)
     {
         var rootDeptCode = ResolveOrgRootDeptCode(companyCode);
-        // PostCategory：字典 sys_post_category（MGT/PRO/TEC/SUP/OPS）；PostLevel：字典 sys_post_level_category（P1~P4 / M1~M5）
+        // PostCategory：字典 sys_post_category（MGT/PRO/TEC/SUP/OPS）；PostLevel：字典 sys_post_level（P1~P4 / M1~M5）
         return new[]
         {
             // ===== 管理岗 =====
@@ -217,7 +217,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 deptCode, tenantCode, companyCode, postCode);
             return (null!, false);
         }
-        var deptName = dept.DeptName ?? string.Empty;
+        var deptName = dept.DeptName1 ?? string.Empty;
         if (deptName.Length > 100)
         {
             deptName = deptName[..100];

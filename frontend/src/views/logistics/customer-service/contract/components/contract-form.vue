@@ -27,18 +27,302 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serviceContractCode')"
+                name="serviceContractCode"
+              >
+                <a-input
+                  v-model:value="formState.serviceContractCode"
+                  :placeholder="pi.ph('serviceContractCode')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.customerServiceContractId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('contractName')"
+                name="contractName"
+              >
+                <a-input
+                  v-model:value="formState.contractName"
+                  :placeholder="pi.ph('contractName')"
+                  show-count
+                  :maxlength="200"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('clientId')"
+                name="clientId"
+              >
+                <a-input
+                  v-model:value="formState.clientId"
+                  :placeholder="pi.ph('clientId')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('clientCode')"
+                name="clientCode"
+              >
+                <a-input
+                  v-model:value="formState.clientCode"
+                  :placeholder="pi.ph('clientCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('clientName1')"
+                name="clientName1"
+              >
+                <a-input
+                  v-model:value="formState.clientName1"
+                  :placeholder="pi.ph('clientName1')"
+                  show-count
+                  :maxlength="140"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('contractType')"
+                name="contractType"
+              >
+                <a-input-number
+                  v-model:value="formState.contractType"
+                  :placeholder="pi.ph('contractType')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('contractStatus')"
+                name="contractStatus"
+              >
+                <a-input-number
+                  v-model:value="formState.contractStatus"
+                  :placeholder="pi.ph('contractStatus')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('signDate')"
+                name="signDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.signDate"
+                  :placeholder="pi.ph('signDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('effectiveDate')"
+                name="effectiveDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.effectiveDate"
+                  :placeholder="pi.ph('effectiveDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('expiryDate')"
+                name="expiryDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.expiryDate"
+                  :placeholder="pi.ph('expiryDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('contractAmount')"
+                name="contractAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.contractAmount"
+                  :placeholder="pi.ph('contractAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <a-input
+                  v-model:value="formState.currencyCode"
+                  :placeholder="pi.ph('currencyCode')"
+                  show-count
+                  :maxlength="3"
+                  allow-clear
+                  :disabled="!!formData?.customerServiceContractId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('paymentTerms')"
+                name="paymentTerms"
+              >
+                <a-input-number
+                  v-model:value="formState.paymentTerms"
+                  :placeholder="pi.ph('paymentTerms')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('serviceScope')"
+                name="serviceScope"
+              >
+                <a-textarea
+                  v-model:value="formState.serviceScope"
+                  :placeholder="pi.ph('serviceScope')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('slaResponseHours')"
+                name="slaResponseHours"
+              >
+                <a-input-number
+                  v-model:value="formState.slaResponseHours"
+                  :placeholder="pi.ph('slaResponseHours')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('slaResolveHours')"
+                name="slaResolveHours"
+              >
+                <a-input-number
+                  v-model:value="formState.slaResolveHours"
+                  :placeholder="pi.ph('slaResolveHours')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('accountManager')"
+                name="accountManager"
+              >
+                <a-input
+                  v-model:value="formState.accountManager"
+                  :placeholder="pi.ph('accountManager')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -92,7 +376,7 @@
  * 服务合同实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/customer-service/contract/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useCustomerServiceContractI18n } from '../composables/use-contract-i18n'
@@ -100,7 +384,9 @@ import { useCustomerServiceContractI18n } from '../composables/use-contract-i18n
 /** 实体字段 i18n */
 const pi = useCustomerServiceContractI18n()
 import type { CustomerServiceContractCreate } from '@/types/logistics/customer-service/contract'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -109,11 +395,11 @@ const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -127,11 +413,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -153,6 +446,14 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 customerServiceContractId 才视为编辑） */
 watch(
@@ -180,7 +481,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.customerServiceContractId) {
       applyScopeDefaults(formState, true)
@@ -190,13 +491,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'blur'
-    }
-  ],
   serviceContractCode: [
     {
       required: true,
@@ -215,20 +509,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('clientId'),
-      trigger: 'blur'
-    }
-  ],
-  clientCode: [
-    {
-      required: true,
-      message: pi.ph('clientCode'),
-      trigger: 'blur'
-    }
-  ],
-  clientName1: [
-    {
-      required: true,
-      message: pi.ph('clientName1'),
       trigger: 'blur'
     }
   ],
@@ -337,29 +617,73 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('contractType' in payload) {
     const rawcontractType = payload.contractType
-    payload.contractType = typeof rawcontractType === 'number' ? rawcontractType : Number(rawcontractType)
+    if (rawcontractType === undefined || rawcontractType === null || rawcontractType === '') {
+      delete payload.contractType
+    } else {
+      const numcontractType = typeof rawcontractType === 'number' ? rawcontractType : Number(rawcontractType)
+      if (Number.isFinite(numcontractType)) payload.contractType = numcontractType
+      else delete payload.contractType
+    }
   }
   if ('contractStatus' in payload) {
     const rawcontractStatus = payload.contractStatus
-    payload.contractStatus = typeof rawcontractStatus === 'number' ? rawcontractStatus : Number(rawcontractStatus)
+    if (rawcontractStatus === undefined || rawcontractStatus === null || rawcontractStatus === '') {
+      delete payload.contractStatus
+    } else {
+      const numcontractStatus = typeof rawcontractStatus === 'number' ? rawcontractStatus : Number(rawcontractStatus)
+      if (Number.isFinite(numcontractStatus)) payload.contractStatus = numcontractStatus
+      else delete payload.contractStatus
+    }
   }
   if ('contractAmount' in payload) {
     const rawcontractAmount = payload.contractAmount
-    payload.contractAmount = typeof rawcontractAmount === 'number' ? rawcontractAmount : Number(rawcontractAmount)
+    if (rawcontractAmount === undefined || rawcontractAmount === null || rawcontractAmount === '') {
+      delete payload.contractAmount
+    } else {
+      const numcontractAmount = typeof rawcontractAmount === 'number' ? rawcontractAmount : Number(rawcontractAmount)
+      if (Number.isFinite(numcontractAmount)) payload.contractAmount = numcontractAmount
+      else delete payload.contractAmount
+    }
   }
   if ('paymentTerms' in payload) {
     const rawpaymentTerms = payload.paymentTerms
-    payload.paymentTerms = typeof rawpaymentTerms === 'number' ? rawpaymentTerms : Number(rawpaymentTerms)
+    if (rawpaymentTerms === undefined || rawpaymentTerms === null || rawpaymentTerms === '') {
+      delete payload.paymentTerms
+    } else {
+      const numpaymentTerms = typeof rawpaymentTerms === 'number' ? rawpaymentTerms : Number(rawpaymentTerms)
+      if (Number.isFinite(numpaymentTerms)) payload.paymentTerms = numpaymentTerms
+      else delete payload.paymentTerms
+    }
   }
   if ('slaResponseHours' in payload) {
     const rawslaResponseHours = payload.slaResponseHours
-    payload.slaResponseHours = typeof rawslaResponseHours === 'number' ? rawslaResponseHours : Number(rawslaResponseHours)
+    if (rawslaResponseHours === undefined || rawslaResponseHours === null || rawslaResponseHours === '') {
+      delete payload.slaResponseHours
+    } else {
+      const numslaResponseHours = typeof rawslaResponseHours === 'number' ? rawslaResponseHours : Number(rawslaResponseHours)
+      if (Number.isFinite(numslaResponseHours)) payload.slaResponseHours = numslaResponseHours
+      else delete payload.slaResponseHours
+    }
   }
   if ('slaResolveHours' in payload) {
     const rawslaResolveHours = payload.slaResolveHours
-    payload.slaResolveHours = typeof rawslaResolveHours === 'number' ? rawslaResolveHours : Number(rawslaResolveHours)
+    if (rawslaResolveHours === undefined || rawslaResolveHours === null || rawslaResolveHours === '') {
+      delete payload.slaResolveHours
+    } else {
+      const numslaResolveHours = typeof rawslaResolveHours === 'number' ? rawslaResolveHours : Number(rawslaResolveHours)
+      if (Number.isFinite(numslaResolveHours)) payload.slaResolveHours = numslaResolveHours
+      else delete payload.slaResolveHours
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.customerServiceContractId) {
+    payload.customerServiceContractId = props.formData.customerServiceContractId
+  }
   return payload
 }
 

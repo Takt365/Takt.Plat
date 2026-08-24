@@ -62,7 +62,7 @@
     <div class="routine-dict-type-table-wrap">
       <TaktSingleTable
         :scroll="tableScroll"
-        entity-scope="tenant"
+        entity-scope="tenant-core"
         :columns="columns"
         :visible-column-keys="visibleColumnKeys"
         :id-column-key="'id'"
@@ -173,7 +173,7 @@
       <a-form-item :label="t('entity.dicttype.dictstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.dictStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.dictstatus') })"
           allow-clear
         />
@@ -183,7 +183,7 @@
     <!-- 列设置抽屉 -->
     <!-- 审计字段统一在 TaktColumnDrawer 中处理 -->
     <TaktColumnDrawer
-      entity-scope="tenant"
+      entity-scope="tenant-core"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
@@ -330,6 +330,12 @@ const dictDataColumns = computed<TableColumnsType<DictData>>(() => [
     dataIndex: 'dictTypeCode',
     key: 'dictTypeCode',
     width: 150
+  },
+  {
+    title: t('entity.dictdata.culturecode'),
+    dataIndex: 'cultureCode',
+    key: 'cultureCode',
+    width: 120
   },
   {
     title: t('entity.dictdata.dictlabel'),
@@ -680,7 +686,7 @@ const handleStatusChange = async (record: DictType, checked: boolean) => {
 }
 
 /**
- * 表格行内切换内置（sys_yes_no_type：1=是，0=否）
+ * 表格行内切换内置（sys_yes_no：1=是，0=否）
  * @param record 当前行
  * @param checked 开关是否选中（内置）
  */

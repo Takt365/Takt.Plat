@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Statistics.Report;
 public class TaktConfigurableSelection : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联报表主表 ID（主子表关系）
+    /// 关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "configurable_id", ColumnDescription = "报表主表ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -52,7 +52,7 @@ public class TaktConfigurableSelection : TaktCompanyEntityBase
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 比较运算符
+    /// 比较运算符（字典 gen_query_type；1=等于 2=不等于 3=大于 4=大于等于 5=小于 6=小于等于 7=模糊 8=区间）
     /// </summary>
     [SugarColumn(ColumnName = "filter_operator", ColumnDescription = "比较运算符", ColumnDataType = "int", IsNullable = false, DefaultValue = "7")]
     public int FilterOperator { get; set; } = 7;
@@ -70,13 +70,13 @@ public class TaktConfigurableSelection : TaktCompanyEntityBase
     public string? DefaultValueTo { get; set; }
 
     /// <summary>
-    /// 是否必填（0=否 1=是）
+    /// 是否必填（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_required", ColumnDescription = "是否必填", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（SQVI 筛选项展示顺序）
+    /// 排序号（回填）（SQVI 筛选项展示顺序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

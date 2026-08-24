@@ -36,6 +36,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -245,7 +246,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.concurrent"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('concurrent')"
                 />
               </a-form-item>

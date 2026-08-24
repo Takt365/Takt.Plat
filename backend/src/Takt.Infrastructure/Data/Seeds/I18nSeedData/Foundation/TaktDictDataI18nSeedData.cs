@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictDataI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictData 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dictdata.isdefault", "zh-HK", "是否默认项_hk", "是否默认项（1=是，0=否）"),
 
             // entity.dictdata.sortorder
-            new TranslationSeedItem("entity.dictdata.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.dictdata.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.dictdata.sortorder
-            new TranslationSeedItem("entity.dictdata.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.dictdata.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.dictdata.sortorder
-            new TranslationSeedItem("entity.dictdata.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.dictdata.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.dictdata.sortorder
-            new TranslationSeedItem("entity.dictdata.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.dictdata.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.dictdata.dicttype
             new TranslationSeedItem("entity.dictdata.dicttype", "en-US", "字典类型_us", "字典类型（多对一关联）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktProfitLossI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProfitLoss 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -199,13 +199,13 @@ public class TaktProfitLossI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitloss.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code）"),
 
             // entity.profitloss.sortorder
-            new TranslationSeedItem("entity.profitloss.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.profitloss.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.profitloss.sortorder
-            new TranslationSeedItem("entity.profitloss.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.profitloss.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.profitloss.sortorder
-            new TranslationSeedItem("entity.profitloss.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.profitloss.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.profitloss.sortorder
-            new TranslationSeedItem("entity.profitloss.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.profitloss.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.profitloss.status
             new TranslationSeedItem("entity.profitloss.status", "en-US", "状态_us", "状态（字典 sys_normal_disable；1=启用，0=停用）"),

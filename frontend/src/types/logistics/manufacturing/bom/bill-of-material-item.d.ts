@@ -104,17 +104,17 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   substitutePriority: number;
 
   /**
-   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否可选件（字典 sys_yes_no；0=否，1=是）
    */
   isOptional: number;
 
   /**
-   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否虚拟件（字典 sys_yes_no；0=否，1=是）
    */
   isPhantom: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -229,17 +229,17 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   substitutePriority?: number;
 
   /**
-   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否可选件（字典 sys_yes_no；0=否，1=是）
    */
   isOptional?: number;
 
   /**
-   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否虚拟件（字典 sys_yes_no；0=否，1=是）
    */
   isPhantom?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -363,17 +363,17 @@ export interface BillOfMaterialItemCreate {
   substitutePriority: number;
 
   /**
-   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否可选件（字典 sys_yes_no；0=否，1=是）
    */
   isOptional: number;
 
   /**
-   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否虚拟件（字典 sys_yes_no；0=否，1=是）
    */
   isPhantom: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -427,7 +427,7 @@ export interface BillOfMaterialItemObsolete {
   billOfMaterialItemId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -531,17 +531,17 @@ export interface BillOfMaterialItemTemplate {
   substitutePriority?: number;
 
   /**
-   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否可选件（字典 sys_yes_no；0=否，1=是）
    */
   isOptional?: number;
 
   /**
-   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否虚拟件（字典 sys_yes_no；0=否，1=是）
    */
   isPhantom?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -660,17 +660,17 @@ export interface BillOfMaterialItemImport {
   substitutePriority?: number;
 
   /**
-   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否可选件（字典 sys_yes_no；0=否，1=是）
    */
   isOptional?: number;
 
   /**
-   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否虚拟件（字典 sys_yes_no；0=否，1=是）
    */
   isPhantom?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -779,17 +779,17 @@ export interface BillOfMaterialItemExport {
   substitutePriority: number;
 
   /**
-   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否可选件（字典 sys_yes_no；0=否，1=是）
    */
   isOptional: number;
 
   /**
-   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
+   * 是否虚拟件（字典 sys_yes_no；0=否，1=是）
    */
   isPhantom: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

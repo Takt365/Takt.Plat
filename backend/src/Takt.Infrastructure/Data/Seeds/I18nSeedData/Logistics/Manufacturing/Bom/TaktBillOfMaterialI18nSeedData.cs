@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterial 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/bom/bill-of-material）
 // 
@@ -199,13 +199,13 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterial.bomdescription", "zh-HK", "BOM描述_hk", "BOM描述"),
 
             // entity.billofmaterial.sortorder
-            new TranslationSeedItem("entity.billofmaterial.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.billofmaterial.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.billofmaterial.sortorder
-            new TranslationSeedItem("entity.billofmaterial.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.billofmaterial.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.billofmaterial.sortorder
-            new TranslationSeedItem("entity.billofmaterial.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.billofmaterial.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.billofmaterial.sortorder
-            new TranslationSeedItem("entity.billofmaterial.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.billofmaterial.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.billofmaterial.bomstatus
             new TranslationSeedItem("entity.billofmaterial.bomstatus", "en-US", "BOM状态_us", "BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）"),

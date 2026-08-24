@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -226,13 +226,13 @@ public class TaktPurchasePlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseplan.convertedamount", "zh-HK", "已转申请订单金额_hk", "已转申请/订单金额"),
 
             // entity.purchaseplan.planstatus
-            new TranslationSeedItem("entity.purchaseplan.planstatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.purchaseplan.planstatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.purchaseplan.planstatus
-            new TranslationSeedItem("entity.purchaseplan.planstatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.purchaseplan.planstatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.purchaseplan.planstatus
-            new TranslationSeedItem("entity.purchaseplan.planstatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.purchaseplan.planstatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
             // entity.purchaseplan.planstatus
-            new TranslationSeedItem("entity.purchaseplan.planstatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
+            new TranslationSeedItem("entity.purchaseplan.planstatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）"),
 
             // entity.purchaseplan.convertedstatus
             new TranslationSeedItem("entity.purchaseplan.convertedstatus", "en-US", "转单状态_us", "转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),

@@ -55,12 +55,12 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "account_title_level", ColumnDescription = "科目层级", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int AccountTitleLevel { get; set; } = 1;
     /// <summary>
-    /// 末级科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 末级科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_leaf", ColumnDescription = "末级科目", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsLeaf { get; set; } = 1;
     /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 辅助核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_auxiliary", ColumnDescription = "辅助核算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsAuxiliary { get; set; }
@@ -70,22 +70,22 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "auxiliary_type", ColumnDescription = "辅助核算类型", ColumnDataType = "varchar", Length = 1, IsNullable = false)]
     public string AuxiliaryType { get; set; } = string.Empty;
     /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 数量核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_quantity", ColumnDescription = "数量核算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsQuantity { get; set; }
     /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 外币核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_currency", ColumnDescription = "外币核算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsCurrency { get; set; }
     /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 现金科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_cash", ColumnDescription = "现金科目", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsCash { get; set; }
     /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 银行科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_bank", ColumnDescription = "银行科目", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBank { get; set; }
@@ -100,12 +100,12 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "account_title_status", ColumnDescription = "科目状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int AccountTitleStatus { get; set; } = 1;

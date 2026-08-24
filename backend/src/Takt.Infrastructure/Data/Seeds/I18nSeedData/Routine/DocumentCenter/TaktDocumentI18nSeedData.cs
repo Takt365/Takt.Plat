@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document._self", "zh-HK", "文管中心主信息_hk", "实体名称"),
 
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "en-US", "文档编码_us", "文档编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.document.code", "en-US", "文档编码_us", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "ja-JP", "文档编码_jp", "文档编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.document.code", "ja-JP", "文档编码_jp", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "zh-CN", "文档编码", "文档编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.document.code", "zh-CN", "文档编码", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "zh-HK", "文档编码_hk", "文档编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.document.code", "zh-HK", "文档编码_hk", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
 
             // entity.document.title
             new TranslationSeedItem("entity.document.title", "en-US", "文档标题_us", "文档标题"),
@@ -162,59 +162,23 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             // entity.document.tags
             new TranslationSeedItem("entity.document.tags", "zh-HK", "标签_hk", "标签（逗号分隔或 JSON 数组存储）"),
 
-            // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "en-US", "当前文件ID_us", "当前文件 ID（选项 TaktFiles/options；DictValue=Id）"),
-            // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "ja-JP", "当前文件ID_jp", "当前文件 ID（选项 TaktFiles/options；DictValue=Id）"),
-            // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "zh-CN", "当前文件ID", "当前文件 ID（选项 TaktFiles/options；DictValue=Id）"),
-            // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "zh-HK", "当前文件ID_hk", "当前文件 ID（选项 TaktFiles/options；DictValue=Id）"),
-
             // entity.document.filename
-            new TranslationSeedItem("entity.document.filename", "en-US", "当前文件名称_us", "当前文件名称"),
+            new TranslationSeedItem("entity.document.filename", "en-US", "文件名称_us", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
             // entity.document.filename
-            new TranslationSeedItem("entity.document.filename", "ja-JP", "当前文件名称_jp", "当前文件名称"),
+            new TranslationSeedItem("entity.document.filename", "ja-JP", "文件名称_jp", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
             // entity.document.filename
-            new TranslationSeedItem("entity.document.filename", "zh-CN", "当前文件名称", "当前文件名称"),
+            new TranslationSeedItem("entity.document.filename", "zh-CN", "文件名称", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
             // entity.document.filename
-            new TranslationSeedItem("entity.document.filename", "zh-HK", "当前文件名称_hk", "当前文件名称"),
+            new TranslationSeedItem("entity.document.filename", "zh-HK", "文件名称_hk", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
 
-            // entity.document.filepath
-            new TranslationSeedItem("entity.document.filepath", "en-US", "当前文件路径_us", "当前文件路径"),
-            // entity.document.filepath
-            new TranslationSeedItem("entity.document.filepath", "ja-JP", "当前文件路径_jp", "当前文件路径"),
-            // entity.document.filepath
-            new TranslationSeedItem("entity.document.filepath", "zh-CN", "当前文件路径", "当前文件路径"),
-            // entity.document.filepath
-            new TranslationSeedItem("entity.document.filepath", "zh-HK", "当前文件路径_hk", "当前文件路径"),
-
-            // entity.document.filesize
-            new TranslationSeedItem("entity.document.filesize", "en-US", "当前文件大小_us", "当前文件大小（字节）"),
-            // entity.document.filesize
-            new TranslationSeedItem("entity.document.filesize", "ja-JP", "当前文件大小_jp", "当前文件大小（字节）"),
-            // entity.document.filesize
-            new TranslationSeedItem("entity.document.filesize", "zh-CN", "当前文件大小", "当前文件大小（字节）"),
-            // entity.document.filesize
-            new TranslationSeedItem("entity.document.filesize", "zh-HK", "当前文件大小_hk", "当前文件大小（字节）"),
-
-            // entity.document.filetype
-            new TranslationSeedItem("entity.document.filetype", "en-US", "当前文件类型_us", "当前文件类型（MIME）"),
-            // entity.document.filetype
-            new TranslationSeedItem("entity.document.filetype", "ja-JP", "当前文件类型_jp", "当前文件类型（MIME）"),
-            // entity.document.filetype
-            new TranslationSeedItem("entity.document.filetype", "zh-CN", "当前文件类型", "当前文件类型（MIME）"),
-            // entity.document.filetype
-            new TranslationSeedItem("entity.document.filetype", "zh-HK", "当前文件类型_hk", "当前文件类型（MIME）"),
-
-            // entity.document.fileextension
-            new TranslationSeedItem("entity.document.fileextension", "en-US", "当前文件扩展名_us", "当前文件扩展名"),
-            // entity.document.fileextension
-            new TranslationSeedItem("entity.document.fileextension", "ja-JP", "当前文件扩展名_jp", "当前文件扩展名"),
-            // entity.document.fileextension
-            new TranslationSeedItem("entity.document.fileextension", "zh-CN", "当前文件扩展名", "当前文件扩展名"),
-            // entity.document.fileextension
-            new TranslationSeedItem("entity.document.fileextension", "zh-HK", "当前文件扩展名_hk", "当前文件扩展名"),
+            // entity.document.accessurl
+            new TranslationSeedItem("entity.document.accessurl", "en-US", "访问地址_us", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.document.accessurl
+            new TranslationSeedItem("entity.document.accessurl", "ja-JP", "访问地址_jp", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.document.accessurl
+            new TranslationSeedItem("entity.document.accessurl", "zh-CN", "访问地址", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.document.accessurl
+            new TranslationSeedItem("entity.document.accessurl", "zh-HK", "访问地址_hk", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
 
             // entity.document.effectivetime
             new TranslationSeedItem("entity.document.effectivetime", "en-US", "生效时间_us", "生效时间"),
@@ -253,40 +217,40 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "en-US", "发布人姓名_us", "发布人姓名"),
+            new TranslationSeedItem("entity.document.publishername", "en-US", "发布人姓名_us", "发布人姓名（冗余字段，便于查询）"),
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "ja-JP", "发布人姓名_jp", "发布人姓名"),
+            new TranslationSeedItem("entity.document.publishername", "ja-JP", "发布人姓名_jp", "发布人姓名（冗余字段，便于查询）"),
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "zh-CN", "发布人姓名", "发布人姓名"),
+            new TranslationSeedItem("entity.document.publishername", "zh-CN", "发布人姓名", "发布人姓名（冗余字段，便于查询）"),
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "zh-HK", "发布人姓名_hk", "发布人姓名"),
+            new TranslationSeedItem("entity.document.publishername", "zh-HK", "发布人姓名_hk", "发布人姓名（冗余字段，便于查询）"),
 
             // entity.document.deptid
-            new TranslationSeedItem("entity.document.deptid", "en-US", "归属部门ID_us", "归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.document.deptid", "en-US", "归属部门ID_us", "归属部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.document.deptid
-            new TranslationSeedItem("entity.document.deptid", "ja-JP", "归属部门ID_jp", "归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.document.deptid", "ja-JP", "归属部门ID_jp", "归属部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.document.deptid
-            new TranslationSeedItem("entity.document.deptid", "zh-CN", "归属部门ID", "归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.document.deptid", "zh-CN", "归属部门ID", "归属部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.document.deptid
-            new TranslationSeedItem("entity.document.deptid", "zh-HK", "归属部门ID_hk", "归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.document.deptid", "zh-HK", "归属部门ID_hk", "归属部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
 
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "en-US", "归属部门名称_us", "归属部门名称"),
+            new TranslationSeedItem("entity.document.deptname", "en-US", "归属部门名称_us", "归属部门名称（冗余字段，便于查询）"),
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "ja-JP", "归属部门名称_jp", "归属部门名称"),
+            new TranslationSeedItem("entity.document.deptname", "ja-JP", "归属部门名称_jp", "归属部门名称（冗余字段，便于查询）"),
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "zh-CN", "归属部门名称", "归属部门名称"),
+            new TranslationSeedItem("entity.document.deptname", "zh-CN", "归属部门名称", "归属部门名称（冗余字段，便于查询）"),
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "zh-HK", "归属部门名称_hk", "归属部门名称"),
+            new TranslationSeedItem("entity.document.deptname", "zh-HK", "归属部门名称_hk", "归属部门名称（冗余字段，便于查询）"),
 
             // entity.document.istop
-            new TranslationSeedItem("entity.document.istop", "en-US", "置顶_us", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.document.istop", "en-US", "置顶_us", "置顶（字典 sys_yes_no；0=否 1=是）"),
             // entity.document.istop
-            new TranslationSeedItem("entity.document.istop", "ja-JP", "置顶_jp", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.document.istop", "ja-JP", "置顶_jp", "置顶（字典 sys_yes_no；0=否 1=是）"),
             // entity.document.istop
-            new TranslationSeedItem("entity.document.istop", "zh-CN", "置顶", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.document.istop", "zh-CN", "置顶", "置顶（字典 sys_yes_no；0=否 1=是）"),
             // entity.document.istop
-            new TranslationSeedItem("entity.document.istop", "zh-HK", "置顶_hk", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.document.istop", "zh-HK", "置顶_hk", "置顶（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.document.viewcount
             new TranslationSeedItem("entity.document.viewcount", "en-US", "浏览次数_us", "浏览次数"),
@@ -297,50 +261,41 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             // entity.document.viewcount
             new TranslationSeedItem("entity.document.viewcount", "zh-HK", "浏览次数_hk", "浏览次数"),
 
-            // entity.document.downloadcount
-            new TranslationSeedItem("entity.document.downloadcount", "en-US", "下载次数_us", "下载次数"),
-            // entity.document.downloadcount
-            new TranslationSeedItem("entity.document.downloadcount", "ja-JP", "下载次数_jp", "下载次数"),
-            // entity.document.downloadcount
-            new TranslationSeedItem("entity.document.downloadcount", "zh-CN", "下载次数", "下载次数"),
-            // entity.document.downloadcount
-            new TranslationSeedItem("entity.document.downloadcount", "zh-HK", "下载次数_hk", "下载次数"),
-
             // entity.document.targetscope
-            new TranslationSeedItem("entity.document.targetscope", "en-US", "目标范围_us", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.document.targetscope", "en-US", "目标范围_us", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
             // entity.document.targetscope
-            new TranslationSeedItem("entity.document.targetscope", "ja-JP", "目标范围_jp", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.document.targetscope", "ja-JP", "目标范围_jp", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
             // entity.document.targetscope
-            new TranslationSeedItem("entity.document.targetscope", "zh-CN", "目标范围", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.document.targetscope", "zh-CN", "目标范围", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
             // entity.document.targetscope
-            new TranslationSeedItem("entity.document.targetscope", "zh-HK", "目标范围_hk", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
+            new TranslationSeedItem("entity.document.targetscope", "zh-HK", "目标范围_hk", "目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）"),
 
             // entity.document.targetdepartments
-            new TranslationSeedItem("entity.document.targetdepartments", "en-US", "目标部门编码_us", "目标部门编码（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetdepartments", "en-US", "目标部门编码_us", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
             // entity.document.targetdepartments
-            new TranslationSeedItem("entity.document.targetdepartments", "ja-JP", "目标部门编码_jp", "目标部门编码（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetdepartments", "ja-JP", "目标部门编码_jp", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
             // entity.document.targetdepartments
-            new TranslationSeedItem("entity.document.targetdepartments", "zh-CN", "目标部门编码", "目标部门编码（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetdepartments", "zh-CN", "目标部门编码", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
             // entity.document.targetdepartments
-            new TranslationSeedItem("entity.document.targetdepartments", "zh-HK", "目标部门编码_hk", "目标部门编码（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetdepartments", "zh-HK", "目标部门编码_hk", "目标部门编码（多个用逗号分隔；TargetScope=1 时使用）"),
 
             // entity.document.targetusers
-            new TranslationSeedItem("entity.document.targetusers", "en-US", "目标用户ID_us", "目标用户 ID（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetusers", "en-US", "目标用户名_us", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
             // entity.document.targetusers
-            new TranslationSeedItem("entity.document.targetusers", "ja-JP", "目标用户ID_jp", "目标用户 ID（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetusers", "ja-JP", "目标用户名_jp", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
             // entity.document.targetusers
-            new TranslationSeedItem("entity.document.targetusers", "zh-CN", "目标用户ID", "目标用户 ID（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetusers", "zh-CN", "目标用户名", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
             // entity.document.targetusers
-            new TranslationSeedItem("entity.document.targetusers", "zh-HK", "目标用户ID_hk", "目标用户 ID（多个用逗号分隔）"),
+            new TranslationSeedItem("entity.document.targetusers", "zh-HK", "目标用户名_hk", "目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）"),
 
             // entity.document.sortorder
-            new TranslationSeedItem("entity.document.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.document.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.document.sortorder
-            new TranslationSeedItem("entity.document.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.document.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.document.sortorder
-            new TranslationSeedItem("entity.document.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.document.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.document.sortorder
-            new TranslationSeedItem("entity.document.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.document.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.document.status
             new TranslationSeedItem("entity.document.status", "en-US", "文档状态_us", "文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),

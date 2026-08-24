@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceFirstArticleI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityAssuranceFirstArticle 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,13 +154,13 @@ public class TaktQualityAssuranceFirstArticleI18nSeedData : ITaktSeedDataCoordin
             new TranslationSeedItem("entity.qualityassurancefirstarticle.qualificationnote", "zh-HK", "检定备注_hk", "检定备注"),
 
             // entity.qualityassurancefirstarticle.isobsolete
-            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassurancefirstarticle.isobsolete
-            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassurancefirstarticle.isobsolete
-            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassurancefirstarticle.isobsolete
-            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancefirstarticle.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityassurancefirstarticle.operation
             new TranslationSeedItem("entity.qualityassurancefirstarticle.operation", "en-US", "品质业务主表_us", "品质业务主表(导航属性)"),

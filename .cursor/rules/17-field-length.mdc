@@ -35,6 +35,10 @@ alwaysApply: true
 | 工厂代码 / 关联工厂 | `plant_code`、`related_plant` | **4** |
 | 区域文化 | `culture_code` | **5** |
 | 币种（ISO 4217） | `currency_code`；角色前缀如 `from_currency_code`、`to_currency_code`、`scale_currency_code`、`condition_currency_code`、`moving_price_currency_code`、`purchase_currency_code` | **3** |
+| 部门编码 | `dept_code`（组织部门；≠ 编码规则字典短码） | **6** |
+| 部门简称 / ISO 编码 | `dept_short_name` / `iso_code`（二者一致） | **6** / **6** |
+| 部门名称1 / 部门名称2 | `dept_name1` / `dept_name2` | **40** / **70** |
+| 成本中心编码 | `cost_center_code`、费用单 `cost_center`（与部门编码同长） | **6** |
 
 属性名：单表结算/报告币种一律 **`CurrencyCode`**；多角色保留前缀且以 **`CurrencyCode` 结尾**（如 `ScaleCurrencyCode`）。❌ 禁止 `Currency`、`CostCurrency`、`ConditionCurrency` 等无 `Code` 后缀。
 

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/complaint/customer-complaint/components -->
 <!-- 文件名称：customer-complaint-item-panel.vue -->
-<!-- 功能描述：客诉主表实体主表实体右侧明细 customerComplaintItem 独立 CRUD（按主表选中 customerComplaintCode 分页） -->
+<!-- 功能描述：客诉主表实体主表实体右侧明细 customerComplaintItem 独立 CRUD（按主表选中 customerComplaintId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,286 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterCustomerComplaintId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-quality-complaint-customer-complaint-customer-complaint-item"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('complaintId')">
-      <a-form-item :label="pi.queryLabel('complaintId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.complaintId"
-          api-url="TaktCustomerComplaints/options"
-          :placeholder="pi.queryPh('complaintId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productCode')">
-      <a-form-item :label="pi.queryLabel('productCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.productCode"
-          api-url="TaktMaterialPlants/options"
-          :placeholder="pi.queryPh('productCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productName')">
-      <a-form-item :label="pi.queryLabel('productName')">
-        <a-input
-          v-model:value="advancedQueryForm.productName"
-          :placeholder="pi.queryPh('productName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('batchCode')">
-      <a-form-item :label="pi.queryLabel('batchCode')">
-        <a-input
-          v-model:value="advancedQueryForm.batchCode"
-          :placeholder="pi.queryPh('batchCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itemType')">
-      <a-form-item :label="pi.queryLabel('itemType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.itemType"
-          dict-type="logistics_quality_complaint_item_type"
-          :placeholder="pi.queryPh('itemType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('defectDescription')">
-      <a-form-item :label="pi.queryLabel('defectDescription')">
-        <a-textarea
-          v-model:value="advancedQueryForm.defectDescription"
-          :placeholder="pi.queryPh('defectDescription', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('defectLevel')">
-      <a-form-item :label="pi.queryLabel('defectLevel')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.defectLevel"
-          dict-type="logistics_quality_defect_severity_code"
-          :placeholder="pi.queryPh('defectLevel', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('defectQuantity')">
-      <a-form-item :label="pi.queryLabel('defectQuantity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.defectQuantity"
-          :placeholder="pi.queryPh('defectQuantity', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('defectRate')">
-      <a-form-item :label="pi.queryLabel('defectRate')">
-        <a-input-number
-          v-model:value="advancedQueryForm.defectRate"
-          :placeholder="pi.queryPh('defectRate', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('causeAnalysis')">
-      <a-form-item :label="pi.queryLabel('causeAnalysis')">
-        <a-input
-          v-model:value="advancedQueryForm.causeAnalysis"
-          :placeholder="pi.queryPh('causeAnalysis', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('improvementAction')">
-      <a-form-item :label="pi.queryLabel('improvementAction')">
-        <a-input
-          v-model:value="advancedQueryForm.improvementAction"
-          :placeholder="pi.queryPh('improvementAction', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('improvementResponsible')">
-      <a-form-item :label="pi.queryLabel('improvementResponsible')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.improvementResponsible"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('improvementResponsible', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannedCompletionDateStart')">
-      <a-form-item :label="pi.queryLabel('plannedCompletionDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedCompletionDateStart"
-          :placeholder="pi.queryPh('plannedCompletionDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannedCompletionDateEnd')">
-      <a-form-item :label="pi.queryLabel('plannedCompletionDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedCompletionDateEnd"
-          :placeholder="pi.queryPh('plannedCompletionDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('actualCompletionDateStart')">
-      <a-form-item :label="pi.queryLabel('actualCompletionDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.actualCompletionDateStart"
-          :placeholder="pi.queryPh('actualCompletionDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('actualCompletionDateEnd')">
-      <a-form-item :label="pi.queryLabel('actualCompletionDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.actualCompletionDateEnd"
-          :placeholder="pi.queryPh('actualCompletionDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('attachmentPaths')">
-      <a-form-item :label="pi.queryLabel('attachmentPaths')">
-        <a-input
-          v-model:value="advancedQueryForm.attachmentPaths"
-          :placeholder="pi.queryPh('attachmentPaths', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('improvementStatus')">
-      <a-form-item :label="pi.queryLabel('improvementStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.improvementStatus"
-          dict-type="logistics_quality_improvement_status"
-          :placeholder="pi.queryPh('improvementStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isObsolete')">
-      <a-form-item :label="pi.queryLabel('isObsolete')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('isObsolete', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -448,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import CustomerComplaintItemForm from './customer-complaint-item-form.vue'
 import { useCustomerComplaintMasterContext } from '../composables/use-customer-complaint-master-context'
 import {
@@ -536,47 +260,6 @@ const formData = ref<Partial<CustomerComplaintItem>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    lineNumber: undefined as number | undefined,
-    itemType: undefined as number | undefined,
-    defectQuantity: undefined as number | undefined,
-    defectRate: undefined as number | undefined,
-    improvementStatus: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  CUSTOMERCOMPLAINTITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...CUSTOMERCOMPLAINTITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -622,16 +305,6 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: CustomerComplaintItem }) =>
       String(getCustomerComplaintItemField(record, 'customerComplaintItemId') ?? ''),
-  },
-  {
-    title: pi.label('complaintId'),
-    dataIndex: 'complaintId',
-    key: 'complaintId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: CustomerComplaintItem }) =>
-      String(getCustomerComplaintItemField(record, 'complaintId') ?? ''),
   },
   {
     title: pi.label('customerComplaintCode'),
@@ -813,6 +486,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: CustomerComplaintItem }) =>
       String(getCustomerComplaintItemField(record, 'isObsolete') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: CustomerComplaintItem }) =>
+      String(getCustomerComplaintItemField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -830,8 +513,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:complaint:customer:delete',
         onClick: (record: CustomerComplaintItem) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -940,7 +625,7 @@ function onClickRow(record: CustomerComplaintItem) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {CustomerComplaintItemQuery} 查询 DTO
  */
@@ -950,7 +635,7 @@ function buildListQuery(overrides?: Partial<CustomerComplaintItemQuery>): Custom
   const query: CustomerComplaintItemQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    customerComplaintCode: masterCustomerComplaintId.value,
+    customerComplaintId: masterCustomerComplaintId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -964,24 +649,6 @@ function buildListQuery(overrides?: Partial<CustomerComplaintItemQuery>): Custom
   }
   for (const key of CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
-  }
-  if (form.itemType !== undefined && form.itemType !== null) {
-    query.itemType = form.itemType
-  }
-  if (form.defectQuantity !== undefined && form.defectQuantity !== null) {
-    query.defectQuantity = form.defectQuantity
-  }
-  if (form.defectRate !== undefined && form.defectRate !== null) {
-    query.defectRate = form.defectRate
-  }
-  if (form.improvementStatus !== undefined && form.improvementStatus !== null) {
-    query.improvementStatus = form.improvementStatus
-  }
-  if (form.isObsolete !== undefined && form.isObsolete !== null) {
-    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1213,6 +880,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportCustomerComplaintItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

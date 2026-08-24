@@ -71,7 +71,7 @@ public class TaktConferenceRoomDto : TaktCompanyDtoBase
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -148,7 +148,7 @@ public class TaktConferenceRoomQueryDto : TaktPagedQuery
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -323,7 +323,7 @@ public class TaktConferenceRoomSortDto
     public long ConferenceRoomId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -544,7 +544,7 @@ public class TaktConferenceRoomExportDto
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

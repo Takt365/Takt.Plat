@@ -185,9 +185,6 @@ function shouldExcludeInterface(interfaceFile, entityName) {
   if (!entityName) {
     return true;
   }
-  if (shouldExcludeStandaloneService(entityName)) {
-    return true;
-  }
   const entityShort = entityName.replace(/^Takt/, '');
   if (isRbacJunctionEntity(entityShort)) {
     return true;
@@ -1181,8 +1178,8 @@ function processInterfaceFile(interfaceFile, options) {
   const rel = path.relative(CONFIG.servicesRoot, interfaceFile);
   console.log(`\n📦 ${entityName} ← ${rel}`);
 
-  if (!options.force && shouldExcludeStandaloneService(entityName)) {
-    console.log(`  ⏭️  跳过：独立手工服务（${entityName}），使用 --force 可覆盖`);
+  if (!options.force && (EXISTING_MANUAL_SERVICE_ENTITIES.has(entityName) || shouldExcludeStandaloneService(entityName))) {
+    console.log(`  ⏭️  跳过：已有手工服务（实体 ${entityName}），使用 --force 可覆盖`);
     return { status: 'skipped' };
   }
 
@@ -1242,6 +1239,13 @@ try {
   const interfaceFiles = scanServiceInterfaces(options.entityPrefix);
 
   if (interfaceFiles.length === 0) {
+    const manualEntityName = options.entityPrefix ? `Takt${options.entityPrefix}` : '';
+    if (manualEntityName && shouldExcludeStandaloneService(manualEntityName)) {
+      console.log(`⏭️  跳过：已有手工服务（实体 ${manualEntityName}），使用 --force 可覆盖`);
+      console.log('\n📊 已创建 0 个，已更新 0 个，跳过 1 个，失败 0 个');
+      console.log('✨ 完成！请编译 Takt.WebApi 并核对权限码与路由。');
+      process.exit(0);
+    }
     console.error('❌ 未找到匹配的服务接口文件');
     process.exit(1);
   }

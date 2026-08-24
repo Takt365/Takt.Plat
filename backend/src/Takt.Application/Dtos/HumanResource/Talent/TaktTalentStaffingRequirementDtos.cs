@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentStaffingRequirement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTalentStaffingRequirement 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Talent;
 // ========================================
 
 /// <summary>
-/// 用人需求（审批单；审批状态见 TaktApprovalDtoBase.ApprovalStatus）
+/// 用人需求（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// 对应前端 TaktTalentStaffingRequirementDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -36,90 +36,90 @@ public class TaktTalentStaffingRequirementDto : TaktApprovalDtoBase
     public long TalentStaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
     /// </summary>
-    public string ReqNo { get; set; } = string.Empty;
+    public string ReqCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID（DeptID，FK→TaktDept）
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 申请部门名称（填充字段）
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? DeptName { get; set; }
 
     /// <summary>
-    /// 申请岗位ID（PositionID，FK→TaktPost）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PostId { get; set; }
 
     /// <summary>
-    /// 申请岗位名称（填充字段）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     public string? PostName { get; set; }
 
     /// <summary>
-    /// 职级（JobGrade/Rank，如专员/主任/工程师）
+    /// 职级（可参照字典 sys_post_level；列存业务码，如 P3/M2）
     /// </summary>
     public string? JobGrade { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求人数（RequestQty，默认 1）
+    /// 需求人数（默认 1）
     /// </summary>
     public int RequestQty { get; set; } = 0;
 
     /// <summary>
-    /// 编制类型（HeadcountType：正式/派遣/实习生/临时）
+    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）
+    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string ReasonCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReplaceEmployeeId { get; set; }
 
     /// <summary>
-    /// 替补员工名称（填充字段）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     public string? ReplaceEmployeeName { get; set; }
 
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）
+    /// 期望入职日
     /// </summary>
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（ContractType：固定期/无固定/实习协议）
+    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作地点（WorkLocation，如工厂/分公司）
+    /// 工作地点（如工厂/分公司）
     /// </summary>
     public string? WorkLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职责（JobDesc）
+    /// 岗位职责
     /// </summary>
     public string? JobDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任职要求（Qualification，学历/经验/技能）
+    /// 任职要求（学历/经验/技能）
     /// </summary>
     public string? Qualification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算年度（BudgetYear，用于 headcount 控制）
+    /// 预算年度（用于 headcount 控制）
     /// </summary>
     public string? BudgetYear { get; set; } = string.Empty;
 
@@ -165,7 +165,7 @@ public class TaktTalentStaffingRequirementQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -174,86 +174,86 @@ public class TaktTalentStaffingRequirementQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-    /// <summary>
-    /// 需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）
-    /// </summary>
-    public string? ReqNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID（DeptID，FK→TaktDept）
+    /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// </summary>
+    public string? ReqCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 申请岗位ID（PositionID，FK→TaktPost）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
 
     /// <summary>
-    /// 职级（JobGrade/Rank，如专员/主任/工程师）
+    /// 职级（可参照字典 sys_post_level；列存业务码，如 P3/M2）
     /// </summary>
     public string? JobGrade { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求人数（RequestQty，默认 1）
+    /// 需求人数（默认 1）
     /// </summary>
     public int? RequestQty { get; set; }
 
     /// <summary>
-    /// 编制类型（HeadcountType：正式/派遣/实习生/临时）
+    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string? HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）
+    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string? ReasonCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReplaceEmployeeId { get; set; }
 
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）（范围查询-开始）
+    /// 期望入职日（范围查询-开始）
     /// </summary>
     public DateTime? ExpectedOnboardDateStart { get; set; }
 
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）（范围查询-结束）
+    /// 期望入职日（范围查询-结束）
     /// </summary>
     public DateTime? ExpectedOnboardDateEnd { get; set; }
 
     /// <summary>
-    /// 合同类型（ContractType：固定期/无固定/实习协议）
+    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作地点（WorkLocation，如工厂/分公司）
+    /// 工作地点（如工厂/分公司）
     /// </summary>
     public string? WorkLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职责（JobDesc）
+    /// 岗位职责
     /// </summary>
     public string? JobDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任职要求（Qualification，学历/经验/技能）
+    /// 任职要求（学历/经验/技能）
     /// </summary>
     public string? Qualification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算年度（BudgetYear，用于 headcount 控制）
+    /// 预算年度（用于 headcount 控制）
     /// </summary>
     public string? BudgetYear { get; set; } = string.Empty;
 
@@ -319,11 +319,6 @@ public class TaktTalentStaffingRequirementQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 需求单号（ReqCode，租户+公司内唯一；自动生成，如 PR-2026-00123）
-    /// </summary>
-    public string ReqCode { get; set; } = string.Empty;
 }
 
 // ========================================
@@ -350,85 +345,84 @@ public class TaktTalentStaffingRequirementCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
-    /// 需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）
-    /// </summary>
-    [Required(ErrorMessage = "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）不能为空")]
-    public string ReqNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID（DeptID，FK→TaktDept）
+    /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// </summary>
+    [Required(ErrorMessage = "需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）不能为空")]
+    public string ReqCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 申请岗位ID（PositionID，FK→TaktPost）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PostId { get; set; }
 
     /// <summary>
-    /// 职级（JobGrade/Rank，如专员/主任/工程师）
+    /// 职级（可参照字典 sys_post_level；列存业务码，如 P3/M2）
     /// </summary>
     public string? JobGrade { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求人数（RequestQty，默认 1）
+    /// 需求人数（默认 1）
     /// </summary>
     public int RequestQty { get; set; } = 0;
 
     /// <summary>
-    /// 编制类型（HeadcountType：正式/派遣/实习生/临时）
+    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
-    [Required(ErrorMessage = "编制类型（HeadcountType：正式/派遣/实习生/临时）不能为空")]
+    [Required(ErrorMessage = "编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）不能为空")]
     public string HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）
+    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
-    [Required(ErrorMessage = "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）不能为空")]
+    [Required(ErrorMessage = "需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）不能为空")]
     public string ReasonCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReplaceEmployeeId { get; set; }
 
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）
+    /// 期望入职日
     /// </summary>
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（ContractType：固定期/无固定/实习协议）
+    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作地点（WorkLocation，如工厂/分公司）
+    /// 工作地点（如工厂/分公司）
     /// </summary>
     public string? WorkLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职责（JobDesc）
+    /// 岗位职责
     /// </summary>
     public string? JobDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任职要求（Qualification，学历/经验/技能）
+    /// 任职要求（学历/经验/技能）
     /// </summary>
     public string? Qualification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算年度（BudgetYear，用于 headcount 控制）
+    /// 预算年度（用于 headcount 控制）
     /// </summary>
     public string? BudgetYear { get; set; } = string.Empty;
 
@@ -467,6 +461,11 @@ public class TaktTalentStaffingRequirementUpdateDto : TaktTalentStaffingRequirem
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TalentStaffingRequirementId { get; set; }
 
+    /// <summary>
+    /// 职位发布（子表，级联保存）
+    /// </summary>
+    public new List<TaktTalentJobPostingUpdateDto>? TalentJobPostings { get; set; }
+
 }
 
 // ========================================
@@ -493,81 +492,81 @@ public class TaktTalentStaffingRequirementTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-    /// <summary>
-    /// 需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）
-    /// </summary>
-    public string? ReqNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID（DeptID，FK→TaktDept）
+    /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// </summary>
+    public string? ReqCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 申请岗位ID（PositionID，FK→TaktPost）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
 
     /// <summary>
-    /// 职级（JobGrade/Rank，如专员/主任/工程师）
+    /// 职级（可参照字典 sys_post_level；列存业务码，如 P3/M2）
     /// </summary>
     public string? JobGrade { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求人数（RequestQty，默认 1）
+    /// 需求人数（默认 1）
     /// </summary>
     public int? RequestQty { get; set; }
 
     /// <summary>
-    /// 编制类型（HeadcountType：正式/派遣/实习生/临时）
+    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string? HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）
+    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string? ReasonCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReplaceEmployeeId { get; set; }
 
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）
+    /// 期望入职日
     /// </summary>
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（ContractType：固定期/无固定/实习协议）
+    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作地点（WorkLocation，如工厂/分公司）
+    /// 工作地点（如工厂/分公司）
     /// </summary>
     public string? WorkLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职责（JobDesc）
+    /// 岗位职责
     /// </summary>
     public string? JobDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任职要求（Qualification，学历/经验/技能）
+    /// 任职要求（学历/经验/技能）
     /// </summary>
     public string? Qualification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算年度（BudgetYear，用于 headcount 控制）
+    /// 预算年度（用于 headcount 控制）
     /// </summary>
     public string? BudgetYear { get; set; } = string.Empty;
 
@@ -608,82 +607,81 @@ public class TaktTalentStaffingRequirementImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-    /// <summary>
-    /// 需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）
-    /// </summary>
-    public string? ReqNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID（DeptID，FK→TaktDept）
+    /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// </summary>
+    public string? ReqCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 申请岗位ID（PositionID，FK→TaktPost）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
 
     /// <summary>
-    /// 职级（JobGrade/Rank，如专员/主任/工程师）
+    /// 职级（可参照字典 sys_post_level；列存业务码，如 P3/M2）
     /// </summary>
     public string? JobGrade { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求人数（RequestQty，默认 1）
+    /// 需求人数（默认 1）
     /// </summary>
     public int? RequestQty { get; set; }
 
     /// <summary>
-    /// 编制类型（HeadcountType：正式/派遣/实习生/临时）
+    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string? HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）
+    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string? ReasonCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReplaceEmployeeId { get; set; }
 
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）
+    /// 期望入职日
     /// </summary>
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（ContractType：固定期/无固定/实习协议）
+    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作地点（WorkLocation，如工厂/分公司）
+    /// 工作地点（如工厂/分公司）
     /// </summary>
     public string? WorkLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职责（JobDesc）
+    /// 岗位职责
     /// </summary>
     public string? JobDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任职要求（Qualification，学历/经验/技能）
+    /// 任职要求（学历/经验/技能）
     /// </summary>
     public string? Qualification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算年度（BudgetYear，用于 headcount 控制）
+    /// 预算年度（用于 headcount 控制）
     /// </summary>
     public string? BudgetYear { get; set; } = string.Empty;
 
@@ -721,75 +719,90 @@ public class TaktTalentStaffingRequirementExportDto
     public long TalentStaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// 公司代码
     /// </summary>
-    public string ReqNo { get; set; } = string.Empty;
+    public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID（DeptID，FK→TaktDept）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// </summary>
+    public string ReqCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 申请岗位ID（PositionID，FK→TaktPost）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PostId { get; set; }
 
     /// <summary>
-    /// 职级（JobGrade/Rank，如专员/主任/工程师）
+    /// 职级（可参照字典 sys_post_level；列存业务码，如 P3/M2）
     /// </summary>
     public string? JobGrade { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求人数（RequestQty，默认 1）
+    /// 需求人数（默认 1）
     /// </summary>
     public int RequestQty { get; set; } = 0;
 
     /// <summary>
-    /// 编制类型（HeadcountType：正式/派遣/实习生/临时）
+    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）
+    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string ReasonCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReplaceEmployeeId { get; set; }
 
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）
+    /// 期望入职日
     /// </summary>
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（ContractType：固定期/无固定/实习协议）
+    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作地点（WorkLocation，如工厂/分公司）
+    /// 工作地点（如工厂/分公司）
     /// </summary>
     public string? WorkLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职责（JobDesc）
+    /// 岗位职责
     /// </summary>
     public string? JobDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任职要求（Qualification，学历/经验/技能）
+    /// 任职要求（学历/经验/技能）
     /// </summary>
     public string? Qualification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算年度（BudgetYear，用于 headcount 控制）
+    /// 预算年度（用于 headcount 控制）
     /// </summary>
     public string? BudgetYear { get; set; } = string.Empty;
 

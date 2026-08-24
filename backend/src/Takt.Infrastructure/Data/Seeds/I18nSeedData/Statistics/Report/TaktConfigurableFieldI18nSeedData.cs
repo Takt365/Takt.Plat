@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableFieldI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurableField 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktConfigurableFieldI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurablefield._self", "zh-HK", "自定义报表输出字段定义信息_hk", "实体名称"),
 
             // entity.configurablefield.configurableid
-            new TranslationSeedItem("entity.configurablefield.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablefield.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurablefield.configurableid
-            new TranslationSeedItem("entity.configurablefield.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablefield.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurablefield.configurableid
-            new TranslationSeedItem("entity.configurablefield.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablefield.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurablefield.configurableid
-            new TranslationSeedItem("entity.configurablefield.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablefield.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
 
             // entity.configurablefield.sourcealias
             new TranslationSeedItem("entity.configurablefield.sourcealias", "en-US", "数据源别名_us", "数据源别名"),
@@ -136,31 +136,31 @@ public class TaktConfigurableFieldI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurablefield.outputalias", "zh-HK", "输出别名_hk", "输出别名（SELECT AS，为空时使用 display_name）"),
 
             // entity.configurablefield.aggregatefunc
-            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "en-US", "聚合函数_us", "聚合函数（无分组时为 None）"),
+            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "en-US", "聚合函数_us", "聚合函数（字典 sys_configurable_aggregate_func；0=无 1=COUNT 2=SUM 3=AVG 4=MIN 5=MAX）"),
             // entity.configurablefield.aggregatefunc
-            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "ja-JP", "聚合函数_jp", "聚合函数（无分组时为 None）"),
+            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "ja-JP", "聚合函数_jp", "聚合函数（字典 sys_configurable_aggregate_func；0=无 1=COUNT 2=SUM 3=AVG 4=MIN 5=MAX）"),
             // entity.configurablefield.aggregatefunc
-            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "zh-CN", "聚合函数", "聚合函数（无分组时为 None）"),
+            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "zh-CN", "聚合函数", "聚合函数（字典 sys_configurable_aggregate_func；0=无 1=COUNT 2=SUM 3=AVG 4=MIN 5=MAX）"),
             // entity.configurablefield.aggregatefunc
-            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "zh-HK", "聚合函数_hk", "聚合函数（无分组时为 None）"),
+            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "zh-HK", "聚合函数_hk", "聚合函数（字典 sys_configurable_aggregate_func；0=无 1=COUNT 2=SUM 3=AVG 4=MIN 5=MAX）"),
 
             // entity.configurablefield.isvisible
-            new TranslationSeedItem("entity.configurablefield.isvisible", "en-US", "是否输出_us", "是否输出（0=隐藏 1=显示）"),
+            new TranslationSeedItem("entity.configurablefield.isvisible", "en-US", "是否输出_us", "是否输出（字典 sys_yes_no；0=否 1=是）"),
             // entity.configurablefield.isvisible
-            new TranslationSeedItem("entity.configurablefield.isvisible", "ja-JP", "是否输出_jp", "是否输出（0=隐藏 1=显示）"),
+            new TranslationSeedItem("entity.configurablefield.isvisible", "ja-JP", "是否输出_jp", "是否输出（字典 sys_yes_no；0=否 1=是）"),
             // entity.configurablefield.isvisible
-            new TranslationSeedItem("entity.configurablefield.isvisible", "zh-CN", "是否输出", "是否输出（0=隐藏 1=显示）"),
+            new TranslationSeedItem("entity.configurablefield.isvisible", "zh-CN", "是否输出", "是否输出（字典 sys_yes_no；0=否 1=是）"),
             // entity.configurablefield.isvisible
-            new TranslationSeedItem("entity.configurablefield.isvisible", "zh-HK", "是否输出_hk", "是否输出（0=隐藏 1=显示）"),
+            new TranslationSeedItem("entity.configurablefield.isvisible", "zh-HK", "是否输出_hk", "是否输出（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.configurablefield.sortorder
-            new TranslationSeedItem("entity.configurablefield.sortorder", "en-US", "排序号_us", "排序号（SELECT 列顺序）"),
+            new TranslationSeedItem("entity.configurablefield.sortorder", "en-US", "排序号_us", "排序号（回填）（SELECT 列顺序）"),
             // entity.configurablefield.sortorder
-            new TranslationSeedItem("entity.configurablefield.sortorder", "ja-JP", "排序号_jp", "排序号（SELECT 列顺序）"),
+            new TranslationSeedItem("entity.configurablefield.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（SELECT 列顺序）"),
             // entity.configurablefield.sortorder
-            new TranslationSeedItem("entity.configurablefield.sortorder", "zh-CN", "排序号", "排序号（SELECT 列顺序）"),
+            new TranslationSeedItem("entity.configurablefield.sortorder", "zh-CN", "排序号", "排序号（回填）（SELECT 列顺序）"),
             // entity.configurablefield.sortorder
-            new TranslationSeedItem("entity.configurablefield.sortorder", "zh-HK", "排序号_hk", "排序号（SELECT 列顺序）"),
+            new TranslationSeedItem("entity.configurablefield.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（SELECT 列顺序）"),
 
             // entity.configurablefield.configurable
             new TranslationSeedItem("entity.configurablefield.configurable", "en-US", "关联的报表主表_us", "关联的报表主表"),

@@ -32,7 +32,7 @@ export default {
     errorcolmessage: '说明',
     selectuserdialogtitle: '选择用户',
     selectusersearchplaceholder: '搜索用户名、邮箱或手机',
-    colusername: '用户名',
+    colUserName: '用户名',
     coluseremail: '邮箱',
     coluserphone: '手机',
     pagetotal: '共 {total} 条',

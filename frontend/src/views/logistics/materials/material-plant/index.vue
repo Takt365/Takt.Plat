@@ -142,13 +142,13 @@
         <template v-else-if="column.key === 'isInspection'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'isInspection')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isBatch'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'isBatch')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isEndOfLife'">
@@ -499,7 +499,7 @@
       <a-form-item :label="pi.queryLabel('isInspection')">
         <TaktSelect
           v-model:value="advancedQueryForm.isInspection"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isInspection', 'select')"
           allow-clear
         />
@@ -509,7 +509,7 @@
       <a-form-item :label="pi.queryLabel('isBatch')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBatch"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBatch', 'select')"
           allow-clear
         />
@@ -529,7 +529,7 @@
       <a-form-item :label="pi.queryLabel('materialStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('materialStatus', 'select')"
           allow-clear
         />

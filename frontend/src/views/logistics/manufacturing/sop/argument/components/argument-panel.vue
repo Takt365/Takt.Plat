@@ -163,7 +163,7 @@
       <a-form-item :label="t('entity.sopargument.isoutofrange')">
         <TaktSelect
           v-model:value="advancedQueryForm.isOutOfRange"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopargument.isoutofrange') })"
           allow-clear
         />

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingPlanI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -190,13 +190,13 @@ public class TaktTrainingPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingplan.description", "zh-HK", "计划说明_hk", "计划说明"),
 
             // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "en-US", "业务状态_us", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingplan.status", "en-US", "业务状态_us", "计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "ja-JP", "业务状态_jp", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingplan.status", "ja-JP", "业务状态_jp", "计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "zh-CN", "业务状态", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingplan.status", "zh-CN", "业务状态", "计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "zh-HK", "业务状态_hk", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingplan.status", "zh-HK", "业务状态_hk", "计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesGroupDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesGroup 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesGroup 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktSalesGroupDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesGroupId { get; set; }
-
 
     /// <summary>
     /// 销售组编码（3）
@@ -73,17 +72,17 @@ public class TaktSalesGroupDto : TaktCompanyDtoBase
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 
@@ -105,7 +104,7 @@ public class TaktSalesGroupQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -151,17 +150,17 @@ public class TaktSalesGroupQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -211,9 +210,8 @@ public class TaktSalesGroupCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -250,12 +248,12 @@ public class TaktSalesGroupCreateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 
@@ -309,9 +307,9 @@ public class TaktSalesGroupStatusDto
     public long SalesGroupId { get; set; }
 
     /// <summary>
-    /// 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "销售组状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int GroupStatus { get; set; } = 0;
 }
 
@@ -333,10 +331,34 @@ public class TaktSalesGroupSortDto
     public long SalesGroupId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
+}
+
+// ========================================
+// SalesGroup 内置 DTO
+// ========================================
+
+/// <summary>
+/// SalesGroup 内置更新 DTO
+/// </summary>
+public class TaktSalesGroupBuiltInDto
+{
+    /// <summary>
+    /// SalesGroupID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SalesGroupId { get; set; }
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no；1=是，0=否）
+    /// </summary>
+    [Required(ErrorMessage = "内置不能为空")]
+    public int IsBuiltIn { get; set; } = 0;
 }
 
 // ========================================
@@ -364,7 +386,7 @@ public class TaktSalesGroupTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -400,12 +422,12 @@ public class TaktSalesGroupTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -442,7 +464,7 @@ public class TaktSalesGroupImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -478,12 +500,12 @@ public class TaktSalesGroupImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? GroupStatus { get; set; }
 
@@ -526,6 +548,11 @@ public class TaktSalesGroupExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 销售组编码（3）
     /// </summary>
     public string SalesGroupCode { get; set; } = string.Empty;
@@ -557,17 +584,17 @@ public class TaktSalesGroupExportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 销售组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 销售组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int GroupStatus { get; set; } = 0;
 

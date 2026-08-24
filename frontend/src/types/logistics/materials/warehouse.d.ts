@@ -60,7 +60,7 @@ export interface Warehouse extends CompanyDtoBase {
   managerUserCode?: string;
 
   /**
-   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
    */
   isVirtual?: number;
 
@@ -70,12 +70,12 @@ export interface Warehouse extends CompanyDtoBase {
   warehouseType?: number;
 
   /**
-   * 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 仓库状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   warehouseStatus?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -153,7 +153,7 @@ export interface WarehouseExport {
   managerUserCode?: string;
 
   /**
-   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
    */
   isVirtual: number;
 
@@ -163,12 +163,12 @@ export interface WarehouseExport {
   warehouseType: number;
 
   /**
-   * 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 仓库状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   warehouseStatus: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 

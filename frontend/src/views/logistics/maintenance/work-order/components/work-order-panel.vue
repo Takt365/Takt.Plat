@@ -602,7 +602,7 @@
       <a-form-item :label="t('entity.maintenanceworkorder.ishistoryarchived')">
         <TaktSelect
           v-model:value="advancedQueryForm.isHistoryArchived"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.ishistoryarchived') })"
           allow-clear
         />

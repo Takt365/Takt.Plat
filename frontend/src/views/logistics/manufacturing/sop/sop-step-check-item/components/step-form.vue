@@ -110,7 +110,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.safetyPopupRequired"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopstep.safetypopuprequired') })"
                 />
               </a-form-item>

@@ -22,7 +22,6 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 /// 职责：每次备份执行的完整结果（路径/大小/状态/起止/错误等）。
 /// 与业务「执行配置」分离：如数据库备份配置见 TaktDatabaseBackup（仅配置 + 最近状态摘要）。
 /// BackupKind 区分场景（database / file / config）；业务专用扩展走 ExtField。
-/// RunStatus：0=进行中 1=成功 2=失败。
 /// </remarks>
 [SugarTable("takt_statistics_logging_backup_log", "备份日志表")]
 [SugarIndex("ix_backup_log_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -45,7 +44,7 @@ public class TaktBackupLog : TaktCompanyEntityBase
     public string SourceId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源编码快照（配置编码、任务编码等）
+    /// 来源编码快照（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源编码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string SourceCode { get; set; } = string.Empty;
@@ -63,19 +62,19 @@ public class TaktBackupLog : TaktCompanyEntityBase
     public string TargetScope { get; set; } = string.Empty;
 
     /// <summary>
-    /// 同步模式快照（1=完整 2=增量；其它场景可按业务约定）
+    /// 同步模式快照（字典 sys_backup_sync_mode；1=完整 2=增量）
     /// </summary>
     [SugarColumn(ColumnName = "sync_mode", ColumnDescription = "同步模式", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SyncMode { get; set; } = 1;
 
     /// <summary>
-    /// 执行方式快照（1=立即 2=后台）
+    /// 执行方式快照（字典 sys_backup_execute_mode；1=立即 2=后台）
     /// </summary>
     [SugarColumn(ColumnName = "execute_mode", ColumnDescription = "执行方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ExecuteMode { get; set; } = 1;
 
     /// <summary>
-    /// 路径类型快照（1=本地 2=网络 3=FTP；无路径场景为 0）
+    /// 路径类型快照（字典 sys_backup_path_type；0=无 1=本地 2=网络 3=FTP）
     /// </summary>
     [SugarColumn(ColumnName = "path_type", ColumnDescription = "路径类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PathType { get; set; } = 0;
@@ -93,7 +92,7 @@ public class TaktBackupLog : TaktCompanyEntityBase
     public long FileSizeBytes { get; set; }
 
     /// <summary>
-    /// 运行状态（0=进行中 1=成功 2=失败）
+    /// 运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）
     /// </summary>
     [SugarColumn(ColumnName = "run_status", ColumnDescription = "运行状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int RunStatus { get; set; } = 0;

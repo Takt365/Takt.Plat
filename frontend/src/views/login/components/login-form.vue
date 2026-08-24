@@ -54,19 +54,19 @@
         </a-form-item>
 
         <a-form-item
-          :label="t('login.page.field.username.label')"
-          name="username"
+          :label="t('login.page.field.userName.label')"
+          name="userName"
           :auto-link="false"
         >
           <a-input
-            ref="usernameInputRef"
-            v-model:value="formData.username"
-            :placeholder="t('login.page.field.username.placeholder')"
+            ref="UserNameInputRef"
+            v-model:value="formData.userName"
+            :placeholder="t('login.page.field.userName.placeholder')"
             size="large"
             show-count
-            :maxlength="LOGIN_USERNAME_MAX_LENGTH"
+            :maxlength="LOGIN_USER_NAME_MAX_LENGTH"
             autocomplete="username"
-            @blur="handleUsernameBlur"
+            @blur="handleUserNameBlur"
           >
             <template #prefix>
               <RiUserLine class="text-text-secondary takt-remix-icon" />
@@ -204,7 +204,7 @@ import { redirectToAuthorize } from '@/utils/oauth';
 import { resolveRequestLocale, resolveCultureCode, useLocaleStore } from '@/stores/foundation/locale';
 import { useSettingStore } from '@/stores/common/setting';
 import type { TaktLoginLayoutPosition } from '@/utils/takt-login-layout-dom';
-import { isValidLoginUsername, isValidPassword, isValidTenantCode, LOGIN_PASSWORD_MAX_LENGTH, LOGIN_USERNAME_MAX_LENGTH } from '@/utils/regex';
+import { isValidLoginUserName, isValidPassword, isValidTenantCode, LOGIN_PASSWORD_MAX_LENGTH, LOGIN_USER_NAME_MAX_LENGTH } from '@/utils/regex';
 import { TAKT_TENANT_CODE_LENGTH } from '@/utils/common';
 
 interface Props {
@@ -247,12 +247,12 @@ const loading = ref(false);
 const formRef = ref<FormInstance>();
 
 /** 用户名输入框（租户校验后聚焦） */
-const usernameInputRef = ref<{ focus?: () => void } | null>(null);
+const UserNameInputRef = ref<{ focus?: () => void } | null>(null);
 
 /** 登录表单模型 */
 const formData = reactive({
   tenantCode: '000',
-  username: 'admin',
+  userName: 'admin',
   password: 'Takt@123456',
   rememberMe: false,
 });
@@ -264,18 +264,18 @@ const {
   tenantValidated,
   tenantValidating,
   onTenantInputChange,
-  onUsernameInputChange,
+  onUserNameInputChange,
   commitTenantAsync,
-  commitUsernamePreviewAsync,
+  commitUserNamePreviewAsync,
   dispose: disposeLoginFieldSync,
 } = useLoginFieldSync({
   getTenantCode: () => formData.tenantCode,
   setTenantCode: (code) => {
     formData.tenantCode = code;
   },
-  getUsername: () => formData.username,
-  setUsername: (username) => {
-    formData.username = username;
+  getUserName: () => formData.userName,
+  setUserName: (userName) => {
+    formData.userName = userName;
   },
   formRef,
 });
@@ -322,12 +322,12 @@ const captchaModalOpen = ref(false);
 const loginTicket = ref<string | null>(null);
 
 /** 验密成功时绑定的租户+用户名（signin 须与签发时一致） */
-const loginSessionContext = ref<{ tenantCode: string; username: string } | null>(null);
+const loginSessionContext = ref<{ tenantCode: string; userName: string } | null>(null);
 
 /** 启用验证码时，待验密的租户/用户名/密文密码 */
 const pendingVerifyPayload = ref<{
   tenantCode: string;
-  username: string;
+  userName: string;
   password: string;
 } | null>(null);
 
@@ -377,9 +377,9 @@ watch(
 );
 
 watch(
-  () => formData.username,
+  () => formData.userName,
   () => {
-    onUsernameInputChange();
+    onUserNameInputChange();
   },
 );
 
@@ -397,15 +397,15 @@ function handleTenantBlur(): void {
 function handleTenantPressEnter(event: KeyboardEvent): void {
   event.preventDefault();
   void commitTenantAsync().then(() => {
-    usernameInputRef.value?.focus?.();
+    UserNameInputRef.value?.focus?.();
   });
 }
 
 /**
  * 用户名输入框失焦：立即拉取登录预览
  */
-function handleUsernameBlur(): void {
-  void commitUsernamePreviewAsync();
+function handleUserNameBlur(): void {
+  void commitUserNamePreviewAsync();
 }
 
 onMounted(() => {
@@ -474,20 +474,20 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       },
       trigger: ['blur', 'change'],
     }],
-  username: [
+  userName: [
     {
       required: true,
-      message: t('login.page.validate.username.required'),
+      message: t('login.page.validate.userName.required'),
       trigger: 'blur',
     },
     {
       validator: async (_rule, value) => {
-        const trimmed = String(formData.username ?? value ?? '').trim();
+        const trimmed = String(formData.userName ?? value ?? '').trim();
         if (!trimmed) {
           return Promise.resolve();
         }
-        if (!isValidLoginUsername(trimmed)) {
-          return Promise.reject(t('login.page.validate.username.invalid'));
+        if (!isValidLoginUserName(trimmed)) {
+          return Promise.reject(t('login.page.validate.userName.invalid'));
         }
         return Promise.resolve();
       },
@@ -518,10 +518,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
  * 解析当前登录凭据（租户 + 用户名，与后端 NormalizeLogin* 一致）
  * @returns {object} 租户编码与用户名
  */
-function resolveLoginCredentials(): { tenantCode: string; username: string } {
+function resolveLoginCredentials(): { tenantCode: string; userName: string } {
   const tenantCode = (tenantStore.tenantCode || formData.tenantCode.trim());
-  const username = formData.username.trim().toLowerCase();
-  return { tenantCode, username };
+  const userName = formData.userName.trim().toLowerCase();
+  return { tenantCode, userName };
 }
 
 /**
@@ -530,7 +530,7 @@ function resolveLoginCredentials(): { tenantCode: string; username: string } {
  */
 async function completeSignInAsync(captcha?: TaktCaptchaSubmitPayload): Promise<void> {
   const ctx = loginSessionContext.value;
-  if (!ctx?.tenantCode || !ctx.username) {
+  if (!ctx?.tenantCode || !ctx.userName) {
     throw new Error(t('login.page.message.fail'));
   }
   const ticket = loginTicket.value?.trim();
@@ -540,7 +540,7 @@ async function completeSignInAsync(captcha?: TaktCaptchaSubmitPayload): Promise<
   const cultureCode = resolveRequestLocale();
 
   await signInSession({
-    username: ctx.username,
+    userName: ctx.userName,
     tenantCode: ctx.tenantCode,
     cultureCode,
     rememberMe: formData.rememberMe,
@@ -600,6 +600,7 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
     'common.field.login.credentials',
     '用户或密码错误',
     '用户名或密码错误',
+    'Incorrect UserName or password',
     'Incorrect username or password',
     'Incorrect user or password',
     'ユーザーまたはパスワードが正しくありません',
@@ -629,14 +630,14 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
  */
 async function runVerifyAndSignInAsync(payload: {
   tenantCode: string;
-  username: string;
+  userName: string;
   password: string;
   captchaId?: string;
   captchaCode?: string;
 }): Promise<void> {
   const verifyResult = normalizeSessionVerifyPasswordResponse(
     await verifySessionPassword({
-      username: payload.username,
+      userName: payload.userName,
       password: payload.password,
       tenantCode: payload.tenantCode,
       captchaId: payload.captchaId,
@@ -650,7 +651,7 @@ async function runVerifyAndSignInAsync(payload: {
   }
 
   loginTicket.value = ticket;
-  loginSessionContext.value = { tenantCode: payload.tenantCode, username: payload.username };
+  loginSessionContext.value = { tenantCode: payload.tenantCode, userName: payload.userName };
   pendingVerifyPayload.value = null;
 
   await completeSignInAsync();
@@ -668,20 +669,20 @@ async function handleLogin(): Promise<void> {
       return;
     }
 
-    await commitUsernamePreviewAsync();
+    await commitUserNamePreviewAsync();
     await formRef.value?.validate();
 
-    const { tenantCode, username } = resolveLoginCredentials();
+    const { tenantCode, userName } = resolveLoginCredentials();
     const cipherPassword = await buildCipherPasswordAsync();
 
     const needCaptchaUpfront = await probeSessionCaptchaRequiredAsync();
     if (needCaptchaUpfront) {
-      pendingVerifyPayload.value = { tenantCode, username, password: cipherPassword };
+      pendingVerifyPayload.value = { tenantCode, userName, password: cipherPassword };
       captchaModalOpen.value = true;
       return;
     }
 
-    await runVerifyAndSignInAsync({ tenantCode, username, password: cipherPassword });
+    await runVerifyAndSignInAsync({ tenantCode, userName, password: cipherPassword });
   } catch (error) {
     loginTicket.value = null;
     loginSessionContext.value = null;

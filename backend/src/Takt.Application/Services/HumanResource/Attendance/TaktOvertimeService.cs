@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktOvertimeService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：加班信息应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
     }
 
     /// <summary>
-    /// 获取加班信息列表（分页）
+    /// 获取加班信息列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktOvertimeDto>> GetOvertimeListAsync(TaktOvertimeQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktOvertimeDto>.Create(
+                new List<TaktOvertimeDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _overtimeRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -106,8 +114,8 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.DeptName ?? e.Id.ToString(),
+            DictValue = e.DeptName ?? string.Empty,
+            DictLabel = e.DeptName ?? string.Empty,
         }).ToList();
     }
 
@@ -285,7 +293,15 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportOvertimeAsync(TaktOvertimeQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktOvertimeQueryDto());
+        var queryDto = query ?? new TaktOvertimeQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktOvertimeExportDto>(),
+                sheetName ?? "加班信息数据",
+                fileName ?? "加班信息导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _overtimeRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -355,7 +371,20 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
     private async Task SaveOvertimeChildrenAsync(TaktOvertime entity, TaktOvertimeCreateDto dto)
     {
         // 加班明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktOvertimeItemUpdateDto>? itemsForSave;
+        if (dto is TaktOvertimeUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktOvertimeItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkOvertimeItemsObsoleteAsync(entity.Id);
             return;
@@ -367,10 +396,14 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktOvertimeItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.OvertimeId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -389,13 +422,12 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
                     submittedIds.Add(childDto.OvertimeItemId);
                     var isUniqueUpdate_ix_overtime_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _overtimeItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.OvertimeId == x.OvertimeId
+                        x => x.OvertimeId == x.OvertimeId
                 && x.LineNumber == x.LineNumber,
                         childDto.OvertimeItemId);
                     if (!isUniqueUpdate_ix_overtime_item_request_line_unique)
                     {
-                        throw new TaktBusinessException("加班明细的CompanyCode、OvertimeId、LineNumber已存在");
+                        throw new TaktBusinessException("加班明细的OvertimeId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.OvertimeItemId;
@@ -407,12 +439,11 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
                 {
                     var isUniqueCreate_ix_overtime_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _overtimeItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.OvertimeId == x.OvertimeId
+                        x => x.OvertimeId == x.OvertimeId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_overtime_item_request_line_unique)
                     {
-                        throw new TaktBusinessException("加班明细的CompanyCode、OvertimeId、LineNumber已存在");
+                        throw new TaktBusinessException("加班明细的OvertimeId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktOvertimeItem>();
                     child.Id = 0;
@@ -461,152 +492,258 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
     {
         var exp = Expressionable.Create<TaktOvertime>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.DeptId).Contains(keywords)
-                || (x.DeptName != null && x.DeptName.Contains(keywords))
-                || SqlFunc.ToString(x.TotalEmployees).Contains(keywords)
-                || SqlFunc.ToString(x.TotalPlannedHours).Contains(keywords)
-                || SqlFunc.ToString(x.TotalActualHours).Contains(keywords)
-                || SqlFunc.ToString(x.OvertimeType).Contains(keywords)
-                || (x.Reason != null && x.Reason.Contains(keywords))
-                || SqlFunc.ToString(x.HandlingBy).Contains(keywords)
-                || (x.HandlingComment != null && x.HandlingComment.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.OvertimeStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.DeptName != null && x.DeptName.Contains(keywords))
+                || (x.Reason != null && x.Reason.Contains(keywords))
+                || (x.HandlingComment != null && x.HandlingComment.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.OvertimeDate).Contains(keywords)
-                || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
-                || SqlFunc.ToString(x.PlannedEndTime).Contains(keywords)
-                || SqlFunc.ToString(x.HandlingAt).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.DeptId.HasValue == true)
         {
-            exp = exp.And(x => x.DeptId == queryDto.DeptId);
+            var deptId = queryDto.DeptId.Value;
+            exp = exp.And(x => x.DeptId == deptId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeptName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
         {
-            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(queryDto.DeptName));
+            var deptName = queryDto.DeptName;
+            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptName));
         }
 
         if (queryDto?.TotalEmployees.HasValue == true)
         {
-            exp = exp.And(x => x.TotalEmployees == queryDto.TotalEmployees);
+            var totalEmployees = queryDto.TotalEmployees.Value;
+            exp = exp.And(x => x.TotalEmployees == totalEmployees);
         }
 
         if (queryDto?.TotalPlannedHours.HasValue == true)
         {
-            exp = exp.And(x => x.TotalPlannedHours == queryDto.TotalPlannedHours);
+            var totalPlannedHours = queryDto.TotalPlannedHours.Value;
+            exp = exp.And(x => x.TotalPlannedHours == totalPlannedHours);
         }
 
         if (queryDto?.TotalActualHours.HasValue == true)
         {
-            exp = exp.And(x => x.TotalActualHours == queryDto.TotalActualHours);
+            var totalActualHours = queryDto.TotalActualHours.Value;
+            exp = exp.And(x => x.TotalActualHours == totalActualHours);
         }
 
         if (queryDto?.OvertimeType.HasValue == true)
         {
-            exp = exp.And(x => x.OvertimeType == queryDto.OvertimeType);
+            var overtimeType = queryDto.OvertimeType.Value;
+            exp = exp.And(x => x.OvertimeType == overtimeType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Reason))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Reason))
         {
-            exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
+            var reason = queryDto.Reason;
+            exp = exp.And(x => x.Reason != null && x.Reason.Contains(reason));
         }
 
         if (queryDto?.HandlingBy.HasValue == true)
         {
-            exp = exp.And(x => x.HandlingBy == queryDto.HandlingBy);
+            var handlingBy = queryDto.HandlingBy.Value;
+            exp = exp.And(x => x.HandlingBy == handlingBy);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.HandlingComment))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandlingComment))
         {
-            exp = exp.And(x => x.HandlingComment != null && x.HandlingComment.Contains(queryDto.HandlingComment));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
-        {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var handlingComment = queryDto.HandlingComment;
+            exp = exp.And(x => x.HandlingComment != null && x.HandlingComment.Contains(handlingComment));
         }
 
         if (queryDto?.OvertimeStatus.HasValue == true)
         {
-            exp = exp.And(x => x.OvertimeStatus == queryDto.OvertimeStatus);
+            var overtimeStatus = queryDto.OvertimeStatus.Value;
+            exp = exp.And(x => x.OvertimeStatus == overtimeStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.OvertimeDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.OvertimeDate >= queryDto.OvertimeDateStart);
+            var overtimeDateStart = queryDto.OvertimeDateStart.Value;
+            exp = exp.And(x => x.OvertimeDate >= overtimeDateStart);
         }
 
         if (queryDto?.OvertimeDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.OvertimeDate <= queryDto.OvertimeDateEnd);
+            var overtimeDateEnd = queryDto.OvertimeDateEnd.Value;
+            exp = exp.And(x => x.OvertimeDate <= overtimeDateEnd);
         }
 
         if (queryDto?.PlannedStartTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartTime >= queryDto.PlannedStartTimeStart);
+            var plannedStartTimeStart = queryDto.PlannedStartTimeStart.Value;
+            exp = exp.And(x => x.PlannedStartTime >= plannedStartTimeStart);
         }
 
         if (queryDto?.PlannedStartTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartTime <= queryDto.PlannedStartTimeEnd);
+            var plannedStartTimeEnd = queryDto.PlannedStartTimeEnd.Value;
+            exp = exp.And(x => x.PlannedStartTime <= plannedStartTimeEnd);
         }
 
         if (queryDto?.PlannedEndTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndTime >= queryDto.PlannedEndTimeStart);
+            var plannedEndTimeStart = queryDto.PlannedEndTimeStart.Value;
+            exp = exp.And(x => x.PlannedEndTime >= plannedEndTimeStart);
         }
 
         if (queryDto?.PlannedEndTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndTime <= queryDto.PlannedEndTimeEnd);
+            var plannedEndTimeEnd = queryDto.PlannedEndTimeEnd.Value;
+            exp = exp.And(x => x.PlannedEndTime <= plannedEndTimeEnd);
         }
 
         if (queryDto?.HandlingAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.HandlingAt >= queryDto.HandlingAtStart);
+            var handlingAtStart = queryDto.HandlingAtStart.Value;
+            exp = exp.And(x => x.HandlingAt >= handlingAtStart);
         }
 
         if (queryDto?.HandlingAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.HandlingAt <= queryDto.HandlingAtEnd);
+            var handlingAtEnd = queryDto.HandlingAtEnd.Value;
+            exp = exp.And(x => x.HandlingAt <= handlingAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktOvertimeQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.DeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
+        {
+            return true;
+        }
+        if (queryDto.TotalEmployees.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalPlannedHours.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalActualHours.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OvertimeType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Reason))
+        {
+            return true;
+        }
+        if (queryDto.HandlingBy.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HandlingComment))
+        {
+            return true;
+        }
+        if (queryDto.OvertimeStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.OvertimeDateStart.HasValue || queryDto.OvertimeDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlannedStartTimeStart.HasValue || queryDto.PlannedStartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlannedEndTimeStart.HasValue || queryDto.PlannedEndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.HandlingAtStart.HasValue || queryDto.HandlingAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

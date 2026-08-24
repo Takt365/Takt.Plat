@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeAddressService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工地址应用服务实现
 // 
@@ -30,33 +30,45 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 public class TaktEmployeeAddressService : TaktServiceBase, ITaktEmployeeAddressService
 {
     private readonly ITaktCompanyRepository<TaktEmployeeAddress> _employeeAddressRepository;
+    private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeAddressRepository">员工地址仓储</param>
+    /// <param name="employeeRepository">员工仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeAddressService(
         ITaktCompanyRepository<TaktEmployeeAddress> employeeAddressRepository,
+        ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeAddressRepository = employeeAddressRepository;
+        _employeeRepository = employeeRepository;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取员工地址列表（分页）
+    /// 获取员工地址列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEmployeeAddressDto>> GetEmployeeAddressListAsync(TaktEmployeeAddressQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEmployeeAddressDto>.Create(
+                new List<TaktEmployeeAddressDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _employeeAddressRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,6 +122,7 @@ public class TaktEmployeeAddressService : TaktServiceBase, ITaktEmployeeAddressS
     public async Task<TaktEmployeeAddressDto> CreateEmployeeAddressAsync(TaktEmployeeAddressCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployeeAddress>();
+        await StampEmployeeAddressEmployeeAsync(entity, dto);
         var isUnique_ix_employee_address_type_unique = await _uniqueValidator.IsUniqueAsync(
             _employeeAddressRepository,
             x => x.EmployeeId == entity.EmployeeId
@@ -136,6 +149,7 @@ public class TaktEmployeeAddressService : TaktServiceBase, ITaktEmployeeAddressS
             throw new TaktBusinessException("员工地址不存在");
         }
         dto.Adapt(entity);
+        await StampEmployeeAddressEmployeeAsync(entity, dto);
         var isUnique_ix_employee_address_type_unique = await _uniqueValidator.IsUniqueAsync(
             _employeeAddressRepository,
             x => x.EmployeeId == entity.EmployeeId
@@ -217,6 +231,8 @@ public class TaktEmployeeAddressService : TaktServiceBase, ITaktEmployeeAddressS
             try
             {
                 var entity = rows[i].Adapt<TaktEmployeeAddress>();
+                var importDto = rows[i].Adapt<TaktEmployeeAddressCreateDto>();
+                await StampEmployeeAddressEmployeeAsync(entity, importDto);
                 var importKey = $"{entity.EmployeeId}|{entity.AddressType}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -251,7 +267,15 @@ public class TaktEmployeeAddressService : TaktServiceBase, ITaktEmployeeAddressS
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeAddressAsync(TaktEmployeeAddressQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmployeeAddressQueryDto());
+        var queryDto = query ?? new TaktEmployeeAddressQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEmployeeAddressExportDto>(),
+                sheetName ?? "员工地址数据",
+                fileName ?? "员工地址导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _employeeAddressRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -268,6 +292,53 @@ public class TaktEmployeeAddressService : TaktServiceBase, ITaktEmployeeAddressS
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步员工地址主表外键（ManyToOne → 员工）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampEmployeeAddressEmployeeAsync(TaktEmployeeAddress entity, TaktEmployeeAddressCreateDto dto)
+    {
+        if (dto.EmployeeId <= 0)
+        {
+            return;
+        }
+        var master = await _employeeRepository.GetByIdAsync(dto.EmployeeId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("员工不存在");
+        }
+        entity.EmployeeId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeCode))
+        {
+            entity.EmployeeCode = master.EmployeeCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeName))
+        {
+            entity.EmployeeName = master.EmployeeName;
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -280,108 +351,199 @@ public class TaktEmployeeAddressService : TaktServiceBase, ITaktEmployeeAddressS
     {
         var exp = Expressionable.Create<TaktEmployeeAddress>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
-                || SqlFunc.ToString(x.AddressType).Contains(keywords)
                 || (x.Country != null && x.Country.Contains(keywords))
                 || (x.Province != null && x.Province.Contains(keywords))
                 || (x.City != null && x.City.Contains(keywords))
                 || (x.District != null && x.District.Contains(keywords))
                 || (x.Address1 != null && x.Address1.Contains(keywords))
                 || (x.Address2 != null && x.Address2.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.EmployeeId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
-        {
-            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
-        {
-            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
-        }
-
-        if (queryDto?.AddressType.HasValue == true)
-        {
-            exp = exp.And(x => x.AddressType == queryDto.AddressType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Country))
-        {
-            exp = exp.And(x => x.Country != null && x.Country.Contains(queryDto.Country));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Province))
-        {
-            exp = exp.And(x => x.Province != null && x.Province.Contains(queryDto.Province));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.City))
-        {
-            exp = exp.And(x => x.City != null && x.City.Contains(queryDto.City));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.District))
-        {
-            exp = exp.And(x => x.District != null && x.District.Contains(queryDto.District));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Address1))
-        {
-            exp = exp.And(x => x.Address1 != null && x.Address1.Contains(queryDto.Address1));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Address2))
-        {
-            exp = exp.And(x => x.Address2 != null && x.Address2.Contains(queryDto.Address2));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.EmployeeId.HasValue == true)
+        {
+            var employeeId = queryDto.EmployeeId.Value;
+            exp = exp.And(x => x.EmployeeId == employeeId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeCode))
+        {
+            var employeeCode = queryDto.EmployeeCode;
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(employeeCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeName))
+        {
+            var employeeName = queryDto.EmployeeName;
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
+        }
+
+        if (queryDto?.AddressType.HasValue == true)
+        {
+            var addressType = queryDto.AddressType.Value;
+            exp = exp.And(x => x.AddressType == addressType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Country))
+        {
+            var country = queryDto.Country;
+            exp = exp.And(x => x.Country != null && x.Country.Contains(country));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Province))
+        {
+            var province = queryDto.Province;
+            exp = exp.And(x => x.Province != null && x.Province.Contains(province));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.City))
+        {
+            var city = queryDto.City;
+            exp = exp.And(x => x.City != null && x.City.Contains(city));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.District))
+        {
+            var district = queryDto.District;
+            exp = exp.And(x => x.District != null && x.District.Contains(district));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Address1))
+        {
+            var address1 = queryDto.Address1;
+            exp = exp.And(x => x.Address1 != null && x.Address1.Contains(address1));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Address2))
+        {
+            var address2 = queryDto.Address2;
+            exp = exp.And(x => x.Address2 != null && x.Address2.Contains(address2));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEmployeeAddressQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.EmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeName))
+        {
+            return true;
+        }
+        if (queryDto.AddressType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Country))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Province))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.City))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.District))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Address1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Address2))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

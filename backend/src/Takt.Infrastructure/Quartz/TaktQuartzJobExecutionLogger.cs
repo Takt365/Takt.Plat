@@ -34,7 +34,7 @@ public static class TaktQuartzJobExecutionLogger
     /// <param name="taskId">任务 Id</param>
     /// <param name="taskCode">任务编码</param>
     /// <param name="taskType">任务类型</param>
-    /// <param name="userName">触发用户</param>
+    /// <param name="UserName">触发用户</param>
     /// <param name="manualTrigger">是否手动触发</param>
     /// <returns>可释放作用域</returns>
     public static IDisposable BeginExecutionScope(
@@ -43,7 +43,7 @@ public static class TaktQuartzJobExecutionLogger
         long taskId,
         string? taskCode,
         string? taskType,
-        string? userName,
+        string? UserName,
         bool manualTrigger)
     {
         var context = new TaktLogContext
@@ -52,7 +52,7 @@ public static class TaktQuartzJobExecutionLogger
             Action = "execute",
             TenantCode = tenantCode,
             CompanyCode = companyCode,
-            Username = userName,
+            UserName = UserName,
             Extra = new Dictionary<string, object?>
             {
                 [TaktQuartzConstants.LogChannelPropertyName] = TaktQuartzConstants.LogChannelValue,
@@ -69,9 +69,9 @@ public static class TaktQuartzJobExecutionLogger
     /// 记录调度侧「已触发立即执行」（Job 尚未开始）
     /// </summary>
     /// <param name="task">定时任务</param>
-    /// <param name="userName">触发用户</param>
+    /// <param name="UserName">触发用户</param>
     /// <param name="jobKey">JobKey 文本</param>
-    public static void LogManualTrigger(TaktQuartzTask task, string? userName, string jobKey)
+    public static void LogManualTrigger(TaktQuartzTask task, string? UserName, string jobKey)
     {
         ArgumentNullException.ThrowIfNull(task);
         using (BeginExecutionScope(
@@ -80,7 +80,7 @@ public static class TaktQuartzJobExecutionLogger
             task.Id,
             task.TaskCode,
             task.TaskType,
-            userName,
+            UserName,
             manualTrigger: true))
         {
             TaktLogger.Information(
@@ -88,7 +88,7 @@ public static class TaktQuartzJobExecutionLogger
                 task.Id,
                 task.TaskCode,
                 jobKey,
-                userName ?? string.Empty);
+                UserName ?? string.Empty);
         }
     }
 
@@ -97,8 +97,8 @@ public static class TaktQuartzJobExecutionLogger
     /// </summary>
     /// <param name="task">定时任务</param>
     /// <param name="manualTrigger">是否手动</param>
-    /// <param name="userName">触发用户</param>
-    public static void LogStarted(TaktQuartzTask task, bool manualTrigger, string? userName)
+    /// <param name="UserName">触发用户</param>
+    public static void LogStarted(TaktQuartzTask task, bool manualTrigger, string? UserName)
     {
         ArgumentNullException.ThrowIfNull(task);
         TaktLogger.Information(
@@ -109,7 +109,7 @@ public static class TaktQuartzJobExecutionLogger
             manualTrigger,
             task.TenantCode,
             task.CompanyCode,
-            userName ?? string.Empty,
+            UserName ?? string.Empty,
             ResolveExecutionTarget(task));
     }
 
@@ -203,7 +203,7 @@ public static class TaktQuartzJobExecutionLogger
             taskId,
             taskCode: null,
             taskType: null,
-            userName: null,
+            UserName: null,
             manualTrigger: false))
         {
             TaktLogger.Error(

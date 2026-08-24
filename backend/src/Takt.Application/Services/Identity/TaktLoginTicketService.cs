@@ -39,13 +39,13 @@ public class TaktLoginTicketService : ITaktLoginTicketService
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>票据字符串</returns>
     public async Task<string> CreateLoginTicketAsync(
         long userId,
         string tenantCode,
-        string username,
+        string UserName,
         CancellationToken cancellationToken = default)
     {
         var ticket = Guid.NewGuid().ToString("N");
@@ -53,7 +53,7 @@ public class TaktLoginTicketService : ITaktLoginTicketService
         {
             UserId = userId,
             TenantCode = tenantCode.Trim(),
-            Username = username.Trim().ToLowerInvariant(),
+            UserName = UserName.Trim().ToLowerInvariant(),
         };
 
         await _cacheService.SetAsync(
@@ -70,13 +70,13 @@ public class TaktLoginTicketService : ITaktLoginTicketService
     /// </summary>
     /// <param name="ticket">票据</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>用户 ID；无效或过期返回 null</returns>
     public async Task<long?> ConsumeLoginTicketAsync(
         string ticket,
         string tenantCode,
-        string username,
+        string UserName,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(ticket))
@@ -92,9 +92,9 @@ public class TaktLoginTicketService : ITaktLoginTicketService
         }
 
         var trimmedTenant = tenantCode.Trim();
-        var normalizedUsername = username.Trim().ToLowerInvariant();
+        var normalizedUserName = UserName.Trim().ToLowerInvariant();
         if (!string.Equals(payload.TenantCode, trimmedTenant, StringComparison.OrdinalIgnoreCase)
-            || !string.Equals(payload.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase))
+            || !string.Equals(payload.UserName, normalizedUserName, StringComparison.OrdinalIgnoreCase))
         {
             return null;
         }

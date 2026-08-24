@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Code.Generator
 // 文件名称：TaktGenTableColumnService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表列配置应用服务实现
 // 
@@ -334,13 +334,13 @@ public class TaktGenTableColumnService : TaktServiceBase, ITaktGenTableColumnSer
 
         if (queryDto?.GenTableId.HasValue == true)
         {
-            var genTableId = queryDto.GenTableId;
+            var genTableId = queryDto.GenTableId.Value;
             exp = exp.And(x => x.GenTableId == genTableId);
         }
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            var lineNumber = queryDto.LineNumber;
+            var lineNumber = queryDto.LineNumber.Value;
             exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
@@ -376,73 +376,73 @@ public class TaktGenTableColumnService : TaktServiceBase, ITaktGenTableColumnSer
 
         if (queryDto?.Length.HasValue == true)
         {
-            var length = queryDto.Length;
+            var length = queryDto.Length.Value;
             exp = exp.And(x => x.Length == length);
         }
 
         if (queryDto?.DecimalDigits.HasValue == true)
         {
-            var decimalDigits = queryDto.DecimalDigits;
+            var decimalDigits = queryDto.DecimalDigits.Value;
             exp = exp.And(x => x.DecimalDigits == decimalDigits);
         }
 
         if (queryDto?.IsPk.HasValue == true)
         {
-            var isPk = queryDto.IsPk;
+            var isPk = queryDto.IsPk.Value;
             exp = exp.And(x => x.IsPk == isPk);
         }
 
         if (queryDto?.IsIncrement.HasValue == true)
         {
-            var isIncrement = queryDto.IsIncrement;
+            var isIncrement = queryDto.IsIncrement.Value;
             exp = exp.And(x => x.IsIncrement == isIncrement);
         }
 
         if (queryDto?.IsRequired.HasValue == true)
         {
-            var isRequired = queryDto.IsRequired;
+            var isRequired = queryDto.IsRequired.Value;
             exp = exp.And(x => x.IsRequired == isRequired);
         }
 
         if (queryDto?.IsCreate.HasValue == true)
         {
-            var isCreate = queryDto.IsCreate;
+            var isCreate = queryDto.IsCreate.Value;
             exp = exp.And(x => x.IsCreate == isCreate);
         }
 
         if (queryDto?.IsUpdate.HasValue == true)
         {
-            var isUpdate = queryDto.IsUpdate;
+            var isUpdate = queryDto.IsUpdate.Value;
             exp = exp.And(x => x.IsUpdate == isUpdate);
         }
 
         if (queryDto?.IsUnique.HasValue == true)
         {
-            var isUnique = queryDto.IsUnique;
+            var isUnique = queryDto.IsUnique.Value;
             exp = exp.And(x => x.IsUnique == isUnique);
         }
 
         if (queryDto?.IsList.HasValue == true)
         {
-            var isList = queryDto.IsList;
+            var isList = queryDto.IsList.Value;
             exp = exp.And(x => x.IsList == isList);
         }
 
         if (queryDto?.IsExport.HasValue == true)
         {
-            var isExport = queryDto.IsExport;
+            var isExport = queryDto.IsExport.Value;
             exp = exp.And(x => x.IsExport == isExport);
         }
 
         if (queryDto?.IsSort.HasValue == true)
         {
-            var isSort = queryDto.IsSort;
+            var isSort = queryDto.IsSort.Value;
             exp = exp.And(x => x.IsSort == isSort);
         }
 
         if (queryDto?.IsQuery.HasValue == true)
         {
-            var isQuery = queryDto.IsQuery;
+            var isQuery = queryDto.IsQuery.Value;
             exp = exp.And(x => x.IsQuery == isQuery);
         }
 
@@ -478,13 +478,13 @@ public class TaktGenTableColumnService : TaktServiceBase, ITaktGenTableColumnSer
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

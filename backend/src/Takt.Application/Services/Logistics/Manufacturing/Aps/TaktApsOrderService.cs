@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsOrderService.cs
-// 创建时间：2026-07-24
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程订单应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
     }
 
     /// <summary>
-    /// 获取APS排程订单列表（分页）
+    /// 获取APS排程订单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktApsOrderDto>> GetApsOrderListAsync(TaktApsOrderQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktApsOrderDto>.Create(
+                new List<TaktApsOrderDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _apsOrderRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -285,7 +293,15 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportApsOrderAsync(TaktApsOrderQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktApsOrderQueryDto());
+        var queryDto = query ?? new TaktApsOrderQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktApsOrderExportDto>(),
+                sheetName ?? "APS排程订单数据",
+                fileName ?? "APS排程订单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _apsOrderRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -384,6 +400,11 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
             {
                 var childDto = operationsForSave[i];
                 childDto.ApsOrderId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.ApsOrderCode = entity.ApsOrderCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -402,13 +423,12 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
                     submittedIds.Add(childDto.ApsOperationId);
                     var isUniqueUpdate_ix_takt_logistics_manufacturing_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _apsOperationRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.ApsOrderId == x.ApsOrderId
+                        x => x.ApsOrderId == x.ApsOrderId
                 && x.LineNumber == x.LineNumber,
                         childDto.ApsOperationId);
                     if (!isUniqueUpdate_ix_takt_logistics_manufacturing_aps_operation_line_unique)
                     {
-                        throw new TaktBusinessException("APS工序排程的CompanyCode、ApsOrderId、LineNumber已存在");
+                        throw new TaktBusinessException("APS工序排程的ApsOrderId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.ApsOperationId;
@@ -420,12 +440,11 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
                 {
                     var isUniqueCreate_ix_takt_logistics_manufacturing_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _apsOperationRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.ApsOrderId == x.ApsOrderId
+                        x => x.ApsOrderId == x.ApsOrderId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_manufacturing_aps_operation_line_unique)
                     {
-                        throw new TaktBusinessException("APS工序排程的CompanyCode、ApsOrderId、LineNumber已存在");
+                        throw new TaktBusinessException("APS工序排程的ApsOrderId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktApsOperation>();
                     child.Id = 0;
@@ -474,124 +493,218 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
     {
         var exp = Expressionable.Create<TaktApsOrder>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ApsOrderCode != null && x.ApsOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.PlannedOrderId).Contains(keywords)
                 || (x.PlannedOrderCode != null && x.PlannedOrderCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || SqlFunc.ToString(x.OrderQuantity).Contains(keywords)
                 || (x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(keywords))
                 || (x.RoutingCode != null && x.RoutingCode.Contains(keywords))
-                || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
-                || SqlFunc.ToString(x.ApsScheduleId).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
-                || SqlFunc.ToString(x.PlannedEndTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ApsOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.ApsOrderCode != null && x.ApsOrderCode.Contains(queryDto.ApsOrderCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApsOrderCode))
+        {
+            var apsOrderCode = queryDto.ApsOrderCode;
+            exp = exp.And(x => x.ApsOrderCode != null && x.ApsOrderCode.Contains(apsOrderCode));
         }
 
         if (queryDto?.PlannedOrderId.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedOrderId == queryDto.PlannedOrderId);
+            var plannedOrderId = queryDto.PlannedOrderId.Value;
+            exp = exp.And(x => x.PlannedOrderId == plannedOrderId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlannedOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlannedOrderCode))
         {
-            exp = exp.And(x => x.PlannedOrderCode != null && x.PlannedOrderCode.Contains(queryDto.PlannedOrderCode));
+            var plannedOrderCode = queryDto.PlannedOrderCode;
+            exp = exp.And(x => x.PlannedOrderCode != null && x.PlannedOrderCode.Contains(plannedOrderCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
         if (queryDto?.OrderQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.OrderQuantity == queryDto.OrderQuantity);
+            var orderQuantity = queryDto.OrderQuantity.Value;
+            exp = exp.And(x => x.OrderQuantity == orderQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.UnitOfMeasure))
+        if (!string.IsNullOrWhiteSpace(queryDto?.UnitOfMeasure))
         {
-            exp = exp.And(x => x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(queryDto.UnitOfMeasure));
+            var unitOfMeasure = queryDto.UnitOfMeasure;
+            exp = exp.And(x => x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(unitOfMeasure));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RoutingCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RoutingCode))
         {
-            exp = exp.And(x => x.RoutingCode != null && x.RoutingCode.Contains(queryDto.RoutingCode));
+            var routingCode = queryDto.RoutingCode;
+            exp = exp.And(x => x.RoutingCode != null && x.RoutingCode.Contains(routingCode));
         }
 
         if (queryDto?.OrderStatus.HasValue == true)
         {
-            exp = exp.And(x => x.OrderStatus == queryDto.OrderStatus);
+            var orderStatus = queryDto.OrderStatus.Value;
+            exp = exp.And(x => x.OrderStatus == orderStatus);
         }
 
         if (queryDto?.ApsScheduleId.HasValue == true)
         {
-            exp = exp.And(x => x.ApsScheduleId == queryDto.ApsScheduleId);
+            var apsScheduleId = queryDto.ApsScheduleId.Value;
+            exp = exp.And(x => x.ApsScheduleId == apsScheduleId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.PlannedStartTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartTime >= queryDto.PlannedStartTimeStart);
+            var plannedStartTimeStart = queryDto.PlannedStartTimeStart.Value;
+            exp = exp.And(x => x.PlannedStartTime >= plannedStartTimeStart);
         }
 
         if (queryDto?.PlannedStartTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartTime <= queryDto.PlannedStartTimeEnd);
+            var plannedStartTimeEnd = queryDto.PlannedStartTimeEnd.Value;
+            exp = exp.And(x => x.PlannedStartTime <= plannedStartTimeEnd);
         }
 
         if (queryDto?.PlannedEndTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndTime >= queryDto.PlannedEndTimeStart);
+            var plannedEndTimeStart = queryDto.PlannedEndTimeStart.Value;
+            exp = exp.And(x => x.PlannedEndTime >= plannedEndTimeStart);
         }
 
         if (queryDto?.PlannedEndTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndTime <= queryDto.PlannedEndTimeEnd);
+            var plannedEndTimeEnd = queryDto.PlannedEndTimeEnd.Value;
+            exp = exp.And(x => x.PlannedEndTime <= plannedEndTimeEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktApsOrderQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApsOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.PlannedOrderId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlannedOrderCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (queryDto.OrderQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UnitOfMeasure))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RoutingCode))
+        {
+            return true;
+        }
+        if (queryDto.OrderStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ApsScheduleId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.PlannedStartTimeStart.HasValue || queryDto.PlannedStartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlannedEndTimeStart.HasValue || queryDto.PlannedEndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

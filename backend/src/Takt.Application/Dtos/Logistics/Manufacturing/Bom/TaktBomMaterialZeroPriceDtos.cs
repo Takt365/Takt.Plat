@@ -48,24 +48,6 @@ public class TaktBomMaterialZeroPriceQueryDto : TaktPagedQuery
 }
 
 /// <summary>
-/// 零价格查询栏机种选项（工厂 + 核算月；固定 FERT）
-/// </summary>
-public class TaktBomMaterialZeroPriceModelOptionsQueryDto
-{
-    /// <summary>
-    /// 工厂代码（必填）
-    /// </summary>
-    [Required]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 核算月（yyyy-MM）
-    /// </summary>
-    [Required]
-    public string FocusPeriod { get; set; } = string.Empty;
-}
-
-/// <summary>
 /// 组件零价格合并行
 /// </summary>
 public class TaktBomMaterialZeroPriceDto

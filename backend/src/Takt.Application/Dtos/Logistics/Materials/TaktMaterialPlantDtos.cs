@@ -182,12 +182,12 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public string StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type；0=否，1=是）
+    /// 检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsInspection { get; set; } = 0;
 
     /// <summary>
-    /// 批次标识（字典 sys_yes_no_type；0=否，1=是）
+    /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsBatch { get; set; } = 0;
 
@@ -197,7 +197,7 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public string IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int MaterialStatus { get; set; } = 0;
 
@@ -379,12 +379,12 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type；0=否，1=是）
+    /// 检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsInspection { get; set; }
 
     /// <summary>
-    /// 批次标识（字典 sys_yes_no_type；0=否，1=是）
+    /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsBatch { get; set; }
 
@@ -394,7 +394,7 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public string? IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? MaterialStatus { get; set; }
 
@@ -609,12 +609,12 @@ public class TaktMaterialPlantCreateDto
     public string StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type；0=否，1=是）
+    /// 检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsInspection { get; set; } = 0;
 
     /// <summary>
-    /// 批次标识（字典 sys_yes_no_type；0=否，1=是）
+    /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsBatch { get; set; } = 0;
 
@@ -625,7 +625,7 @@ public class TaktMaterialPlantCreateDto
     public string IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int MaterialStatus { get; set; } = 0;
 
@@ -679,9 +679,9 @@ public class TaktMaterialPlantStatusDto
     public long MaterialPlantId { get; set; }
 
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
+    [Required(ErrorMessage = "物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）不能为空")]
     public int MaterialStatus { get; set; } = 0;
 }
 
@@ -860,12 +860,12 @@ public class TaktMaterialPlantTemplateDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type；0=否，1=是）
+    /// 检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsInspection { get; set; }
 
     /// <summary>
-    /// 批次标识（字典 sys_yes_no_type；0=否，1=是）
+    /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsBatch { get; set; }
 
@@ -875,7 +875,7 @@ public class TaktMaterialPlantTemplateDto
     public string? IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? MaterialStatus { get; set; }
 
@@ -1062,12 +1062,12 @@ public class TaktMaterialPlantImportDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type；0=否，1=是）
+    /// 检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsInspection { get; set; }
 
     /// <summary>
-    /// 批次标识（字典 sys_yes_no_type；0=否，1=是）
+    /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsBatch { get; set; }
 
@@ -1077,7 +1077,7 @@ public class TaktMaterialPlantImportDto
     public string? IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? MaterialStatus { get; set; }
 
@@ -1265,12 +1265,12 @@ public class TaktMaterialPlantExportDto
     public string StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验（字典 sys_yes_no_type；0=否，1=是）
+    /// 检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsInspection { get; set; } = 0;
 
     /// <summary>
-    /// 批次标识（字典 sys_yes_no_type；0=否，1=是）
+    /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsBatch { get; set; } = 0;
 
@@ -1280,7 +1280,7 @@ public class TaktMaterialPlantExportDto
     public string IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int MaterialStatus { get; set; } = 0;
 

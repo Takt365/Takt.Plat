@@ -26,47 +26,47 @@ public interface ITaktAuthService
     /// 验证用户登录凭据（租户权限 + 密码）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="password">密码</param>
     /// <returns>用户 ID；验证失败返回 null</returns>
-    Task<long?> ValidateUserAsync(string tenantCode, string username, string password);
+    Task<long?> ValidateUserAsync(string tenantCode, string UserName, string password);
 
     /// <summary>
     /// 校验用户名在指定租户下是否具备登录权限（最优先，不校验密码）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <returns>是否有权限</returns>
-    Task<bool> ValidateUserTenantAccessAsync(string tenantCode, string username);
+    Task<bool> ValidateUserTenantAccessAsync(string tenantCode, string UserName);
 
     /// <summary>
     /// 校验租户权限通过后验证密码
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="password">密码</param>
     /// <returns>用户 ID；验证失败返回 null</returns>
-    Task<long?> ValidateUserPasswordAsync(string tenantCode, string username, string password);
+    Task<long?> ValidateUserPasswordAsync(string tenantCode, string UserName, string password);
 
     /// <summary>
     /// 仅校验密码（调用方须已单独通过 ValidateUserTenantAccessAsync）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="password">密码</param>
     /// <returns>用户 ID；密码错误返回 null</returns>
-    Task<long?> ValidateUserPasswordOnlyAsync(string tenantCode, string username, string password);
+    Task<long?> ValidateUserPasswordOnlyAsync(string tenantCode, string UserName, string password);
 
     /// <summary>
     /// 登录凭据统一校验（租户权限、锁定、密码；成功时清零失败计数）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="plainPassword">明文密码</param>
     /// <returns>校验结果（含锁定态）</returns>
     Task<TaktLoginCredentialResult> AuthenticateLoginCredentialsAsync(
         string tenantCode,
-        string username,
+        string UserName,
         string plainPassword);
 
     /// <summary>
@@ -88,18 +88,18 @@ public interface ITaktAuthService
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名（仅用于诊断日志）</param>
+    /// <param name="UserName">用户名（仅用于诊断日志）</param>
     /// <returns>公司代码；无 IsDefault 关联或不可访问时返回 null</returns>
-    Task<string?> ResolveUserDefaultCompanyCodeAsync(long userId, string tenantCode, string? username = null);
+    Task<string?> ResolveUserDefaultCompanyCodeAsync(long userId, string tenantCode, string? UserName = null);
 
     /// <summary>
     /// 解析当前会话生效公司（请求头 X-Company-Code 优先，否则 UserCompany.is_default）
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名（保留供诊断扩展）</param>
+    /// <param name="UserName">用户名（保留供诊断扩展）</param>
     /// <returns>生效公司编码；无可用公司时返回空字符串</returns>
-    Task<string> ResolveCurrentActiveCompanyCodeAsync(long userId, string tenantCode, string? username = null);
+    Task<string> ResolveCurrentActiveCompanyCodeAsync(long userId, string tenantCode, string? UserName = null);
 
     /// <summary>
     /// 记录用户最后登录时间与 IP（成功登录后由认证日志处理器调用）
@@ -153,9 +153,9 @@ public interface ITaktAuthService
     /// 登录前预览：解析用户默认公司、用户 CultureCode 与公司 CultureCode（与假日无关）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">登录用户名</param>
+    /// <param name="UserName">登录用户名</param>
     /// <returns>公司编码、用户/公司默认语言；解析失败时字段为空</returns>
-    Task<TaktLoginPreviewLocaleDto> GetLoginPreviewLocaleAsync(string tenantCode, string username);
+    Task<TaktLoginPreviewLocaleDto> GetLoginPreviewLocaleAsync(string tenantCode, string UserName);
 
     #endregion
 

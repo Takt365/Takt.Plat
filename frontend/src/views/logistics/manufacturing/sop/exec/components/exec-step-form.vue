@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -35,18 +35,20 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('execId')"
-                name="execId"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <TaktSelect
-                  v-model:value="formState.execId"
-                  api-url="TaktSopExecs/options"
-                  :placeholder="pi.ph('execId')"
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -144,8 +146,45 @@
               >
                 <TaktSelect
                   v-model:value="formState.blockNextStep"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('blockNextStep')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -172,15 +211,45 @@ const pi = useSopExecStepI18n()
 import type { SopExecStepCreate } from '@/types/logistics/manufacturing/sop/exec-step'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["plantCode","execId","stepId","stepNo","startedAt","endedAt","stepResult","confirmedBy","confirmedAt","blockNextStep"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","stepId","stepNo","startedAt","endedAt","stepResult","confirmedBy","confirmedAt","blockNextStep"]
 
 
 
@@ -191,12 +260,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -229,6 +301,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -237,28 +310,25 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.sopExecStepId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  execId: [
-    {
-      required: true,
-      message: pi.ph('execId'),
-      trigger: 'change'
-    }
-  ],
   stepId: [
     {
       required: true,
@@ -307,23 +377,75 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 sopExecId） */
+/** 映射为 Create/Update DTO（含主表外键 execId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('stepNo' in payload) {
     const rawstepNo = payload.stepNo
-    payload.stepNo = typeof rawstepNo === 'number' ? rawstepNo : Number(rawstepNo)
+    if (rawstepNo === undefined || rawstepNo === null || rawstepNo === '') {
+      delete payload.stepNo
+    } else {
+      const numstepNo = typeof rawstepNo === 'number' ? rawstepNo : Number(rawstepNo)
+      if (Number.isFinite(numstepNo)) payload.stepNo = numstepNo
+      else delete payload.stepNo
+    }
   }
   if ('stepResult' in payload) {
     const rawstepResult = payload.stepResult
-    payload.stepResult = typeof rawstepResult === 'number' ? rawstepResult : Number(rawstepResult)
+    if (rawstepResult === undefined || rawstepResult === null || rawstepResult === '') {
+      delete payload.stepResult
+    } else {
+      const numstepResult = typeof rawstepResult === 'number' ? rawstepResult : Number(rawstepResult)
+      if (Number.isFinite(numstepResult)) payload.stepResult = numstepResult
+      else delete payload.stepResult
+    }
   }
   if ('blockNextStep' in payload) {
     const rawblockNextStep = payload.blockNextStep
-    payload.blockNextStep = typeof rawblockNextStep === 'number' ? rawblockNextStep : Number(rawblockNextStep)
+    if (rawblockNextStep === undefined || rawblockNextStep === null || rawblockNextStep === '') {
+      delete payload.blockNextStep
+    } else {
+      const numblockNextStep = typeof rawblockNextStep === 'number' ? rawblockNextStep : Number(rawblockNextStep)
+      if (Number.isFinite(numblockNextStep)) payload.blockNextStep = numblockNextStep
+      else delete payload.blockNextStep
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.sopExecId = props.masterId
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.sopExecStepId) {
+    payload.sopExecStepId = props.formData.sopExecStepId
+  }
+  payload.execId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.sopExecCode ?? masterRow.SopExecCode
+    const masterName = masterRow.sopExecName ?? masterRow.SopExecName
+    if (masterCode != null && masterCode !== '' && !payload.sopExecCode) {
+      payload.sopExecCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.sopExecName) {
+      payload.sopExecName = masterName
+    }
+    if (masterCode != null && masterCode !== '' && !payload.execCode) {
+      payload.execCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.execName) {
+      payload.execName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -334,6 +456,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.sopExecStepId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

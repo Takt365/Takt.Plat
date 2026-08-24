@@ -184,7 +184,7 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
                 : $"責任者: {manager.Trim()}";
             return await CreateOrUpdateDeptAsync(
                 repository, sqlSugarContext, tenantCode, companyCode, plantCode, cultureCode,
-                code, nameJa, shortName, costCategory, parentId, sort, description, nameEn);
+                code, nameJa, shortName, costCategory, parentId, sort, description, nameEn, null);
         }
         // 総務人事部（挂在 TCJ 1000 下）
         var d1100 = await SeedChild("1100", "総務人事部", "General Affairs and Personnel Department", "秋野　浩隆", tcj.Id, 1);
@@ -316,7 +316,7 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
         {
             return await CreateOrUpdateDeptAsync(
                 repository, sqlSugarContext, tenantCode, companyCode, plantCode, cultureCode,
-                code, name, shortName, costCategory, parentId, sort, null, null);
+                code, name, shortName, costCategory, parentId, sort, null, null, null);
         }
         var (_, i1) = await Seed("D1000", "总经理室", "GM", 1, dta.Id, 1); Acc(i1);
         var (d0100, i2) = await Seed("D0100", "总务部", "GA", 1, dta.Id, 2); Acc(i2);
@@ -378,7 +378,7 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
             var description = string.IsNullOrWhiteSpace(manager) ? null : $"Manager: {manager.Trim()}";
             return await CreateOrUpdateDeptAsync(
                 repository, sqlSugarContext, tenantCode, companyCode, plantCode, cultureCode,
-                code, name, shortName, costCategory, parentId, sort, description, nameEn);
+                code, name, shortName, costCategory, parentId, sort, description, nameEn, null);
         }
         Acc((await Seed("T000", "General Manager Office", "General Manager Office", null, 2, tac.Id, 1)).IsInserted);
         Acc((await Seed("T100", "Finance Department", "Finance Department", "Kathy Lo", 1, tac.Id, 2)).IsInserted);
@@ -407,11 +407,11 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
         var (group, i0) = await CreateOrUpdateDeptAsync(
             repository, sqlSugarContext, tenantCode, companyCode, plantCode, cultureCode,
             "0000", "TEAC", "TEAC", 2, 0, 0,
-            "ティアック株式会社", "TEAC CORPORATION");
+            "ティアック株式会社", "TEAC CORPORATION", null);
         var (_, i1) = await CreateOrUpdateDeptAsync(
             repository, sqlSugarContext, tenantCode, companyCode, plantCode, cultureCode,
             companyCode, rootName, shortName, 2, group.Id, 1,
-            null, null);
+            null, rootName, null);
         return ((i0 ? 1 : 0) + (i1 ? 1 : 0), (i0 ? 0 : 1) + (i1 ? 0 : 1));
     }
 
@@ -440,13 +440,154 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
         var (group, i0) = await CreateOrUpdateDeptAsync(
             repository, sqlSugarContext, tenantCode, companyCode, plantCode, cultureCode,
             "0000", "TEAC", "TEAC", 2, 0, 0,
-            "ティアック株式会社", "TEAC CORPORATION");
+            "ティアック株式会社", "TEAC CORPORATION", null);
         Acc(i0);
         var (branch, i1) = await CreateOrUpdateDeptAsync(
             repository, sqlSugarContext, tenantCode, companyCode, plantCode, cultureCode,
-            branchDeptCode, branchName, branchShortName, 2, group.Id, branchSortOrder, null, null);
+            branchDeptCode, branchName, branchShortName, 2, group.Id, branchSortOrder, null, branchName, null);
         Acc(i1);
         return (group, branch, insertCount, updateCount);
+    }
+
+    /// <summary>
+    /// 仅保留大写英文字母（A–Z）。
+    /// </summary>
+    /// <param name="value">源字符串</param>
+    /// <returns>大写字母串；无字母时为空</returns>
+    private static string LettersOnlyUpper(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+        return new string(value.Where(char.IsAsciiLetter).Select(char.ToUpperInvariant).ToArray());
+    }
+
+    /// <summary>
+    /// 截断为最多 6 位（部门简称 / ISO 编码列长）。
+    /// </summary>
+    /// <param name="letters">已为大写字母串</param>
+    /// <returns>最多 6 位</returns>
+    private static string TruncateEnglishAbbr(string letters)
+    {
+        if (string.IsNullOrEmpty(letters))
+        {
+            return string.Empty;
+        }
+        return letters.Length <= 6 ? letters : letters[..6];
+    }
+
+    /// <summary>
+    /// 是否为纯数字（日本部门编码作简称时跳过，改从英文名取 ISO）。
+    /// </summary>
+    /// <param name="value">待判断字符串</param>
+    /// <returns>全为数字则为 true</returns>
+    private static bool IsAllDigits(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+        return value.All(char.IsAsciiDigit);
+    }
+
+    /// <summary>
+    /// 从英文部门名取首字母缩写（跳过虚词），最多 6 位大写。
+    /// </summary>
+    /// <param name="englishName">英文名或 Remark</param>
+    /// <returns>ISO 候选</returns>
+    private static string IsoFromEnglishInitials(string? englishName)
+    {
+        if (string.IsNullOrWhiteSpace(englishName))
+        {
+            return string.Empty;
+        }
+        var stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "and", "of", "the", "a", "an", "section", "sec", "department", "division",
+            "headquarters", "office", "others", "worker", "workers", "union", "for", "in", "to",
+        };
+        var parts = englishName.Split(
+            [' ', ',', '/', '-', '&', '(', ')', '.', '·', '　'],
+            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var chars = new List<char>(6);
+        foreach (var part in parts)
+        {
+            if (stopWords.Contains(part))
+            {
+                continue;
+            }
+            var letter = part.FirstOrDefault(char.IsAsciiLetter);
+            if (letter == default)
+            {
+                continue;
+            }
+            chars.Add(char.ToUpperInvariant(letter));
+            if (chars.Count >= 6)
+            {
+                break;
+            }
+        }
+        return chars.Count == 0 ? string.Empty : new string(chars.ToArray());
+    }
+
+    /// <summary>
+    /// 解析部门简称（与 ISO 编码一致，≤6）：优先简称参数，否则英文名首字母，再否则部门编码字母。
+    /// </summary>
+    /// <param name="deptCode">部门编码</param>
+    /// <param name="deptShortName">部门简称候选</param>
+    /// <param name="englishName">英文长名称（DeptName2）</param>
+    /// <returns>最多 6 位大写英文字母</returns>
+    private static string ResolveEnglishAbbr(string deptCode, string deptShortName, string? englishName)
+    {
+        var fromShort = LettersOnlyUpper(deptShortName);
+        if (fromShort.Length >= 2 && !IsAllDigits(deptShortName))
+        {
+            return TruncateEnglishAbbr(fromShort);
+        }
+        var fromEn = IsoFromEnglishInitials(englishName);
+        if (fromEn.Length > 0)
+        {
+            return TruncateEnglishAbbr(fromEn);
+        }
+        if (fromShort.Length > 0)
+        {
+            return TruncateEnglishAbbr(fromShort);
+        }
+        return TruncateEnglishAbbr(LettersOnlyUpper(deptCode));
+    }
+
+    /// <summary>
+    /// 截断部门名称1（列长 40）。
+    /// </summary>
+    private static string TrimDeptName1(string? value)
+    {
+        var text = (value ?? string.Empty).Trim();
+        return text.Length <= 40 ? text : text[..40];
+    }
+
+    /// <summary>
+    /// 截断部门名称2（列长 70）；空则回退为名称1。
+    /// </summary>
+    private static string TrimDeptName2(string? value, string fallbackName1)
+    {
+        var text = string.IsNullOrWhiteSpace(value) ? fallbackName1.Trim() : value.Trim();
+        return text.Length <= 70 ? text : text[..70];
+    }
+
+    /// <summary>
+    /// 成本中心编码默认与部门编码一致（同长 6）。
+    /// </summary>
+    /// <param name="deptCode">部门编码</param>
+    /// <returns>成本中心编码（与部门编码相同，最多 6 位）</returns>
+    private static string DefaultCostCenterCode(string deptCode)
+    {
+        var code = (deptCode ?? string.Empty).Trim().ToUpperInvariant();
+        if (code.Length == 0)
+        {
+            return string.Empty;
+        }
+        return code.Length <= 6 ? code : code[..6];
     }
 
     /// <summary>
@@ -461,23 +602,30 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
         string plantCode,
         string cultureCode,
         string deptCode,
-        string deptName,
+        string deptName1,
         string deptShortName,
         int costCategory,
         long parentId,
         int sortOrder,
         string? deptDescription,
+        string? deptName2,
         string? remark)
     {
-        if (deptShortName.Length > 6)
-        {
-            deptShortName = deptShortName[..6];
-        }
+        var name1 = TrimDeptName1(deptName1);
+        var name2 = TrimDeptName2(deptName2, name1);
         var description = deptDescription ?? string.Empty;
         if (description.Length > 500)
         {
             description = description[..500];
         }
+        if (deptCode.Length > 6)
+        {
+            deptCode = deptCode[..6];
+        }
+        var costCenterCode = DefaultCostCenterCode(deptCode);
+        var englishAbbr = ResolveEnglishAbbr(deptCode, deptShortName, name2);
+        deptShortName = englishAbbr;
+        var isoCode = englishAbbr;
         // 注意：种子数据必须绕过仓储的租户过滤，直接使用 SqlSugar 原生查询（同菜单种子）
         var dept = await sqlSugarContext.Db.Queryable<TaktDept>()
             .Where(d =>
@@ -494,9 +642,10 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
             dept.CompanyCode = companyCode;
             dept.DeptCode = deptCode;
             dept.DeptShortName = deptShortName;
-            dept.DeptName = deptName;
-            dept.IsoCode = string.Empty;
-            dept.CostCenterCode = string.Empty;
+            dept.DeptName1 = name1;
+            dept.DeptName2 = name2;
+            dept.IsoCode = isoCode;
+            dept.CostCenterCode = costCenterCode;
             dept.CostCategory = costCategory;
             dept.ParentId = parentId;
             dept.Level = parentId > 0 ? 0 : 1; // 稍后根据父级计算
@@ -514,7 +663,7 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
             dept.PlantCode = plantCode;
             dept.CultureCode = cultureCode;
             dept.DeptDescription = description;
-            dept.Remark = remark;
+            dept.Remark = remark ?? string.Empty;
             // CreatedBy / CreatedAt 由 ITaktCompanySeedRepository 自动填充
             dept = await repository.CreateAsync(dept);
             // 更新 DeptPath 和 Level
@@ -551,7 +700,8 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
         }
         else
         {
-            var oldDeptName = dept.DeptName;
+            var oldDeptName1 = dept.DeptName1;
+            var oldDeptName2 = dept.DeptName2;
             var oldDeptShortName = dept.DeptShortName;
             var oldCostCategory = dept.CostCategory;
             var oldSortOrder = dept.SortOrder;
@@ -569,26 +719,20 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
             var oldPhone = dept.Phone ?? string.Empty;
             var oldEmail = dept.Email ?? string.Empty;
             var oldLocation = dept.Location ?? string.Empty;
-            dept.DeptName = deptName;
+            dept.DeptName1 = name1;
+            dept.DeptName2 = name2;
             dept.DeptShortName = deptShortName;
+            dept.IsoCode = isoCode;
+            dept.CostCenterCode = costCenterCode;
             dept.CostCategory = costCategory;
             dept.SortOrder = sortOrder;
             dept.IsBuiltIn = 1;
             dept.PlantCode = plantCode;
             dept.CultureCode = cultureCode;
             dept.DeptDescription = description;
-            dept.Remark = remark;
+            dept.Remark = remark ?? string.Empty;
             dept.ParentId = parentId;
             dept.DeptStatus = 1;
-            // 新增列幂等：空则补默认；已有 IsoCode/负责人由业务维护时不覆盖非空 IsoCode
-            if (string.IsNullOrEmpty(dept.IsoCode))
-            {
-                dept.IsoCode = string.Empty;
-            }
-            if (string.IsNullOrEmpty(dept.CostCenterCode))
-            {
-                dept.CostCenterCode = string.Empty;
-            }
             if (dept.HeadUserId <= 0)
             {
                 dept.HeadUserId = 0;
@@ -607,7 +751,8 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
                 dept.Location = string.Empty;
             }
             bool needUpdate =
-                oldDeptName != dept.DeptName ||
+                oldDeptName1 != dept.DeptName1 ||
+                oldDeptName2 != dept.DeptName2 ||
                 oldDeptShortName != dept.DeptShortName ||
                 oldCostCategory != dept.CostCategory ||
                 oldSortOrder != dept.SortOrder ||

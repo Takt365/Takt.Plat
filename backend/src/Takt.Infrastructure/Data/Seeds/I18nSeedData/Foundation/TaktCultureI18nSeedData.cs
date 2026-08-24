@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktCultureI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCulture 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.culture.icon", "zh-HK", "语言图标_hk", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
 
             // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "en-US", "默认语言_us", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.culture.isdefault", "en-US", "默认语言_us", "默认语言（字典 sys_yes_no；1=是 0=否）"),
             // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "ja-JP", "默认语言_jp", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.culture.isdefault", "ja-JP", "默认语言_jp", "默认语言（字典 sys_yes_no；1=是 0=否）"),
             // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "zh-CN", "默认语言", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.culture.isdefault", "zh-CN", "默认语言", "默认语言（字典 sys_yes_no；1=是 0=否）"),
             // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "默认语言_hk", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+            new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "默认语言_hk", "默认语言（字典 sys_yes_no；1=是 0=否）"),
 
             // entity.culture.sortorder
-            new TranslationSeedItem("entity.culture.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.culture.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.culture.sortorder
-            new TranslationSeedItem("entity.culture.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.culture.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.culture.sortorder
-            new TranslationSeedItem("entity.culture.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.culture.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.culture.sortorder
-            new TranslationSeedItem("entity.culture.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.culture.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.culture.translationlist
             new TranslationSeedItem("entity.culture.translationlist", "en-US", "翻译列表_us", "翻译列表（一对多关联）"),

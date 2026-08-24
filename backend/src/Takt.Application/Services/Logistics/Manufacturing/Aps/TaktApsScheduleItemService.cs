@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsScheduleItemService.cs
-// 创建时间：2026-07-24
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
     }
 
     /// <summary>
-    /// 获取APS排程明细列表（分页）
+    /// 获取APS排程明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktApsScheduleItemDto>> GetApsScheduleItemListAsync(TaktApsScheduleItemQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktApsScheduleItemDto>.Create(
+                new List<TaktApsScheduleItemDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _apsScheduleItemRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -328,7 +336,15 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportApsScheduleItemAsync(TaktApsScheduleItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktApsScheduleItemQueryDto());
+        var queryDto = query ?? new TaktApsScheduleItemQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktApsScheduleItemExportDto>(),
+                sheetName ?? "APS排程明细数据",
+                fileName ?? "APS排程明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _apsScheduleItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -366,6 +382,22 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
             throw new TaktBusinessException("APS排程主不存在");
         }
         entity.ApsScheduleId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -389,16 +421,13 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.ApsScheduleId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ApsScheduleCode != null && x.ApsScheduleCode.Contains(keywords))
-                || SqlFunc.ToString(x.ApsOrderId).Contains(keywords)
-                || SqlFunc.ToString(x.ApsOperationId).Contains(keywords)
-                || SqlFunc.ToString(x.RoutingItemId).Contains(keywords)
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.WorkOrderCode != null && x.WorkOrderCode.Contains(keywords))
                 || (x.ProductCode != null && x.ProductCode.Contains(keywords))
                 || (x.ProductName != null && x.ProductName.Contains(keywords))
@@ -406,195 +435,353 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
                 || (x.WorkCenterDescription != null && x.WorkCenterDescription.Contains(keywords))
                 || (x.ProcessCode != null && x.ProcessCode.Contains(keywords))
                 || (x.ProcessName != null && x.ProcessName.Contains(keywords))
-                || SqlFunc.ToString(x.ProcessSequence).Contains(keywords)
-                || SqlFunc.ToString(x.ProcessStandardST).Contains(keywords)
-                || SqlFunc.ToString(x.ProcessStandardSTUnit).Contains(keywords)
-                || SqlFunc.ToString(x.ExtraMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.PlanQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.ProcessStatus).Contains(keywords)
-                || SqlFunc.ToString(x.Priority).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PlanStartTime).Contains(keywords)
-                || SqlFunc.ToString(x.PlanEndTime).Contains(keywords)
-                || SqlFunc.ToString(x.ActualStartTime).Contains(keywords)
-                || SqlFunc.ToString(x.ActualEndTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.ApsScheduleId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.ApsScheduleId == queryDto.ApsScheduleId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ApsScheduleCode))
-        {
-            exp = exp.And(x => x.ApsScheduleCode != null && x.ApsScheduleCode.Contains(queryDto.ApsScheduleCode));
-        }
-
-        if (queryDto?.ApsOrderId.HasValue == true)
-        {
-            exp = exp.And(x => x.ApsOrderId == queryDto.ApsOrderId);
-        }
-
-        if (queryDto?.ApsOperationId.HasValue == true)
-        {
-            exp = exp.And(x => x.ApsOperationId == queryDto.ApsOperationId);
-        }
-
-        if (queryDto?.RoutingItemId.HasValue == true)
-        {
-            exp = exp.And(x => x.RoutingItemId == queryDto.RoutingItemId);
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.WorkOrderCode))
-        {
-            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(queryDto.WorkOrderCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ProductCode))
-        {
-            exp = exp.And(x => x.ProductCode != null && x.ProductCode.Contains(queryDto.ProductCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ProductName))
-        {
-            exp = exp.And(x => x.ProductName != null && x.ProductName.Contains(queryDto.ProductName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.WorkCenterCode))
-        {
-            exp = exp.And(x => x.WorkCenterCode != null && x.WorkCenterCode.Contains(queryDto.WorkCenterCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.WorkCenterDescription))
-        {
-            exp = exp.And(x => x.WorkCenterDescription != null && x.WorkCenterDescription.Contains(queryDto.WorkCenterDescription));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ProcessCode))
-        {
-            exp = exp.And(x => x.ProcessCode != null && x.ProcessCode.Contains(queryDto.ProcessCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ProcessName))
-        {
-            exp = exp.And(x => x.ProcessName != null && x.ProcessName.Contains(queryDto.ProcessName));
-        }
-
-        if (queryDto?.ProcessSequence.HasValue == true)
-        {
-            exp = exp.And(x => x.ProcessSequence == queryDto.ProcessSequence);
-        }
-
-        if (queryDto?.ProcessStandardST.HasValue == true)
-        {
-            exp = exp.And(x => x.ProcessStandardST == queryDto.ProcessStandardST);
-        }
-
-        if (queryDto?.ProcessStandardSTUnit.HasValue == true)
-        {
-            exp = exp.And(x => x.ProcessStandardSTUnit == queryDto.ProcessStandardSTUnit);
-        }
-
-        if (queryDto?.ExtraMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.ExtraMinutes == queryDto.ExtraMinutes);
-        }
-
-        if (queryDto?.PlanQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.PlanQuantity == queryDto.PlanQuantity);
-        }
-
-        if (queryDto?.ProcessStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.ProcessStatus == queryDto.ProcessStatus);
-        }
-
-        if (queryDto?.Priority.HasValue == true)
-        {
-            exp = exp.And(x => x.Priority == queryDto.Priority);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.PlanStartTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.PlanStartTime >= queryDto.PlanStartTimeStart);
-        }
-
-        if (queryDto?.PlanStartTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.PlanStartTime <= queryDto.PlanStartTimeEnd);
-        }
-
-        if (queryDto?.PlanEndTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.PlanEndTime >= queryDto.PlanEndTimeStart);
-        }
-
-        if (queryDto?.PlanEndTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.PlanEndTime <= queryDto.PlanEndTimeEnd);
-        }
-
-        if (queryDto?.ActualStartTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ActualStartTime >= queryDto.ActualStartTimeStart);
-        }
-
-        if (queryDto?.ActualStartTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ActualStartTime <= queryDto.ActualStartTimeEnd);
-        }
-
-        if (queryDto?.ActualEndTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ActualEndTime >= queryDto.ActualEndTimeStart);
-        }
-
-        if (queryDto?.ActualEndTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ActualEndTime <= queryDto.ActualEndTimeEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.ApsScheduleId.HasValue == true)
+        {
+            var apsScheduleId = queryDto.ApsScheduleId.Value;
+            exp = exp.And(x => x.ApsScheduleId == apsScheduleId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApsScheduleCode))
+        {
+            var apsScheduleCode = queryDto.ApsScheduleCode;
+            exp = exp.And(x => x.ApsScheduleCode != null && x.ApsScheduleCode.Contains(apsScheduleCode));
+        }
+
+        if (queryDto?.ApsOrderId.HasValue == true)
+        {
+            var apsOrderId = queryDto.ApsOrderId.Value;
+            exp = exp.And(x => x.ApsOrderId == apsOrderId);
+        }
+
+        if (queryDto?.ApsOperationId.HasValue == true)
+        {
+            var apsOperationId = queryDto.ApsOperationId.Value;
+            exp = exp.And(x => x.ApsOperationId == apsOperationId);
+        }
+
+        if (queryDto?.RoutingItemId.HasValue == true)
+        {
+            var routingItemId = queryDto.RoutingItemId.Value;
+            exp = exp.And(x => x.RoutingItemId == routingItemId);
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkOrderCode))
+        {
+            var workOrderCode = queryDto.WorkOrderCode;
+            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(workOrderCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductCode))
+        {
+            var productCode = queryDto.ProductCode;
+            exp = exp.And(x => x.ProductCode != null && x.ProductCode.Contains(productCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductName))
+        {
+            var productName = queryDto.ProductName;
+            exp = exp.And(x => x.ProductName != null && x.ProductName.Contains(productName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkCenterCode))
+        {
+            var workCenterCode = queryDto.WorkCenterCode;
+            exp = exp.And(x => x.WorkCenterCode != null && x.WorkCenterCode.Contains(workCenterCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkCenterDescription))
+        {
+            var workCenterDescription = queryDto.WorkCenterDescription;
+            exp = exp.And(x => x.WorkCenterDescription != null && x.WorkCenterDescription.Contains(workCenterDescription));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProcessCode))
+        {
+            var processCode = queryDto.ProcessCode;
+            exp = exp.And(x => x.ProcessCode != null && x.ProcessCode.Contains(processCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProcessName))
+        {
+            var processName = queryDto.ProcessName;
+            exp = exp.And(x => x.ProcessName != null && x.ProcessName.Contains(processName));
+        }
+
+        if (queryDto?.ProcessSequence.HasValue == true)
+        {
+            var processSequence = queryDto.ProcessSequence.Value;
+            exp = exp.And(x => x.ProcessSequence == processSequence);
+        }
+
+        if (queryDto?.ProcessStandardST.HasValue == true)
+        {
+            var processStandardST = queryDto.ProcessStandardST.Value;
+            exp = exp.And(x => x.ProcessStandardST == processStandardST);
+        }
+
+        if (queryDto?.ProcessStandardSTUnit.HasValue == true)
+        {
+            var processStandardSTUnit = queryDto.ProcessStandardSTUnit.Value;
+            exp = exp.And(x => x.ProcessStandardSTUnit == processStandardSTUnit);
+        }
+
+        if (queryDto?.ExtraMinutes.HasValue == true)
+        {
+            var extraMinutes = queryDto.ExtraMinutes.Value;
+            exp = exp.And(x => x.ExtraMinutes == extraMinutes);
+        }
+
+        if (queryDto?.PlanQuantity.HasValue == true)
+        {
+            var planQuantity = queryDto.PlanQuantity.Value;
+            exp = exp.And(x => x.PlanQuantity == planQuantity);
+        }
+
+        if (queryDto?.ProcessStatus.HasValue == true)
+        {
+            var processStatus = queryDto.ProcessStatus.Value;
+            exp = exp.And(x => x.ProcessStatus == processStatus);
+        }
+
+        if (queryDto?.Priority.HasValue == true)
+        {
+            var priority = queryDto.Priority.Value;
+            exp = exp.And(x => x.Priority == priority);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.PlanStartTimeStart.HasValue == true)
+        {
+            var planStartTimeStart = queryDto.PlanStartTimeStart.Value;
+            exp = exp.And(x => x.PlanStartTime >= planStartTimeStart);
+        }
+
+        if (queryDto?.PlanStartTimeEnd.HasValue == true)
+        {
+            var planStartTimeEnd = queryDto.PlanStartTimeEnd.Value;
+            exp = exp.And(x => x.PlanStartTime <= planStartTimeEnd);
+        }
+
+        if (queryDto?.PlanEndTimeStart.HasValue == true)
+        {
+            var planEndTimeStart = queryDto.PlanEndTimeStart.Value;
+            exp = exp.And(x => x.PlanEndTime >= planEndTimeStart);
+        }
+
+        if (queryDto?.PlanEndTimeEnd.HasValue == true)
+        {
+            var planEndTimeEnd = queryDto.PlanEndTimeEnd.Value;
+            exp = exp.And(x => x.PlanEndTime <= planEndTimeEnd);
+        }
+
+        if (queryDto?.ActualStartTimeStart.HasValue == true)
+        {
+            var actualStartTimeStart = queryDto.ActualStartTimeStart.Value;
+            exp = exp.And(x => x.ActualStartTime >= actualStartTimeStart);
+        }
+
+        if (queryDto?.ActualStartTimeEnd.HasValue == true)
+        {
+            var actualStartTimeEnd = queryDto.ActualStartTimeEnd.Value;
+            exp = exp.And(x => x.ActualStartTime <= actualStartTimeEnd);
+        }
+
+        if (queryDto?.ActualEndTimeStart.HasValue == true)
+        {
+            var actualEndTimeStart = queryDto.ActualEndTimeStart.Value;
+            exp = exp.And(x => x.ActualEndTime >= actualEndTimeStart);
+        }
+
+        if (queryDto?.ActualEndTimeEnd.HasValue == true)
+        {
+            var actualEndTimeEnd = queryDto.ActualEndTimeEnd.Value;
+            exp = exp.And(x => x.ActualEndTime <= actualEndTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktApsScheduleItemQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.ApsScheduleId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApsScheduleCode))
+        {
+            return true;
+        }
+        if (queryDto.ApsOrderId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ApsOperationId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RoutingItemId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkOrderCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkCenterCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkCenterDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProcessCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProcessName))
+        {
+            return true;
+        }
+        if (queryDto.ProcessSequence.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ProcessStandardST.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ProcessStandardSTUnit.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExtraMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlanQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ProcessStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Priority.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlanStartTimeStart.HasValue || queryDto.PlanStartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlanEndTimeStart.HasValue || queryDto.PlanEndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualStartTimeStart.HasValue || queryDto.ActualStartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualEndTimeStart.HasValue || queryDto.ActualEndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

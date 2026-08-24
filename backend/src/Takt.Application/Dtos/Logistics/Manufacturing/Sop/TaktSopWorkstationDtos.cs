@@ -67,12 +67,12 @@ public class TaktSopWorkstationDto : TaktCompanyDtoBase
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int WorkstationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -139,12 +139,12 @@ public class TaktSopWorkstationQueryDto : TaktPagedQuery
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? WorkstationStatus { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -232,7 +232,7 @@ public class TaktSopWorkstationCreateDto
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int WorkstationStatus { get; set; } = 0;
 
@@ -286,9 +286,9 @@ public class TaktSopWorkstationStatusDto
     public long SopWorkstationId { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
+    [Required(ErrorMessage = "启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）不能为空")]
     public int WorkstationStatus { get; set; } = 0;
 }
 
@@ -310,7 +310,7 @@ public class TaktSopWorkstationSortDto
     public long SopWorkstationId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -376,7 +376,7 @@ public class TaktSopWorkstationTemplateDto
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? WorkstationStatus { get; set; }
 
@@ -448,7 +448,7 @@ public class TaktSopWorkstationImportDto
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? WorkstationStatus { get; set; }
 
@@ -521,12 +521,12 @@ public class TaktSopWorkstationExportDto
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int WorkstationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

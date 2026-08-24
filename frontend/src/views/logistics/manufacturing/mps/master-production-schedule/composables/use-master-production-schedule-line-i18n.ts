@@ -20,7 +20,6 @@ export const MASTERPRODUCTIONSCHEDULELINE_SELF_I18N_KEY = buildEntitySelfI18nKey
 
 /** 列表业务列（不含主键） */
 export const MASTERPRODUCTIONSCHEDULELINE_LIST_FIELDS = [
-  'masterProductionScheduleId',
   'mpsCode',
   'masterDemandScheduleLineId',
   'materialCode',
@@ -33,11 +32,11 @@ export const MASTERPRODUCTIONSCHEDULELINE_LIST_FIELDS = [
   'plannedOrderQuantity',
   'atpQuantity',
   'unitOfMeasure',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const MASTERPRODUCTIONSCHEDULELINE_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'masterProductionScheduleId',
   'mpsCode',
   'masterDemandScheduleLineId',
   'materialCode',
@@ -65,22 +64,7 @@ export const MASTERPRODUCTIONSCHEDULELINE_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const MASTERPRODUCTIONSCHEDULELINE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  mpsCode: 'required',
-  masterDemandScheduleLineId: 'optional',
-  materialCode: 'select',
-  bucketStart: 'select',
-  bucketEnd: 'select',
-  grossRequirement: 'select',
-  scheduledReceipts: 'select',
-  projectedOnHand: 'select',
-  netRequirement: 'select',
-  plannedOrderQuantity: 'select',
-  atpQuantity: 'select',
-  unitOfMeasure: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -88,34 +72,13 @@ export type MasterProductionScheduleLineField = keyof typeof MASTERPRODUCTIONSCH
 
 /** 高级查询可 trim 的字符串字段 */
 export const MASTERPRODUCTIONSCHEDULELINE_QUERY_STRING_FIELDS = [
-  'mpsCode',
-  'masterDemandScheduleLineId',
-  'materialCode',
-  'bucketStartStart',
-  'bucketStartEnd',
-  'bucketEndStart',
-  'bucketEndEnd',
-  'unitOfMeasure',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof MasterProductionScheduleLineQuery)[]
 
-export type MasterProductionScheduleLineQueryField =
-  | (typeof MASTERPRODUCTIONSCHEDULELINE_QUERY_STRING_FIELDS)[number]
-  | 'grossRequirement' | 'scheduledReceipts' | 'projectedOnHand' | 'netRequirement' | 'plannedOrderQuantity' | 'atpQuantity'
+export type MasterProductionScheduleLineQueryField = (typeof MASTERPRODUCTIONSCHEDULELINE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const MASTERPRODUCTIONSCHEDULELINE_QUERY_FIELDS: readonly MasterProductionScheduleLineQueryField[] = [
-  ...MASTERPRODUCTIONSCHEDULELINE_QUERY_STRING_FIELDS,
-  'grossRequirement',
-  'scheduledReceipts',
-  'projectedOnHand',
-  'netRequirement',
-  'plannedOrderQuantity',
-  'atpQuantity',
-]
+export const MASTERPRODUCTIONSCHEDULELINE_QUERY_FIELDS: readonly MasterProductionScheduleLineQueryField[] = [...MASTERPRODUCTIONSCHEDULELINE_QUERY_STRING_FIELDS]
 
 /**
  * MasterProductionScheduleLine字段 i18n：index / master-production-schedule-line-form 统一入口

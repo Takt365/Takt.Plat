@@ -152,7 +152,7 @@ public sealed class TaktDatabaseBackupProvider : ITaktDatabaseBackupProvider
             {
                 Host = options.BackupHost.Trim(),
                 Port = options.BackupPort is > 0 ? options.BackupPort.Value : 21,
-                Username = options.BackupUserName.Trim(),
+                UserName = options.BackupUserName.Trim(),
                 Password = options.BackupPassword,
                 Timeout = 120,
             };

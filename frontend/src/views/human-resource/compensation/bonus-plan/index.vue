@@ -217,7 +217,7 @@
       <a-form-item :label="t('entity.bonusplan.planstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.planStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.bonusplan.planstatus') })"
           allow-clear
         />

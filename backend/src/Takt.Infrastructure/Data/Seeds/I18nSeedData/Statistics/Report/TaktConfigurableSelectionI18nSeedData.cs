@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableSelectionI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurableSelection 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktConfigurableSelectionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurableselection._self", "zh-HK", "自定义报表 SQVI 筛选条件信息_hk", "实体名称"),
 
             // entity.configurableselection.configurableid
-            new TranslationSeedItem("entity.configurableselection.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurableselection.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurableselection.configurableid
-            new TranslationSeedItem("entity.configurableselection.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurableselection.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurableselection.configurableid
-            new TranslationSeedItem("entity.configurableselection.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurableselection.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
             // entity.configurableselection.configurableid
-            new TranslationSeedItem("entity.configurableselection.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurableselection.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）"),
 
             // entity.configurableselection.sourcealias
             new TranslationSeedItem("entity.configurableselection.sourcealias", "en-US", "数据源别名_us", "数据源别名"),
@@ -127,13 +127,13 @@ public class TaktConfigurableSelectionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurableselection.displayname", "zh-HK", "显示名称_hk", "显示名称（SQVI 筛选项标签）"),
 
             // entity.configurableselection.filteroperator
-            new TranslationSeedItem("entity.configurableselection.filteroperator", "en-US", "比较运算符_us", "比较运算符"),
+            new TranslationSeedItem("entity.configurableselection.filteroperator", "en-US", "比较运算符_us", "比较运算符（字典 gen_query_type；1=等于 2=不等于 3=大于 4=大于等于 5=小于 6=小于等于 7=模糊 8=区间）"),
             // entity.configurableselection.filteroperator
-            new TranslationSeedItem("entity.configurableselection.filteroperator", "ja-JP", "比较运算符_jp", "比较运算符"),
+            new TranslationSeedItem("entity.configurableselection.filteroperator", "ja-JP", "比较运算符_jp", "比较运算符（字典 gen_query_type；1=等于 2=不等于 3=大于 4=大于等于 5=小于 6=小于等于 7=模糊 8=区间）"),
             // entity.configurableselection.filteroperator
-            new TranslationSeedItem("entity.configurableselection.filteroperator", "zh-CN", "比较运算符", "比较运算符"),
+            new TranslationSeedItem("entity.configurableselection.filteroperator", "zh-CN", "比较运算符", "比较运算符（字典 gen_query_type；1=等于 2=不等于 3=大于 4=大于等于 5=小于 6=小于等于 7=模糊 8=区间）"),
             // entity.configurableselection.filteroperator
-            new TranslationSeedItem("entity.configurableselection.filteroperator", "zh-HK", "比较运算符_hk", "比较运算符"),
+            new TranslationSeedItem("entity.configurableselection.filteroperator", "zh-HK", "比较运算符_hk", "比较运算符（字典 gen_query_type；1=等于 2=不等于 3=大于 4=大于等于 5=小于 6=小于等于 7=模糊 8=区间）"),
 
             // entity.configurableselection.defaultvalue
             new TranslationSeedItem("entity.configurableselection.defaultvalue", "en-US", "默认值_us", "默认值（单值或 IN 列表逗号分隔）"),
@@ -154,22 +154,22 @@ public class TaktConfigurableSelectionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurableselection.defaultvalueto", "zh-HK", "区间结束值_hk", "区间结束值（BETWEEN 时使用）"),
 
             // entity.configurableselection.isrequired
-            new TranslationSeedItem("entity.configurableselection.isrequired", "en-US", "是否必填_us", "是否必填（0=否 1=是）"),
+            new TranslationSeedItem("entity.configurableselection.isrequired", "en-US", "是否必填_us", "是否必填（字典 sys_yes_no；0=否 1=是）"),
             // entity.configurableselection.isrequired
-            new TranslationSeedItem("entity.configurableselection.isrequired", "ja-JP", "是否必填_jp", "是否必填（0=否 1=是）"),
+            new TranslationSeedItem("entity.configurableselection.isrequired", "ja-JP", "是否必填_jp", "是否必填（字典 sys_yes_no；0=否 1=是）"),
             // entity.configurableselection.isrequired
-            new TranslationSeedItem("entity.configurableselection.isrequired", "zh-CN", "是否必填", "是否必填（0=否 1=是）"),
+            new TranslationSeedItem("entity.configurableselection.isrequired", "zh-CN", "是否必填", "是否必填（字典 sys_yes_no；0=否 1=是）"),
             // entity.configurableselection.isrequired
-            new TranslationSeedItem("entity.configurableselection.isrequired", "zh-HK", "是否必填_hk", "是否必填（0=否 1=是）"),
+            new TranslationSeedItem("entity.configurableselection.isrequired", "zh-HK", "是否必填_hk", "是否必填（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.configurableselection.sortorder
-            new TranslationSeedItem("entity.configurableselection.sortorder", "en-US", "排序号_us", "排序号（SQVI 筛选项展示顺序）"),
+            new TranslationSeedItem("entity.configurableselection.sortorder", "en-US", "排序号_us", "排序号（回填）（SQVI 筛选项展示顺序）"),
             // entity.configurableselection.sortorder
-            new TranslationSeedItem("entity.configurableselection.sortorder", "ja-JP", "排序号_jp", "排序号（SQVI 筛选项展示顺序）"),
+            new TranslationSeedItem("entity.configurableselection.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（SQVI 筛选项展示顺序）"),
             // entity.configurableselection.sortorder
-            new TranslationSeedItem("entity.configurableselection.sortorder", "zh-CN", "排序号", "排序号（SQVI 筛选项展示顺序）"),
+            new TranslationSeedItem("entity.configurableselection.sortorder", "zh-CN", "排序号", "排序号（回填）（SQVI 筛选项展示顺序）"),
             // entity.configurableselection.sortorder
-            new TranslationSeedItem("entity.configurableselection.sortorder", "zh-HK", "排序号_hk", "排序号（SQVI 筛选项展示顺序）"),
+            new TranslationSeedItem("entity.configurableselection.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（SQVI 筛选项展示顺序）"),
 
             // entity.configurableselection.configurable
             new TranslationSeedItem("entity.configurableselection.configurable", "en-US", "关联的报表主表_us", "关联的报表主表"),

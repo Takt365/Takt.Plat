@@ -27,7 +27,7 @@ export default {
     errorcolmessage: 'Message',
     selectuserdialogtitle: 'Select users',
     selectusersearchplaceholder: 'Search name, email or phone',
-    colusername: 'Username',
+    colUserName: 'userName',
     coluseremail: 'Email',
     coluserphone: 'Phone',
     pagetotal: 'Total {total}',

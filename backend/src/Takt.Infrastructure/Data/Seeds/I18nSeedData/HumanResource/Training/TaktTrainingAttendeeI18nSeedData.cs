@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingAttendeeI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingAttendee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -190,13 +190,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.trainingscore", "zh-HK", "培训成绩_hk", "培训成绩"),
 
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "en-US", "是否通过_us", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "en-US", "是否通过_us", "是否通过（字典 sys_yes_no；0=否 1=是）"),
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "ja-JP", "是否通过_jp", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "ja-JP", "是否通过_jp", "是否通过（字典 sys_yes_no；0=否 1=是）"),
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-CN", "是否通过", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-CN", "是否通过", "是否通过（字典 sys_yes_no；0=否 1=是）"),
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-HK", "是否通过_hk", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-HK", "是否通过_hk", "是否通过（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.trainingattendee.certificatecode
             new TranslationSeedItem("entity.trainingattendee.certificatecode", "en-US", "证书编码_us", "证书编码"),
@@ -217,13 +217,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.trainingevaluation", "zh-HK", "培训评价_hk", "培训评价"),
 
             // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "en-US", "状态_us", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "en-US", "状态_us", "参训记录状态（字典 sys_normal_disable；1=有效 0=无效）"),
             // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "ja-JP", "状态_jp", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "ja-JP", "状态_jp", "参训记录状态（字典 sys_normal_disable；1=有效 0=无效）"),
             // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-CN", "状态", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-CN", "状态", "参训记录状态（字典 sys_normal_disable；1=有效 0=无效）"),
             // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-HK", "状态_hk", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-HK", "状态_hk", "参训记录状态（字典 sys_normal_disable；1=有效 0=无效）"),
         };
     }
 

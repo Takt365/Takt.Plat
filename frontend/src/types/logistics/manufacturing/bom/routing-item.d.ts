@@ -99,7 +99,7 @@ export interface RoutingItem extends CompanyDtoBase {
   teardownMinutes: number;
 
   /**
-   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   * 检验（字典 sys_yes_no：0=否，1=是）
    */
   isInspection: number;
 
@@ -124,7 +124,7 @@ export interface RoutingItem extends CompanyDtoBase {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -234,7 +234,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   teardownMinutes?: number;
 
   /**
-   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   * 检验（字典 sys_yes_no：0=否，1=是）
    */
   isInspection?: number;
 
@@ -259,7 +259,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -378,7 +378,7 @@ export interface RoutingItemCreate {
   teardownMinutes: number;
 
   /**
-   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   * 检验（字典 sys_yes_no：0=否，1=是）
    */
   isInspection: number;
 
@@ -398,7 +398,7 @@ export interface RoutingItemCreate {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -471,7 +471,7 @@ export interface RoutingItemObsolete {
   routingItemId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -570,7 +570,7 @@ export interface RoutingItemTemplate {
   teardownMinutes?: number;
 
   /**
-   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   * 检验（字典 sys_yes_no：0=否，1=是）
    */
   isInspection?: number;
 
@@ -590,7 +590,7 @@ export interface RoutingItemTemplate {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -704,7 +704,7 @@ export interface RoutingItemImport {
   teardownMinutes?: number;
 
   /**
-   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   * 检验（字典 sys_yes_no：0=否，1=是）
    */
   isInspection?: number;
 
@@ -724,7 +724,7 @@ export interface RoutingItemImport {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -828,7 +828,7 @@ export interface RoutingItemExport {
   teardownMinutes: number;
 
   /**
-   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   * 检验（字典 sys_yes_no：0=否，1=是）
    */
   isInspection: number;
 
@@ -853,7 +853,7 @@ export interface RoutingItemExport {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

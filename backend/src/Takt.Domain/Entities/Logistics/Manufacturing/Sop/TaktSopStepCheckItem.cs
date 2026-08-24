@@ -51,13 +51,13 @@ public class TaktSopStepCheckItem : TaktCompanyEntityBase
     public string? CheckStandard { get; set; }
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否必检（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_required", ColumnDescription = "是否必检", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsRequired { get; set; } = 1;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

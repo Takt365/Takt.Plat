@@ -24,14 +24,14 @@ namespace Takt.Domain.Entities.Statistics.Report;
 public class TaktConfigurableJoin : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联报表主表 ID（主子表关系）
+    /// 关联报表主表 ID（选项 TaktConfigurables/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "configurable_id", ColumnDescription = "报表主表ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConfigurableId { get; set; }
 
     /// <summary>
-    /// 关联类型（内/左/右/全连接）
+    /// 关联类型（字典 sys_configurable_join_type；1=内连接 2=左连接 3=右连接 4=全连接）
     /// </summary>
     [SugarColumn(ColumnName = "join_type", ColumnDescription = "关联类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int JoinType { get; set; } = 1;
@@ -61,7 +61,7 @@ public class TaktConfigurableJoin : TaktCompanyEntityBase
     public string RightColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（JOIN 应用顺序）
+    /// 排序号（回填）（JOIN 应用顺序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

@@ -139,7 +139,7 @@ export interface PurchasePlanItem extends CompanyDtoBase {
   referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -277,7 +277,7 @@ export interface PurchasePlanItemExport {
   referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

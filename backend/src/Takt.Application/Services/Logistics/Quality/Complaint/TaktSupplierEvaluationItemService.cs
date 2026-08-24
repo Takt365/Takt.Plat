@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核项目明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
     }
 
     /// <summary>
-    /// 获取供应商评价考核项目明细列表（分页）
+    /// 获取供应商评价考核项目明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSupplierEvaluationItemDto>> GetSupplierEvaluationItemListAsync(TaktSupplierEvaluationItemQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSupplierEvaluationItemDto>.Create(
+                new List<TaktSupplierEvaluationItemDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _supplierEvaluationItemRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -328,7 +336,15 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSupplierEvaluationItemAsync(TaktSupplierEvaluationItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSupplierEvaluationItemQueryDto());
+        var queryDto = query ?? new TaktSupplierEvaluationItemQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSupplierEvaluationItemExportDto>(),
+                sheetName ?? "供应商评价考核项目明细数据",
+                fileName ?? "供应商评价考核项目明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _supplierEvaluationItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -366,6 +382,26 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
             throw new TaktBusinessException("供应商评价考核不存在");
         }
         entity.EvaluationId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.SupplierEvaluationCode))
+        {
+            entity.SupplierEvaluationCode = master.SupplierEvaluationCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -389,149 +425,268 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EvaluationId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.CategoryType).Contains(keywords)
                 || (x.ItemName != null && x.ItemName.Contains(keywords))
                 || (x.ItemDescription != null && x.ItemDescription.Contains(keywords))
-                || SqlFunc.ToString(x.Weight).Contains(keywords)
                 || (x.ScoringStandard != null && x.ScoringStandard.Contains(keywords))
-                || SqlFunc.ToString(x.Score).Contains(keywords)
-                || SqlFunc.ToString(x.RatingLevel).Contains(keywords)
                 || (x.EvaluationComment != null && x.EvaluationComment.Contains(keywords))
                 || (x.ExistingIssues != null && x.ExistingIssues.Contains(keywords))
                 || (x.ImprovementRequirement != null && x.ImprovementRequirement.Contains(keywords))
-                || SqlFunc.ToString(x.RectificationRequired).Contains(keywords)
-                || SqlFunc.ToString(x.RectificationStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.RectificationDeadline).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.EvaluationId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.EvaluationId == queryDto.EvaluationId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierEvaluationCode))
-        {
-            exp = exp.And(x => x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(queryDto.SupplierEvaluationCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.CategoryType.HasValue == true)
-        {
-            exp = exp.And(x => x.CategoryType == queryDto.CategoryType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ItemName))
-        {
-            exp = exp.And(x => x.ItemName != null && x.ItemName.Contains(queryDto.ItemName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ItemDescription))
-        {
-            exp = exp.And(x => x.ItemDescription != null && x.ItemDescription.Contains(queryDto.ItemDescription));
-        }
-
-        if (queryDto?.Weight.HasValue == true)
-        {
-            exp = exp.And(x => x.Weight == queryDto.Weight);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ScoringStandard))
-        {
-            exp = exp.And(x => x.ScoringStandard != null && x.ScoringStandard.Contains(queryDto.ScoringStandard));
-        }
-
-        if (queryDto?.Score.HasValue == true)
-        {
-            exp = exp.And(x => x.Score == queryDto.Score);
-        }
-
-        if (queryDto?.RatingLevel.HasValue == true)
-        {
-            exp = exp.And(x => x.RatingLevel == queryDto.RatingLevel);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EvaluationComment))
-        {
-            exp = exp.And(x => x.EvaluationComment != null && x.EvaluationComment.Contains(queryDto.EvaluationComment));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExistingIssues))
-        {
-            exp = exp.And(x => x.ExistingIssues != null && x.ExistingIssues.Contains(queryDto.ExistingIssues));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ImprovementRequirement))
-        {
-            exp = exp.And(x => x.ImprovementRequirement != null && x.ImprovementRequirement.Contains(queryDto.ImprovementRequirement));
-        }
-
-        if (queryDto?.RectificationRequired.HasValue == true)
-        {
-            exp = exp.And(x => x.RectificationRequired == queryDto.RectificationRequired);
-        }
-
-        if (queryDto?.RectificationStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.RectificationStatus == queryDto.RectificationStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.RectificationDeadlineStart.HasValue == true)
-        {
-            exp = exp.And(x => x.RectificationDeadline >= queryDto.RectificationDeadlineStart);
-        }
-
-        if (queryDto?.RectificationDeadlineEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.RectificationDeadline <= queryDto.RectificationDeadlineEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.EvaluationId.HasValue == true)
+        {
+            var evaluationId = queryDto.EvaluationId.Value;
+            exp = exp.And(x => x.EvaluationId == evaluationId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierEvaluationCode))
+        {
+            var supplierEvaluationCode = queryDto.SupplierEvaluationCode;
+            exp = exp.And(x => x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(supplierEvaluationCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.CategoryType.HasValue == true)
+        {
+            var categoryType = queryDto.CategoryType.Value;
+            exp = exp.And(x => x.CategoryType == categoryType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ItemName))
+        {
+            var itemName = queryDto.ItemName;
+            exp = exp.And(x => x.ItemName != null && x.ItemName.Contains(itemName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ItemDescription))
+        {
+            var itemDescription = queryDto.ItemDescription;
+            exp = exp.And(x => x.ItemDescription != null && x.ItemDescription.Contains(itemDescription));
+        }
+
+        if (queryDto?.Weight.HasValue == true)
+        {
+            var weight = queryDto.Weight.Value;
+            exp = exp.And(x => x.Weight == weight);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ScoringStandard))
+        {
+            var scoringStandard = queryDto.ScoringStandard;
+            exp = exp.And(x => x.ScoringStandard != null && x.ScoringStandard.Contains(scoringStandard));
+        }
+
+        if (queryDto?.Score.HasValue == true)
+        {
+            var score = queryDto.Score.Value;
+            exp = exp.And(x => x.Score == score);
+        }
+
+        if (queryDto?.RatingLevel.HasValue == true)
+        {
+            var ratingLevel = queryDto.RatingLevel.Value;
+            exp = exp.And(x => x.RatingLevel == ratingLevel);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluationComment))
+        {
+            var evaluationComment = queryDto.EvaluationComment;
+            exp = exp.And(x => x.EvaluationComment != null && x.EvaluationComment.Contains(evaluationComment));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExistingIssues))
+        {
+            var existingIssues = queryDto.ExistingIssues;
+            exp = exp.And(x => x.ExistingIssues != null && x.ExistingIssues.Contains(existingIssues));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ImprovementRequirement))
+        {
+            var improvementRequirement = queryDto.ImprovementRequirement;
+            exp = exp.And(x => x.ImprovementRequirement != null && x.ImprovementRequirement.Contains(improvementRequirement));
+        }
+
+        if (queryDto?.RectificationRequired.HasValue == true)
+        {
+            var rectificationRequired = queryDto.RectificationRequired.Value;
+            exp = exp.And(x => x.RectificationRequired == rectificationRequired);
+        }
+
+        if (queryDto?.RectificationStatus.HasValue == true)
+        {
+            var rectificationStatus = queryDto.RectificationStatus.Value;
+            exp = exp.And(x => x.RectificationStatus == rectificationStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.RectificationDeadlineStart.HasValue == true)
+        {
+            var rectificationDeadlineStart = queryDto.RectificationDeadlineStart.Value;
+            exp = exp.And(x => x.RectificationDeadline >= rectificationDeadlineStart);
+        }
+
+        if (queryDto?.RectificationDeadlineEnd.HasValue == true)
+        {
+            var rectificationDeadlineEnd = queryDto.RectificationDeadlineEnd.Value;
+            exp = exp.And(x => x.RectificationDeadline <= rectificationDeadlineEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSupplierEvaluationItemQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.EvaluationId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierEvaluationCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CategoryType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ItemName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ItemDescription))
+        {
+            return true;
+        }
+        if (queryDto.Weight.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ScoringStandard))
+        {
+            return true;
+        }
+        if (queryDto.Score.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RatingLevel.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EvaluationComment))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExistingIssues))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ImprovementRequirement))
+        {
+            return true;
+        }
+        if (queryDto.RectificationRequired.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RectificationStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RectificationDeadlineStart.HasValue || queryDto.RectificationDeadlineEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

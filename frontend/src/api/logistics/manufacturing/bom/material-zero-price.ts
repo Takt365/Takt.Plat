@@ -11,7 +11,6 @@
 // ========================================
 
 import request from '@/api/request'
-import type { TaktSelectOption } from '@/types/common'
 import type {
   BomMaterialZeroPriceQuery,
   BomMaterialZeroPriceResult,
@@ -24,33 +23,6 @@ import type {
 
 /** API 路由前缀（对应 TaktBomMaterialZeroPricesController） */
 const BOM_MATERIAL_ZERO_PRICE_API_BASE = 'TaktBomMaterialZeroPrices'
-
-/**
- * 工厂下拉选项 URL（查询栏 TaktSelect）
- * @returns 相对路径
- */
-export function getBomMaterialZeroPricePlantOptionsUrl(): string {
-  return `${BOM_MATERIAL_ZERO_PRICE_API_BASE}/plant-options`
-}
-
-/**
- * 机种下拉选项 URL（查询栏 TaktSelect 多选；空=全部）
- * @returns 相对路径
- */
-export function getBomMaterialZeroPriceModelOptionsUrl(): string {
-  return `${BOM_MATERIAL_ZERO_PRICE_API_BASE}/model-options`
-}
-
-/**
- * 获取工厂选项
- * @returns 下拉选项
- */
-export function getBomMaterialZeroPricePlantOptions(): Promise<TaktSelectOption[]> {
-  return request<TaktSelectOption[]>({
-    url: `${BOM_MATERIAL_ZERO_PRICE_API_BASE}/plant-options`,
-    method: 'get',
-  })
-}
 
 /**
  * 获取组件零价格合并清单（工厂+核算月；仅 FERT）

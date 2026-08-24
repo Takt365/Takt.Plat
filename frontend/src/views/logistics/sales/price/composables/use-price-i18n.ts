@@ -20,7 +20,6 @@ export const SALESPRICE_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESPRICE_ENTITY
 
 /** 列表业务列（不含主键） */
 export const SALESPRICE_LIST_FIELDS = [
-  'plantCode',
   'salesPriceCode',
   'priceType',
   'customerCode',
@@ -35,30 +34,12 @@ export const SALESPRICE_LIST_FIELDS = [
   'salesQuotationId',
   'salesQuotationCode',
   'variableKey',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESPRICE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  salesPriceCode: 'required',
-  priceType: 'select',
-  customerCode: 'select',
-  materialCode: 'select',
-  materialDescription: 'optional',
-  salesGroup: 'optional',
-  taxCode: 'optional',
-  grBasedInvoiceInspection: 'select',
-  pricingDateControl: 'select',
-  validFrom: 'select',
-  validTo: 'select',
-  salesQuotationId: 'optional',
-  salesQuotationCode: 'optional',
-  variableKey: 'optional',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -66,37 +47,13 @@ export type SalesPriceField = keyof typeof SALESPRICE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESPRICE_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'salesPriceCode',
-  'priceType',
-  'customerCode',
-  'materialCode',
-  'materialDescription',
-  'salesGroup',
-  'taxCode',
-  'validFromStart',
-  'validFromEnd',
-  'validToStart',
-  'validToEnd',
-  'salesQuotationId',
-  'salesQuotationCode',
-  'variableKey',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SalesPriceQuery)[]
 
-export type SalesPriceQueryField =
-  | (typeof SALESPRICE_QUERY_STRING_FIELDS)[number]
-  | 'grBasedInvoiceInspection' | 'pricingDateControl'
+export type SalesPriceQueryField = (typeof SALESPRICE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESPRICE_QUERY_FIELDS: readonly SalesPriceQueryField[] = [
-  ...SALESPRICE_QUERY_STRING_FIELDS,
-  'grBasedInvoiceInspection',
-  'pricingDateControl',
-]
+export const SALESPRICE_QUERY_FIELDS: readonly SalesPriceQueryField[] = [...SALESPRICE_QUERY_STRING_FIELDS]
 
 /**
  * Takt销售价格实体字段 i18n：index / price-form 统一入口

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchasePriceI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePrice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,13 +154,13 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseprice.taxcode", "zh-HK", "税码_hk", "税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
 
             // entity.purchaseprice.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "en-US", "基于收货的发票检验_us", "基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "en-US", "基于收货的发票检验_us", "基于收货的发票检验（字典 sys_yes_no；0=否 1=是）"),
             // entity.purchaseprice.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "ja-JP", "基于收货的发票检验_jp", "基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "ja-JP", "基于收货的发票检验_jp", "基于收货的发票检验（字典 sys_yes_no；0=否 1=是）"),
             // entity.purchaseprice.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "zh-CN", "基于收货的发票检验", "基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "zh-CN", "基于收货的发票检验", "基于收货的发票检验（字典 sys_yes_no；0=否 1=是）"),
             // entity.purchaseprice.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "zh-HK", "基于收货的发票检验_hk", "基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "zh-HK", "基于收货的发票检验_hk", "基于收货的发票检验（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.purchaseprice.pricingdatecontrol
             new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "en-US", "定价日期控制_us", "定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),

@@ -74,7 +74,7 @@
 
       <!-- 表格 -->
       <TaktSingleTable
-        entity-scope="tenant"
+        entity-scope="tenant-culture"
         :columns="displayColumns"
         :data-source="dataSource"
         :loading="loading"
@@ -278,6 +278,9 @@
         @submit="handleAdvancedQuerySubmit"
         @reset="handleAdvancedQueryReset"
       >
+        <a-form-item :label="t('entity.dictdata.culturecode')">
+          <TaktSelect v-model:value="advancedQueryForm.cultureCode" dict-type="sys_culture_code" allow-clear />
+        </a-form-item>
         <a-form-item :label="t('entity.dictdata.dictlabel')">
           <a-input v-model:value="advancedQueryForm.dictLabel" />
         </a-form-item>
@@ -293,6 +296,7 @@
         :checked-keys="visibleColumnKeys"
         :id-column-key="'dictDataId'"
         :action-column-key="'action'"
+        entity-scope="tenant-culture"
         @update:checked-keys="handleColumnKeysChange"
         @reset="handleColumnSettingReset"
       />
@@ -317,9 +321,10 @@ import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-pa
 const { t } = useI18n()
 
 /** 高级查询抽屉：`DictDataQuery` 中 `dictLabel`/`dictValue` 为可选时推断为 `string | undefined`，与 `a-input` 在 exactOptionalPropertyTypes 下不兼容；表单内固定为 `string`（空串表示未填）。 */
-type DictDataAdvancedQueryFormState = Omit<DictDataQuery, 'dictLabel' | 'dictValue'> & {
+type DictDataAdvancedQueryFormState = Omit<DictDataQuery, 'dictLabel' | 'dictValue' | 'cultureCode'> & {
   dictLabel: string
   dictValue: string
+  cultureCode: string
 }
 
 /** 行内可编辑列（与模板 bodyCell 分支一致） */
@@ -421,6 +426,7 @@ const advancedQueryForm = reactive<DictDataAdvancedQueryFormState>({
   keyWords: '',
   dictTypeId: '',
   dictTypeCode: '',
+  cultureCode: '',
   dictLabel: '',
   dictValue: ''
 })
@@ -469,6 +475,12 @@ const columns = computed<TableColumnsType<DictData>>(() => [
     dataIndex: 'dictTypeCode',
     key: 'dictTypeCode',
     width: 150
+  },
+  {
+    title: t('entity.dictdata.culturecode'),
+    dataIndex: 'cultureCode',
+    key: 'cultureCode',
+    width: 120
   },
   {
     title: t('entity.dictdata.dictlabel'),
@@ -545,7 +557,7 @@ const columns = computed<TableColumnsType<DictData>>(() => [
 
 // 合并列配置（包含审计字段）
 const mergedColumns = computed((): any => {
-  return mergeDefaultColumns(columns.value as any, t, true)
+  return mergeDefaultColumns(columns.value as any, t, true, 'tenant-culture')
 })
 
 // 根据可见列过滤显示的列
@@ -634,7 +646,8 @@ const initWindow = () => {
     dictTypeId: props.dictType.dictTypeId,
     dictTypeCode: props.dictType.dictTypeCode,
     dictLabel: '',
-    dictValue: ''
+    dictValue: '',
+    cultureCode: ''
   })
   
   // 重置选择状态
@@ -684,7 +697,8 @@ const handleReset = () => {
   Object.assign(advancedQueryForm, {
     keyWords: '',
     dictLabel: '',
-    dictValue: ''
+    dictValue: '',
+    cultureCode: ''
   })
   loadData()
 }
@@ -837,7 +851,8 @@ const handleAdvancedQueryReset = () => {
   Object.assign(advancedQueryForm, {
     keyWords: '',
     dictLabel: '',
-    dictValue: ''
+    dictValue: '',
+    cultureCode: ''
   })
 }
 

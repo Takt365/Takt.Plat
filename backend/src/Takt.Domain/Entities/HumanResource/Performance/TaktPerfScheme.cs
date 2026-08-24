@@ -89,7 +89,7 @@ public class TaktPerfScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "standard_weight", ColumnDescription = "标准权重", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal StandardWeight { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

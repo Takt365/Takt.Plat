@@ -62,13 +62,13 @@
           layout="vertical"
           @finish="handleInfoStepSubmit"
         >
-          <a-form-item :label="t('login.page.field.username.label')" name="userName">
+          <a-form-item :label="t('login.page.field.userName.label')" name="userName">
             <a-input
               v-model:value="formState.userName"
-              :placeholder="t('login.page.field.username.placeholder')"
+              :placeholder="t('login.page.field.userName.placeholder')"
               size="large"
               show-count
-              :maxlength="LOGIN_USERNAME_MAX_LENGTH"
+              :maxlength="LOGIN_USER_NAME_MAX_LENGTH"
               autocomplete="username"
             >
               <template #prefix>
@@ -210,9 +210,9 @@ import {
   EMAIL_MIN_LENGTH,
   getPhoneMaxLengthByCulture,
   isValidEmail,
-  isValidLoginUsername,
+  isValidLoginUserName,
   isValidPhoneByCulture,
-  LOGIN_USERNAME_MAX_LENGTH,
+  LOGIN_USER_NAME_MAX_LENGTH,
 } from '@/utils/regex';
 import { useLocaleStore } from '@/stores/foundation/locale';
 
@@ -303,7 +303,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userName: [
     {
       required: true,
-      message: t('login.page.validate.username.required'),
+      message: t('login.page.validate.userName.required'),
       trigger: 'blur',
     },
     {
@@ -312,8 +312,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         if (!trimmed) {
           return Promise.resolve();
         }
-        if (!isValidLoginUsername(trimmed)) {
-          return Promise.reject(t('login.page.validate.username.invalid'));
+        if (!isValidLoginUserName(trimmed)) {
+          return Promise.reject(t('login.page.validate.userName.invalid'));
         }
         return Promise.resolve();
       },
@@ -380,8 +380,8 @@ async function doRegisterAsync(): Promise<void> {
     const userName = formState.userName.trim();
     const registerData = {
       employeeId: '0',
-      username: userName,
-      nickname: userName,
+      userName: userName,
+      nickName: userName,
       userType: 0,
       passwordHash: '',
       userStatus: 0,

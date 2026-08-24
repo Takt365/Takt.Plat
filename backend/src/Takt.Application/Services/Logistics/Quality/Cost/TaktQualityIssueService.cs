@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质问题应对主应用服务实现
 // 
@@ -67,12 +67,20 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
     }
 
     /// <summary>
-    /// 获取品质问题应对主列表（分页）
+    /// 获取品质问题应对主列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktQualityIssueDto>> GetQualityIssueListAsync(TaktQualityIssueQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktQualityIssueDto>.Create(
+                new List<TaktQualityIssueDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _qualityIssueRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -281,7 +289,15 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportQualityIssueAsync(TaktQualityIssueQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityIssueQueryDto());
+        var queryDto = query ?? new TaktQualityIssueQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktQualityIssueExportDto>(),
+                sheetName ?? "品质问题应对主数据",
+                fileName ?? "品质问题应对主导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _qualityIssueRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -433,6 +449,11 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             {
                 var childDto = meetingItemsForSave[i];
                 childDto.QualityIssueId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityIssueCode = entity.QualityIssueCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -451,13 +472,12 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
                     submittedIds.Add(childDto.QualityIssueMeetingId);
                     var isUniqueUpdate_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityIssueMeetingRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityIssueId == x.QualityIssueId
+                        x => x.QualityIssueId == x.QualityIssueId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityIssueMeetingId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_issue_meeting_line_unique)
                     {
-                        throw new TaktBusinessException("质量问题会议调查试验费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                        throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityIssueId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityIssueMeetingId;
@@ -469,12 +489,11 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityIssueMeetingRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityIssueId == x.QualityIssueId
+                        x => x.QualityIssueId == x.QualityIssueId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_issue_meeting_line_unique)
                     {
-                        throw new TaktBusinessException("质量问题会议调查试验费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                        throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityIssueId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityIssueMeeting>();
                     child.Id = 0;
@@ -538,6 +557,11 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             {
                 var childDto = assyReworkItemsForSave[i];
                 childDto.QualityIssueId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityIssueCode = entity.QualityIssueCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -556,13 +580,12 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
                     submittedIds.Add(childDto.QualityIssueAssyReworkId);
                     var isUniqueUpdate_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityIssueAssyReworkRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityIssueId == x.QualityIssueId
+                        x => x.QualityIssueId == x.QualityIssueId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityIssueAssyReworkId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_issue_assy_rework_line_unique)
                     {
-                        throw new TaktBusinessException("质量问题组装不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                        throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityIssueId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityIssueAssyReworkId;
@@ -574,12 +597,11 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityIssueAssyReworkRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityIssueId == x.QualityIssueId
+                        x => x.QualityIssueId == x.QualityIssueId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_issue_assy_rework_line_unique)
                     {
-                        throw new TaktBusinessException("质量问题组装不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                        throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityIssueId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityIssueAssyRework>();
                     child.Id = 0;
@@ -643,6 +665,11 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             {
                 var childDto = pcbaReworkItemsForSave[i];
                 childDto.QualityIssueId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.QualityIssueCode = entity.QualityIssueCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -661,13 +688,12 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
                     submittedIds.Add(childDto.QualityIssuePcbaReworkId);
                     var isUniqueUpdate_ix_takt_logistics_quality_issue_pcba_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityIssuePcbaReworkRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityIssueId == x.QualityIssueId
+                        x => x.QualityIssueId == x.QualityIssueId
                 && x.LineNumber == x.LineNumber,
                         childDto.QualityIssuePcbaReworkId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_issue_pcba_rework_line_unique)
                     {
-                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细的QualityIssueId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.QualityIssuePcbaReworkId;
@@ -679,12 +705,11 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_issue_pcba_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _qualityIssuePcbaReworkRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.QualityIssueId == x.QualityIssueId
+                        x => x.QualityIssueId == x.QualityIssueId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_issue_pcba_rework_line_unique)
                     {
-                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细的QualityIssueId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktQualityIssuePcbaRework>();
                     child.Id = 0;
@@ -733,113 +758,204 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
     {
         var exp = Expressionable.Create<TaktQualityIssue>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.QualityIssueCode != null && x.QualityIssueCode.Contains(keywords))
                 || (x.Model != null && x.Model.Contains(keywords))
                 || (x.Lot != null && x.Lot.Contains(keywords))
                 || (x.QualityProblemsResponse != null && x.QualityProblemsResponse.Contains(keywords))
                 || (x.ReworkDueToDefects != null && x.ReworkDueToDefects.Contains(keywords))
                 || (x.NeedRework != null && x.NeedRework.Contains(keywords))
-                || SqlFunc.ToString(x.TotalTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.TotalCost).Contains(keywords)
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.IssueDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityIssueCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(queryDto.QualityIssueCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Model))
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityIssueCode))
         {
-            exp = exp.And(x => x.Model != null && x.Model.Contains(queryDto.Model));
+            var qualityIssueCode = queryDto.QualityIssueCode;
+            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(qualityIssueCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Lot))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Model))
         {
-            exp = exp.And(x => x.Lot != null && x.Lot.Contains(queryDto.Lot));
+            var model = queryDto.Model;
+            exp = exp.And(x => x.Model != null && x.Model.Contains(model));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityProblemsResponse))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Lot))
         {
-            exp = exp.And(x => x.QualityProblemsResponse != null && x.QualityProblemsResponse.Contains(queryDto.QualityProblemsResponse));
+            var lot = queryDto.Lot;
+            exp = exp.And(x => x.Lot != null && x.Lot.Contains(lot));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReworkDueToDefects))
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityProblemsResponse))
         {
-            exp = exp.And(x => x.ReworkDueToDefects != null && x.ReworkDueToDefects.Contains(queryDto.ReworkDueToDefects));
+            var qualityProblemsResponse = queryDto.QualityProblemsResponse;
+            exp = exp.And(x => x.QualityProblemsResponse != null && x.QualityProblemsResponse.Contains(qualityProblemsResponse));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NeedRework))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReworkDueToDefects))
         {
-            exp = exp.And(x => x.NeedRework != null && x.NeedRework.Contains(queryDto.NeedRework));
+            var reworkDueToDefects = queryDto.ReworkDueToDefects;
+            exp = exp.And(x => x.ReworkDueToDefects != null && x.ReworkDueToDefects.Contains(reworkDueToDefects));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NeedRework))
+        {
+            var needRework = queryDto.NeedRework;
+            exp = exp.And(x => x.NeedRework != null && x.NeedRework.Contains(needRework));
         }
 
         if (queryDto?.TotalTimeMinutes.HasValue == true)
         {
-            exp = exp.And(x => x.TotalTimeMinutes == queryDto.TotalTimeMinutes);
+            var totalTimeMinutes = queryDto.TotalTimeMinutes.Value;
+            exp = exp.And(x => x.TotalTimeMinutes == totalTimeMinutes);
         }
 
         if (queryDto?.TotalCost.HasValue == true)
         {
-            exp = exp.And(x => x.TotalCost == queryDto.TotalCost);
+            var totalCost = queryDto.TotalCost.Value;
+            exp = exp.And(x => x.TotalCost == totalCost);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.IssueDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.IssueDate >= queryDto.IssueDateStart);
+            var issueDateStart = queryDto.IssueDateStart.Value;
+            exp = exp.And(x => x.IssueDate >= issueDateStart);
         }
 
         if (queryDto?.IssueDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.IssueDate <= queryDto.IssueDateEnd);
+            var issueDateEnd = queryDto.IssueDateEnd.Value;
+            exp = exp.And(x => x.IssueDate <= issueDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktQualityIssueQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.QualityIssueCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Model))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Lot))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.QualityProblemsResponse))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReworkDueToDefects))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NeedRework))
+        {
+            return true;
+        }
+        if (queryDto.TotalTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalCost.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IssueDateStart.HasValue || queryDto.IssueDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

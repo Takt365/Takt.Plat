@@ -22,32 +22,62 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
-
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('parentId')"
+                name="parentId"
+              >
+                <TaktTreeSelect
+                  v-model:value="formState.parentId"
+                  api-url="TaktAccountTitles/tree-options"
+                  :lazy="true"
+                  :placeholder="pi.ph('parentId')"
+                  allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accounttitle.code')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('accountTitleCode')"
                 name="accountTitleCode"
               >
                 <a-input
                   v-model:value="formState.accountTitleCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.code') })"
+                  :placeholder="pi.ph('accountTitleCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -57,12 +87,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accounttitle.name')"
+                :label="pi.label('accountTitleName')"
                 name="accountTitleName"
               >
                 <a-input
                   v-model:value="formState.accountTitleName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.name') })"
+                  :placeholder="pi.ph('accountTitleName')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -71,63 +101,73 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accounttitle.type')"
+                :label="pi.label('accountTitleType')"
                 name="accountTitleType"
               >
                 <TaktSelect
                   v-model:value="formState.accountTitleType"
                   dict-type="accounting_account_title_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.type') })"
-                  allow-clear
+                  :placeholder="pi.ph('accountTitleType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accounttitle.balancedirection')"
+                :label="pi.label('balanceDirection')"
                 name="balanceDirection"
               >
                 <a-input-number
                   v-model:value="formState.balanceDirection"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.balancedirection') })"
+                  :placeholder="pi.ph('balanceDirection')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accounttitle.level')"
+                :label="pi.label('accountTitleLevel')"
                 name="accountTitleLevel"
               >
                 <a-input-number
                   v-model:value="formState.accountTitleLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.level') })"
+                  :placeholder="pi.ph('accountTitleLevel')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accounttitle.isauxiliary')"
+                :label="pi.label('isAuxiliary')"
                 name="isAuxiliary"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isAuxiliary"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isauxiliary') })"
-                  style="width: 100%"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isAuxiliary')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accounttitle.auxiliarytype')"
+                :label="pi.label('auxiliaryType')"
                 name="auxiliaryType"
               >
                 <TaktSelect
                   v-model:value="formState.auxiliaryType"
                   dict-type="accounting_auxiliary_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.auxiliarytype') })"
-                  allow-clear
+                  :placeholder="pi.ph('auxiliaryType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isQuantity')"
+                name="isQuantity"
+              >
+                <TaktSelect
+                  v-model:value="formState.isQuantity"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isQuantity')"
                 />
               </a-form-item>
             </a-col>
@@ -136,107 +176,119 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.accounttitle.isquantity')"
-                name="isQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.isQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isquantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.accounttitle.iscurrency')"
+                :label="pi.label('isCurrency')"
                 name="isCurrency"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isCurrency"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.iscurrency') })"
-                  style="width: 100%"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isCurrency')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.accounttitle.iscash')"
+                :label="pi.label('isCash')"
                 name="isCash"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isCash"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.iscash') })"
-                  style="width: 100%"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isCash')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.accounttitle.isbank')"
+                :label="pi.label('isBank')"
                 name="isBank"
               >
-                <a-input-number
-                  v-model:value="formState.isBank"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isbank') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.accounttitle.relatedplant')"
-                name="plantCode"
-              >
                 <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.relatedplant') })"
-                  :disabled="loading"
+                  v-model:value="formState.isBank"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isBank')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.accounttitle.validfrom')"
+                :label="pi.label('validFrom')"
                 name="validFrom"
               >
                 <a-date-picker
                   v-model:value="formState.validFrom"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validfrom') })"
+                  :placeholder="pi.ph('validFrom')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.accounttitle.validto')"
+                :label="pi.label('validTo')"
                 name="validTo"
               >
                 <a-date-picker
                   v-model:value="formState.validTo"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validto') })"
+                  :placeholder="pi.ph('validTo')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.accounttitle.status')"
+                :label="pi.label('accountTitleStatus')"
                 name="accountTitleStatus"
               >
                 <TaktSelect
                   v-model:value="formState.accountTitleStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.status') })"
+                  dict-type="sys_normal_disable"
+                  :placeholder="pi.ph('accountTitleStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -253,7 +305,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -268,12 +320,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -297,6 +349,11 @@ import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useAccountTitleI18n } from '../composables/use-account-title-i18n'
+
+/** 实体字段 i18n */
+const pi = useAccountTitleI18n()
+
 import type { AccountTitleCreate } from '@/types/accounting/financial/account-title'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -313,7 +370,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -327,17 +384,21 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
-  if (force || !target.plantCode) {
+  if (formFields.includes('plantCode') && (force || !target.plantCode)) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
+  if (formFields.includes('relatedPlant') && (force || !target.relatedPlant)) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","accountTitleCode","accountTitleName","accountTitleType","balanceDirection","accountTitleLevel","isAuxiliary","auxiliaryType","isQuantity","isCurrency","isCash","isBank","plantCode","validFrom","validTo","accountTitleStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","accountTitleCode","accountTitleName","accountTitleType","balanceDirection","accountTitleLevel","isAuxiliary","auxiliaryType","isQuantity","isCurrency","isCash","isBank","validFrom","validTo","accountTitleStatus","extField","remark"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -357,8 +418,10 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({ parentId: '0' })
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  auxiliaryType: "S",
   accountTitleStatus: 1
 }
+
 
 /** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
 function normalizeTreeParentId(target: Record<string, unknown>) {
@@ -406,7 +469,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.accountTitleId
     if (isCreate) {
@@ -420,37 +483,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   parentId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accounttitle.parentid') }),
+      message: pi.ph('parentId'),
+      trigger: 'change'
+    }
+  ],
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
       trigger: 'change'
     }
   ],
   accountTitleCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.accounttitle.code') }),
+      message: pi.ph('accountTitleCode'),
       trigger: 'blur'
     }
   ],
   accountTitleName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.accounttitle.name') }),
+      message: pi.ph('accountTitleName'),
       trigger: 'blur'
     }
   ],
-  accountTitleType: [{
-    required: true,
-    message: t('common.page.form.placeholder.select', { field: t('entity.accounttitle.type') }),
-    trigger: 'change'
-  }],
+  accountTitleType: [
+    {
+      required: true,
+      message: pi.ph('accountTitleType'),
+      trigger: 'change'
+    }
+  ],
   balanceDirection: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.balancedirection') }))
+        return Promise.reject(pi.ph('balanceDirection'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.balancedirection') }))
+        return Promise.reject(pi.ph('balanceDirection'))
       }
       return Promise.resolve()
     },
@@ -459,11 +531,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   accountTitleLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.level') }))
+        return Promise.reject(pi.ph('accountTitleLevel'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.level') }))
+        return Promise.reject(pi.ph('accountTitleLevel'))
       }
       return Promise.resolve()
     },
@@ -472,25 +544,31 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isAuxiliary: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isauxiliary') }))
+        return Promise.reject(pi.ph('isAuxiliary'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isauxiliary') }))
+        return Promise.reject(pi.ph('isAuxiliary'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  auxiliaryType: [],
+  auxiliaryType: [
+    {
+      required: true,
+      message: pi.ph('auxiliaryType'),
+      trigger: 'change'
+    }
+  ],
   isQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isquantity') }))
+        return Promise.reject(pi.ph('isQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isquantity') }))
+        return Promise.reject(pi.ph('isQuantity'))
       }
       return Promise.resolve()
     },
@@ -499,11 +577,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isCurrency: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscurrency') }))
+        return Promise.reject(pi.ph('isCurrency'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscurrency') }))
+        return Promise.reject(pi.ph('isCurrency'))
       }
       return Promise.resolve()
     },
@@ -512,11 +590,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isCash: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscash') }))
+        return Promise.reject(pi.ph('isCash'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscash') }))
+        return Promise.reject(pi.ph('isCash'))
       }
       return Promise.resolve()
     },
@@ -525,24 +603,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isBank: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isbank') }))
+        return Promise.reject(pi.ph('isBank'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isbank') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  accountTitleStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.status') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.status') }))
+        return Promise.reject(pi.ph('isBank'))
       }
       return Promise.resolve()
     },
@@ -551,17 +616,30 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   validFrom: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validfrom') }),
+      message: pi.ph('validFrom'),
       trigger: 'change'
     }
   ],
   validTo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validto') }),
+      message: pi.ph('validTo'),
       trigger: 'change'
     }
   ],
+  accountTitleStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('accountTitleStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('accountTitleStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */

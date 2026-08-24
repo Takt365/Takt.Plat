@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktQuartzLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQuartzLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,40 +91,40 @@ public class TaktQuartzLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.quartzlog._self", "zh-HK", "Quartz 任务执行日志信息_hk", "实体名称"),
 
             // entity.quartzlog.quartztaskid
-            new TranslationSeedItem("entity.quartzlog.quartztaskid", "en-US", "定时任务ID_us", "关联定时任务 ID"),
+            new TranslationSeedItem("entity.quartzlog.quartztaskid", "en-US", "定时任务ID_us", "关联定时任务 ID（选项 TaktQuartzTasks/options；DictValue=Id）"),
             // entity.quartzlog.quartztaskid
-            new TranslationSeedItem("entity.quartzlog.quartztaskid", "ja-JP", "定时任务ID_jp", "关联定时任务 ID"),
+            new TranslationSeedItem("entity.quartzlog.quartztaskid", "ja-JP", "定时任务ID_jp", "关联定时任务 ID（选项 TaktQuartzTasks/options；DictValue=Id）"),
             // entity.quartzlog.quartztaskid
-            new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-CN", "定时任务ID", "关联定时任务 ID"),
+            new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-CN", "定时任务ID", "关联定时任务 ID（选项 TaktQuartzTasks/options；DictValue=Id）"),
             // entity.quartzlog.quartztaskid
-            new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-HK", "定时任务ID_hk", "关联定时任务 ID"),
+            new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-HK", "定时任务ID_hk", "关联定时任务 ID（选项 TaktQuartzTasks/options；DictValue=Id）"),
 
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "en-US", "任务名称_us", "任务名称（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "en-US", "任务名称_us", "任务名称（冗余字段，便于查询）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "ja-JP", "任务名称_jp", "任务名称（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "ja-JP", "任务名称_jp", "任务名称（冗余字段，便于查询）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "zh-CN", "任务名称", "任务名称（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "zh-CN", "任务名称", "任务名称（冗余字段，便于查询）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "zh-HK", "任务名称_hk", "任务名称（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "zh-HK", "任务名称_hk", "任务名称（冗余字段，便于查询）"),
 
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "en-US", "任务组名_us", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "en-US", "任务组名_us", "任务组名（字典 sys_quartz_job_group；DictValue=编码）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "ja-JP", "任务组名_jp", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "ja-JP", "任务组名_jp", "任务组名（字典 sys_quartz_job_group；DictValue=编码）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-CN", "任务组名", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-CN", "任务组名", "任务组名（字典 sys_quartz_job_group；DictValue=编码）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-HK", "任务组名_hk", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-HK", "任务组名_hk", "任务组名（字典 sys_quartz_job_group；DictValue=编码）"),
 
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "en-US", "任务类型_us", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "en-US", "任务类型_us", "任务类型（字典 sys_quartz_task_type；DictValue=assembly/http/sql）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "ja-JP", "任务类型_jp", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "ja-JP", "任务类型_jp", "任务类型（字典 sys_quartz_task_type；DictValue=assembly/http/sql）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-CN", "任务类型", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-CN", "任务类型", "任务类型（字典 sys_quartz_task_type；DictValue=assembly/http/sql）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-HK", "任务类型_hk", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-HK", "任务类型_hk", "任务类型（字典 sys_quartz_task_type；DictValue=assembly/http/sql）"),
 
             // entity.quartzlog.executetime
             new TranslationSeedItem("entity.quartzlog.executetime", "en-US", "执行时间_us", "执行时间"),
@@ -190,13 +190,13 @@ public class TaktQuartzLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.quartzlog.executehost", "zh-HK", "执行机器名_hk", "执行机器名"),
 
             // entity.quartzlog.executestatus
-            new TranslationSeedItem("entity.quartzlog.executestatus", "en-US", "执行状态_us", "执行状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.quartzlog.executestatus", "en-US", "执行状态_us", "执行状态（字典 sys_success_fail_status；0=失败 1=成功）"),
             // entity.quartzlog.executestatus
-            new TranslationSeedItem("entity.quartzlog.executestatus", "ja-JP", "执行状态_jp", "执行状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.quartzlog.executestatus", "ja-JP", "执行状态_jp", "执行状态（字典 sys_success_fail_status；0=失败 1=成功）"),
             // entity.quartzlog.executestatus
-            new TranslationSeedItem("entity.quartzlog.executestatus", "zh-CN", "执行状态", "执行状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.quartzlog.executestatus", "zh-CN", "执行状态", "执行状态（字典 sys_success_fail_status；0=失败 1=成功）"),
             // entity.quartzlog.executestatus
-            new TranslationSeedItem("entity.quartzlog.executestatus", "zh-HK", "执行状态_hk", "执行状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.quartzlog.executestatus", "zh-HK", "执行状态_hk", "执行状态（字典 sys_success_fail_status；0=失败 1=成功）"),
 
             // entity.quartzlog.quartztask
             new TranslationSeedItem("entity.quartzlog.quartztask", "en-US", "关联的定时任务_us", "关联的定时任务"),

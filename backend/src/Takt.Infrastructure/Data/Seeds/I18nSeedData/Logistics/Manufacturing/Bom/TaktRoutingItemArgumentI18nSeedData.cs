@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemArgumentI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoutingItemArgument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,13 +154,13 @@ public class TaktRoutingItemArgumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitemargument.upperlimit", "zh-HK", "上限_hk", "上限"),
 
             // entity.routingitemargument.sortorder
-            new TranslationSeedItem("entity.routingitemargument.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.routingitemargument.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.routingitemargument.sortorder
-            new TranslationSeedItem("entity.routingitemargument.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.routingitemargument.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.routingitemargument.sortorder
-            new TranslationSeedItem("entity.routingitemargument.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.routingitemargument.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.routingitemargument.sortorder
-            new TranslationSeedItem("entity.routingitemargument.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.routingitemargument.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.routingitemargument.routingitem
             new TranslationSeedItem("entity.routingitemargument.routingitem", "en-US", "工序_us", "工序"),

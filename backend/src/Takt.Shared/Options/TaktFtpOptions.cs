@@ -35,7 +35,7 @@ public class TaktFtpOptions
     /// <summary>
     /// FTP 用户名
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// FTP 密码
@@ -73,9 +73,9 @@ public class TaktFtpOptions
             throw new InvalidOperationException($"{SectionName}:{provider}:Port 必须大于 0");
         }
 
-        if (string.IsNullOrWhiteSpace(Username))
+        if (string.IsNullOrWhiteSpace(UserName))
         {
-            throw new InvalidOperationException($"{SectionName}:{provider}:Username 不能为空");
+            throw new InvalidOperationException($"{SectionName}:{provider}:UserName 不能为空");
         }
 
         if (Timeout <= 0)

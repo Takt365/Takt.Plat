@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktOnlineValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Online 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktOnline 生成，请按需审阅）
 // 
@@ -36,19 +36,19 @@ public class TaktOnlineCreateValidator : AbstractValidator<TaktOnlineCreateDto>
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.UserId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.UserId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ConnectionId)
             .NotEmpty().WithMessage("SignalR 连接 ID不能为空")
             .MaximumLength(200).WithMessage("SignalR 连接 ID长度不能超过200个字符");
-        RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("用户名不能为空")
-            .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.UserId)
             .GreaterThanOrEqualTo(0).WithMessage("用户 ID不能为负数");
+        RuleFor(x => x.UserName)
+            .NotEmpty().WithMessage("用户名不能为空").When(x => x.UserId <= 0)
+            .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.ConnectIp)
             .NotEmpty().WithMessage("连接 IP 地址不能为空")
             .MaximumLength(50).WithMessage("连接 IP 地址长度不能超过50个字符");
@@ -97,19 +97,19 @@ public class TaktOnlineUpdateValidator : AbstractValidator<TaktOnlineUpdateDto>
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.UserId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.UserId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ConnectionId)
             .NotEmpty().WithMessage("SignalR 连接 ID不能为空")
             .MaximumLength(200).WithMessage("SignalR 连接 ID长度不能超过200个字符");
-        RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("用户名不能为空")
-            .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.UserId)
             .GreaterThanOrEqualTo(0).WithMessage("用户 ID不能为负数");
+        RuleFor(x => x.UserName)
+            .NotEmpty().WithMessage("用户名不能为空").When(x => x.UserId <= 0)
+            .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.ConnectIp)
             .NotEmpty().WithMessage("连接 IP 地址不能为空")
             .MaximumLength(50).WithMessage("连接 IP 地址长度不能超过50个字符");
@@ -160,11 +160,11 @@ public class TaktOnlineImportValidator : AbstractValidator<TaktOnlineImportDto>
         RuleFor(x => x.ConnectionId)
             .NotEmpty().WithMessage("SignalR 连接 ID不能为空")
             .MaximumLength(200).WithMessage("SignalR 连接 ID长度不能超过200个字符");
+        RuleFor(x => x.UserId)
+            .GreaterThanOrEqualTo(0).WithMessage("用户 ID不能为负数");
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
-        RuleFor(x => x.UserId)
-            .GreaterThanOrEqualTo(0).WithMessage("用户 ID不能为负数");
         RuleFor(x => x.ConnectIp)
             .NotEmpty().WithMessage("连接 IP 地址不能为空")
             .MaximumLength(50).WithMessage("连接 IP 地址长度不能超过50个字符");

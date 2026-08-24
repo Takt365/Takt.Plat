@@ -448,13 +448,13 @@ public class TaktPackagingMaterialService : TaktServiceBase, ITaktPackagingMater
 
         if (queryDto?.GrossWeight.HasValue == true)
         {
-            var grossWeight = queryDto.GrossWeight;
+            var grossWeight = queryDto.GrossWeight.Value;
             exp = exp.And(x => x.GrossWeight == grossWeight);
         }
 
         if (queryDto?.NetWeight.HasValue == true)
         {
-            var netWeight = queryDto.NetWeight;
+            var netWeight = queryDto.NetWeight.Value;
             exp = exp.And(x => x.NetWeight == netWeight);
         }
 
@@ -466,7 +466,7 @@ public class TaktPackagingMaterialService : TaktServiceBase, ITaktPackagingMater
 
         if (queryDto?.BusinessVolume.HasValue == true)
         {
-            var businessVolume = queryDto.BusinessVolume;
+            var businessVolume = queryDto.BusinessVolume.Value;
             exp = exp.And(x => x.BusinessVolume == businessVolume);
         }
 
@@ -496,7 +496,7 @@ public class TaktPackagingMaterialService : TaktServiceBase, ITaktPackagingMater
 
         if (queryDto?.QuantityPerPacking.HasValue == true)
         {
-            var quantityPerPacking = queryDto.QuantityPerPacking;
+            var quantityPerPacking = queryDto.QuantityPerPacking.Value;
             exp = exp.And(x => x.QuantityPerPacking == quantityPerPacking);
         }
 
@@ -514,7 +514,7 @@ public class TaktPackagingMaterialService : TaktServiceBase, ITaktPackagingMater
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
@@ -532,13 +532,13 @@ public class TaktPackagingMaterialService : TaktServiceBase, ITaktPackagingMater
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

@@ -39,7 +39,7 @@ export interface File extends CompanyDtoBase {
   fileCode?: string;
 
   /**
-   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+   * 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName?: string;
 
@@ -127,7 +127,7 @@ export interface FileExport {
   fileCode: string;
 
   /**
-   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
+   * 文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName: string;
 
@@ -192,12 +192,12 @@ export interface FileExport {
   lastDownloadTime?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   fileStatus: number;
 
   /**
-   * 是否公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+   * 是否公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
    */
   isPublic: number;
 

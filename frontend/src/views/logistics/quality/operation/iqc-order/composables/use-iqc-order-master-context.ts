@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { IqcOrder } from '@/types/logistics/quality/operation/iqc-order'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type IqcOrderRowRecord = IqcOrder | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface IqcOrderMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<IqcOrder | null>
+  selectedMasterRow: Ref<IqcOrderRowRecord | null>
 }
 
 const iqcOrderMasterContextKey: InjectionKey<IqcOrderMasterContext> = Symbol('iqc-orderMasterContext')
@@ -22,7 +25,7 @@ const iqcOrderMasterContextKey: InjectionKey<IqcOrderMasterContext> = Symbol('iq
  * @returns {IqcOrderMasterContext} 主表上下文
  */
 export function provideIqcOrderMasterContext(): IqcOrderMasterContext {
-  const selectedMasterRow = ref<IqcOrder | null>(null)
+  const selectedMasterRow = ref<IqcOrderRowRecord | null>(null)
   const ctx: IqcOrderMasterContext = { selectedMasterRow }
   provide(iqcOrderMasterContextKey, ctx)
   return ctx

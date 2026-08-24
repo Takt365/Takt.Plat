@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/complaint/supplier-evaluation/components -->
 <!-- 文件名称：supplier-evaluation-item-panel.vue -->
-<!-- 功能描述：供应商评价考核主表实体主表实体右侧明细 supplierEvaluationItem 独立 CRUD（按主表选中 supplierEvaluationCode 分页） -->
+<!-- 功能描述：供应商评价考核主表实体主表实体右侧明细 supplierEvaluationItem 独立 CRUD（按主表选中 supplierEvaluationId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,257 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterSupplierEvaluationId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-quality-complaint-supplier-evaluation-supplier-evaluation-item"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('evaluationId')">
-      <a-form-item :label="pi.queryLabel('evaluationId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.evaluationId"
-          api-url="TaktSupplierEvaluations/options"
-          :placeholder="pi.queryPh('evaluationId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('categoryType')">
-      <a-form-item :label="pi.queryLabel('categoryType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.categoryType"
-          dict-type="logistics_quality_evaluation_category"
-          :placeholder="pi.queryPh('categoryType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itemName')">
-      <a-form-item :label="pi.queryLabel('itemName')">
-        <a-input
-          v-model:value="advancedQueryForm.itemName"
-          :placeholder="pi.queryPh('itemName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itemDescription')">
-      <a-form-item :label="pi.queryLabel('itemDescription')">
-        <a-textarea
-          v-model:value="advancedQueryForm.itemDescription"
-          :placeholder="pi.queryPh('itemDescription', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('weight')">
-      <a-form-item :label="pi.queryLabel('weight')">
-        <a-input-number
-          v-model:value="advancedQueryForm.weight"
-          :placeholder="pi.queryPh('weight', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scoringStandard')">
-      <a-form-item :label="pi.queryLabel('scoringStandard')">
-        <a-input
-          v-model:value="advancedQueryForm.scoringStandard"
-          :placeholder="pi.queryPh('scoringStandard', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('score')">
-      <a-form-item :label="pi.queryLabel('score')">
-        <a-input-number
-          v-model:value="advancedQueryForm.score"
-          :placeholder="pi.queryPh('score', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ratingLevel')">
-      <a-form-item :label="pi.queryLabel('ratingLevel')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.ratingLevel"
-          dict-type="logistics_quality_supplier_rating"
-          :placeholder="pi.queryPh('ratingLevel', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationComment')">
-      <a-form-item :label="pi.queryLabel('evaluationComment')">
-        <a-input
-          v-model:value="advancedQueryForm.evaluationComment"
-          :placeholder="pi.queryPh('evaluationComment', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('existingIssues')">
-      <a-form-item :label="pi.queryLabel('existingIssues')">
-        <a-input
-          v-model:value="advancedQueryForm.existingIssues"
-          :placeholder="pi.queryPh('existingIssues', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('improvementRequirement')">
-      <a-form-item :label="pi.queryLabel('improvementRequirement')">
-        <a-input
-          v-model:value="advancedQueryForm.improvementRequirement"
-          :placeholder="pi.queryPh('improvementRequirement', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('rectificationRequired')">
-      <a-form-item :label="pi.queryLabel('rectificationRequired')">
-        <a-input-number
-          v-model:value="advancedQueryForm.rectificationRequired"
-          :placeholder="pi.queryPh('rectificationRequired', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('rectificationDeadlineStart')">
-      <a-form-item :label="pi.queryLabel('rectificationDeadlineStart')">
-        <a-input
-          v-model:value="advancedQueryForm.rectificationDeadlineStart"
-          :placeholder="pi.queryPh('rectificationDeadlineStart', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('rectificationDeadlineEnd')">
-      <a-form-item :label="pi.queryLabel('rectificationDeadlineEnd')">
-        <a-input
-          v-model:value="advancedQueryForm.rectificationDeadlineEnd"
-          :placeholder="pi.queryPh('rectificationDeadlineEnd', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('rectificationStatus')">
-      <a-form-item :label="pi.queryLabel('rectificationStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.rectificationStatus"
-          dict-type="logistics_quality_rectification_status"
-          :placeholder="pi.queryPh('rectificationStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isObsolete')">
-      <a-form-item :label="pi.queryLabel('isObsolete')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('isObsolete', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -419,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import SupplierEvaluationItemForm from './supplier-evaluation-item-form.vue'
 import { useSupplierEvaluationMasterContext } from '../composables/use-supplier-evaluation-master-context'
 import {
@@ -507,49 +260,6 @@ const formData = ref<Partial<SupplierEvaluationItem>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    lineNumber: undefined as number | undefined,
-    categoryType: undefined as number | undefined,
-    weight: undefined as number | undefined,
-    score: undefined as number | undefined,
-    ratingLevel: undefined as number | undefined,
-    rectificationRequired: undefined as number | undefined,
-    rectificationStatus: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  SUPPLIEREVALUATIONITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...SUPPLIEREVALUATIONITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -595,16 +305,6 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: SupplierEvaluationItem }) =>
       String(getSupplierEvaluationItemField(record, 'supplierEvaluationItemId') ?? ''),
-  },
-  {
-    title: pi.label('evaluationId'),
-    dataIndex: 'evaluationId',
-    key: 'evaluationId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: SupplierEvaluationItem }) =>
-      String(getSupplierEvaluationItemField(record, 'evaluationId') ?? ''),
   },
   {
     title: pi.label('supplierEvaluationCode'),
@@ -766,6 +466,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: SupplierEvaluationItem }) =>
       String(getSupplierEvaluationItemField(record, 'isObsolete') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SupplierEvaluationItem }) =>
+      String(getSupplierEvaluationItemField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -783,8 +493,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:complaint:supplier:evaluation:delete',
         onClick: (record: SupplierEvaluationItem) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -893,7 +605,7 @@ function onClickRow(record: SupplierEvaluationItem) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SupplierEvaluationItemQuery} 查询 DTO
  */
@@ -903,7 +615,7 @@ function buildListQuery(overrides?: Partial<SupplierEvaluationItemQuery>): Suppl
   const query: SupplierEvaluationItemQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    supplierEvaluationCode: masterSupplierEvaluationId.value,
+    supplierEvaluationId: masterSupplierEvaluationId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -917,30 +629,6 @@ function buildListQuery(overrides?: Partial<SupplierEvaluationItemQuery>): Suppl
   }
   for (const key of SUPPLIEREVALUATIONITEM_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
-  }
-  if (form.categoryType !== undefined && form.categoryType !== null) {
-    query.categoryType = form.categoryType
-  }
-  if (form.weight !== undefined && form.weight !== null) {
-    query.weight = form.weight
-  }
-  if (form.score !== undefined && form.score !== null) {
-    query.score = form.score
-  }
-  if (form.ratingLevel !== undefined && form.ratingLevel !== null) {
-    query.ratingLevel = form.ratingLevel
-  }
-  if (form.rectificationRequired !== undefined && form.rectificationRequired !== null) {
-    query.rectificationRequired = form.rectificationRequired
-  }
-  if (form.rectificationStatus !== undefined && form.rectificationStatus !== null) {
-    query.rectificationStatus = form.rectificationStatus
-  }
-  if (form.isObsolete !== undefined && form.isObsolete !== null) {
-    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1172,6 +860,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSupplierEvaluationItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

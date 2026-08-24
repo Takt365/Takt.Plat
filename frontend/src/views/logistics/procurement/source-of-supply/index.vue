@@ -81,13 +81,13 @@
         <template v-else-if="column.key === 'isFixed'">
           <TaktDictTag
             :value="getSourceOfSupplyDictValue(record, 'isFixed')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isBlocked'">
           <TaktDictTag
             :value="getSourceOfSupplyDictValue(record, 'isBlocked')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'purchaseUnit'">
@@ -192,7 +192,7 @@
       <a-form-item :label="pi.queryLabel('isFixed')">
         <TaktSelect
           v-model:value="advancedQueryForm.isFixed"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isFixed', 'select')"
           allow-clear
         />
@@ -202,7 +202,7 @@
       <a-form-item :label="pi.queryLabel('isBlocked')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBlocked"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBlocked', 'select')"
           allow-clear
         />
@@ -309,7 +309,7 @@
       <a-form-item :label="pi.queryLabel('sourceStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.sourceStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('sourceStatus', 'select')"
           allow-clear
         />

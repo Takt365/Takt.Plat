@@ -20,23 +20,15 @@ export const WORKCENTER_SELF_I18N_KEY = buildEntitySelfI18nKey(WORKCENTER_ENTITY
 
 /** 列表业务列（不含主键） */
 export const WORKCENTER_LIST_FIELDS = [
-  'plantCode',
   'workCenterCode',
   'workCenterDescription',
   'workCenterStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const WORKCENTER_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  workCenterCode: 'required',
-  workCenterDescription: 'optional',
-  workCenterStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -44,24 +36,13 @@ export type WorkCenterField = keyof typeof WORKCENTER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const WORKCENTER_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'workCenterCode',
-  'workCenterDescription',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof WorkCenterQuery)[]
 
-export type WorkCenterQueryField =
-  | (typeof WORKCENTER_QUERY_STRING_FIELDS)[number]
-  | 'workCenterStatus'
+export type WorkCenterQueryField = (typeof WORKCENTER_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const WORKCENTER_QUERY_FIELDS: readonly WorkCenterQueryField[] = [
-  ...WORKCENTER_QUERY_STRING_FIELDS,
-  'workCenterStatus',
-]
+export const WORKCENTER_QUERY_FIELDS: readonly WorkCenterQueryField[] = [...WORKCENTER_QUERY_STRING_FIELDS]
 
 /**
  * 工作中心字段 i18n：index / work-center-form 统一入口

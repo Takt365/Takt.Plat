@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailsController.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立不良明细控制器
 // 
@@ -141,26 +141,6 @@ public class TaktAssyDefectDetailsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新组立不良明细作废状态
-    /// </summary>
-    /// <param name="dto">作废 DTO</param>
-    /// <returns>组立不良明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:defect:assy:update", "更新组立不良明细作废状态")]
-    [HttpPut("obsolete")]
-    public async Task<IActionResult> UpdateAssyDefectDetailObsoleteAsync([FromBody] TaktAssyDefectDetailObsoleteDto dto)
-    {
-        try
-        {
-            var result = await _assyDefectDetailService.UpdateAssyDefectDetailObsoleteAsync(dto);
-            return Success(result, "更新成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 删除组立不良明细
     /// </summary>
     /// <param name="id">组立不良明细ID</param>
@@ -193,6 +173,26 @@ public class TaktAssyDefectDetailsController : TaktControllerBase
         {
             await _assyDefectDetailService.DeleteAssyDefectDetailBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新组立不良明细作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>组立不良明细DTO</returns>
+    [TaktPermission("logistics:manufacturing:defect:assy:update", "更新组立不良明细作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateAssyDefectDetailObsoleteAsync([FromBody] TaktAssyDefectDetailObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _assyDefectDetailService.UpdateAssyDefectDetailObsoleteAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

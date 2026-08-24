@@ -64,7 +64,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.filterLevel"
-                  dict-type="sys_word_filter_level_category"
+                  dict-type="sys_word_filter_level"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vocabulary.filterlevel') })"
                 />
               </a-form-item>
@@ -90,7 +90,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.status"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vocabulary.status') })"
                 />
               </a-form-item>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScaleQuantityService.cs
-// 创建时间：2026-08-10
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格数量等级应用服务实现
 // 
@@ -350,16 +350,29 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
         if (queryDto?.PurchasePriceItemId.HasValue == true)
         {
-            var purchasePriceItemId = queryDto.PurchasePriceItemId;
+            var purchasePriceItemId = queryDto.PurchasePriceItemId.Value;
             exp = exp.And(x => x.PurchasePriceItemId == purchasePriceItemId);
         }
 
@@ -371,43 +384,43 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
 
         if (queryDto?.PurchasePriceSeq.HasValue == true)
         {
-            var purchasePriceSeq = queryDto.PurchasePriceSeq;
+            var purchasePriceSeq = queryDto.PurchasePriceSeq.Value;
             exp = exp.And(x => x.PurchasePriceSeq == purchasePriceSeq);
         }
 
         if (queryDto?.PurchaseScaleSeq.HasValue == true)
         {
-            var purchaseScaleSeq = queryDto.PurchaseScaleSeq;
+            var purchaseScaleSeq = queryDto.PurchaseScaleSeq.Value;
             exp = exp.And(x => x.PurchaseScaleSeq == purchaseScaleSeq);
         }
 
         if (queryDto?.ScaleQuantity.HasValue == true)
         {
-            var scaleQuantity = queryDto.ScaleQuantity;
+            var scaleQuantity = queryDto.ScaleQuantity.Value;
             exp = exp.And(x => x.ScaleQuantity == scaleQuantity);
         }
 
         if (queryDto?.Price.HasValue == true)
         {
-            var price = queryDto.Price;
+            var price = queryDto.Price.Value;
             exp = exp.And(x => x.Price == price);
         }
 
         if (queryDto?.UntaxedPrice.HasValue == true)
         {
-            var untaxedPrice = queryDto.UntaxedPrice;
+            var untaxedPrice = queryDto.UntaxedPrice.Value;
             exp = exp.And(x => x.UntaxedPrice == untaxedPrice);
         }
 
         if (queryDto?.TaxIncludedPrice.HasValue == true)
         {
-            var taxIncludedPrice = queryDto.TaxIncludedPrice;
+            var taxIncludedPrice = queryDto.TaxIncludedPrice.Value;
             exp = exp.And(x => x.TaxIncludedPrice == taxIncludedPrice);
         }
 
         if (queryDto?.TaxAmount.HasValue == true)
         {
-            var taxAmount = queryDto.TaxAmount;
+            var taxAmount = queryDto.TaxAmount.Value;
             exp = exp.And(x => x.TaxAmount == taxAmount);
         }
 
@@ -425,26 +438,15 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -461,6 +463,14 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }

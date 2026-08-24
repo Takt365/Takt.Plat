@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktNumberingI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNumbering 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/numbering）
 // 
@@ -109,22 +109,22 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.rulename", "zh-HK", "规则名称_hk", "规则名称（如：销售订单号、采购订单号）"),
 
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "en-US", "单据类型_us", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "en-US", "单据类型_us", "单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name；存菜单名称非 Id）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "ja-JP", "单据类型_jp", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "ja-JP", "单据类型_jp", "单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name；存菜单名称非 Id）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "zh-CN", "单据类型", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "zh-CN", "单据类型", "单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name；存菜单名称非 Id）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "zh-HK", "单据类型_hk", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "zh-HK", "单据类型_hk", "单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name；存菜单名称非 Id）"),
 
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "en-US", "部门编码_us", "部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "en-US", "部门编码_us", "部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options；与部门简称一致，长度 6）"),
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "ja-JP", "部门编码_jp", "部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "ja-JP", "部门编码_jp", "部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options；与部门简称一致，长度 6）"),
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "zh-CN", "部门编码", "部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "zh-CN", "部门编码", "部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options；与部门简称一致，长度 6）"),
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "zh-HK", "部门编码_hk", "部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "zh-HK", "部门编码_hk", "部门编码（关联 TaktDept.IsoCode，选项 TaktDepts/iso-tree-options；与部门简称一致，长度 6）"),
 
             // entity.numbering.prefixcode
             new TranslationSeedItem("entity.numbering.prefixcode", "en-US", "前缀编码_us", "前缀编码（如：PUR、SORD、ANN）"),
@@ -172,13 +172,13 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.suffixcode", "zh-HK", "后缀编码_hk", "后缀编码（可选，最多 4 位）"),
 
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "en-US", "重置周期_us", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "en-US", "重置周期_us", "重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）"),
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "ja-JP", "重置周期_jp", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "ja-JP", "重置周期_jp", "重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）"),
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "zh-CN", "重置周期", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "zh-CN", "重置周期", "重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）"),
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "zh-HK", "重置周期_hk", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "zh-HK", "重置周期_hk", "重置周期（字典 sys_reset_period；DictValue=None|Annually|Monthly|Daily；须与 date_format 粒度匹配）"),
 
             // entity.numbering.currentsequence
             new TranslationSeedItem("entity.numbering.currentsequence", "en-US", "当前流水_us", "当前流水（用于记录下一个流水号值）"),
@@ -208,13 +208,13 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.separator", "zh-HK", "分隔符_hk", "分隔符（空=段直接拼接；-=连字符分隔，默认 -）"),
 
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.numbering.description
             new TranslationSeedItem("entity.numbering.description", "en-US", "描述说明_us", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）"),
@@ -226,13 +226,13 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.description", "zh-HK", "描述说明_hk", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）"),
 
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "en-US", "状态_us", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
         };
     }
 

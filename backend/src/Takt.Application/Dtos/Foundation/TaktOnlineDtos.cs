@@ -47,15 +47,15 @@ public class TaktOnlineDto : TaktCompanyDtoBase
     public string? ConnectionName { get; set; }
 
     /// <summary>
-    /// 用户名
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接 IP 地址
@@ -150,15 +150,15 @@ public class TaktOnlineQueryDto : TaktPagedQuery
     public string? ConnectionId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名
-    /// </summary>
-    public string? UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接 IP 地址
@@ -288,17 +288,17 @@ public class TaktOnlineCreateDto
     public string ConnectionId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名
-    /// </summary>
-    [Required(ErrorMessage = "用户名不能为空")]
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [Required(ErrorMessage = "用户 ID不能为空")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    [Required(ErrorMessage = "用户名不能为空")]
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接 IP 地址
@@ -446,15 +446,15 @@ public class TaktOnlineTemplateDto
     public string? ConnectionId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名
-    /// </summary>
-    public string? UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接 IP 地址
@@ -555,15 +555,15 @@ public class TaktOnlineImportDto
     public string? ConnectionId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名
-    /// </summary>
-    public string? UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接 IP 地址
@@ -659,15 +659,15 @@ public class TaktOnlineExportDto
     public string ConnectionId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接 IP 地址
@@ -761,15 +761,15 @@ public class TaktOnlineStatisticsQueryDto
 public class TaktOnlineStatisticsDto
 {
     /// <summary>
-    /// 用户名
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前活跃在线连接数
@@ -887,12 +887,12 @@ public class TaktOnlineForceKickBatchDto
 public class TaktSignalRPushStatisticsRequestDto
 {
     /// <summary>
-    /// 目标用户名
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 目标用户 ID（可选，前端 string 雪花 ID）
     /// </summary>
     public string? UserId { get; set; }
+
+    /// <summary>
+    /// 目标用户名
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 }

@@ -247,11 +247,13 @@ import type { TableColumnsType } from 'ant-design-vue'
 import type { ToolBarAction } from '@/components/business/takt-tools-bar/index.vue'
 import { useI18n } from 'vue-i18n'
 import {
+  getBomCostOptionPlantOptions,
+  getBomCostOptionPlantOptionsUrl,
+  getBomCostOptionModelOptionsUrl,
+} from '@/api/logistics/manufacturing/bom/cost-option'
+import {
   exportBomMaterialZeroPriceData,
   getBomMaterialZeroPriceList,
-  getBomMaterialZeroPricePlantOptions,
-  getBomMaterialZeroPricePlantOptionsUrl,
-  getBomMaterialZeroPriceModelOptionsUrl,
   backfillBomMaterialZeroPriceMoving,
   manualUpdateBomMaterialZeroPriceMoving,
   markBomMaterialZeroPricePcbSect,
@@ -288,6 +290,8 @@ import {
   costingMonthToDateQuery,
   isCostingPeriodMonthDisabled,
 } from './utils/bom-material-cost-period'
+import { BOM_ANALYSIS_PREFERRED_MATERIAL_TYPE } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-type-options'
+import { buildBomCostOptionParams } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-cost-option-params'
 
 /** 静态文案键前缀 */
 const localePrefix = 'logistics.manufacturing.bom.material-zero-price.page'
@@ -298,9 +302,9 @@ const tenantStore = useTenantStore()
 /** Excel 命名 */
 const excelNames = taktExcelEntityNames('TaktBomMaterialZeroPrice')
 /** 工厂下拉 */
-const plantOptionsUrl = getBomMaterialZeroPricePlantOptionsUrl()
+const plantOptionsUrl = getBomCostOptionPlantOptionsUrl()
 /** 机种下拉（本表 FERT 去重） */
-const modelOptionsUrl = getBomMaterialZeroPriceModelOptionsUrl()
+const modelOptionsUrl = getBomCostOptionModelOptionsUrl()
 /** 机种下拉刷新 key（工厂/核算月变更时重建） */
 const modelSelectKey = ref(0)
 /** 计算按钮权限 */
@@ -323,16 +327,14 @@ const canSelectModel = computed(
   () => !!queryForm.plantCode?.trim() && !!queryForm.costingMonth?.trim(),
 )
 
-/** 机种下拉参数 */
-const modelApiParams = computed(() => {
-  if (!canSelectModel.value) {
-    return { plantCode: '', focusPeriod: '' }
-  }
-  return {
-    plantCode: queryForm.plantCode.trim(),
-    focusPeriod: queryForm.costingMonth.trim(),
-  }
-})
+/** 机种下拉参数（工厂 + 单月 + FERT） */
+const modelApiParams = computed(() =>
+  buildBomCostOptionParams({
+    plantCode: queryForm.plantCode,
+    costingMonth: queryForm.costingMonth,
+    materialType: BOM_ANALYSIS_PREFERRED_MATERIAL_TYPE,
+  }),
+)
 
 /**
  * 机种查询串（空=不传=全部）
@@ -725,7 +727,7 @@ async function applyDefaultPlantFromCompany(): Promise<void> {
   let matched = ''
   if (related) {
     try {
-      const plants = await getBomMaterialZeroPricePlantOptions()
+      const plants = await getBomCostOptionPlantOptions()
       const hit = (plants ?? []).find(
         (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
       )

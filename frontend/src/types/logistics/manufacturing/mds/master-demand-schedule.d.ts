@@ -45,7 +45,7 @@ export interface MasterDemandSchedule extends ApprovalDtoBase {
   bucketType?: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
+   * 计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）
    */
   scheduleStatus?: number;
 
@@ -103,7 +103,7 @@ export interface MasterDemandScheduleExport {
   bucketType: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
+   * 计划状态（字典 sys_normal_disable；1=启用，0=禁用，2=锁定）
    */
   scheduleStatus: number;
 

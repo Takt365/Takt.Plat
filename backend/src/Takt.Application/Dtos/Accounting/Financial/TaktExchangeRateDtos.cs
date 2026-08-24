@@ -77,7 +77,7 @@ public class TaktExchangeRateDto : TaktTenantCoreDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int ExchangeRateStatus { get; set; } = 0;
 
@@ -149,7 +149,7 @@ public class TaktExchangeRateQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? ExchangeRateStatus { get; set; }
 
@@ -232,7 +232,7 @@ public class TaktExchangeRateCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int ExchangeRateStatus { get; set; } = 0;
 
@@ -286,9 +286,9 @@ public class TaktExchangeRateStatusDto
     public long ExchangeRateId { get; set; }
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "汇率状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int ExchangeRateStatus { get; set; } = 0;
 }
 
@@ -347,7 +347,7 @@ public class TaktExchangeRateTemplateDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? ExchangeRateStatus { get; set; }
 
@@ -414,7 +414,7 @@ public class TaktExchangeRateImportDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? ExchangeRateStatus { get; set; }
 
@@ -487,7 +487,7 @@ public class TaktExchangeRateExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 汇率状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int ExchangeRateStatus { get; set; } = 0;
 

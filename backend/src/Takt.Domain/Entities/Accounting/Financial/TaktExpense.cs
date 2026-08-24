@@ -72,7 +72,7 @@ public class TaktExpense : TaktApprovalEntityBase
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_center", ColumnDescription = "成本中心", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
+    [SugarColumn(ColumnName = "cost_center", ColumnDescription = "成本中心", ColumnDataType = "varchar", Length = 6, IsNullable = true)]
     public string? CostCenter { get; set; }
     /// <summary>
     /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）

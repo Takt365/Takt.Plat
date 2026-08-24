@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktStandardOperationRateI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktStandardOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationrate.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.standardoperationrate.ratestatus
-            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable；0=禁用，1=启用）"),
             // entity.standardoperationrate.ratestatus
-            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；0=禁用，1=启用）"),
             // entity.standardoperationrate.ratestatus
-            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；0=禁用，1=启用）"),
             // entity.standardoperationrate.ratestatus
-            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；0=禁用，1=启用）"),
         };
     }
 

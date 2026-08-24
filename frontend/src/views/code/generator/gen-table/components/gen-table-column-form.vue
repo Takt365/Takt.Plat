@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -135,7 +135,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isPk"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isPk')"
                 />
               </a-form-item>
@@ -147,7 +147,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isIncrement"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isIncrement')"
                 />
               </a-form-item>
@@ -157,7 +157,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -169,7 +169,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isRequired"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isRequired')"
                 />
               </a-form-item>
@@ -181,7 +181,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isCreate"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isCreate')"
                 />
               </a-form-item>
@@ -193,7 +193,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isUpdate"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isUpdate')"
                 />
               </a-form-item>
@@ -205,7 +205,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isUnique"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isUnique')"
                 />
               </a-form-item>
@@ -217,7 +217,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isList"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isList')"
                 />
               </a-form-item>
@@ -229,7 +229,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isExport"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isExport')"
                 />
               </a-form-item>
@@ -241,7 +241,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isSort"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isSort')"
                 />
               </a-form-item>
@@ -253,7 +253,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isQuery"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isQuery')"
                 />
               </a-form-item>
@@ -287,7 +287,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -301,6 +301,30 @@
                   v-model:value="formState.dictType"
                   api-url="TaktDictTypes/options"
                   :placeholder="pi.ph('dictType')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -327,15 +351,30 @@ const pi = useGenTableColumnI18n()
 import type { GenTableColumnCreate } from '@/types/code/generator/gen-table-column'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+
+/**
+ * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","databaseColumnName","columnComment","databaseDataType","csharpDataType","csharpColumnName","length","decimalDigits","isPk","isIncrement","isRequired","isCreate","isUpdate","isUnique","isList","isExport","isSort","isQuery","queryType","htmlType","dictType"]
+const formFields = ["tenantCode","lineNumber","databaseColumnName","columnComment","databaseDataType","csharpDataType","csharpColumnName","length","decimalDigits","isPk","isIncrement","isRequired","isCreate","isUpdate","isUnique","isList","isExport","isSort","isQuery","queryType","htmlType","dictType"]
 
 
 
@@ -346,12 +385,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -379,6 +421,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -387,10 +430,21 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
+)
+
+/** 租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => tenantStore.tenantCode,
+  () => {
+    if (!props.formData?.genTableColumnId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
 )
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
@@ -619,58 +673,160 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+    if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
+      delete payload.lineNumber
+    } else {
+      const numlineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+      if (Number.isFinite(numlineNumber)) payload.lineNumber = numlineNumber
+      else delete payload.lineNumber
+    }
   }
   if ('length' in payload) {
     const rawlength = payload.length
-    payload.length = typeof rawlength === 'number' ? rawlength : Number(rawlength)
+    if (rawlength === undefined || rawlength === null || rawlength === '') {
+      delete payload.length
+    } else {
+      const numlength = typeof rawlength === 'number' ? rawlength : Number(rawlength)
+      if (Number.isFinite(numlength)) payload.length = numlength
+      else delete payload.length
+    }
   }
   if ('decimalDigits' in payload) {
     const rawdecimalDigits = payload.decimalDigits
-    payload.decimalDigits = typeof rawdecimalDigits === 'number' ? rawdecimalDigits : Number(rawdecimalDigits)
+    if (rawdecimalDigits === undefined || rawdecimalDigits === null || rawdecimalDigits === '') {
+      delete payload.decimalDigits
+    } else {
+      const numdecimalDigits = typeof rawdecimalDigits === 'number' ? rawdecimalDigits : Number(rawdecimalDigits)
+      if (Number.isFinite(numdecimalDigits)) payload.decimalDigits = numdecimalDigits
+      else delete payload.decimalDigits
+    }
   }
   if ('isPk' in payload) {
     const rawisPk = payload.isPk
-    payload.isPk = typeof rawisPk === 'number' ? rawisPk : Number(rawisPk)
+    if (rawisPk === undefined || rawisPk === null || rawisPk === '') {
+      delete payload.isPk
+    } else {
+      const numisPk = typeof rawisPk === 'number' ? rawisPk : Number(rawisPk)
+      if (Number.isFinite(numisPk)) payload.isPk = numisPk
+      else delete payload.isPk
+    }
   }
   if ('isIncrement' in payload) {
     const rawisIncrement = payload.isIncrement
-    payload.isIncrement = typeof rawisIncrement === 'number' ? rawisIncrement : Number(rawisIncrement)
+    if (rawisIncrement === undefined || rawisIncrement === null || rawisIncrement === '') {
+      delete payload.isIncrement
+    } else {
+      const numisIncrement = typeof rawisIncrement === 'number' ? rawisIncrement : Number(rawisIncrement)
+      if (Number.isFinite(numisIncrement)) payload.isIncrement = numisIncrement
+      else delete payload.isIncrement
+    }
   }
   if ('isRequired' in payload) {
     const rawisRequired = payload.isRequired
-    payload.isRequired = typeof rawisRequired === 'number' ? rawisRequired : Number(rawisRequired)
+    if (rawisRequired === undefined || rawisRequired === null || rawisRequired === '') {
+      delete payload.isRequired
+    } else {
+      const numisRequired = typeof rawisRequired === 'number' ? rawisRequired : Number(rawisRequired)
+      if (Number.isFinite(numisRequired)) payload.isRequired = numisRequired
+      else delete payload.isRequired
+    }
   }
   if ('isCreate' in payload) {
     const rawisCreate = payload.isCreate
-    payload.isCreate = typeof rawisCreate === 'number' ? rawisCreate : Number(rawisCreate)
+    if (rawisCreate === undefined || rawisCreate === null || rawisCreate === '') {
+      delete payload.isCreate
+    } else {
+      const numisCreate = typeof rawisCreate === 'number' ? rawisCreate : Number(rawisCreate)
+      if (Number.isFinite(numisCreate)) payload.isCreate = numisCreate
+      else delete payload.isCreate
+    }
   }
   if ('isUpdate' in payload) {
     const rawisUpdate = payload.isUpdate
-    payload.isUpdate = typeof rawisUpdate === 'number' ? rawisUpdate : Number(rawisUpdate)
+    if (rawisUpdate === undefined || rawisUpdate === null || rawisUpdate === '') {
+      delete payload.isUpdate
+    } else {
+      const numisUpdate = typeof rawisUpdate === 'number' ? rawisUpdate : Number(rawisUpdate)
+      if (Number.isFinite(numisUpdate)) payload.isUpdate = numisUpdate
+      else delete payload.isUpdate
+    }
   }
   if ('isUnique' in payload) {
     const rawisUnique = payload.isUnique
-    payload.isUnique = typeof rawisUnique === 'number' ? rawisUnique : Number(rawisUnique)
+    if (rawisUnique === undefined || rawisUnique === null || rawisUnique === '') {
+      delete payload.isUnique
+    } else {
+      const numisUnique = typeof rawisUnique === 'number' ? rawisUnique : Number(rawisUnique)
+      if (Number.isFinite(numisUnique)) payload.isUnique = numisUnique
+      else delete payload.isUnique
+    }
   }
   if ('isList' in payload) {
     const rawisList = payload.isList
-    payload.isList = typeof rawisList === 'number' ? rawisList : Number(rawisList)
+    if (rawisList === undefined || rawisList === null || rawisList === '') {
+      delete payload.isList
+    } else {
+      const numisList = typeof rawisList === 'number' ? rawisList : Number(rawisList)
+      if (Number.isFinite(numisList)) payload.isList = numisList
+      else delete payload.isList
+    }
   }
   if ('isExport' in payload) {
     const rawisExport = payload.isExport
-    payload.isExport = typeof rawisExport === 'number' ? rawisExport : Number(rawisExport)
+    if (rawisExport === undefined || rawisExport === null || rawisExport === '') {
+      delete payload.isExport
+    } else {
+      const numisExport = typeof rawisExport === 'number' ? rawisExport : Number(rawisExport)
+      if (Number.isFinite(numisExport)) payload.isExport = numisExport
+      else delete payload.isExport
+    }
   }
   if ('isSort' in payload) {
     const rawisSort = payload.isSort
-    payload.isSort = typeof rawisSort === 'number' ? rawisSort : Number(rawisSort)
+    if (rawisSort === undefined || rawisSort === null || rawisSort === '') {
+      delete payload.isSort
+    } else {
+      const numisSort = typeof rawisSort === 'number' ? rawisSort : Number(rawisSort)
+      if (Number.isFinite(numisSort)) payload.isSort = numisSort
+      else delete payload.isSort
+    }
   }
   if ('isQuery' in payload) {
     const rawisQuery = payload.isQuery
-    payload.isQuery = typeof rawisQuery === 'number' ? rawisQuery : Number(rawisQuery)
+    if (rawisQuery === undefined || rawisQuery === null || rawisQuery === '') {
+      delete payload.isQuery
+    } else {
+      const numisQuery = typeof rawisQuery === 'number' ? rawisQuery : Number(rawisQuery)
+      if (Number.isFinite(numisQuery)) payload.isQuery = numisQuery
+      else delete payload.isQuery
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.genTableColumnId) {
+    payload.genTableColumnId = props.formData.genTableColumnId
+  }
   payload.genTableId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.genTableCode ?? masterRow.GenTableCode
+    const masterName = masterRow.genTableName ?? masterRow.GenTableName
+    if (masterCode != null && masterCode !== '' && !payload.genTableCode) {
+      payload.genTableCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.genTableName) {
+      payload.genTableName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -681,6 +837,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.genTableColumnId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

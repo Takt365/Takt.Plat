@@ -99,7 +99,7 @@
         <template v-else-if="column.key === 'isMandatory'">
           <TaktDictTag
             :value="getBenefitItemField(record, 'isMandatory')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -235,7 +235,7 @@
       <a-form-item :label="t('entity.benefititem.ismandatory')">
         <TaktSelect
           v-model:value="advancedQueryForm.isMandatory"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.ismandatory') })"
           allow-clear
         />
@@ -245,7 +245,7 @@
       <a-form-item :label="t('entity.benefititem.itemstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.itemStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.itemstatus') })"
           allow-clear
         />

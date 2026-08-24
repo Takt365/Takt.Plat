@@ -107,7 +107,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
                     userRepository,
                     userCompanyRepository,
                     tenantCode,
-                    user.Username,
+                    user.UserName,
                     company.CompanyCode,
                     database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode,
@@ -138,16 +138,16 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
         ITaktTenantSeedRepository<TaktUser> userRepository,
         ITaktCompanySeedRepository<TaktUserCompany> userCompanyRepository,
         string tenantCode,
-        string username,
+        string UserName,
         string companyCode,
         string plantCode,
         string cultureCode,
         bool isDefault)
     {
-        var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == username);
+        var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == UserName);
         if (user == null)
         {
-            TaktLogger.Warning("用户 {TenantCode}/{Username} 不存在，跳过公司关联", tenantCode, username);
+            TaktLogger.Warning("用户 {TenantCode}/{UserName} 不存在，跳过公司关联", tenantCode, UserName);
             return (0, 0);
         }
 

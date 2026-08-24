@@ -105,7 +105,7 @@ public class TaktBank : TaktCompanyEntityBase
     public string? BankGroup { get; set; }
 
     /// <summary>
-    /// 邮政银行往来账户（字典 sys_yes_no_type）
+    /// 邮政银行往来账户（字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "pobk_cur_ac", ColumnDescription = "邮政银行往来账户", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PobkCurAc { get; set; } = 0;
@@ -153,13 +153,13 @@ public class TaktBank : TaktCompanyEntityBase
     public string? IbanRule { get; set; }
 
     /// <summary>
-    /// 企业间（字典 sys_yes_no_type）
+    /// 企业间（字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "sdd_b2b", ColumnDescription = "企业间", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SddB2b { get; set; } = 0;
 
     /// <summary>
-    /// 核心个人（字典 sys_yes_no_type）
+    /// 核心个人（字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "sdd_core", ColumnDescription = "核心个人", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SddCore { get; set; } = 0;

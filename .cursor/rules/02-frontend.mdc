@@ -225,7 +225,7 @@ api / utils → config
 export default {
   page: {
     title: '用户管理',
-    field: { username: '用户名' },
+    field: { UserName: '用户名' },
   },
 };
 
@@ -233,7 +233,7 @@ export default {
 export default {
   page: {
     title: '登录',
-    placeholder: { username: '请输入用户名' },
+    placeholder: { UserName: '请输入用户名' },
   },
 };
 

@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,154 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterWorkCenterId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-manufacturing-aps-work-center-work-center-resource"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('workCenterCode')">
-      <a-form-item :label="pi.queryLabel('workCenterCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.workCenterCode"
-          api-url="TaktWorkCenters/options"
-          :placeholder="pi.queryPh('workCenterCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resourceCode')">
-      <a-form-item :label="pi.queryLabel('resourceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.resourceCode"
-          :placeholder="pi.queryPh('resourceCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resourceName')">
-      <a-form-item :label="pi.queryLabel('resourceName')">
-        <a-input
-          v-model:value="advancedQueryForm.resourceName"
-          :placeholder="pi.queryPh('resourceName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resourceType')">
-      <a-form-item :label="pi.queryLabel('resourceType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.resourceType"
-          dict-type="work_center_resource_type"
-          :placeholder="pi.queryPh('resourceType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('parallelCapacity')">
-      <a-form-item :label="pi.queryLabel('parallelCapacity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.parallelCapacity"
-          :placeholder="pi.queryPh('parallelCapacity', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('efficiencyRate')">
-      <a-form-item :label="pi.queryLabel('efficiencyRate')">
-        <a-input-number
-          v-model:value="advancedQueryForm.efficiencyRate"
-          :placeholder="pi.queryPh('efficiencyRate', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resourceStatus')">
-      <a-form-item :label="pi.queryLabel('resourceStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.resourceStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="pi.queryPh('resourceStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -316,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import WorkCenterResourceForm from './work-center-resource-form.vue'
 import { useWorkCenterMasterContext } from '../composables/use-work-center-master-context'
 import {
@@ -404,45 +260,6 @@ const formData = ref<Partial<WorkCenterResource>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(WORKCENTERRESOURCE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof WORKCENTERRESOURCE_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    resourceType: undefined as number | undefined,
-    parallelCapacity: undefined as number | undefined,
-    efficiencyRate: undefined as number | undefined,
-    resourceStatus: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  WORKCENTERRESOURCE_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...WORKCENTERRESOURCE_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -488,16 +305,6 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: WorkCenterResource }) =>
       String(getWorkCenterResourceField(record, 'workCenterResourceId') ?? ''),
-  },
-  {
-    title: pi.label('workCenterId'),
-    dataIndex: 'workCenterId',
-    key: 'workCenterId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: WorkCenterResource }) =>
-      String(getWorkCenterResourceField(record, 'workCenterId') ?? ''),
   },
   {
     title: pi.label('workCenterCode'),
@@ -569,6 +376,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: WorkCenterResource }) =>
       String(getWorkCenterResourceField(record, 'resourceStatus') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: WorkCenterResource }) =>
+      String(getWorkCenterResourceField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -586,8 +403,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:aps:work:center:delete',
         onClick: (record: WorkCenterResource) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -696,7 +515,7 @@ function onClickRow(record: WorkCenterResource) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {WorkCenterResourceQuery} 查询 DTO
  */
@@ -720,18 +539,6 @@ function buildListQuery(overrides?: Partial<WorkCenterResourceQuery>): WorkCente
   }
   for (const key of WORKCENTERRESOURCE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.resourceType !== undefined && form.resourceType !== null) {
-    query.resourceType = form.resourceType
-  }
-  if (form.parallelCapacity !== undefined && form.parallelCapacity !== null) {
-    query.parallelCapacity = form.parallelCapacity
-  }
-  if (form.efficiencyRate !== undefined && form.efficiencyRate !== null) {
-    query.efficiencyRate = form.efficiencyRate
-  }
-  if (form.resourceStatus !== undefined && form.resourceStatus !== null) {
-    query.resourceStatus = form.resourceStatus
   }
   return query
 }
@@ -963,6 +770,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportWorkCenterResource(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

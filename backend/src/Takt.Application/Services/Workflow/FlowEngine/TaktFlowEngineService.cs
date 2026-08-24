@@ -96,10 +96,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         EnsureThreeLayerContext();
         var scheme = await LoadPublishedSchemeAsync(dto.ProcessKey);
         var userId = GetCurrentUserIdForApproval();
-        var userName = CurrentUserName;
-        var instance = await CreateInstanceEntityAsync(scheme, dto, userId, userName, TaktFlowInstanceStatus.Running);
+        var UserName = CurrentUserName;
+        var instance = await CreateInstanceEntityAsync(scheme, dto, userId, UserName, TaktFlowInstanceStatus.Running);
         await DispatchFlowStartedAndSyncInstanceAsync(instance);
-        await RecordTransitionAsync(instance, null, null, "发起", userId, userName, TaktFlowActionType.Start, null);
+        await RecordTransitionAsync(instance, null, null, "发起", userId, UserName, TaktFlowActionType.Start, null);
         await AdvanceInstanceAsync(instance, null);
         await NotifyWorkflowRuntimeChangeAsync(instance, "start");
         return (await GetFlowInstanceDetailByIdAsync(instance.Id))!;
@@ -131,7 +131,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     {
         EnsureThreeLayerContext();
         var instance = await LoadInstanceOrThrowAsync(instanceId);
-        if (instance.InstanceStatus != TaktFlowInstanceStatus.Draft)
+        if (instance.InstanceStatus != (int)TaktFlowInstanceStatus.Draft)
         {
             ThrowBusinessException("仅草稿状态可提交启动");
         }
@@ -139,7 +139,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         {
             ThrowBusinessException("仅发起人可提交草稿");
         }
-        instance.InstanceStatus = TaktFlowInstanceStatus.Running;
+        instance.InstanceStatus = (int)TaktFlowInstanceStatus.Running;
         instance.StartTime = DateTime.Now;
         await _flowInstanceRepository.UpdateAsync(instance);
         await DispatchFlowStartedAndSyncInstanceAsync(instance);
@@ -171,7 +171,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         var pendingTask = await _flowTaskRepository.FirstAsync(x =>
             x.InstanceId == instance.Id
             && x.AssigneeUserId == userId
-            && x.TaskStatus == TaktFlowTaskStatus.Pending);
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Pending);
         if (pendingTask == null)
         {
             ThrowBusinessException("当前用户无待办任务");
@@ -189,7 +189,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             await NotifyWorkflowRuntimeChangeAsync(instance, "reject");
             return;
         }
-        pendingTask.TaskStatus = TaktFlowTaskStatus.Completed;
+        pendingTask.TaskStatus = (int)TaktFlowTaskStatus.Completed;
         pendingTask.CompletedAt = DateTime.Now;
         pendingTask.Comment = dto.Comment;
         await _flowTaskRepository.UpdateAsync(pendingTask);
@@ -217,7 +217,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
                     .ToHashSet(StringComparer.Ordinal);
                 var otherPending = await _flowTaskRepository.FirstAsync(x =>
                     x.InstanceId == instance.Id
-                    && x.TaskStatus == TaktFlowTaskStatus.Pending
+                    && x.TaskStatus == (int)TaktFlowTaskStatus.Pending
                     && x.IsAddSign == 0
                     && branchIds.Contains(x.TaskDefinitionKey)
                     && x.Id != pendingTask.Id);
@@ -311,7 +311,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
             && x.StartUserId == userId
-            && x.InstanceStatus == TaktFlowInstanceStatus.Running
+            && x.InstanceStatus == (int)TaktFlowInstanceStatus.Running
             && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
                 || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
         var monthMyRunningCount = await _flowInstanceRepository.CountAsync(runningPredicate);
@@ -319,7 +319,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
             && x.StartUserId == userId
-            && x.InstanceStatus == TaktFlowInstanceStatus.Completed
+            && x.InstanceStatus == (int)TaktFlowInstanceStatus.Completed
             && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
                 || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
         var monthMyCompletedCount = await _flowInstanceRepository.CountAsync(completedPredicate);
@@ -350,7 +350,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
             && x.AssigneeUserId == userId
-            && x.TaskStatus == TaktFlowTaskStatus.Completed
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Completed
             && x.CompletedAt != null
             && x.CompletedAt >= start
             && x.CompletedAt <= end;
@@ -375,7 +375,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.AssigneeUserId == userId
-            && x.TaskStatus == TaktFlowTaskStatus.Pending);
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Pending);
         var instanceIds = tasks.Select(x => x.InstanceId).Distinct().ToList();
         if (instanceIds.Count == 0)
         {
@@ -390,7 +390,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             {
                 continue;
             }
-            if (inst.InstanceStatus != TaktFlowInstanceStatus.Running)
+            if (inst.InstanceStatus != (int)TaktFlowInstanceStatus.Running)
             {
                 continue;
             }
@@ -450,7 +450,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.AssigneeUserId == userId
-            && x.TaskStatus == TaktFlowTaskStatus.Completed);
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Completed);
         var instanceIds = doneTasks.Select(x => x.InstanceId).Distinct().ToList();
         if (instanceIds.Count == 0)
         {
@@ -505,12 +505,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         {
             ThrowBusinessException("仅发起人可撤回");
         }
-        if (instance.InstanceStatus != TaktFlowInstanceStatus.Running)
+        if (instance.InstanceStatus != (int)TaktFlowInstanceStatus.Running)
         {
             ThrowBusinessException("仅运行中流程可撤回");
         }
         await CancelPendingTasksAsync(instance.Id);
-        instance.InstanceStatus = TaktFlowInstanceStatus.Terminated;
+        instance.InstanceStatus = (int)TaktFlowInstanceStatus.Terminated;
         instance.DeleteReason = "发起人撤回";
         instance.EndTime = DateTime.Now;
         instance.DurationMs = (long)((instance.EndTime!.Value - (instance.StartTime ?? instance.EndTime.Value)).TotalMilliseconds);
@@ -535,7 +535,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         var task = await _flowTaskRepository.FirstAsync(x =>
             x.InstanceId == instance.Id
             && x.AssigneeUserId == userId
-            && x.TaskStatus == TaktFlowTaskStatus.Pending);
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Pending);
         if (task == null)
         {
             ThrowBusinessException("当前用户无待办任务");
@@ -593,15 +593,15 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
                 TaskName = instance.CurrentActivityName,
                 AssigneeUserId = approver.ApproverUserId,
                 AssigneeUserName = approver.ApproverUserName,
-                TaskStatus = isPending ? TaktFlowTaskStatus.Pending : TaktFlowTaskStatus.Cancelled,
-                SignType = signType == "all" ? TaktFlowSignType.All : TaktFlowSignType.Any,
+                TaskStatus = isPending ? (int)TaktFlowTaskStatus.Pending : (int)TaktFlowTaskStatus.Cancelled,
+                SignType = signType == "all" ? (int)TaktFlowSignType.All : (int)TaktFlowSignType.Any,
                 IsAddSign = 1,
                 AddSignId = addSign.Id,
                 SortOrder = sort++
             };
             if (!isPending)
             {
-                task.TaskStatus = TaktFlowTaskStatus.Cancelled;
+                task.TaskStatus = (int)TaktFlowTaskStatus.Cancelled;
             }
             await _flowTaskRepository.CreateAsync(task);
         }
@@ -631,9 +631,9 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x.InstanceId == instance.Id && x.AddSignId == addSign.Id);
         foreach (var task in tasks)
         {
-            if (task.TaskStatus == TaktFlowTaskStatus.Pending)
+            if (task.TaskStatus == (int)TaktFlowTaskStatus.Pending)
             {
-                task.TaskStatus = TaktFlowTaskStatus.Cancelled;
+                task.TaskStatus = (int)TaktFlowTaskStatus.Cancelled;
                 await _flowTaskRepository.UpdateAsync(task);
             }
         }
@@ -651,11 +651,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     {
         EnsureThreeLayerContext();
         var instance = await LoadInstanceOrThrowAsync(dto.FlowInstanceId);
-        if (instance.InstanceStatus != TaktFlowInstanceStatus.Running)
+        if (instance.InstanceStatus != (int)TaktFlowInstanceStatus.Running)
         {
             ThrowBusinessException("仅运行中流程可挂起");
         }
-        instance.InstanceStatus = TaktFlowInstanceStatus.Suspended;
+        instance.InstanceStatus = (int)TaktFlowInstanceStatus.Suspended;
         instance.DeleteReason = dto.Reason;
         await _flowInstanceRepository.UpdateAsync(instance);
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Suspend, null);
@@ -672,11 +672,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     {
         EnsureThreeLayerContext();
         var instance = await LoadInstanceOrThrowAsync(dto.FlowInstanceId);
-        if (instance.InstanceStatus != TaktFlowInstanceStatus.Suspended)
+        if (instance.InstanceStatus != (int)TaktFlowInstanceStatus.Suspended)
         {
             ThrowBusinessException("仅已挂起流程可恢复");
         }
-        instance.InstanceStatus = TaktFlowInstanceStatus.Running;
+        instance.InstanceStatus = (int)TaktFlowInstanceStatus.Running;
         instance.DeleteReason = null;
         await _flowInstanceRepository.UpdateAsync(instance);
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Resume, null);
@@ -693,7 +693,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         EnsureThreeLayerContext();
         var instance = await LoadInstanceOrThrowAsync(dto.FlowInstanceId);
         await CancelPendingTasksAsync(instance.Id);
-        instance.InstanceStatus = TaktFlowInstanceStatus.Terminated;
+        instance.InstanceStatus = (int)TaktFlowInstanceStatus.Terminated;
         instance.DeleteReason = dto.Reason;
         instance.EndTime = DateTime.Now;
         instance.DurationMs = (long)((instance.EndTime!.Value - (instance.StartTime ?? instance.EndTime.Value)).TotalMilliseconds);
@@ -714,20 +714,20 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         EnsureThreeLayerContext();
         var userId = GetCurrentUserIdForApproval();
         var instance = await LoadInstanceOrThrowAsync(dto.FlowInstanceId);
-        if (instance.InstanceStatus != TaktFlowInstanceStatus.Running)
+        if (instance.InstanceStatus != (int)TaktFlowInstanceStatus.Running)
         {
             ThrowBusinessException("仅运行中流程可撤销审批");
         }
         var lastTask = await _flowTaskRepository.FirstAsync(x =>
             x.InstanceId == instance.Id
             && x.AssigneeUserId == userId
-            && x.TaskStatus == TaktFlowTaskStatus.Completed
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Completed
             && x.IsAddSign == 0);
         if (lastTask == null)
         {
             ThrowBusinessException("未找到可撤销的已办任务");
         }
-        lastTask.TaskStatus = TaktFlowTaskStatus.Pending;
+        lastTask.TaskStatus = (int)TaktFlowTaskStatus.Pending;
         lastTask.CompletedAt = null;
         await _flowTaskRepository.UpdateAsync(lastTask);
         instance.CurrentActivityId = lastTask.TaskDefinitionKey;
@@ -737,7 +737,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x => x.InstanceId == instance.Id,
             x => x.TransitionTime,
             true);
-        var lastTransition = transitions.FirstOrDefault(x => x.ActionType == TaktFlowActionType.Approve && x.TransitionUserId == userId);
+        var lastTransition = transitions.FirstOrDefault(x => x.ActionType == (int)TaktFlowActionType.Approve && x.TransitionUserId == userId);
         if (lastTransition != null)
         {
             await _flowTransitionRepository.DeleteAsync(lastTransition.Id);
@@ -893,8 +893,8 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
                 TaskName = TaktFlowProcessNavigator.GetNodeDisplayName(node),
                 AssigneeUserId = approver.UserId,
                 AssigneeUserName = approver.UserName,
-                TaskStatus = active ? TaktFlowTaskStatus.Pending : TaktFlowTaskStatus.Cancelled,
-                SignType = signType,
+                TaskStatus = active ? (int)TaktFlowTaskStatus.Pending : (int)TaktFlowTaskStatus.Cancelled,
+                SignType = (int)signType,
                 SortOrder = sort++
             };
             await _flowTaskRepository.CreateAsync(task);
@@ -914,14 +914,14 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             x.InstanceId == instance.Id
             && x.TaskDefinitionKey == node.NodeId
             && x.IsAddSign == 0);
-        var pending = nodeTasks.Where(x => x.TaskStatus == TaktFlowTaskStatus.Pending).ToList();
+        var pending = nodeTasks.Where(x => x.TaskStatus == (int)TaktFlowTaskStatus.Pending).ToList();
         if (node.SignType == 2)
         {
             return pending.Count == 0;
         }
         foreach (var other in pending)
         {
-            other.TaskStatus = TaktFlowTaskStatus.Cancelled;
+            other.TaskStatus = (int)TaktFlowTaskStatus.Cancelled;
             await _flowTaskRepository.UpdateAsync(other);
         }
         return true;
@@ -945,9 +945,9 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         var signType = addSign.SignType;
         if (signType == "one")
         {
-            foreach (var other in groupTasks.Where(x => x.Id != task.Id && x.TaskStatus == TaktFlowTaskStatus.Pending))
+            foreach (var other in groupTasks.Where(x => x.Id != task.Id && x.TaskStatus == (int)TaktFlowTaskStatus.Pending))
             {
-                other.TaskStatus = TaktFlowTaskStatus.Cancelled;
+                other.TaskStatus = (int)TaktFlowTaskStatus.Cancelled;
                 await _flowTaskRepository.UpdateAsync(other);
             }
             addSign.IsHandled = 1;
@@ -956,7 +956,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         }
         if (signType == "all")
         {
-            if (groupTasks.Any(x => x.TaskStatus == TaktFlowTaskStatus.Pending))
+            if (groupTasks.Any(x => x.TaskStatus == (int)TaktFlowTaskStatus.Pending))
             {
                 return false;
             }
@@ -965,12 +965,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             return addSign.ReturnToSignNode != 1;
         }
         var next = groupTasks
-            .Where(x => x.TaskStatus == TaktFlowTaskStatus.Cancelled)
+            .Where(x => x.TaskStatus == (int)TaktFlowTaskStatus.Cancelled)
             .OrderBy(x => x.SortOrder)
             .FirstOrDefault();
         if (next != null)
         {
-            next.TaskStatus = TaktFlowTaskStatus.Pending;
+            next.TaskStatus = (int)TaktFlowTaskStatus.Pending;
             await _flowTaskRepository.UpdateAsync(next);
             return false;
         }
@@ -989,7 +989,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         TaktFlowCompleteTaskDto dto,
         long userId)
     {
-        pendingTask.TaskStatus = TaktFlowTaskStatus.Completed;
+        pendingTask.TaskStatus = (int)TaktFlowTaskStatus.Completed;
         pendingTask.CompletedAt = DateTime.Now;
         pendingTask.Comment = dto.Comment;
         await _flowTaskRepository.UpdateAsync(pendingTask);
@@ -1009,12 +1009,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             var rejectNode = TaktFlowProcessNavigator.FindNode(root, dto.NodeRejectStep);
             if (rejectNode != null)
             {
-                instance.InstanceStatus = TaktFlowInstanceStatus.Running;
+                instance.InstanceStatus = (int)TaktFlowInstanceStatus.Running;
                 await EnterApproverNodeAsync(instance, rejectNode);
                 return;
             }
         }
-        instance.InstanceStatus = TaktFlowInstanceStatus.Rejected;
+        instance.InstanceStatus = (int)TaktFlowInstanceStatus.Rejected;
         instance.EndTime = DateTime.Now;
         instance.DurationMs = (long)((instance.EndTime!.Value - (instance.StartTime ?? instance.EndTime.Value)).TotalMilliseconds);
         await _flowInstanceRepository.UpdateAsync(instance);
@@ -1030,7 +1030,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     private async Task CompleteInstanceAsync(TaktFlowInstance instance, TaktFlowInstanceStatus status)
     {
         await CancelPendingTasksAsync(instance.Id);
-        instance.InstanceStatus = status;
+        instance.InstanceStatus = (int)status;
         instance.EndTime = DateTime.Now;
         instance.CurrentActivityId = string.Empty;
         instance.CurrentActivityName = string.Empty;
@@ -1091,14 +1091,14 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     private async Task CancelPendingTasksAsync(long instanceId, long? exceptTaskId = null)
     {
         var pending = await _flowTaskRepository.GetListAsync(x =>
-            x.InstanceId == instanceId && x.TaskStatus == TaktFlowTaskStatus.Pending);
+            x.InstanceId == instanceId && x.TaskStatus == (int)TaktFlowTaskStatus.Pending);
         foreach (var task in pending)
         {
             if (exceptTaskId.HasValue && task.Id == exceptTaskId.Value)
             {
                 continue;
             }
-            task.TaskStatus = TaktFlowTaskStatus.Cancelled;
+            task.TaskStatus = (int)TaktFlowTaskStatus.Cancelled;
             await _flowTaskRepository.UpdateAsync(task);
         }
     }
@@ -1111,7 +1111,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     private async Task<bool> HasOtherPendingTasksAsync(long instanceId)
     {
         return await _flowTaskRepository.FirstAsync(x =>
-            x.InstanceId == instanceId && x.TaskStatus == TaktFlowTaskStatus.Pending) != null;
+            x.InstanceId == instanceId && x.TaskStatus == (int)TaktFlowTaskStatus.Pending) != null;
     }
 
     /// <summary>
@@ -1123,7 +1123,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         string? fromNodeName,
         string? comment,
         long userId,
-        string? userName,
+        string? UserName,
         TaktFlowActionType actionType,
         string? toNodeNameOverride)
     {
@@ -1135,10 +1135,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             ToNodeId = instance.CurrentActivityId,
             ToNodeName = toNodeNameOverride ?? instance.CurrentActivityName,
             TransitionUserId = userId,
-            TransitionUserName = userName,
+            TransitionUserName = UserName,
             TransitionTime = DateTime.Now,
             TransitionComment = comment,
-            ActionType = actionType
+            ActionType = (int)actionType
         };
         await _flowTransitionRepository.CreateAsync(transition);
     }
@@ -1190,7 +1190,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             ProcessName = scheme.ProcessName,
             DefinitionVersion = scheme.DefinitionVersion,
             ProcessTitle = dto.ProcessTitle ?? string.Empty,
-            InstanceStatus = status,
+            InstanceStatus = (int)status,
             StartUserId = startUserId,
             StartUserName = startUserName ?? string.Empty,
             StartTime = DateTime.Now,
@@ -1234,7 +1234,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     /// <param name="instance">实例</param>
     private static void EnsureInstanceRunnable(TaktFlowInstance instance)
     {
-        if (instance.InstanceStatus != TaktFlowInstanceStatus.Running)
+        if (instance.InstanceStatus != (int)TaktFlowInstanceStatus.Running)
         {
             throw new TaktBusinessException("流程未处于运行中，无法操作");
         }
@@ -1253,7 +1253,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             InstanceCode = entity.InstanceCode,
             ProcessName = entity.ProcessName,
             ProcessTitle = entity.ProcessTitle,
-            InstanceStatus = entity.InstanceStatus,
+            InstanceStatus = (TaktFlowInstanceStatus)entity.InstanceStatus,
             CurrentActivityName = entity.CurrentActivityName,
             StartUserId = entity.StartUserId,
             StartUserName = entity.StartUserName,
@@ -1287,7 +1287,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         var canVerify = userId.HasValue && await _flowTaskRepository.FirstAsync(x =>
             x.InstanceId == instance.Id
             && x.AssigneeUserId == userId.Value
-            && x.TaskStatus == TaktFlowTaskStatus.Pending) != null;
+            && x.TaskStatus == (int)TaktFlowTaskStatus.Pending) != null;
         return new TaktFlowInstanceDetailDto
         {
             FlowInstanceId = instance.Id,
@@ -1296,7 +1296,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             ProcessKey = instance.ProcessKey,
             ProcessName = instance.ProcessName,
             ProcessTitle = instance.ProcessTitle,
-            InstanceStatus = instance.InstanceStatus,
+            InstanceStatus = (TaktFlowInstanceStatus)instance.InstanceStatus,
             CurrentActivityId = instance.CurrentActivityId,
             CurrentActivityName = instance.CurrentActivityName,
             StartUserId = instance.StartUserId,
@@ -1421,12 +1421,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         if (query.InstanceStatus.HasValue)
         {
             var status = query.InstanceStatus.Value;
-            exp = exp.And(x => x.InstanceStatus == status);
+            exp = exp.And(x => x.InstanceStatus == (int)status);
         }
         if (!string.IsNullOrWhiteSpace(query.StartUserName))
         {
-            var userName = query.StartUserName;
-            exp = exp.And(x => x.StartUserName != null && x.StartUserName.Contains(userName));
+            var UserName = query.StartUserName;
+            exp = exp.And(x => x.StartUserName != null && x.StartUserName.Contains(UserName));
         }
         if (query.StartTimeStart.HasValue)
         {
@@ -1492,8 +1492,8 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         }
         if (!string.IsNullOrWhiteSpace(query.StartUserName))
         {
-            var userName = query.StartUserName;
-            exp = exp.And(x => x.StartUserName != null && x.StartUserName.Contains(userName));
+            var UserName = query.StartUserName;
+            exp = exp.And(x => x.StartUserName != null && x.StartUserName.Contains(UserName));
         }
         if (query.StartTimeStart.HasValue)
         {

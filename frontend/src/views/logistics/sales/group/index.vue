@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getSalesGroupId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -81,7 +82,7 @@
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getSalesGroupDictValue(record, 'isBuiltIn')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -125,6 +126,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
@@ -203,7 +214,7 @@
       <a-form-item :label="pi.queryLabel('isBuiltIn')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBuiltIn', 'select')"
           allow-clear
         />
@@ -213,7 +224,7 @@
       <a-form-item :label="pi.queryLabel('groupStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.groupStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('groupStatus', 'select')"
           allow-clear
         />
@@ -395,7 +406,31 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SALESGROUP_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    return true
+  }
+  if (form.groupStatus !== undefined && form.groupStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -406,8 +441,7 @@ function createEmptyAdvancedQueryForm() {
   return {
     ...form,
     isBuiltIn: undefined as number | undefined,
-    groupStatus: undefined as number | undefined,
-  }
+    groupStatus: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -433,8 +467,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SalesGroupQuery} 查询 DTO
  */
@@ -466,12 +501,13 @@ function buildListQuery(overrides?: Partial<SalesGroupQuery>): SalesGroupQuery {
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /**
  * 构建列表标准文本列
@@ -548,6 +584,8 @@ const toSalesGroupNumber = (value: string | number | undefined | null): number =
   return Number.isFinite(num) ? num : 0
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -590,6 +628,11 @@ const onClickRow = (record: SalesGroupRowRecord) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSalesGroupList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -722,6 +765,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSalesGroup(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

@@ -23,27 +23,103 @@ import type {
  * @description 对应后端 TaktDictDataDto
  */
 export interface DictData extends TenantCultureDtoBase {
-
+  /**
+   * DictDataID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  dictDataId: string;
+  /**
+   * 字典类型（选项 TaktDictTypes/options；DictValue=Id）
+   */
+  dictTypeId: string;
+  /**
+   * 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+   */
+  dictTypeCode: string;
+  /**
+   * 字典项标签
+   */
+  dictLabel: string;
+  /**
+   * 字典项值
+   */
+  dictValue: string;
+  /**
+   * 国际化翻译键
+   */
+  i18nKey: string;
+  /**
+   * 扩展标签
+   */
+  extLabel?: string;
+  /**
+   * 扩展值
+   */
+  extValue?: string;
+  /**
+   * 列表样式类
+   */
+  listClass?: number;
+  /**
+   * CSS 类名
+   */
+  cssClass?: number;
   /**
    * 是否默认项（1=是，0=否）
    */
   isDefault?: number;
-
   /**
    * 排序号
    */
   sortOrder?: number;
-
   /**
    * 扩展字段JSON
    */
   extField?: string;
-
   /**
    * 备注
    */
   remark?: string;
+}
 
+/**
+ * 创建 DictData DTO（组合 2：TenantCode + CultureCode，无关联工厂；CultureCode 默认 mul）
+ */
+export interface DictDataCreate {
+  tenantCode: string;
+  cultureCode: string;
+  dictTypeId: string;
+  dictTypeCode: string;
+  dictLabel: string;
+  dictValue: string;
+  i18nKey: string;
+  extLabel?: string;
+  extValue?: string;
+  listClass?: number;
+  cssClass?: number;
+  isDefault?: number;
+  sortOrder?: number;
+  extField?: string;
+  remark?: string;
+}
+
+/**
+ * 更新 DictData DTO
+ */
+export interface DictDataUpdate extends DictDataCreate {
+  dictDataId: string;
+}
+
+/**
+ * DictData 分页查询 DTO
+ */
+export interface DictDataQuery extends TaktPagedQuery {
+  tenantCode?: string;
+  cultureCode?: string;
+  dictTypeId?: string;
+  dictTypeCode?: string;
+  dictLabel?: string;
+  dictValue?: string;
+  i18nKey?: string;
 }
 
 /**

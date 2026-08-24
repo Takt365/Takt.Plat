@@ -20,7 +20,6 @@ export const CUSTOMERCOMPLAINTITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTOM
 
 /** 列表业务列（不含主键） */
 export const CUSTOMERCOMPLAINTITEM_LIST_FIELDS = [
-  'complaintId',
   'customerComplaintCode',
   'lineNumber',
   'productCode',
@@ -39,11 +38,11 @@ export const CUSTOMERCOMPLAINTITEM_LIST_FIELDS = [
   'attachmentPaths',
   'improvementStatus',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const CUSTOMERCOMPLAINTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'complaintId',
   'customerComplaintCode',
   'lineNumber',
   'productCode',
@@ -76,28 +75,7 @@ export const CUSTOMERCOMPLAINTITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const CUSTOMERCOMPLAINTITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  complaintId: 'select',
-  lineNumber: 'select',
-  productCode: 'optional',
-  productName: 'optional',
-  batchCode: 'optional',
-  itemType: 'select',
-  defectDescription: 'optional',
-  defectLevel: 'select',
-  defectQuantity: 'select',
-  defectRate: 'optional',
-  causeAnalysis: 'optional',
-  improvementAction: 'optional',
-  improvementResponsible: 'optional',
-  plannedCompletionDate: 'optional',
-  actualCompletionDate: 'optional',
-  attachmentPaths: 'optional',
-  improvementStatus: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -105,40 +83,13 @@ export type CustomerComplaintItemField = keyof typeof CUSTOMERCOMPLAINTITEM_PLAC
 
 /** 高级查询可 trim 的字符串字段 */
 export const CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS = [
-  'complaintId',
-  'productCode',
-  'productName',
-  'batchCode',
-  'defectDescription',
-  'defectLevel',
-  'causeAnalysis',
-  'improvementAction',
-  'improvementResponsible',
-  'plannedCompletionDateStart',
-  'plannedCompletionDateEnd',
-  'actualCompletionDateStart',
-  'actualCompletionDateEnd',
-  'attachmentPaths',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof CustomerComplaintItemQuery)[]
 
-export type CustomerComplaintItemQueryField =
-  | (typeof CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'itemType' | 'defectQuantity' | 'defectRate' | 'improvementStatus' | 'isObsolete'
+export type CustomerComplaintItemQueryField = (typeof CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const CUSTOMERCOMPLAINTITEM_QUERY_FIELDS: readonly CustomerComplaintItemQueryField[] = [
-  ...CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'itemType',
-  'defectQuantity',
-  'defectRate',
-  'improvementStatus',
-  'isObsolete',
-]
+export const CUSTOMERCOMPLAINTITEM_QUERY_FIELDS: readonly CustomerComplaintItemQueryField[] = [...CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS]
 
 /**
  * CustomerComplaintItem字段 i18n：index / customer-complaint-item-form 统一入口

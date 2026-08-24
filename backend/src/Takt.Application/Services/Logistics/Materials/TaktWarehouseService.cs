@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktWarehouseService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：仓库主数据应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
     }
 
     /// <summary>
-    /// 获取仓库主数据列表（分页）
+    /// 获取仓库主数据列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktWarehouseDto>> GetWarehouseListAsync(TaktWarehouseQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktWarehouseDto>.Create(
+                new List<TaktWarehouseDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _warehouseRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -335,7 +343,15 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportWarehouseAsync(TaktWarehouseQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktWarehouseQueryDto());
+        var queryDto = query ?? new TaktWarehouseQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktWarehouseExportDto>(),
+                sheetName ?? "仓库主数据数据",
+                fileName ?? "仓库主数据导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _warehouseRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -373,7 +389,7 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
     }
 
     /// <summary>
-    /// 保存仓库主数据子表级联（库位主数据；Create/Update 后按主表 Id 先删后插）
+    /// 保存仓库主数据子表级联（库位主数据；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -381,57 +397,70 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
     private async Task SaveWarehouseChildrenAsync(TaktWarehouse entity, TaktWarehouseCreateDto dto)
     {
         // 库位主数据（StorageLocations）
-        if (dto.StorageLocations is not { Count: > 0 })
+        List<TaktStorageLocationUpdateDto>? storageLocationsForSave;
+        if (dto is TaktWarehouseUpdateDto updateDtoForStorageLocations && updateDtoForStorageLocations.StorageLocations != null)
+        {
+            storageLocationsForSave = updateDtoForStorageLocations.StorageLocations;
+        }
+        else if (dto.StorageLocations != null)
+        {
+            storageLocationsForSave = dto.StorageLocations.Adapt<List<TaktStorageLocationUpdateDto>>();
+        }
+        else
+        {
+            storageLocationsForSave = null;
+        }
+        if (storageLocationsForSave is not { Count: > 0 })
         {
             await _storageLocationRepository.DeleteAsync(x => x.WarehouseId == entity.Id);
         }
         else
         {
-            var storagelocations = dto.StorageLocations.Adapt<List<TaktStorageLocation>>();
-            foreach (var child in storagelocations)
+            var existingList = await _storageLocationRepository.GetListAsync(x => x.WarehouseId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktStorageLocation>();
+            for (var i = 0; i < storageLocationsForSave.Count; i++)
             {
-                child.WarehouseId = entity.Id;
-            }
-            var storagelocationsNeedSort = storagelocations.Where(c => c.SortOrder <= 0).ToList();
-            if (storagelocationsNeedSort.Count > 0)
-            {
-                var maxSort = await _storageLocationRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.WarehouseId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, storagelocationsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in storagelocations)
+                var childDto = storageLocationsForSave[i];
+                childDto.WarehouseId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.WarehouseCode = entity.WarehouseCode;
+                if (childDto.StorageLocationId > 0)
                 {
-                    if (child.SortOrder <= 0)
+                    if (!existingById.TryGetValue(childDto.StorageLocationId, out var target))
                     {
-                        child.SortOrder = sortSeq[sortIdx++];
+                        throw new TaktBusinessException("库位主数据不存在（StorageLocationId={childDto.StorageLocationId}）");
                     }
+                    if (target.WarehouseId != entity.Id)
+                    {
+                        throw new TaktBusinessException("库位主数据不属于当前主表（StorageLocationId={childDto.StorageLocationId}）");
+                    }
+                    submittedIds.Add(childDto.StorageLocationId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.StorageLocationId;
+                    target.WarehouseId = entity.Id;
+                    await _storageLocationRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktStorageLocation>();
+                    child.Id = 0;
+                    child.WarehouseId = entity.Id;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < storagelocations.Count; i++)
-                        {
-                            var key = $"{storagelocations[i].CompanyCode}|{storagelocations[i].PlantCode}|{storagelocations[i].WarehouseCode}|{storagelocations[i].LocationCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"库位主数据第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、WarehouseCode、LocationCode）");
-                            }
-                        }
-            await _storageLocationRepository.DeleteAsync(x => x.WarehouseId == entity.Id);
-            foreach (var child in storagelocations)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_takt_logistics_materials_storage_location_unique = await _uniqueValidator.IsUniqueAsync(
-                _storageLocationRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.PlantCode == child.PlantCode
-                    && x.WarehouseCode == child.WarehouseCode
-                    && x.LocationCode == child.LocationCode);
-            if (!isUnique_ix_takt_logistics_materials_storage_location_unique)
+                await _storageLocationRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("库位主数据的CompanyCode、PlantCode、WarehouseCode、LocationCode已存在");
+                await _storageLocationRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _storageLocationRepository.CreateRangeAsync(storagelocations);
         }
     }
     // ========================================
@@ -447,11 +476,12 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
     {
         var exp = Expressionable.Create<TaktWarehouse>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.WarehouseName != null && x.WarehouseName.Contains(keywords))
                 || (x.WarehouseShortName != null && x.WarehouseShortName.Contains(keywords))
@@ -459,108 +489,205 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
                 || (x.ContactPerson != null && x.ContactPerson.Contains(keywords))
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ManagerUserCode != null && x.ManagerUserCode.Contains(keywords))
-                || SqlFunc.ToString(x.IsVirtual).Contains(keywords)
-                || SqlFunc.ToString(x.WarehouseType).Contains(keywords)
-                || SqlFunc.ToString(x.WarehouseStatus).Contains(keywords)
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WarehouseCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.WarehouseCode != null && x.WarehouseCode.Contains(queryDto.WarehouseCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WarehouseName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseCode))
         {
-            exp = exp.And(x => x.WarehouseName != null && x.WarehouseName.Contains(queryDto.WarehouseName));
+            var warehouseCode = queryDto.WarehouseCode;
+            exp = exp.And(x => x.WarehouseCode != null && x.WarehouseCode.Contains(warehouseCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WarehouseShortName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseName))
         {
-            exp = exp.And(x => x.WarehouseShortName != null && x.WarehouseShortName.Contains(queryDto.WarehouseShortName));
+            var warehouseName = queryDto.WarehouseName;
+            exp = exp.And(x => x.WarehouseName != null && x.WarehouseName.Contains(warehouseName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Address))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseShortName))
         {
-            exp = exp.And(x => x.Address != null && x.Address.Contains(queryDto.Address));
+            var warehouseShortName = queryDto.WarehouseShortName;
+            exp = exp.And(x => x.WarehouseShortName != null && x.WarehouseShortName.Contains(warehouseShortName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactPerson))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Address))
         {
-            exp = exp.And(x => x.ContactPerson != null && x.ContactPerson.Contains(queryDto.ContactPerson));
+            var address = queryDto.Address;
+            exp = exp.And(x => x.Address != null && x.Address.Contains(address));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactPhone))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactPerson))
         {
-            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(queryDto.ContactPhone));
+            var contactPerson = queryDto.ContactPerson;
+            exp = exp.And(x => x.ContactPerson != null && x.ContactPerson.Contains(contactPerson));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManagerUserCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {
-            exp = exp.And(x => x.ManagerUserCode != null && x.ManagerUserCode.Contains(queryDto.ManagerUserCode));
+            var contactPhone = queryDto.ContactPhone;
+            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(contactPhone));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ManagerUserCode))
+        {
+            var managerUserCode = queryDto.ManagerUserCode;
+            exp = exp.And(x => x.ManagerUserCode != null && x.ManagerUserCode.Contains(managerUserCode));
         }
 
         if (queryDto?.IsVirtual.HasValue == true)
         {
-            exp = exp.And(x => x.IsVirtual == queryDto.IsVirtual);
+            var isVirtual = queryDto.IsVirtual.Value;
+            exp = exp.And(x => x.IsVirtual == isVirtual);
         }
 
         if (queryDto?.WarehouseType.HasValue == true)
         {
-            exp = exp.And(x => x.WarehouseType == queryDto.WarehouseType);
-        }
-
-        if (queryDto?.WarehouseStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.WarehouseStatus == queryDto.WarehouseStatus);
+            var warehouseType = queryDto.WarehouseType.Value;
+            exp = exp.And(x => x.WarehouseType == warehouseType);
         }
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (queryDto?.WarehouseStatus.HasValue == true)
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var warehouseStatus = queryDto.WarehouseStatus.Value;
+            exp = exp.And(x => x.WarehouseStatus == warehouseStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktWarehouseQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WarehouseCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WarehouseName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WarehouseShortName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Address))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactPerson))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactPhone))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ManagerUserCode))
+        {
+            return true;
+        }
+        if (queryDto.IsVirtual.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WarehouseType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WarehouseStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

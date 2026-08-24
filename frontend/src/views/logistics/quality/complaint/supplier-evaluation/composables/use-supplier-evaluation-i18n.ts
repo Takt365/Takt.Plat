@@ -20,65 +20,13 @@ export const SUPPLIEREVALUATION_SELF_I18N_KEY = buildEntitySelfI18nKey(SUPPLIERE
 
 /** 列表业务列（不含主键） */
 export const SUPPLIEREVALUATION_LIST_FIELDS = [
-  'supplierEvaluationCode',
-  'supplierId',
-  'supplierName1',
-  'supplierCode',
-  'evaluationDate',
-  'evaluationPeriod',
-  'evaluationType',
-  'evaluatorBy',
-  'evaluationDept',
-  'overallRating',
-  'totalScore',
-  'qualityScore',
-  'deliveryScore',
-  'priceScore',
-  'serviceScore',
-  'technicalScore',
-  'mainStrengths',
-  'mainIssues',
-  'improvementRequirements',
-  'evaluationConclusion',
-  'rectificationDeadline',
-  'attachments',
-  'evaluationStatus',
-  'plantCode',
   'rectificationStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SUPPLIEREVALUATION_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  supplierEvaluationCode: 'required',
-  supplierId: 'select',
-  supplierName1: 'required',
-  supplierCode: 'optional',
-  evaluationDate: 'select',
-  evaluationPeriod: 'select',
-  evaluationType: 'select',
-  evaluatorBy: 'optional',
-  evaluationDept: 'optional',
-  overallRating: 'select',
-  totalScore: 'optional',
-  qualityScore: 'optional',
-  deliveryScore: 'optional',
-  priceScore: 'optional',
-  serviceScore: 'optional',
-  technicalScore: 'optional',
-  mainStrengths: 'optional',
-  mainIssues: 'optional',
-  improvementRequirements: 'optional',
-  evaluationConclusion: 'select',
-  rectificationDeadline: 'optional',
-  attachments: 'optional',
-  evaluationStatus: 'select',
-  plantCode: 'select',
-  rectificationStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -86,47 +34,13 @@ export type SupplierEvaluationField = keyof typeof SUPPLIEREVALUATION_PLACEHOLDE
 
 /** 高级查询可 trim 的字符串字段 */
 export const SUPPLIEREVALUATION_QUERY_STRING_FIELDS = [
-  'supplierEvaluationCode',
-  'supplierId',
-  'supplierName1',
-  'supplierCode',
-  'evaluationDateStart',
-  'evaluationDateEnd',
-  'evaluatorBy',
-  'evaluationDept',
-  'mainStrengths',
-  'mainIssues',
-  'improvementRequirements',
-  'rectificationDeadlineStart',
-  'rectificationDeadlineEnd',
-  'attachments',
-  'plantCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SupplierEvaluationQuery)[]
 
-export type SupplierEvaluationQueryField =
-  | (typeof SUPPLIEREVALUATION_QUERY_STRING_FIELDS)[number]
-  | 'evaluationPeriod' | 'evaluationType' | 'overallRating' | 'totalScore' | 'qualityScore' | 'deliveryScore' | 'priceScore' | 'serviceScore' | 'technicalScore' | 'evaluationConclusion' | 'evaluationStatus' | 'rectificationStatus'
+export type SupplierEvaluationQueryField = (typeof SUPPLIEREVALUATION_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SUPPLIEREVALUATION_QUERY_FIELDS: readonly SupplierEvaluationQueryField[] = [
-  ...SUPPLIEREVALUATION_QUERY_STRING_FIELDS,
-  'evaluationPeriod',
-  'evaluationType',
-  'overallRating',
-  'totalScore',
-  'qualityScore',
-  'deliveryScore',
-  'priceScore',
-  'serviceScore',
-  'technicalScore',
-  'evaluationConclusion',
-  'evaluationStatus',
-  'rectificationStatus',
-]
+export const SUPPLIEREVALUATION_QUERY_FIELDS: readonly SupplierEvaluationQueryField[] = [...SUPPLIEREVALUATION_QUERY_STRING_FIELDS]
 
 /**
  * 供应商评价考核主表实体字段 i18n：index / supplier-evaluation-form 统一入口

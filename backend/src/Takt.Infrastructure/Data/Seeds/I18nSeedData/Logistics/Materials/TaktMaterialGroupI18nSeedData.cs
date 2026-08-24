@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialGroupI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktMaterialGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialgroup.name", "zh-HK", "物料组名称_hk", "物料组名称（group_name）"),
 
             // entity.materialgroup.sortorder
-            new TranslationSeedItem("entity.materialgroup.sortorder", "en-US", "排序号_us", "排序号（sort；越小越靠前）"),
+            new TranslationSeedItem("entity.materialgroup.sortorder", "en-US", "排序号_us", "排序号（回填）（sort；越小越靠前）"),
             // entity.materialgroup.sortorder
-            new TranslationSeedItem("entity.materialgroup.sortorder", "ja-JP", "排序号_jp", "排序号（sort；越小越靠前）"),
+            new TranslationSeedItem("entity.materialgroup.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（sort；越小越靠前）"),
             // entity.materialgroup.sortorder
-            new TranslationSeedItem("entity.materialgroup.sortorder", "zh-CN", "排序号", "排序号（sort；越小越靠前）"),
+            new TranslationSeedItem("entity.materialgroup.sortorder", "zh-CN", "排序号", "排序号（回填）（sort；越小越靠前）"),
             // entity.materialgroup.sortorder
-            new TranslationSeedItem("entity.materialgroup.sortorder", "zh-HK", "排序号_hk", "排序号（sort；越小越靠前）"),
+            new TranslationSeedItem("entity.materialgroup.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（sort；越小越靠前）"),
 
             // entity.materialgroup.description
             new TranslationSeedItem("entity.materialgroup.description", "en-US", "物料组描述_us", "物料组描述（description）"),

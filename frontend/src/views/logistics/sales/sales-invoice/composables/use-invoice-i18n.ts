@@ -20,7 +20,6 @@ export const SALESINVOICE_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESINVOICE_EN
 
 /** 列表业务列（不含主键） */
 export const SALESINVOICE_LIST_FIELDS = [
-  'billingDocumentCode',
   'billingType',
   'billingCategory',
   'documentCategory',
@@ -58,54 +57,12 @@ export const SALESINVOICE_LIST_FIELDS = [
   'paymentReference',
   'reversalReason',
   'postedBy',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESINVOICE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  billingDocumentCode: 'required',
-  billingType: 'optional',
-  billingCategory: 'optional',
-  documentCategory: 'optional',
-  currencyCode: 'select',
-  salesOrganization: 'optional',
-  distributionChannel: 'optional',
-  pricingProcedure: 'optional',
-  conditionCode: 'optional',
-  shippingConditions: 'optional',
-  billingDate: 'select',
-  customerGroup: 'optional',
-  incoterms1: 'optional',
-  incoterms2: 'optional',
-  postingStatus: 'optional',
-  accountingExchangeRate: 'optional',
-  paymentTerms: 'optional',
-  accountAssignmentGroup: 'optional',
-  countryCode: 'optional',
-  netAmount: 'select',
-  payerCode: 'optional',
-  customerCode: 'select',
-  statisticsCurrencyCode: 'optional',
-  foreignTradeCode: 'optional',
-  cancelledBillingDocument: 'optional',
-  invoiceListType: 'optional',
-  division: 'optional',
-  hierarchyTypePricing: 'optional',
-  tradingPartner: 'optional',
-  taxDepartureCountry: 'optional',
-  organizationSalesTaxNumber: 'optional',
-  countrySalesTaxNumber: 'optional',
-  referenceCode: 'optional',
-  cancelledFlag: 'optional',
-  exchangeRateDate: 'optional',
-  paymentReference: 'optional',
-  reversalReason: 'optional',
-  postedBy: 'optional',
-  extField: 'optional',
-  remark: 'optional',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -113,60 +70,13 @@ export type SalesInvoiceField = keyof typeof SALESINVOICE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESINVOICE_QUERY_STRING_FIELDS = [
-  'billingDocumentCode',
-  'billingType',
-  'billingCategory',
-  'documentCategory',
-  'currencyCode',
-  'salesOrganization',
-  'distributionChannel',
-  'pricingProcedure',
-  'conditionCode',
-  'shippingConditions',
-  'billingDateStart',
-  'billingDateEnd',
-  'customerGroup',
-  'incoterms1',
-  'incoterms2',
-  'postingStatus',
-  'paymentTerms',
-  'accountAssignmentGroup',
-  'countryCode',
-  'payerCode',
-  'customerCode',
-  'statisticsCurrencyCode',
-  'foreignTradeCode',
-  'cancelledBillingDocument',
-  'invoiceListType',
-  'division',
-  'hierarchyTypePricing',
-  'tradingPartner',
-  'taxDepartureCountry',
-  'organizationSalesTaxNumber',
-  'countrySalesTaxNumber',
-  'referenceCode',
-  'cancelledFlag',
-  'exchangeRateDateStart',
-  'exchangeRateDateEnd',
-  'paymentReference',
-  'reversalReason',
-  'postedBy',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SalesInvoiceQuery)[]
 
-export type SalesInvoiceQueryField =
-  | (typeof SALESINVOICE_QUERY_STRING_FIELDS)[number]
-  | 'accountingExchangeRate' | 'netAmount'
+export type SalesInvoiceQueryField = (typeof SALESINVOICE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESINVOICE_QUERY_FIELDS: readonly SalesInvoiceQueryField[] = [
-  ...SALESINVOICE_QUERY_STRING_FIELDS,
-  'accountingExchangeRate',
-  'netAmount',
-]
+export const SALESINVOICE_QUERY_FIELDS: readonly SalesInvoiceQueryField[] = [...SALESINVOICE_QUERY_STRING_FIELDS]
 
 /**
  * Takt销售发票主表实体字段 i18n：index / invoice-form 统一入口

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议参与人应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     }
 
     /// <summary>
-    /// 获取会议参与人列表（分页）
+    /// 获取会议参与人列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktConferenceParticipantDto>> GetConferenceParticipantListAsync(TaktConferenceParticipantQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktConferenceParticipantDto>.Create(
+                new List<TaktConferenceParticipantDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _conferenceParticipantRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,8 +109,8 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.UserName ?? e.Id.ToString(),
+            DictValue = e.UserName,
+            DictLabel = e.UserName,
         }).ToList();
     }
 
@@ -276,7 +284,15 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportConferenceParticipantAsync(TaktConferenceParticipantQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktConferenceParticipantQueryDto());
+        var queryDto = query ?? new TaktConferenceParticipantQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktConferenceParticipantExportDto>(),
+                sheetName ?? "会议参与人数据",
+                fileName ?? "会议参与人导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _conferenceParticipantRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -314,6 +330,22 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
             throw new TaktBusinessException("会议中心不存在");
         }
         entity.ConferenceId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -328,106 +360,184 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     {
         var exp = Expressionable.Create<TaktConferenceParticipant>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.ConferenceId).Contains(keywords)
-                || SqlFunc.ToString(x.UserId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.UserName != null && x.UserName.Contains(keywords))
-                || SqlFunc.ToString(x.ParticipantRole).Contains(keywords)
-                || SqlFunc.ToString(x.AttendanceStatus).Contains(keywords)
-                || SqlFunc.ToString(x.CheckInMethod).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CheckInTime).Contains(keywords)
-                || SqlFunc.ToString(x.CheckOutTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.ConferenceId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.ConferenceId == queryDto.ConferenceId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.UserId.HasValue == true)
-        {
-            exp = exp.And(x => x.UserId == queryDto.UserId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.UserName))
-        {
-            exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
-        }
-
-        if (queryDto?.ParticipantRole.HasValue == true)
-        {
-            exp = exp.And(x => x.ParticipantRole == queryDto.ParticipantRole);
-        }
-
-        if (queryDto?.AttendanceStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.AttendanceStatus == queryDto.AttendanceStatus);
-        }
-
-        if (queryDto?.CheckInMethod.HasValue == true)
-        {
-            exp = exp.And(x => x.CheckInMethod == queryDto.CheckInMethod);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CheckInTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CheckInTime >= queryDto.CheckInTimeStart);
-        }
-
-        if (queryDto?.CheckInTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CheckInTime <= queryDto.CheckInTimeEnd);
-        }
-
-        if (queryDto?.CheckOutTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CheckOutTime >= queryDto.CheckOutTimeStart);
-        }
-
-        if (queryDto?.CheckOutTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CheckOutTime <= queryDto.CheckOutTimeEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.ConferenceId.HasValue == true)
+        {
+            var conferenceId = queryDto.ConferenceId.Value;
+            exp = exp.And(x => x.ConferenceId == conferenceId);
+        }
+
+        if (queryDto?.UserId.HasValue == true)
+        {
+            var userId = queryDto.UserId.Value;
+            exp = exp.And(x => x.UserId == userId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UserName))
+        {
+            var UserName = queryDto.UserName;
+            exp = exp.And(x => x.UserName != null && x.UserName.Contains(UserName));
+        }
+
+        if (queryDto?.ParticipantRole.HasValue == true)
+        {
+            var participantRole = queryDto.ParticipantRole.Value;
+            exp = exp.And(x => x.ParticipantRole == participantRole);
+        }
+
+        if (queryDto?.CheckInMethod.HasValue == true)
+        {
+            var checkInMethod = queryDto.CheckInMethod.Value;
+            exp = exp.And(x => x.CheckInMethod == checkInMethod);
+        }
+
+        if (queryDto?.AttendanceStatus.HasValue == true)
+        {
+            var attendanceStatus = queryDto.AttendanceStatus.Value;
+            exp = exp.And(x => x.AttendanceStatus == attendanceStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CheckInTimeStart.HasValue == true)
+        {
+            var checkInTimeStart = queryDto.CheckInTimeStart.Value;
+            exp = exp.And(x => x.CheckInTime >= checkInTimeStart);
+        }
+
+        if (queryDto?.CheckInTimeEnd.HasValue == true)
+        {
+            var checkInTimeEnd = queryDto.CheckInTimeEnd.Value;
+            exp = exp.And(x => x.CheckInTime <= checkInTimeEnd);
+        }
+
+        if (queryDto?.CheckOutTimeStart.HasValue == true)
+        {
+            var checkOutTimeStart = queryDto.CheckOutTimeStart.Value;
+            exp = exp.And(x => x.CheckOutTime >= checkOutTimeStart);
+        }
+
+        if (queryDto?.CheckOutTimeEnd.HasValue == true)
+        {
+            var checkOutTimeEnd = queryDto.CheckOutTimeEnd.Value;
+            exp = exp.And(x => x.CheckOutTime <= checkOutTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktConferenceParticipantQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.ConferenceId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.UserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UserName))
+        {
+            return true;
+        }
+        if (queryDto.ParticipantRole.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CheckInMethod.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AttendanceStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CheckInTimeStart.HasValue || queryDto.CheckInTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CheckOutTimeStart.HasValue || queryDto.CheckOutTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

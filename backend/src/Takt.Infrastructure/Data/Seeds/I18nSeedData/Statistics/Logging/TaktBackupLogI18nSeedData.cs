@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktBackupLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBackupLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktBackupLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.backuplog.sourceid", "zh-HK", "来源业务键_hk", "来源业务键（备份配置 Id、任务号等，统一字符串）"),
 
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "en-US", "来源编码_us", "来源编码快照（配置编码、任务编码等）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "en-US", "来源编码_us", "来源编码快照（冗余字段，便于查询）"),
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "ja-JP", "来源编码_jp", "来源编码快照（配置编码、任务编码等）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "ja-JP", "来源编码_jp", "来源编码快照（冗余字段，便于查询）"),
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-CN", "来源编码", "来源编码快照（配置编码、任务编码等）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-CN", "来源编码", "来源编码快照（冗余字段，便于查询）"),
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-HK", "来源编码_hk", "来源编码快照（配置编码、任务编码等）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-HK", "来源编码_hk", "来源编码快照（冗余字段，便于查询）"),
 
             // entity.backuplog.targetname
             new TranslationSeedItem("entity.backuplog.targetname", "en-US", "目标名称_us", "目标名称（库展示名、目标标签等）"),
@@ -136,31 +136,31 @@ public class TaktBackupLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.backuplog.targetscope", "zh-HK", "目标范围_hk", "目标范围（可选；如租户码、公司码、路径根等）"),
 
             // entity.backuplog.syncmode
-            new TranslationSeedItem("entity.backuplog.syncmode", "en-US", "同步模式_us", "同步模式快照（1=完整 2=增量；其它场景可按业务约定）"),
+            new TranslationSeedItem("entity.backuplog.syncmode", "en-US", "同步模式_us", "同步模式快照（字典 sys_backup_sync_mode；1=完整 2=增量）"),
             // entity.backuplog.syncmode
-            new TranslationSeedItem("entity.backuplog.syncmode", "ja-JP", "同步模式_jp", "同步模式快照（1=完整 2=增量；其它场景可按业务约定）"),
+            new TranslationSeedItem("entity.backuplog.syncmode", "ja-JP", "同步模式_jp", "同步模式快照（字典 sys_backup_sync_mode；1=完整 2=增量）"),
             // entity.backuplog.syncmode
-            new TranslationSeedItem("entity.backuplog.syncmode", "zh-CN", "同步模式", "同步模式快照（1=完整 2=增量；其它场景可按业务约定）"),
+            new TranslationSeedItem("entity.backuplog.syncmode", "zh-CN", "同步模式", "同步模式快照（字典 sys_backup_sync_mode；1=完整 2=增量）"),
             // entity.backuplog.syncmode
-            new TranslationSeedItem("entity.backuplog.syncmode", "zh-HK", "同步模式_hk", "同步模式快照（1=完整 2=增量；其它场景可按业务约定）"),
+            new TranslationSeedItem("entity.backuplog.syncmode", "zh-HK", "同步模式_hk", "同步模式快照（字典 sys_backup_sync_mode；1=完整 2=增量）"),
 
             // entity.backuplog.executemode
-            new TranslationSeedItem("entity.backuplog.executemode", "en-US", "执行方式_us", "执行方式快照（1=立即 2=后台）"),
+            new TranslationSeedItem("entity.backuplog.executemode", "en-US", "执行方式_us", "执行方式快照（字典 sys_backup_execute_mode；1=立即 2=后台）"),
             // entity.backuplog.executemode
-            new TranslationSeedItem("entity.backuplog.executemode", "ja-JP", "执行方式_jp", "执行方式快照（1=立即 2=后台）"),
+            new TranslationSeedItem("entity.backuplog.executemode", "ja-JP", "执行方式_jp", "执行方式快照（字典 sys_backup_execute_mode；1=立即 2=后台）"),
             // entity.backuplog.executemode
-            new TranslationSeedItem("entity.backuplog.executemode", "zh-CN", "执行方式", "执行方式快照（1=立即 2=后台）"),
+            new TranslationSeedItem("entity.backuplog.executemode", "zh-CN", "执行方式", "执行方式快照（字典 sys_backup_execute_mode；1=立即 2=后台）"),
             // entity.backuplog.executemode
-            new TranslationSeedItem("entity.backuplog.executemode", "zh-HK", "执行方式_hk", "执行方式快照（1=立即 2=后台）"),
+            new TranslationSeedItem("entity.backuplog.executemode", "zh-HK", "执行方式_hk", "执行方式快照（字典 sys_backup_execute_mode；1=立即 2=后台）"),
 
             // entity.backuplog.pathtype
-            new TranslationSeedItem("entity.backuplog.pathtype", "en-US", "路径类型_us", "路径类型快照（1=本地 2=网络 3=FTP；无路径场景为 0）"),
+            new TranslationSeedItem("entity.backuplog.pathtype", "en-US", "路径类型_us", "路径类型快照（字典 sys_backup_path_type；0=无 1=本地 2=网络 3=FTP）"),
             // entity.backuplog.pathtype
-            new TranslationSeedItem("entity.backuplog.pathtype", "ja-JP", "路径类型_jp", "路径类型快照（1=本地 2=网络 3=FTP；无路径场景为 0）"),
+            new TranslationSeedItem("entity.backuplog.pathtype", "ja-JP", "路径类型_jp", "路径类型快照（字典 sys_backup_path_type；0=无 1=本地 2=网络 3=FTP）"),
             // entity.backuplog.pathtype
-            new TranslationSeedItem("entity.backuplog.pathtype", "zh-CN", "路径类型", "路径类型快照（1=本地 2=网络 3=FTP；无路径场景为 0）"),
+            new TranslationSeedItem("entity.backuplog.pathtype", "zh-CN", "路径类型", "路径类型快照（字典 sys_backup_path_type；0=无 1=本地 2=网络 3=FTP）"),
             // entity.backuplog.pathtype
-            new TranslationSeedItem("entity.backuplog.pathtype", "zh-HK", "路径类型_hk", "路径类型快照（1=本地 2=网络 3=FTP；无路径场景为 0）"),
+            new TranslationSeedItem("entity.backuplog.pathtype", "zh-HK", "路径类型_hk", "路径类型快照（字典 sys_backup_path_type；0=无 1=本地 2=网络 3=FTP）"),
 
             // entity.backuplog.resultpath
             new TranslationSeedItem("entity.backuplog.resultpath", "en-US", "结果路径_us", "执行后结果路径"),
@@ -181,13 +181,13 @@ public class TaktBackupLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.backuplog.filesizebytes", "zh-HK", "文件大小字节_hk", "结果大小（字节）"),
 
             // entity.backuplog.runstatus
-            new TranslationSeedItem("entity.backuplog.runstatus", "en-US", "运行状态_us", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.backuplog.runstatus", "en-US", "运行状态_us", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
             // entity.backuplog.runstatus
-            new TranslationSeedItem("entity.backuplog.runstatus", "ja-JP", "运行状态_jp", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.backuplog.runstatus", "ja-JP", "运行状态_jp", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
             // entity.backuplog.runstatus
-            new TranslationSeedItem("entity.backuplog.runstatus", "zh-CN", "运行状态", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.backuplog.runstatus", "zh-CN", "运行状态", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
             // entity.backuplog.runstatus
-            new TranslationSeedItem("entity.backuplog.runstatus", "zh-HK", "运行状态_hk", "运行状态（0=进行中 1=成功 2=失败）"),
+            new TranslationSeedItem("entity.backuplog.runstatus", "zh-HK", "运行状态_hk", "运行状态（字典 sys_job_run_status；0=进行中 1=成功 2=失败）"),
 
             // entity.backuplog.errormessage
             new TranslationSeedItem("entity.backuplog.errormessage", "en-US", "错误信息_us", "失败错误信息"),

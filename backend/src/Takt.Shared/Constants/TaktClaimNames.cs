@@ -23,6 +23,6 @@ public static class TaktClaimNames
     /// <summary>公司编码</summary>
     public const string CompanyCode = "company_code";
 
-    /// <summary>登录账号（OpenIddict preferred_username）</summary>
+    /// <summary>登录账号（OpenID Connect preferred_username / OpenIddict Claims.PreferredUsername）</summary>
     public const string PreferredUsername = "preferred_username";
 }

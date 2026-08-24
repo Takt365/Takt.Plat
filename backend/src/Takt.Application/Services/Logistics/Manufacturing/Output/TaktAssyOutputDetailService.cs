@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailService.cs
-// 创建时间：2026-07-06
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报明细应用服务实现
 // 
@@ -10,16 +10,11 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using System.Globalization;
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
-using Takt.Application.Services.Foundation;
-using Takt.Application.Services.Logistics.Manufacturing.Defect;
-using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
-using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -36,72 +31,48 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
 {
     private readonly ITaktCompanyRepository<TaktAssyOutputDetail> _assyOutputDetailRepository;
     private readonly ITaktCompanyRepository<TaktAssyOutput> _assyOutputRepository;
-    private readonly ITaktCompanyRepository<TaktAssyDefect> _assyDefectRepository;
-    private readonly ITaktCompanyRepository<TaktAssyDefectDetail> _assyDefectDetailRepository;
-    private readonly ITaktCompanyRepository<TaktAssyOrderDefect> _assyOrderDefectRepository;
-    private readonly ITaktCompanyRepository<TaktAssyBatchDefect> _assyBatchDefectRepository;
-    private readonly ITaktCompanyRepository<TaktProductionChangeover> _productionChangeoverRepository;
-    private readonly ITaktCompanyRepository<TaktProductionOrder> _productionOrderRepository;
-    private readonly ITaktCompanyRepository<TaktStandardOperationRate> _standardOperationRateRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
-    private readonly ITaktDictDataService _dictDataService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="assyOutputDetailRepository">组立日报明细仓储</param>
     /// <param name="assyOutputRepository">组立日报仓储</param>
-    /// <param name="assyDefectRepository">组立不良日报仓储</param>
-    /// <param name="assyDefectDetailRepository">组立不良明细仓储</param>
-    /// <param name="assyOrderDefectRepository">工单不良统计仓储</param>
-    /// <param name="assyBatchDefectRepository">批量不良统计仓储</param>
-    /// <param name="productionChangeoverRepository">生产切换记录仓储</param>
-    /// <param name="productionOrderRepository">生产工单仓储</param>
-    /// <param name="standardOperationRateRepository">标准生产稼动率仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
-    /// <param name="dictDataService">字典数据服务</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAssyOutputDetailService(
         ITaktCompanyRepository<TaktAssyOutputDetail> assyOutputDetailRepository,
         ITaktCompanyRepository<TaktAssyOutput> assyOutputRepository,
-        ITaktCompanyRepository<TaktAssyDefect> assyDefectRepository,
-        ITaktCompanyRepository<TaktAssyDefectDetail> assyDefectDetailRepository,
-        ITaktCompanyRepository<TaktAssyOrderDefect> assyOrderDefectRepository,
-        ITaktCompanyRepository<TaktAssyBatchDefect> assyBatchDefectRepository,
-        ITaktCompanyRepository<TaktProductionChangeover> productionChangeoverRepository,
-        ITaktCompanyRepository<TaktProductionOrder> productionOrderRepository,
-        ITaktCompanyRepository<TaktStandardOperationRate> standardOperationRateRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
-        ITaktDictDataService dictDataService,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _assyOutputDetailRepository = assyOutputDetailRepository;
         _assyOutputRepository = assyOutputRepository;
-        _assyDefectRepository = assyDefectRepository;
-        _assyDefectDetailRepository = assyDefectDetailRepository;
-        _assyOrderDefectRepository = assyOrderDefectRepository;
-        _assyBatchDefectRepository = assyBatchDefectRepository;
-        _productionChangeoverRepository = productionChangeoverRepository;
-        _productionOrderRepository = productionOrderRepository;
-        _standardOperationRateRepository = standardOperationRateRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
-        _dictDataService = dictDataService;
     }
 
     /// <summary>
-    /// 获取组立日报明细列表（分页）
+    /// 获取组立日报明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktAssyOutputDetailDto>> GetAssyOutputDetailListAsync(TaktAssyOutputDetailQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktAssyOutputDetailDto>.Create(
+                new List<TaktAssyOutputDetailDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _assyOutputDetailRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -137,13 +108,13 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     {
         EnsureThreeLayerContext();
         var list = await _assyOutputDetailRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.ProdOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ProdOrderCode ?? e.Id.ToString(),
+            DictValue = e.ProdOrderCode,
+            DictLabel = e.ProdOrderCode,
         }).ToList();
     }
 
@@ -155,8 +126,8 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     public async Task<TaktAssyOutputDetailDto> CreateAssyOutputDetailAsync(TaktAssyOutputDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktAssyOutputDetail>();
-        var master = await RequireAssyOutputMasterAsync(entity, dto);
-        EnsureAssyOutputProdDateEditable(master.ProdDate);
+        entity.IsObsolete = 0;
+        await StampAssyOutputDetailAssyOutputAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputDetailRepository,
             x => x.AssyOutputId == entity.AssyOutputId
@@ -173,18 +144,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
             var businessCode = entity.AssyOutputId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
-        await ApplyDetailDerivedFieldsAsync(entity, master);
-        await TaktAssyOutputProdActualQtyLimitHelper.EnsureProdActualQtyNotExceedForDetailAsync(
-            _assyOutputDetailRepository,
-            _productionOrderRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            master,
-            entity.ProdActualQty);
         entity = await _assyOutputDetailRepository.CreateAsync(entity);
-        await RefreshMixedProdBucketForMasterAsync(master, entity.TimePeriod);
-        await RefreshChangeoverBucketForMasterAsync(master, entity.TimePeriod);
-        await SyncDefectFromOutputAsync(master);
         return await GetAssyOutputDetailByIdAsync(entity.Id) ?? entity.Adapt<TaktAssyOutputDetailDto>();
     }
 
@@ -201,13 +161,8 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         {
             throw new TaktBusinessException("组立日报明细不存在");
         }
-        var oldMaster = await _assyOutputRepository.GetByIdAsync(entity.AssyOutputId);
-        var oldTimePeriod = entity.TimePeriod;
-        var oldTeamCode = oldMaster?.TeamCode;
-        var oldProdDate = oldMaster?.ProdDate ?? default;
         dto.Adapt(entity);
-        var master = await RequireAssyOutputMasterAsync(entity, dto);
-        EnsureAssyOutputProdDateEditable(master.ProdDate);
+        await StampAssyOutputDetailAssyOutputAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputDetailRepository,
             x => x.AssyOutputId == entity.AssyOutputId
@@ -217,29 +172,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         {
             throw new TaktBusinessException("组立日报明细的AssyOutputId、LineNumber已存在");
         }
-        await ApplyDetailDerivedFieldsAsync(entity, master);
-        await TaktAssyOutputProdActualQtyLimitHelper.EnsureProdActualQtyNotExceedForDetailAsync(
-            _assyOutputDetailRepository,
-            _productionOrderRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            master,
-            entity.ProdActualQty,
-            id);
         await _assyOutputDetailRepository.UpdateAsync(entity);
-        await RefreshMixedProdBucketForMasterAsync(master, entity.TimePeriod);
-        if (oldMaster != null
-            && !string.IsNullOrWhiteSpace(oldTimePeriod)
-            && !string.IsNullOrWhiteSpace(oldTeamCode)
-            && (!string.Equals(oldTimePeriod, entity.TimePeriod, StringComparison.Ordinal)
-                || !string.Equals(oldTeamCode, master.TeamCode, StringComparison.Ordinal)
-                || oldProdDate.Date != master.ProdDate.Date))
-        {
-            await RefreshMixedProdBucketAsync(oldTeamCode, oldProdDate, oldTimePeriod);
-            await RefreshChangeoverBucketAsync(oldTeamCode, oldProdDate, oldTimePeriod);
-        }
-        await RefreshChangeoverBucketForMasterAsync(master, entity.TimePeriod);
-        await SyncDefectFromOutputAsync(master);
         return await GetAssyOutputDetailByIdAsync(id) ?? throw new TaktBusinessException("组立日报明细不存在");
     }
 
@@ -255,25 +188,16 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         {
             throw new TaktBusinessException("组立日报明细不存在或已删除");
         }
-        var master = await _assyOutputRepository.GetByIdAsync(entity.AssyOutputId);
-        var timePeriod = entity.TimePeriod;
-        var TeamCode = master?.TeamCode;
-        var prodDate = master?.ProdDate ?? default;
-        if (master != null)
-        {
-            EnsureAssyOutputProdDateEditable(master.ProdDate);
-        }
-        var deleted = await _assyOutputDetailRepository.DeleteAsync(id);
-        if (!deleted)
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             throw new TaktBusinessException("组立日报明细不存在或已删除");
         }
-        if (master != null && !string.IsNullOrWhiteSpace(timePeriod) && !string.IsNullOrWhiteSpace(TeamCode))
+        if (entity.IsObsolete == 1)
         {
-            await RefreshMixedProdBucketAsync(TeamCode, prodDate, timePeriod);
-            await RefreshChangeoverBucketAsync(TeamCode, prodDate, timePeriod);
-            await SyncDefectFromOutputAsync(master);
+            throw new TaktBusinessException("组立日报明细已作废");
         }
+        entity.IsObsolete = 1;
+        await _assyOutputDetailRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -292,6 +216,27 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         {
             await DeleteAssyOutputDetailByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新组立日报明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktAssyOutputDetailDto> UpdateAssyOutputDetailObsoleteAsync(TaktAssyOutputDetailObsoleteDto dto)
+    {
+        var entity = await _assyOutputDetailRepository.GetByIdAsync(dto.AssyOutputDetailId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("组立日报明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("组立日报明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _assyOutputDetailRepository.UpdateAsync(entity);
+        return await GetAssyOutputDetailByIdAsync(dto.AssyOutputDetailId) ?? throw new TaktBusinessException("组立日报明细不存在");
     }
 
     /// <summary>
@@ -325,23 +270,13 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
             return (0, 0, errors);
         }
         var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
-        var importOutputIds = new HashSet<long>();
-        var importBucketsToRefresh = new HashSet<(string TeamCode, DateTime ProdDate, string TimePeriod)>();
-        var dictContext = await _dictDataService.CreateDictStorageContextAsync(
-            TaktDictStorageHelper.CollectDictTypeCodes(TaktOutputDetailDictImportBindings.AssyDetail).ToArray());
         for (var i = 0; i < rows.Count; i++)
         {
             try
             {
+                var entity = rows[i].Adapt<TaktAssyOutputDetail>();
                 var importDto = rows[i].Adapt<TaktAssyOutputDetailCreateDto>();
-                TaktDictStorageHelper.ApplyStorageLabels(
-                    importDto,
-                    typeof(TaktAssyOutputDetailCreateDto),
-                    dictContext,
-                    TaktOutputDetailDictImportBindings.AssyDetail);
-                var entity = importDto.Adapt<TaktAssyOutputDetail>();
-                var master = await RequireAssyOutputMasterAsync(entity, importDto);
-                EnsureAssyOutputProdDateEditable(master.ProdDate);
+                await StampAssyOutputDetailAssyOutputAsync(entity, importDto);
                 var importKey = $"{entity.AssyOutputId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -363,39 +298,13 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
                     var businessCode = entity.AssyOutputId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
-                await ApplyDetailDerivedFieldsAsync(entity, master);
-                await TaktAssyOutputProdActualQtyLimitHelper.EnsureProdActualQtyNotExceedForDetailAsync(
-                    _assyOutputDetailRepository,
-                    _productionOrderRepository,
-                    CurrentTenantCode,
-                    CurrentCompanyCode,
-                    master,
-                    entity.ProdActualQty);
                 await _assyOutputDetailRepository.CreateAsync(entity);
-                importOutputIds.Add(master.Id);
-                if (!string.IsNullOrWhiteSpace(entity.TimePeriod))
-                {
-                    importBucketsToRefresh.Add((master.TeamCode, master.ProdDate, entity.TimePeriod));
-                }
                 success += 1;
             }
             catch (Exception ex)
             {
                 fail += 1;
                 errors.Add($"第{i + 2}行: {ex.Message}");
-            }
-        }
-        foreach (var bucket in importBucketsToRefresh)
-        {
-            await RefreshMixedProdBucketAsync(bucket.TeamCode, bucket.ProdDate, bucket.TimePeriod);
-            await RefreshChangeoverBucketAsync(bucket.TeamCode, bucket.ProdDate, bucket.TimePeriod);
-        }
-        foreach (var outputId in importOutputIds)
-        {
-            var output = await _assyOutputRepository.GetByIdAsync(outputId);
-            if (output != null)
-            {
-                await SyncDefectFromOutputAsync(output);
             }
         }
         return (success, fail, errors);
@@ -410,7 +319,15 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportAssyOutputDetailAsync(TaktAssyOutputDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktAssyOutputDetailQueryDto());
+        var queryDto = query ?? new TaktAssyOutputDetailQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktAssyOutputDetailExportDto>(),
+                sheetName ?? "组立日报明细数据",
+                fileName ?? "组立日报明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _assyOutputDetailRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -427,161 +344,48 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     }
 
     // ========================================
-    // 派生字段计算（MixedProd / 工时 / 达成率）
+    // 主表外键同步（ManyToOne）
     // ========================================
 
     /// <summary>
-    /// 校验主表生产日期未过编辑截止日（次月 cutoff 日之后不可新增/修改/删除明细）
+    /// 同步组立日报明细主表外键（ManyToOne → 组立日报）
     /// </summary>
-    /// <param name="prodDate">生产日期</param>
-    private void EnsureAssyOutputProdDateEditable(DateTime prodDate)
-    {
-        if (TaktAssyOutputProdDateEditLockHelper.IsProdDateLocked(prodDate, DateTime.Today))
-        {
-            ThrowBusinessExceptionLocalized(
-                TaktValidationI18nKeys.AssyOutputProdDateLocked,
-                prodDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                TaktAssyOutputProdDateEditLockHelper.DefaultCutoffDayOfNextMonth);
-        }
-        if (!TaktAssyOutputProdDateEditLockHelper.IsProdDateSelectable(prodDate, DateTime.Today))
-        {
-            ThrowBusinessExceptionLocalized(
-                TaktValidationI18nKeys.AssyOutputProdDateOutOfRange,
-                TaktAssyOutputProdDateEditLockHelper.DefaultCutoffDayOfNextMonth);
-        }
-    }
-
-    /// <summary>
-    /// 校验并同步组立日报主表外键，返回主表实体
-    /// </summary>
-    /// <param name="entity">组立日报明细实体</param>
+    /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
-    /// <returns>组立日报主表</returns>
-    private async Task<TaktAssyOutput> RequireAssyOutputMasterAsync(TaktAssyOutputDetail entity, TaktAssyOutputDetailCreateDto dto)
+    /// <returns>任务</returns>
+    private async Task StampAssyOutputDetailAssyOutputAsync(TaktAssyOutputDetail entity, TaktAssyOutputDetailCreateDto dto)
     {
         if (dto.AssyOutputId <= 0)
         {
-            throw new TaktBusinessException("组立日报不存在");
+            return;
         }
         var master = await _assyOutputRepository.GetByIdAsync(dto.AssyOutputId);
-        if (master == null || master.TenantCode != CurrentTenantCode || master.CompanyCode != CurrentCompanyCode)
+        if (master == null)
         {
             throw new TaktBusinessException("组立日报不存在");
         }
         entity.AssyOutputId = master.Id;
-        return master;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.ProdOrderCode))
+        {
+            entity.ProdOrderCode = master.ProdOrderCode;
+        }
     }
-
-    /// <summary>
-    /// 保存前按主表重算明细派生字段（含无产量无报工时标准产能为 0）
-    /// </summary>
-    /// <param name="detail">组立日报明细</param>
-    /// <param name="master">组立日报主表</param>
-    /// <returns>任务</returns>
-    private async Task ApplyDetailDerivedFieldsAsync(TaktAssyOutputDetail detail, TaktAssyOutput master)
-    {
-        ArgumentNullException.ThrowIfNull(detail);
-        ArgumentNullException.ThrowIfNull(master);
-        var operationRatePercent = await TaktAssyOutputDerivedFieldsHelper.ResolvePersonnelOperationRatePercentAsync(
-            _standardOperationRateRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            master.PlantCode,
-            master.ProdDate);
-        TaktAssyOutputDetailDerivedFieldsHelper.ApplyCalculatedFields(
-            detail,
-            master,
-            TaktProductionStatHelper.CalculateAssyMixedProdCount(1),
-            operationRatePercent);
-    }
-
-    /// <summary>
-    /// 刷新指定主表上下文下生产时段混合生产桶
-    /// </summary>
-    /// <param name="master">组立日报主表</param>
-    /// <param name="timePeriod">生产时段</param>
-    /// <returns>任务</returns>
-    private async Task RefreshMixedProdBucketForMasterAsync(TaktAssyOutput master, string timePeriod)
-    {
-        await RefreshMixedProdBucketAsync(master.TeamCode, master.ProdDate, timePeriod);
-    }
-
-    /// <summary>
-    /// 刷新指定主表上下文下生产时段生产切换桶
-    /// </summary>
-    /// <param name="master">组立日报主表</param>
-    /// <param name="timePeriod">生产时段</param>
-    /// <returns>任务</returns>
-    private async Task RefreshChangeoverBucketForMasterAsync(TaktAssyOutput master, string timePeriod)
-    {
-        await RefreshChangeoverBucketAsync(master.TeamCode, master.ProdDate, timePeriod);
-    }
-
-    /// <summary>
-    /// 刷新同一生产日期、生产班组、生产时段桶内生产切换记录
-    /// </summary>
-    /// <param name="TeamCode">生产班组</param>
-    /// <param name="prodDate">生产日期</param>
-    /// <param name="timePeriod">生产时段</param>
-    /// <returns>任务</returns>
-    private async Task RefreshChangeoverBucketAsync(string TeamCode, DateTime prodDate, string timePeriod)
-    {
-        EnsureThreeLayerContext();
-        await TaktAssyOutputProductionChangeoverSyncHelper.RefreshBucketAsync(
-            _assyOutputRepository,
-            _assyOutputDetailRepository,
-            _productionChangeoverRepository,
-            _productionOrderRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            TeamCode,
-            prodDate,
-            timePeriod);
-    }
-
-    /// <summary>
-    /// 刷新同一生产日期、生产班组、生产时段桶内全部明细派生字段
-    /// </summary>
-    /// <param name="TeamCode">生产班组</param>
-    /// <param name="prodDate">生产日期</param>
-    /// <param name="timePeriod">生产时段</param>
-    /// <returns>任务</returns>
-    private async Task RefreshMixedProdBucketAsync(string TeamCode, DateTime prodDate, string timePeriod)
-    {
-        EnsureThreeLayerContext();
-        await TaktAssyOutputDetailDerivedFieldsHelper.RefreshMixedProdBucketAsync(
-            _assyOutputRepository,
-            _assyOutputDetailRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            TeamCode,
-            prodDate,
-            timePeriod);
-    }
-
-    /// <summary>
-    /// 产出主表变更后刷新工单/批量不良统计（不自动生成组立不良日报）
-    /// </summary>
-    /// <param name="output">组立日报主表</param>
-    /// <returns>任务</returns>
-    private async Task SyncDefectFromOutputAsync(TaktAssyOutput output)
-    {
-        EnsureThreeLayerContext();
-        await TaktAssyOutputDefectSyncHelper.SyncFromAssyOutputAsync(
-            _assyOutputRepository,
-            _assyOutputDetailRepository,
-            _assyDefectRepository,
-            _assyDefectDetailRepository,
-            _assyOrderDefectRepository,
-            _assyBatchDefectRepository,
-            output,
-            CurrentTenantCode,
-            CurrentCompanyCode);
-    }
-
-    // ========================================
-    // 主表外键同步（ManyToOne）
-    // ========================================
     // ========================================
     // 查询表达式
     // ========================================
@@ -595,150 +399,280 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     {
         var exp = Expressionable.Create<TaktAssyOutputDetail>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (queryDto?.IsObsolete.HasValue == true)
         {
-            var keywords = queryDto.KeyWords;
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
+        {
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.AssyOutputId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.TimePeriod != null && x.TimePeriod.Contains(keywords))
-                || SqlFunc.ToString(x.MixedProd).Contains(keywords)
-                || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
-                || SqlFunc.ToString(x.DowntimeMinutes).Contains(keywords)
                 || (x.DowntimeReason != null && x.DowntimeReason.Contains(keywords))
                 || (x.DowntimeDescription != null && x.DowntimeDescription.Contains(keywords))
                 || (x.UnachievedReason != null && x.UnachievedReason.Contains(keywords))
                 || (x.UnachievedDescription != null && x.UnachievedDescription.Contains(keywords))
-                || SqlFunc.ToString(x.InputMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.ActualMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.IndirectMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.ConfirmMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.StdCapacity).Contains(keywords)
-                || SqlFunc.ToString(x.AchievementRate).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.AssyOutputId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.AssyOutputId == queryDto.AssyOutputId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdOrderCode))
-        {
-            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(queryDto.ProdOrderCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TimePeriod))
-        {
-            exp = exp.And(x => x.TimePeriod != null && x.TimePeriod.Contains(queryDto.TimePeriod));
-        }
-
-        if (queryDto?.MixedProd.HasValue == true)
-        {
-            exp = exp.And(x => x.MixedProd == queryDto.MixedProd);
-        }
-
-        if (queryDto?.ProdActualQty.HasValue == true)
-        {
-            exp = exp.And(x => x.ProdActualQty == queryDto.ProdActualQty);
-        }
-
-        if (queryDto?.DowntimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.DowntimeMinutes == queryDto.DowntimeMinutes);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DowntimeReason))
-        {
-            exp = exp.And(x => x.DowntimeReason != null && x.DowntimeReason.Contains(queryDto.DowntimeReason));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DowntimeDescription))
-        {
-            exp = exp.And(x => x.DowntimeDescription != null && x.DowntimeDescription.Contains(queryDto.DowntimeDescription));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.UnachievedReason))
-        {
-            exp = exp.And(x => x.UnachievedReason != null && x.UnachievedReason.Contains(queryDto.UnachievedReason));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.UnachievedDescription))
-        {
-            exp = exp.And(x => x.UnachievedDescription != null && x.UnachievedDescription.Contains(queryDto.UnachievedDescription));
-        }
-
-        if (queryDto?.InputMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.InputMinutes == queryDto.InputMinutes);
-        }
-
-        if (queryDto?.ActualMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.ActualMinutes == queryDto.ActualMinutes);
-        }
-
-        if (queryDto?.IndirectMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.IndirectMinutes == queryDto.IndirectMinutes);
-        }
-
-        if (queryDto?.ConfirmMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.ConfirmMinutes == queryDto.ConfirmMinutes);
-        }
-
-        if (queryDto?.StdCapacity.HasValue == true)
-        {
-            exp = exp.And(x => x.StdCapacity == queryDto.StdCapacity);
-        }
-
-        if (queryDto?.AchievementRate.HasValue == true)
-        {
-            exp = exp.And(x => x.AchievementRate == queryDto.AchievementRate);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.AssyOutputId.HasValue == true)
+        {
+            var assyOutputId = queryDto.AssyOutputId.Value;
+            exp = exp.And(x => x.AssyOutputId == assyOutputId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProdOrderCode))
+        {
+            var prodOrderCode = queryDto.ProdOrderCode;
+            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(prodOrderCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TimePeriod))
+        {
+            var timePeriod = queryDto.TimePeriod;
+            exp = exp.And(x => x.TimePeriod != null && x.TimePeriod.Contains(timePeriod));
+        }
+
+        if (queryDto?.StdCapacity.HasValue == true)
+        {
+            var stdCapacity = queryDto.StdCapacity.Value;
+            exp = exp.And(x => x.StdCapacity == stdCapacity);
+        }
+
+        if (queryDto?.ProdActualQty.HasValue == true)
+        {
+            var prodActualQty = queryDto.ProdActualQty.Value;
+            exp = exp.And(x => x.ProdActualQty == prodActualQty);
+        }
+
+        if (queryDto?.DowntimeMinutes.HasValue == true)
+        {
+            var downtimeMinutes = queryDto.DowntimeMinutes.Value;
+            exp = exp.And(x => x.DowntimeMinutes == downtimeMinutes);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DowntimeReason))
+        {
+            var downtimeReason = queryDto.DowntimeReason;
+            exp = exp.And(x => x.DowntimeReason != null && x.DowntimeReason.Contains(downtimeReason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DowntimeDescription))
+        {
+            var downtimeDescription = queryDto.DowntimeDescription;
+            exp = exp.And(x => x.DowntimeDescription != null && x.DowntimeDescription.Contains(downtimeDescription));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UnachievedReason))
+        {
+            var unachievedReason = queryDto.UnachievedReason;
+            exp = exp.And(x => x.UnachievedReason != null && x.UnachievedReason.Contains(unachievedReason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UnachievedDescription))
+        {
+            var unachievedDescription = queryDto.UnachievedDescription;
+            exp = exp.And(x => x.UnachievedDescription != null && x.UnachievedDescription.Contains(unachievedDescription));
+        }
+
+        if (queryDto?.InputMinutes.HasValue == true)
+        {
+            var inputMinutes = queryDto.InputMinutes.Value;
+            exp = exp.And(x => x.InputMinutes == inputMinutes);
+        }
+
+        if (queryDto?.ActualMinutes.HasValue == true)
+        {
+            var actualMinutes = queryDto.ActualMinutes.Value;
+            exp = exp.And(x => x.ActualMinutes == actualMinutes);
+        }
+
+        if (queryDto?.IndirectMinutes.HasValue == true)
+        {
+            var indirectMinutes = queryDto.IndirectMinutes.Value;
+            exp = exp.And(x => x.IndirectMinutes == indirectMinutes);
+        }
+
+        if (queryDto?.ConfirmMinutes.HasValue == true)
+        {
+            var confirmMinutes = queryDto.ConfirmMinutes.Value;
+            exp = exp.And(x => x.ConfirmMinutes == confirmMinutes);
+        }
+
+        if (queryDto?.MixedProd.HasValue == true)
+        {
+            var mixedProd = queryDto.MixedProd.Value;
+            exp = exp.And(x => x.MixedProd == mixedProd);
+        }
+
+        if (queryDto?.AchievementRate.HasValue == true)
+        {
+            var achievementRate = queryDto.AchievementRate.Value;
+            exp = exp.And(x => x.AchievementRate == achievementRate);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktAssyOutputDetailQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.AssyOutputId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProdOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TimePeriod))
+        {
+            return true;
+        }
+        if (queryDto.StdCapacity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ProdActualQty.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DowntimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DowntimeReason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DowntimeDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UnachievedReason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UnachievedDescription))
+        {
+            return true;
+        }
+        if (queryDto.InputMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IndirectMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ConfirmMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MixedProd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AchievementRate.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

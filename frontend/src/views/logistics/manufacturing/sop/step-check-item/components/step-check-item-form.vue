@@ -89,7 +89,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isRequired"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopstepcheckitem.isrequired') })"
                 />
               </a-form-item>

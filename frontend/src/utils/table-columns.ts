@@ -34,8 +34,21 @@ export function readColumnSettingLabel(column: ColumnItem): string | undefined {
   return trimmed || undefined;
 }
 
-/** 实体基类作用域 ↔ common.d.ts 三个 EntityBase */
-export type TaktEntityScope = 'tenant' | 'company' | 'approval';
+/**
+ * 实体基类作用域 ↔ Domain 隔离组合
+ * tenant          → TaktTenantEntityBase（组合 1：有工厂、有语言）
+ * tenant-core     → TaktTenantCoreEntityBase（组合 4：无工厂、无语言）
+ * tenant-culture  → TaktTenantCultureEntityBase（组合 2：无工厂、有语言）
+ * tenant-plant    → TaktTenantPlantEntityBase（组合 3：有工厂、无语言）
+ * company / approval → 公司级 / 审批级
+ */
+export type TaktEntityScope =
+  | 'tenant'
+  | 'tenant-core'
+  | 'tenant-culture'
+  | 'tenant-plant'
+  | 'company'
+  | 'approval';
 
 /** 单表 / 树表 / 主子表左右布局默认可见业务字段数（不含 id、plant、action、其余基类字段） */
 export type TaktTableLayoutMode = 'single' | 'tree' | 'masterDetailMaster' | 'masterDetailDetail';
@@ -49,37 +62,53 @@ export const DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT: Record<TaktTableLayoutMode, n
   masterDetailDetail: 4,
 };
 
+const TENANT_CORE_AUDIT_FIELDS = [
+  'tenantCode',
+  'ExtField',
+  'remark',
+  'createdBy',
+  'createdAt',
+  'updatedBy',
+  'updatedAt',
+  'isDeleted',
+  'deletedBy',
+  'deletedAt',
+] as const;
+
 /**
- * 作用域对应工厂列键（表格固定第 2 列；对齐 Domain / common.d.ts）
- * tenant → relatedPlant；company / approval → plantCode
+ * 作用域对应工厂列键（有工厂时表格固定第 2 列；Core/Culture 组合无工厂列）
+ * tenant / tenant-plant → relatedPlant；company / approval → plantCode
  */
-export const ENTITY_SCOPE_PLANT_FIELD: Record<TaktEntityScope, 'relatedPlant' | 'plantCode'> = {
+export const ENTITY_SCOPE_PLANT_FIELD: Record<
+  TaktEntityScope,
+  'relatedPlant' | 'plantCode' | undefined
+> = {
   tenant: 'relatedPlant',
+  'tenant-core': undefined,
+  'tenant-culture': undefined,
+  'tenant-plant': 'relatedPlant',
   company: 'plantCode',
   approval: 'plantCode',
 };
 
 /**
- * 三个实体基类字段（不含 id；顺序与 common.d.ts 一致：plant 居首）
- * tenant   → TaktTenantEntityBase
- * company  → TaktCompanyEntityBase
- * approval → TaktApprovalEntityBase
+ * 实体基类字段（不含 id；有工厂时 plant 居首）
+ * tenant          → TaktTenantEntityBase
+ * tenant-core     → TaktTenantCoreEntityBase
+ * tenant-culture  → TaktTenantCultureEntityBase
+ * tenant-plant    → TaktTenantPlantEntityBase
+ * company         → TaktCompanyEntityBase
+ * approval        → TaktApprovalEntityBase
  */
 export const ENTITY_BASE_FIELDS = {
   tenant: [
     'relatedPlant',
     'cultureCode',
-    'tenantCode',
-    'ExtField',
-    'remark',
-    'createdBy',
-    'createdAt',
-    'updatedBy',
-    'updatedAt',
-    'isDeleted',
-    'deletedBy',
-    'deletedAt',
+    ...TENANT_CORE_AUDIT_FIELDS,
   ],
+  'tenant-core': [...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-culture': ['cultureCode', ...TENANT_CORE_AUDIT_FIELDS],
+  'tenant-plant': ['relatedPlant', ...TENANT_CORE_AUDIT_FIELDS],
   company: [
     'plantCode',
     'tenantCode',
@@ -169,7 +198,7 @@ export function resolveEntityScopeBaseFieldKeys(entityScope: TaktEntityScope): r
  */
 export function resolveEntityScopePlantFieldKey(
   entityScope: TaktEntityScope,
-): 'relatedPlant' | 'plantCode' {
+): 'relatedPlant' | 'plantCode' | undefined {
   return ENTITY_SCOPE_PLANT_FIELD[entityScope];
 }
 
@@ -308,8 +337,11 @@ export function getDefaultEntityColumns(
  * @param plantKey 作用域主工厂键
  */
 function resolveAlternatePlantFieldKey(
-  plantKey: 'relatedPlant' | 'plantCode',
-): 'relatedPlant' | 'plantCode' {
+  plantKey: 'relatedPlant' | 'plantCode' | undefined,
+): 'relatedPlant' | 'plantCode' | undefined {
+  if (!plantKey) {
+    return undefined;
+  }
   return plantKey === 'plantCode' ? 'relatedPlant' : 'plantCode';
 }
 
@@ -344,7 +376,9 @@ export function mergeDefaultColumns(
       if (key) userKeys.add(key);
     }
   }
-  const hasAnyPlant = userKeys.has(plantKey) || userKeys.has(alternatePlantKey);
+  const hasAnyPlant = Boolean(
+    (plantKey && userKeys.has(plantKey)) || (alternatePlantKey && userKeys.has(alternatePlantKey)),
+  );
   const baseColumns = getDefaultEntityColumns(t, includeAuditFields, entityScope).filter((col) => {
     const key = getTableColumnKey(col as ColumnItem);
     return key != null && !userKeys.has(key);
@@ -360,15 +394,19 @@ export function mergeDefaultColumns(
       actions.push(col);
     } else if (key === idKey) {
       idCols.push(col);
-    } else if (key === plantKey || key === alternatePlantKey) {
+    } else if (
+      (plantKey != null && key === plantKey) ||
+      (alternatePlantKey != null && key === alternatePlantKey)
+    ) {
       plantCols.push(col);
     } else {
       body.push(col);
     }
   }
-  const basePlantCols = hasAnyPlant
-    ? []
-    : baseColumns.filter((col) => getTableColumnKey(col as ColumnItem) === plantKey);
+  const basePlantCols =
+    !plantKey || hasAnyPlant
+      ? []
+      : baseColumns.filter((col) => getTableColumnKey(col as ColumnItem) === plantKey);
   const baseRestCols = baseColumns.filter((col) => {
     const key = getTableColumnKey(col as ColumnItem);
     return key !== plantKey;
@@ -429,8 +467,8 @@ export function extractBusinessColumnKeys(
       !key ||
       key === idKey ||
       key === actionKey ||
-      key === plantKey ||
-      key === alternatePlantKey ||
+      (plantKey != null && key === plantKey) ||
+      (alternatePlantKey != null && key === alternatePlantKey) ||
       baseKeys.has(key)
     ) {
       continue;
@@ -448,15 +486,18 @@ export function extractBusinessColumnKeys(
 export function resolveVisiblePlantColumnKey(
   userColumns: TableColumnsType,
   entityScope: TaktEntityScope = 'company',
-): string {
+): string | undefined {
   const plantKey = resolveEntityScopePlantFieldKey(entityScope);
   const alternatePlantKey = resolveAlternatePlantFieldKey(plantKey);
+  if (!plantKey) {
+    return undefined;
+  }
   let hasPlant = false;
   let hasAlternate = false;
   for (const col of userColumns) {
     const key = getTableColumnKey(col as ColumnItem);
     if (key === plantKey) hasPlant = true;
-    if (key === alternatePlantKey) hasAlternate = true;
+    if (alternatePlantKey != null && key === alternatePlantKey) hasAlternate = true;
   }
   if (hasPlant) {
     return plantKey;
@@ -486,7 +527,12 @@ export function resolveDefaultVisibleColumnKeys(
   const plantKey = resolveVisiblePlantColumnKey(userColumns, entityScope);
   const count = DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT[tableMode];
   const businessKeys = extractBusinessColumnKeys(userColumns, idKey, actionKey, entityScope);
-  return [idKey, plantKey, ...businessKeys.slice(0, Math.max(0, count)), actionKey];
+  const keys = [idKey];
+  if (plantKey) {
+    keys.push(plantKey);
+  }
+  keys.push(...businessKeys.slice(0, Math.max(0, count)), actionKey);
+  return keys;
 }
 
 /**

@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,169 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterQualityAssuranceId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-quality-cost-assurance-assurance-incoming"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('qualityAssuranceCode')">
-      <a-form-item :label="pi.queryLabel('qualityAssuranceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.qualityAssuranceCode"
-          :placeholder="pi.queryPh('qualityAssuranceCode', 'required')"
-          show-count
-          :maxlength="30"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('directManpowerCostPerMinute')">
-      <a-form-item :label="pi.queryLabel('directManpowerCostPerMinute')">
-        <a-input-number
-          v-model:value="advancedQueryForm.directManpowerCostPerMinute"
-          :placeholder="pi.queryPh('directManpowerCostPerMinute', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('incomingInspectionCost')">
-      <a-form-item :label="pi.queryLabel('incomingInspectionCost')">
-        <a-input-number
-          v-model:value="advancedQueryForm.incomingInspectionCost"
-          :placeholder="pi.queryPh('incomingInspectionCost', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('inspectionTimeMinutes')">
-      <a-form-item :label="pi.queryLabel('inspectionTimeMinutes')">
-        <a-input-number
-          v-model:value="advancedQueryForm.inspectionTimeMinutes"
-          :placeholder="pi.queryPh('inspectionTimeMinutes', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('travelCost')">
-      <a-form-item :label="pi.queryLabel('travelCost')">
-        <a-input-number
-          v-model:value="advancedQueryForm.travelCost"
-          :placeholder="pi.queryPh('travelCost', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('otherExpenses')">
-      <a-form-item :label="pi.queryLabel('otherExpenses')">
-        <a-input-number
-          v-model:value="advancedQueryForm.otherExpenses"
-          :placeholder="pi.queryPh('otherExpenses', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('incomingNote')">
-      <a-form-item :label="pi.queryLabel('incomingNote')">
-        <a-textarea
-          v-model:value="advancedQueryForm.incomingNote"
-          :placeholder="pi.queryPh('incomingNote', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isObsolete')">
-      <a-form-item :label="pi.queryLabel('isObsolete')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('isObsolete', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -331,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import QualityAssuranceIncomingForm from './assurance-incoming-form.vue'
 import { useQualityAssuranceMasterContext } from '../composables/use-assurance-master-context'
 import {
@@ -419,48 +260,6 @@ const formData = ref<Partial<QualityAssuranceIncoming>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    lineNumber: undefined as number | undefined,
-    directManpowerCostPerMinute: undefined as number | undefined,
-    incomingInspectionCost: undefined as number | undefined,
-    inspectionTimeMinutes: undefined as number | undefined,
-    travelCost: undefined as number | undefined,
-    otherExpenses: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  QUALITYASSURANCEINCOMING_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...QUALITYASSURANCEINCOMING_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -506,16 +305,6 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: QualityAssuranceIncoming }) =>
       String(getQualityAssuranceIncomingField(record, 'qualityAssuranceIncomingId') ?? ''),
-  },
-  {
-    title: pi.label('qualityAssuranceId'),
-    dataIndex: 'qualityAssuranceId',
-    key: 'qualityAssuranceId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: QualityAssuranceIncoming }) =>
-      String(getQualityAssuranceIncomingField(record, 'qualityAssuranceId') ?? ''),
   },
   {
     title: pi.label('qualityAssuranceCode'),
@@ -607,6 +396,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: QualityAssuranceIncoming }) =>
       String(getQualityAssuranceIncomingField(record, 'isObsolete') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: QualityAssuranceIncoming }) =>
+      String(getQualityAssuranceIncomingField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -624,8 +423,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:cost:assurance:delete',
         onClick: (record: QualityAssuranceIncoming) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -734,7 +535,7 @@ function onClickRow(record: QualityAssuranceIncoming) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {QualityAssuranceIncomingQuery} 查询 DTO
  */
@@ -758,27 +559,6 @@ function buildListQuery(overrides?: Partial<QualityAssuranceIncomingQuery>): Qua
   }
   for (const key of QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
-  }
-  if (form.directManpowerCostPerMinute !== undefined && form.directManpowerCostPerMinute !== null) {
-    query.directManpowerCostPerMinute = form.directManpowerCostPerMinute
-  }
-  if (form.incomingInspectionCost !== undefined && form.incomingInspectionCost !== null) {
-    query.incomingInspectionCost = form.incomingInspectionCost
-  }
-  if (form.inspectionTimeMinutes !== undefined && form.inspectionTimeMinutes !== null) {
-    query.inspectionTimeMinutes = form.inspectionTimeMinutes
-  }
-  if (form.travelCost !== undefined && form.travelCost !== null) {
-    query.travelCost = form.travelCost
-  }
-  if (form.otherExpenses !== undefined && form.otherExpenses !== null) {
-    query.otherExpenses = form.otherExpenses
-  }
-  if (form.isObsolete !== undefined && form.isObsolete !== null) {
-    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1010,6 +790,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportQualityAssuranceIncoming(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

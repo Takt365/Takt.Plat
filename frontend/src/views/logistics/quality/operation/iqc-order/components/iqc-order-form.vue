@@ -10,286 +10,76 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form iqc-order-form flex flex-col min-h-0"
+    class="takt-generated-form iqc-order-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="iqc-order-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.plantcode')"
-                name="plantCode"
-              >
-                <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.iqcOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.iqcorder.sourcecode')"
-                name="sourceCode"
-              >
-                <a-input
-                  v-model:value="formState.sourceCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.sourcecode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.iqcOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.iqcorder.inspectiondate')"
-                name="inspectionDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.inspectionDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.iqcorder.inspectiondate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.iqcorder.code')"
-                name="iqcOrderCode"
-              >
-                <a-input
-                  v-model:value="formState.iqcOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.code') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.iqcOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.iqcorder.suppliercode')"
-                name="supplierCode"
-              >
-                <a-input
-                  v-model:value="formState.supplierCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.suppliercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.iqcOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.iqcorder.totalpurchasequantity')"
-                name="totalPurchaseQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.totalPurchaseQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.totalpurchasequantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.iqcorder.totalsamplequantity')"
-                name="totalSampleQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.totalSampleQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.totalsamplequantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.iqcorder.totalqualifiedquantity')"
-                name="totalQualifiedQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.totalQualifiedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.totalqualifiedquantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.iqcorder.totalunqualifiedquantity')"
-                name="totalUnqualifiedQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.totalUnqualifiedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.totalunqualifiedquantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.iqcorder.totalinspectionreturnquantity')"
-                name="totalInspectionReturnQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.totalInspectionReturnQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.totalinspectionreturnquantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.iqcorder.judgeby')"
-                name="judgeBy"
-              >
-                <a-input
-                  v-model:value="formState.judgeBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.judgeby') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.iqcorder.judgedate')"
-                name="judgeDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.judgeDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.iqcorder.judgedate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.iqcorder.judgedescription')"
-                name="judgeDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.judgeDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.iqcorder.judgedescription') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.iqcorder.judgestatus')"
-                name="judgeStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.judgeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.judgestatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="iqcOrderItemTableRef"
       v-model="childIqcOrderItemRows"
       :columns="iqcOrderItemFormColumns"
-      :title="t('entity.iqcorderitem._self')"
-      :add-button-entity="t('entity.iqcorderitem._self')"
+      :title="iqcOrderItemPi.self()"
+      :add-button-entity="iqcOrderItemPi.self()"
       id-field="iqcOrderItemId"
       :default-row="createDefaultIqcOrderItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-materialCode="{ record }">
+        <TaktSelect
+          v-model:value="record.materialCode"
+          api-url="TaktGeneralMaterials/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="iqcOrderItemPi.queryPh('materialCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-standardCode="{ record }">
+        <TaktSelect
+          v-model:value="record.standardCode"
+          api-url="TaktInspectionStandards/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="iqcOrderItemPi.queryPh('standardCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-samplingSchemeCode="{ record }">
+        <TaktSelect
+          v-model:value="record.samplingSchemeCode"
+          api-url="TaktSamplingSchemes/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="iqcOrderItemPi.queryPh('samplingSchemeCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="iqcOrderItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -301,47 +91,60 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useIqcOrderI18n } from '../composables/use-iqc-order-i18n'
+
+/** 实体字段 i18n */
+const pi = useIqcOrderI18n()
+
 import type { IqcOrderCreate } from '@/types/logistics/quality/operation/iqc-order'
-import { RiQuestionLine } from '@remixicon/vue'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","sourceCode","inspectionDate","iqcOrderCode","supplierCode","totalPurchaseQuantity","totalSampleQuantity","totalQualifiedQuantity","totalUnqualifiedQuantity","totalInspectionReturnQuantity","judgeBy","judgeDate","judgeDescription","judgeStatus","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useIqcOrderItemI18n } from '../composables/use-iqc-order-item-i18n'
+
+const iqcOrderItemPi = useIqcOrderItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childIqcOrderItemRows = ref<Record<string, unknown>[]>([])
 const iqcOrderItemTableRef = ref<{
@@ -350,65 +153,141 @@ const iqcOrderItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedIqcOrderItemRow(row: Record<string, unknown>): boolean {
+  const id = row.iqcOrderItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextIqcOrderItemLineNumber(): number {
+  const rows = iqcOrderItemTableRef.value?.getRows?.() ?? childIqcOrderItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 iqcOrderItem 可编辑列 */
 const iqcOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.iqcorderitem.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: iqcOrderItemPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'materialCode',
-    title: t('entity.iqcorderitem.materialcode'),
-    editor: 'input',
+    title: iqcOrderItemPi.label('materialCode'),
     width: 140,
   },
   {
     key: 'materialDescription',
-    title: t('entity.iqcorderitem.materialdescription'),
-    editor: 'input',
-    width: 140,
+    title: iqcOrderItemPi.label('materialDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: iqcOrderItemPi.ph('materialDescription'),
+    width: 180,
   },
   {
     key: 'batchCode',
-    title: t('entity.iqcorderitem.batchCode'),
+    title: iqcOrderItemPi.label('batchCode'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.iqcorderitem.batchCode') }),
+    width: 140, allowClear: true, placeholder: iqcOrderItemPi.ph('batchCode'),
   },
   {
     key: 'purchaseQuantity',
-    title: t('entity.iqcorderitem.purchasequantity'),
-    editor: 'inputNumber',
+    title: iqcOrderItemPi.label('purchaseQuantity'),
     width: 140,
   },
   {
     key: 'standardCode',
-    title: t('entity.iqcorderitem.standardcode'),
-    editor: 'input',
+    title: iqcOrderItemPi.label('standardCode'),
     width: 140,
   },
   {
     key: 'samplingSchemeCode',
-    title: t('entity.iqcorderitem.samplingschemecode'),
-    editor: 'input',
+    title: iqcOrderItemPi.label('samplingSchemeCode'),
     width: 140,
   },
   {
     key: 'inspectionMethod',
-    title: t('entity.iqcorderitem.inspectionmethod'),
-    editor: 'inputNumber',
+    title: iqcOrderItemPi.label('inspectionMethod'),
     width: 140,
-  }])
+  },
+  {
+    key: 'sampleQuantity',
+    title: iqcOrderItemPi.label('sampleQuantity'),
+    width: 140,
+  },
+  {
+    key: 'qualifiedQuantity',
+    title: iqcOrderItemPi.label('qualifiedQuantity'),
+    width: 140,
+  },
+  {
+    key: 'unqualifiedQuantity',
+    title: iqcOrderItemPi.label('unqualifiedQuantity'),
+    width: 140,
+  },
+  {
+    key: 'inspectionReturnQuantity',
+    title: iqcOrderItemPi.label('inspectionReturnQuantity'),
+    width: 140,
+  },
+  {
+    key: 'sampleSerialCode',
+    title: iqcOrderItemPi.label('sampleSerialCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: iqcOrderItemPi.ph('sampleSerialCode'),
+  },
+  {
+    key: 'inspectionDescription',
+    title: iqcOrderItemPi.label('inspectionDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: iqcOrderItemPi.ph('inspectionDescription'),
+    width: 180,
+  },
+  {
+    key: 'inspectorBy',
+    title: iqcOrderItemPi.label('inspectorBy'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'inspectionDate',
+    title: iqcOrderItemPi.label('inspectionDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'judgeStatus',
+    title: iqcOrderItemPi.label('judgeStatus'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: iqcOrderItemPi.label('isObsolete'),
+    width: 140,
+  },
+  {
+    key: 'defectHandlings',
+    title: iqcOrderItemPi.label('defectHandlings'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: iqcOrderItemPi.ph('defectHandlings'),
+  },
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<IqcOrderCreate & { iqcOrderId?: string }> | null | undefined) {
-  childIqcOrderItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_iqcOrderItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childIqcOrderItemRows.value = rows_iqcOrderItem
 }
 
 function createDefaultIqcOrderItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childIqcOrderItemRows.value.length + 1) * 10,
+    lineNumber: allocateNextIqcOrderItemLineNumber(),
     materialCode: '',
     materialDescription: '',
     batchCode: '',
@@ -416,21 +295,41 @@ function createDefaultIqcOrderItemRow(): Record<string, unknown> {
     standardCode: '',
     samplingSchemeCode: '',
     inspectionMethod: 0,
+    sampleQuantity: 0,
+    qualifiedQuantity: 0,
+    unqualifiedQuantity: 0,
+    inspectionReturnQuantity: 0,
+    sampleSerialCode: '',
+    inspectionDescription: '',
+    inspectorBy: '',
+    inspectionDate: '',
+    judgeStatus: 0,
+    isObsolete: 0,
+    defectHandlings: '',
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.iqcOrderId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: iqcOrderItemTableRef.value?.getRows?.() ?? childIqcOrderItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      defectHandlings: masterId,
-    })),
+    items: iqcOrderItemTableRef.value?.getRows?.() ?? childIqcOrderItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        iqcOrderId: masterId,
+      }
+      if (isUpdate && isPersistedIqcOrderItemRow(row)) {
+        normalized.iqcOrderItemId = row.iqcOrderItemId
+      } else {
+        delete normalized.iqcOrderItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -454,6 +353,7 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 iqcOrderId 才视为编辑） */
 watch(
@@ -482,10 +382,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.iqcOrderId
-    if (isCreate) {
+    if (!props.formData?.iqcOrderId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -493,112 +392,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') }),
-      trigger: 'blur'
-    }
-  ],
-  sourceCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.iqcorder.sourcecode') }),
-      trigger: 'blur'
-    }
-  ],
-  iqcOrderCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.iqcorder.code') }),
-      trigger: 'blur'
-    }
-  ],
-  supplierCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.iqcorder.suppliercode') }),
-      trigger: 'blur'
-    }
-  ],
-  totalPurchaseQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalpurchasequantity') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalpurchasequantity') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalSampleQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalsamplequantity') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalsamplequantity') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalQualifiedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalqualifiedquantity') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalqualifiedquantity') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalUnqualifiedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalunqualifiedquantity') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalunqualifiedquantity') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalInspectionReturnQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalinspectionreturnquantity') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.totalinspectionreturnquantity') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  judgeStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.judgestatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorder.judgestatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -611,31 +405,11 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('totalPurchaseQuantity' in payload) {
-    const rawtotalPurchaseQuantity = payload.totalPurchaseQuantity
-    payload.totalPurchaseQuantity = typeof rawtotalPurchaseQuantity === 'number' ? rawtotalPurchaseQuantity : Number(rawtotalPurchaseQuantity)
-  }
-  if ('totalSampleQuantity' in payload) {
-    const rawtotalSampleQuantity = payload.totalSampleQuantity
-    payload.totalSampleQuantity = typeof rawtotalSampleQuantity === 'number' ? rawtotalSampleQuantity : Number(rawtotalSampleQuantity)
-  }
-  if ('totalQualifiedQuantity' in payload) {
-    const rawtotalQualifiedQuantity = payload.totalQualifiedQuantity
-    payload.totalQualifiedQuantity = typeof rawtotalQualifiedQuantity === 'number' ? rawtotalQualifiedQuantity : Number(rawtotalQualifiedQuantity)
-  }
-  if ('totalUnqualifiedQuantity' in payload) {
-    const rawtotalUnqualifiedQuantity = payload.totalUnqualifiedQuantity
-    payload.totalUnqualifiedQuantity = typeof rawtotalUnqualifiedQuantity === 'number' ? rawtotalUnqualifiedQuantity : Number(rawtotalUnqualifiedQuantity)
-  }
-  if ('totalInspectionReturnQuantity' in payload) {
-    const rawtotalInspectionReturnQuantity = payload.totalInspectionReturnQuantity
-    payload.totalInspectionReturnQuantity = typeof rawtotalInspectionReturnQuantity === 'number' ? rawtotalInspectionReturnQuantity : Number(rawtotalInspectionReturnQuantity)
-  }
-  if ('judgeStatus' in payload) {
-    const rawjudgeStatus = payload.judgeStatus
-    payload.judgeStatus = typeof rawjudgeStatus === 'number' ? rawjudgeStatus : Number(rawjudgeStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.iqcOrderId) {
+    payload.iqcOrderId = props.formData.iqcOrderId
+  }
   return payload
 }
 
@@ -649,19 +423,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.iqcOrderId)
   childIqcOrderItemRows.value = []
   iqcOrderItemTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

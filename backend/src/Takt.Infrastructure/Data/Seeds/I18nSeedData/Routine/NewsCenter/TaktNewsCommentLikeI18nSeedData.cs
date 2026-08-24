@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsCommentLikeI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsCommentLike 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,6 +99,15 @@ public class TaktNewsCommentLikeI18nSeedData : ITaktSeedDataCoordinator
             // entity.newscommentlike.commentid
             new TranslationSeedItem("entity.newscommentlike.commentid", "zh-HK", "评论ID_hk", "评论 ID（选项 TaktNewsComments/options；DictValue=Id）"),
 
+            // entity.newscommentlike.linenumber
+            new TranslationSeedItem("entity.newscommentlike.linenumber", "en-US", "行号_us", "行号（固定步长=10）"),
+            // entity.newscommentlike.linenumber
+            new TranslationSeedItem("entity.newscommentlike.linenumber", "ja-JP", "行号_jp", "行号（固定步长=10）"),
+            // entity.newscommentlike.linenumber
+            new TranslationSeedItem("entity.newscommentlike.linenumber", "zh-CN", "行号", "行号（固定步长=10）"),
+            // entity.newscommentlike.linenumber
+            new TranslationSeedItem("entity.newscommentlike.linenumber", "zh-HK", "行号_hk", "行号（固定步长=10）"),
+
             // entity.newscommentlike.userid
             new TranslationSeedItem("entity.newscommentlike.userid", "en-US", "用户ID_us", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.newscommentlike.userid
@@ -109,13 +118,13 @@ public class TaktNewsCommentLikeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newscommentlike.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.newscommentlike.username
-            new TranslationSeedItem("entity.newscommentlike.username", "en-US", "用户姓名_us", "用户姓名"),
+            new TranslationSeedItem("entity.newscommentlike.username", "en-US", "用户姓名_us", "用户姓名（冗余字段，便于查询）"),
             // entity.newscommentlike.username
-            new TranslationSeedItem("entity.newscommentlike.username", "ja-JP", "用户姓名_jp", "用户姓名"),
+            new TranslationSeedItem("entity.newscommentlike.username", "ja-JP", "用户姓名_jp", "用户姓名（冗余字段，便于查询）"),
             // entity.newscommentlike.username
-            new TranslationSeedItem("entity.newscommentlike.username", "zh-CN", "用户姓名", "用户姓名"),
+            new TranslationSeedItem("entity.newscommentlike.username", "zh-CN", "用户姓名", "用户姓名（冗余字段，便于查询）"),
             // entity.newscommentlike.username
-            new TranslationSeedItem("entity.newscommentlike.username", "zh-HK", "用户姓名_hk", "用户姓名"),
+            new TranslationSeedItem("entity.newscommentlike.username", "zh-HK", "用户姓名_hk", "用户姓名（冗余字段，便于查询）"),
 
             // entity.newscommentlike.liketime
             new TranslationSeedItem("entity.newscommentlike.liketime", "en-US", "点赞时间_us", "点赞时间"),
@@ -125,6 +134,15 @@ public class TaktNewsCommentLikeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newscommentlike.liketime", "zh-CN", "点赞时间", "点赞时间"),
             // entity.newscommentlike.liketime
             new TranslationSeedItem("entity.newscommentlike.liketime", "zh-HK", "点赞时间_hk", "点赞时间"),
+
+            // entity.newscommentlike.isobsolete
+            new TranslationSeedItem("entity.newscommentlike.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.newscommentlike.isobsolete
+            new TranslationSeedItem("entity.newscommentlike.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.newscommentlike.isobsolete
+            new TranslationSeedItem("entity.newscommentlike.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.newscommentlike.isobsolete
+            new TranslationSeedItem("entity.newscommentlike.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.newscommentlike.comment
             new TranslationSeedItem("entity.newscommentlike.comment", "en-US", "评论_us", "评论（主表）"),

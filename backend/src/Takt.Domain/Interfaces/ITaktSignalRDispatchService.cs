@@ -58,19 +58,19 @@ public interface ITaktSignalRDispatchService
     /// 向指定用户推送最新在线统计（多终端同步）
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="userId">用户 ID</param>
     /// <returns>任务</returns>
-    Task PushOnlineStatisticsToUserAsync(string companyCode, string userName, long? userId = null);
+    Task PushOnlineStatisticsToUserAsync(string companyCode, string UserName, long? userId = null);
 
     /// <summary>
     /// 向指定用户推送最新消息统计（多终端同步）
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">用户名（接收者）</param>
+    /// <param name="UserName">用户名（接收者）</param>
     /// <param name="userId">用户 ID</param>
     /// <returns>任务</returns>
-    Task PushMessageStatisticsToUserAsync(string companyCode, string userName, long? userId = null);
+    Task PushMessageStatisticsToUserAsync(string companyCode, string UserName, long? userId = null);
 
     /// <summary>
     /// 推送流程定义变更到公司内在线客户端
@@ -154,17 +154,17 @@ public interface ITaktSignalRDispatchService
     /// 向发起人推送部门确认通知
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">发起人用户名</param>
+    /// <param name="UserName">发起人用户名</param>
     /// <param name="payload">载荷</param>
     /// <returns>任务</returns>
-    Task PushEcNotificationConfirmedToUserAsync(string companyCode, string userName, object payload);
+    Task PushEcNotificationConfirmedToUserAsync(string companyCode, string UserName, object payload);
 
     /// <summary>
     /// 向发起人推送变更闭环完成
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">发起人用户名</param>
+    /// <param name="UserName">发起人用户名</param>
     /// <param name="push">闭环模型</param>
     /// <returns>任务</returns>
-    Task PushEcChangeClosedToUserAsync(string companyCode, string userName, TaktEcChangeClosedPush push);
+    Task PushEcChangeClosedToUserAsync(string companyCode, string UserName, TaktEcChangeClosedPush push);
 }

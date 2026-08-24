@@ -99,7 +99,7 @@ export interface QuartzTask extends CompanyDtoBase {
   executeParams?: string;
 
   /**
-   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   * 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
    */
   concurrent: number;
 
@@ -239,7 +239,7 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   executeParams?: string;
 
   /**
-   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   * 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
    */
   concurrent?: number;
 
@@ -413,7 +413,7 @@ export interface QuartzTaskCreate {
   executeParams?: string;
 
   /**
-   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   * 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
    */
   concurrent: number;
 
@@ -596,7 +596,7 @@ export interface QuartzTaskTemplate {
   executeParams?: string;
 
   /**
-   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   * 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
    */
   concurrent?: number;
 
@@ -745,7 +745,7 @@ export interface QuartzTaskImport {
   executeParams?: string;
 
   /**
-   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   * 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
    */
   concurrent?: number;
 
@@ -889,7 +889,7 @@ export interface QuartzTaskExport {
   executeParams?: string;
 
   /**
-   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   * 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
    */
   concurrent: number;
 

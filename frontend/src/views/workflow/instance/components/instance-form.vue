@@ -27,12 +27,15 @@
         {{ detail.processTitle }}
       </a-descriptions-item>
       <a-descriptions-item :label="t('entity.flowinstance.instancestatus')">
-        {{ statusText(detail.instanceStatus) }}
+        <TaktDictTag
+          :value="detail.instanceStatus"
+          dict-type="sys_flow_status"
+        />
       </a-descriptions-item>
       <a-descriptions-item :label="t('entity.flowinstance.currentactivityname')">
         {{ detail.currentActivityName ?? '-' }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowinstance.startusername')">
+      <a-descriptions-item :label="t('entity.flowinstance.startUserName')">
         {{ detail.startUserName }}
       </a-descriptions-item>
       <a-descriptions-item :label="t('entity.flowinstance.starttime')">
@@ -93,11 +96,6 @@ const historyItems = computed<FlowHistoryItem[]>(() => {
   if (!Array.isArray(list)) return []
   return list.filter(isFlowHistoryItem)
 })
-
-/** 实例状态码转展示文案（走 i18n workflow.instance.page.status.*） */
-function statusText(s: number): string {
-  return t(`workflow.instance.page.status.${s}`) || t('workflow.instance.page.status.unknown')
-}
 </script>
 
 <style scoped lang="css">

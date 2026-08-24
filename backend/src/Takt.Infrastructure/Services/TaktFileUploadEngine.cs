@@ -58,17 +58,24 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     private readonly IConfiguration _configuration;
 
     /// <summary>
+    /// 编码生成器（按 MIME → FD-F* 规则取 FileCode）
+    /// </summary>
+    private readonly ITaktNumberingGenerator _numberingGenerator;
+
+    /// <summary>
     /// 初始化文件上传引擎
     /// </summary>
     /// <param name="webHostEnvironment">Web 宿主环境</param>
     /// <param name="uploadOptions">上传配置</param>
     /// <param name="configuration">应用配置</param>
+    /// <param name="numberingGenerator">编码生成器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktFileUploadEngine(
         IWebHostEnvironment webHostEnvironment,
         IOptions<TaktFileUploadOptions> uploadOptions,
         IConfiguration configuration,
+        ITaktNumberingGenerator numberingGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -76,9 +83,11 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         ArgumentNullException.ThrowIfNull(webHostEnvironment);
         ArgumentNullException.ThrowIfNull(uploadOptions);
         ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(numberingGenerator);
         _webHostEnvironment = webHostEnvironment;
         _uploadOptions = uploadOptions.Value;
         _configuration = configuration;
+        _numberingGenerator = numberingGenerator;
     }
 
     /// <summary>
@@ -115,8 +124,8 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             ThrowFileSizeExceededException();
         }
 
-        var fileCode = TaktFileHelper.GenerateFileCode();
         var fileMimeType = string.IsNullOrWhiteSpace(contentType) ? GetMimeType(safeOriginalName) : contentType.Trim();
+        var fileCode = await GenerateFileCodeFromMimeAsync(fileMimeType, cancellationToken);
         var fileHash = await ComputeStreamHashAsync(fileStream);
         if (fileStream.CanSeek)
         {
@@ -402,7 +411,8 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
 
         var safeOriginalName = Path.GetFileName(request.FileName);
         ValidateFileName(safeOriginalName);
-        var fileCode = TaktFileHelper.GenerateFileCode();
+        var fileMimeType = GetMimeType(safeOriginalName);
+        var fileCode = await GenerateFileCodeFromMimeAsync(fileMimeType, cancellationToken);
         var finalFileName = TaktFileHelper.ResolveStoredFileName(
             resolvedScope.StorageNaming,
             safeOriginalName,
@@ -660,6 +670,44 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             StorageNaming = scope?.StorageNaming ?? 0,
             StorageType = scope?.StorageType ?? TaktFileHelper.StorageTypeLocal,
             StorageConfig = scope?.StorageConfig,
+        };
+    }
+
+    /// <summary>
+    /// 按 MIME 映射 TaktNumbering 规则码（FD-FDOC/IMG/VID/AUD/ARC/OTH）并生成 FileCode
+    /// </summary>
+    /// <param name="fileMimeType">MIME 类型</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>业务编码</returns>
+    private async Task<string> GenerateFileCodeFromMimeAsync(
+        string fileMimeType,
+        CancellationToken cancellationToken = default)
+    {
+        var ruleCode = ResolveFileNumberingRuleCode(fileMimeType);
+        var generated = await _numberingGenerator.GenerateNextAsync(ruleCode, cancellationToken);
+        if (string.IsNullOrWhiteSpace(generated.BusinessCode))
+        {
+            throw new TaktBusinessException("文件编码生成失败");
+        }
+
+        return generated.BusinessCode;
+    }
+
+    /// <summary>
+    /// MIME → 文件编码规则码（与 TaktNumberingSeedData FD-F* 对齐）
+    /// </summary>
+    /// <param name="fileMimeType">MIME 类型</param>
+    /// <returns>规则码</returns>
+    private static string ResolveFileNumberingRuleCode(string fileMimeType)
+    {
+        return GetFileCategoryFromMimeType(fileMimeType) switch
+        {
+            FileCategory.Document => "FD-FDOC",
+            FileCategory.Image => "FD-FIMG",
+            FileCategory.Video => "FD-FVID",
+            FileCategory.Audio => "FD-FAUD",
+            FileCategory.Archive => "FD-FARC",
+            _ => "FD-FOTH",
         };
     }
 

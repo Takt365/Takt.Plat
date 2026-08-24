@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工程变更通知单应用服务实现
 // 
@@ -30,37 +30,45 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationService
 {
     private readonly ITaktApprovalRepository<TaktEcNotification> _ecNotificationRepository;
-    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecEngRepository;
+    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecGijutsuRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecNotificationRepository">工程变更通知单仓储</param>
-    /// <param name="ecEngRepository">设变技术课主仓储</param>
+    /// <param name="ecGijutsuRepository">设变技术课主仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcNotificationService(
         ITaktApprovalRepository<TaktEcNotification> ecNotificationRepository,
-        ITaktCompanyRepository<TaktEcGijutsu> ecEngRepository,
+        ITaktCompanyRepository<TaktEcGijutsu> ecGijutsuRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _ecNotificationRepository = ecNotificationRepository;
-        _ecEngRepository = ecEngRepository;
+        _ecGijutsuRepository = ecGijutsuRepository;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取工程变更通知单列表（分页）
+    /// 获取工程变更通知单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEcNotificationDto>> GetEcNotificationListAsync(TaktEcNotificationQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEcNotificationDto>.Create(
+                new List<TaktEcNotificationDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _ecNotificationRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,8 +109,8 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EcNotificationNotifierName ?? e.Id.ToString(),
+            DictValue = e.EcNotificationCode,
+            DictLabel = e.EcNotificationNotifierName ?? e.EcNotificationCode,
         }).ToList();
     }
 
@@ -273,7 +281,15 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEcNotificationAsync(TaktEcNotificationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEcNotificationQueryDto());
+        var queryDto = query ?? new TaktEcNotificationQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEcNotificationExportDto>(),
+                sheetName ?? "工程变更通知单数据",
+                fileName ?? "工程变更通知单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _ecNotificationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -305,12 +321,36 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
         {
             return;
         }
-        var master = await _ecEngRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcId);
         if (master == null)
         {
             throw new TaktBusinessException("设变技术课主不存在");
         }
         entity.EcId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.EcCode))
+        {
+            entity.EcCode = master.EcCode;
+        }
+        if (string.IsNullOrEmpty(entity.EcTitle))
+        {
+            entity.EcTitle = master.EcTitle;
+        }
     }
     // ========================================
     // 查询表达式
@@ -325,119 +365,213 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
     {
         var exp = Expressionable.Create<TaktEcNotification>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EcNotificationCode != null && x.EcNotificationCode.Contains(keywords))
-                || SqlFunc.ToString(x.EcId).Contains(keywords)
                 || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcTitle != null && x.EcTitle.Contains(keywords))
                 || (x.EcNotificationDeptCodes != null && x.EcNotificationDeptCodes.Contains(keywords))
                 || (x.EcNotificationDeptNames != null && x.EcNotificationDeptNames.Contains(keywords))
-                || SqlFunc.ToString(x.EcNotificationNotifierId).Contains(keywords)
                 || (x.EcNotificationNotifierName != null && x.EcNotificationNotifierName.Contains(keywords))
-                || SqlFunc.ToString(x.EcNotificationMethod).Contains(keywords)
-                || SqlFunc.ToString(x.EcNotificationStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EcNotificationDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNotificationCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.EcNotificationCode != null && x.EcNotificationCode.Contains(queryDto.EcNotificationCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNotificationCode))
+        {
+            var ecNotificationCode = queryDto.EcNotificationCode;
+            exp = exp.And(x => x.EcNotificationCode != null && x.EcNotificationCode.Contains(ecNotificationCode));
         }
 
         if (queryDto?.EcId.HasValue == true)
         {
-            exp = exp.And(x => x.EcId == queryDto.EcId);
+            var ecId = queryDto.EcId.Value;
+            exp = exp.And(x => x.EcId == ecId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
+            var ecCode = queryDto.EcCode;
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(ecCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcTitle))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcTitle))
         {
-            exp = exp.And(x => x.EcTitle != null && x.EcTitle.Contains(queryDto.EcTitle));
+            var ecTitle = queryDto.EcTitle;
+            exp = exp.And(x => x.EcTitle != null && x.EcTitle.Contains(ecTitle));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNotificationDeptCodes))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNotificationDeptCodes))
         {
-            exp = exp.And(x => x.EcNotificationDeptCodes != null && x.EcNotificationDeptCodes.Contains(queryDto.EcNotificationDeptCodes));
+            var ecNotificationDeptCodes = queryDto.EcNotificationDeptCodes;
+            exp = exp.And(x => x.EcNotificationDeptCodes != null && x.EcNotificationDeptCodes.Contains(ecNotificationDeptCodes));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNotificationDeptNames))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNotificationDeptNames))
         {
-            exp = exp.And(x => x.EcNotificationDeptNames != null && x.EcNotificationDeptNames.Contains(queryDto.EcNotificationDeptNames));
+            var ecNotificationDeptNames = queryDto.EcNotificationDeptNames;
+            exp = exp.And(x => x.EcNotificationDeptNames != null && x.EcNotificationDeptNames.Contains(ecNotificationDeptNames));
         }
 
         if (queryDto?.EcNotificationNotifierId.HasValue == true)
         {
-            exp = exp.And(x => x.EcNotificationNotifierId == queryDto.EcNotificationNotifierId);
+            var ecNotificationNotifierId = queryDto.EcNotificationNotifierId.Value;
+            exp = exp.And(x => x.EcNotificationNotifierId == ecNotificationNotifierId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNotificationNotifierName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcNotificationNotifierName))
         {
-            exp = exp.And(x => x.EcNotificationNotifierName != null && x.EcNotificationNotifierName.Contains(queryDto.EcNotificationNotifierName));
+            var ecNotificationNotifierName = queryDto.EcNotificationNotifierName;
+            exp = exp.And(x => x.EcNotificationNotifierName != null && x.EcNotificationNotifierName.Contains(ecNotificationNotifierName));
         }
 
         if (queryDto?.EcNotificationMethod.HasValue == true)
         {
-            exp = exp.And(x => x.EcNotificationMethod == queryDto.EcNotificationMethod);
+            var ecNotificationMethod = queryDto.EcNotificationMethod.Value;
+            exp = exp.And(x => x.EcNotificationMethod == ecNotificationMethod);
         }
 
         if (queryDto?.EcNotificationStatus.HasValue == true)
         {
-            exp = exp.And(x => x.EcNotificationStatus == queryDto.EcNotificationStatus);
+            var ecNotificationStatus = queryDto.EcNotificationStatus.Value;
+            exp = exp.And(x => x.EcNotificationStatus == ecNotificationStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.EcNotificationDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.EcNotificationDate >= queryDto.EcNotificationDateStart);
+            var ecNotificationDateStart = queryDto.EcNotificationDateStart.Value;
+            exp = exp.And(x => x.EcNotificationDate >= ecNotificationDateStart);
         }
 
         if (queryDto?.EcNotificationDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EcNotificationDate <= queryDto.EcNotificationDateEnd);
+            var ecNotificationDateEnd = queryDto.EcNotificationDateEnd.Value;
+            exp = exp.And(x => x.EcNotificationDate <= ecNotificationDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEcNotificationQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNotificationCode))
+        {
+            return true;
+        }
+        if (queryDto.EcId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcTitle))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNotificationDeptCodes))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNotificationDeptNames))
+        {
+            return true;
+        }
+        if (queryDto.EcNotificationNotifierId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EcNotificationNotifierName))
+        {
+            return true;
+        }
+        if (queryDto.EcNotificationMethod.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EcNotificationStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.EcNotificationDateStart.HasValue || queryDto.EcNotificationDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

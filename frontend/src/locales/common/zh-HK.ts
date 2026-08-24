@@ -131,5 +131,10 @@ export default {
         },
       },
     },
+    form: {
+      numberingRule: "編碼規則",
+      numberingCodePreview: "選擇編碼規則後自動生成",
+      numberingRuleRequired: "請選擇編碼規則",
+    },
   },
 };

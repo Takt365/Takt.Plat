@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeDelegationDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeDelegation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeDelegation 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 员工代理关系实体：独立记录部门/岗位/审批等代理场景
+/// 员工代理关系实体 独立记录所有代理场景（部门代理、岗位代理、审批代理等）
 /// 对应前端 TaktEmployeeDelegationDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,50 +36,60 @@ public class TaktEmployeeDelegationDto : TaktCompanyDtoBase
     public long EmployeeDelegationId { get; set; }
 
     /// <summary>
-    /// 代理人ID（代替别人处理工作的人）
+    /// 代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProxyEmployeeId { get; set; }
 
     /// <summary>
-    /// 代理人名称（填充字段）
+    /// 代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? ProxyEmployeeName { get; set; }
+    public string ProxyEmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 被代理人ID（需要别人代替的人）
+    /// 代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string ProxyEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OriginalEmployeeId { get; set; }
 
     /// <summary>
-    /// 被代理人名称（填充字段）
+    /// 被代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? OriginalEmployeeName { get; set; }
+    public string OriginalEmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）
+    /// 被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string OriginalEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int DelegationType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）
+    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int ScopeType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）
+    /// 代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ScopeId { get; set; }
 
     /// <summary>
-    /// 代理范围名称（填充字段）
+    /// 代理范围 名称（填充字段）
     /// </summary>
     public string? ScopeName { get; set; }
 
     /// <summary>
-    /// 代理原因 如：休假、出差、培训、岗位空缺、病假等
+    /// 代理原因（如休假、出差、培训、岗位空缺、病假等）
     /// </summary>
     public string Reason { get; set; } = string.Empty;
 
@@ -89,9 +99,21 @@ public class TaktEmployeeDelegationDto : TaktCompanyDtoBase
     public DateTime StartDate { get; set; }
 
     /// <summary>
-    /// 代理结束时间 null = 长期有效，直到手动删除
+    /// 代理结束时间（null=长期有效，直到手动删除）
     /// </summary>
     public DateTime? EndDate { get; set; }
+
+    /// <summary>
+    /// 被代理人（多对一；外键 OriginalEmployeeId，非 EmployeeId）
+    /// （主表：TaktEmployee）
+    /// </summary>
+    public TaktEmployeeDto? OriginalEmployee { get; set; }
+
+    /// <summary>
+    /// 代理人（多对一；外键 ProxyEmployeeId，非 EmployeeId）
+    /// （主表：TaktEmployee）
+    /// </summary>
+    public TaktEmployeeDto? ProxyEmployee { get; set; }
 
 }
 
@@ -111,7 +133,7 @@ public class TaktEmployeeDelegationQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -120,41 +142,61 @@ public class TaktEmployeeDelegationQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 代理人ID（代替别人处理工作的人）
+    /// 代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProxyEmployeeId { get; set; }
 
     /// <summary>
-    /// 被代理人ID（需要别人代替的人）
+    /// 代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? ProxyEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? ProxyEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OriginalEmployeeId { get; set; }
 
     /// <summary>
-    /// 代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）
+    /// 被代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? OriginalEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? OriginalEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int? DelegationType { get; set; }
 
     /// <summary>
-    /// 代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）
+    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int? ScopeType { get; set; }
 
     /// <summary>
-    /// 代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）
+    /// 代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ScopeId { get; set; }
 
     /// <summary>
-    /// 代理原因 如：休假、出差、培训、岗位空缺、病假等
+    /// 代理原因（如休假、出差、培训、岗位空缺、病假等）
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
 
@@ -169,12 +211,12 @@ public class TaktEmployeeDelegationQueryDto : TaktPagedQuery
     public DateTime? StartDateEnd { get; set; }
 
     /// <summary>
-    /// 代理结束时间 null = 长期有效，直到手动删除（范围查询-开始）
+    /// 代理结束时间（null=长期有效，直到手动删除）（范围查询-开始）
     /// </summary>
     public DateTime? EndDateStart { get; set; }
 
     /// <summary>
-    /// 代理结束时间 null = 长期有效，直到手动删除（范围查询-结束）
+    /// 代理结束时间（null=长期有效，直到手动删除）（范围查询-结束）
     /// </summary>
     public DateTime? EndDateEnd { get; set; }
 
@@ -223,44 +265,63 @@ public class TaktEmployeeDelegationCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 代理人ID（代替别人处理工作的人）
+    /// 代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProxyEmployeeId { get; set; }
 
     /// <summary>
-    /// 被代理人ID（需要别人代替的人）
+    /// 代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string ProxyEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string ProxyEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OriginalEmployeeId { get; set; }
 
     /// <summary>
-    /// 代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）
+    /// 被代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string OriginalEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string OriginalEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int DelegationType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）
+    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int ScopeType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）
+    /// 代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ScopeId { get; set; }
 
     /// <summary>
-    /// 代理原因 如：休假、出差、培训、岗位空缺、病假等
+    /// 代理原因（如休假、出差、培训、岗位空缺、病假等）
     /// </summary>
-    [Required(ErrorMessage = "代理原因 如：休假、出差、培训、岗位空缺、病假等不能为空")]
+    [Required(ErrorMessage = "代理原因（如休假、出差、培训、岗位空缺、病假等）不能为空")]
     public string Reason { get; set; } = string.Empty;
 
     /// <summary>
@@ -269,7 +330,7 @@ public class TaktEmployeeDelegationCreateDto
     public DateTime StartDate { get; set; }
 
     /// <summary>
-    /// 代理结束时间 null = 长期有效，直到手动删除
+    /// 代理结束时间（null=长期有效，直到手动删除）
     /// </summary>
     public DateTime? EndDate { get; set; }
 
@@ -329,41 +390,61 @@ public class TaktEmployeeDelegationTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 代理人ID（代替别人处理工作的人）
+    /// 代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProxyEmployeeId { get; set; }
 
     /// <summary>
-    /// 被代理人ID（需要别人代替的人）
+    /// 代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? ProxyEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? ProxyEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OriginalEmployeeId { get; set; }
 
     /// <summary>
-    /// 代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）
+    /// 被代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? OriginalEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? OriginalEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int? DelegationType { get; set; }
 
     /// <summary>
-    /// 代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）
+    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int? ScopeType { get; set; }
 
     /// <summary>
-    /// 代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）
+    /// 代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ScopeId { get; set; }
 
     /// <summary>
-    /// 代理原因 如：休假、出差、培训、岗位空缺、病假等
+    /// 代理原因（如休假、出差、培训、岗位空缺、病假等）
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
 
@@ -373,7 +454,7 @@ public class TaktEmployeeDelegationTemplateDto
     public DateTime? StartDate { get; set; }
 
     /// <summary>
-    /// 代理结束时间 null = 长期有效，直到手动删除
+    /// 代理结束时间（null=长期有效，直到手动删除）
     /// </summary>
     public DateTime? EndDate { get; set; }
 
@@ -409,42 +490,61 @@ public class TaktEmployeeDelegationImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 代理人ID（代替别人处理工作的人）
+    /// 代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProxyEmployeeId { get; set; }
 
     /// <summary>
-    /// 被代理人ID（需要别人代替的人）
+    /// 代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? ProxyEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? ProxyEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OriginalEmployeeId { get; set; }
 
     /// <summary>
-    /// 代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）
+    /// 被代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? OriginalEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? OriginalEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int? DelegationType { get; set; }
 
     /// <summary>
-    /// 代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）
+    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int? ScopeType { get; set; }
 
     /// <summary>
-    /// 代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）
+    /// 代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ScopeId { get; set; }
 
     /// <summary>
-    /// 代理原因 如：休假、出差、培训、岗位空缺、病假等
+    /// 代理原因（如休假、出差、培训、岗位空缺、病假等）
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
 
@@ -454,7 +554,7 @@ public class TaktEmployeeDelegationImportDto
     public DateTime? StartDate { get; set; }
 
     /// <summary>
-    /// 代理结束时间 null = 长期有效，直到手动删除
+    /// 代理结束时间（null=长期有效，直到手动删除）
     /// </summary>
     public DateTime? EndDate { get; set; }
 
@@ -492,35 +592,65 @@ public class TaktEmployeeDelegationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理人ID（代替别人处理工作的人）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProxyEmployeeId { get; set; }
 
     /// <summary>
-    /// 被代理人ID（需要别人代替的人）
+    /// 代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string ProxyEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string ProxyEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OriginalEmployeeId { get; set; }
 
     /// <summary>
-    /// 代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）
+    /// 被代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string OriginalEmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string OriginalEmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int DelegationType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）
+    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int ScopeType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）
+    /// 代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ScopeId { get; set; }
 
     /// <summary>
-    /// 代理原因 如：休假、出差、培训、岗位空缺、病假等
+    /// 代理原因（如休假、出差、培训、岗位空缺、病假等）
     /// </summary>
     public string Reason { get; set; } = string.Empty;
 
@@ -530,7 +660,7 @@ public class TaktEmployeeDelegationExportDto
     public DateTime StartDate { get; set; }
 
     /// <summary>
-    /// 代理结束时间 null = 长期有效，直到手动删除
+    /// 代理结束时间（null=长期有效，直到手动删除）
     /// </summary>
     public DateTime? EndDate { get; set; }
 

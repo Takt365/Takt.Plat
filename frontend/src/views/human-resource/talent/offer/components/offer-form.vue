@@ -16,209 +16,9 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="offer-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.talentoffer.jobpostingid')"
-                name="jobPostingId"
-              >
-                <a-input
-                  v-model:value="formState.jobPostingId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.jobpostingid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.talentoffer.offerCode')"
-                name="offerCode"
-              >
-                <a-input
-                  v-model:value="formState.offerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.offerCode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.talentoffer.hiredate')"
-                name="hireDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.hireDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentoffer.hiredate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.talentoffer.employeeid')"
-                name="employeeId"
-              >
-                <a-input
-                  v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.employeeid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.talentoffer.deptid')"
-                name="deptId"
-              >
-                <a-input
-                  v-model:value="formState.deptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.deptid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.talentoffer.deptname')"
-                name="deptName"
-              >
-                <a-input
-                  v-model:value="formState.deptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.deptname') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.talentoffer.postid')"
-                name="postId"
-              >
-                <a-input
-                  v-model:value="formState.postId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.postid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.talentoffer.postname')"
-                name="postName"
-              >
-                <a-input
-                  v-model:value="formState.postName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.postname') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.talentoffer.reason')"
-                name="reason"
-              >
-                <a-input
-                  v-model:value="formState.reason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.reason') })"
-                  show-count
-                  :maxlength="500"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+      <a-row :gutter="24">
+
+      </a-row>
   </a-form>
 </template>
 
@@ -230,41 +30,18 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useTalentOfferI18n } from '../composables/use-offer-i18n'
+
+/** 实体字段 i18n */
+const pi = useTalentOfferI18n()
 import type { TalentOfferCreate } from '@/types/human-resource/talent/offer'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-}
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","jobPostingId","offerCode","hireDate","employeeId","deptId","deptName","postId","postName","reason","extField","remark"]
+const formFields = []
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -287,6 +64,7 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 talentOfferId 才视为编辑） */
 watch(
   () => props.formData,
@@ -295,7 +73,6 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
-      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -304,61 +81,15 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
-      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.talentOfferId
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  jobPostingId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.talentoffer.jobpostingid') }),
-      trigger: 'blur'
-    }
-  ],
-  offerCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.talentoffer.offerCode') }),
-      trigger: 'blur'
-    }
-  ],
-  hireDate: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.talentoffer.hiredate') }),
-      trigger: 'change'
-    }
-  ],
-  deptId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.talentoffer.deptid') }),
-      trigger: 'blur'
-    }
-  ],
-  deptName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.talentoffer.deptname') }),
-      trigger: 'blur'
-    }
-  ],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -371,6 +102,10 @@ async function validate() {
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.talentOfferId) {
+    payload.talentOfferId = props.formData.talentOfferId
+  }
   return payload
 }
 
@@ -381,21 +116,11 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
-  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.talentOfferId)
 
-  activeTab.value = 'tab-0'
+
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

@@ -156,8 +156,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             options.Add(new TaktSelectOption
             {
                 DictValue = user.Id.ToString(),
-                DictLabel = $"{user.Username} ({user.Nickname})",
-                ExtValue = user.Username,
+                DictLabel = $"{user.UserName} ({user.NickName})",
+                ExtValue = user.UserName,
             });
         }
 
@@ -173,10 +173,10 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     {
         // 1. 业务校验：用户名唯一性
         var exists = await _userRepository.FirstAsync(u => 
-            u.TenantCode == CurrentTenantCode && u.Username == dto.Username);
+            u.TenantCode == CurrentTenantCode && u.UserName == dto.UserName);
         if (exists != null)
         {
-            ThrowValidationLocalized(TaktValidationI18nKeys.Duplicate, TaktValidationI18nKeys.EntityUserName, dto.Username);
+            ThrowValidationLocalized(TaktValidationI18nKeys.Duplicate, TaktValidationI18nKeys.EntityUserName, dto.UserName);
         }
 
         // 2. 业务校验：员工ID必须存在
@@ -511,12 +511,12 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     /// <returns>结果</returns>
     public async Task<TaktForgotPasswordResultDto> ForgotPasswordAsync(TaktForgotPasswordDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.UsernameOrEmail))
+        if (string.IsNullOrWhiteSpace(dto.UserNameOrEmail))
         {
             return new TaktForgotPasswordResultDto
             {
                 Success = false,
-                Message = GetValidationMessage(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldUsernameOrEmail),
+                Message = GetValidationMessage(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldUserNameOrEmail),
             };
         }
 
@@ -532,9 +532,9 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             };
         }
 
-        var keyword = dto.UsernameOrEmail.Trim();
+        var keyword = dto.UserNameOrEmail.Trim();
         var user = await _userRepository.FirstAsync(u =>
-            u.TenantCode == CurrentTenantCode && u.Username == keyword);
+            u.TenantCode == CurrentTenantCode && u.UserName == keyword);
 
         if (user == null)
         {
@@ -557,7 +557,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         }
 
         // TODO: 发送密码重置邮件
-        LogInformation("忘记密码请求已受理: UserId={UserId}, Username={Username}", user.Id, user.Username);
+        LogInformation("忘记密码请求已受理: UserId={UserId}, UserName={UserName}", user.Id, user.UserName);
 
         return new TaktForgotPasswordResultDto { Success = true };
     }
@@ -644,7 +644,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 return (0, 0, errors);
             }
 
-            var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no_type");
+            var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no");
             var entitiesToInsert = new List<TaktUser>();
 
             for (int i = 0; i < importData.Count; i++)
@@ -655,14 +655,14 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 try
                 {
                     // 业务校验
-                    if (string.IsNullOrWhiteSpace(row.Username))
+                    if (string.IsNullOrWhiteSpace(row.UserName))
                     {
                         errors.Add($"第{rowNumber}行：用户名不能为空");
                         fail++;
                         continue;
                     }
 
-                    if (row.Username.Length != 8)
+                    if (row.UserName.Length != 8)
                     {
                         errors.Add($"第{rowNumber}行：用户名必须为8位");
                         fail++;
@@ -678,10 +678,10 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
 
                     // 唯一性校验
                     var exists = await _userRepository.FirstAsync(u => 
-                        u.TenantCode == CurrentTenantCode && u.Username == row.Username);
+                        u.TenantCode == CurrentTenantCode && u.UserName == row.UserName);
                     if (exists != null)
                     {
-                        errors.Add($"第{rowNumber}行：用户名{row.Username}已存在");
+                        errors.Add($"第{rowNumber}行：用户名{row.UserName}已存在");
                         fail++;
                         continue;
                     }
@@ -711,7 +711,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                     }
 
                     if (!dictSnapshot.TryResolveImportCode("sys_user_type", row.UserType ?? 0, row.UserTypeName, out var userType, out var dictError)
-                        || !dictSnapshot.TryResolveImportCode("sys_yes_no_type", row.UserStatus ?? 0, row.StatusName, out var userStatus, out dictError))
+                        || !dictSnapshot.TryResolveImportCode("sys_yes_no", row.UserStatus ?? 0, row.StatusName, out var userStatus, out dictError))
                     {
                         errors.Add($"第{rowNumber}行：{dictError}");
                         fail++;
@@ -721,8 +721,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                     // 添加到待插入列表
                     var entity = new TaktUser
                     {
-                        Username = row.Username,
-                        Nickname = row.Nickname,
+                        UserName = row.UserName,
+                        NickName = row.NickName,
                         UserType = userType,
                         EmployeeId = row.EmployeeId is > 0 ? row.EmployeeId.Value : employee.Id,
                         UserStatus = userStatus,
@@ -780,7 +780,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 fileName ?? "用户导出.xlsx");
         }
 
-        var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no_type");
+        var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no");
         var employeeIds = list
             .Where(u => u.EmployeeId > 0)
             .Select(u => u.EmployeeId)
@@ -798,7 +798,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         {
             var exportDto = user.Adapt<TaktUserExportDto>();
             exportDto.UserTypeName = dictSnapshot.GetName("sys_user_type", user.UserType, string.Empty);
-            exportDto.StatusName = dictSnapshot.GetName("sys_yes_no_type", user.UserStatus, string.Empty);
+            exportDto.StatusName = dictSnapshot.GetName("sys_yes_no", user.UserStatus, string.Empty);
             if (user.EmployeeId > 0 && employeeNameMap.TryGetValue(user.EmployeeId, out var employeeName))
             {
                 exportDto.EmployeeName = employeeName;
@@ -894,8 +894,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.Username != null && x.Username.Contains(keywords))
-                || (x.Nickname != null && x.Nickname.Contains(keywords))
+                (x.UserName != null && x.UserName.Contains(keywords))
+                || (x.NickName != null && x.NickName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
@@ -906,14 +906,14 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Username))
+        if (!string.IsNullOrEmpty(queryDto?.UserName))
         {
-            exp = exp.And(x => x.Username != null && x.Username.Contains(queryDto.Username));
+            exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Nickname))
+        if (!string.IsNullOrEmpty(queryDto?.NickName))
         {
-            exp = exp.And(x => x.Nickname != null && x.Nickname.Contains(queryDto.Nickname));
+            exp = exp.And(x => x.NickName != null && x.NickName.Contains(queryDto.NickName));
         }
 
         if (queryDto?.UserType.HasValue == true)

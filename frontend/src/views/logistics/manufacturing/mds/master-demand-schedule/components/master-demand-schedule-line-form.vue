@@ -21,163 +21,12 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo')"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('mdsCode')"
-                name="mdsCode"
-              >
-                <a-input
-                  v-model:value="formState.mdsCode"
-                  :placeholder="pi.ph('mdsCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.masterDemandScheduleLineId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('demandSourceType')"
-                name="demandSourceType"
-              >
-                <TaktSelect
-                  v-model:value="formState.demandSourceType"
-                  dict-type="mds_demand_source_type"
-                  :placeholder="pi.ph('demandSourceType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesOrderId')"
-                name="salesOrderId"
-              >
-                <a-input
-                  v-model:value="formState.salesOrderId"
-                  :placeholder="pi.ph('salesOrderId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesOrderLineNumber')"
-                name="salesOrderLineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.salesOrderLineNumber"
-                  :placeholder="pi.ph('salesOrderLineNumber')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesForecastId')"
-                name="salesForecastId"
-              >
-                <a-input
-                  v-model:value="formState.salesForecastId"
-                  :placeholder="pi.ph('salesForecastId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesForecastLineNumber')"
-                name="salesForecastLineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.salesForecastLineNumber"
-                  :placeholder="pi.ph('salesForecastLineNumber')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktGeneralMaterials/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.masterDemandScheduleLineId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('bucketStart')"
-                name="bucketStart"
-              >
-                <a-date-picker
-                  v-model:value="formState.bucketStart"
-                  :placeholder="pi.ph('bucketStart')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('bucketEnd')"
-                name="bucketEnd"
-              >
-                <a-date-picker
-                  v-model:value="formState.bucketEnd"
-                  :placeholder="pi.ph('bucketEnd')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('demandQuantity')"
-                name="demandQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.demandQuantity"
-                  :placeholder="pi.ph('demandQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('unitOfMeasure')"
-                name="unitOfMeasure"
-              >
-                <TaktSelect
-                  v-model:value="formState.unitOfMeasure"
-                  dict-type="logistics_unit_of_measure_code"
-                  :placeholder="pi.ph('unitOfMeasure')"
-                />
-              </a-form-item>
-            </a-col>
+
           </a-row>
         </div>
       </a-tab-pane>
@@ -190,7 +39,7 @@
  * 主需求计划 MDS 头表子表 masterDemandScheduleLine 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/mds/master-demand-schedule/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useMasterDemandScheduleLineI18n } from '../composables/use-master-demand-schedule-line-i18n'
@@ -199,8 +48,6 @@ import { useMasterDemandScheduleLineI18n } from '../composables/use-master-deman
 const pi = useMasterDemandScheduleLineI18n()
 
 import type { MasterDemandScheduleLineCreate } from '@/types/logistics/manufacturing/mds/master-demand-schedule-line'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -209,7 +56,9 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["mdsCode","demandSourceType","salesOrderId","salesOrderLineNumber","salesForecastId","salesForecastLineNumber","materialCode","bucketStart","bucketEnd","demandQuantity","unitOfMeasure"]
+const formFields = []
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -218,12 +67,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -235,13 +87,6 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 masterDemandScheduleLineId 才视为编辑） */
 watch(
@@ -267,67 +112,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  mdsCode: [
-    {
-      required: true,
-      message: pi.ph('mdsCode'),
-      trigger: 'blur'
-    }
-  ],
-  demandSourceType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('demandSourceType'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('demandSourceType'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  materialCode: [
-    {
-      required: true,
-      message: pi.ph('materialCode'),
-      trigger: 'change'
-    }
-  ],
-  bucketStart: [
-    {
-      required: true,
-      message: pi.ph('bucketStart'),
-      trigger: 'change'
-    }
-  ],
-  bucketEnd: [
-    {
-      required: true,
-      message: pi.ph('bucketEnd'),
-      trigger: 'change'
-    }
-  ],
-  demandQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('demandQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('demandQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  unitOfMeasure: [
-    {
-      required: true,
-      message: pi.ph('unitOfMeasure'),
-      trigger: 'change'
-    }
-  ],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -339,24 +124,32 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 masterDemandScheduleId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('demandSourceType' in payload) {
-    const rawdemandSourceType = payload.demandSourceType
-    payload.demandSourceType = typeof rawdemandSourceType === 'number' ? rawdemandSourceType : Number(rawdemandSourceType)
-  }
-  if ('salesOrderLineNumber' in payload) {
-    const rawsalesOrderLineNumber = payload.salesOrderLineNumber
-    payload.salesOrderLineNumber = typeof rawsalesOrderLineNumber === 'number' ? rawsalesOrderLineNumber : Number(rawsalesOrderLineNumber)
-  }
-  if ('salesForecastLineNumber' in payload) {
-    const rawsalesForecastLineNumber = payload.salesForecastLineNumber
-    payload.salesForecastLineNumber = typeof rawsalesForecastLineNumber === 'number' ? rawsalesForecastLineNumber : Number(rawsalesForecastLineNumber)
-  }
-  if ('demandQuantity' in payload) {
-    const rawdemandQuantity = payload.demandQuantity
-    payload.demandQuantity = typeof rawdemandQuantity === 'number' ? rawdemandQuantity : Number(rawdemandQuantity)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.masterDemandScheduleLineId) {
+    payload.masterDemandScheduleLineId = props.formData.masterDemandScheduleLineId
+  }
   payload.masterDemandScheduleId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.masterDemandScheduleCode ?? masterRow.MasterDemandScheduleCode
+    const masterName = masterRow.masterDemandScheduleName ?? masterRow.MasterDemandScheduleName
+    if (masterCode != null && masterCode !== '' && !payload.masterDemandScheduleCode) {
+      payload.masterDemandScheduleCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.masterDemandScheduleName) {
+      payload.masterDemandScheduleName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 

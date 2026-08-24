@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsShareI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsShare 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,6 +99,15 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
             // entity.newsshare.newsid
             new TranslationSeedItem("entity.newsshare.newsid", "zh-HK", "新闻ID_hk", "新闻 ID（选项 TaktNews/options；DictValue=Id）"),
 
+            // entity.newsshare.linenumber
+            new TranslationSeedItem("entity.newsshare.linenumber", "en-US", "行号_us", "行号（固定步长=10）"),
+            // entity.newsshare.linenumber
+            new TranslationSeedItem("entity.newsshare.linenumber", "ja-JP", "行号_jp", "行号（固定步长=10）"),
+            // entity.newsshare.linenumber
+            new TranslationSeedItem("entity.newsshare.linenumber", "zh-CN", "行号", "行号（固定步长=10）"),
+            // entity.newsshare.linenumber
+            new TranslationSeedItem("entity.newsshare.linenumber", "zh-HK", "行号_hk", "行号（固定步长=10）"),
+
             // entity.newsshare.userid
             new TranslationSeedItem("entity.newsshare.userid", "en-US", "分享人ID_us", "分享人 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.newsshare.userid
@@ -109,13 +118,13 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newsshare.userid", "zh-HK", "分享人ID_hk", "分享人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "en-US", "分享人姓名_us", "分享人姓名"),
+            new TranslationSeedItem("entity.newsshare.username", "en-US", "分享人姓名_us", "分享人姓名（冗余字段，便于查询）"),
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "ja-JP", "分享人姓名_jp", "分享人姓名"),
+            new TranslationSeedItem("entity.newsshare.username", "ja-JP", "分享人姓名_jp", "分享人姓名（冗余字段，便于查询）"),
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "zh-CN", "分享人姓名", "分享人姓名"),
+            new TranslationSeedItem("entity.newsshare.username", "zh-CN", "分享人姓名", "分享人姓名（冗余字段，便于查询）"),
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "zh-HK", "分享人姓名_hk", "分享人姓名"),
+            new TranslationSeedItem("entity.newsshare.username", "zh-HK", "分享人姓名_hk", "分享人姓名（冗余字段，便于查询）"),
 
             // entity.newsshare.sharechannel
             new TranslationSeedItem("entity.newsshare.sharechannel", "en-US", "分享渠道_us", "分享渠道（如 wechat、link 等）"),
@@ -134,6 +143,15 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newsshare.sharetime", "zh-CN", "分享时间", "分享时间"),
             // entity.newsshare.sharetime
             new TranslationSeedItem("entity.newsshare.sharetime", "zh-HK", "分享时间_hk", "分享时间"),
+
+            // entity.newsshare.isobsolete
+            new TranslationSeedItem("entity.newsshare.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.newsshare.isobsolete
+            new TranslationSeedItem("entity.newsshare.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.newsshare.isobsolete
+            new TranslationSeedItem("entity.newsshare.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.newsshare.isobsolete
+            new TranslationSeedItem("entity.newsshare.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.newsshare.news
             new TranslationSeedItem("entity.newsshare.news", "en-US", "新闻_us", "新闻（主表）"),

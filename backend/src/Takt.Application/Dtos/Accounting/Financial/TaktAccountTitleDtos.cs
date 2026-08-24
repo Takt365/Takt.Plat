@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktAccountTitleDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AccountTitle 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAccountTitle 生成，请按需审阅）
 // 
@@ -52,54 +52,54 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type）
+    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     public string AccountTitleType { get; set; } = string.Empty;
 
     /// <summary>
     /// 余额方向（0=借方，1=贷方）
     /// </summary>
-    public int BalanceDirection { get; set; }
+    public int BalanceDirection { get; set; } = 0;
 
     /// <summary>
     /// 科目层级
     /// </summary>
-    public int AccountTitleLevel { get; set; } = 1;
+    public int AccountTitleLevel { get; set; } = 0;
 
     /// <summary>
-    /// 末级科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 末级科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
-    public int IsLeaf { get; set; } = 1;
+    public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 辅助核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
-    public int IsAuxiliary { get; set; }
+    public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     public string AuxiliaryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 数量核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
-    public int IsQuantity { get; set; }
+    public int IsQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 外币核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
-    public int IsCurrency { get; set; }
+    public int IsCurrency { get; set; } = 0;
 
     /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 现金科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
-    public int IsCash { get; set; }
+    public int IsCash { get; set; } = 0;
 
     /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 银行科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
-    public int IsBank { get; set; }
+    public int IsBank { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -112,14 +112,15 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int AccountTitleStatus { get; set; } = 0;
+
 }
 
 // ========================================
@@ -133,9 +134,9 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
 public class TaktAccountTitleTreeDto : TaktAccountTitleDto
 {
     /// <summary>
-    /// 子节点
+    /// 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
     /// </summary>
-    public List<TaktAccountTitleTreeDto> Children { get; set; } = new();
+    public List<TaktAccountTitleTreeDto>? Children { get; set; }
 }
 
 // ========================================
@@ -154,7 +155,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -162,6 +163,11 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 科目编码
@@ -180,9 +186,9 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public long? ParentId { get; set; }
 
     /// <summary>
- /// 科目类型（字典 accounting_account_title_type）
+    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
-    public string? AccountTitleType { get; set; }
+    public string? AccountTitleType { get; set; } = string.Empty;
 
     /// <summary>
     /// 余额方向（0=借方，1=贷方）
@@ -195,37 +201,37 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public int? AccountTitleLevel { get; set; }
 
     /// <summary>
-    /// 末级科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 末级科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsLeaf { get; set; }
 
     /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 辅助核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
- /// 辅助核算类型（字典 accounting_auxiliary_type）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
-    public string? AuxiliaryType { get; set; }
+    public string? AuxiliaryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 数量核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsQuantity { get; set; }
 
     /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 外币核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsCurrency { get; set; }
 
     /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 现金科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsCash { get; set; }
 
     /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 银行科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsBank { get; set; }
 
@@ -250,17 +256,12 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? AccountTitleStatus { get; set; }
 
@@ -309,6 +310,10 @@ public class TaktAccountTitleCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 科目编码
@@ -329,8 +334,9 @@ public class TaktAccountTitleCreateDto
     public long ParentId { get; set; }
 
     /// <summary>
- /// 科目类型（字典 accounting_account_title_type）
+    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
+    [Required(ErrorMessage = "科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）不能为空")]
     public string AccountTitleType { get; set; } = string.Empty;
 
     /// <summary>
@@ -344,32 +350,33 @@ public class TaktAccountTitleCreateDto
     public int AccountTitleLevel { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 辅助核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
- /// 辅助核算类型（字典 accounting_auxiliary_type）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
+    [Required(ErrorMessage = "辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）不能为空")]
     public string AuxiliaryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 数量核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 外币核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsCurrency { get; set; } = 0;
 
     /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 现金科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsCash { get; set; } = 0;
 
     /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 银行科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsBank { get; set; } = 0;
 
@@ -384,15 +391,11 @@ public class TaktAccountTitleCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "关联工厂（关联 TaktPlant.PlantCode）不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
+    public int AccountTitleStatus { get; set; } = 0;
 
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int AccountTitleStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -442,9 +445,9 @@ public class TaktAccountTitleStatusDto
     public long AccountTitleId { get; set; }
 
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "科目状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int AccountTitleStatus { get; set; } = 0;
 }
 
@@ -466,9 +469,9 @@ public class TaktAccountTitleSortDto
     public long AccountTitleId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -497,6 +500,11 @@ public class TaktAccountTitleTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 科目编码
     /// </summary>
     public string? AccountTitleCode { get; set; } = string.Empty;
@@ -513,9 +521,9 @@ public class TaktAccountTitleTemplateDto
     public long? ParentId { get; set; }
 
     /// <summary>
- /// 科目类型（字典 accounting_account_title_type）
+    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
-    public string? AccountTitleType { get; set; }
+    public string? AccountTitleType { get; set; } = string.Empty;
 
     /// <summary>
     /// 余额方向（0=借方，1=贷方）
@@ -528,32 +536,32 @@ public class TaktAccountTitleTemplateDto
     public int? AccountTitleLevel { get; set; }
 
     /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 辅助核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
- /// 辅助核算类型（字典 accounting_auxiliary_type）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
-    public string? AuxiliaryType { get; set; }
+    public string? AuxiliaryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 数量核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsQuantity { get; set; }
 
     /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 外币核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsCurrency { get; set; }
 
     /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 现金科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsCash { get; set; }
 
     /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 银行科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsBank { get; set; }
 
@@ -568,14 +576,11 @@ public class TaktAccountTitleTemplateDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public int? AccountTitleStatus { get; set; }
 
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? AccountTitleStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -607,6 +612,10 @@ public class TaktAccountTitleImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 科目编码
@@ -625,9 +634,9 @@ public class TaktAccountTitleImportDto
     public long? ParentId { get; set; }
 
     /// <summary>
- /// 科目类型（字典 accounting_account_title_type）
+    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
-    public string? AccountTitleType { get; set; }
+    public string? AccountTitleType { get; set; } = string.Empty;
 
     /// <summary>
     /// 余额方向（0=借方，1=贷方）
@@ -640,32 +649,32 @@ public class TaktAccountTitleImportDto
     public int? AccountTitleLevel { get; set; }
 
     /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 辅助核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
- /// 辅助核算类型（字典 accounting_auxiliary_type）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
-    public string? AuxiliaryType { get; set; }
+    public string? AuxiliaryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 数量核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsQuantity { get; set; }
 
     /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 外币核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsCurrency { get; set; }
 
     /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 现金科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsCash { get; set; }
 
     /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 银行科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int? IsBank { get; set; }
 
@@ -680,14 +689,11 @@ public class TaktAccountTitleImportDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public int? AccountTitleStatus { get; set; }
 
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? AccountTitleStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -721,6 +727,16 @@ public class TaktAccountTitleExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 科目编码
     /// </summary>
     public string AccountTitleCode { get; set; } = string.Empty;
@@ -737,7 +753,7 @@ public class TaktAccountTitleExportDto
     public long ParentId { get; set; }
 
     /// <summary>
- /// 科目类型（字典 accounting_account_title_type）
+    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     public string AccountTitleType { get; set; } = string.Empty;
 
@@ -752,37 +768,37 @@ public class TaktAccountTitleExportDto
     public int AccountTitleLevel { get; set; } = 0;
 
     /// <summary>
-    /// 末级科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 末级科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 辅助核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
- /// 辅助核算类型（字典 accounting_auxiliary_type）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     public string AuxiliaryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 数量核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// 外币核算（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsCurrency { get; set; } = 0;
 
     /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 现金科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsCash { get; set; } = 0;
 
     /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// 银行科目（字典 sys_yes_no；1=是，0=否）
     /// </summary>
     public int IsBank { get; set; } = 0;
 
@@ -797,17 +813,12 @@ public class TaktAccountTitleExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 科目状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int AccountTitleStatus { get; set; } = 0;
 

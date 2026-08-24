@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceNotificationService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护通知单应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
     }
 
     /// <summary>
-    /// 获取维护通知单列表（分页）
+    /// 获取维护通知单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktMaintenanceNotificationDto>> GetMaintenanceNotificationListAsync(TaktMaintenanceNotificationQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktMaintenanceNotificationDto>.Create(
+                new List<TaktMaintenanceNotificationDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _maintenanceNotificationRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -105,8 +113,8 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EquipmentName ?? e.Id.ToString(),
+            DictValue = e.NotificationCode,
+            DictLabel = e.EquipmentName ?? e.NotificationCode,
         }).ToList();
     }
 
@@ -283,7 +291,15 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaintenanceNotificationAsync(TaktMaintenanceNotificationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktMaintenanceNotificationQueryDto());
+        var queryDto = query ?? new TaktMaintenanceNotificationQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktMaintenanceNotificationExportDto>(),
+                sheetName ?? "维护通知单数据",
+                fileName ?? "维护通知单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _maintenanceNotificationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -300,48 +316,8 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
     }
 
     // ========================================
-    // 主表外键同步（ManyToOne）
+    // 扩展方法（保留）
     // ========================================
-
-    /// <summary>
-    /// 同步维护通知单主表外键（ManyToOne → 工厂设备）
-    /// </summary>
-    /// <param name="entity">当前实体</param>
-    /// <param name="dto">创建 DTO</param>
-    /// <returns>任务</returns>
-    private async Task StampMaintenanceNotificationEquipmentAsync(TaktMaintenanceNotification entity, TaktMaintenanceNotificationCreateDto dto)
-    {
-        if (dto.EquipmentId <= 0)
-        {
-            return;
-        }
-        var master = await _equipmentRepository.GetByIdAsync(dto.EquipmentId);
-        if (master == null)
-        {
-            throw new TaktBusinessException("工厂设备不存在");
-        }
-        entity.EquipmentId = master.Id;
-    }
-
-    /// <summary>
-    /// 同步维护通知单主表外键（ManyToOne → 维护工单）
-    /// </summary>
-    /// <param name="entity">当前实体</param>
-    /// <param name="dto">创建 DTO</param>
-    /// <returns>任务</returns>
-    private async Task StampMaintenanceNotificationMaintenanceWorkOrderAsync(TaktMaintenanceNotification entity, TaktMaintenanceNotificationCreateDto dto)
-    {
-        if (dto.MaintenanceWorkOrderId is not > 0)
-        {
-            return;
-        }
-        var master = await _maintenanceWorkOrderRepository.GetByIdAsync(dto.MaintenanceWorkOrderId.Value);
-        if (master == null)
-        {
-            throw new TaktBusinessException("维护工单不存在");
-        }
-        entity.MaintenanceWorkOrderId = master.Id;
-    }
 
     /// <summary>
     /// 获取维护通知单统计（数据看板）
@@ -370,6 +346,109 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步维护通知单主表外键（ManyToOne → 工厂设备）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampMaintenanceNotificationEquipmentAsync(TaktMaintenanceNotification entity, TaktMaintenanceNotificationCreateDto dto)
+    {
+        if (dto.EquipmentId <= 0)
+        {
+            return;
+        }
+        var master = await _equipmentRepository.GetByIdAsync(dto.EquipmentId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("工厂设备不存在");
+        }
+        entity.EquipmentId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.EquipCode))
+        {
+            entity.EquipCode = master.EquipCode;
+        }
+        if (string.IsNullOrEmpty(entity.EquipmentName))
+        {
+            entity.EquipmentName = master.EquipmentName;
+        }
+    }
+
+    /// <summary>
+    /// 同步维护通知单主表外键（ManyToOne → 维护工单）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampMaintenanceNotificationMaintenanceWorkOrderAsync(TaktMaintenanceNotification entity, TaktMaintenanceNotificationCreateDto dto)
+    {
+        if (dto.MaintenanceWorkOrderId is not > 0)
+        {
+            return;
+        }
+        var master = await _maintenanceWorkOrderRepository.GetByIdAsync(dto.MaintenanceWorkOrderId.Value);
+        if (master == null)
+        {
+            throw new TaktBusinessException("维护工单不存在");
+        }
+        entity.MaintenanceWorkOrderId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.NotificationCode))
+        {
+            entity.NotificationCode = master.NotificationCode ?? string.Empty;
+        }
+        if (string.IsNullOrEmpty(entity.EquipCode))
+        {
+            entity.EquipCode = master.EquipCode;
+        }
+        if (string.IsNullOrEmpty(entity.EquipmentName))
+        {
+            entity.EquipmentName = master.EquipmentName;
+        }
+        if (string.IsNullOrEmpty(entity.FaultDescription))
+        {
+            entity.FaultDescription = master.FaultDescription ?? string.Empty;
+        }
+        if (string.IsNullOrEmpty(entity.CostCenterCode))
+        {
+            entity.CostCenterCode = master.CostCenterCode ?? string.Empty;
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -382,165 +461,287 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
     {
         var exp = Expressionable.Create<TaktMaintenanceNotification>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.NotificationCode != null && x.NotificationCode.Contains(keywords))
-                || SqlFunc.ToString(x.EquipmentId).Contains(keywords)
                 || (x.EquipCode != null && x.EquipCode.Contains(keywords))
                 || (x.EquipmentName != null && x.EquipmentName.Contains(keywords))
-                || SqlFunc.ToString(x.MaintenanceCategory).Contains(keywords)
-                || SqlFunc.ToString(x.Priority).Contains(keywords)
-                || SqlFunc.ToString(x.NotificationStatus).Contains(keywords)
                 || (x.FaultDescription != null && x.FaultDescription.Contains(keywords))
                 || (x.ReportedBy != null && x.ReportedBy.Contains(keywords))
-                || SqlFunc.ToString(x.CostCenterId).Contains(keywords)
                 || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
-                || SqlFunc.ToString(x.MaintenanceWorkOrderId).Contains(keywords)
                 || (x.MaintenanceWorkOrderCode != null && x.MaintenanceWorkOrderCode.Contains(keywords))
                 || (x.NotificationImages != null && x.NotificationImages.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.DiscoveredAt).Contains(keywords)
-                || SqlFunc.ToString(x.BreakdownStartTime).Contains(keywords)
-                || SqlFunc.ToString(x.BreakdownEndTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NotificationCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.NotificationCode != null && x.NotificationCode.Contains(queryDto.NotificationCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.NotificationCode))
+        {
+            var notificationCode = queryDto.NotificationCode;
+            exp = exp.And(x => x.NotificationCode != null && x.NotificationCode.Contains(notificationCode));
         }
 
         if (queryDto?.EquipmentId.HasValue == true)
         {
-            exp = exp.And(x => x.EquipmentId == queryDto.EquipmentId);
+            var equipmentId = queryDto.EquipmentId.Value;
+            exp = exp.And(x => x.EquipmentId == equipmentId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipCode))
         {
-            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(queryDto.EquipCode));
+            var equipCode = queryDto.EquipCode;
+            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(equipCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentName))
         {
-            exp = exp.And(x => x.EquipmentName != null && x.EquipmentName.Contains(queryDto.EquipmentName));
+            var equipmentName = queryDto.EquipmentName;
+            exp = exp.And(x => x.EquipmentName != null && x.EquipmentName.Contains(equipmentName));
         }
 
         if (queryDto?.MaintenanceCategory.HasValue == true)
         {
-            exp = exp.And(x => x.MaintenanceCategory == queryDto.MaintenanceCategory);
+            var maintenanceCategory = queryDto.MaintenanceCategory.Value;
+            exp = exp.And(x => x.MaintenanceCategory == maintenanceCategory);
         }
 
         if (queryDto?.Priority.HasValue == true)
         {
-            exp = exp.And(x => x.Priority == queryDto.Priority);
+            var priority = queryDto.Priority.Value;
+            exp = exp.And(x => x.Priority == priority);
         }
 
         if (queryDto?.NotificationStatus.HasValue == true)
         {
-            exp = exp.And(x => x.NotificationStatus == queryDto.NotificationStatus);
+            var notificationStatus = queryDto.NotificationStatus.Value;
+            exp = exp.And(x => x.NotificationStatus == notificationStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FaultDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FaultDescription))
         {
-            exp = exp.And(x => x.FaultDescription != null && x.FaultDescription.Contains(queryDto.FaultDescription));
+            var faultDescription = queryDto.FaultDescription;
+            exp = exp.And(x => x.FaultDescription != null && x.FaultDescription.Contains(faultDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReportedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReportedBy))
         {
-            exp = exp.And(x => x.ReportedBy != null && x.ReportedBy.Contains(queryDto.ReportedBy));
+            var reportedBy = queryDto.ReportedBy;
+            exp = exp.And(x => x.ReportedBy != null && x.ReportedBy.Contains(reportedBy));
         }
 
         if (queryDto?.CostCenterId.HasValue == true)
         {
-            exp = exp.And(x => x.CostCenterId == queryDto.CostCenterId);
+            var costCenterId = queryDto.CostCenterId.Value;
+            exp = exp.And(x => x.CostCenterId == costCenterId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostCenterCode))
         {
-            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(queryDto.CostCenterCode));
+            var costCenterCode = queryDto.CostCenterCode;
+            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(costCenterCode));
         }
 
         if (queryDto?.MaintenanceWorkOrderId.HasValue == true)
         {
-            exp = exp.And(x => x.MaintenanceWorkOrderId == queryDto.MaintenanceWorkOrderId);
+            var maintenanceWorkOrderId = queryDto.MaintenanceWorkOrderId.Value;
+            exp = exp.And(x => x.MaintenanceWorkOrderId == maintenanceWorkOrderId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaintenanceWorkOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaintenanceWorkOrderCode))
         {
-            exp = exp.And(x => x.MaintenanceWorkOrderCode != null && x.MaintenanceWorkOrderCode.Contains(queryDto.MaintenanceWorkOrderCode));
+            var maintenanceWorkOrderCode = queryDto.MaintenanceWorkOrderCode;
+            exp = exp.And(x => x.MaintenanceWorkOrderCode != null && x.MaintenanceWorkOrderCode.Contains(maintenanceWorkOrderCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NotificationImages))
+        if (!string.IsNullOrWhiteSpace(queryDto?.NotificationImages))
         {
-            exp = exp.And(x => x.NotificationImages != null && x.NotificationImages.Contains(queryDto.NotificationImages));
+            var notificationImages = queryDto.NotificationImages;
+            exp = exp.And(x => x.NotificationImages != null && x.NotificationImages.Contains(notificationImages));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.DiscoveredAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.DiscoveredAt >= queryDto.DiscoveredAtStart);
+            var discoveredAtStart = queryDto.DiscoveredAtStart.Value;
+            exp = exp.And(x => x.DiscoveredAt >= discoveredAtStart);
         }
 
         if (queryDto?.DiscoveredAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.DiscoveredAt <= queryDto.DiscoveredAtEnd);
+            var discoveredAtEnd = queryDto.DiscoveredAtEnd.Value;
+            exp = exp.And(x => x.DiscoveredAt <= discoveredAtEnd);
         }
 
         if (queryDto?.BreakdownStartTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.BreakdownStartTime >= queryDto.BreakdownStartTimeStart);
+            var breakdownStartTimeStart = queryDto.BreakdownStartTimeStart.Value;
+            exp = exp.And(x => x.BreakdownStartTime >= breakdownStartTimeStart);
         }
 
         if (queryDto?.BreakdownStartTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.BreakdownStartTime <= queryDto.BreakdownStartTimeEnd);
+            var breakdownStartTimeEnd = queryDto.BreakdownStartTimeEnd.Value;
+            exp = exp.And(x => x.BreakdownStartTime <= breakdownStartTimeEnd);
         }
 
         if (queryDto?.BreakdownEndTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.BreakdownEndTime >= queryDto.BreakdownEndTimeStart);
+            var breakdownEndTimeStart = queryDto.BreakdownEndTimeStart.Value;
+            exp = exp.And(x => x.BreakdownEndTime >= breakdownEndTimeStart);
         }
 
         if (queryDto?.BreakdownEndTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.BreakdownEndTime <= queryDto.BreakdownEndTimeEnd);
+            var breakdownEndTimeEnd = queryDto.BreakdownEndTimeEnd.Value;
+            exp = exp.And(x => x.BreakdownEndTime <= breakdownEndTimeEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktMaintenanceNotificationQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NotificationCode))
+        {
+            return true;
+        }
+        if (queryDto.EquipmentId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipmentName))
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceCategory.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Priority.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NotificationStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FaultDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReportedBy))
+        {
+            return true;
+        }
+        if (queryDto.CostCenterId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostCenterCode))
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceWorkOrderId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaintenanceWorkOrderCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NotificationImages))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.DiscoveredAtStart.HasValue || queryDto.DiscoveredAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BreakdownStartTimeStart.HasValue || queryDto.BreakdownStartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BreakdownEndTimeStart.HasValue || queryDto.BreakdownEndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

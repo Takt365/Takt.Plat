@@ -213,7 +213,7 @@ const { userInfo } = storeToRefs(useUserStore())
 /** 从登录用户信息解析展示名（优先级：员工姓名 > 昵称 > 用户名） */
 function resolveUserDisplayName(u: UserInfoResponse | null | undefined): string {
   if (!u) return ''
-  return (u.employeeName?.trim() || u.nickname?.trim() || u.username || '').trim() || ''
+  return (u.employeeName?.trim() || u.nickName?.trim() || u.userName || '').trim() || ''
 }
 
 const currentUserDisplayName = computed(() => resolveUserDisplayName(userInfo.value))

@@ -255,7 +255,7 @@
                   v-model:value="formState.plantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.relatedplant') })"
                   size="small"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -382,7 +382,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.trainingAttendeeId
     if (isCreate) {

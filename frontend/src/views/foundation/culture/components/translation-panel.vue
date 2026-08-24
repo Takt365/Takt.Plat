@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/culture/components -->
 <!-- 文件名称：translation-panel.vue -->
-<!-- 功能描述：区域文化实体 定义系统支持的多语言区域文化主表实体右侧明细 translation 独立 CRUD（按主表选中 cultureId 分页） -->
+<!-- 功能描述：区域文化实体 定义系统支持的多语言区域文化主表实体右侧明细 translation 独立 CRUD（按主表选中 cultureCode 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="foundation:culture:create"
-      update-permission="foundation:culture:update"
-      delete-permission="foundation:culture:delete"
-      import-permission="foundation:culture:import"
-      export-permission="foundation:culture:export"
+      create-permission="foundation:i18n:create"
+      update-permission="foundation:i18n:update"
+      delete-permission="foundation:i18n:delete"
+      import-permission="foundation:i18n:import"
+      export-permission="foundation:i18n:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -59,7 +59,7 @@
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
-        entity-scope="tenant"
+        entity-scope="tenant-core"
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
@@ -95,6 +95,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterCultureId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -109,16 +110,6 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="pi.queryLabel('relatedPlant')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.relatedPlant"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('relatedPlant', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('i18nKey')">
       <a-form-item :label="pi.queryLabel('i18nKey')">
         <a-input
@@ -263,7 +254,7 @@
       :checked-keys="visibleColumnKeys"
       id-column-key="translationId"
       action-column-key="action"
-      entity-scope="tenant"
+      entity-scope="tenant-core"
       table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
@@ -542,7 +533,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'foundation:culture:update',
+        permission: 'foundation:i18n:update',
         onClick: (record: Translation) => void handleEdit(record),
       },
       {
@@ -550,7 +541,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'foundation:culture:delete',
+        permission: 'foundation:i18n:delete',
         onClick: (record: Translation) => void handleDeleteOne(record),
       },
     ],
@@ -605,7 +596,7 @@ function buildListQuery(overrides?: Partial<TranslationQuery>): TranslationQuery
   const query: TranslationQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    cultureId: masterCultureId.value,
+    cultureCode: masterCultureId.value,
     ...overrides,
   }
   if (kw.length > 0) {

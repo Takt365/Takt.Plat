@@ -151,7 +151,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "survey_status", ColumnDescription = "调查状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SurveyStatus { get; set; } = 0;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

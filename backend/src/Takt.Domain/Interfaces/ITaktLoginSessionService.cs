@@ -30,12 +30,12 @@ public interface ITaktLoginSessionService
     /// 校验用户名在指定租户库中是否存在且启用（仅连接该租户对应库，不遍历聚合）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>可登录为 true</returns>
     Task<bool> HasUserLoginAccessInTenantAsync(
         string tenantCode,
-        string username,
+        string UserName,
         CancellationToken cancellationToken = default);
 
     /// <summary>

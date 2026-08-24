@@ -16,74 +16,11 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="fqc-order-form-tabs"
-    >
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="pi.ph('remark')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+
+      </a-row>
+    </div>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="fqcOrderItemTableRef"
@@ -97,85 +34,7 @@
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
-    >
-      <template #cell-materialCode="{ record }">
-        <TaktSelect
-          v-model:value="record.materialCode"
-          api-url="TaktMaterialPlants/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="fqcOrderItemPi.queryPh('materialCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-standardCode="{ record }">
-        <TaktSelect
-          v-model:value="record.standardCode"
-          api-url="TaktInspectionStandards/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="fqcOrderItemPi.queryPh('standardCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-samplingSchemeCode="{ record }">
-        <TaktSelect
-          v-model:value="record.samplingSchemeCode"
-          api-url="TaktSamplingSchemes/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="fqcOrderItemPi.queryPh('samplingSchemeCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-inspectionMethod="{ record }">
-        <TaktSelect
-          v-model:value="record.inspectionMethod"
-          dict-type="logistics_quality_inspection_method"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="fqcOrderItemPi.ph('inspectionMethod')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-inspectorBy="{ record }">
-        <TaktSelect
-          v-model:value="record.inspectorBy"
-          api-url="TaktEmployees/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="fqcOrderItemPi.queryPh('inspectorBy', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-judgeStatus="{ record }">
-        <TaktSelect
-          v-model:value="record.judgeStatus"
-          dict-type="logistics_quality_judge_status"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="fqcOrderItemPi.ph('judgeStatus')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-isObsolete="{ record }">
-        <TaktSelect
-          v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="fqcOrderItemPi.ph('isObsolete')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-    </TaktEditableTable>
+    >    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -184,7 +43,7 @@
  * FQC出货检验单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/quality/operation/fqc-order/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useFqcOrderI18n } from '../composables/use-fqc-order-i18n'
@@ -193,57 +52,17 @@ import { useFqcOrderI18n } from '../composables/use-fqc-order-i18n'
 const pi = useFqcOrderI18n()
 
 import type { FqcOrderCreate } from '@/types/logistics/quality/operation/fqc-order'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-  if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
-}
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","sourceCode","inspectionDate","fqcOrderCode","customerCode","totalWarehouseQuantity","totalSampleQuantity","totalQualifiedQuantity","totalUnqualifiedQuantity","totalInspectionReturnQuantity","judgeBy","judgeDate","judgeDescription","judgeStatus","extField","remark"]
+const formFields = []
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useFqcOrderItemI18n } from '../composables/use-fqc-order-item-i18n'
 
 const fqcOrderItemPi = useFqcOrderItemI18n()
-
-/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
-function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
-  return triggerNode?.ownerDocument?.body ?? document.body
-}
 
 const childFqcOrderItemRows = ref<Record<string, unknown>[]>([])
 const fqcOrderItemTableRef = ref<{
@@ -252,115 +71,10 @@ const fqcOrderItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
-/** 是否已持久化的子表行 */
-function isPersistedFqcOrderItemRow(row: Record<string, unknown>): boolean {
-  const id = row.fqcOrderItemId
-  if (id == null || id === '') {
-    return false
-  }
-  return String(id) !== '0'
-}
-
-/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
-function allocateNextFqcOrderItemLineNumber(): number {
-  const rows = fqcOrderItemTableRef.value?.getRows?.() ?? childFqcOrderItemRows.value
-  return resolveNextDetailLineNumber(0, rows)
-}
-
 /** 子表 fqcOrderItem 可编辑列 */
 const fqcOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'lineNumber',
-    title: fqcOrderItemPi.label('lineNumber'),
-    width: 140,
-  },
-  {
-    key: 'materialCode',
-    title: fqcOrderItemPi.label('materialCode'),
-    width: 140,
-  },
-  {
-    key: 'batchCode',
-    title: fqcOrderItemPi.label('batchCode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: fqcOrderItemPi.ph('batchCode'),
-  },
-  {
-    key: 'warehouseQuantity',
-    title: fqcOrderItemPi.label('warehouseQuantity'),
-    width: 140,
-  },
-  {
-    key: 'standardCode',
-    title: fqcOrderItemPi.label('standardCode'),
-    width: 140,
-  },
-  {
-    key: 'samplingSchemeCode',
-    title: fqcOrderItemPi.label('samplingSchemeCode'),
-    width: 140,
-  },
-  {
-    key: 'inspectionMethod',
-    title: fqcOrderItemPi.label('inspectionMethod'),
-    width: 140,
-  },
-  {
-    key: 'sampleQuantity',
-    title: fqcOrderItemPi.label('sampleQuantity'),
-    width: 140,
-  },
-  {
-    key: 'qualifiedQuantity',
-    title: fqcOrderItemPi.label('qualifiedQuantity'),
-    width: 140,
-  },
-  {
-    key: 'unqualifiedQuantity',
-    title: fqcOrderItemPi.label('unqualifiedQuantity'),
-    width: 140,
-  },
-  {
-    key: 'inspectionReturnQuantity',
-    title: fqcOrderItemPi.label('inspectionReturnQuantity'),
-    width: 140,
-  },
-  {
-    key: 'sampleSerialCode',
-    title: fqcOrderItemPi.label('sampleSerialCode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: fqcOrderItemPi.ph('sampleSerialCode'),
-  },
-  {
-    key: 'inspectionDescription',
-    title: fqcOrderItemPi.label('inspectionDescription'),
-    editor: 'textarea',
-    rows: 1,
-    placeholder: fqcOrderItemPi.ph('inspectionDescription'),
-    width: 180,
-  },
-  {
-    key: 'inspectorBy',
-    title: fqcOrderItemPi.label('inspectorBy'),
-    width: 140,
-  },
-  {
-    key: 'inspectionDate',
-    title: fqcOrderItemPi.label('inspectionDate'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD',
-    width: 140,
-  },
-  {
-    key: 'judgeStatus',
-    title: fqcOrderItemPi.label('judgeStatus'),
-    width: 140,
-  },
-  {
-    key: 'isObsolete',
-    title: fqcOrderItemPi.label('isObsolete'),
-    width: 140,
-  }])
+,
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<FqcOrderCreate & { fqcOrderId?: string }> | null | undefined) {
@@ -370,23 +84,7 @@ function syncChildRowsFromFormData(val: Partial<FqcOrderCreate & { fqcOrderId?: 
 
 function createDefaultFqcOrderItemRow(): Record<string, unknown> {
   return {
-    lineNumber: allocateNextFqcOrderItemLineNumber(),
-    materialCode: '',
-    batchCode: '',
-    warehouseQuantity: 0,
-    standardCode: '',
-    samplingSchemeCode: '',
-    inspectionMethod: 0,
-    sampleQuantity: 0,
-    qualifiedQuantity: 0,
-    unqualifiedQuantity: 0,
-    inspectionReturnQuantity: 0,
-    sampleSerialCode: '',
-    inspectionDescription: '',
-    inspectorBy: '',
-    inspectionDate: '',
-    judgeStatus: 0,
-    isObsolete: 0,
+
   }
 }
 
@@ -396,21 +94,13 @@ function buildSubmitPayload() {
   const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: fqcOrderItemTableRef.value?.getRows?.() ?? childFqcOrderItemRows.value.map((row) => {
-      const normalized = {
-        ...row,
-        tenantCode: tenantStore.tenantCode,
-        companyCode: tenantStore.companyCode,
-        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        defectHandlings: masterId,
-      }
-      if (isUpdate && isPersistedFqcOrderItemRow(row)) {
-        normalized.fqcOrderItemId = row.fqcOrderItemId
-      } else {
-        delete normalized.fqcOrderItemId
-      }
-      return normalized
-    }),
+    items: fqcOrderItemTableRef.value?.getRows?.() ?? childFqcOrderItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+      fqcOrderId: masterId,
+    })),
   }
 }
 
@@ -430,23 +120,11 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  judgeStatus: 0
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 fqcOrderId 才视为编辑） */
 watch(
@@ -473,118 +151,9 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.fqcOrderId
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  sourceCode: [
-    {
-      required: true,
-      message: pi.ph('sourceCode'),
-      trigger: 'change'
-    }
-  ],
-  fqcOrderCode: [
-    {
-      required: true,
-      message: pi.ph('fqcOrderCode'),
-      trigger: 'blur'
-    }
-  ],
-  totalWarehouseQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalWarehouseQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalWarehouseQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalSampleQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalSampleQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalSampleQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalQualifiedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalQualifiedQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalQualifiedQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalUnqualifiedQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalUnqualifiedQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalUnqualifiedQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalInspectionReturnQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalInspectionReturnQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalInspectionReturnQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  judgeStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('judgeStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('judgeStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -597,31 +166,11 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('totalWarehouseQuantity' in payload) {
-    const rawtotalWarehouseQuantity = payload.totalWarehouseQuantity
-    payload.totalWarehouseQuantity = typeof rawtotalWarehouseQuantity === 'number' ? rawtotalWarehouseQuantity : Number(rawtotalWarehouseQuantity)
-  }
-  if ('totalSampleQuantity' in payload) {
-    const rawtotalSampleQuantity = payload.totalSampleQuantity
-    payload.totalSampleQuantity = typeof rawtotalSampleQuantity === 'number' ? rawtotalSampleQuantity : Number(rawtotalSampleQuantity)
-  }
-  if ('totalQualifiedQuantity' in payload) {
-    const rawtotalQualifiedQuantity = payload.totalQualifiedQuantity
-    payload.totalQualifiedQuantity = typeof rawtotalQualifiedQuantity === 'number' ? rawtotalQualifiedQuantity : Number(rawtotalQualifiedQuantity)
-  }
-  if ('totalUnqualifiedQuantity' in payload) {
-    const rawtotalUnqualifiedQuantity = payload.totalUnqualifiedQuantity
-    payload.totalUnqualifiedQuantity = typeof rawtotalUnqualifiedQuantity === 'number' ? rawtotalUnqualifiedQuantity : Number(rawtotalUnqualifiedQuantity)
-  }
-  if ('totalInspectionReturnQuantity' in payload) {
-    const rawtotalInspectionReturnQuantity = payload.totalInspectionReturnQuantity
-    payload.totalInspectionReturnQuantity = typeof rawtotalInspectionReturnQuantity === 'number' ? rawtotalInspectionReturnQuantity : Number(rawtotalInspectionReturnQuantity)
-  }
-  if ('judgeStatus' in payload) {
-    const rawjudgeStatus = payload.judgeStatus
-    payload.judgeStatus = typeof rawjudgeStatus === 'number' ? rawjudgeStatus : Number(rawjudgeStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.fqcOrderId) {
+    payload.fqcOrderId = props.formData.fqcOrderId
+  }
   return payload
 }
 
@@ -635,19 +184,9 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.fqcOrderId)
   childFqcOrderItemRows.value = []
   fqcOrderItemTableRef.value?.resetRows?.()
-  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

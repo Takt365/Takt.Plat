@@ -20,7 +20,6 @@ export const SALESFORECAST_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESFORECAST_
 
 /** 列表业务列（不含主键） */
 export const SALESFORECAST_LIST_FIELDS = [
-  'plantCode',
   'salesForecastCode',
   'planDate',
   'receiveDate',
@@ -42,37 +41,12 @@ export const SALESFORECAST_LIST_FIELDS = [
   'planStatus',
   'convertedStatus',
   'planDescription',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESFORECAST_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  salesForecastCode: 'required',
-  planDate: 'select',
-  receiveDate: 'select',
-  receiveVersionNo: 'required',
-  salesProduct: 'required',
-  productCategoryCode: 'select',
-  profitCenterCode: 'optional',
-  modelCode: 'optional',
-  materialCode: 'select',
-  materialDescription: 'optional',
-  customerCode: 'optional',
-  customerName1: 'optional',
-  plannerId: 'optional',
-  planBy: 'select',
-  totalQuantity: 'select',
-  totalAmount: 'select',
-  convertedQuantity: 'select',
-  convertedAmount: 'select',
-  planStatus: 'select',
-  convertedStatus: 'select',
-  planDescription: 'optional',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -80,52 +54,13 @@ export type SalesForecastField = keyof typeof SALESFORECAST_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESFORECAST_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'salesForecastCode',
-  'planDateStart',
-  'planDateEnd',
-  'receiveDateStart',
-  'receiveDateEnd',
-  'salesProduct',
-  'productCategoryCode',
-  'profitCenterCode',
-  'modelCode',
-  'materialCode',
-  'materialDescription',
-  'customerCode',
-  'customerName1',
-  'plannerId',
-  'planBy',
-  'planDescription',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SalesForecastQuery)[]
 
-export type SalesForecastQueryField =
-  | (typeof SALESFORECAST_QUERY_STRING_FIELDS)[number]
-  | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'planStatus' | 'convertedStatus' | 'approvalStatus' | 'receiveVersionNo'
+export type SalesForecastQueryField = (typeof SALESFORECAST_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESFORECAST_QUERY_FIELDS: readonly SalesForecastQueryField[] = [
-  ...SALESFORECAST_QUERY_STRING_FIELDS,
-  'totalQuantity',
-  'totalAmount',
-  'convertedQuantity',
-  'convertedAmount',
-  'planStatus',
-  'convertedStatus',
-  'approvalStatus',
-  'receiveVersionNo',
-]
+export const SALESFORECAST_QUERY_FIELDS: readonly SalesForecastQueryField[] = [...SALESFORECAST_QUERY_STRING_FIELDS]
 
 /**
  * Takt销售预测实体字段 i18n：index / sales-forecast-form 统一入口

@@ -20,7 +20,6 @@ export const SALESGROUP_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESGROUP_ENTITY
 
 /** 列表业务列（不含主键） */
 export const SALESGROUP_LIST_FIELDS = [
-  'plantCode',
   'salesGroupCode',
   'salesGroupName',
   'salesGroupDescription',
@@ -35,8 +34,8 @@ export const SALESGROUP_LIST_FIELDS = [
 export const SALESGROUP_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   salesGroupCode: 'required',
   salesGroupName: 'required',
   salesGroupDescription: 'optional',
@@ -54,6 +53,7 @@ export type SalesGroupField = keyof typeof SALESGROUP_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESGROUP_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'salesGroupCode',
   'salesGroupName',

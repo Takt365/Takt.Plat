@@ -50,7 +50,7 @@ public static class TaktQuartzAmbientHttpContext
             return;
         }
 
-        var userName = string.IsNullOrWhiteSpace(triggerUserName)
+        var UserName = string.IsNullOrWhiteSpace(triggerUserName)
             ? TaktQuartzConstants.SystemSenderUserName
             : triggerUserName.Trim();
         var userId = triggerUserId is > 0
@@ -61,7 +61,7 @@ public static class TaktQuartzAmbientHttpContext
         var claims = new List<Claim>
         {
             new("sub", userId.ToString(CultureInfo.InvariantCulture)),
-            new(TaktClaimNames.PreferredUsername, userName),
+            new(TaktClaimNames.PreferredUsername, UserName),
             new(TaktClaimNames.TenantCode, tenant),
             new(TaktClaimNames.CompanyCode, company),
         };

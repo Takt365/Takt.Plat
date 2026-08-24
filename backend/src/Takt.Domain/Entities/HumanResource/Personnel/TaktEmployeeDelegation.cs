@@ -84,4 +84,20 @@ public class TaktEmployeeDelegation : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "end_date", ColumnDescription = "代理结束时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? EndDate { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 被代理人（多对一；外键 OriginalEmployeeId，非 EmployeeId）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(OriginalEmployeeId))]
+    public TaktEmployee? OriginalEmployee { get; set; }
+
+    /// <summary>
+    /// 代理人（多对一；外键 ProxyEmployeeId，非 EmployeeId）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(ProxyEmployeeId))]
+    public TaktEmployee? ProxyEmployee { get; set; }
 }

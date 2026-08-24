@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepCheckItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopStepCheckItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,22 +127,22 @@ public class TaktSopStepCheckItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstepcheckitem.checkstandard", "zh-HK", "检验标准_hk", "检验标准"),
 
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "en-US", "是否必检_us", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "en-US", "是否必检_us", "是否必检（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "ja-JP", "是否必检_jp", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "ja-JP", "是否必检_jp", "是否必检（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-CN", "是否必检", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-CN", "是否必检", "是否必检（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-HK", "是否必检_hk", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-HK", "是否必检_hk", "是否必检（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.sopstepcheckitem.sortorder
-            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.sopstepcheckitem.sortorder
-            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.sopstepcheckitem.sortorder
-            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.sopstepcheckitem.sortorder
-            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.sopstepcheckitem.step
             new TranslationSeedItem("entity.sopstepcheckitem.step", "en-US", "工步_us", "工步"),

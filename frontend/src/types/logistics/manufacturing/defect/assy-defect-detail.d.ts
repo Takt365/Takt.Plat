@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：assy-defect-detail.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -59,7 +59,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category，存 DictValue）
+   * 不良区分（字典 logistics_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -94,7 +94,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -104,12 +104,12 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   defectReason?: string;
 
   /**
-   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 修理员（选项 TaktEmployees/options；DictValue=Id）
    */
   repairOperator?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -134,12 +134,17 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -169,7 +174,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category，存 DictValue）
+   * 不良区分（字典 logistics_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -204,7 +209,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -214,12 +219,12 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   defectReason?: string;
 
   /**
-   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 修理员（选项 TaktEmployees/options；DictValue=Id）
    */
   repairOperator?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -263,17 +268,14 @@ export interface AssyDefectDetailCreate {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
-   */
-  plantCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode: string
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
 
   /**
    * 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
@@ -301,7 +303,7 @@ export interface AssyDefectDetailCreate {
   lineNumber: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category，存 DictValue）
+   * 不良区分（字典 logistics_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -336,7 +338,7 @@ export interface AssyDefectDetailCreate {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -346,12 +348,12 @@ export interface AssyDefectDetailCreate {
   defectReason?: string;
 
   /**
-   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 修理员（选项 TaktEmployees/options；DictValue=Id）
    */
   repairOperator?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -395,7 +397,7 @@ export interface AssyDefectDetailObsolete {
   assyDefectDetailId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -419,7 +421,12 @@ export interface AssyDefectDetailTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -449,7 +456,7 @@ export interface AssyDefectDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category，存 DictValue）
+   * 不良区分（字典 logistics_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -484,7 +491,7 @@ export interface AssyDefectDetailTemplate {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -494,12 +501,12 @@ export interface AssyDefectDetailTemplate {
   defectReason?: string;
 
   /**
-   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 修理员（选项 TaktEmployees/options；DictValue=Id）
    */
   repairOperator?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -533,17 +540,14 @@ export interface AssyDefectDetailImport {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
-   */
-  plantCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode?: string
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
 
   /**
    * 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
@@ -571,7 +575,7 @@ export interface AssyDefectDetailImport {
   lineNumber?: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category，存 DictValue）
+   * 不良区分（字典 logistics_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -606,7 +610,7 @@ export interface AssyDefectDetailImport {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -616,12 +620,12 @@ export interface AssyDefectDetailImport {
   defectReason?: string;
 
   /**
-   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 修理员（选项 TaktEmployees/options；DictValue=Id）
    */
   repairOperator?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -655,6 +659,16 @@ export interface AssyDefectDetailExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
    * 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
    */
   assyDefectId: string;
@@ -680,7 +694,7 @@ export interface AssyDefectDetailExport {
   lineNumber: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category，存 DictValue）
+   * 不良区分（字典 logistics_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -715,7 +729,7 @@ export interface AssyDefectDetailExport {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -725,12 +739,12 @@ export interface AssyDefectDetailExport {
   defectReason?: string;
 
   /**
-   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 修理员（选项 TaktEmployees/options；DictValue=Id）
    */
   repairOperator?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

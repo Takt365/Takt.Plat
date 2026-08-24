@@ -89,7 +89,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.priority"
-                  dict-type="sys_priority_level_category"
+                  dict-type="sys_priority_level"
                   :placeholder="pi.ph('priority')"
                 />
               </a-form-item>
@@ -101,7 +101,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.urgency"
-                  dict-type="sys_urgency_level_category"
+                  dict-type="sys_urgency_level"
                   :placeholder="pi.ph('urgency')"
                 />
               </a-form-item>
@@ -113,7 +113,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.impact"
-                  dict-type="sys_impact_level_category"
+                  dict-type="sys_impact_level"
                   :placeholder="pi.ph('impact')"
                 />
               </a-form-item>

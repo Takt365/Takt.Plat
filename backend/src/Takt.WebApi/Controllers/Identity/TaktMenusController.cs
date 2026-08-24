@@ -85,11 +85,11 @@ public class TaktMenusController : TaktControllerBase
     /// <returns>树形选项</returns>
     [TaktPermission("identity:menu:query", "菜单树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetMenuTreeOptionsAsync()
+    public async Task<IActionResult> GetMenuTreeOptionsAsync([FromQuery] string? valueBy = null)
     {
         try
         {
-            var result = await _menuService.GetMenuTreeOptionsAsync();
+            var result = await _menuService.GetMenuTreeOptionsAsync(valueBy);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

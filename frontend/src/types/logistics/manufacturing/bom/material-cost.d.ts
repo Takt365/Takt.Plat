@@ -34,7 +34,7 @@ export interface BomMaterialCost extends CompanyDtoBase {
   plantCode: string;
 
   /**
-   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomCostOptions/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode: string;
 
@@ -44,12 +44,12 @@ export interface BomMaterialCost extends CompanyDtoBase {
   modelMonthlyAverageCost: number;
 
   /**
-   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomCostOptions/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
    */
   materialType: string;
 
   /**
-   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode: string;
 
@@ -119,7 +119,7 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomCostOptions/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode?: string;
 
@@ -129,12 +129,12 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   modelMonthlyAverageCost?: number;
 
   /**
-   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomCostOptions/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
    */
   materialType?: string;
 
   /**
-   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode?: string;
 
@@ -228,7 +228,7 @@ export interface BomMaterialCostCreate {
   plantCode: string;
 
   /**
-   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomCostOptions/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode: string;
 
@@ -238,12 +238,12 @@ export interface BomMaterialCostCreate {
   modelMonthlyAverageCost: number;
 
   /**
-   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomCostOptions/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
    */
   materialType: string;
 
   /**
-   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode: string;
 
@@ -337,7 +337,7 @@ export interface BomMaterialCostTemplate {
   plantCode?: string;
 
   /**
-   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomCostOptions/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode?: string;
 
@@ -347,12 +347,12 @@ export interface BomMaterialCostTemplate {
   modelMonthlyAverageCost?: number;
 
   /**
-   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomCostOptions/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
    */
   materialType?: string;
 
   /**
-   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode?: string;
 
@@ -431,7 +431,7 @@ export interface BomMaterialCostImport {
   plantCode?: string;
 
   /**
-   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomCostOptions/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode?: string;
 
@@ -441,12 +441,12 @@ export interface BomMaterialCostImport {
   modelMonthlyAverageCost?: number;
 
   /**
-   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomCostOptions/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
    */
   materialType?: string;
 
   /**
-   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode?: string;
 
@@ -520,7 +520,7 @@ export interface BomMaterialCostExport {
   plantCode: string;
 
   /**
-   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomCostOptions/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode: string;
 
@@ -530,12 +530,12 @@ export interface BomMaterialCostExport {
   modelMonthlyAverageCost: number;
 
   /**
-   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomCostOptions/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
    */
   materialType: string;
 
   /**
-   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode: string;
 

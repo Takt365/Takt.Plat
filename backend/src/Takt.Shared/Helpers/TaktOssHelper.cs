@@ -21,7 +21,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// OSS 对象存储配置与 I/O 帮助类
 /// </summary>
-/// <remarks>无状态；从配置解析选项；I/O 方法当前实现阿里云 OSS（sys_oss_provider_type=aliyun）。</remarks>
+/// <remarks>无状态；从配置解析选项；I/O 方法当前实现阿里云 OSS（sys_oss_provider=aliyun）。</remarks>
 public static class TaktOssHelper
 {
     /// <summary>
@@ -29,7 +29,7 @@ public static class TaktOssHelper
     /// </summary>
     public const string SupportedProviderAliyun = "aliyun";
     /// <summary>
-    /// 从配置中读取 OSS 设置（键与字典 <c>sys_oss_provider_type</c> 一致，如 <c>aliyun</c>）。
+    /// 从配置中读取 OSS 设置（键与字典 <c>sys_oss_provider</c> 一致，如 <c>aliyun</c>）。
     /// </summary>
     /// <param name="configuration">配置</param>
     /// <param name="provider">OSS 提供商标识，对应 <c>Oss:{provider}</c> 节点</param>

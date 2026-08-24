@@ -4,7 +4,7 @@
 // 文件名称：purchase-price-trend.d.ts
 // 创建时间：2026-07-18
 // 创建人：Takt365(Cursor AI)
-// 功能描述：采购价格月推移转置分析类型
+// 功能描述：采购价格推移转置分析类型
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,10 +13,10 @@
 import type { TaktPagedQuery, TaktPagedResult } from '@/types/common';
 
 /**
- * 采购价格月推移查询
- * @description 对应后端 TaktPurchasePriceMonthlyTrendQueryDto
+ * 采购价格推移查询
+ * @description 对应后端 TaktPurchasePriceTrendQueryDto
  */
-export interface PurchasePriceMonthlyTrendQuery extends TaktPagedQuery {
+export interface PurchasePriceTrendQuery extends TaktPagedQuery {
   /** 工厂代码（必填） */
   plantCode: string;
   /** 期间起（当月首日） */
@@ -27,23 +27,21 @@ export interface PurchasePriceMonthlyTrendQuery extends TaktPagedQuery {
   focusPeriod?: string;
   /** 物料编码（模糊） */
   materialCode?: string;
-  /** 产品物料类型（机种推移必填） */
-  materialType?: string;
   /** 供应商编码 */
   supplierCode?: string;
   /** 价格类型（字典 logistics_price_type，如 PB00） */
   priceType?: string;
   /** 仅启用主表 */
   onlyEnabled?: boolean;
-  /** 涨跌筛选：空/all=全部；leading=机种推移领涨领跌各 50；up/down/changed */
+  /** 涨跌筛选 */
   trendFilter?: string;
 }
 
 /**
- * 采购价格月推移转置行
- * @description 对应后端 TaktPurchasePriceMonthlyTrendDto
+ * 采购价格推移转置行
+ * @description 对应后端 TaktPurchasePriceTrendDto
  */
-export interface PurchasePriceMonthlyTrend {
+export interface PurchasePriceTrend {
   /** 工厂代码 */
   plantCode: string;
   /** 物料编码 */
@@ -75,54 +73,12 @@ export interface PurchasePriceMonthlyTrend {
 }
 
 /**
- * 采购价格月推移分析结果
- * @description 对应后端 TaktPurchasePriceMonthlyTrendResultDto
+ * 采购价格推移分析结果
+ * @description 对应后端 TaktPurchasePriceTrendResultDto
  */
-export interface PurchasePriceMonthlyTrendResult {
+export interface PurchasePriceTrendResult {
   /** 分页行 */
-  paged: TaktPagedResult<PurchasePriceMonthlyTrend>;
-  /** 期间列顺序 */
-  periodOrder: string[];
-  /** 行总数 */
-  materialCount: number;
-  /** 环比基准期间 */
-  basePeriod?: string;
-  /** 环比对比期间 */
-  comparePeriod?: string;
-  /** 涨价行数 */
-  upCount: number;
-  /** 跌价行数 */
-  downCount: number;
-  /** 持平行数 */
-  flatCount: number;
-  /** 无法比较行数 */
-  noneCount: number;
-}
-
-/**
- * 采购机种价格推移转置行
- * @description 对应后端 TaktPurchasePriceModelTrendDto
- */
-export interface PurchasePriceModelTrend extends PurchasePriceMonthlyTrend {
-  /** 机种组展示 */
-  modelGroup?: string;
-  /** 产品组展示 */
-  productGroup?: string;
-  /** 机种编码列表 */
-  modelCodes?: string[];
-  /** 产品编码列表 */
-  productCodes?: string[];
-  /** 物料描述 */
-  materialText?: string;
-}
-
-/**
- * 采购机种价格推移分析结果
- * @description 对应后端 TaktPurchasePriceModelTrendResultDto
- */
-export interface PurchasePriceModelTrendResult {
-  /** 分页行 */
-  paged: TaktPagedResult<PurchasePriceModelTrend>;
+  paged: TaktPagedResult<PurchasePriceTrend>;
   /** 期间列顺序 */
   periodOrder: string[];
   /** 行总数 */

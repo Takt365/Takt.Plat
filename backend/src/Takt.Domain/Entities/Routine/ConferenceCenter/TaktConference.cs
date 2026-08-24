@@ -30,7 +30,7 @@ namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 public class TaktConference : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 会议编码（租户+公司内唯一）
+    /// 会议编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 会议编码规则生成并展示，非手输；单据类型菜单：会议中心）
     /// </summary>
     [SugarColumn(ColumnName = "conference_code", ColumnDescription = "会议编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string ConferenceCode { get; set; } = string.Empty;
@@ -91,18 +91,18 @@ public class TaktConference : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OrganizerId { get; set; }
     /// <summary>
-    /// 组织人姓名
+    /// 组织人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "organizer_name", ColumnDescription = "组织人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string OrganizerName { get; set; } = string.Empty;
     /// <summary>
-    /// 主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 主办部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "主办部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 主办部门名称
+    /// 主办部门名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "主办部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
@@ -123,7 +123,7 @@ public class TaktConference : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceRoomId { get; set; }
     /// <summary>
-    /// 会议室名称（冗余快照）
+    /// 会议室名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "conference_room_name", ColumnDescription = "会议室名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ConferenceRoomName { get; set; }

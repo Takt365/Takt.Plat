@@ -20,7 +20,6 @@ export const SALESPRICEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESPRICEITE
 
 /** 列表业务列（不含主键） */
 export const SALESPRICEITEM_LIST_FIELDS = [
-  'salesPriceId',
   'salesPriceCode',
   'salesPriceSeq',
   'priceType',
@@ -42,37 +41,12 @@ export const SALESPRICEITEM_LIST_FIELDS = [
   'roundingValue',
   'plannedDeliveryTimeDays',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESPRICEITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  salesPriceId: 'select',
-  salesPriceCode: 'required',
-  salesPriceSeq: 'select',
-  priceType: 'select',
-  scaleType: 'optional',
-  scaleBasis: 'optional',
-  scaleQuantity: 'select',
-  scaleUnit: 'optional',
-  scaleValue: 'select',
-  scaleCurrencyCode: 'optional',
-  calculationType: 'select',
-  price: 'select',
-  untaxedPrice: 'select',
-  taxIncludedPrice: 'select',
-  taxAmount: 'select',
-  conditionCurrencyCode: 'select',
-  priceUnit: 'select',
-  unitOfMeasure: 'select',
-  minOrderQuantity: 'select',
-  roundingValue: 'select',
-  plannedDeliveryTimeDays: 'select',
-  isObsolete: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -80,42 +54,13 @@ export type SalesPriceItemField = keyof typeof SALESPRICEITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESPRICEITEM_QUERY_STRING_FIELDS = [
-  'salesPriceId',
-  'salesPriceCode',
-  'priceType',
-  'scaleType',
-  'scaleBasis',
-  'scaleUnit',
-  'scaleCurrencyCode',
-  'calculationType',
-  'conditionCurrencyCode',
-  'unitOfMeasure',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SalesPriceItemQuery)[]
 
-export type SalesPriceItemQueryField =
-  | (typeof SALESPRICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'salesPriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'taxAmount' | 'priceUnit' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'isObsolete'
+export type SalesPriceItemQueryField = (typeof SALESPRICEITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESPRICEITEM_QUERY_FIELDS: readonly SalesPriceItemQueryField[] = [
-  ...SALESPRICEITEM_QUERY_STRING_FIELDS,
-  'salesPriceSeq',
-  'scaleQuantity',
-  'scaleValue',
-  'price',
-  'untaxedPrice',
-  'taxIncludedPrice',
-  'taxAmount',
-  'priceUnit',
-  'minOrderQuantity',
-  'roundingValue',
-  'plannedDeliveryTimeDays',
-  'isObsolete',
-]
+export const SALESPRICEITEM_QUERY_FIELDS: readonly SalesPriceItemQueryField[] = [...SALESPRICEITEM_QUERY_STRING_FIELDS]
 
 /**
  * Takt销售价格明细实体字段 i18n：index / price-item-form 统一入口

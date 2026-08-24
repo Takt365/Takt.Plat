@@ -47,14 +47,14 @@ public sealed class TaktOpenIddictLogHandler
     /// 写入 Subject/Name、角色、tenant_code、company_code 声明并设置 AccessToken 目的地
     /// </summary>
     /// <param name="userId">用户 ID</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="tenantCode">租户编码（写入 tenant_code 声明）</param>
     /// <param name="companyCode">公司编码（写入 company_code 声明）</param>
     /// <param name="scopes">请求的 scope（可为空）</param>
     /// <returns>含角色与租户/公司声明的 ClaimsPrincipal</returns>
     public async Task<ClaimsPrincipal> CreateUserPrincipalAsync(
         long userId,
-        string username,
+        string UserName,
         string tenantCode,
         string companyCode,
         IEnumerable<string>? scopes = null)
@@ -67,8 +67,8 @@ public sealed class TaktOpenIddictLogHandler
             Claims.Role);
 
         identity.SetClaim(Claims.Subject, userId.ToString());
-        identity.SetClaim(Claims.Name, username);
-        identity.SetClaim(Claims.PreferredUsername, username);
+        identity.SetClaim(Claims.Name, UserName);
+        identity.SetClaim(Claims.PreferredUsername, UserName);
 
         foreach (var role in roles)
         {
@@ -126,7 +126,7 @@ public sealed class TaktOpenIddictLogHandler
     /// <param name="phase">流程阶段（TaktAuthLoginPhases）</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="username">用户名或 client_id</param>
+    /// <param name="UserName">用户名或 client_id</param>
     /// <param name="loginType">登录方式</param>
     /// <param name="loginResult">登录结果</param>
     /// <param name="loginMessage">结果说明</param>
@@ -137,7 +137,7 @@ public sealed class TaktOpenIddictLogHandler
         string phase,
         string tenantCode,
         string? companyCode,
-        string username,
+        string UserName,
         string loginType,
         string loginResult,
         string? loginMessage = null,
@@ -153,7 +153,7 @@ public sealed class TaktOpenIddictLogHandler
                 LoginResult = loginResult,
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
-                Username = username,
+                UserName = UserName,
                 Message = loginMessage,
                 UserId = userId,
                 ElapsedMs = elapsedMs,

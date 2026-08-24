@@ -308,8 +308,17 @@ public class TaktSqlSugarContext : IDisposable
             TaktLogger.Information("  ℹ 开始初始化 {Count} 个数据表...", _entityTypes.Length);
             foreach (var entityType in _entityTypes)
             {
-                tempDb.CodeFirst.InitTables(entityType);
-                TaktLogger.Information("    ✓ {EntityName} -> {TableName}", entityType.Name, tempDb.EntityMaintenance.GetEntityInfo(entityType).DbTableName);
+                try
+                {
+                    tempDb.CodeFirst.InitTables(entityType);
+                    TaktLogger.Information("    ✓ {EntityName} -> {TableName}", entityType.Name, tempDb.EntityMaintenance.GetEntityInfo(entityType).DbTableName);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(
+                        $"CodeFirst 建表失败：实体 {entityType.FullName}（{entityType.Name}）",
+                        ex);
+                }
             }
                             
             TaktLogger.Information("  ✓ [租户 {TenantCode}] 数据库表初始化成功！共 {Count} 个表。", tenantCode, _entityTypes.Length);
@@ -638,7 +647,7 @@ internal static class TaktSqlSugarAuditAop
                 RequestMethod = httpContext.Request.Method ?? string.Empty,
                 OperUrl = BuildOperUrl(httpContext) ?? string.Empty,
                 RequestParam = MaskSensitiveJson(requestBody) ?? string.Empty,
-                OperStatus = statusCode >= 400 ? TaktExecuteStatus.Failed : TaktExecuteStatus.Success,
+                OperStatus = statusCode >= 400 ? (int)TaktExecuteStatus.Failed : (int)TaktExecuteStatus.Success,
                 OperIp = client.Ip,
                 OperLocation = client.Location,
                 UserAgent = client.UserAgent,

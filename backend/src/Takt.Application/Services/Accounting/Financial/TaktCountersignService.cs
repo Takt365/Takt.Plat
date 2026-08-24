@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktCountersignService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会签单应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
     }
 
     /// <summary>
-    /// 获取会签单列表（分页）
+    /// 获取会签单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCountersignDto>> GetCountersignListAsync(TaktCountersignQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCountersignDto>.Create(
+                new List<TaktCountersignDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _countersignRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -106,8 +114,8 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CountersignCode ?? e.Id.ToString(),
+            DictValue = e.CountersignCode,
+            DictLabel = e.CountersignCode,
         }).ToList();
     }
 
@@ -282,7 +290,15 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCountersignAsync(TaktCountersignQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCountersignQueryDto());
+        var queryDto = query ?? new TaktCountersignQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCountersignExportDto>(),
+                sheetName ?? "会签单数据",
+                fileName ?? "会签单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _countersignRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -352,7 +368,20 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
     private async Task SaveCountersignChildrenAsync(TaktCountersign entity, TaktCountersignCreateDto dto)
     {
         // 会签单明细（CountersignDetails）
-        if (dto.CountersignDetails is not { Count: > 0 })
+        List<TaktCountersignDetailUpdateDto>? countersignDetailsForSave;
+        if (dto is TaktCountersignUpdateDto updateDtoForCountersignDetails && updateDtoForCountersignDetails.CountersignDetails != null)
+        {
+            countersignDetailsForSave = updateDtoForCountersignDetails.CountersignDetails;
+        }
+        else if (dto.CountersignDetails != null)
+        {
+            countersignDetailsForSave = dto.CountersignDetails.Adapt<List<TaktCountersignDetailUpdateDto>>();
+        }
+        else
+        {
+            countersignDetailsForSave = null;
+        }
+        if (countersignDetailsForSave is not { Count: > 0 })
         {
             await MarkCountersignDetailsObsoleteAsync(entity.Id);
             return;
@@ -364,10 +393,15 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktCountersignDetail>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.CountersignDetails.Count; i++)
+            for (var i = 0; i < countersignDetailsForSave.Count; i++)
             {
-                var childDto = dto.CountersignDetails[i];
+                var childDto = countersignDetailsForSave[i];
                 childDto.CountersignId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.CountersignCode = entity.CountersignCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -386,13 +420,12 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
                     submittedIds.Add(childDto.CountersignDetailId);
                     var isUniqueUpdate_ix_countersign_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _countersignDetailRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.CountersignId == x.CountersignId
+                        x => x.CountersignId == x.CountersignId
                 && x.LineNumber == x.LineNumber,
                         childDto.CountersignDetailId);
                     if (!isUniqueUpdate_ix_countersign_detail_line_unique)
                     {
-                        throw new TaktBusinessException("会签单明细的CompanyCode、CountersignId、LineNumber已存在");
+                        throw new TaktBusinessException("会签单明细的CountersignId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.CountersignDetailId;
@@ -404,12 +437,11 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
                 {
                     var isUniqueCreate_ix_countersign_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _countersignDetailRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.CountersignId == x.CountersignId
+                        x => x.CountersignId == x.CountersignId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_countersign_detail_line_unique)
                     {
-                        throw new TaktBusinessException("会签单明细的CompanyCode、CountersignId、LineNumber已存在");
+                        throw new TaktBusinessException("会签单明细的CountersignId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktCountersignDetail>();
                     child.Id = 0;
@@ -458,186 +490,337 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
     {
         var exp = Expressionable.Create<TaktCountersign>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.CountersignCode != null && x.CountersignCode.Contains(keywords))
-                || SqlFunc.ToString(x.PurchaseInquiryId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CountersignCode != null && x.CountersignCode.Contains(keywords))
                 || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
                 || (x.BusinessType != null && x.BusinessType.Contains(keywords))
                 || (x.BusinessKey != null && x.BusinessKey.Contains(keywords))
-                || SqlFunc.ToString(x.StepNo).Contains(keywords)
                 || (x.CountersignDepts != null && x.CountersignDepts.Contains(keywords))
                 || (x.FinanceDept != null && x.FinanceDept.Contains(keywords))
                 || (x.BudgetReviewComment != null && x.BudgetReviewComment.Contains(keywords))
                 || (x.ExecutiveOffice != null && x.ExecutiveOffice.Contains(keywords))
-                || SqlFunc.ToString(x.ApplicantBy).Contains(keywords)
                 || (x.ApplicationDept != null && x.ApplicationDept.Contains(keywords))
                 || (x.CostBearerDept != null && x.CostBearerDept.Contains(keywords))
-                || SqlFunc.ToString(x.IsBudget).Contains(keywords)
                 || (x.BudgetItem != null && x.BudgetItem.Contains(keywords))
-                || SqlFunc.ToString(x.BudgetAmount).Contains(keywords)
-                || SqlFunc.ToString(x.ApplicationAmount).Contains(keywords)
                 || (x.CountersignTitle != null && x.CountersignTitle.Contains(keywords))
                 || (x.ApplicationReason != null && x.ApplicationReason.Contains(keywords))
                 || (x.BudgetUsageDescription != null && x.BudgetUsageDescription.Contains(keywords))
                 || (x.TargetAndExpectedBenefit != null && x.TargetAndExpectedBenefit.Contains(keywords))
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
-                || SqlFunc.ToString(x.CountersignStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CountersignCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.CountersignCode != null && x.CountersignCode.Contains(queryDto.CountersignCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.PurchaseInquiryId.HasValue == true)
-        {
-            exp = exp.And(x => x.PurchaseInquiryId == queryDto.PurchaseInquiryId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseInquiryCode))
-        {
-            exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(queryDto.PurchaseInquiryCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.BusinessType))
-        {
-            exp = exp.And(x => x.BusinessType != null && x.BusinessType.Contains(queryDto.BusinessType));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.BusinessKey))
-        {
-            exp = exp.And(x => x.BusinessKey != null && x.BusinessKey.Contains(queryDto.BusinessKey));
-        }
-
-        if (queryDto?.StepNo.HasValue == true)
-        {
-            exp = exp.And(x => x.StepNo == queryDto.StepNo);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CountersignDepts))
-        {
-            exp = exp.And(x => x.CountersignDepts != null && x.CountersignDepts.Contains(queryDto.CountersignDepts));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FinanceDept))
-        {
-            exp = exp.And(x => x.FinanceDept != null && x.FinanceDept.Contains(queryDto.FinanceDept));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.BudgetReviewComment))
-        {
-            exp = exp.And(x => x.BudgetReviewComment != null && x.BudgetReviewComment.Contains(queryDto.BudgetReviewComment));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExecutiveOffice))
-        {
-            exp = exp.And(x => x.ExecutiveOffice != null && x.ExecutiveOffice.Contains(queryDto.ExecutiveOffice));
-        }
-
-        if (queryDto?.ApplicantBy.HasValue == true)
-        {
-            exp = exp.And(x => x.ApplicantBy == queryDto.ApplicantBy);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ApplicationDept))
-        {
-            exp = exp.And(x => x.ApplicationDept != null && x.ApplicationDept.Contains(queryDto.ApplicationDept));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CostBearerDept))
-        {
-            exp = exp.And(x => x.CostBearerDept != null && x.CostBearerDept.Contains(queryDto.CostBearerDept));
-        }
-
-        if (queryDto?.IsBudget.HasValue == true)
-        {
-            exp = exp.And(x => x.IsBudget == queryDto.IsBudget);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.BudgetItem))
-        {
-            exp = exp.And(x => x.BudgetItem != null && x.BudgetItem.Contains(queryDto.BudgetItem));
-        }
-
-        if (queryDto?.BudgetAmount.HasValue == true)
-        {
-            exp = exp.And(x => x.BudgetAmount == queryDto.BudgetAmount);
-        }
-
-        if (queryDto?.ApplicationAmount.HasValue == true)
-        {
-            exp = exp.And(x => x.ApplicationAmount == queryDto.ApplicationAmount);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CountersignTitle))
-        {
-            exp = exp.And(x => x.CountersignTitle != null && x.CountersignTitle.Contains(queryDto.CountersignTitle));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ApplicationReason))
-        {
-            exp = exp.And(x => x.ApplicationReason != null && x.ApplicationReason.Contains(queryDto.ApplicationReason));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.BudgetUsageDescription))
-        {
-            exp = exp.And(x => x.BudgetUsageDescription != null && x.BudgetUsageDescription.Contains(queryDto.BudgetUsageDescription));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TargetAndExpectedBenefit))
-        {
-            exp = exp.And(x => x.TargetAndExpectedBenefit != null && x.TargetAndExpectedBenefit.Contains(queryDto.TargetAndExpectedBenefit));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Attachments))
-        {
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
-        }
-
-        if (queryDto?.CountersignStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.CountersignStatus == queryDto.CountersignStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountersignCode))
+        {
+            var countersignCode = queryDto.CountersignCode;
+            exp = exp.And(x => x.CountersignCode != null && x.CountersignCode.Contains(countersignCode));
+        }
+
+        if (queryDto?.PurchaseInquiryId.HasValue == true)
+        {
+            var purchaseInquiryId = queryDto.PurchaseInquiryId.Value;
+            exp = exp.And(x => x.PurchaseInquiryId == purchaseInquiryId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseInquiryCode))
+        {
+            var purchaseInquiryCode = queryDto.PurchaseInquiryCode;
+            exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(purchaseInquiryCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BusinessType))
+        {
+            var businessType = queryDto.BusinessType;
+            exp = exp.And(x => x.BusinessType != null && x.BusinessType.Contains(businessType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BusinessKey))
+        {
+            var businessKey = queryDto.BusinessKey;
+            exp = exp.And(x => x.BusinessKey != null && x.BusinessKey.Contains(businessKey));
+        }
+
+        if (queryDto?.StepNo.HasValue == true)
+        {
+            var stepNo = queryDto.StepNo.Value;
+            exp = exp.And(x => x.StepNo == stepNo);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountersignDepts))
+        {
+            var countersignDepts = queryDto.CountersignDepts;
+            exp = exp.And(x => x.CountersignDepts != null && x.CountersignDepts.Contains(countersignDepts));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.FinanceDept))
+        {
+            var financeDept = queryDto.FinanceDept;
+            exp = exp.And(x => x.FinanceDept != null && x.FinanceDept.Contains(financeDept));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BudgetReviewComment))
+        {
+            var budgetReviewComment = queryDto.BudgetReviewComment;
+            exp = exp.And(x => x.BudgetReviewComment != null && x.BudgetReviewComment.Contains(budgetReviewComment));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExecutiveOffice))
+        {
+            var executiveOffice = queryDto.ExecutiveOffice;
+            exp = exp.And(x => x.ExecutiveOffice != null && x.ExecutiveOffice.Contains(executiveOffice));
+        }
+
+        if (queryDto?.ApplicantBy.HasValue == true)
+        {
+            var applicantBy = queryDto.ApplicantBy.Value;
+            exp = exp.And(x => x.ApplicantBy == applicantBy);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicationDept))
+        {
+            var applicationDept = queryDto.ApplicationDept;
+            exp = exp.And(x => x.ApplicationDept != null && x.ApplicationDept.Contains(applicationDept));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostBearerDept))
+        {
+            var costBearerDept = queryDto.CostBearerDept;
+            exp = exp.And(x => x.CostBearerDept != null && x.CostBearerDept.Contains(costBearerDept));
+        }
+
+        if (queryDto?.IsBudget.HasValue == true)
+        {
+            var isBudget = queryDto.IsBudget.Value;
+            exp = exp.And(x => x.IsBudget == isBudget);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BudgetItem))
+        {
+            var budgetItem = queryDto.BudgetItem;
+            exp = exp.And(x => x.BudgetItem != null && x.BudgetItem.Contains(budgetItem));
+        }
+
+        if (queryDto?.BudgetAmount.HasValue == true)
+        {
+            var budgetAmount = queryDto.BudgetAmount.Value;
+            exp = exp.And(x => x.BudgetAmount == budgetAmount);
+        }
+
+        if (queryDto?.ApplicationAmount.HasValue == true)
+        {
+            var applicationAmount = queryDto.ApplicationAmount.Value;
+            exp = exp.And(x => x.ApplicationAmount == applicationAmount);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountersignTitle))
+        {
+            var countersignTitle = queryDto.CountersignTitle;
+            exp = exp.And(x => x.CountersignTitle != null && x.CountersignTitle.Contains(countersignTitle));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicationReason))
+        {
+            var applicationReason = queryDto.ApplicationReason;
+            exp = exp.And(x => x.ApplicationReason != null && x.ApplicationReason.Contains(applicationReason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BudgetUsageDescription))
+        {
+            var budgetUsageDescription = queryDto.BudgetUsageDescription;
+            exp = exp.And(x => x.BudgetUsageDescription != null && x.BudgetUsageDescription.Contains(budgetUsageDescription));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TargetAndExpectedBenefit))
+        {
+            var targetAndExpectedBenefit = queryDto.TargetAndExpectedBenefit;
+            exp = exp.And(x => x.TargetAndExpectedBenefit != null && x.TargetAndExpectedBenefit.Contains(targetAndExpectedBenefit));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Attachments))
+        {
+            var attachments = queryDto.Attachments;
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(attachments));
+        }
+
+        if (queryDto?.CountersignStatus.HasValue == true)
+        {
+            var countersignStatus = queryDto.CountersignStatus.Value;
+            exp = exp.And(x => x.CountersignStatus == countersignStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCountersignQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountersignCode))
+        {
+            return true;
+        }
+        if (queryDto.PurchaseInquiryId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseInquiryCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BusinessType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BusinessKey))
+        {
+            return true;
+        }
+        if (queryDto.StepNo.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountersignDepts))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FinanceDept))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BudgetReviewComment))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExecutiveOffice))
+        {
+            return true;
+        }
+        if (queryDto.ApplicantBy.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicationDept))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostBearerDept))
+        {
+            return true;
+        }
+        if (queryDto.IsBudget.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BudgetItem))
+        {
+            return true;
+        }
+        if (queryDto.BudgetAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ApplicationAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountersignTitle))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicationReason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BudgetUsageDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TargetAndExpectedBenefit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Attachments))
+        {
+            return true;
+        }
+        if (queryDto.CountersignStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

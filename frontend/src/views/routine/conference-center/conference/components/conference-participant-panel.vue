@@ -8,9 +8,6 @@
 
 <template>
   <div class="conference-participant-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.conferenceparticipant._self') }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -32,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -41,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -55,7 +51,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="conference-participant-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="conference-participant-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -63,6 +62,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getConferenceParticipantId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -73,12 +73,28 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -92,183 +108,23 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterConferenceId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-routine-conference-center-conference-conference-participant"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('userId')">
-      <a-form-item :label="t('entity.conferenceparticipant.userid')">
-        <a-input
-          v-model:value="advancedQueryForm.userId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.userid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('userName')">
-      <a-form-item :label="t('entity.conferenceparticipant.username')">
-        <a-input
-          v-model:value="advancedQueryForm.userName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.username') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('participantRole')">
-      <a-form-item :label="t('entity.conferenceparticipant.participantrole')">
-        <a-input-number
-          v-model:value="advancedQueryForm.participantRole"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.participantrole') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('attendanceStatus')">
-      <a-form-item :label="t('entity.conferenceparticipant.attendancestatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.attendanceStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.attendancestatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('checkInTimeStart')">
-      <a-form-item :label="t('entity.conferenceparticipant.checkintimestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.checkInTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkintimestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('checkInTimeEnd')">
-      <a-form-item :label="t('entity.conferenceparticipant.checkintimeend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.checkInTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkintimeend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('checkOutTimeStart')">
-      <a-form-item :label="t('entity.conferenceparticipant.checkouttimestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.checkOutTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkouttimestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('checkOutTimeEnd')">
-      <a-form-item :label="t('entity.conferenceparticipant.checkouttimeend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.checkOutTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkouttimeend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('checkInMethod')">
-      <a-form-item :label="t('entity.conferenceparticipant.checkinmethod')">
-        <a-input-number
-          v-model:value="advancedQueryForm.checkInMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.checkinmethod') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.conferenceparticipant._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.conferenceparticipant._self"
+        v-if="importVisible"
+        :entity-i18n-key="CONFERENCEPARTICIPANT_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -286,7 +142,7 @@
       id-column-key="conferenceParticipantId"
       action-column-key="action"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -298,15 +154,25 @@
  * 会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理子表 conferenceParticipant 右栏面板
  * @module views/routine/conference-center/conference/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import ConferenceParticipantForm from './conference-participant-form.vue'
 import { useConferenceMasterContext } from '../composables/use-conference-master-context'
 import {
@@ -322,6 +188,18 @@ import {
 } from '@/api/routine/conference-center/conference-participant'
 import type { ConferenceParticipant, ConferenceParticipantQuery } from '@/types/routine/conference-center/conference-participant'
 
+import {
+  useConferenceParticipantI18n,
+  CONFERENCEPARTICIPANT_DEFAULT_VISIBLE_COLUMN_KEYS,
+  CONFERENCEPARTICIPANT_SUMMARY_SUM_FIELDS,
+  CONFERENCEPARTICIPANT_QUERY_STRING_FIELDS,
+  CONFERENCEPARTICIPANT_QUERY_FIELDS,
+  CONFERENCEPARTICIPANT_SELF_I18N_KEY,
+} from '../composables/use-conference-participant-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useConferenceParticipantI18n()
+
 const { t } = useI18n()
 const { selectedMasterRow } = useConferenceMasterContext()
 
@@ -329,10 +207,45 @@ const { selectedMasterRow } = useConferenceMasterContext()
 const excelNames = taktExcelEntityNames('TaktConferenceParticipant')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.conferenceparticipant._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<ConferenceParticipant[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -347,77 +260,9 @@ const formData = ref<Partial<ConferenceParticipant>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  userId: '',
-  userName: '',
-  participantRole: undefined as number | undefined,
-  attendanceStatus: undefined as number | undefined,
-  checkInTimeStart: '',
-  checkInTimeEnd: '',
-  checkOutTimeStart: '',
-  checkOutTimeEnd: '',
-  checkInMethod: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'userId', label: t('entity.conferenceparticipant.userid') },
-  { key: 'userName', label: t('entity.conferenceparticipant.username') },
-  { key: 'participantRole', label: t('entity.conferenceparticipant.participantrole') },
-  { key: 'attendanceStatus', label: t('entity.conferenceparticipant.attendancestatus') },
-  { key: 'checkInTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.conferenceparticipant.checkintime')) },
-  { key: 'checkInTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.conferenceparticipant.checkintime')) },
-  { key: 'checkOutTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.conferenceparticipant.checkouttime')) },
-  { key: 'checkOutTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.conferenceparticipant.checkouttime')) },
-  { key: 'checkInMethod', label: t('entity.conferenceparticipant.checkinmethod') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  userId: '',
-  userName: '',
-  participantRole: undefined as number | undefined,
-  attendanceStatus: undefined as number | undefined,
-  checkInTimeStart: '',
-  checkInTimeEnd: '',
-  checkOutTimeStart: '',
-  checkOutTimeEnd: '',
-  checkInMethod: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
-}
 const columnSettingVisible = ref(false)
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...CONFERENCEPARTICIPANT_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -428,13 +273,16 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...CONFERENCEPARTICIPANT_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
 const entityIdName = 'conferenceParticipantId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.conferenceId)
-const masterConferenceId = computed(() => selectedMasterRow.value?.conferenceId ?? '')
+const masterConferenceId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['conferenceId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterConferenceId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -459,7 +307,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'conferenceParticipantId') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.userid'),
+    title: pi.label('userId'),
     dataIndex: 'userId',
     key: 'userId',
     width: 120,
@@ -469,7 +317,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'userId') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.username'),
+    title: pi.label('userName'),
     dataIndex: 'userName',
     key: 'userName',
     width: 120,
@@ -479,7 +327,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'userName') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.participantrole'),
+    title: pi.label('participantRole'),
     dataIndex: 'participantRole',
     key: 'participantRole',
     width: 120,
@@ -489,7 +337,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'participantRole') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.attendancestatus'),
+    title: pi.label('attendanceStatus'),
     dataIndex: 'attendanceStatus',
     key: 'attendanceStatus',
     width: 120,
@@ -499,7 +347,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'attendanceStatus') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.checkintime'),
+    title: pi.label('checkInTime'),
     dataIndex: 'checkInTime',
     key: 'checkInTime',
     width: 120,
@@ -509,7 +357,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'checkInTime') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.checkouttime'),
+    title: pi.label('checkOutTime'),
     dataIndex: 'checkOutTime',
     key: 'checkOutTime',
     width: 120,
@@ -519,7 +367,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'checkOutTime') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.checkinmethod'),
+    title: pi.label('checkInMethod'),
     dataIndex: 'checkInMethod',
     key: 'checkInMethod',
     width: 120,
@@ -529,14 +377,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getConferenceParticipantField(record, 'checkInMethod') ?? ''),
   },
   {
-    title: t('entity.conferenceparticipant.conference'),
-    dataIndex: 'conference',
-    key: 'conference',
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ConferenceParticipant }) =>
-      String(getConferenceParticipantField(record, 'conference') ?? ''),
+      String(getConferenceParticipantField(record, 'remark') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -555,9 +403,80 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'routine:conference:center:delete',
         onClick: (record: ConferenceParticipant) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'approval')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'conferenceParticipantId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'approval',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(CONFERENCEPARTICIPANT_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    CONFERENCEPARTICIPANT_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof CONFERENCEPARTICIPANT_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of CONFERENCEPARTICIPANT_SUMMARY_SUM_FIELDS) {
+      const num = Number(getConferenceParticipantField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: ConferenceParticipant[]) => {
@@ -596,7 +515,7 @@ function onClickRow(record: ConferenceParticipant) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {ConferenceParticipantQuery} 查询 DTO
  */
@@ -618,25 +537,9 @@ function buildListQuery(overrides?: Partial<ConferenceParticipantQuery>): Confer
       query[key] = v as never
     }
   }
-  assignTrimmed('userId', form.userId)
-  assignTrimmed('userName', form.userName)
-  if (form.participantRole !== undefined && form.participantRole !== null) {
-    query.participantRole = form.participantRole
+  for (const key of CONFERENCEPARTICIPANT_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  if (form.attendanceStatus !== undefined && form.attendanceStatus !== null) {
-    query.attendanceStatus = form.attendanceStatus
-  }
-  assignTrimmed('checkInTimeStart', form.checkInTimeStart)
-  assignTrimmed('checkInTimeEnd', form.checkInTimeEnd)
-  assignTrimmed('checkOutTimeStart', form.checkOutTimeStart)
-  assignTrimmed('checkOutTimeEnd', form.checkOutTimeEnd)
-  if (form.checkInMethod !== undefined && form.checkInMethod !== null) {
-    query.checkInMethod = form.checkInMethod
-  }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 
@@ -677,6 +580,36 @@ watch(masterConferenceId, () => {
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
 
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
+
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
@@ -693,13 +626,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.conferenceparticipant._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: ConferenceParticipant) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.conferenceparticipant._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getConferenceParticipantById(getConferenceParticipantId(record))
@@ -716,7 +649,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.conferenceparticipant._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -735,10 +668,10 @@ async function handleFormSubmit() {
     const id = formData.value?.conferenceParticipantId
     if (id) {
       await updateConferenceParticipant(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.conferenceparticipant._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createConferenceParticipant(payload)
-      message.success(t('common.feedback.created', { target: t('entity.conferenceparticipant._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -755,14 +688,14 @@ async function handleDeleteOne(record: ConferenceParticipant) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.conferenceparticipant._self'),
-      name: t('common.tip.this.target', { target: t('entity.conferenceparticipant._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteConferenceParticipantById(getConferenceParticipantId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.conferenceparticipant._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -772,14 +705,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.conferenceparticipant._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.conferenceparticipant._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -787,7 +720,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getConferenceParticipantId(r)).filter(Boolean)
       await deleteConferenceParticipantBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.conferenceparticipant._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -797,35 +730,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getConferenceParticipantTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importConferenceParticipant(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importConferenceParticipant(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }
@@ -836,6 +770,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportConferenceParticipant(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -859,10 +796,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.conferenceparticipant._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.conferenceparticipant._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

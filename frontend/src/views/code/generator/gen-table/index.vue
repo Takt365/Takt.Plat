@@ -77,7 +77,7 @@
         <template v-if="column.key === 'inDatabase'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'inDatabase')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'genTemplateCategory'">
@@ -95,7 +95,7 @@
         <template v-else-if="column.key === 'isRepository'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'isRepository')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'genFunction'">
@@ -119,13 +119,13 @@
         <template v-else-if="column.key === 'isGenMenu'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'isGenMenu')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isGenTranslation'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'isGenTranslation')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'sortType'">
@@ -155,13 +155,13 @@
         <template v-else-if="column.key === 'isGenCode'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'isGenCode')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isUseTabs'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'isUseTabs')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -293,7 +293,7 @@
       <a-form-item :label="pi.queryLabel('inDatabase')">
         <TaktSelect
           v-model:value="advancedQueryForm.inDatabase"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('inDatabase', 'select')"
           allow-clear
         />
@@ -477,7 +477,7 @@
       <a-form-item :label="pi.queryLabel('isRepository')">
         <TaktSelect
           v-model:value="advancedQueryForm.isRepository"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isRepository', 'select')"
           allow-clear
         />
@@ -561,7 +561,7 @@
       <a-form-item :label="pi.queryLabel('isGenMenu')">
         <TaktSelect
           v-model:value="advancedQueryForm.isGenMenu"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isGenMenu', 'select')"
           allow-clear
         />
@@ -581,7 +581,7 @@
       <a-form-item :label="pi.queryLabel('isGenTranslation')">
         <TaktSelect
           v-model:value="advancedQueryForm.isGenTranslation"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isGenTranslation', 'select')"
           allow-clear
         />
@@ -642,7 +642,7 @@
       <a-form-item :label="pi.queryLabel('isGenCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.isGenCode"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isGenCode', 'select')"
           allow-clear
         />
@@ -661,7 +661,7 @@
       <a-form-item :label="pi.queryLabel('isUseTabs')">
         <TaktSelect
           v-model:value="advancedQueryForm.isUseTabs"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isUseTabs', 'select')"
           allow-clear
         />

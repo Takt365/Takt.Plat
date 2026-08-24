@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoutingItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -208,22 +208,22 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitem.teardownminutes", "zh-HK", "清理时间_hk", "清理时间（分钟），如清洁、整理等"),
 
             // entity.routingitem.isinspection
-            new TranslationSeedItem("entity.routingitem.isinspection", "en-US", "检验_us", "检验（字典 sys_yes_no_type：0=否，1=是）"),
+            new TranslationSeedItem("entity.routingitem.isinspection", "en-US", "检验_us", "检验（字典 sys_yes_no：0=否，1=是）"),
             // entity.routingitem.isinspection
-            new TranslationSeedItem("entity.routingitem.isinspection", "ja-JP", "检验_jp", "检验（字典 sys_yes_no_type：0=否，1=是）"),
+            new TranslationSeedItem("entity.routingitem.isinspection", "ja-JP", "检验_jp", "检验（字典 sys_yes_no：0=否，1=是）"),
             // entity.routingitem.isinspection
-            new TranslationSeedItem("entity.routingitem.isinspection", "zh-CN", "检验", "检验（字典 sys_yes_no_type：0=否，1=是）"),
+            new TranslationSeedItem("entity.routingitem.isinspection", "zh-CN", "检验", "检验（字典 sys_yes_no：0=否，1=是）"),
             // entity.routingitem.isinspection
-            new TranslationSeedItem("entity.routingitem.isinspection", "zh-HK", "检验_hk", "检验（字典 sys_yes_no_type：0=否，1=是）"),
+            new TranslationSeedItem("entity.routingitem.isinspection", "zh-HK", "检验_hk", "检验（字典 sys_yes_no：0=否，1=是）"),
 
             // entity.routingitem.sortorder
-            new TranslationSeedItem("entity.routingitem.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.routingitem.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.routingitem.sortorder
-            new TranslationSeedItem("entity.routingitem.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.routingitem.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.routingitem.sortorder
-            new TranslationSeedItem("entity.routingitem.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.routingitem.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.routingitem.sortorder
-            new TranslationSeedItem("entity.routingitem.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.routingitem.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.routingitem.processdescription
             new TranslationSeedItem("entity.routingitem.processdescription", "en-US", "工序说明_us", "工序说明"),
@@ -253,13 +253,13 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitem.extjson", "zh-HK", "工序扩展JSON_hk", "工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）"),
 
             // entity.routingitem.isobsolete
-            new TranslationSeedItem("entity.routingitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.routingitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.routingitem.isobsolete
-            new TranslationSeedItem("entity.routingitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.routingitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.routingitem.isobsolete
-            new TranslationSeedItem("entity.routingitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.routingitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.routingitem.isobsolete
-            new TranslationSeedItem("entity.routingitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.routingitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.routingitem.routing
             new TranslationSeedItem("entity.routingitem.routing", "en-US", "工艺路线主表_us", "工艺路线主表（主表）"),

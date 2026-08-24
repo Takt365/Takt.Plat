@@ -44,12 +44,12 @@ public class TaktWorkShift : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "end_time", ColumnDescription = "结束时间", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
     public string EndTime { get; set; } = string.Empty;
     /// <summary>
-    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "cross_midnight", ColumnDescription = "是否跨日", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CrossMidnight { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

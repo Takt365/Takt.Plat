@@ -26,102 +26,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('lineNumber')"
-                name="lineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="pi.ph('lineNumber')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('directManpowerCostPerMinute')"
-                name="directManpowerCostPerMinute"
-              >
-                <a-input-number
-                  v-model:value="formState.directManpowerCostPerMinute"
-                  :placeholder="pi.ph('directManpowerCostPerMinute')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('incomingInspectionCost')"
-                name="incomingInspectionCost"
-              >
-                <a-input-number
-                  v-model:value="formState.incomingInspectionCost"
-                  :placeholder="pi.ph('incomingInspectionCost')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inspectionTimeMinutes')"
-                name="inspectionTimeMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.inspectionTimeMinutes"
-                  :placeholder="pi.ph('inspectionTimeMinutes')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('travelCost')"
-                name="travelCost"
-              >
-                <a-input-number
-                  v-model:value="formState.travelCost"
-                  :placeholder="pi.ph('travelCost')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('otherExpenses')"
-                name="otherExpenses"
-              >
-                <a-input-number
-                  v-model:value="formState.otherExpenses"
-                  :placeholder="pi.ph('otherExpenses')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('incomingNote')"
-                name="incomingNote"
-              >
-                <a-textarea
-                  v-model:value="formState.incomingNote"
-                  :placeholder="pi.ph('incomingNote')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('isObsolete')"
-                name="isObsolete"
-              >
-                <TaktSelect
-                  v-model:value="formState.isObsolete"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="pi.ph('isObsolete')"
-                />
-              </a-form-item>
-            </a-col>
+
           </a-row>
         </div>
       </a-tab-pane>
@@ -134,7 +39,7 @@
  * 品质业务主表子表 qualityAssuranceIncoming 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/quality/cost/assurance/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useQualityAssuranceIncomingI18n } from '../composables/use-assurance-incoming-i18n'
@@ -143,8 +48,6 @@ import { useQualityAssuranceIncomingI18n } from '../composables/use-assurance-in
 const pi = useQualityAssuranceIncomingI18n()
 
 import type { QualityAssuranceIncomingCreate } from '@/types/logistics/quality/cost/assurance-incoming'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -153,7 +56,9 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","directManpowerCostPerMinute","incomingInspectionCost","inspectionTimeMinutes","travelCost","otherExpenses","incomingNote","isObsolete"]
+const formFields = []
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -162,12 +67,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -179,13 +87,6 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 qualityAssuranceIncomingId 才视为编辑） */
 watch(
@@ -211,97 +112,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  lineNumber: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('lineNumber'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('lineNumber'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  directManpowerCostPerMinute: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('directManpowerCostPerMinute'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('directManpowerCostPerMinute'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  incomingInspectionCost: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('incomingInspectionCost'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('incomingInspectionCost'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  inspectionTimeMinutes: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('inspectionTimeMinutes'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('inspectionTimeMinutes'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  travelCost: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('travelCost'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('travelCost'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  otherExpenses: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('otherExpenses'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('otherExpenses'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  isObsolete: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('isObsolete'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('isObsolete'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -313,36 +124,32 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 qualityAssuranceId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('lineNumber' in payload) {
-    const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
-  }
-  if ('directManpowerCostPerMinute' in payload) {
-    const rawdirectManpowerCostPerMinute = payload.directManpowerCostPerMinute
-    payload.directManpowerCostPerMinute = typeof rawdirectManpowerCostPerMinute === 'number' ? rawdirectManpowerCostPerMinute : Number(rawdirectManpowerCostPerMinute)
-  }
-  if ('incomingInspectionCost' in payload) {
-    const rawincomingInspectionCost = payload.incomingInspectionCost
-    payload.incomingInspectionCost = typeof rawincomingInspectionCost === 'number' ? rawincomingInspectionCost : Number(rawincomingInspectionCost)
-  }
-  if ('inspectionTimeMinutes' in payload) {
-    const rawinspectionTimeMinutes = payload.inspectionTimeMinutes
-    payload.inspectionTimeMinutes = typeof rawinspectionTimeMinutes === 'number' ? rawinspectionTimeMinutes : Number(rawinspectionTimeMinutes)
-  }
-  if ('travelCost' in payload) {
-    const rawtravelCost = payload.travelCost
-    payload.travelCost = typeof rawtravelCost === 'number' ? rawtravelCost : Number(rawtravelCost)
-  }
-  if ('otherExpenses' in payload) {
-    const rawotherExpenses = payload.otherExpenses
-    payload.otherExpenses = typeof rawotherExpenses === 'number' ? rawotherExpenses : Number(rawotherExpenses)
-  }
-  if ('isObsolete' in payload) {
-    const rawisObsolete = payload.isObsolete
-    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.qualityAssuranceIncomingId) {
+    payload.qualityAssuranceIncomingId = props.formData.qualityAssuranceIncomingId
+  }
   payload.qualityAssuranceId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.qualityAssuranceCode ?? masterRow.QualityAssuranceCode
+    const masterName = masterRow.qualityAssuranceName ?? masterRow.QualityAssuranceName
+    if (masterCode != null && masterCode !== '' && !payload.qualityAssuranceCode) {
+      payload.qualityAssuranceCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.qualityAssuranceName) {
+      payload.qualityAssuranceName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 

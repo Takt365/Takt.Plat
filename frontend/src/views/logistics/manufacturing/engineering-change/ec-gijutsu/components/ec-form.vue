@@ -158,11 +158,9 @@
                 :label="t('entity.ec.content')"
                 name="ecContent"
               >
-                <a-textarea
+                <takt-rich-editor
                   v-model:value="formState.ecContent"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.content') })"
-                  :rows="8"
-                  allow-clear
                   :disabled="loading"
                 />
               </a-form-item>
@@ -882,7 +880,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.ecGijutsuId
     if (isCreate) {

@@ -27,6 +27,282 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesQuotationCode')"
+                name="salesQuotationCode"
+              >
+                <a-input
+                  v-model:value="formState.salesQuotationCode"
+                  :placeholder="pi.ph('salesQuotationCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.salesQuotationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerCode')"
+                name="customerCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.customerCode"
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
+                  :disabled="!!formData?.salesQuotationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerName1')"
+                name="customerName1"
+              >
+                <a-input
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
+                  show-count
+                  :maxlength="140"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('quotationDate')"
+                name="quotationDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.quotationDate"
+                  :placeholder="pi.ph('quotationDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('validUntilDate')"
+                name="validUntilDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.validUntilDate"
+                  :placeholder="pi.ph('validUntilDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesBy')"
+                name="salesBy"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesBy"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('salesBy')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalQuantity')"
+                name="totalQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.totalQuantity"
+                  :placeholder="pi.ph('totalQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalAmount')"
+                name="totalAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.totalAmount"
+                  :placeholder="pi.ph('totalAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('discountAmount')"
+                name="discountAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.discountAmount"
+                  :placeholder="pi.ph('discountAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.salesQuotationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('taxCode')"
+                name="taxCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxCode"
+                  dict-type="accounting_tax_code"
+                  :placeholder="pi.ph('taxCode')"
+                  :disabled="!!formData?.salesQuotationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('taxRate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_tax_code"
+                  :placeholder="pi.ph('taxRate')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('actualAmount')"
+                name="actualAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.actualAmount"
+                  :placeholder="pi.ph('actualAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('salesOrderCode')"
+                name="salesOrderCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesOrderCode"
+                  api-url="TaktSalesOrders/options"
+                  :placeholder="pi.ph('salesOrderCode')"
+                  :disabled="!!formData?.salesQuotationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('quotationStatus')"
+                name="quotationStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.quotationStatus"
+                  dict-type="logistics_quotation_status"
+                  :placeholder="pi.ph('quotationStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -133,7 +409,7 @@
       <template #cell-isObsolete="{ record }">
         <TaktSelect
           v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="salesQuotationItemPi.ph('isObsolete')"
@@ -159,7 +435,7 @@ import { useSalesQuotationI18n } from '../composables/use-quotation-i18n'
 const pi = useSalesQuotationI18n()
 
 import type { SalesQuotationCreate } from '@/types/logistics/sales/quotation'
-import { applyTaxRateFromTaxCode } from '@/utils/tax-code'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
@@ -168,25 +444,31 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture || 'zh-CN'
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -194,7 +476,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","plantCode","salesQuotationCode","customerCode","customerName1","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","currencyCode","taxCode","taxRate","taxAmount","actualAmount","salesOrderCode","cultureCode","quotationStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","salesQuotationCode","customerCode","customerName1","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","currencyCode","taxCode","taxRate","taxAmount","actualAmount","salesOrderCode","quotationStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -287,10 +570,16 @@ const salesQuotationItemFormColumns = computed<TaktEditableTableColumn[]>(() => 
     width: 140,
   },
   {
+    key: 'quotationAmount',
+    title: salesQuotationItemPi.label('quotationAmount'),
+    width: 140,
+  },
+  {
     key: 'isObsolete',
     title: salesQuotationItemPi.label('isObsolete'),
     width: 140,
-  }])
+  },
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesQuotationCreate & { salesQuotationId?: string }> | null | undefined) {
@@ -311,6 +600,7 @@ function createDefaultSalesQuotationItemRow(): Record<string, unknown> {
     taxIncludedAmount: 0,
     untaxedAmount: 0,
     taxAmount: 0,
+    quotationAmount: 0,
     isObsolete: 0,
   }
 }
@@ -358,9 +648,7 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   currencyCode: "CNY",
-  cultureCode: "zh-CN",
   taxCode: "J2",
-  taxRate: 13,
   quotationStatus: 0
 }
 
@@ -384,11 +672,10 @@ watch(
     if (val?.salesQuotationId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-      delete (next as any).items
+    delete (next as any).items
       applyScopeDefaults(next)
       Object.assign(formState, next)
-      formState.taxRate = applyTaxRateFromTaxCode(formState.taxCode, formState.taxRate ?? 13)
-      syncChildRowsFromFormData(val)
+    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -405,10 +692,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.salesQuotationId
-    if (isCreate) {
+    if (!props.formData?.salesQuotationId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -416,13 +702,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   salesQuotationCode: [
     {
       required: true,
@@ -435,13 +714,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('customerCode'),
       trigger: 'change'
-    }
-  ],
-  customerName1: [
-    {
-      required: true,
-      message: pi.ph('customerName1'),
-      trigger: 'blur'
     }
   ],
   quotationDate: [
@@ -559,63 +831,87 @@ async function validate() {
 }
 
 /** 映射为 Create/Update DTO */
-
-/**
- * 税码变更时回填税率
- * @param {string | number | undefined} value 税码
- * @returns {void}
- */
-
-/**
- * 区域文化变更：重选税码默认项并回填税率
- * @param {string | number | undefined} value 区域文化
- * @returns {void}
- */
-function handleCultureCodeChange(value: string | number | undefined) {
-  const culture = value == null ? '' : String(value)
-  formState.cultureCode = culture
-  const defaultTax = dictDataStore.getDictDefaultValue('accounting_tax_code', 'dictValue', culture)
-  formState.taxCode = defaultTax == null ? '' : String(defaultTax)
-  formState.taxRate = applyTaxRateFromTaxCode(formState.taxCode, formState.taxRate ?? 13)
-}
-
-function handleTaxCodeChange(value: string | number | undefined) {
-  const code = value == null ? '' : String(value)
-  formState.taxCode = code
-  formState.taxRate = applyTaxRateFromTaxCode(code, formState.taxRate ?? 13)
-}
-
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('totalQuantity' in payload) {
     const rawtotalQuantity = payload.totalQuantity
-    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+    if (rawtotalQuantity === undefined || rawtotalQuantity === null || rawtotalQuantity === '') {
+      delete payload.totalQuantity
+    } else {
+      const numtotalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+      if (Number.isFinite(numtotalQuantity)) payload.totalQuantity = numtotalQuantity
+      else delete payload.totalQuantity
+    }
   }
   if ('totalAmount' in payload) {
     const rawtotalAmount = payload.totalAmount
-    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+    if (rawtotalAmount === undefined || rawtotalAmount === null || rawtotalAmount === '') {
+      delete payload.totalAmount
+    } else {
+      const numtotalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+      if (Number.isFinite(numtotalAmount)) payload.totalAmount = numtotalAmount
+      else delete payload.totalAmount
+    }
   }
   if ('discountAmount' in payload) {
     const rawdiscountAmount = payload.discountAmount
-    payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+    if (rawdiscountAmount === undefined || rawdiscountAmount === null || rawdiscountAmount === '') {
+      delete payload.discountAmount
+    } else {
+      const numdiscountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+      if (Number.isFinite(numdiscountAmount)) payload.discountAmount = numdiscountAmount
+      else delete payload.discountAmount
+    }
   }
   if ('taxRate' in payload) {
     const rawtaxRate = payload.taxRate
-    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+    if (rawtaxRate === undefined || rawtaxRate === null || rawtaxRate === '') {
+      delete payload.taxRate
+    } else {
+      const numtaxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+      if (Number.isFinite(numtaxRate)) payload.taxRate = numtaxRate
+      else delete payload.taxRate
+    }
   }
   if ('taxAmount' in payload) {
     const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+    if (rawtaxAmount === undefined || rawtaxAmount === null || rawtaxAmount === '') {
+      delete payload.taxAmount
+    } else {
+      const numtaxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+      if (Number.isFinite(numtaxAmount)) payload.taxAmount = numtaxAmount
+      else delete payload.taxAmount
+    }
   }
   if ('actualAmount' in payload) {
     const rawactualAmount = payload.actualAmount
-    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+    if (rawactualAmount === undefined || rawactualAmount === null || rawactualAmount === '') {
+      delete payload.actualAmount
+    } else {
+      const numactualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+      if (Number.isFinite(numactualAmount)) payload.actualAmount = numactualAmount
+      else delete payload.actualAmount
+    }
   }
   if ('quotationStatus' in payload) {
     const rawquotationStatus = payload.quotationStatus
-    payload.quotationStatus = typeof rawquotationStatus === 'number' ? rawquotationStatus : Number(rawquotationStatus)
+    if (rawquotationStatus === undefined || rawquotationStatus === null || rawquotationStatus === '') {
+      delete payload.quotationStatus
+    } else {
+      const numquotationStatus = typeof rawquotationStatus === 'number' ? rawquotationStatus : Number(rawquotationStatus)
+      if (Number.isFinite(numquotationStatus)) payload.quotationStatus = numquotationStatus
+      else delete payload.quotationStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.salesQuotationId) {
+    payload.salesQuotationId = props.formData.salesQuotationId
+  }
   return payload
 }
 

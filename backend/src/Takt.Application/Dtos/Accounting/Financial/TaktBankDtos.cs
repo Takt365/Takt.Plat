@@ -101,7 +101,7 @@ public class TaktBankDto : TaktCompanyDtoBase
     public string? BankGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 邮政银行往来账户（字典 sys_yes_no_type）
+    /// 邮政银行往来账户（字典 sys_yes_no）
     /// </summary>
     public int PobkCurAc { get; set; } = 0;
 
@@ -141,12 +141,12 @@ public class TaktBankDto : TaktCompanyDtoBase
     public string? IbanRule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业间（字典 sys_yes_no_type）
+    /// 企业间（字典 sys_yes_no）
     /// </summary>
     public int SddB2b { get; set; } = 0;
 
     /// <summary>
-    /// 核心个人（字典 sys_yes_no_type）
+    /// 核心个人（字典 sys_yes_no）
     /// </summary>
     public int SddCore { get; set; } = 0;
 
@@ -263,7 +263,7 @@ public class TaktBankQueryDto : TaktPagedQuery
     public string? BankGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 邮政银行往来账户（字典 sys_yes_no_type）
+    /// 邮政银行往来账户（字典 sys_yes_no）
     /// </summary>
     public int? PobkCurAc { get; set; }
 
@@ -303,12 +303,12 @@ public class TaktBankQueryDto : TaktPagedQuery
     public string? IbanRule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业间（字典 sys_yes_no_type）
+    /// 企业间（字典 sys_yes_no）
     /// </summary>
     public int? SddB2b { get; set; }
 
     /// <summary>
-    /// 核心个人（字典 sys_yes_no_type）
+    /// 核心个人（字典 sys_yes_no）
     /// </summary>
     public int? SddCore { get; set; }
 
@@ -446,7 +446,7 @@ public class TaktBankCreateDto
     public string? BankGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 邮政银行往来账户（字典 sys_yes_no_type）
+    /// 邮政银行往来账户（字典 sys_yes_no）
     /// </summary>
     public int PobkCurAc { get; set; } = 0;
 
@@ -486,12 +486,12 @@ public class TaktBankCreateDto
     public string? IbanRule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业间（字典 sys_yes_no_type）
+    /// 企业间（字典 sys_yes_no）
     /// </summary>
     public int SddB2b { get; set; } = 0;
 
     /// <summary>
-    /// 核心个人（字典 sys_yes_no_type）
+    /// 核心个人（字典 sys_yes_no）
     /// </summary>
     public int SddCore { get; set; } = 0;
 
@@ -637,7 +637,7 @@ public class TaktBankTemplateDto
     public string? BankGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 邮政银行往来账户（字典 sys_yes_no_type）
+    /// 邮政银行往来账户（字典 sys_yes_no）
     /// </summary>
     public int? PobkCurAc { get; set; }
 
@@ -677,12 +677,12 @@ public class TaktBankTemplateDto
     public string? IbanRule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业间（字典 sys_yes_no_type）
+    /// 企业间（字典 sys_yes_no）
     /// </summary>
     public int? SddB2b { get; set; }
 
     /// <summary>
-    /// 核心个人（字典 sys_yes_no_type）
+    /// 核心个人（字典 sys_yes_no）
     /// </summary>
     public int? SddCore { get; set; }
 
@@ -804,7 +804,7 @@ public class TaktBankImportDto
     public string? BankGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 邮政银行往来账户（字典 sys_yes_no_type）
+    /// 邮政银行往来账户（字典 sys_yes_no）
     /// </summary>
     public int? PobkCurAc { get; set; }
 
@@ -844,12 +844,12 @@ public class TaktBankImportDto
     public string? IbanRule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业间（字典 sys_yes_no_type）
+    /// 企业间（字典 sys_yes_no）
     /// </summary>
     public int? SddB2b { get; set; }
 
     /// <summary>
-    /// 核心个人（字典 sys_yes_no_type）
+    /// 核心个人（字典 sys_yes_no）
     /// </summary>
     public int? SddCore { get; set; }
 
@@ -977,7 +977,7 @@ public class TaktBankExportDto
     public string? BankGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 邮政银行往来账户（字典 sys_yes_no_type）
+    /// 邮政银行往来账户（字典 sys_yes_no）
     /// </summary>
     public int PobkCurAc { get; set; } = 0;
 
@@ -1017,12 +1017,12 @@ public class TaktBankExportDto
     public string? IbanRule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业间（字典 sys_yes_no_type）
+    /// 企业间（字典 sys_yes_no）
     /// </summary>
     public int SddB2b { get; set; } = 0;
 
     /// <summary>
-    /// 核心个人（字典 sys_yes_no_type）
+    /// 核心个人（字典 sys_yes_no）
     /// </summary>
     public int SddCore { get; set; } = 0;
 

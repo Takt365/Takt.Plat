@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktSelfServiceI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSelfService 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,22 +145,22 @@ public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.selfservice.attachments", "zh-HK", "附件_hk", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
 
             // entity.selfservice.sortorder
-            new TranslationSeedItem("entity.selfservice.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.selfservice.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.selfservice.sortorder
-            new TranslationSeedItem("entity.selfservice.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.selfservice.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.selfservice.sortorder
-            new TranslationSeedItem("entity.selfservice.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.selfservice.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.selfservice.sortorder
-            new TranslationSeedItem("entity.selfservice.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.selfservice.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "en-US", "状态_us", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.selfservice.status", "en-US", "状态_us", "自助服务状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "ja-JP", "状态_jp", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.selfservice.status", "ja-JP", "状态_jp", "自助服务状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "zh-CN", "状态", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.selfservice.status", "zh-CN", "状态", "自助服务状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "zh-HK", "状态_hk", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.selfservice.status", "zh-HK", "状态_hk", "自助服务状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
         };
     }
 

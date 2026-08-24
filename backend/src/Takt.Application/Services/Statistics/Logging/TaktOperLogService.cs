@@ -187,7 +187,7 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
         {
             throw new TaktBusinessException("操作日志不存在");
         }
-        entity.OperStatus = dto.OperStatus;
+        entity.OperStatus = (int)dto.OperStatus;
         await _operLogRepository.UpdateAsync(entity);
         return await GetOperLogByIdAsync(dto.OperLogId) ?? throw new TaktBusinessException("操作日志不存在");
     }
@@ -298,7 +298,7 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
 
         if (queryDto?.OperStatus.HasValue == true)
         {
-            exp = exp.And(x => x.OperStatus == queryDto.OperStatus);
+            exp = exp.And(x => x.OperStatus == (int)queryDto.OperStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ErrorMsg))

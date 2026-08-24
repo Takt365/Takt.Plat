@@ -47,7 +47,7 @@ public class TaktVocabularyDto : TaktTenantCoreDtoBase
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
     /// </summary>
     public int FilterLevel { get; set; } = 0;
 
@@ -57,7 +57,7 @@ public class TaktVocabularyDto : TaktTenantCoreDtoBase
     public string ReplaceText { get; set; } = "*";
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int VocabularyStatus { get; set; } = 0;
 
@@ -88,7 +88,7 @@ public class TaktVocabularyQueryDto : TaktPagedQuery
     public int? WordCategory { get; set; }
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
     /// </summary>
     public int? FilterLevel { get; set; }
 
@@ -98,7 +98,7 @@ public class TaktVocabularyQueryDto : TaktPagedQuery
     public string? ReplaceText { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? VocabularyStatus { get; set; }
 
@@ -148,7 +148,7 @@ public class TaktVocabularyCreateDto
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
     /// </summary>
     public int FilterLevel { get; set; } = 0;
 
@@ -158,7 +158,7 @@ public class TaktVocabularyCreateDto
     public string ReplaceText { get; set; } = "*";
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int VocabularyStatus { get; set; } = 0;
 
@@ -212,7 +212,7 @@ public class TaktVocabularyStatusDto
     public long VocabularyId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态不能为空")]
     public int VocabularyStatus { get; set; } = 0;
@@ -242,7 +242,7 @@ public class TaktVocabularyTemplateDto
     public int? WordCategory { get; set; }
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
     /// </summary>
     public int? FilterLevel { get; set; }
 
@@ -252,7 +252,7 @@ public class TaktVocabularyTemplateDto
     public string? ReplaceText { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? VocabularyStatus { get; set; }
 
@@ -288,7 +288,7 @@ public class TaktVocabularyImportDto
     public int? WordCategory { get; set; }
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
     /// </summary>
     public int? FilterLevel { get; set; }
 
@@ -298,7 +298,7 @@ public class TaktVocabularyImportDto
     public string? ReplaceText { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? VocabularyStatus { get; set; }
 
@@ -341,7 +341,7 @@ public class TaktVocabularyExportDto
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
     /// </summary>
     public int FilterLevel { get; set; } = 0;
 
@@ -351,7 +351,7 @@ public class TaktVocabularyExportDto
     public string ReplaceText { get; set; } = "*";
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int VocabularyStatus { get; set; } = 0;
 

@@ -129,11 +129,10 @@
       </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="pi.queryPh('plantCode', 'required')"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -516,6 +515,7 @@ onMounted(async () => {
   loadData()
 })
 
+
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -577,15 +577,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     fixed: 'left',
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'pcbaOutputId') ?? ''
-  },
-  {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'plantCode') ?? ''
   },
   {
     title: pi.label('prodCategory'),
@@ -714,6 +705,8 @@ const getPcbaOutputDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

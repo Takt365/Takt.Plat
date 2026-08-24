@@ -13,7 +13,7 @@
     <a-form v-if="method === 'fileserver' && showAuthForm" layout="vertical" class="mb-0">
       <a-row :gutter="12">
         <a-col :span="12">
-          <a-form-item :label="t('components.common.page.directoryexplore.username')">
+          <a-form-item :label="t('components.common.page.directoryexplore.userName')">
             <a-input v-model:value="authState.userName" allow-clear />
           </a-form-item>
         </a-col>
@@ -45,7 +45,7 @@
       </a-row>
       <a-row :gutter="12">
         <a-col :span="12">
-          <a-form-item :label="t('components.common.page.directoryexplore.username')" required>
+          <a-form-item :label="t('components.common.page.directoryexplore.userName')" required>
             <a-input v-model:value="ftpState.userName" allow-clear />
           </a-form-item>
         </a-col>

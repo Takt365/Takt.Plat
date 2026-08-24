@@ -69,7 +69,7 @@ export interface SopWorkstation extends CompanyDtoBase {
   processSegmentType?: number;
 
   /**
-   * 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+   * 启用状态（字典 sys_normal_disable，0=停用，1=启用）
    */
   workstationStatus?: number;
 
@@ -137,7 +137,7 @@ export interface SopWorkstationExport {
   processSegmentType: number;
 
   /**
-   * 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+   * 启用状态（字典 sys_normal_disable，0=停用，1=启用）
    */
   workstationStatus: number;
 

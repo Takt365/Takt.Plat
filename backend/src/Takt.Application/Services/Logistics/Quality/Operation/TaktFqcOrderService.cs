@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     }
 
     /// <summary>
-    /// 获取出货检验单列表（分页）
+    /// 获取出货检验单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktFqcOrderDto>> GetFqcOrderListAsync(TaktFqcOrderQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktFqcOrderDto>.Create(
+                new List<TaktFqcOrderDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _fqcOrderRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -285,7 +293,15 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportFqcOrderAsync(TaktFqcOrderQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktFqcOrderQueryDto());
+        var queryDto = query ?? new TaktFqcOrderQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktFqcOrderExportDto>(),
+                sheetName ?? "出货检验单数据",
+                fileName ?? "出货检验单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _fqcOrderRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -384,6 +400,11 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
             {
                 var childDto = itemsForSave[i];
                 childDto.FqcOrderId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.FqcOrderCode = entity.FqcOrderCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -402,13 +423,12 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
                     submittedIds.Add(childDto.FqcOrderItemId);
                     var isUniqueUpdate_ix_takt_logistics_quality_fqc_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _fqcOrderItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.FqcOrderId == x.FqcOrderId
+                        x => x.FqcOrderId == x.FqcOrderId
                 && x.LineNumber == x.LineNumber,
                         childDto.FqcOrderItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_fqc_order_item_order_line_unique)
                     {
-                        throw new TaktBusinessException("出货检验单明细的CompanyCode、FqcOrderId、LineNumber已存在");
+                        throw new TaktBusinessException("出货检验单明细的FqcOrderId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.FqcOrderItemId;
@@ -420,12 +440,11 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_fqc_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _fqcOrderItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.FqcOrderId == x.FqcOrderId
+                        x => x.FqcOrderId == x.FqcOrderId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_fqc_order_item_order_line_unique)
                     {
-                        throw new TaktBusinessException("出货检验单明细的CompanyCode、FqcOrderId、LineNumber已存在");
+                        throw new TaktBusinessException("出货检验单明细的FqcOrderId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktFqcOrderItem>();
                     child.Id = 0;
@@ -474,136 +493,238 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     {
         var exp = Expressionable.Create<TaktFqcOrder>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SourceCode != null && x.SourceCode.Contains(keywords))
                 || (x.FqcOrderCode != null && x.FqcOrderCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || SqlFunc.ToString(x.TotalWarehouseQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalSampleQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalQualifiedQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalUnqualifiedQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TotalInspectionReturnQuantity).Contains(keywords)
                 || (x.JudgeBy != null && x.JudgeBy.Contains(keywords))
                 || (x.JudgeDescription != null && x.JudgeDescription.Contains(keywords))
-                || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
-                || SqlFunc.ToString(x.JudgeDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.SourceCode != null && x.SourceCode.Contains(queryDto.SourceCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FqcOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceCode))
         {
-            exp = exp.And(x => x.FqcOrderCode != null && x.FqcOrderCode.Contains(queryDto.FqcOrderCode));
+            var sourceCode = queryDto.SourceCode;
+            exp = exp.And(x => x.SourceCode != null && x.SourceCode.Contains(sourceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FqcOrderCode))
         {
-            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
+            var fqcOrderCode = queryDto.FqcOrderCode;
+            exp = exp.And(x => x.FqcOrderCode != null && x.FqcOrderCode.Contains(fqcOrderCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerCode))
+        {
+            var customerCode = queryDto.CustomerCode;
+            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(customerCode));
         }
 
         if (queryDto?.TotalWarehouseQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalWarehouseQuantity == queryDto.TotalWarehouseQuantity);
+            var totalWarehouseQuantity = queryDto.TotalWarehouseQuantity.Value;
+            exp = exp.And(x => x.TotalWarehouseQuantity == totalWarehouseQuantity);
         }
 
         if (queryDto?.TotalSampleQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalSampleQuantity == queryDto.TotalSampleQuantity);
+            var totalSampleQuantity = queryDto.TotalSampleQuantity.Value;
+            exp = exp.And(x => x.TotalSampleQuantity == totalSampleQuantity);
         }
 
         if (queryDto?.TotalQualifiedQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalQualifiedQuantity == queryDto.TotalQualifiedQuantity);
+            var totalQualifiedQuantity = queryDto.TotalQualifiedQuantity.Value;
+            exp = exp.And(x => x.TotalQualifiedQuantity == totalQualifiedQuantity);
         }
 
         if (queryDto?.TotalUnqualifiedQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalUnqualifiedQuantity == queryDto.TotalUnqualifiedQuantity);
+            var totalUnqualifiedQuantity = queryDto.TotalUnqualifiedQuantity.Value;
+            exp = exp.And(x => x.TotalUnqualifiedQuantity == totalUnqualifiedQuantity);
         }
 
         if (queryDto?.TotalInspectionReturnQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalInspectionReturnQuantity == queryDto.TotalInspectionReturnQuantity);
+            var totalInspectionReturnQuantity = queryDto.TotalInspectionReturnQuantity.Value;
+            exp = exp.And(x => x.TotalInspectionReturnQuantity == totalInspectionReturnQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JudgeBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.JudgeBy))
         {
-            exp = exp.And(x => x.JudgeBy != null && x.JudgeBy.Contains(queryDto.JudgeBy));
+            var judgeBy = queryDto.JudgeBy;
+            exp = exp.And(x => x.JudgeBy != null && x.JudgeBy.Contains(judgeBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JudgeDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.JudgeDescription))
         {
-            exp = exp.And(x => x.JudgeDescription != null && x.JudgeDescription.Contains(queryDto.JudgeDescription));
+            var judgeDescription = queryDto.JudgeDescription;
+            exp = exp.And(x => x.JudgeDescription != null && x.JudgeDescription.Contains(judgeDescription));
         }
 
         if (queryDto?.JudgeStatus.HasValue == true)
         {
-            exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
+            var judgeStatus = queryDto.JudgeStatus.Value;
+            exp = exp.And(x => x.JudgeStatus == judgeStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.InspectionDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.InspectionDate >= queryDto.InspectionDateStart);
+            var inspectionDateStart = queryDto.InspectionDateStart.Value;
+            exp = exp.And(x => x.InspectionDate >= inspectionDateStart);
         }
 
         if (queryDto?.InspectionDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.InspectionDate <= queryDto.InspectionDateEnd);
+            var inspectionDateEnd = queryDto.InspectionDateEnd.Value;
+            exp = exp.And(x => x.InspectionDate <= inspectionDateEnd);
         }
 
         if (queryDto?.JudgeDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.JudgeDate >= queryDto.JudgeDateStart);
+            var judgeDateStart = queryDto.JudgeDateStart.Value;
+            exp = exp.And(x => x.JudgeDate >= judgeDateStart);
         }
 
         if (queryDto?.JudgeDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.JudgeDate <= queryDto.JudgeDateEnd);
+            var judgeDateEnd = queryDto.JudgeDateEnd.Value;
+            exp = exp.And(x => x.JudgeDate <= judgeDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktFqcOrderQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FqcOrderCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerCode))
+        {
+            return true;
+        }
+        if (queryDto.TotalWarehouseQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalSampleQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalQualifiedQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalUnqualifiedQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalInspectionReturnQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.JudgeBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.JudgeDescription))
+        {
+            return true;
+        }
+        if (queryDto.JudgeStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.InspectionDateStart.HasValue || queryDto.InspectionDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.JudgeDateStart.HasValue || queryDto.JudgeDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

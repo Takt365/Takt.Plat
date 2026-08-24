@@ -23,10 +23,10 @@ public interface ITaktQuartzSchedulerManager
     /// 调度定时任务（新增或覆盖）
     /// </summary>
     /// <param name="task">定时任务实体</param>
-    /// <param name="userName">触发/创建用户（写入 JobDataMap，StartNow 立即触发时可用）</param>
+    /// <param name="UserName">触发/创建用户（写入 JobDataMap，StartNow 立即触发时可用）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
-    Task ScheduleQuartzTaskAsync(TaktQuartzTask task, string? userName = null, CancellationToken cancellationToken = default);
+    Task ScheduleQuartzTaskAsync(TaktQuartzTask task, string? UserName = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 从调度器移除定时任务
@@ -56,13 +56,13 @@ public interface ITaktQuartzSchedulerManager
     /// 立即执行一次定时任务
     /// </summary>
     /// <param name="task">定时任务实体</param>
-    /// <param name="userName">触发用户</param>
+    /// <param name="UserName">触发用户</param>
     /// <param name="executeParams">本次触发执行参数（非空则覆盖任务配置 ExecuteParams）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
     Task RunQuartzTaskNowAsync(
         TaktQuartzTask task,
-        string? userName = null,
+        string? UserName = null,
         string? executeParams = null,
         CancellationToken cancellationToken = default);
 

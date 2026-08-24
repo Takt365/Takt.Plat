@@ -41,7 +41,7 @@ public class TaktRole : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "data_scope", ColumnDescription = "数据权限范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
     public int DataScope { get; set; } = 4;
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
@@ -51,12 +51,12 @@ public class TaktRole : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "role_description", ColumnDescription = "角色描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? RoleDescription { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "role_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int RoleStatus { get; set; } = 1;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketCategoryAssignI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketCategoryAssign 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketcategoryassign._self", "zh-HK", "工单分类默认处理人信息_hk", "实体名称"),
 
             // entity.ticketcategoryassign.categorycode
-            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "en-US", "分类编码_us", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "en-US", "分类编码_us", "分类编码（业务编码；与 TaktTicket.CategoryCode 一致）"),
             // entity.ticketcategoryassign.categorycode
-            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "ja-JP", "分类编码_jp", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "ja-JP", "分类编码_jp", "分类编码（业务编码；与 TaktTicket.CategoryCode 一致）"),
             // entity.ticketcategoryassign.categorycode
-            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "zh-CN", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "zh-CN", "分类编码", "分类编码（业务编码；与 TaktTicket.CategoryCode 一致）"),
             // entity.ticketcategoryassign.categorycode
-            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "zh-HK", "分类编码_hk", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "zh-HK", "分类编码_hk", "分类编码（业务编码；与 TaktTicket.CategoryCode 一致）"),
 
             // entity.ticketcategoryassign.assigneeid
             new TranslationSeedItem("entity.ticketcategoryassign.assigneeid", "en-US", "默认处理人ID_us", "默认处理人 ID（选项 TaktUsers/options；DictValue=Id）"),
@@ -109,22 +109,22 @@ public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketcategoryassign.assigneeid", "zh-HK", "默认处理人ID_hk", "默认处理人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.ticketcategoryassign.assigneename
-            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "en-US", "默认处理人姓名_us", "默认处理人姓名"),
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "en-US", "默认处理人姓名_us", "默认处理人姓名（冗余字段，便于查询）"),
             // entity.ticketcategoryassign.assigneename
-            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "ja-JP", "默认处理人姓名_jp", "默认处理人姓名"),
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "ja-JP", "默认处理人姓名_jp", "默认处理人姓名（冗余字段，便于查询）"),
             // entity.ticketcategoryassign.assigneename
-            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "zh-CN", "默认处理人姓名", "默认处理人姓名"),
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "zh-CN", "默认处理人姓名", "默认处理人姓名（冗余字段，便于查询）"),
             // entity.ticketcategoryassign.assigneename
-            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "zh-HK", "默认处理人姓名_hk", "默认处理人姓名"),
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "zh-HK", "默认处理人姓名_hk", "默认处理人姓名（冗余字段，便于查询）"),
 
             // entity.ticketcategoryassign.sortorder
-            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.ticketcategoryassign.sortorder
-            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.ticketcategoryassign.sortorder
-            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.ticketcategoryassign.sortorder
-            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
         };
     }
 

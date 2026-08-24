@@ -26,89 +26,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.visitorcompanion.department')"
-                name="department"
-              >
-                <a-input
-                  v-model:value="formState.department"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitorcompanion.department') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.visitorcompanion.jobtitle')"
-                name="jobTitle"
-              >
-                <a-input
-                  v-model:value="formState.jobTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitorcompanion.jobtitle') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.visitorcompanion.companionname')"
-                name="companionName"
-              >
-                <a-input
-                  v-model:value="formState.companionName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitorcompanion.companionname') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
+
           </a-row>
         </div>
       </a-tab-pane>
@@ -124,8 +42,12 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useVisitorCompanionI18n } from '../composables/use-visitor-companion-i18n'
+
+/** 实体字段 i18n */
+const pi = useVisitorCompanionI18n()
+
 import type { VisitorCompanionCreate } from '@/types/routine/visitor-center/visitor-companion'
-import { RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -134,7 +56,9 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["department","jobTitle","companionName","extField","remark"]
+const formFields = []
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -143,12 +67,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -159,6 +86,7 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 visitorCompanionId 才视为编辑） */
 watch(
@@ -184,27 +112,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  department: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.visitorcompanion.department') }),
-      trigger: 'blur'
-    }
-  ],
-  jobTitle: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.visitorcompanion.jobtitle') }),
-      trigger: 'blur'
-    }
-  ],
-  companionName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.visitorcompanion.companionname') }),
-      trigger: 'blur'
-    }
-  ],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -217,7 +125,31 @@ async function validate() {
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.visitorCompanionId) {
+    payload.visitorCompanionId = props.formData.visitorCompanionId
+  }
   payload.visitorId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.visitorCode ?? masterRow.VisitorCode
+    const masterName = masterRow.visitorName ?? masterRow.VisitorName
+    if (masterCode != null && masterCode !== '' && !payload.visitorCode) {
+      payload.visitorCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.visitorName) {
+      payload.visitorName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 

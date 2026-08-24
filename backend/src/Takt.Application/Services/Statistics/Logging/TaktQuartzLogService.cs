@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktQuartzLogService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：任务执行日志应用服务实现
 // 
@@ -17,7 +17,6 @@ using Takt.Application.Dtos.Statistics.Logging;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -101,7 +100,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
     {
         EnsureThreeLayerContext();
         var list = await _quartzLogRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ExecuteStatus == TaktExecuteStatus.Success,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ExecuteStatus == 1,
             x => x.TaskName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -185,7 +184,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
         {
             throw new TaktBusinessException("任务执行日志不存在");
         }
-        entity.ExecuteStatus = dto.ExecuteStatus;
+        entity.ExecuteStatus = (int)dto.ExecuteStatus;
         await _quartzLogRepository.UpdateAsync(entity);
         return await GetQuartzLogByIdAsync(dto.QuartzLogId) ?? throw new TaktBusinessException("任务执行日志不存在");
     }
@@ -269,7 +268,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
 
         if (queryDto?.QuartzTaskId.HasValue == true)
         {
-            var quartzTaskId = queryDto.QuartzTaskId;
+            var quartzTaskId = queryDto.QuartzTaskId.Value;
             exp = exp.And(x => x.QuartzTaskId == quartzTaskId);
         }
 
@@ -293,7 +292,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
 
         if (queryDto?.ExecuteDuration.HasValue == true)
         {
-            var executeDuration = queryDto.ExecuteDuration;
+            var executeDuration = queryDto.ExecuteDuration.Value;
             exp = exp.And(x => x.ExecuteDuration == executeDuration);
         }
 
@@ -329,8 +328,8 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
 
         if (queryDto?.ExecuteStatus.HasValue == true)
         {
-            var executeStatus = queryDto.ExecuteStatus;
-            exp = exp.And(x => x.ExecuteStatus == executeStatus);
+            var executeStatus = queryDto.ExecuteStatus.Value;
+            exp = exp.And(x => x.ExecuteStatus == (int)executeStatus);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -347,25 +346,25 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
 
         if (queryDto?.ExecuteTimeStart.HasValue == true)
         {
-            var executeTimeStart = queryDto.ExecuteTimeStart;
+            var executeTimeStart = queryDto.ExecuteTimeStart.Value;
             exp = exp.And(x => x.ExecuteTime >= executeTimeStart);
         }
 
         if (queryDto?.ExecuteTimeEnd.HasValue == true)
         {
-            var executeTimeEnd = queryDto.ExecuteTimeEnd;
+            var executeTimeEnd = queryDto.ExecuteTimeEnd.Value;
             exp = exp.And(x => x.ExecuteTime <= executeTimeEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

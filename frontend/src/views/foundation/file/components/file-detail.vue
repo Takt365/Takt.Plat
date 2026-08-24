@@ -109,7 +109,7 @@
                   <TaktSelect
                     v-if="hasDictDisplayValue(detailState.storageNaming)"
                     :model-value="detailState.storageNaming"
-                    dict-type="sys_storage_naming_config"
+                    dict-type="sys_storage_naming"
                     size="small"
                     disabled
                     :allow-clear="false"
@@ -132,7 +132,7 @@
                 <a-form-item :label="t('foundation.file.page.oss.provider')">
                   <TaktSelect
                     :model-value="detailState.ossProvider"
-                    dict-type="sys_oss_provider_type"
+                    dict-type="sys_oss_provider"
                     size="small"
                     disabled
                     :allow-clear="false"
@@ -179,7 +179,7 @@
                 <a-form-item :label="t('entity.file.status')">
                   <TaktSelect
                     :model-value="detailState.fileStatus"
-                    dict-type="sys_normal_disable_status"
+                    dict-type="sys_normal_disable"
                     size="small"
                     disabled
                     :allow-clear="false"
@@ -190,7 +190,7 @@
                 <a-form-item :label="t('entity.file.ispublic')">
                   <TaktSelect
                     :model-value="detailState.isPublic"
-                    dict-type="sys_is_public_type"
+                    dict-type="sys_public_type"
                     size="small"
                     disabled
                     :allow-clear="false"

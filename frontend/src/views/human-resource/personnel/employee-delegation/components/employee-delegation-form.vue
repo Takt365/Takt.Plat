@@ -2,15 +2,14 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-delegation/components -->
 <!-- 文件名称：employee-delegation-form.vue -->
-<!-- 功能描述：员工代理关系实体 独立记录所有代理场景维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：员工实体子表 employeeDelegation 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
-<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form"
+    class="takt-generated-form employee-delegation-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,104 +26,115 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeedelegation.proxyemployeeid')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('proxyEmployeeId')"
                 name="proxyEmployeeId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.proxyEmployeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.proxyemployeeid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('proxyEmployeeId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeedelegation.originalemployeeid')"
-                name="originalEmployeeId"
-              >
-                <a-input
-                  v-model:value="formState.originalEmployeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.originalemployeeid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.employeedelegation.delegationtype')"
+                :label="pi.label('delegationType')"
                 name="delegationType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.delegationType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.delegationtype') })"
-                  style="width: 100%"
+                  dict-type="hr_employee_delegation_type"
+                  :placeholder="pi.ph('delegationType')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeedelegation.scopetype')"
+                :label="pi.label('scopeType')"
                 name="scopeType"
               >
-                <a-textarea
+                <TaktSelect
                   v-model:value="formState.scopeType"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeedelegation.scopetype') })"
-                  :rows="2"
+                  dict-type="hr_employee_delegation_scope_type"
+                  :placeholder="pi.ph('scopeType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeedelegation.scopeid')"
+                :label="pi.label('scopeId')"
                 name="scopeId"
               >
                 <a-textarea
                   v-model:value="formState.scopeId"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeedelegation.scopeid') })"
+                  :placeholder="pi.ph('scopeId')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeedelegation.reason')"
+                :label="pi.label('reason')"
                 name="reason"
               >
                 <a-input
                   v-model:value="formState.reason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.reason') })"
+                  :placeholder="pi.ph('reason')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeedelegation.startdate')"
+                :label="pi.label('startDate')"
                 name="startDate"
               >
                 <a-date-picker
                   v-model:value="formState.startDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.startdate') })"
+                  :placeholder="pi.ph('startDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('endDate')"
+                name="endDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.endDate"
+                  :placeholder="pi.ph('endDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -140,57 +150,30 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeedelegation.enddate')"
-                name="endDate"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
-                <a-date-picker
-                  v-model:value="formState.endDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.enddate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -203,62 +186,78 @@
 
 <script setup lang="ts">
 /**
- * 员工代理关系实体 独立记录所有代理场景维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 员工实体子表 employeeDelegation 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/human-resource/personnel/employee-delegation/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useEmployeeDelegationI18n } from '../composables/use-employee-delegation-i18n'
+
+/** 实体字段 i18n */
+const pi = useEmployeeDelegationI18n()
+
 import type { EmployeeDelegationCreate } from '@/types/human-resource/personnel/employee-delegation'
-import { RiQuestionLine } from '@remixicon/vue'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","proxyEmployeeId","originalEmployeeId","delegationType","scopeType","scopeId","reason","startDate","endDate","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","proxyEmployeeId","delegationType","scopeType","scopeId","reason","startDate","endDate"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<EmployeeDelegationCreate & { employeeDelegationId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
+  /** 主表选中行 Id（Create/Update 提交时写入外键） */
+  masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
+  masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -269,6 +268,14 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 employeeDelegationId 才视为编辑） */
 watch(
@@ -296,10 +303,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.employeeDelegationId
-    if (isCreate) {
+    if (!props.formData?.employeeDelegationId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -310,48 +316,47 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   proxyEmployeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.proxyemployeeid') }),
-      trigger: 'blur'
-    }
-  ],
-  originalEmployeeId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.originalemployeeid') }),
-      trigger: 'blur'
+      message: pi.ph('proxyEmployeeId'),
+      trigger: 'change'
     }
   ],
   delegationType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.delegationtype') }))
+        return Promise.reject(pi.ph('delegationType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.delegationtype') }))
+        return Promise.reject(pi.ph('delegationType'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  scopeType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.scopetype') }),
-      trigger: 'blur'
-    }
-  ],
+  scopeType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('scopeType'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('scopeType'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   reason: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.reason') }),
+      message: pi.ph('reason'),
       trigger: 'blur'
     }
   ],
   startDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.startdate') }),
+      message: pi.ph('startDate'),
       trigger: 'change'
     }
   ],
@@ -363,22 +368,69 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO */
+/** 映射为 Create/Update DTO（含主表外键 originalEmployeeId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('delegationType' in payload) {
     const rawdelegationType = payload.delegationType
-    payload.delegationType = typeof rawdelegationType === 'number' ? rawdelegationType : Number(rawdelegationType)
+    if (rawdelegationType === undefined || rawdelegationType === null || rawdelegationType === '') {
+      delete payload.delegationType
+    } else {
+      const numdelegationType = typeof rawdelegationType === 'number' ? rawdelegationType : Number(rawdelegationType)
+      if (Number.isFinite(numdelegationType)) payload.delegationType = numdelegationType
+      else delete payload.delegationType
+    }
   }
   if ('scopeType' in payload) {
     const rawscopeType = payload.scopeType
-    payload.scopeType = typeof rawscopeType === 'number' ? rawscopeType : Number(rawscopeType)
+    if (rawscopeType === undefined || rawscopeType === null || rawscopeType === '') {
+      delete payload.scopeType
+    } else {
+      const numscopeType = typeof rawscopeType === 'number' ? rawscopeType : Number(rawscopeType)
+      if (Number.isFinite(numscopeType)) payload.scopeType = numscopeType
+      else delete payload.scopeType
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.employeeDelegationId) {
+    payload.employeeDelegationId = props.formData.employeeDelegationId
+  }
+  payload.originalEmployeeId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.employeeCode ?? masterRow.EmployeeCode
+    const masterName = masterRow.employeeName ?? masterRow.EmployeeName
+    if (masterCode != null && masterCode !== '' && !payload.employeeCode) {
+      payload.employeeCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.employeeName) {
+      payload.employeeName = masterName
+    }
+    if (masterCode != null && masterCode !== '' && !payload.originalEmployeeCode) {
+      payload.originalEmployeeCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.originalEmployeeName) {
+      payload.originalEmployeeName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
-/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
+/** 重置表单（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
@@ -386,7 +438,6 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.employeeDelegationId)
-
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

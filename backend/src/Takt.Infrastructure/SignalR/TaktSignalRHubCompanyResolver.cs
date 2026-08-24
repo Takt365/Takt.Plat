@@ -27,13 +27,13 @@ public static class TaktSignalRHubCompanyResolver
     /// <param name="userContext">用户上下文</param>
     /// <param name="authService">认证服务</param>
     /// <param name="userId">用户 ID</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <returns>公司编码</returns>
     public static async Task<string> ResolveAsync(
         ITaktUserContext userContext,
         ITaktAuthService authService,
         long userId,
-        string userName)
+        string UserName)
     {
         var tenantCode = userContext.TenantCode;
         if (string.IsNullOrWhiteSpace(tenantCode))
@@ -44,7 +44,7 @@ public static class TaktSignalRHubCompanyResolver
         var companyCode = await authService.ResolveCurrentActiveCompanyCodeAsync(
             userId,
             tenantCode.Trim(),
-            userName.Trim());
+            UserName.Trim());
         if (string.IsNullOrWhiteSpace(companyCode))
         {
             throw new HubException("无法解析公司编码，请确认账号已绑定可访问公司。");

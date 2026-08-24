@@ -59,7 +59,7 @@
     >
       <TaktSingleTable
         :scroll="tableScroll"
-        entity-scope="tenant"
+        entity-scope="tenant-core"
         :columns="translationDisplayColumns"
         :data-source="translationDataSource"
         :loading="translationLoading"
@@ -168,7 +168,7 @@
     </TaktQueryDrawer>
     <!-- 列设置 -->
     <TaktColumnDrawer
-      entity-scope="tenant"
+      entity-scope="tenant-core"
       v-model:open="translationColumnDrawerVisible"
       :columns="translationListColumns"
       :checked-keys="translationVisibleColumnKeys"

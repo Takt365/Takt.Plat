@@ -29,8 +29,7 @@ export const CULTURE_LIST_FIELDS = [
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const CULTURE_PLACEHOLDER = {
   tenantCode: 'optional',
-  relatedPlant: 'select',
-  cultureCode: 'select',
+  cultureCode: 'required',
   nativeName: 'required',
   icon: 'optional',
   isDefault: 'select',
@@ -43,7 +42,6 @@ export type CultureField = keyof typeof CULTURE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const CULTURE_QUERY_STRING_FIELDS = [
-  'relatedPlant',
   'cultureCode',
   'nativeName',
   'icon',

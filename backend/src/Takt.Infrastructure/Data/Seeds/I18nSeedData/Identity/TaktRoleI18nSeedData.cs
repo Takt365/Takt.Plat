@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRole 实体字段国际化种子（已对齐前端 locales：src/locales/identity/role）
 // 
@@ -118,13 +118,13 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.role.datascope", "zh-HK", "数据权限范围_hk", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
 
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
 
             // entity.role.description
             new TranslationSeedItem("entity.role.description", "en-US", "角色描述_us", "角色描述"),
@@ -136,22 +136,22 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.role.description", "zh-HK", "角色描述_hk", "角色描述"),
 
             // entity.role.sortorder
-            new TranslationSeedItem("entity.role.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.role.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.role.sortorder
-            new TranslationSeedItem("entity.role.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.role.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.role.sortorder
-            new TranslationSeedItem("entity.role.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.role.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.role.sortorder
-            new TranslationSeedItem("entity.role.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.role.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.role.status", "en-US", "状态_us", "状态（字典 sys_normal_disable）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.role.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.role.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.role.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable）"),
 
             // entity.role.menus
             new TranslationSeedItem("entity.role.menus", "en-US", "角色菜单权限关联_us", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),

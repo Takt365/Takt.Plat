@@ -93,25 +93,25 @@
         <template v-else-if="column.key === 'isDeduction'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'isDeduction')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isTaxable'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'isTaxable')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'includeSocialSecurityBase'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'includeSocialSecurityBase')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'includeHousingFundBase'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'includeHousingFundBase')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -259,7 +259,7 @@
       <a-form-item :label="t('entity.salaryitem.isdeduction')">
         <TaktSelect
           v-model:value="advancedQueryForm.isDeduction"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') })"
           allow-clear
         />
@@ -269,7 +269,7 @@
       <a-form-item :label="t('entity.salaryitem.istaxable')">
         <TaktSelect
           v-model:value="advancedQueryForm.isTaxable"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') })"
           allow-clear
         />
@@ -279,7 +279,7 @@
       <a-form-item :label="t('entity.salaryitem.includesocialsecuritybase')">
         <TaktSelect
           v-model:value="advancedQueryForm.includeSocialSecurityBase"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') })"
           allow-clear
         />
@@ -289,7 +289,7 @@
       <a-form-item :label="t('entity.salaryitem.includehousingfundbase')">
         <TaktSelect
           v-model:value="advancedQueryForm.includeHousingFundBase"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') })"
           allow-clear
         />
@@ -299,7 +299,7 @@
       <a-form-item :label="t('entity.salaryitem.itemstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.itemStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') })"
           allow-clear
         />

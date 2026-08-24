@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktDictTypeDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DictType 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDictType 生成，请按需审阅）
 // 
@@ -22,13 +22,12 @@ namespace Takt.Application.Dtos.Foundation;
 // ========================================
 
 /// <summary>
-/// 字典类型实体 用于定义系统中使用的各种字典分类，如：订单状态、用户类型、审批状态等 租户级实体：字典类型在租户内共享，不需要公司隔离
+/// 字典类型实体 用于定义系统中使用的各种字典分类，如：订单状态、用户类型、审批状态等 租户级实体：字典类型在租户内共享，不需要公司隔离 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// 对应前端 TaktDictTypeDto
-/// 继承 TaktTenantCoreDtoBase（组合 4）
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
 public class TaktDictTypeDto : TaktTenantCoreDtoBase
 {
-
     /// <summary>
     /// DictTypeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -57,17 +56,17 @@ public class TaktDictTypeDto : TaktTenantCoreDtoBase
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int DictStatus { get; set; } = 0;
 
@@ -93,6 +92,7 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
@@ -114,17 +114,17 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? DictStatus { get; set; }
 
@@ -162,6 +162,7 @@ public class TaktDictTypeCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
@@ -185,12 +186,12 @@ public class TaktDictTypeCreateDto
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int DictStatus { get; set; } = 0;
 
@@ -229,6 +230,11 @@ public class TaktDictTypeUpdateDto : TaktDictTypeCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DictTypeId { get; set; }
 
+    /// <summary>
+    /// 字典数据列表（一对多关联）（子表，级联保存）
+    /// </summary>
+    public new List<TaktDictDataUpdateDto>? DictDataList { get; set; }
+
 }
 
 // ========================================
@@ -249,34 +255,10 @@ public class TaktDictTypeStatusDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；1=启用 0=禁用）不能为空")]
     public int DictStatus { get; set; } = 0;
-}
-
-// ========================================
-// DictType 内置 DTO
-// ========================================
-
-/// <summary>
-/// DictType 内置更新 DTO
-/// </summary>
-public class TaktDictTypeBuiltInDto
-{
-    /// <summary>
-    /// DictTypeID
-    /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long DictTypeId { get; set; }
-
-    /// <summary>
-    /// 内置（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    [Required(ErrorMessage = "内置不能为空")]
-    public int IsBuiltIn { get; set; } = 0;
 }
 
 // ========================================
@@ -297,10 +279,34 @@ public class TaktDictTypeSortDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
+}
+
+// ========================================
+// DictType 内置 DTO
+// ========================================
+
+/// <summary>
+/// DictType 内置更新 DTO
+/// </summary>
+public class TaktDictTypeBuiltInDto
+{
+    /// <summary>
+    /// DictTypeID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long DictTypeId { get; set; }
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no；1=是，0=否）
+    /// </summary>
+    [Required(ErrorMessage = "内置不能为空")]
+    public int IsBuiltIn { get; set; } = 0;
 }
 
 // ========================================
@@ -316,6 +322,7 @@ public class TaktDictTypeTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
@@ -337,12 +344,12 @@ public class TaktDictTypeTemplateDto
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? DictStatus { get; set; }
 
@@ -372,6 +379,7 @@ public class TaktDictTypeImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
@@ -393,12 +401,12 @@ public class TaktDictTypeImportDto
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? DictStatus { get; set; }
 
@@ -456,17 +464,17 @@ public class TaktDictTypeExportDto
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int DictStatus { get; set; } = 0;
 

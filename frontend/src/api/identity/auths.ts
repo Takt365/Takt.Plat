@@ -140,16 +140,16 @@ export function getSessionCultureOptions(tenantCode?: string): Promise<TaktSelec
 /**
  * 登录前预览：解析用户默认公司、用户 DefaultCulture（须 X-Tenant-Code，与假日无关）
  * @param {string} tenantCode 租户编码
- * @param {string} username 登录用户名
+ * @param {string} userName 登录用户名
  * @returns {Promise<LoginPreviewLocale>} 公司编码、用户/公司默认语言
  */
-export function getLoginPreviewLocale(tenantCode: string, username: string): Promise<LoginPreviewLocale> {
+export function getLoginPreviewLocale(tenantCode: string, userName: string): Promise<LoginPreviewLocale> {
   return request<LoginPreviewLocale>({
     url: `${AUTH_API_BASE}/session/login-preview-locale`,
     method: 'get',
     params: {
       tenantCode,
-      username,
+      userName,
     },
     skipTokenRefresh: true,
     skipLoginAuthError: true,

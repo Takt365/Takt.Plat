@@ -11,29 +11,15 @@
 // ========================================
 
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
 /// <summary>
 /// BOM 组件零价格清单服务（FERT+未删除；X+F+移动平均价=0；建议代替末字母逆推）
+/// 查询栏工厂/机种选项统一走 ITaktBomMaterialCostAnalysisService。
 /// </summary>
 public interface ITaktBomMaterialZeroPriceService
 {
-    /// <summary>
-    /// 查询栏工厂选项：当前公司 RelatedPlant ∩ 成本主表 PlantCode
-    /// </summary>
-    /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetBomMaterialZeroPricePlantOptionsAsync();
-
-    /// <summary>
-    /// 查询栏机种选项：工厂 + 核算月 + MaterialType=FERT 下去重 ModelCode（空可选）
-    /// </summary>
-    /// <param name="queryDto">工厂 + FocusPeriod</param>
-    /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetBomMaterialZeroPriceModelOptionsAsync(
-        TaktBomMaterialZeroPriceModelOptionsQueryDto queryDto);
-
     /// <summary>
     /// 组件零价格合并清单（工厂+核算月；机种可选多选空=全部；仅主表 MaterialType=FERT 且未删除；X+F 且移动平均价=0；建议代替按末字母逆推）
     /// </summary>

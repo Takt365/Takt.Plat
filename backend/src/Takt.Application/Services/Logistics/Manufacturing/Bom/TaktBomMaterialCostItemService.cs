@@ -404,7 +404,7 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
 
         if (queryDto?.ComponentQuantity.HasValue == true)
         {
-            var componentQuantity = queryDto.ComponentQuantity;
+            var componentQuantity = queryDto.ComponentQuantity.Value;
             exp = exp.And(x => x.ComponentQuantity == componentQuantity);
         }
 
@@ -446,13 +446,13 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
 
         if (queryDto?.MovingAveragePrice.HasValue == true)
         {
-            var movingAveragePrice = queryDto.MovingAveragePrice;
+            var movingAveragePrice = queryDto.MovingAveragePrice.Value;
             exp = exp.And(x => x.MovingAveragePrice == movingAveragePrice);
         }
 
         if (queryDto?.MovingPriceUnit.HasValue == true)
         {
-            var movingPriceUnit = queryDto.MovingPriceUnit;
+            var movingPriceUnit = queryDto.MovingPriceUnit.Value;
             exp = exp.And(x => x.MovingPriceUnit == movingPriceUnit);
         }
 
@@ -482,13 +482,13 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
 
         if (queryDto?.NetPurchasePrice.HasValue == true)
         {
-            var netPurchasePrice = queryDto.NetPurchasePrice;
+            var netPurchasePrice = queryDto.NetPurchasePrice.Value;
             exp = exp.And(x => x.NetPurchasePrice == netPurchasePrice);
         }
 
         if (queryDto?.PurchasePriceUnit.HasValue == true)
         {
-            var purchasePriceUnit = queryDto.PurchasePriceUnit;
+            var purchasePriceUnit = queryDto.PurchasePriceUnit.Value;
             exp = exp.And(x => x.PurchasePriceUnit == purchasePriceUnit);
         }
 
@@ -512,25 +512,25 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
 
         if (queryDto?.CostingDateStart.HasValue == true)
         {
-            var costingDateStart = queryDto.CostingDateStart;
+            var costingDateStart = queryDto.CostingDateStart.Value;
             exp = exp.And(x => x.CostingDate >= costingDateStart);
         }
 
         if (queryDto?.CostingDateEnd.HasValue == true)
         {
-            var costingDateEnd = queryDto.CostingDateEnd;
+            var costingDateEnd = queryDto.CostingDateEnd.Value;
             exp = exp.And(x => x.CostingDate <= costingDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

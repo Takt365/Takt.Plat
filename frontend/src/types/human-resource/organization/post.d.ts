@@ -54,7 +54,7 @@ export interface Post extends CompanyDtoBase {
   postCategory: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+   * 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
    */
   postLevel: string;
 
@@ -99,7 +99,7 @@ export interface Post extends CompanyDtoBase {
   salaryMax?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
    */
   isBuiltIn: number;
 
@@ -114,7 +114,7 @@ export interface Post extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   postStatus: number;
 
@@ -174,7 +174,7 @@ export interface PostQuery extends TaktPagedQuery {
   postCategory?: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+   * 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
    */
   postLevel?: string;
 
@@ -219,7 +219,7 @@ export interface PostQuery extends TaktPagedQuery {
   salaryMax?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
    */
   isBuiltIn?: number;
 
@@ -234,7 +234,7 @@ export interface PostQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   postStatus?: number;
 
@@ -313,7 +313,7 @@ export interface PostCreate {
   postCategory: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+   * 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
    */
   postLevel: string;
 
@@ -358,7 +358,7 @@ export interface PostCreate {
   salaryMax?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
    */
   isBuiltIn: number;
 
@@ -368,7 +368,7 @@ export interface PostCreate {
   postDescription?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   postStatus: number;
 
@@ -417,7 +417,7 @@ export interface PostStatus {
   postId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   postStatus: number;
 
@@ -495,7 +495,7 @@ export interface PostTemplate {
   postCategory?: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+   * 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
    */
   postLevel?: string;
 
@@ -540,7 +540,7 @@ export interface PostTemplate {
   salaryMax?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
    */
   isBuiltIn?: number;
 
@@ -550,7 +550,7 @@ export interface PostTemplate {
   postDescription?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   postStatus?: number;
 
@@ -624,7 +624,7 @@ export interface PostImport {
   postCategory?: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+   * 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
    */
   postLevel?: string;
 
@@ -669,7 +669,7 @@ export interface PostImport {
   salaryMax?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
    */
   isBuiltIn?: number;
 
@@ -679,7 +679,7 @@ export interface PostImport {
   postDescription?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   postStatus?: number;
 
@@ -753,7 +753,7 @@ export interface PostExport {
   postCategory: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+   * 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
    */
   postLevel: string;
 
@@ -798,7 +798,7 @@ export interface PostExport {
   salaryMax?: number;
 
   /**
-   * 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+   * 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
    */
   isBuiltIn: number;
 
@@ -813,7 +813,7 @@ export interface PostExport {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
    */
   postStatus: number;
 

@@ -21,10 +21,10 @@ internal static class TaktSignalRGroupNames
     /// 公司内用户组（ConnectHub 强退/在线统计；NotificationHub 私信/消息统计/工作流推送）
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <returns>组名</returns>
-    public static string UserGroup(string companyCode, string userName) =>
-        $"Company_{companyCode.Trim()}_User_{userName.Trim()}";
+    public static string UserGroup(string companyCode, string UserName) =>
+        $"Company_{companyCode.Trim()}_User_{UserName.Trim()}";
 
     /// <summary>
     /// 公司内广播通知组

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/announcement/components -->
 <!-- 文件名称：announcement-form.vue -->
-<!-- 功能描述：公告通知实体 用于发布系统公告、通知等信息 支持富文本内容、附件、置顶、定时发布等功能 需要审批流程：草稿→审批→发布维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：公告通知实体 用于发布系统公告、通知等信息维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -27,55 +27,66 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.numbering.rulecode')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.form.numberingRule')"
                 name="numberingRuleCode"
               >
                 <TaktSelect
                   v-model:value="formState.numberingRuleCode"
                   api-url="TaktNumberings/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.rulecode') })"
-                  :disabled="!!formData?.announcementId"
-                  allow-clear
+                  :api-params="{ documentType: '公告通知' }"
+                  :placeholder="t('common.page.form.placeholder.selectonly')"
+                  :disabled="!!formData?.announcementId || loading"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.code')"
+                :label="pi.label('announcementCode')"
                 name="announcementCode"
               >
                 <a-input
                   v-model:value="formState.announcementCode"
-                  :placeholder="t('routine.announcement.page.placeholder.autocode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.announcementId"
+                  :placeholder="t('common.page.form.numberingCodePreview')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.title')"
+                :label="pi.label('announcementTitle')"
                 name="announcementTitle"
               >
                 <a-input
                   v-model:value="formState.announcementTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.title') })"
+                  :placeholder="pi.ph('announcementTitle')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -84,36 +95,35 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.type')"
+                :label="pi.label('announcementType')"
                 name="announcementType"
               >
                 <TaktSelect
                   v-model:value="formState.announcementType"
                   dict-type="sys_announcement_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.type') })"
+                  :placeholder="pi.ph('announcementType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.announcement.content')"
+                :label="pi.label('content')"
                 name="content"
               >
-                <a-textarea
+                <takt-rich-editor
                   v-model:value="formState.content"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.announcement.content') })"
-                  :rows="2"
+                  :placeholder="pi.ph('content')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.summary')"
+                :label="pi.label('summary')"
                 name="summary"
               >
                 <a-input
                   v-model:value="formState.summary"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.summary') })"
+                  :placeholder="pi.ph('summary')"
                   show-count
                   :maxlength="2000"
                   allow-clear
@@ -122,12 +132,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.tags')"
+                :label="pi.label('tags')"
                 name="tags"
               >
                 <a-input
                   v-model:value="formState.tags"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.tags') })"
+                  :placeholder="pi.ph('tags')"
                   show-count
                   :maxlength="500"
                   allow-clear
@@ -136,15 +146,44 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.attachments')"
-                name="attachments"
+                :label="pi.label('fileName')"
+                name="fileName"
               >
                 <a-input
-                  v-model:value="formState.attachments"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.attachments') })"
+                  v-model:value="formState.fileName"
+                  :placeholder="pi.ph('fileName')"
                   show-count
-                  :maxlength="2000"
-                  allow-clear
+                  :maxlength="200"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('accessUrl')"
+                name="accessUrl"
+              >
+                <takt-upload-file
+                  tabs-type="files"
+                  :files-auto-upload="true"
+                  :files-multiple="false"
+                  :files-max-count="1"
+                  :files-disabled="!!loading || fileUploading"
+                  :files-max-size="taktFileMaxSizeMb"
+                  :files-accept="taktFileAccept"
+                  :files-hint="t('foundation.file.page.upload.hint', { max: taktFileMaxSizeMb })"
+                  :files-custom-request="handleFilesCustomRequest"
+                  v-model:files-file-list="filesFileList"
+                  @files:remove="handleFileRemove"
+                />
+                <a-input
+                  v-if="formState.accessUrl"
+                  v-model:value="formState.accessUrl"
+                  class="mt-2"
+                  :placeholder="pi.ph('accessUrl')"
+                  show-count
+                  :maxlength="1000"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -160,12 +199,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.publishtime')"
+                :label="pi.label('publishTime')"
                 name="publishTime"
               >
                 <a-date-picker
                   v-model:value="formState.publishTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.publishtime') })"
+                  :placeholder="pi.ph('publishTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -173,48 +212,48 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.isscheduled')"
+                :label="pi.label('isScheduled')"
                 name="isScheduled"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isScheduled"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.isscheduled') })"
-                  style="width: 100%"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isScheduled')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.istop')"
+                :label="pi.label('isTop')"
                 name="isTop"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isTop"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.istop') })"
-                  style="width: 100%"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isTop')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.toppriority')"
+                :label="pi.label('topPriority')"
                 name="topPriority"
               >
                 <a-input-number
                   v-model:value="formState.topPriority"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.toppriority') })"
+                  :placeholder="pi.ph('topPriority')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.expiretime')"
+                :label="pi.label('expireTime')"
                 name="expireTime"
               >
                 <a-date-picker
                   v-model:value="formState.expireTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.expiretime') })"
+                  :placeholder="pi.ph('expireTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -222,36 +261,36 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.viewcount')"
+                :label="pi.label('viewCount')"
                 name="viewCount"
               >
                 <a-input-number
                   v-model:value="formState.viewCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.viewcount') })"
+                  :placeholder="pi.ph('viewCount')"
                   style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.announcement.targetscope')"
-                name="targetScope"
-              >
-                <a-textarea
-                  v-model:value="formState.targetScope"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.announcement.targetscope') })"
-                  :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.targetdepartments')"
+                :label="pi.label('targetScope')"
+                name="targetScope"
+              >
+                <TaktSelect
+                  v-model:value="formState.targetScope"
+                  dict-type="sys_publish_scope"
+                  :placeholder="pi.ph('targetScope')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('targetDepartments')"
                 name="targetDepartments"
               >
                 <a-input
                   v-model:value="formState.targetDepartments"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.targetdepartments') })"
+                  :placeholder="pi.ph('targetDepartments')"
                   show-count
                   :maxlength="1000"
                   allow-clear
@@ -260,12 +299,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.targetusers')"
+                :label="pi.label('targetUsers')"
                 name="targetUsers"
               >
                 <a-input
                   v-model:value="formState.targetUsers"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.targetusers') })"
+                  :placeholder="pi.ph('targetUsers')"
                   show-count
                   :maxlength="2000"
                   allow-clear
@@ -274,13 +313,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.status')"
+                :label="pi.label('announcementStatus')"
                 name="announcementStatus"
               >
                 <TaktSelect
                   v-model:value="formState.announcementStatus"
                   dict-type="sys_publish_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.status') })"
+                  :placeholder="pi.ph('announcementStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -296,6 +335,33 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >
@@ -307,7 +373,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -322,12 +388,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -344,53 +410,68 @@
 
 <script setup lang="ts">
 /**
- * 公告通知实体 用于发布系统公告、通知等信息 支持富文本内容、附件、置顶、定时发布等功能 需要审批流程：草稿→审批→发布维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 公告通知实体 用于发布系统公告、通知等信息维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/announcement/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { AnnouncementCreate } from '@/types/routine/announcement/announcement'
+import { useAnnouncementI18n } from '../composables/use-announcement-i18n'
+
+/** 实体字段 i18n */
+const pi = useAnnouncementI18n()
+import type { AnnouncementCreate } from '@/types/routine/announcement'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { message } from 'ant-design-vue'
+import type { UploadFile, UploadProps } from 'ant-design-vue'
+import { getFileById } from '@/api/foundation/file'
+import { uploadTaktFileSmart } from '@/utils/takt-file-chunk-upload'
+import {
+  buildTaktFileAcceptAttribute,
+  loadTaktFileUploadBasePolicy,
+  resolveTaktFileMaxSizeMb,
+} from '@/utils/takt-file-upload-policy'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useTaktFormNumbering } from '@/composables/use-takt-form-numbering'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","numberingRuleCode","announcementCode","announcementTitle","announcementType","content","summary","tags","attachments","publishTime","isScheduled","isTop","topPriority","expireTime","viewCount","targetScope","targetDepartments","targetUsers","announcementStatus","extField","remark"]
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -411,7 +492,8 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   announcementType: 1,
-  announcementStatus: 0
+  announcementStatus: 0,
+  targetScope: 0,
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -425,6 +507,104 @@ const dictDataStore = useDictDataStore()
 /** 表单挂载时预加载全量字典 */
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 文件上传中 */
+const fileUploading = ref(false)
+/** takt-upload-file 文件列表 */
+const filesFileList = ref<UploadFile[]>([])
+/** 上传 accept */
+const taktFileAccept = ref('')
+/** 上传体积上限 MB */
+const taktFileMaxSizeMb = ref(500)
+
+/**
+ * 按 fileName / accessUrl 同步上传列表展示
+ */
+function syncFilesFileListFromFormState() {
+  const url = String(formState.accessUrl ?? '').trim()
+  if (!url) {
+    filesFileList.value = []
+    return
+  }
+  filesFileList.value = [{
+    uid: '-1',
+    name: String(formState.fileName ?? url.split('/').pop() ?? 'file'),
+    status: 'done',
+    url,
+  }]
+}
+
+/**
+ * 将 TaktFile 上传结果回填至表单（文件名由上传结果回填，禁止手输）
+ * @param file 本地文件
+ * @param result 上传结果
+ */
+async function applyUploadResultToForm(file: globalThis.File, result: Awaited<ReturnType<typeof uploadTaktFileSmart>>) {
+  let accessUrl = result.accessUrl?.trim() ?? ''
+  if (!accessUrl && result.fileId) {
+    const detail = await getFileById(result.fileId)
+    accessUrl = detail.accessUrl?.trim() ?? ''
+  }
+  if (!accessUrl) {
+    throw new Error('accessUrl empty')
+  }
+  formState.accessUrl = accessUrl
+  formState.fileName = result.fileOriginalName?.trim()
+    || result.fileName?.trim()
+    || file.name
+  syncFilesFileListFromFormState()
+  formRef.value?.validateFields(['accessUrl', 'fileName']).catch(() => undefined)
+}
+
+/** takt-upload-file 自定义上传：落库 TaktFile 后回写 accessUrl / fileName */
+const handleFilesCustomRequest: UploadProps['customRequest'] = (options) => {
+  if (props.loading || fileUploading.value) {
+    options.onError?.(new Error('upload disabled'))
+    return
+  }
+  const originFile = options.file as globalThis.File
+  fileUploading.value = true
+  void (async () => {
+    try {
+      const result = await uploadTaktFileSmart(originFile)
+      await applyUploadResultToForm(originFile, result)
+      options.onSuccess?.(result)
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error : new Error(String(error))
+      message.error(t('common.feedback.failed'))
+      options.onError?.(err)
+    } finally {
+      fileUploading.value = false
+    }
+  })()
+}
+
+/** 移除已上传文件 */
+function handleFileRemove() {
+  formState.accessUrl = ''
+  formState.fileName = ''
+  filesFileList.value = []
+}
+
+watch(
+  () => [formState.fileName, formState.accessUrl],
+  () => {
+    syncFilesFileListFromFormState()
+  },
+)
+
+/** 挂载后加载后端上传策略（accept / maxSize） */
+onMounted(() => {
+  void (async () => {
+    try {
+      const policy = await loadTaktFileUploadBasePolicy()
+      taktFileAccept.value = buildTaktFileAcceptAttribute(policy.allowedExtensions ?? [])
+      taktFileMaxSizeMb.value = resolveTaktFileMaxSizeMb(policy)
+    } catch {
+      // 回退默认值；实际上传校验仍由后端 API 返回
+    }
+  })()
 })
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 announcementId 才视为编辑） */
@@ -453,62 +633,64 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.announcementId
-    if (isCreate) {
+    if (!props.formData?.announcementId) {
       applyScopeDefaults(formState, true)
     }
   },
 )
 
+/** 是否编辑态 */
+const isEditMode = computed(() => !!props.formData?.announcementId)
+
+useTaktFormNumbering({
+  formState,
+  isEdit: isEditMode,
+  businessCodeField: 'announcementCode',
+})
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   numberingRuleCode: [{
     validator: async (_rule, value) => {
-      const isCreate = !props.formData?.announcementId
-      const code = formState.announcementCode
-      const hasCode = typeof code === 'string' && code.trim().length > 0
-      if (!isCreate || hasCode) {
+      if (isEditMode.value) {
         return Promise.resolve()
       }
-      if (value === undefined || value === null || String(value).trim() === '') {
-        return Promise.reject(t('routine.announcement.page.validation.numberingRuleRequired'))
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingRuleRequired'))
       }
       return Promise.resolve()
     },
-    trigger: 'change'
+    trigger: 'change',
   }],
   announcementCode: [{
     validator: async (_rule, value) => {
-      const isCreate = !props.formData?.announcementId
-      if (!isCreate) {
+      if (isEditMode.value) {
         return Promise.resolve()
       }
-      const hasCode = typeof value === 'string' && value.trim().length > 0
-      const hasRule = formState.numberingRuleCode != null && String(formState.numberingRuleCode).trim() !== ''
-      if (hasCode || hasRule) {
-        return Promise.resolve()
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingCodePreview'))
       }
-      return Promise.reject(t('routine.announcement.page.validation.codeOrRuleRequired'))
+      return Promise.resolve()
     },
-    trigger: 'blur'
+    trigger: 'change',
   }],
   announcementTitle: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.announcement.title') }),
+      message: pi.ph('announcementTitle'),
       trigger: 'blur'
     }
   ],
   announcementType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.type') }))
+        return Promise.reject(pi.ph('announcementType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.type') }))
+        return Promise.reject(pi.ph('announcementType'))
       }
       return Promise.resolve()
     },
@@ -517,18 +699,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   content: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.announcement.content') }),
+      message: pi.ph('content'),
       trigger: 'blur'
     }
   ],
   isScheduled: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.isscheduled') }))
+        return Promise.reject(pi.ph('isScheduled'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.isscheduled') }))
+        return Promise.reject(pi.ph('isScheduled'))
       }
       return Promise.resolve()
     },
@@ -537,11 +719,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isTop: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.istop') }))
+        return Promise.reject(pi.ph('isTop'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.istop') }))
+        return Promise.reject(pi.ph('isTop'))
       }
       return Promise.resolve()
     },
@@ -550,11 +732,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   topPriority: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.toppriority') }))
+        return Promise.reject(pi.ph('topPriority'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.toppriority') }))
+        return Promise.reject(pi.ph('topPriority'))
       }
       return Promise.resolve()
     },
@@ -563,11 +745,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   viewCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.viewcount') }))
+        return Promise.reject(pi.ph('viewCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.viewcount') }))
+        return Promise.reject(pi.ph('viewCount'))
       }
       return Promise.resolve()
     },
@@ -576,18 +758,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   targetScope: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.announcement.targetscope') }),
-      trigger: 'blur'
+      message: pi.ph('targetScope'),
+      trigger: 'change'
     }
   ],
   announcementStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.status') }))
+        return Promise.reject(pi.ph('announcementStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.announcement.status') }))
+        return Promise.reject(pi.ph('announcementStatus'))
       }
       return Promise.resolve()
     },
@@ -604,34 +786,76 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if (props.formData?.announcementId) {
-    delete payload.numberingRuleCode
-  }
   if ('announcementType' in payload) {
     const rawannouncementType = payload.announcementType
-    payload.announcementType = typeof rawannouncementType === 'number' ? rawannouncementType : Number(rawannouncementType)
+    if (rawannouncementType === undefined || rawannouncementType === null || rawannouncementType === '') {
+      delete payload.announcementType
+    } else {
+      const numannouncementType = typeof rawannouncementType === 'number' ? rawannouncementType : Number(rawannouncementType)
+      if (Number.isFinite(numannouncementType)) payload.announcementType = numannouncementType
+      else delete payload.announcementType
+    }
   }
   if ('isScheduled' in payload) {
-    const rawIsScheduled = payload.isScheduled
-    payload.isScheduled = typeof rawIsScheduled === 'number' ? rawIsScheduled : Number(rawIsScheduled)
+    const rawisScheduled = payload.isScheduled
+    if (rawisScheduled === undefined || rawisScheduled === null || rawisScheduled === '') {
+      delete payload.isScheduled
+    } else {
+      const numisScheduled = typeof rawisScheduled === 'number' ? rawisScheduled : Number(rawisScheduled)
+      if (Number.isFinite(numisScheduled)) payload.isScheduled = numisScheduled
+      else delete payload.isScheduled
+    }
   }
   if ('isTop' in payload) {
-    const rawIsTop = payload.isTop
-    payload.isTop = typeof rawIsTop === 'number' ? rawIsTop : Number(rawIsTop)
+    const rawisTop = payload.isTop
+    if (rawisTop === undefined || rawisTop === null || rawisTop === '') {
+      delete payload.isTop
+    } else {
+      const numisTop = typeof rawisTop === 'number' ? rawisTop : Number(rawisTop)
+      if (Number.isFinite(numisTop)) payload.isTop = numisTop
+      else delete payload.isTop
+    }
   }
   if ('topPriority' in payload) {
     const rawtopPriority = payload.topPriority
-    payload.topPriority = typeof rawtopPriority === 'number' ? rawtopPriority : Number(rawtopPriority)
+    if (rawtopPriority === undefined || rawtopPriority === null || rawtopPriority === '') {
+      delete payload.topPriority
+    } else {
+      const numtopPriority = typeof rawtopPriority === 'number' ? rawtopPriority : Number(rawtopPriority)
+      if (Number.isFinite(numtopPriority)) payload.topPriority = numtopPriority
+      else delete payload.topPriority
+    }
   }
   if ('viewCount' in payload) {
-    const rawViewCount = payload.viewCount
-    payload.viewCount = typeof rawViewCount === 'number' ? rawViewCount : Number(rawViewCount)
+    const rawviewCount = payload.viewCount
+    if (rawviewCount === undefined || rawviewCount === null || rawviewCount === '') {
+      delete payload.viewCount
+    } else {
+      const numviewCount = typeof rawviewCount === 'number' ? rawviewCount : Number(rawviewCount)
+      if (Number.isFinite(numviewCount)) payload.viewCount = numviewCount
+      else delete payload.viewCount
+    }
   }
   if ('announcementStatus' in payload) {
     const rawannouncementStatus = payload.announcementStatus
-    payload.announcementStatus = typeof rawannouncementStatus === 'number' ? rawannouncementStatus : Number(rawannouncementStatus)
+    if (rawannouncementStatus === undefined || rawannouncementStatus === null || rawannouncementStatus === '') {
+      delete payload.announcementStatus
+    } else {
+      const numannouncementStatus = typeof rawannouncementStatus === 'number' ? rawannouncementStatus : Number(rawannouncementStatus)
+      if (Number.isFinite(numannouncementStatus)) payload.announcementStatus = numannouncementStatus
+      else delete payload.announcementStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.announcementId) {
+    payload.announcementId = props.formData.announcementId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 

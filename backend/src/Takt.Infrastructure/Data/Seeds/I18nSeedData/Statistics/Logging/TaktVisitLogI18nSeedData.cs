@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktVisitLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVisitLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,23 +90,23 @@ public class TaktVisitLogI18nSeedData : ITaktSeedDataCoordinator
             // entity.visitlog._self
             new TranslationSeedItem("entity.visitlog._self", "zh-HK", "用户日访问量统计信息_hk", "实体名称"),
 
-            // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "en-US", "用户名_us", "用户名（登录账号）"),
-            // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "ja-JP", "用户名_jp", "用户名（登录账号）"),
-            // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "zh-CN", "用户名", "用户名（登录账号）"),
-            // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "zh-HK", "用户名_hk", "用户名（登录账号）"),
+            // entity.visitlog.userid
+            new TranslationSeedItem("entity.visitlog.userid", "en-US", "用户ID_us", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.visitlog.userid
+            new TranslationSeedItem("entity.visitlog.userid", "ja-JP", "用户ID_jp", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.visitlog.userid
+            new TranslationSeedItem("entity.visitlog.userid", "zh-CN", "用户ID", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.visitlog.userid
+            new TranslationSeedItem("entity.visitlog.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
-            // entity.visitlog.userid
-            new TranslationSeedItem("entity.visitlog.userid", "en-US", "用户ID_us", "用户 ID"),
-            // entity.visitlog.userid
-            new TranslationSeedItem("entity.visitlog.userid", "ja-JP", "用户ID_jp", "用户 ID"),
-            // entity.visitlog.userid
-            new TranslationSeedItem("entity.visitlog.userid", "zh-CN", "用户ID", "用户 ID"),
-            // entity.visitlog.userid
-            new TranslationSeedItem("entity.visitlog.userid", "zh-HK", "用户ID_hk", "用户 ID"),
+            // entity.visitlog.username
+            new TranslationSeedItem("entity.visitlog.username", "en-US", "用户名_us", "用户名（冗余字段，便于查询）"),
+            // entity.visitlog.username
+            new TranslationSeedItem("entity.visitlog.username", "ja-JP", "用户名_jp", "用户名（冗余字段，便于查询）"),
+            // entity.visitlog.username
+            new TranslationSeedItem("entity.visitlog.username", "zh-CN", "用户名", "用户名（冗余字段，便于查询）"),
+            // entity.visitlog.username
+            new TranslationSeedItem("entity.visitlog.username", "zh-HK", "用户名_hk", "用户名（冗余字段，便于查询）"),
 
             // entity.visitlog.statdate
             new TranslationSeedItem("entity.visitlog.statdate", "en-US", "统计日期_us", "统计日期（自然日，不含时分秒）"),

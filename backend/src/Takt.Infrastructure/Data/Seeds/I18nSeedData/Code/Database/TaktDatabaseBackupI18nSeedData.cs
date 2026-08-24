@@ -162,11 +162,11 @@ public class TaktDatabaseBackupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.databasebackup.backupport", "zh-CN", "端口", "FTP 端口"),
             new TranslationSeedItem("entity.databasebackup.backupport", "zh-HK", "端口_hk", "FTP 端口"),
 
-            // entity.databasebackup.backupusername
-            new TranslationSeedItem("entity.databasebackup.backupusername", "en-US", "用户名_us", "网络/FTP 用户名"),
-            new TranslationSeedItem("entity.databasebackup.backupusername", "ja-JP", "用户名_jp", "网络/FTP 用户名"),
-            new TranslationSeedItem("entity.databasebackup.backupusername", "zh-CN", "用户名", "网络/FTP 用户名"),
-            new TranslationSeedItem("entity.databasebackup.backupusername", "zh-HK", "用户名_hk", "网络/FTP 用户名"),
+            // entity.databasebackup.backupUserName
+            new TranslationSeedItem("entity.databasebackup.backupUserName", "en-US", "用户名_us", "网络/FTP 用户名"),
+            new TranslationSeedItem("entity.databasebackup.backupUserName", "ja-JP", "用户名_jp", "网络/FTP 用户名"),
+            new TranslationSeedItem("entity.databasebackup.backupUserName", "zh-CN", "用户名", "网络/FTP 用户名"),
+            new TranslationSeedItem("entity.databasebackup.backupUserName", "zh-HK", "用户名_hk", "网络/FTP 用户名"),
 
             // entity.databasebackup.backuppassword
             new TranslationSeedItem("entity.databasebackup.backuppassword", "en-US", "密码_us", "网络/FTP 密码"),

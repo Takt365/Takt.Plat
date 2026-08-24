@@ -104,12 +104,12 @@ export interface InspectionStandardItem extends CompanyDtoBase {
   rejectionCriteria: string;
 
   /**
-   * 是否合格判定项目（字典 sys_yes_no_type）
+   * 是否合格判定项目（字典 sys_yes_no）
    */
   isQualifiedBasis: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -214,12 +214,12 @@ export interface InspectionStandardItemQuery extends TaktPagedQuery {
   rejectionCriteria?: string;
 
   /**
-   * 是否合格判定项目（字典 sys_yes_no_type）
+   * 是否合格判定项目（字典 sys_yes_no）
    */
   isQualifiedBasis?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -346,12 +346,12 @@ export interface InspectionStandardItemCreate {
   rejectionCriteria: string;
 
   /**
-   * 是否合格判定项目（字典 sys_yes_no_type）
+   * 是否合格判定项目（字典 sys_yes_no）
    */
   isQualifiedBasis: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -395,7 +395,7 @@ export interface InspectionStandardItemObsolete {
   inspectionStandardItemId: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -494,12 +494,12 @@ export interface InspectionStandardItemTemplate {
   rejectionCriteria?: string;
 
   /**
-   * 是否合格判定项目（字典 sys_yes_no_type）
+   * 是否合格判定项目（字典 sys_yes_no）
    */
   isQualifiedBasis?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -616,12 +616,12 @@ export interface InspectionStandardItemImport {
   rejectionCriteria?: string;
 
   /**
-   * 是否合格判定项目（字典 sys_yes_no_type）
+   * 是否合格判定项目（字典 sys_yes_no）
    */
   isQualifiedBasis?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -725,12 +725,12 @@ export interface InspectionStandardItemExport {
   rejectionCriteria: string;
 
   /**
-   * 是否合格判定项目（字典 sys_yes_no_type）
+   * 是否合格判定项目（字典 sys_yes_no）
    */
   isQualifiedBasis: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

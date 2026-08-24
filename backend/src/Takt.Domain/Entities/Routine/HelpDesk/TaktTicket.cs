@@ -49,22 +49,22 @@ public class TaktTicket : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件列表JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? attachments { get; set; }
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+    /// 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
     /// </summary>
     [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
     public int Priority { get; set; } = 3;
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
+    /// 紧急度（字典 sys_urgency_level；1=高 2=中 3=低）
     /// </summary>
     [SugarColumn(ColumnName = "urgency", ColumnDescription = "紧急度", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
     public int Urgency { get; set; } = 3;
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
+    /// 影响范围（字典 sys_impact_level；1=高 2=中 3=低）
     /// </summary>
     [SugarColumn(ColumnName = "impact", ColumnDescription = "影响范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
     public int Impact { get; set; } = 3;
     /// <summary>
-    /// 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
+    /// 分类编码（业务编码；与 TaktTicketCategoryAssign.CategoryCode 一致）
     /// </summary>
     [SugarColumn(ColumnName = "category_code", ColumnDescription = "分类编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CategoryCode { get; set; }
@@ -80,7 +80,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubmitterId { get; set; }
     /// <summary>
-    /// 提交人姓名
+    /// 提交人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "submitter_name", ColumnDescription = "提交人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? SubmitterName { get; set; }
@@ -91,7 +91,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
     /// <summary>
-    /// 处理人姓名
+    /// 处理人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "assignee_name", ColumnDescription = "处理人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? AssigneeName { get; set; }
@@ -139,24 +139,24 @@ public class TaktTicket : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItAssetId { get; set; }
     /// <summary>
-    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// 资产号码（冗余字段，便于查询；与 TaktItAsset.AssetCode 一致）
     /// </summary>
     [SugarColumn(ColumnName = "asset_code", ColumnDescription = "资产号码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? AssetCode { get; set; }
     /// <summary>
-    /// 流程实例 ID（关联 TaktFlowInstance.Id；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id；BusinessType=Ticket、BusinessKey=本表 Id）
     /// </summary>
     [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
     /// <summary>
-    /// 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "applicant_dept_id", ColumnDescription = "申请部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
     /// <summary>
-    /// 申请部门名称
+    /// 申请部门名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "applicant_dept_name", ColumnDescription = "申请部门名称", Length = 100, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? ApplicantDeptName { get; set; }

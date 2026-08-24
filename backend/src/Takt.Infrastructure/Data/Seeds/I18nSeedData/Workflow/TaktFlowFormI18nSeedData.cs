@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowFormI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowForm 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowform._self", "zh-HK", "流程表单定义信息_hk", "实体名称"),
 
             // entity.flowform.formcode
-            new TranslationSeedItem("entity.flowform.formcode", "en-US", "表单编码_us", "表单编码（公司内唯一）"),
+            new TranslationSeedItem("entity.flowform.formcode", "en-US", "表单编码_us", "表单编码（公司内唯一；前端表单按表单分类选择编码规则后自动通过 TaktNumbering 表单编码规则生成并展示，非手输；单据类型菜单：表单管理）"),
             // entity.flowform.formcode
-            new TranslationSeedItem("entity.flowform.formcode", "ja-JP", "表单编码_jp", "表单编码（公司内唯一）"),
+            new TranslationSeedItem("entity.flowform.formcode", "ja-JP", "表单编码_jp", "表单编码（公司内唯一；前端表单按表单分类选择编码规则后自动通过 TaktNumbering 表单编码规则生成并展示，非手输；单据类型菜单：表单管理）"),
             // entity.flowform.formcode
-            new TranslationSeedItem("entity.flowform.formcode", "zh-CN", "表单编码", "表单编码（公司内唯一）"),
+            new TranslationSeedItem("entity.flowform.formcode", "zh-CN", "表单编码", "表单编码（公司内唯一；前端表单按表单分类选择编码规则后自动通过 TaktNumbering 表单编码规则生成并展示，非手输；单据类型菜单：表单管理）"),
             // entity.flowform.formcode
-            new TranslationSeedItem("entity.flowform.formcode", "zh-HK", "表单编码_hk", "表单编码（公司内唯一）"),
+            new TranslationSeedItem("entity.flowform.formcode", "zh-HK", "表单编码_hk", "表单编码（公司内唯一；前端表单按表单分类选择编码规则后自动通过 TaktNumbering 表单编码规则生成并展示，非手输；单据类型菜单：表单管理）"),
 
             // entity.flowform.formname
             new TranslationSeedItem("entity.flowform.formname", "en-US", "表单名称_us", "表单名称"),
@@ -154,31 +154,31 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowform.formversion", "zh-HK", "表单版本_hk", "表单版本标签"),
 
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "en-US", "数据源表单_us", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "en-US", "数据源表单_us", "是否绑定数据源（字典 sys_yes_no；0=否 1=是）"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "ja-JP", "数据源表单_jp", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "ja-JP", "数据源表单_jp", "是否绑定数据源（字典 sys_yes_no；0=否 1=是）"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "zh-CN", "数据源表单", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "zh-CN", "数据源表单", "是否绑定数据源（字典 sys_yes_no；0=否 1=是）"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "zh-HK", "数据源表单_hk", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "zh-HK", "数据源表单_hk", "是否绑定数据源（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "en-US", "关联库名_us", "关联库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "en-US", "关联库名_us", "关联库名（选项 TaktDatabaseInfos/list；DictValue=TenantCode）"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "ja-JP", "关联库名_jp", "关联库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "ja-JP", "关联库名_jp", "关联库名（选项 TaktDatabaseInfos/list；DictValue=TenantCode）"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-CN", "关联库名", "关联库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-CN", "关联库名", "关联库名（选项 TaktDatabaseInfos/list；DictValue=TenantCode）"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-HK", "关联库名_hk", "关联库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-HK", "关联库名_hk", "关联库名（选项 TaktDatabaseInfos/list；DictValue=TenantCode）"),
 
             // entity.flowform.relatedtablename
-            new TranslationSeedItem("entity.flowform.relatedtablename", "en-US", "关联表名_us", "关联表名"),
+            new TranslationSeedItem("entity.flowform.relatedtablename", "en-US", "关联表名_us", "关联表名（选项 TaktDatabaseInfos/tables；DictValue=TableName）"),
             // entity.flowform.relatedtablename
-            new TranslationSeedItem("entity.flowform.relatedtablename", "ja-JP", "关联表名_jp", "关联表名"),
+            new TranslationSeedItem("entity.flowform.relatedtablename", "ja-JP", "关联表名_jp", "关联表名（选项 TaktDatabaseInfos/tables；DictValue=TableName）"),
             // entity.flowform.relatedtablename
-            new TranslationSeedItem("entity.flowform.relatedtablename", "zh-CN", "关联表名", "关联表名"),
+            new TranslationSeedItem("entity.flowform.relatedtablename", "zh-CN", "关联表名", "关联表名（选项 TaktDatabaseInfos/tables；DictValue=TableName）"),
             // entity.flowform.relatedtablename
-            new TranslationSeedItem("entity.flowform.relatedtablename", "zh-HK", "关联表名_hk", "关联表名"),
+            new TranslationSeedItem("entity.flowform.relatedtablename", "zh-HK", "关联表名_hk", "关联表名（选项 TaktDatabaseInfos/tables；DictValue=TableName）"),
 
             // entity.flowform.relatedformfield
             new TranslationSeedItem("entity.flowform.relatedformfield", "en-US", "关联映射_us", "关联映射 JSON"),
@@ -190,22 +190,22 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowform.relatedformfield", "zh-HK", "关联映射_hk", "关联映射 JSON"),
 
             // entity.flowform.sortorder
-            new TranslationSeedItem("entity.flowform.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.flowform.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.flowform.sortorder
-            new TranslationSeedItem("entity.flowform.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.flowform.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.flowform.sortorder
-            new TranslationSeedItem("entity.flowform.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.flowform.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.flowform.sortorder
-            new TranslationSeedItem("entity.flowform.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.flowform.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.flowform.formstatus
-            new TranslationSeedItem("entity.flowform.formstatus", "en-US", "表单状态_us", "表单状态"),
+            new TranslationSeedItem("entity.flowform.formstatus", "en-US", "表单状态_us", "表单状态（字典 sys_scheme_status；0=草稿 1=已发布 2=已禁用）"),
             // entity.flowform.formstatus
-            new TranslationSeedItem("entity.flowform.formstatus", "ja-JP", "表单状态_jp", "表单状态"),
+            new TranslationSeedItem("entity.flowform.formstatus", "ja-JP", "表单状态_jp", "表单状态（字典 sys_scheme_status；0=草稿 1=已发布 2=已禁用）"),
             // entity.flowform.formstatus
-            new TranslationSeedItem("entity.flowform.formstatus", "zh-CN", "表单状态", "表单状态"),
+            new TranslationSeedItem("entity.flowform.formstatus", "zh-CN", "表单状态", "表单状态（字典 sys_scheme_status；0=草稿 1=已发布 2=已禁用）"),
             // entity.flowform.formstatus
-            new TranslationSeedItem("entity.flowform.formstatus", "zh-HK", "表单状态_hk", "表单状态"),
+            new TranslationSeedItem("entity.flowform.formstatus", "zh-HK", "表单状态_hk", "表单状态（字典 sys_scheme_status；0=草稿 1=已发布 2=已禁用）"),
         };
     }
 

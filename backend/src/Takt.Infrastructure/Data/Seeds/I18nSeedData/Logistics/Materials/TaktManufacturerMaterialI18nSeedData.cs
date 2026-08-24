@@ -172,13 +172,13 @@ public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturermaterial.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
 
             // entity.manufacturermaterial.isobsolete
-            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.manufacturermaterial.isobsolete
-            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.manufacturermaterial.isobsolete
-            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.manufacturermaterial.isobsolete
-            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.manufacturermaterial.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.manufacturermaterial.manufacturer
             new TranslationSeedItem("entity.manufacturermaterial.manufacturer", "en-US", "导航属性：关联的制造商_us", "导航属性：关联的制造商（主子表关系；多对一）"),

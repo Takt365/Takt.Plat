@@ -74,7 +74,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public string? TreeName { get; set; }
 
     /// <summary>
-    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
+    /// 库表标识（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "in_database", ColumnDescription = "库表标识", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int InDatabase { get; set; } = 1;
@@ -176,7 +176,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public string? ControllerClassName { get; set; }
     
     /// <summary>
-    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// 仓储层（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_repository", ColumnDescription = "仓储层", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsRepository { get; set; } = 0;
@@ -227,7 +227,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public string GenPath { get; set; } = "/";
 
     /// <summary>
-    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成菜单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_gen_menu", ColumnDescription = "生成菜单", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsGenMenu { get; set; } = 1;
@@ -239,7 +239,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public long ParentMenuId { get; set; }
 
     /// <summary>
-    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// 生成翻译（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_gen_translation", ColumnDescription = "生成翻译", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsGenTranslation { get; set; } = 1;
@@ -275,7 +275,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public int FrontBtnStyle { get; set; } = 1;
 
     /// <summary>
-    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否生成（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_gen_code", ColumnDescription = "是否生成", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsGenCode { get; set; } = 0;
@@ -287,7 +287,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public int GenCodeCount { get; set; } = 0;
 
     /// <summary>
-    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// 使用tabs（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_use_tabs", ColumnDescription = "使用tabs", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsUseTabs { get; set; } = 1;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOutput 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyOutput 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Output;
 // ========================================
 
 /// <summary>
-/// 组立日报（产出）主表实体 达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%。
+/// 组立日报（产出）主表实体 <para>业务唯一键：TenantCode+CompanyCode+PlantCode+ProdDate+ProdOrderCode。</para> 达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%。
 /// 对应前端 TaktAssyOutputDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -34,7 +34,6 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssyOutputId { get; set; }
-
 
     /// <summary>
     /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
@@ -135,7 +134,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -145,7 +144,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -275,9 +274,8 @@ public class TaktAssyOutputCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（回填：随工单）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -363,7 +361,7 @@ public class TaktAssyOutputCreateDto
     /// <summary>
     /// 组立日报明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktAssyOutputDetailUpdateDto>? AssyOutputDetails { get; set; }
+    public List<TaktAssyOutputDetailCreateDto>? AssyOutputDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -427,7 +425,7 @@ public class TaktAssyOutputTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -544,7 +542,7 @@ public class TaktAssyOutputImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -662,9 +660,14 @@ public class TaktAssyOutputExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）

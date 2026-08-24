@@ -37,17 +37,17 @@ public class TaktOnline : TaktCompanyEntityBase
     public string ConnectionId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名
-    /// </summary>
-    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接 IP 地址

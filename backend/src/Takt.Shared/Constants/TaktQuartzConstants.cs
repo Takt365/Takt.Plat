@@ -51,7 +51,7 @@ public static class TaktQuartzConstants
     /// <summary>任务执行完成落库消息类型（字典 sys_message_type DictValue）</summary>
     public const string ExecutedMessageType = "system";
 
-    /// <summary>任务执行完成落库消息分组（字典 sys_message_group_category DictValue）</summary>
+    /// <summary>任务执行完成落库消息分组（字典 sys_message_group DictValue）</summary>
     public const string ExecutedMessageGroup = "reminder";
 
     /// <summary>无触发用户时的系统发送者登录名（与种子 admin / SystemAuditUser 对齐）</summary>

@@ -213,7 +213,7 @@
       <a-form-item :label="t('entity.sopworkstation.workstationstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.workstationStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopworkstation.workstationstatus') })"
           allow-clear
         />

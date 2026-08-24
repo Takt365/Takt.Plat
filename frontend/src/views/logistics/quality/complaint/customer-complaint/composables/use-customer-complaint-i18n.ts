@@ -20,55 +20,13 @@ export const CUSTOMERCOMPLAINT_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTOMERCO
 
 /** 列表业务列（不含主键） */
 export const CUSTOMERCOMPLAINT_LIST_FIELDS = [
-  'customerComplaintCode',
-  'customerId',
-  'customerName1',
-  'customerCode',
-  'complaintDate',
-  'complaintMethod',
-  'complaintType',
-  'complaintLevel',
-  'responsibleDeptId',
-  'responsibleDeptName',
-  'responsiblePersonId',
-  'responsiblePersonName',
-  'requiredReplyDate',
-  'actualReplyDate',
-  'complaintDescription',
-  'handlingResult',
-  'customerSatisfaction',
-  'attachments',
-  'plantCode',
   'complaintStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const CUSTOMERCOMPLAINT_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  customerComplaintCode: 'required',
-  customerId: 'select',
-  customerName1: 'required',
-  customerCode: 'optional',
-  complaintDate: 'select',
-  complaintMethod: 'select',
-  complaintType: 'select',
-  complaintLevel: 'select',
-  responsibleDeptId: 'optional',
-  responsibleDeptName: 'optional',
-  responsiblePersonId: 'optional',
-  responsiblePersonName: 'optional',
-  requiredReplyDate: 'optional',
-  actualReplyDate: 'optional',
-  complaintDescription: 'optional',
-  handlingResult: 'optional',
-  customerSatisfaction: 'optional',
-  attachments: 'optional',
-  plantCode: 'select',
-  complaintStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -76,43 +34,13 @@ export type CustomerComplaintField = keyof typeof CUSTOMERCOMPLAINT_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS = [
-  'customerComplaintCode',
-  'customerId',
-  'customerName1',
-  'customerCode',
-  'complaintDateStart',
-  'complaintDateEnd',
-  'responsibleDeptId',
-  'responsibleDeptName',
-  'responsiblePersonId',
-  'responsiblePersonName',
-  'requiredReplyDateStart',
-  'requiredReplyDateEnd',
-  'actualReplyDateStart',
-  'actualReplyDateEnd',
-  'complaintDescription',
-  'handlingResult',
-  'attachments',
-  'plantCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof CustomerComplaintQuery)[]
 
-export type CustomerComplaintQueryField =
-  | (typeof CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS)[number]
-  | 'complaintMethod' | 'complaintType' | 'complaintLevel' | 'customerSatisfaction' | 'complaintStatus'
+export type CustomerComplaintQueryField = (typeof CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const CUSTOMERCOMPLAINT_QUERY_FIELDS: readonly CustomerComplaintQueryField[] = [
-  ...CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS,
-  'complaintMethod',
-  'complaintType',
-  'complaintLevel',
-  'customerSatisfaction',
-  'complaintStatus',
-]
+export const CUSTOMERCOMPLAINT_QUERY_FIELDS: readonly CustomerComplaintQueryField[] = [...CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS]
 
 /**
  * 客诉主表实体字段 i18n：index / customer-complaint-form 统一入口

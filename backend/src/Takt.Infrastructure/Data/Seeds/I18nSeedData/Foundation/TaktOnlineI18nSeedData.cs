@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktOnlineI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOnline 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/online）
 // 
@@ -99,15 +99,6 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             // entity.online.connectionid
             new TranslationSeedItem("entity.online.connectionid", "zh-HK", "SignalR连接ID_hk", "SignalR 连接 ID（当前连接；租户+公司内唯一，见 ix_online_connection_id_unique）"),
 
-            // entity.online.username
-            new TranslationSeedItem("entity.online.username", "en-US", "用户名_us", "用户名"),
-            // entity.online.username
-            new TranslationSeedItem("entity.online.username", "ja-JP", "用户名_jp", "用户名"),
-            // entity.online.username
-            new TranslationSeedItem("entity.online.username", "zh-CN", "用户名", "用户名"),
-            // entity.online.username
-            new TranslationSeedItem("entity.online.username", "zh-HK", "用户名_hk", "用户名"),
-
             // entity.online.userid
             new TranslationSeedItem("entity.online.userid", "en-US", "用户ID_us", "用户 ID"),
             // entity.online.userid
@@ -116,6 +107,15 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online.userid", "zh-CN", "用户ID", "用户 ID"),
             // entity.online.userid
             new TranslationSeedItem("entity.online.userid", "zh-HK", "用户ID_hk", "用户 ID"),
+
+            // entity.online.username
+            new TranslationSeedItem("entity.online.username", "en-US", "用户名_us", "用户名"),
+            // entity.online.username
+            new TranslationSeedItem("entity.online.username", "ja-JP", "用户名_jp", "用户名"),
+            // entity.online.username
+            new TranslationSeedItem("entity.online.username", "zh-CN", "用户名", "用户名"),
+            // entity.online.username
+            new TranslationSeedItem("entity.online.username", "zh-HK", "用户名_hk", "用户名"),
 
             // entity.online.connectip
             new TranslationSeedItem("entity.online.connectip", "en-US", "连接IP地址_us", "连接 IP 地址"),

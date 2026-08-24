@@ -65,7 +65,7 @@ export interface ProductionOrder extends CompanyDtoBase {
   actualEndDate?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
@@ -188,7 +188,7 @@ export interface ProductionOrderExport {
   actualEndDate?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
+   * 优先级（字典 sys_priority_level；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 

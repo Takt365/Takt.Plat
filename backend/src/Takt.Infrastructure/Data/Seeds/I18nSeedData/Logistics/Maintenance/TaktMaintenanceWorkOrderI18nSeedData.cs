@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaintenanceWorkOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -442,13 +442,13 @@ public class TaktMaintenanceWorkOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.maintenanceworkorder.acceptedsummary", "zh-HK", "验收总结_hk", "验收总结"),
 
             // entity.maintenanceworkorder.ishistoryarchived
-            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "en-US", "是否已归档履历_us", "是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "en-US", "是否已归档履历_us", "是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）"),
             // entity.maintenanceworkorder.ishistoryarchived
-            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "ja-JP", "是否已归档履历_jp", "是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "ja-JP", "是否已归档履历_jp", "是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）"),
             // entity.maintenanceworkorder.ishistoryarchived
-            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "zh-CN", "是否已归档履历", "是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "zh-CN", "是否已归档履历", "是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）"),
             // entity.maintenanceworkorder.ishistoryarchived
-            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "zh-HK", "是否已归档履历_hk", "是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.maintenanceworkorder.ishistoryarchived", "zh-HK", "是否已归档履历_hk", "是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.maintenanceworkorder.maintenancenotification
             new TranslationSeedItem("entity.maintenanceworkorder.maintenancenotification", "en-US", "来源维护通知单_us", "来源维护通知单"),

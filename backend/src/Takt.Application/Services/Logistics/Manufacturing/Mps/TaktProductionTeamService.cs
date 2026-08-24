@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamService.cs
-// 创建时间：2026-07-24
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产班组应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
     }
 
     /// <summary>
-    /// 获取生产班组列表（分页）
+    /// 获取生产班组列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktProductionTeamDto>> GetProductionTeamListAsync(TaktProductionTeamQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktProductionTeamDto>.Create(
+                new List<TaktProductionTeamDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _productionTeamRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -289,7 +297,15 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportProductionTeamAsync(TaktProductionTeamQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktProductionTeamQueryDto());
+        var queryDto = query ?? new TaktProductionTeamQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktProductionTeamExportDto>(),
+                sheetName ?? "生产班组数据",
+                fileName ?? "生产班组导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _productionTeamRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -388,6 +404,11 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
             {
                 var childDto = teamEquipmentListForSave[i];
                 childDto.ProdTeamId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.TeamCode = entity.TeamCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -406,14 +427,13 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
                     submittedIds.Add(childDto.ProductionTeamEquipmentId);
                     var isUniqueUpdate_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _productionTeamEquipmentRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.ProdTeamId == x.ProdTeamId
+                        x => x.ProdTeamId == x.ProdTeamId
                 && x.LineNumber == x.LineNumber
                 && x.ProdEquipCode == x.ProdEquipCode,
                         childDto.ProductionTeamEquipmentId);
                     if (!isUniqueUpdate_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique)
                     {
-                        throw new TaktBusinessException("生产班组设备组的CompanyCode、ProdTeamId、LineNumber、ProdEquipCode已存在");
+                        throw new TaktBusinessException("生产班组设备组的ProdTeamId、LineNumber、ProdEquipCode已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.ProductionTeamEquipmentId;
@@ -425,13 +445,12 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
                 {
                     var isUniqueCreate_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _productionTeamEquipmentRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.ProdTeamId == x.ProdTeamId
+                        x => x.ProdTeamId == x.ProdTeamId
                 && x.LineNumber == x.LineNumber
                 && x.ProdEquipCode == x.ProdEquipCode);
                     if (!isUniqueCreate_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique)
                     {
-                        throw new TaktBusinessException("生产班组设备组的CompanyCode、ProdTeamId、LineNumber、ProdEquipCode已存在");
+                        throw new TaktBusinessException("生产班组设备组的ProdTeamId、LineNumber、ProdEquipCode已存在");
                     }
                     var child = childDto.Adapt<TaktProductionTeamEquipment>();
                     child.Id = 0;
@@ -480,84 +499,155 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
     {
         var exp = Expressionable.Create<TaktProductionTeam>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || (x.TeamName != null && x.TeamName.Contains(keywords))
                 || (x.TeamCategory != null && x.TeamCategory.Contains(keywords))
                 || (x.TeamLeaderName != null && x.TeamLeaderName.Contains(keywords))
-                || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
-                || SqlFunc.ToString(x.TeamStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TeamName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TeamCode))
         {
-            exp = exp.And(x => x.TeamName != null && x.TeamName.Contains(queryDto.TeamName));
+            var teamCode = queryDto.TeamCode;
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(teamCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TeamCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TeamName))
         {
-            exp = exp.And(x => x.TeamCategory != null && x.TeamCategory.Contains(queryDto.TeamCategory));
+            var teamName = queryDto.TeamName;
+            exp = exp.And(x => x.TeamName != null && x.TeamName.Contains(teamName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TeamLeaderName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TeamCategory))
         {
-            exp = exp.And(x => x.TeamLeaderName != null && x.TeamLeaderName.Contains(queryDto.TeamLeaderName));
+            var teamCategory = queryDto.TeamCategory;
+            exp = exp.And(x => x.TeamCategory != null && x.TeamCategory.Contains(teamCategory));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TeamLeaderName))
+        {
+            var teamLeaderName = queryDto.TeamLeaderName;
+            exp = exp.And(x => x.TeamLeaderName != null && x.TeamLeaderName.Contains(teamLeaderName));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
         {
-            exp = exp.And(x => x.ShiftNo == queryDto.ShiftNo);
+            var shiftNo = queryDto.ShiftNo.Value;
+            exp = exp.And(x => x.ShiftNo == shiftNo);
         }
 
         if (queryDto?.TeamStatus.HasValue == true)
         {
-            exp = exp.And(x => x.TeamStatus == queryDto.TeamStatus);
+            var teamStatus = queryDto.TeamStatus.Value;
+            exp = exp.And(x => x.TeamStatus == teamStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktProductionTeamQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TeamCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TeamName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TeamCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TeamLeaderName))
+        {
+            return true;
+        }
+        if (queryDto.ShiftNo.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TeamStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

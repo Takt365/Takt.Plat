@@ -73,9 +73,9 @@ public static class TaktLogFormatter
         {
             parts.Add($"company={context.CompanyCode}");
         }
-        if (!string.IsNullOrWhiteSpace(context.Username))
+        if (!string.IsNullOrWhiteSpace(context.UserName))
         {
-            parts.Add($"user={context.Username}");
+            parts.Add($"user={context.UserName}");
         }
         else if (!string.IsNullOrWhiteSpace(context.UserId))
         {
@@ -204,7 +204,7 @@ public static class TaktLogFormatter
         AddIfNotEmpty(properties, "Module", context.Module);
         AddIfNotEmpty(properties, "Action", context.Action);
         AddIfNotEmpty(properties, "UserId", context.UserId);
-        AddIfNotEmpty(properties, "Username", context.Username);
+        AddIfNotEmpty(properties, "user_name", context.UserName);
         AddIfNotEmpty(properties, "TenantCode", context.TenantCode);
         AddIfNotEmpty(properties, "CompanyCode", context.CompanyCode);
         AddIfNotEmpty(properties, "Route", context.Route);

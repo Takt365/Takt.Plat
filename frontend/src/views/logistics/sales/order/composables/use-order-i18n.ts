@@ -33,7 +33,7 @@ export const SALESORDER_LIST_FIELDS = [
   'discountAmount',
   'currencyCode',
   'exchangeRate',
-  'taxRate',
+  'taxCode',
   'taxAmount',
   'actualAmount',
   'shippedQuantity',
@@ -44,39 +44,12 @@ export const SALESORDER_LIST_FIELDS = [
   'deliveryAddress',
   'orderStatus',
   'deliveryStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESORDER_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  salesOrderCode: 'required',
-  customerCode: 'select',
-  customerName1: 'required',
-  orderDate: 'select',
-  requiredDeliveryDate: 'optional',
-  actualDeliveryDate: 'optional',
-  salesBy: 'optional',
-  totalQuantity: 'select',
-  totalAmount: 'select',
-  discountAmount: 'select',
-  currencyCode: 'select',
-  exchangeRate: 'select',
-  taxRate: 'select',
-  taxAmount: 'select',
-  actualAmount: 'select',
-  shippedQuantity: 'select',
-  shippedAmount: 'select',
-  receivedAmount: 'select',
-  deliveryMethod: 'select',
-  paymentMethod: 'select',
-  deliveryAddress: 'optional',
-  orderStatus: 'select',
-  deliveryStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -84,47 +57,13 @@ export type SalesOrderField = keyof typeof SALESORDER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESORDER_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'salesOrderCode',
-  'customerCode',
-  'customerName1',
-  'orderDateStart',
-  'orderDateEnd',
-  'requiredDeliveryDateStart',
-  'requiredDeliveryDateEnd',
-  'actualDeliveryDateStart',
-  'actualDeliveryDateEnd',
-  'salesBy',
-  'currencyCode',
-  'deliveryAddress',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SalesOrderQuery)[]
 
-export type SalesOrderQueryField =
-  | (typeof SALESORDER_QUERY_STRING_FIELDS)[number]
-  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'exchangeRate' | 'taxRate' | 'taxAmount' | 'actualAmount' | 'shippedQuantity' | 'shippedAmount' | 'receivedAmount' | 'deliveryMethod' | 'paymentMethod' | 'orderStatus' | 'deliveryStatus'
+export type SalesOrderQueryField = (typeof SALESORDER_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESORDER_QUERY_FIELDS: readonly SalesOrderQueryField[] = [
-  ...SALESORDER_QUERY_STRING_FIELDS,
-  'totalQuantity',
-  'totalAmount',
-  'discountAmount',
-  'exchangeRate',
-  'taxRate',
-  'taxAmount',
-  'actualAmount',
-  'shippedQuantity',
-  'shippedAmount',
-  'receivedAmount',
-  'deliveryMethod',
-  'paymentMethod',
-  'orderStatus',
-  'deliveryStatus',
-]
+export const SALESORDER_QUERY_FIELDS: readonly SalesOrderQueryField[] = [...SALESORDER_QUERY_STRING_FIELDS]
 
 /**
  * Takt销售订单实体字段 i18n：index / order-form 统一入口

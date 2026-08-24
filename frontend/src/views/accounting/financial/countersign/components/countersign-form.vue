@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form countersign-form flex flex-col min-h-0"
+    class="takt-generated-form countersign-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,46 +22,45 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.code')"
-                name="countersignCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.countersignCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.code') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.countersignId"
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.purchaseinquiryid')"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseInquiryId')"
                 name="purchaseInquiryId"
               >
                 <a-input
                   v-model:value="formState.purchaseInquiryId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.purchaseinquiryid') })"
+                  :placeholder="pi.ph('purchaseInquiryId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -70,39 +69,38 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.purchaseinquirycode')"
+                :label="pi.label('purchaseInquiryCode')"
                 name="purchaseInquiryCode"
               >
                 <a-input
                   v-model:value="formState.purchaseInquiryCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.purchaseinquirycode') })"
+                  :placeholder="pi.ph('purchaseInquiryCode')"
                   show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.countersignId"
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.businesstype')"
+                :label="pi.label('businessType')"
                 name="businessType"
               >
                 <TaktSelect
                   v-model:value="formState.businessType"
                   dict-type="logistics_countersign_business_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.countersign.businesstype') })"
+                  :placeholder="pi.ph('businessType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.businesskey')"
+                :label="pi.label('businessKey')"
                 name="businessKey"
               >
                 <a-input
                   v-model:value="formState.businessKey"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.businesskey') })"
+                  :placeholder="pi.ph('businessKey')"
                   show-count
                   :maxlength="80"
                   allow-clear
@@ -111,24 +109,52 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.stepno')"
+                :label="pi.label('stepNo')"
                 name="stepNo"
               >
                 <a-input-number
                   v-model:value="formState.stepNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.stepno') })"
+                  :placeholder="pi.ph('stepNo')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.depts')"
+                :label="pi.label('countersignDepts')"
                 name="countersignDepts"
               >
                 <a-input
                   v-model:value="formState.countersignDepts"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.depts') })"
+                  :placeholder="pi.ph('countersignDepts')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('financeDept')"
+                name="financeDept"
+              >
+                <a-input
+                  v-model:value="formState.financeDept"
+                  :placeholder="pi.ph('financeDept')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('budgetReviewComment')"
+                name="budgetReviewComment"
+              >
+                <a-input
+                  v-model:value="formState.budgetReviewComment"
+                  :placeholder="pi.ph('budgetReviewComment')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -140,47 +166,19 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.financedept')"
-                name="financeDept"
-              >
-                <a-input
-                  v-model:value="formState.financeDept"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.financedept') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.countersign.budgetreviewcomment')"
-                name="budgetReviewComment"
-              >
-                <a-input
-                  v-model:value="formState.budgetReviewComment"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetreviewcomment') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.countersign.executiveoffice')"
+                :label="pi.label('executiveOffice')"
                 name="executiveOffice"
               >
                 <a-input
                   v-model:value="formState.executiveOffice"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.executiveoffice') })"
+                  :placeholder="pi.ph('executiveOffice')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -189,66 +187,60 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.applicantby')"
+                :label="pi.label('applicantBy')"
                 name="applicantBy"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.applicantBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicantby') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('applicantBy')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.applicationdept')"
+                :label="pi.label('applicationDept')"
                 name="applicationDept"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.applicationDept"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationdept') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('applicationDept')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.costbearerdept')"
+                :label="pi.label('costBearerDept')"
                 name="costBearerDept"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.costBearerDept"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.costbearerdept') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('costBearerDept')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.isbudget')"
+                :label="pi.label('isBudget')"
                 name="isBudget"
               >
                 <TaktSelect
                   v-model:value="formState.isBudget"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.countersign.isbudget') })"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isBudget')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.budgetitem')"
+                :label="pi.label('budgetItem')"
                 name="budgetItem"
               >
                 <a-input
                   v-model:value="formState.budgetItem"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetitem') })"
+                  :placeholder="pi.ph('budgetItem')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -257,25 +249,53 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.budgetamount')"
+                :label="pi.label('budgetAmount')"
                 name="budgetAmount"
               >
                 <a-input-number
                   v-model:value="formState.budgetAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetamount') })"
+                  :placeholder="pi.ph('budgetAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.applicationamount')"
+                :label="pi.label('applicationAmount')"
                 name="applicationAmount"
               >
                 <a-input-number
                   v-model:value="formState.applicationAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationamount') })"
+                  :placeholder="pi.ph('applicationAmount')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('countersignTitle')"
+                name="countersignTitle"
+              >
+                <a-input
+                  v-model:value="formState.countersignTitle"
+                  :placeholder="pi.ph('countersignTitle')"
+                  show-count
+                  :maxlength="500"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('applicationReason')"
+                name="applicationReason"
+              >
+                <a-input
+                  v-model:value="formState.applicationReason"
+                  :placeholder="pi.ph('applicationReason')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -284,59 +304,31 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.countersign.title')"
-                name="countersignTitle"
-              >
-                <a-input
-                  v-model:value="formState.countersignTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.title') })"
-                  show-count
-                  :maxlength="500"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.countersign.applicationreason')"
-                name="applicationReason"
-              >
-                <a-input
-                  v-model:value="formState.applicationReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationreason') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.countersign.budgetusagedescription')"
+                :label="pi.label('budgetUsageDescription')"
                 name="budgetUsageDescription"
               >
                 <a-textarea
                   v-model:value="formState.budgetUsageDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.countersign.budgetusagedescription') })"
+                  :placeholder="pi.ph('budgetUsageDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.countersign.targetandexpectedbenefit')"
+                :label="pi.label('targetAndExpectedBenefit')"
                 name="targetAndExpectedBenefit"
               >
                 <a-input
                   v-model:value="formState.targetAndExpectedBenefit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.targetandexpectedbenefit') })"
+                  :placeholder="pi.ph('targetAndExpectedBenefit')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -345,12 +337,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.countersign.attachments')"
+                :label="pi.label('attachments')"
                 name="attachments"
               >
                 <a-input
                   v-model:value="formState.attachments"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.attachments') })"
+                  :placeholder="pi.ph('attachments')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -359,13 +351,50 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.countersign.status')"
+                :label="pi.label('countersignStatus')"
                 name="countersignStatus"
               >
                 <TaktSelect
                   v-model:value="formState.countersignStatus"
                   dict-type="sys_approval_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.countersign.status') })"
+                  :placeholder="pi.ph('countersignStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -382,7 +411,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -397,12 +426,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -419,13 +448,49 @@
       ref="countersignDetailTableRef"
       v-model="childCountersignDetailRows"
       :columns="countersignDetailFormColumns"
-      :title="t('entity.countersigndetail._self')"
-      :add-button-entity="t('entity.countersigndetail._self')"
+      :title="countersignDetailPi.self()"
+      :add-button-entity="countersignDetailPi.self()"
       id-field="countersignDetailId"
       :default-row="createDefaultCountersignDetailRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-allocationCategory="{ record }">
+        <TaktSelect
+          v-model:value="record.allocationCategory"
+          dict-type="logistics_allocation_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="countersignDetailPi.ph('allocationCategory')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-accountTitle="{ record }">
+        <TaktSelect
+          v-model:value="record.accountTitle"
+          api-url="TaktAccountTitles/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="countersignDetailPi.queryPh('accountTitle', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="countersignDetailPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -437,6 +502,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useCountersignI18n } from '../composables/use-countersign-i18n'
+
+/** 实体字段 i18n */
+const pi = useCountersignI18n()
+
 import type { CountersignCreate } from '@/types/accounting/financial/countersign'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -447,39 +517,51 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","countersignCode","purchaseInquiryId","purchaseInquiryCode","businessType","businessKey","stepNo","countersignDepts","financeDept","budgetReviewComment","executiveOffice","applicantBy","applicationDept","costBearerDept","isBudget","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","attachments","countersignStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","purchaseInquiryId","purchaseInquiryCode","businessType","businessKey","stepNo","countersignDepts","financeDept","budgetReviewComment","executiveOffice","applicantBy","applicationDept","costBearerDept","isBudget","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","attachments","countersignStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useCountersignDetailI18n } from '../composables/use-countersign-detail-i18n'
+
+const countersignDetailPi = useCountersignDetailI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childCountersignDetailRows = ref<Record<string, unknown>[]>([])
 const countersignDetailTableRef = ref<{
@@ -488,91 +570,109 @@ const countersignDetailTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedCountersignDetailRow(row: Record<string, unknown>): boolean {
+  const id = row.countersignDetailId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextCountersignDetailLineNumber(): number {
+  const rows = countersignDetailTableRef.value?.getRows?.() ?? childCountersignDetailRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 countersignDetail 可编辑列 */
 const countersignDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.countersigndetail.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: countersignDetailPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'allocationCategory',
-    title: t('entity.countersigndetail.allocationcategory'),
-    editor: 'input',
+    title: countersignDetailPi.label('allocationCategory'),
     width: 140,
   },
   {
     key: 'accountTitle',
-    title: t('entity.countersigndetail.accounttitle'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.countersigndetail.accounttitle') }),
+    title: countersignDetailPi.label('accountTitle'),
+    width: 140,
   },
   {
     key: 'itemName',
-    title: t('entity.countersigndetail.itemname'),
+    title: countersignDetailPi.label('itemName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'itemDescription',
-    title: t('entity.countersigndetail.itemdescription'),
+    title: countersignDetailPi.label('itemDescription'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.countersigndetail.itemdescription') }),
-    width: 140,
+    placeholder: countersignDetailPi.ph('itemDescription'),
+    width: 180,
   },
   {
     key: 'itemQuantity',
-    title: t('entity.countersigndetail.itemquantity'),
-    editor: 'inputNumber',
+    title: countersignDetailPi.label('itemQuantity'),
     width: 140,
   },
   {
     key: 'itemAmount',
-    title: t('entity.countersigndetail.itemamount'),
-    editor: 'inputNumber',
+    title: countersignDetailPi.label('itemAmount'),
     width: 140,
   },
   {
-    key: 'extField',
-    title: t('common.page.entity.extfield'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    key: 'isObsolete',
+    title: countersignDetailPi.label('isObsolete'),
     width: 140,
-  }])
+  },
+])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<CountersignCreate & { countersignId?: string }> | null | undefined) {
-  childCountersignDetailRows.value = ((val as any)?.countersignDetails ?? []) as Record<string, unknown>[]
+  const rows_countersignDetail = ((val as any)?.countersignDetails ?? []) as Record<string, unknown>[]
+  childCountersignDetailRows.value = rows_countersignDetail
 }
 
 function createDefaultCountersignDetailRow(): Record<string, unknown> {
   return {
-    lineNumber: (childCountersignDetailRows.value.length + 1) * 10,
+    lineNumber: allocateNextCountersignDetailLineNumber(),
     allocationCategory: '',
     accountTitle: '',
     itemName: '',
     itemDescription: '',
     itemQuantity: 0,
     itemAmount: 0,
-    extField: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.countersignId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    countersignDetails: countersignDetailTableRef.value?.getRows?.() ?? childCountersignDetailRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      countersignId: masterId,
-    })),
+    countersignDetails: countersignDetailTableRef.value?.getRows?.() ?? childCountersignDetailRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        countersignId: masterId,
+      }
+      if (isUpdate && isPersistedCountersignDetailRow(row)) {
+        normalized.countersignDetailId = row.countersignDetailId
+      } else {
+        delete normalized.countersignDetailId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -594,7 +694,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  businessType: "inquiry",
+  businessType: "INQUIRY",
   countersignStatus: 0
 }
 
@@ -638,10 +738,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.countersignId
-    if (isCreate) {
+    if (!props.formData?.countersignId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -649,28 +748,21 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  countersignCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.countersign.code') }),
-      trigger: 'blur'
-    }
-  ],
   businessType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.countersign.businesstype') }),
+      message: pi.ph('businessType'),
       trigger: 'change'
     }
   ],
   stepNo: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.stepno') }))
+        return Promise.reject(pi.ph('stepNo'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.stepno') }))
+        return Promise.reject(pi.ph('stepNo'))
       }
       return Promise.resolve()
     },
@@ -679,18 +771,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   applicantBy: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.countersign.applicantby') }),
-      trigger: 'blur'
+      message: pi.ph('applicantBy'),
+      trigger: 'change'
     }
   ],
   isBudget: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.isbudget') }))
+        return Promise.reject(pi.ph('isBudget'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.isbudget') }))
+        return Promise.reject(pi.ph('isBudget'))
       }
       return Promise.resolve()
     },
@@ -699,11 +791,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   budgetAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.budgetamount') }))
+        return Promise.reject(pi.ph('budgetAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.budgetamount') }))
+        return Promise.reject(pi.ph('budgetAmount'))
       }
       return Promise.resolve()
     },
@@ -712,11 +804,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   applicationAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.applicationamount') }))
+        return Promise.reject(pi.ph('applicationAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.applicationamount') }))
+        return Promise.reject(pi.ph('applicationAmount'))
       }
       return Promise.resolve()
     },
@@ -725,11 +817,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   countersignStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.status') }))
+        return Promise.reject(pi.ph('countersignStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.status') }))
+        return Promise.reject(pi.ph('countersignStatus'))
       }
       return Promise.resolve()
     },
@@ -749,25 +841,63 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('stepNo' in payload) {
     const rawstepNo = payload.stepNo
-    payload.stepNo = typeof rawstepNo === 'number' ? rawstepNo : Number(rawstepNo)
+    if (rawstepNo === undefined || rawstepNo === null || rawstepNo === '') {
+      delete payload.stepNo
+    } else {
+      const numstepNo = typeof rawstepNo === 'number' ? rawstepNo : Number(rawstepNo)
+      if (Number.isFinite(numstepNo)) payload.stepNo = numstepNo
+      else delete payload.stepNo
+    }
   }
   if ('isBudget' in payload) {
     const rawisBudget = payload.isBudget
-    payload.isBudget = typeof rawisBudget === 'number' ? rawisBudget : Number(rawisBudget)
+    if (rawisBudget === undefined || rawisBudget === null || rawisBudget === '') {
+      delete payload.isBudget
+    } else {
+      const numisBudget = typeof rawisBudget === 'number' ? rawisBudget : Number(rawisBudget)
+      if (Number.isFinite(numisBudget)) payload.isBudget = numisBudget
+      else delete payload.isBudget
+    }
   }
   if ('budgetAmount' in payload) {
     const rawbudgetAmount = payload.budgetAmount
-    payload.budgetAmount = typeof rawbudgetAmount === 'number' ? rawbudgetAmount : Number(rawbudgetAmount)
+    if (rawbudgetAmount === undefined || rawbudgetAmount === null || rawbudgetAmount === '') {
+      delete payload.budgetAmount
+    } else {
+      const numbudgetAmount = typeof rawbudgetAmount === 'number' ? rawbudgetAmount : Number(rawbudgetAmount)
+      if (Number.isFinite(numbudgetAmount)) payload.budgetAmount = numbudgetAmount
+      else delete payload.budgetAmount
+    }
   }
   if ('applicationAmount' in payload) {
     const rawapplicationAmount = payload.applicationAmount
-    payload.applicationAmount = typeof rawapplicationAmount === 'number' ? rawapplicationAmount : Number(rawapplicationAmount)
+    if (rawapplicationAmount === undefined || rawapplicationAmount === null || rawapplicationAmount === '') {
+      delete payload.applicationAmount
+    } else {
+      const numapplicationAmount = typeof rawapplicationAmount === 'number' ? rawapplicationAmount : Number(rawapplicationAmount)
+      if (Number.isFinite(numapplicationAmount)) payload.applicationAmount = numapplicationAmount
+      else delete payload.applicationAmount
+    }
   }
   if ('countersignStatus' in payload) {
     const rawcountersignStatus = payload.countersignStatus
-    payload.countersignStatus = typeof rawcountersignStatus === 'number' ? rawcountersignStatus : Number(rawcountersignStatus)
+    if (rawcountersignStatus === undefined || rawcountersignStatus === null || rawcountersignStatus === '') {
+      delete payload.countersignStatus
+    } else {
+      const numcountersignStatus = typeof rawcountersignStatus === 'number' ? rawcountersignStatus : Number(rawcountersignStatus)
+      if (Number.isFinite(numcountersignStatus)) payload.countersignStatus = numcountersignStatus
+      else delete payload.countersignStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.countersignId) {
+    payload.countersignId = props.formData.countersignId
+  }
   return payload
 }
 

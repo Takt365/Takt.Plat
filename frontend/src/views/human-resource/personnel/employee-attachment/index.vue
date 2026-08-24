@@ -2,29 +2,49 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-attachment -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：员工档案附件管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：员工实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="p-4">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="human:resource:personnel:employee:attachment:create"
-      update-permission="human:resource:personnel:employee:attachment:update"
-      delete-permission="human:resource:personnel:employee:attachment:delete"
-      import-permission="human:resource:personnel:employee:attachment:import"
-      export-permission="human:resource:personnel:employee:attachment:export"
+  <div class="p-4 flex flex-col min-h-0 h-full">
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getEmployeeId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="employeeId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="human:resource:personnel:employee:create"
+      update-permission="human:resource:personnel:employee:update"
+      delete-permission="human:resource:personnel:employee:delete"
+      import-permission="human:resource:personnel:employee:import"
+      export-permission="human:resource:personnel:employee:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -50,49 +70,73 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 表格 -->
-    <TaktSingleTable
-      entity-scope="company"
-      :columns="columns"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'employeeAttachmentId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getEmployeeAttachmentId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
-    >
-
-    </TaktSingleTable>
-
-    <!-- 分页（服务端分页，外置 TaktPagination） -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'gender'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'gender')"
+            dict-type="sys_user_gender_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'nativePlace'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'nativePlace')"
+            dict-type="hr_native_place_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'ethnicity'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'ethnicity')"
+            dict-type="hr_ethnic_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'politicalAffiliation'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'politicalAffiliation')"
+            dict-type="hr_political_affiliation"
+          />
+        </template>
+        <template v-else-if="column.key === 'maritalStatus'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'maritalStatus')"
+            dict-type="hr_marital_status"
+          />
+        </template>
+        <template v-else-if="column.key === 'employeeStatus'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'employeeStatus')"
+            dict-type="hr_employee_status"
+          />
+        </template>
+        <template v-else-if="column.key === 'isBuiltIn'">
+          <TaktDictTag
+            :value="getEmployeeDictValue(record, 'isBuiltIn')"
+            dict-type="sys_yes_no"
+          />
+        </template>
+      </template>
+      <template #detail>
+        <EmployeeAttachmentPanel
+          ref="employeeAttachmentPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <EmployeeAttachmentForm
-        :key="formData?.employeeAttachmentId ?? 'create'"
+      <EmployeeForm
+        :key="formData?.employeeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,44 +153,187 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeattachment.employeeid')">
-        <a-input
-          v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeattachment.employeeid') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachmentName')">
-      <a-form-item :label="t('entity.employeeattachment.attachmentname')">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeCode')">
+      <a-form-item :label="pi.queryLabel('employeeCode')">
         <a-input
-          v-model:value="advancedQueryForm.attachmentName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeattachment.attachmentname') })"
+          v-model:value="advancedQueryForm.employeeCode"
+          :placeholder="pi.queryPh('employeeCode', 'required')"
+          show-count
+          :maxlength="6"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeName')">
+      <a-form-item :label="pi.queryLabel('employeeName')">
+        <a-input
+          v-model:value="advancedQueryForm.employeeName"
+          :placeholder="pi.queryPh('employeeName', 'required')"
+          show-count
+          :maxlength="80"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('gender')">
+      <a-form-item :label="pi.queryLabel('gender')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.gender"
+          dict-type="sys_user_gender_category"
+          :placeholder="pi.queryPh('gender', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('birthDateStart')">
+      <a-form-item :label="pi.queryLabel('birthDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.birthDateStart"
+          :placeholder="pi.queryPh('birthDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('birthDateEnd')">
+      <a-form-item :label="pi.queryLabel('birthDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.birthDateEnd"
+          :placeholder="pi.queryPh('birthDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('idCardCode')">
+      <a-form-item :label="pi.queryLabel('idCardCode')">
+        <a-input
+          v-model:value="advancedQueryForm.idCardCode"
+          :placeholder="pi.queryPh('idCardCode', 'required')"
+          show-count
+          :maxlength="18"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('mobile')">
+      <a-form-item :label="pi.queryLabel('mobile')">
+        <a-input
+          v-model:value="advancedQueryForm.mobile"
+          :placeholder="pi.queryPh('mobile', 'required')"
+          show-count
+          :maxlength="11"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('email')">
+      <a-form-item :label="pi.queryLabel('email')">
+        <a-input
+          v-model:value="advancedQueryForm.email"
+          :placeholder="pi.queryPh('email', 'required')"
           show-count
           :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('accessUrl')">
-      <a-form-item :label="t('entity.employeeattachment.accessurl')">
+      <div v-show="isFieldVisible('nativePlace')">
+      <a-form-item :label="pi.queryLabel('nativePlace')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.nativePlace"
+          dict-type="hr_native_place_code"
+          :placeholder="pi.queryPh('nativePlace', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ethnicity')">
+      <a-form-item :label="pi.queryLabel('ethnicity')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.ethnicity"
+          dict-type="hr_ethnic_code"
+          :placeholder="pi.queryPh('ethnicity', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('politicalAffiliation')">
+      <a-form-item :label="pi.queryLabel('politicalAffiliation')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.politicalAffiliation"
+          dict-type="hr_political_affiliation"
+          :placeholder="pi.queryPh('politicalAffiliation', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maritalStatus')">
+      <a-form-item :label="pi.queryLabel('maritalStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.maritalStatus"
+          dict-type="hr_marital_status"
+          :placeholder="pi.queryPh('maritalStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeStatus')">
+      <a-form-item :label="pi.queryLabel('employeeStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.employeeStatus"
+          dict-type="hr_employee_status"
+          :placeholder="pi.queryPh('employeeStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isBuiltIn')">
+      <a-form-item :label="pi.queryLabel('isBuiltIn')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isBuiltIn"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isBuiltIn', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('avatar')">
+      <a-form-item :label="pi.queryLabel('avatar')">
         <a-input
-          v-model:value="advancedQueryForm.accessUrl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeattachment.accessurl') })"
+          v-model:value="advancedQueryForm.avatar"
+          :placeholder="pi.queryPh('avatar', 'required')"
           show-count
-          :maxlength="1000"
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -154,10 +341,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -179,7 +366,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -193,10 +380,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -210,14 +397,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeattachment._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeattachment._self"
+        v-if="importVisible"
+        :entity-i18n-key="EMPLOYEE_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -233,10 +421,10 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'employeeAttachmentId'"
+      :id-column-key="'employeeId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -245,7 +433,7 @@
 
 <script setup lang="ts">
 /**
- * 员工档案附件管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 员工实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-attachment
  */
 import { ref, computed, onMounted } from 'vue'
@@ -254,20 +442,35 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import EmployeeAttachmentForm from './components/employee-attachment-form.vue'
-import { getEmployeeAttachmentList, getEmployeeAttachmentById, createEmployeeAttachment, updateEmployeeAttachment, deleteEmployeeAttachmentById, deleteEmployeeAttachmentBatch, getEmployeeAttachmentTemplate, importEmployeeAttachment, exportEmployeeAttachment } from '@/api/human-resource/personnel/employee-attachment'
-import type { EmployeeAttachment, EmployeeAttachmentQuery } from '@/types/human-resource/personnel/employee-attachment'
+import EmployeeForm from './components/employee-form.vue'
+import EmployeeAttachmentPanel from './components/employee-attachment-panel.vue'
+import { provideEmployeeMasterContext, type EmployeeRowRecord } from './composables/use-employee-master-context'
+import { getEmployeeList, getEmployeeById, createEmployee, updateEmployee, deleteEmployeeById, deleteEmployeeBatch, getEmployeeTemplate, importEmployee, exportEmployee, updateEmployeeStatus } from '@/api/human-resource/personnel/employee'
+import type { Employee, EmployeeQuery } from '@/types/human-resource/personnel/employee'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useEmployeeI18n,
+  EMPLOYEE_LIST_FIELDS,
+  EMPLOYEE_QUERY_STRING_FIELDS,
+  EMPLOYEE_QUERY_FIELDS,
+  EMPLOYEE_SELF_I18N_KEY,
+} from './composables/use-employee-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useEmployeeI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktEmployeeAttachment')
+const excelNames = taktExcelEntityNames('TaktEmployee')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeattachment._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -275,7 +478,7 @@ const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
 /** 分页列表数据 */
-const dataSource = ref<EmployeeAttachment[]>([])
+const dataSource = ref<Employee[]>([])
 /** 当前页码 */
 const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
@@ -283,9 +486,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<EmployeeAttachment | null>(null)
+const selectedRow = ref<EmployeeRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<EmployeeAttachment[]>([])
+const selectedRows = ref<EmployeeRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -294,7 +497,7 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeAttachment> | null>(null)
+const formData = ref<Partial<Employee> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
@@ -302,25 +505,66 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of EMPLOYEE_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.gender !== undefined && form.gender !== null) {
+    return true
+  }
+  if (form.ethnicity !== undefined && form.ethnicity !== null) {
+    return true
+  }
+  if (form.politicalAffiliation !== undefined && form.politicalAffiliation !== null) {
+    return true
+  }
+  if (form.maritalStatus !== undefined && form.maritalStatus !== null) {
+    return true
+  }
+  if (form.employeeStatus !== undefined && form.employeeStatus !== null) {
+    return true
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(EMPLOYEE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof EMPLOYEE_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    gender: undefined as number | undefined,
+    ethnicity: undefined as number | undefined,
+    politicalAffiliation: undefined as number | undefined,
+    maritalStatus: undefined as number | undefined,
+    employeeStatus: undefined as number | undefined,
+    isBuiltIn: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  employeeId: '',
-  attachmentName: '',
-  accessUrl: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.employeeattachment.employeeid') },
-  { key: 'attachmentName', label: t('entity.employeeattachment.attachmentname') },
-  { key: 'accessUrl', label: t('entity.employeeattachment.accessurl') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  EMPLOYEE_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -330,21 +574,27 @@ const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
-const entityIdName = 'employeeAttachmentId'
+const entityIdName = 'employeeId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideEmployeeMasterContext()
+const employeeAttachmentPanelRef = ref<InstanceType<typeof EmployeeAttachmentPanel> | null>(null)
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
- * @returns {EmployeeAttachmentQuery} 查询 DTO
+ * @returns {EmployeeQuery} 查询 DTO
  */
-function buildListQuery(overrides?: Partial<EmployeeAttachmentQuery>): EmployeeAttachmentQuery {
+function buildListQuery(overrides?: Partial<EmployeeQuery>): EmployeeQuery {
   const form = advancedQueryForm.value
   const kw = (queryKeyword.value ?? '').trim()
-  const query: EmployeeAttachmentQuery = {
+  const query: EmployeeQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
     ...overrides,
@@ -352,65 +602,223 @@ function buildListQuery(overrides?: Partial<EmployeeAttachmentQuery>): EmployeeA
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: keyof EmployeeAttachmentQuery, value: string | undefined) => {
+  const assignTrimmed = (key: keyof EmployeeQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
       query[key] = v as never
     }
   }
-  assignTrimmed('employeeId', form.employeeId)
-  assignTrimmed('attachmentName', form.attachmentName)
-  assignTrimmed('accessUrl', form.accessUrl)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  for (const key of EMPLOYEE_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
+  if (form.gender !== undefined && form.gender !== null) {
+    query.gender = form.gender
+  }
+  if (form.ethnicity !== undefined && form.ethnicity !== null) {
+    query.ethnicity = form.ethnicity
+  }
+  if (form.politicalAffiliation !== undefined && form.politicalAffiliation !== null) {
+    query.politicalAffiliation = form.politicalAffiliation
+  }
+  if (form.maritalStatus !== undefined && form.maritalStatus !== null) {
+    query.maritalStatus = form.maritalStatus
+  }
+  if (form.employeeStatus !== undefined && form.employeeStatus !== null) {
+    query.employeeStatus = form.employeeStatus
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    query.isBuiltIn = form.isBuiltIn
+  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
+
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: EmployeeRowRecord | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getEmployeeId(record) : ''
+}
+
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as EmployeeRowRecord
+  const key = getEmployeeId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
+}
+
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
+
+/** 加载主表详情并回填当前页 dataSource */
+async function loadEmployeeDetail(record: EmployeeRowRecord): Promise<Employee | null> {
+  const id = getEmployeeId(record)
+  if (!id) {
+    return null
+  }
+  try {
+    const detail = await getEmployeeById(id)
+    const index = dataSource.value.findIndex((row) => getEmployeeId(row) === id)
+    if (index !== -1) {
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Employee
+    }
+    return detail
+  } catch (error: any) {
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    return null
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'employeeAttachmentId',
-    key: 'employeeAttachmentId',
+    dataIndex: 'employeeId',
+    key: 'employeeId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEmployeeAttachmentField(record, 'employeeAttachmentId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeattachment.employeeid'),
-    dataIndex: 'employeeId',
-    key: 'employeeId',
+    title: pi.label('employeeCode'),
+    dataIndex: 'employeeCode',
+    key: 'employeeCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeAttachmentField(record, 'employeeId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'employeeCode') ?? ''
   },
   {
-    title: t('entity.employeeattachment.attachmentname'),
-    dataIndex: 'attachmentName',
-    key: 'attachmentName',
-    width: 160,
+    title: pi.label('employeeName'),
+    dataIndex: 'employeeName',
+    key: 'employeeName',
+    width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeAttachmentField(record, 'attachmentName') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'employeeName') ?? ''
   },
   {
-    title: t('entity.employeeattachment.accessurl'),
-    dataIndex: 'accessUrl',
-    key: 'accessUrl',
-    width: 240,
+    title: pi.label('gender'),
+    dataIndex: 'gender',
+    key: 'gender',
+    width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeAttachmentField(record, 'accessUrl') ?? ''
+  },
+  {
+    title: pi.label('birthDate'),
+    dataIndex: 'birthDate',
+    key: 'birthDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'birthDate') ?? ''
+  },
+  {
+    title: pi.label('idCardCode'),
+    dataIndex: 'idCardCode',
+    key: 'idCardCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'idCardCode') ?? ''
+  },
+  {
+    title: pi.label('mobile'),
+    dataIndex: 'mobile',
+    key: 'mobile',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'mobile') ?? ''
+  },
+  {
+    title: pi.label('email'),
+    dataIndex: 'email',
+    key: 'email',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'email') ?? ''
+  },
+  {
+    title: pi.label('nativePlace'),
+    dataIndex: 'nativePlace',
+    key: 'nativePlace',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('ethnicity'),
+    dataIndex: 'ethnicity',
+    key: 'ethnicity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('politicalAffiliation'),
+    dataIndex: 'politicalAffiliation',
+    key: 'politicalAffiliation',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('maritalStatus'),
+    dataIndex: 'maritalStatus',
+    key: 'maritalStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('employeeStatus'),
+    dataIndex: 'employeeStatus',
+    key: 'employeeStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('isBuiltIn'),
+    dataIndex: 'isBuiltIn',
+    key: 'isBuiltIn',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('avatar'),
+    dataIndex: 'avatar',
+    key: 'avatar',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'avatar') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -419,77 +827,91 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:attachment:update',
-        onClick: (record: EmployeeAttachment) => handleEdit(record)
+        permission: 'human:resource:personnel:employee:update',
+        onClick: (record: EmployeeRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:attachment:delete',
-        onClick: (record: EmployeeAttachment) => handleDeleteOne(record)
+        permission: 'human:resource:personnel:employee:delete',
+        onClick: (record: EmployeeRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getEmployeeAttachmentId = (record: any): string => record?.[entityIdName] ?? ''
+const getEmployeeId = (record: EmployeeRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
-const getEmployeeAttachmentField = (record: any, field: string): any => record?.[field]
+const getEmployeeField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getEmployeeDictValue = (
+  record: EmployeeRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: EmployeeAttachment[]) => {
+  onChange: (keys: (string | number)[], rows: EmployeeRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
-  onSelect: (record: EmployeeAttachment, selected: boolean) => {
+  onSelect: (record: EmployeeRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (selectedRow.value && getEmployeeAttachmentId(selectedRow.value) === getEmployeeAttachmentId(record)) {
+      syncMasterSelection(record)
+    } else if (selectedRow.value && getEmployeeId(selectedRow.value) === getEmployeeId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: EmployeeAttachment[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EmployeeRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: EmployeeAttachment) => ({
-  onClick: () => {
-    const key = getEmployeeAttachmentId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getEmployeeAttachmentId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const res = await getEmployeeAttachmentList(buildListQuery())
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
+    const res = await getEmployeeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[EmployeeAttachment] 加载数据失败', { error })
+    logger.error('[Employee] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -511,9 +933,23 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  employeeId: '',
-  attachmentName: '',
-  accessUrl: '',
+  cultureCode: '',
+  plantCode: '',
+  employeeCode: '',
+  employeeName: '',
+  gender: undefined as number | undefined,
+  birthDateStart: '',
+  birthDateEnd: '',
+  idCardCode: '',
+  mobile: '',
+  email: '',
+  nativePlace: '',
+  ethnicity: undefined as number | undefined,
+  politicalAffiliation: undefined as number | undefined,
+  maritalStatus: undefined as number | undefined,
+  employeeStatus: undefined as number | undefined,
+  isBuiltIn: undefined as number | undefined,
+  avatar: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -525,24 +961,30 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeattachment._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: EmployeeAttachment) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeattachment._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
+async function handleEdit(record: EmployeeRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await loadEmployeeDetail(record)
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeattachment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -559,15 +1001,18 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateEmployeeAttachment(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeattachment._self') }))
+      await updateEmployee(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
-      await createEmployeeAttachment(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeattachment._self') }))
+      await createEmployee(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  employeeAttachmentPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -587,19 +1032,26 @@ function handleImport() {
 
 /** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getEmployeeAttachmentTemplate(sheetName, fileName)
+  const res = await getEmployeeTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEmployeeAttachment(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEmployee(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    employeeAttachmentPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -610,7 +1062,10 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const exportMeta = await exportEmployeeAttachment(
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
+    const exportMeta = await exportEmployee(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
       excelNames.fileBase
@@ -633,24 +1088,28 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeattachment._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
-    logger.error('[EmployeeAttachment] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeattachment._self') }))
+    logger.error('[Employee] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: EmployeeAttachment) {
+async function handleDeleteOne(record: EmployeeRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeattachment._self'), name: t('common.tip.this.target', { target: t('entity.employeeattachment._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteEmployeeAttachmentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeattachment._self') }))
+      await deleteEmployeeById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -658,18 +1117,22 @@ async function handleDeleteOne(record: EmployeeAttachment) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeattachment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeattachment._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteEmployeeAttachmentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeattachment._self') }))
+      await deleteEmployeeBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -688,9 +1151,23 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  employeeId: '',
-  attachmentName: '',
-  accessUrl: '',
+  cultureCode: '',
+  plantCode: '',
+  employeeCode: '',
+  employeeName: '',
+  gender: undefined as number | undefined,
+  birthDateStart: '',
+  birthDateEnd: '',
+  idCardCode: '',
+  mobile: '',
+  email: '',
+  nativePlace: '',
+  ethnicity: undefined as number | undefined,
+  politicalAffiliation: undefined as number | undefined,
+  maritalStatus: undefined as number | undefined,
+  employeeStatus: undefined as number | undefined,
+  isBuiltIn: undefined as number | undefined,
+  avatar: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -722,17 +1199,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number, size: number) {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-/** 分页每页条数变更（重置到第 1 页） */
-function handlePaginationSizeChange(_current: number, size: number) {
-  currentPage.value = getTaktDefaultPageIndex()
-  pageSize.value = size
-  loadData()
-}
 </script>

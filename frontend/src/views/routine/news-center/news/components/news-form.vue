@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/news-center/news/components -->
 <!-- 文件名称：news-form.vue -->
-<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form news-form flex flex-col min-h-0"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,58 +22,83 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.code')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.form.numberingRule')"
+                name="numberingRuleCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.numberingRuleCode"
+                  api-url="TaktNumberings/options"
+                  :api-params="{ documentType: '新闻' }"
+                  :placeholder="t('common.page.form.placeholder.selectonly')"
+                  :disabled="!!formData?.newsId || loading"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('newsCode')"
                 name="newsCode"
               >
                 <a-input
                   v-model:value="formState.newsCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.code') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.newsId"
+                  :placeholder="t('common.page.form.numberingCodePreview')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.category')"
+                :label="pi.label('newsCategory')"
                 name="newsCategory"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.newsCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.category') })"
-                  style="width: 100%"
+                  dict-type="sys_news_type"
+                  :placeholder="pi.ph('newsCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.title')"
+                :label="pi.label('newsTitle')"
                 name="newsTitle"
               >
                 <a-input
                   v-model:value="formState.newsTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.title') })"
+                  :placeholder="pi.ph('newsTitle')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -82,12 +107,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.summary')"
+                :label="pi.label('newsSummary')"
                 name="newsSummary"
               >
                 <a-input
                   v-model:value="formState.newsSummary"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.summary') })"
+                  :placeholder="pi.ph('newsSummary')"
                   show-count
                   :maxlength="2000"
                   allow-clear
@@ -96,12 +121,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.tags')"
-                name="tags"
+                :label="pi.label('newsTags')"
+                name="newsTags"
               >
                 <a-input
-                  v-model:value="formState.tags"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.tags') })"
+                  v-model:value="formState.newsTags"
+                  :placeholder="pi.ph('newsTags')"
                   show-count
                   :maxlength="500"
                   allow-clear
@@ -110,27 +135,38 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.news.content')"
+                :label="pi.label('newsContent')"
                 name="newsContent"
               >
-                <a-textarea
+                <takt-rich-editor
                   v-model:value="formState.newsContent"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.news.content') })"
-                  :rows="2"
+                  :placeholder="pi.ph('newsContent')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.coverimage')"
+                :label="pi.label('newsCoverImage')"
                 name="newsCoverImage"
               >
                 <a-input
                   v-model:value="formState.newsCoverImage"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.coverimage') })"
+                  :placeholder="pi.ph('newsCoverImage')"
                   show-count
                   :maxlength="500"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('newsIsTop')"
+                name="newsIsTop"
+              >
+                <TaktSelect
+                  v-model:value="formState.newsIsTop"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('newsIsTop')"
                 />
               </a-form-item>
             </a-col>
@@ -139,43 +175,31 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.istop')"
-                name="isTop"
+                :label="pi.label('newsIsRecommended')"
+                name="newsIsRecommended"
               >
-                <a-input-number
-                  v-model:value="formState.isTop"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.istop') })"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.newsIsRecommended"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('newsIsRecommended')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.isrecommended')"
-                name="isRecommended"
-              >
-                <a-input-number
-                  v-model:value="formState.isRecommended"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.isrecommended') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.news.effectivetime')"
-                name="effectiveTime"
+                :label="pi.label('newsEffectiveTime')"
+                name="newsEffectiveTime"
               >
                 <a-date-picker
-                  v-model:value="formState.effectiveTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.effectivetime') })"
+                  v-model:value="formState.newsEffectiveTime"
+                  :placeholder="pi.ph('newsEffectiveTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -183,12 +207,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.expiretime')"
-                name="expireTime"
+                :label="pi.label('newsExpireTime')"
+                name="newsExpireTime"
               >
                 <a-date-picker
-                  v-model:value="formState.expireTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.expiretime') })"
+                  v-model:value="formState.newsExpireTime"
+                  :placeholder="pi.ph('newsExpireTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -196,73 +220,85 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.readcount')"
-                name="readCount"
+                :label="pi.label('newsReadCount')"
+                name="newsReadCount"
               >
                 <a-input-number
-                  v-model:value="formState.readCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.readcount') })"
+                  v-model:value="formState.newsReadCount"
+                  :placeholder="pi.ph('newsReadCount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.likecount')"
-                name="likeCount"
+                :label="pi.label('newsLikeCount')"
+                name="newsLikeCount"
               >
                 <a-input-number
-                  v-model:value="formState.likeCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.likecount') })"
+                  v-model:value="formState.newsLikeCount"
+                  :placeholder="pi.ph('newsLikeCount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.commentcount')"
-                name="commentCount"
+                :label="pi.label('newsCommentCount')"
+                name="newsCommentCount"
               >
                 <a-input-number
-                  v-model:value="formState.commentCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.commentcount') })"
+                  v-model:value="formState.newsCommentCount"
+                  :placeholder="pi.ph('newsCommentCount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.favoritecount')"
-                name="favoriteCount"
+                :label="pi.label('newsFavoriteCount')"
+                name="newsFavoriteCount"
               >
                 <a-input-number
-                  v-model:value="formState.favoriteCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.favoritecount') })"
+                  v-model:value="formState.newsFavoriteCount"
+                  :placeholder="pi.ph('newsFavoriteCount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.sharecount')"
-                name="shareCount"
+                :label="pi.label('newsShareCount')"
+                name="newsShareCount"
               >
                 <a-input-number
-                  v-model:value="formState.shareCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.sharecount') })"
+                  v-model:value="formState.newsShareCount"
+                  :placeholder="pi.ph('newsShareCount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.news.attachmentcount')"
-                name="attachmentCount"
+                :label="pi.label('newsAttachmentCount')"
+                name="newsAttachmentCount"
               >
                 <a-input-number
-                  v-model:value="formState.attachmentCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.attachmentcount') })"
+                  v-model:value="formState.newsAttachmentCount"
+                  :placeholder="pi.ph('newsAttachmentCount')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('deptId')"
+                name="deptId"
+              >
+                <TaktSelect
+                  v-model:value="formState.deptId"
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('deptId')"
                 />
               </a-form-item>
             </a-col>
@@ -271,75 +307,59 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.news.deptid')"
-                name="deptId"
-              >
-                <a-input
-                  v-model:value="formState.deptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.news.deptname')"
+                :label="pi.label('deptName')"
                 name="deptName"
               >
                 <a-input
                   v-model:value="formState.deptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptname') })"
+                  :placeholder="pi.ph('deptName')"
                   show-count
                   :maxlength="100"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.news.publisherid')"
+                :label="pi.label('publisherId')"
                 name="publisherId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.publisherId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publisherid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktUsers/options"
+                  :placeholder="pi.ph('publisherId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.news.publishername')"
+                :label="pi.label('publisherName')"
                 name="publisherName"
               >
                 <a-input
                   v-model:value="formState.publisherName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publishername') })"
+                  :placeholder="pi.ph('publisherName')"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.news.publishtime')"
-                name="publishTime"
+                :label="pi.label('newsPublishTime')"
+                name="newsPublishTime"
               >
                 <a-date-picker
-                  v-model:value="formState.publishTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.publishtime') })"
+                  v-model:value="formState.newsPublishTime"
+                  :placeholder="pi.ph('newsPublishTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -347,13 +367,90 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.news.status')"
+                :label="pi.label('targetScope')"
+                name="targetScope"
+              >
+                <TaktSelect
+                  v-model:value="formState.targetScope"
+                  dict-type="sys_publish_scope"
+                  :placeholder="pi.ph('targetScope')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('targetDepartments')"
+                name="targetDepartments"
+              >
+                <a-input
+                  v-model:value="formState.targetDepartments"
+                  :placeholder="pi.ph('targetDepartments')"
+                  show-count
+                  :maxlength="1000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('targetUsers')"
+                name="targetUsers"
+              >
+                <a-input
+                  v-model:value="formState.targetUsers"
+                  :placeholder="pi.ph('targetUsers')"
+                  show-count
+                  :maxlength="2000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('newsStatus')"
                 name="newsStatus"
               >
                 <TaktSelect
                   v-model:value="formState.newsStatus"
                   dict-type="sys_publish_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.status') })"
+                  :placeholder="pi.ph('newsStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -370,7 +467,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -385,12 +482,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -402,167 +499,64 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <!-- 下：子表 attachments -->
-    <TaktEditableTable
-      ref="newsAttachmentTableRef"
-      v-model="childNewsAttachmentRows"
-      :columns="newsAttachmentFormColumns"
-      :title="t('entity.newsattachment._self')"
-      :add-button-entity="t('entity.newsattachment._self')"
-      id-field="newsAttachmentId"
-      :default-row="createDefaultNewsAttachmentRow"
-      :disabled="loading"
-      section-border
-    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 新闻中心主实体 支持分类、置顶、推荐、社交统计维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 新闻中心主实体 支持分类、置顶、推荐、社交统计维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/news-center/news/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useNewsI18n } from '../composables/use-news-i18n'
+
+/** 实体字段 i18n */
+const pi = useNewsI18n()
 import type { NewsCreate } from '@/types/routine/news-center/news'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useTaktFormNumbering } from '@/composables/use-takt-form-numbering'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","newsCode","newsCategory","newsTitle","newsSummary","tags","newsContent","newsCoverImage","isTop","isRecommended","effectiveTime","expireTime","readCount","likeCount","commentCount","favoriteCount","shareCount","attachmentCount","deptId","deptName","publisherId","publisherName","publishTime","newsStatus","extField","remark"]
 
-import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-
-const childNewsAttachmentRows = ref<Record<string, unknown>[]>([])
-const newsAttachmentTableRef = ref<{
-  getRows: () => Record<string, unknown>[]
-  validate: () => Promise<unknown>
-  resetRows: () => void
-} | null>(null)
-
-/** 子表 newsAttachment 可编辑列 */
-const newsAttachmentFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'fileId',
-    title: t('entity.newsattachment.fileid'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'fileName',
-    title: t('entity.newsattachment.filename'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'filePath',
-    title: t('entity.newsattachment.filepath'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'fileSize',
-    title: t('entity.newsattachment.filesize'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'fileType',
-    title: t('entity.newsattachment.filetype'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.newsattachment.filetype') }),
-  },
-  {
-    key: 'fileExtension',
-    title: t('entity.newsattachment.fileextension'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.newsattachment.fileextension') }),
-  },
-  {
-    key: 'extField',
-    title: t('common.page.entity.extfield'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
-    width: 140,
-  },
-  {
-    key: 'remark',
-    title: t('common.page.entity.remark'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
-    width: 140,
-  }])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<NewsCreate & { newsId?: string }> | null | undefined) {
-  childNewsAttachmentRows.value = ((val as any)?.attachments ?? []) as Record<string, unknown>[]
-}
-
-function createDefaultNewsAttachmentRow(): Record<string, unknown> {
-  return {
-    fileId: '',
-    fileName: '',
-    filePath: '',
-    fileSize: '',
-    fileType: '',
-    fileExtension: '',
-    extField: '',
-    remark: '',
-  }
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  const masterId = props.formData?.newsId ?? ''
-  return {
-    ...formState,
-    attachments: newsAttachmentTableRef.value?.getRows?.() ?? childNewsAttachmentRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      newsId: masterId,
-    })),
-  }
-}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -582,7 +576,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  newsStatus: 0
+  newsStatus: 0,
+  targetScope: 0,
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -605,10 +600,9 @@ watch(
     if (val?.newsId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).attachments
+
       applyScopeDefaults(next)
       Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -625,32 +619,57 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.newsId
-    if (isCreate) {
+    if (!props.formData?.newsId) {
       applyScopeDefaults(formState, true)
     }
   },
 )
 
+/** 是否编辑态 */
+const isEditMode = computed(() => !!props.formData?.newsId)
+
+useTaktFormNumbering({
+  formState,
+  isEdit: isEditMode,
+  businessCodeField: 'newsCode',
+})
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  newsCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.news.code') }),
-      trigger: 'blur'
-    }
-  ],
+  numberingRuleCode: [{
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingRuleRequired'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],
+  newsCode: [{
+    validator: async (_rule, value) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingCodePreview'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],
   newsCategory: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.category') }))
+        return Promise.reject(pi.ph('newsCategory'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.category') }))
+        return Promise.reject(pi.ph('newsCategory'))
       }
       return Promise.resolve()
     },
@@ -659,116 +678,116 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   newsTitle: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.news.title') }),
+      message: pi.ph('newsTitle'),
       trigger: 'blur'
     }
   ],
   newsContent: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.news.content') }),
+      message: pi.ph('newsContent'),
       trigger: 'blur'
     }
   ],
-  isTop: [{
+  newsIsTop: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.istop') }))
+        return Promise.reject(pi.ph('newsIsTop'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.istop') }))
+        return Promise.reject(pi.ph('newsIsTop'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  isRecommended: [{
+  newsIsRecommended: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.isrecommended') }))
+        return Promise.reject(pi.ph('newsIsRecommended'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.isrecommended') }))
+        return Promise.reject(pi.ph('newsIsRecommended'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  readCount: [{
+  newsReadCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.readcount') }))
+        return Promise.reject(pi.ph('newsReadCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.readcount') }))
+        return Promise.reject(pi.ph('newsReadCount'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  likeCount: [{
+  newsLikeCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.likecount') }))
+        return Promise.reject(pi.ph('newsLikeCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.likecount') }))
+        return Promise.reject(pi.ph('newsLikeCount'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  commentCount: [{
+  newsCommentCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.commentcount') }))
+        return Promise.reject(pi.ph('newsCommentCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.commentcount') }))
+        return Promise.reject(pi.ph('newsCommentCount'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  favoriteCount: [{
+  newsFavoriteCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.favoritecount') }))
+        return Promise.reject(pi.ph('newsFavoriteCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.favoritecount') }))
+        return Promise.reject(pi.ph('newsFavoriteCount'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  shareCount: [{
+  newsShareCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.sharecount') }))
+        return Promise.reject(pi.ph('newsShareCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.sharecount') }))
+        return Promise.reject(pi.ph('newsShareCount'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  attachmentCount: [{
+  newsAttachmentCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.attachmentcount') }))
+        return Promise.reject(pi.ph('newsAttachmentCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.attachmentcount') }))
+        return Promise.reject(pi.ph('newsAttachmentCount'))
       }
       return Promise.resolve()
     },
@@ -777,25 +796,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   publisherId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.news.publisherid') }),
-      trigger: 'blur'
+      message: pi.ph('publisherId'),
+      trigger: 'change'
     }
   ],
-  publisherName: [
+  targetScope: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.news.publishername') }),
-      trigger: 'blur'
-    }
+      message: pi.ph('targetScope'),
+      trigger: 'change',
+    },
   ],
   newsStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.status') }))
+        return Promise.reject(pi.ph('newsStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.status') }))
+        return Promise.reject(pi.ph('newsStatus'))
       }
       return Promise.resolve()
     },
@@ -806,54 +825,132 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
-  await newsAttachmentTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = buildSubmitPayload() as Record<string, unknown>
+  const payload = { ...formState }
   if ('newsCategory' in payload) {
     const rawnewsCategory = payload.newsCategory
-    payload.newsCategory = typeof rawnewsCategory === 'number' ? rawnewsCategory : Number(rawnewsCategory)
+    if (rawnewsCategory === undefined || rawnewsCategory === null || rawnewsCategory === '') {
+      delete payload.newsCategory
+    } else {
+      const numnewsCategory = typeof rawnewsCategory === 'number' ? rawnewsCategory : Number(rawnewsCategory)
+      if (Number.isFinite(numnewsCategory)) payload.newsCategory = numnewsCategory
+      else delete payload.newsCategory
+    }
   }
-  if ('isTop' in payload) {
-    const rawisTop = payload.isTop
-    payload.isTop = typeof rawisTop === 'number' ? rawisTop : Number(rawisTop)
+  if ('newsIsTop' in payload) {
+    const rawnewsIsTop = payload.newsIsTop
+    if (rawnewsIsTop === undefined || rawnewsIsTop === null || rawnewsIsTop === '') {
+      delete payload.newsIsTop
+    } else {
+      const numnewsIsTop = typeof rawnewsIsTop === 'number' ? rawnewsIsTop : Number(rawnewsIsTop)
+      if (Number.isFinite(numnewsIsTop)) payload.newsIsTop = numnewsIsTop
+      else delete payload.newsIsTop
+    }
   }
-  if ('isRecommended' in payload) {
-    const rawisRecommended = payload.isRecommended
-    payload.isRecommended = typeof rawisRecommended === 'number' ? rawisRecommended : Number(rawisRecommended)
+  if ('newsIsRecommended' in payload) {
+    const rawnewsIsRecommended = payload.newsIsRecommended
+    if (rawnewsIsRecommended === undefined || rawnewsIsRecommended === null || rawnewsIsRecommended === '') {
+      delete payload.newsIsRecommended
+    } else {
+      const numnewsIsRecommended = typeof rawnewsIsRecommended === 'number' ? rawnewsIsRecommended : Number(rawnewsIsRecommended)
+      if (Number.isFinite(numnewsIsRecommended)) payload.newsIsRecommended = numnewsIsRecommended
+      else delete payload.newsIsRecommended
+    }
   }
-  if ('readCount' in payload) {
-    const rawreadCount = payload.readCount
-    payload.readCount = typeof rawreadCount === 'number' ? rawreadCount : Number(rawreadCount)
+  if ('newsReadCount' in payload) {
+    const rawnewsReadCount = payload.newsReadCount
+    if (rawnewsReadCount === undefined || rawnewsReadCount === null || rawnewsReadCount === '') {
+      delete payload.newsReadCount
+    } else {
+      const numnewsReadCount = typeof rawnewsReadCount === 'number' ? rawnewsReadCount : Number(rawnewsReadCount)
+      if (Number.isFinite(numnewsReadCount)) payload.newsReadCount = numnewsReadCount
+      else delete payload.newsReadCount
+    }
   }
-  if ('likeCount' in payload) {
-    const rawlikeCount = payload.likeCount
-    payload.likeCount = typeof rawlikeCount === 'number' ? rawlikeCount : Number(rawlikeCount)
+  if ('newsLikeCount' in payload) {
+    const rawnewsLikeCount = payload.newsLikeCount
+    if (rawnewsLikeCount === undefined || rawnewsLikeCount === null || rawnewsLikeCount === '') {
+      delete payload.newsLikeCount
+    } else {
+      const numnewsLikeCount = typeof rawnewsLikeCount === 'number' ? rawnewsLikeCount : Number(rawnewsLikeCount)
+      if (Number.isFinite(numnewsLikeCount)) payload.newsLikeCount = numnewsLikeCount
+      else delete payload.newsLikeCount
+    }
   }
-  if ('commentCount' in payload) {
-    const rawcommentCount = payload.commentCount
-    payload.commentCount = typeof rawcommentCount === 'number' ? rawcommentCount : Number(rawcommentCount)
+  if ('newsCommentCount' in payload) {
+    const rawnewsCommentCount = payload.newsCommentCount
+    if (rawnewsCommentCount === undefined || rawnewsCommentCount === null || rawnewsCommentCount === '') {
+      delete payload.newsCommentCount
+    } else {
+      const numnewsCommentCount = typeof rawnewsCommentCount === 'number' ? rawnewsCommentCount : Number(rawnewsCommentCount)
+      if (Number.isFinite(numnewsCommentCount)) payload.newsCommentCount = numnewsCommentCount
+      else delete payload.newsCommentCount
+    }
   }
-  if ('favoriteCount' in payload) {
-    const rawfavoriteCount = payload.favoriteCount
-    payload.favoriteCount = typeof rawfavoriteCount === 'number' ? rawfavoriteCount : Number(rawfavoriteCount)
+  if ('newsFavoriteCount' in payload) {
+    const rawnewsFavoriteCount = payload.newsFavoriteCount
+    if (rawnewsFavoriteCount === undefined || rawnewsFavoriteCount === null || rawnewsFavoriteCount === '') {
+      delete payload.newsFavoriteCount
+    } else {
+      const numnewsFavoriteCount = typeof rawnewsFavoriteCount === 'number' ? rawnewsFavoriteCount : Number(rawnewsFavoriteCount)
+      if (Number.isFinite(numnewsFavoriteCount)) payload.newsFavoriteCount = numnewsFavoriteCount
+      else delete payload.newsFavoriteCount
+    }
   }
-  if ('shareCount' in payload) {
-    const rawshareCount = payload.shareCount
-    payload.shareCount = typeof rawshareCount === 'number' ? rawshareCount : Number(rawshareCount)
+  if ('newsShareCount' in payload) {
+    const rawnewsShareCount = payload.newsShareCount
+    if (rawnewsShareCount === undefined || rawnewsShareCount === null || rawnewsShareCount === '') {
+      delete payload.newsShareCount
+    } else {
+      const numnewsShareCount = typeof rawnewsShareCount === 'number' ? rawnewsShareCount : Number(rawnewsShareCount)
+      if (Number.isFinite(numnewsShareCount)) payload.newsShareCount = numnewsShareCount
+      else delete payload.newsShareCount
+    }
   }
-  if ('attachmentCount' in payload) {
-    const rawattachmentCount = payload.attachmentCount
-    payload.attachmentCount = typeof rawattachmentCount === 'number' ? rawattachmentCount : Number(rawattachmentCount)
+  if ('newsAttachmentCount' in payload) {
+    const rawnewsAttachmentCount = payload.newsAttachmentCount
+    if (rawnewsAttachmentCount === undefined || rawnewsAttachmentCount === null || rawnewsAttachmentCount === '') {
+      delete payload.newsAttachmentCount
+    } else {
+      const numnewsAttachmentCount = typeof rawnewsAttachmentCount === 'number' ? rawnewsAttachmentCount : Number(rawnewsAttachmentCount)
+      if (Number.isFinite(numnewsAttachmentCount)) payload.newsAttachmentCount = numnewsAttachmentCount
+      else delete payload.newsAttachmentCount
+    }
+  }
+  if ('targetScope' in payload) {
+    const rawTargetScope = payload.targetScope
+    if (rawTargetScope === undefined || rawTargetScope === null || rawTargetScope === '') {
+      delete payload.targetScope
+    } else {
+      const numTargetScope = typeof rawTargetScope === 'number' ? rawTargetScope : Number(rawTargetScope)
+      if (Number.isFinite(numTargetScope)) payload.targetScope = numTargetScope
+      else delete payload.targetScope
+    }
   }
   if ('newsStatus' in payload) {
     const rawnewsStatus = payload.newsStatus
-    payload.newsStatus = typeof rawnewsStatus === 'number' ? rawnewsStatus : Number(rawnewsStatus)
+    if (rawnewsStatus === undefined || rawnewsStatus === null || rawnewsStatus === '') {
+      delete payload.newsStatus
+    } else {
+      const numnewsStatus = typeof rawnewsStatus === 'number' ? rawnewsStatus : Number(rawnewsStatus)
+      if (Number.isFinite(numnewsStatus)) payload.newsStatus = numnewsStatus
+      else delete payload.newsStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.newsId) {
+    payload.newsId = props.formData.newsId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 
@@ -865,8 +962,7 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.newsId)
-  childNewsAttachmentRows.value = []
-  newsAttachmentTableRef.value?.resetRows?.()
+
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

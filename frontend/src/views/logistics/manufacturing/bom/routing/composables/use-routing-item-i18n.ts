@@ -81,6 +81,7 @@ export const ROUTINGITEM_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
+  plantCode: 'optional',
   lineNumber: 'select',
   baseUnit: 'select',
   baseQuantity: 'select',
@@ -98,7 +99,6 @@ export const ROUTINGITEM_PLACEHOLDER = {
   extJson: 'optional',
   isObsolete: 'select',
   arguments: 'optional',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -107,6 +107,7 @@ export type RoutingItemField = keyof typeof ROUTINGITEM_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const ROUTINGITEM_QUERY_STRING_FIELDS = [
   'cultureCode',
+  'plantCode',
   'routingCode',
   'baseUnit',
   'timeUnit',

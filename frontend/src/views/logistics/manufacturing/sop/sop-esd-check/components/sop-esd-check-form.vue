@@ -115,7 +115,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isCompliant"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopesdcheck.iscompliant') })"
                 />
               </a-form-item>
@@ -127,7 +127,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.lockScreenTriggered"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopesdcheck.lockscreentriggered') })"
                 />
               </a-form-item>

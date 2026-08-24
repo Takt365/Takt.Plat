@@ -36,6 +36,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -126,7 +127,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.postLevel"
-                  dict-type="sys_post_level_category"
+                  dict-type="sys_post_level"
                   :placeholder="pi.ph('postLevel')"
                 />
               </a-form-item>
@@ -248,7 +249,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isBuiltIn')"
                 />
               </a-form-item>
@@ -272,7 +273,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.postStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('postStatus')"
                 />
               </a-form-item>

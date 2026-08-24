@@ -68,8 +68,9 @@ export const PCBAREPAIRDETAIL_SUMMARY_SUM_FIELDS = [
 export const PCBAREPAIRDETAIL_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  prodOrderCode: 'required',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  prodOrderCode: 'optional',
   lineNumber: 'select',
   pcbaBoardType: 'optional',
   prodActualQty: 'select',
@@ -83,7 +84,6 @@ export const PCBAREPAIRDETAIL_PLACEHOLDER = {
   defectNature: 'optional',
   repairOperator: 'optional',
   isObsolete: 'select',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -91,6 +91,7 @@ export type PcbaRepairDetailField = keyof typeof PCBAREPAIRDETAIL_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PCBAREPAIRDETAIL_QUERY_STRING_FIELDS = [
+  'plantCode',
   'prodOrderCode',
   'pcbaBoardType',
   'TeamCode',

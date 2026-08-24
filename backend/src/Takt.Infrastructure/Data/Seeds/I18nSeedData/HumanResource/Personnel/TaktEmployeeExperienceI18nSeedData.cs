@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeExperienceI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeExperience 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -179,6 +179,15 @@ public class TaktEmployeeExperienceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeexperience.witnessphone", "zh-CN", "证明人电话", "证明人电话"),
             // entity.employeeexperience.witnessphone
             new TranslationSeedItem("entity.employeeexperience.witnessphone", "zh-HK", "证明人电话_hk", "证明人电话"),
+
+            // entity.employeeexperience.employee
+            new TranslationSeedItem("entity.employeeexperience.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeeexperience.employee
+            new TranslationSeedItem("entity.employeeexperience.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeeexperience.employee
+            new TranslationSeedItem("entity.employeeexperience.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeeexperience.employee
+            new TranslationSeedItem("entity.employeeexperience.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

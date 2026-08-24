@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsCommentDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：NewsComment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNewsComment 生成，请按需审阅）
 // 
@@ -47,6 +47,11 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     public string? NewsName { get; set; }
 
     /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
     /// 父评论 ID（选项 TaktNewsComments/options；0 表示顶级评论，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -59,12 +64,12 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     public long UserId { get; set; }
 
     /// <summary>
-    /// 评论人姓名
+    /// 评论人姓名（冗余字段，便于查询）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论人头像 URL
+    /// 评论人头像 URL（冗余字段，便于查询）
     /// </summary>
     public string? UserAvatar { get; set; } = string.Empty;
 
@@ -75,7 +80,7 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     public long? ReplyToUserId { get; set; }
 
     /// <summary>
-    /// 被回复人姓名
+    /// 被回复人姓名（冗余字段，便于查询）
     /// </summary>
     public string? ReplyToUserName { get; set; } = string.Empty;
 
@@ -110,16 +115,15 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     public int CommentStatus { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 新闻（主表）
     /// （主表：TaktNews）
     /// </summary>
     public TaktNewsDto? News { get; set; }
-
-    /// <summary>
-    /// 评论点赞记录列表（主子表关系）
-    /// （子表：TaktNewsCommentLike）
-    /// </summary>
-    public List<TaktNewsCommentLikeDto>? Likes { get; set; }
 
 }
 
@@ -134,9 +138,9 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
 public class TaktNewsCommentTreeDto : TaktNewsCommentDto
 {
     /// <summary>
-    /// 子节点
+    /// 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
     /// </summary>
-    public List<TaktNewsCommentTreeDto> Children { get; set; } = new();
+    public List<TaktNewsCommentTreeDto>? Children { get; set; }
 }
 
 // ========================================
@@ -155,7 +159,7 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -164,16 +168,21 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 父评论 ID（选项 TaktNewsComments/options；0 表示顶级评论，DictValue=Id）
@@ -188,12 +197,12 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 评论人姓名
+    /// 评论人姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论人头像 URL
+    /// 评论人头像 URL（冗余字段，便于查询）
     /// </summary>
     public string? UserAvatar { get; set; } = string.Empty;
 
@@ -204,7 +213,7 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     public long? ReplyToUserId { get; set; }
 
     /// <summary>
-    /// 被回复人姓名
+    /// 被回复人姓名（冗余字段，便于查询）
     /// </summary>
     public string? ReplyToUserName { get; set; } = string.Empty;
 
@@ -242,6 +251,11 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int? CommentStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
@@ -331,16 +345,21 @@ public class TaktNewsCommentCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 父评论 ID（选项 TaktNewsComments/options；0 表示顶级评论，DictValue=Id）
@@ -355,13 +374,12 @@ public class TaktNewsCommentCreateDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 评论人姓名
+    /// 评论人姓名（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "评论人姓名不能为空")]
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论人头像 URL
+    /// 评论人头像 URL（冗余字段，便于查询）
     /// </summary>
     public string? UserAvatar { get; set; } = string.Empty;
 
@@ -372,7 +390,7 @@ public class TaktNewsCommentCreateDto
     public long? ReplyToUserId { get; set; }
 
     /// <summary>
-    /// 被回复人姓名
+    /// 被回复人姓名（冗余字段，便于查询）
     /// </summary>
     public string? ReplyToUserName { get; set; } = string.Empty;
 
@@ -408,9 +426,9 @@ public class TaktNewsCommentCreateDto
     public int CommentStatus { get; set; } = 0;
 
     /// <summary>
-    /// 评论点赞记录列表（主子表关系）（子表，级联保存）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public List<TaktNewsCommentLikeCreateDto>? Likes { get; set; }
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -442,11 +460,6 @@ public class TaktNewsCommentUpdateDto : TaktNewsCommentCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsCommentId { get; set; }
 
-    /// <summary>
-    /// 评论点赞记录列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public new List<TaktNewsCommentLikeUpdateDto>? Likes { get; set; }
-
 }
 
 // ========================================
@@ -474,6 +487,29 @@ public class TaktNewsCommentStatusDto
 }
 
 // ========================================
+// NewsComment 作废 DTO
+// ========================================
+
+/// <summary>
+/// NewsComment 作废/撤销作废 DTO
+/// </summary>
+public class TaktNewsCommentObsoleteDto
+{
+    /// <summary>
+    /// NewsCommentID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long NewsCommentId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -497,16 +533,21 @@ public class TaktNewsCommentTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 父评论 ID（选项 TaktNewsComments/options；0 表示顶级评论，DictValue=Id）
@@ -521,12 +562,12 @@ public class TaktNewsCommentTemplateDto
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 评论人姓名
+    /// 评论人姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论人头像 URL
+    /// 评论人头像 URL（冗余字段，便于查询）
     /// </summary>
     public string? UserAvatar { get; set; } = string.Empty;
 
@@ -537,7 +578,7 @@ public class TaktNewsCommentTemplateDto
     public long? ReplyToUserId { get; set; }
 
     /// <summary>
-    /// 被回复人姓名
+    /// 被回复人姓名（冗余字段，便于查询）
     /// </summary>
     public string? ReplyToUserName { get; set; } = string.Empty;
 
@@ -572,9 +613,9 @@ public class TaktNewsCommentTemplateDto
     public int? CommentStatus { get; set; }
 
     /// <summary>
-    /// 评论点赞记录列表（主子表关系）（子表，级联保存）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public List<TaktNewsCommentLikeCreateDto>? Likes { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -608,16 +649,21 @@ public class TaktNewsCommentImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 父评论 ID（选项 TaktNewsComments/options；0 表示顶级评论，DictValue=Id）
@@ -632,12 +678,12 @@ public class TaktNewsCommentImportDto
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 评论人姓名
+    /// 评论人姓名（冗余字段，便于查询）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论人头像 URL
+    /// 评论人头像 URL（冗余字段，便于查询）
     /// </summary>
     public string? UserAvatar { get; set; } = string.Empty;
 
@@ -648,7 +694,7 @@ public class TaktNewsCommentImportDto
     public long? ReplyToUserId { get; set; }
 
     /// <summary>
-    /// 被回复人姓名
+    /// 被回复人姓名（冗余字段，便于查询）
     /// </summary>
     public string? ReplyToUserName { get; set; } = string.Empty;
 
@@ -683,9 +729,9 @@ public class TaktNewsCommentImportDto
     public int? CommentStatus { get; set; }
 
     /// <summary>
-    /// 评论点赞记录列表（主子表关系）（子表，级联保存）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public List<TaktNewsCommentLikeCreateDto>? Likes { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -716,10 +762,30 @@ public class TaktNewsCommentExportDto
     public long NewsCommentId { get; set; }
 
     /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
+
+    /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 父评论 ID（选项 TaktNewsComments/options；0 表示顶级评论，DictValue=Id）
@@ -734,12 +800,12 @@ public class TaktNewsCommentExportDto
     public long UserId { get; set; }
 
     /// <summary>
-    /// 评论人姓名
+    /// 评论人姓名（冗余字段，便于查询）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论人头像 URL
+    /// 评论人头像 URL（冗余字段，便于查询）
     /// </summary>
     public string? UserAvatar { get; set; } = string.Empty;
 
@@ -750,7 +816,7 @@ public class TaktNewsCommentExportDto
     public long? ReplyToUserId { get; set; }
 
     /// <summary>
-    /// 被回复人姓名
+    /// 被回复人姓名（冗余字段，便于查询）
     /// </summary>
     public string? ReplyToUserName { get; set; } = string.Empty;
 
@@ -783,6 +849,11 @@ public class TaktNewsCommentExportDto
     /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int CommentStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

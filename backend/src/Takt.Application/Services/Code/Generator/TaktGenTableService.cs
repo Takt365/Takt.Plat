@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Code.Generator
 // 文件名称：TaktGenTableService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表配置应用服务实现
 // 
@@ -361,6 +361,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             {
                 var childDto = columnsForSave[i];
                 childDto.GenTableId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
                 var lineKey = $"{entity.TenantCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -524,7 +525,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
 
         if (queryDto?.InDatabase.HasValue == true)
         {
-            var inDatabase = queryDto.InDatabase;
+            var inDatabase = queryDto.InDatabase.Value;
             exp = exp.And(x => x.InDatabase == inDatabase);
         }
 
@@ -626,7 +627,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
 
         if (queryDto?.IsRepository.HasValue == true)
         {
-            var isRepository = queryDto.IsRepository;
+            var isRepository = queryDto.IsRepository.Value;
             exp = exp.And(x => x.IsRepository == isRepository);
         }
 
@@ -662,7 +663,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
 
         if (queryDto?.GenMethod.HasValue == true)
         {
-            var genMethod = queryDto.GenMethod;
+            var genMethod = queryDto.GenMethod.Value;
             exp = exp.And(x => x.GenMethod == genMethod);
         }
 
@@ -674,19 +675,19 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
 
         if (queryDto?.IsGenMenu.HasValue == true)
         {
-            var isGenMenu = queryDto.IsGenMenu;
+            var isGenMenu = queryDto.IsGenMenu.Value;
             exp = exp.And(x => x.IsGenMenu == isGenMenu);
         }
 
         if (queryDto?.ParentMenuId.HasValue == true)
         {
-            var parentMenuId = queryDto.ParentMenuId;
+            var parentMenuId = queryDto.ParentMenuId.Value;
             exp = exp.And(x => x.ParentMenuId == parentMenuId);
         }
 
         if (queryDto?.IsGenTranslation.HasValue == true)
         {
-            var isGenTranslation = queryDto.IsGenTranslation;
+            var isGenTranslation = queryDto.IsGenTranslation.Value;
             exp = exp.And(x => x.IsGenTranslation == isGenTranslation);
         }
 
@@ -704,43 +705,43 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
 
         if (queryDto?.FrontUi.HasValue == true)
         {
-            var frontUi = queryDto.FrontUi;
+            var frontUi = queryDto.FrontUi.Value;
             exp = exp.And(x => x.FrontUi == frontUi);
         }
 
         if (queryDto?.FrontFormLayout.HasValue == true)
         {
-            var frontFormLayout = queryDto.FrontFormLayout;
+            var frontFormLayout = queryDto.FrontFormLayout.Value;
             exp = exp.And(x => x.FrontFormLayout == frontFormLayout);
         }
 
         if (queryDto?.FrontBtnStyle.HasValue == true)
         {
-            var frontBtnStyle = queryDto.FrontBtnStyle;
+            var frontBtnStyle = queryDto.FrontBtnStyle.Value;
             exp = exp.And(x => x.FrontBtnStyle == frontBtnStyle);
         }
 
         if (queryDto?.IsGenCode.HasValue == true)
         {
-            var isGenCode = queryDto.IsGenCode;
+            var isGenCode = queryDto.IsGenCode.Value;
             exp = exp.And(x => x.IsGenCode == isGenCode);
         }
 
         if (queryDto?.GenCodeCount.HasValue == true)
         {
-            var genCodeCount = queryDto.GenCodeCount;
+            var genCodeCount = queryDto.GenCodeCount.Value;
             exp = exp.And(x => x.GenCodeCount == genCodeCount);
         }
 
         if (queryDto?.IsUseTabs.HasValue == true)
         {
-            var isUseTabs = queryDto.IsUseTabs;
+            var isUseTabs = queryDto.IsUseTabs.Value;
             exp = exp.And(x => x.IsUseTabs == isUseTabs);
         }
 
         if (queryDto?.TabsFieldCount.HasValue == true)
         {
-            var tabsFieldCount = queryDto.TabsFieldCount;
+            var tabsFieldCount = queryDto.TabsFieldCount.Value;
             exp = exp.And(x => x.TabsFieldCount == tabsFieldCount);
         }
 
@@ -770,13 +771,13 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

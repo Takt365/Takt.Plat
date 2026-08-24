@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:左树区域,用于树表布局左侧的树,宽度为视口比例(如 1/4)
+功能描述:左树区域；外框与右表同高撑满父级；空数据居中暂无数据；点击节点仅选中；三角手风琴展开（不绑 a-tree accordion，以便工具栏完整展开）
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -12,32 +12,35 @@
 
 <template>
   <div
-    ref="containerRef"
     class="takt-tree-left-table"
     :style="leftStyle"
   >
-    <a-spin
-      :spinning="loading"
-      class="takt-tree-left-table__spin"
+    <div
+      ref="viewportRef"
+      class="takt-tree-left-table__viewport"
+      :class="{
+        'takt-tree-left-table__viewport--virtual': effectiveVirtual,
+      }"
     >
       <a-tree
-        v-model:expanded-keys="expandedKeys"
+        v-if="!showEmpty"
+        :expanded-keys="expandedKeys"
         v-model:selected-keys="selectedKeys"
         class="takt-tree-left-table__tree"
         :class="{ 'draggable-tree': draggable }"
-        :tree-data="treeData"
+        :tree-data="rawTreeData"
         :field-names="fieldNames"
         :block-node="blockNode"
         :show-line="showLine"
         :selectable="selectable"
         :draggable="draggable"
         :expand-action="expandAction"
+        :accordion="false"
         :virtual="effectiveVirtual"
+        :item-height="treeItemHeightPx"
         :load-data="loadData"
-        v-bind="{
-          ...(effectiveVirtual && computedVirtualHeight !== undefined ? { height: computedVirtualHeight } : {}),
-          ...(itemHeight !== undefined ? { itemHeight } : {})
-        }"
+        v-bind="effectiveVirtual ? { height: treeScrollYPx } : {}"
+        @expand="handleExpand"
         @select="handleSelect"
         @dragenter="onDragEnter"
         @drop="onDrop"
@@ -54,7 +57,19 @@
           />
         </template>
       </a-tree>
-    </a-spin>
+      <div
+        v-else-if="showEmpty"
+        class="takt-tree-left-table__empty"
+      >
+        <a-empty :description="t('common.status.empty')" />
+      </div>
+      <div
+        v-if="loading"
+        class="takt-tree-left-table__loading"
+      >
+        <a-spin :spinning="true" />
+      </div>
+    </div>
     <div
       v-if="showFooterRemark"
       class="takt-tree-left-table__footer-remark shrink-0 px-1 pt-2 text-sm leading-relaxed text-text-secondary"
@@ -67,14 +82,17 @@
 </template>
 
 <script setup lang="ts">
-import { createLogger } from '@/utils/logger'
 import {
   countTreeNodesForVirtualScroll,
+  resolveVerticalScrollY,
   shouldUseTableVirtualScroll,
+  TAKT_TABLE_SCROLL_Y_MIN,
   TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK,
+  type TaktTableScrollLayout,
 } from '@/utils/table-scroll'
-
-const treeLeftTableLogger = createLogger('takt-tree-left-table')
+import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
+import { useTaktFillHeightScrollY } from '@/composables/use-takt-fill-height-scroll-y'
+import { useI18n } from 'vue-i18n'
 
 type TreeNode = Record<string, unknown> & {
   key: string | number
@@ -110,14 +128,23 @@ interface Props {
   selectable?: boolean
   /** 是否开启虚拟滚动(由页面控制,大数据展开时建议开启) */
   virtual?: boolean
-  /** 虚拟滚动列表高度(px)；传入则覆盖视口测量结果 */
+  /**
+   * 滚动配置（与右表同一语义；a-tree 无 scroll API）
+   * y：纵向视口高度(px)；未传则由 scrollLayout 计算
+   */
+  scroll?: { y?: number | string }
+  /** 布局场景（默认 treeLeft，与右表 treeRight 同一套 chrome 预留） */
+  scrollLayout?: TaktTableScrollLayout
+  /** 虚拟滚动列表高度(px)；等价于 scroll.y 覆盖（兼容旧用法） */
   height?: number
-  /** 虚拟滚动单项高度(px),不传则使用组件默认 */
+  /** 虚拟滚动单项高度(px)，默认 28 与 a-tree 行高对齐，避免展开时逐行测量 */
   itemHeight?: number
   /** 是否开启拖拽排序/变更父节点（由页面控制，与 virtual 独立） */
   draggable?: boolean
-  /** 点击节点标题时展开/收起子级（false 则仅点击三角图标） */
+  /** 点击节点标题时展开/收起子级（false 则仅点击三角，标题用于选中右表） */
   expandAction?: 'click' | 'doubleclick' | false
+  /** 手风琴：同级仅允许展开一个节点（仅自定义 handleExpand，不使用 a-tree accordion） */
+  accordion?: boolean
   /** 表尾备注说明（树区域下方） */
   footerRemark?: string
   /**
@@ -138,90 +165,69 @@ const props = withDefaults(defineProps<Props>(), {
   showLine: false,
   selectable: true,
   virtual: true,
+  scroll: undefined,
+  scrollLayout: 'treeLeft',
   draggable: false,
-  expandAction: 'click',
+  expandAction: false,
+  accordion: true,
+  itemHeight: 28,
   footerRemark: '',
   loadData: undefined,
 })
 
 const slots = useSlots()
+const { t } = useI18n()
+
+/** 树视口 DOM（撑满父级后实测高度） */
+const viewportRef = ref<HTMLElement | null>(null)
+
+/** 无数据且非加载中：显示与右表一致的空状态 */
+const showEmpty = computed(
+  () => !props.loading && !(props.treeData?.length),
+)
 
 /** 是否展示表尾备注 */
 const showFooterRemark = computed(
   () => !!props.footerRemark?.trim() || !!slots.footerRemark,
 )
 
-/** 根节点 ref，用于按视口计算虚拟滚动高度 */
-const containerRef = ref<HTMLElement | null>(null)
-/** 虚拟滚动高度 = 从本组件内容区顶部到视口底部的可见高度，与树收缩/展开无关 */
-const measuredHeight = ref(0)
-
-/** 按视口动态计算：从本组件内容区顶部到视口底部的距离作为虚拟列表高度，不依赖父级或树内容高度 */
-function doUpdateHeight() {
-  const el = containerRef.value
-  if (!el) return
-  const rect = el.getBoundingClientRect()
-  const style = getComputedStyle(el)
-  const marginTop = parseFloat(style.marginTop) || 0
-  const marginBottom = parseFloat(style.marginBottom) || 0
-  const paddingTop = parseFloat(style.paddingTop) || 0
-  const paddingBottom = parseFloat(style.paddingBottom) || 0
-  const contentTop = rect.top + marginTop + paddingTop
-  const viewportHeight = window.innerHeight
-  const available = viewportHeight - contentTop - paddingBottom - marginBottom
-  const nextHeight = Math.max(0, Math.floor(available))
-  const prevHeight = measuredHeight.value
-  measuredHeight.value = nextHeight
-  if (prevHeight !== nextHeight) {
-    treeLeftTableLogger.debug('视口高度动态计算', {
-      action: 'doUpdateHeight',
-      rectTop: rect.top,
-      contentTop,
-      viewportHeight,
-      available: nextHeight,
-      measuredHeight: nextHeight,
-    })
+/**
+ * 把 scroll.y 转成 a-tree.height 所需像素
+ * @param {number | string} y 视口高度
+ * @returns {number} 像素
+ */
+function toTreeScrollYPx(y: number | string): number {
+  if (typeof y === 'number' && Number.isFinite(y) && y > 0) {
+    return Math.floor(y)
   }
+  const parsed = Number.parseInt(String(y), 10)
+  if (Number.isFinite(parsed) && parsed > 0) {
+    return parsed
+  }
+  return TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
 }
 
-/** 节流：将多次 updateHeight 合并到下一帧执行，避免 HMR/ResizeObserver 风暴 */
-let rafId: number | null = null
-function updateHeight() {
-  if (rafId !== null) return
-  rafId = requestAnimationFrame(() => {
-    rafId = null
-    doUpdateHeight()
-  })
-}
+/** 窗口回退 scroll.y（容器尚未布局时） */
+const viewportScrollYPx = useTaktTableViewportScrollY(computed(() => props.scrollLayout ?? 'treeLeft'))
 
-let resizeObserver: ResizeObserver | null = null
-let windowResizeHandler: (() => void) | null = null
-onMounted(() => {
-  nextTick(() => {
-    doUpdateHeight()
-    const el = containerRef.value
-    if (el && typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(() => updateHeight())
-      resizeObserver.observe(el)
-    }
-    windowResizeHandler = () => updateHeight()
-    window.addEventListener('resize', windowResizeHandler)
-  })
+/** 填满父级后的实测高度（与右表外框同高） */
+const fillHeightScrollYPx = useTaktFillHeightScrollY(viewportRef, {
+  fallbackPx: viewportScrollYPx,
+  recalcToken: computed(() => [props.loading, props.treeData?.length ?? 0, showFooterRemark.value]),
 })
-onBeforeUnmount(() => {
-  if (rafId !== null) {
-    cancelAnimationFrame(rafId)
-    rafId = null
-  }
-  if (resizeObserver && containerRef.value) {
-    resizeObserver.disconnect()
-    resizeObserver = null
-  }
-  if (windowResizeHandler) {
-    window.removeEventListener('resize', windowResizeHandler)
-    windowResizeHandler = null
-  }
-})
+
+/** 生效 scroll.y：scroll.y > height > 容器实测 */
+const resolvedScrollY = computed(() =>
+  resolveVerticalScrollY(
+    props.scroll?.y ?? (props.height != null && props.height > 0 ? props.height : undefined),
+    fillHeightScrollYPx.value,
+  ),
+)
+
+/** 传给 a-tree.height 的像素高度 */
+const treeScrollYPx = computed(() =>
+  Math.max(TAKT_TABLE_SCROLL_Y_MIN, toTreeScrollYPx(resolvedScrollY.value)),
+)
 
 export interface TreeDropPayload {
   newTreeData: TreeNode[]
@@ -240,10 +246,7 @@ const emit = defineEmits<{
   'tree-drop': [payload: TreeDropPayload]
 }>()
 
-const expandedKeys = computed({
-  get: () => props.expandedKeys ?? [],
-  set: (val) => emit('update:expandedKeys', val)
-})
+const expandedKeys = computed(() => props.expandedKeys ?? [])
 
 const selectedKeys = computed({
   get: () => props.selectedKeys ?? [],
@@ -255,6 +258,22 @@ const fieldNames = computed(() => ({
   key: props.treeFieldNames?.key ?? 'key',
   children: props.treeFieldNames?.children ?? 'children'
 }))
+
+/**
+ * 交给 a-tree 的非代理树：页面 ref 深代理会导致展开时 flatten 全树走 Proxy，大数据必卡
+ */
+const rawTreeData = computed(() => {
+  const data = props.treeData
+  if (!data?.length) return []
+  return toRaw(data)
+})
+
+/** 虚拟列表行高（px） */
+const treeItemHeightPx = computed(() => {
+  const h = props.itemHeight
+  if (typeof h === 'number' && Number.isFinite(h) && h > 0) return Math.floor(h)
+  return 28
+})
 
 /** 树节点总数（达阈值即停计，仅用于是否强制 virtual；不截断树数据） */
 const treeNodeCount = computed(() =>
@@ -269,27 +288,98 @@ const effectiveVirtual = computed(() =>
   shouldUseTableVirtualScroll(treeNodeCount.value, props.virtual),
 )
 
-const computedVirtualHeight = computed(() => {
-  if (!effectiveVirtual.value) return undefined
-  if (props.height != null && props.height > 0) {
-    return props.height
-  }
-  const h = measuredHeight.value > 0 ? measuredHeight.value : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
-  return h > 0 ? h : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
-})
-
 /** 左侧宽度：内容视口的 1/5（treeWidthRatio 0.2 = 20%） */
 const leftStyle = computed(() => {
   const ratio = (props.treeWidthRatio ?? 0.2) * 100
   return {
     flex: `0 0 ${ratio}%`,
     width: `${ratio}%`,
-    maxWidth: `${ratio}%`
+    maxWidth: `${ratio}%`,
+    height: '100%',
+    minHeight: 0,
+    alignSelf: 'stretch',
   }
 })
 
 const handleSelect = (keys: (string | number)[], e: TreeSelectEvent) => {
   emit('tree-select', keys, e)
+}
+
+/**
+ * 查找与目标节点同级的全部 key（含自身；根节点同级为整层根）
+ * @param nodes 树数据
+ * @param targetKey 目标节点 key
+ * @returns {(string | number)[]} 同级 key；未找到则为空数组
+ */
+function findSiblingKeys(nodes: TreeNode[], targetKey: string | number): (string | number)[] {
+  const keyF = fieldNames.value.key
+  const chF = fieldNames.value.children
+  const keyStr = String(targetKey)
+  const readKey = (node: TreeNode): string | number | undefined => {
+    const raw = node[keyF]
+    if (raw == null || String(raw) === '') return undefined
+    return raw as string | number
+  }
+  const layerKeys = (layer: TreeNode[]): (string | number)[] =>
+    layer.map(readKey).filter((k): k is string | number => k != null)
+  if (nodes.some((n) => String(readKey(n) ?? '') === keyStr)) {
+    return layerKeys(nodes)
+  }
+  const stack = [...nodes]
+  while (stack.length > 0) {
+    const node = stack.pop()
+    if (!node) continue
+    const children = (node[chF] as TreeNode[] | undefined) ?? []
+    if (children.some((c) => String(readKey(c) ?? '') === keyStr)) {
+      return layerKeys(children)
+    }
+    for (let i = 0; i < children.length; i += 1) {
+      const child = children[i]
+      if (child) stack.push(child)
+    }
+  }
+  return []
+}
+
+/**
+ * 展开/收起：手风琴模式下展开某一节点时收起其同级已展开项。
+ * 非手风琴：展开时与当前 expandedKeys 合并（a-tree 批量展开会多次 @expand 且 keys 不完整，否则工具栏「全部展开」会被盖成只剩一项）。
+ * @param keys a-tree 给出的展开 key
+ * @param info 展开节点信息
+ */
+function handleExpand(
+  keys: (string | number)[],
+  info: { expanded?: boolean; node?: Record<string, unknown> },
+): void {
+  const node = info?.node ?? {}
+  const dataRef = (node.dataRef ?? node.data) as Record<string, unknown> | undefined
+  const keyF = fieldNames.value.key
+  const nodeKey = ([node.eventKey, node.key, dataRef?.[keyF], dataRef?.key] as unknown[])
+    .find((k) => k != null && String(k) !== '') as string | number | undefined
+
+  if (props.accordion && info?.expanded === true && nodeKey != null && String(nodeKey) !== '') {
+    const siblings = findSiblingKeys(rawTreeData.value ?? [], nodeKey)
+    if (siblings.length === 0) {
+      emit('update:expandedKeys', keys)
+      return
+    }
+    const siblingSet = new Set(siblings.map((k) => String(k)))
+    const next = keys.filter((k) => String(k) === String(nodeKey) || !siblingSet.has(String(k)))
+    emit('update:expandedKeys', next)
+    return
+  }
+
+  if (!props.accordion && info?.expanded === true) {
+    const merged = new Set((props.expandedKeys ?? []).map((k) => String(k)))
+    for (const k of keys) {
+      if (k != null && String(k) !== '') merged.add(String(k))
+    }
+    if (nodeKey != null && String(nodeKey) !== '') merged.add(String(nodeKey))
+    emit('update:expandedKeys', Array.from(merged))
+    return
+  }
+
+  emit('update:expandedKeys', keys)
 }
 
 /** 深拷贝树节点（保留 key/title/children 等字段） */
@@ -402,47 +492,61 @@ function onDrop(info: {
 </script>
 
 <style scoped>
-/* 占满父级（树表 wrap）高度，虚拟滚动视口由父级高度计算，不随树收缩变化 */
+/* 左树外框与右表同高撑满 wrap；内部滚动由 a-tree.height / overflow 承担 */
 .takt-tree-left-table {
   min-width: 160px;
   min-height: 0;
+  height: 100%;
   align-self: stretch;
-  margin: 40px 0px 0px 0px;
+  margin: 0;
   overflow: hidden;
-  padding: 4px;
+  padding: 0;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+}
 
-  .takt-tree-left-table__spin {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
+.takt-tree-left-table__viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
 
-    /* 让 loading 遮罩铺满并具有高度，使内部 top:50% 能上下居中 */
-    :deep(.ant-spin-nested-loading) {
-      flex: 1;
-      min-height: 0;
-      position: relative;
-    }
-    :deep(.ant-spin-nested-loading > div:first-child) {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-    }
+.takt-tree-left-table__viewport:not(.takt-tree-left-table__viewport--virtual) {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
 
-    :deep(.ant-spin-container) {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-    }
-  }
+.takt-tree-left-table__viewport--virtual {
+  overflow: hidden;
+}
 
-  :deep(.ant-tree) {
-    flex: 1;
-    min-height: 0;
-    overflow: auto;
-  }
+.takt-tree-left-table__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--ant-color-bg-container) 65%, transparent);
+}
+
+.takt-tree-left-table__empty {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.takt-tree-left-table__tree {
+  min-height: 0;
 }
 </style>

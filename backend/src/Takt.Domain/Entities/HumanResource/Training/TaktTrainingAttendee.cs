@@ -81,7 +81,7 @@ public class TaktTrainingAttendee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "training_score", ColumnDescription = "培训成绩", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TrainingScore { get; set; } = 0m;
     /// <summary>
-    /// 是否通过（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否通过（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_passed", ColumnDescription = "是否通过", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPassed { get; set; } = 0;
@@ -96,7 +96,7 @@ public class TaktTrainingAttendee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "training_evaluation", ColumnDescription = "培训评价", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
     public string TrainingEvaluation { get; set; } = string.Empty;
     /// <summary>
-    /// 参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）
+    /// 参训记录状态（字典 sys_normal_disable；1=有效 0=无效）
     /// </summary>
     [SugarColumn(ColumnName = "training_result_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int TrainingResultStatus { get; set; } = 1;

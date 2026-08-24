@@ -4,7 +4,7 @@
 // 文件名称：TaktNews.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：新闻中心主实体，支持分类、置顶、推荐、社交统计；需审批通过后发布
+// 功能描述：新闻中心主实体，支持分类、置顶、推荐、社交统计；正文为富文本；需审批通过后发布
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,7 +17,7 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 
 /// <summary>
 /// 新闻中心主实体
-/// 支持分类、置顶、推荐、社交统计；需审批通过后发布（草稿→审批→发布）
+/// 支持分类、置顶、推荐、社交统计；正文为富文本 HTML；需审批通过后发布（草稿→审批→发布）
 /// 审批态见基类 ApprovalStatus，字典 sys_approval_status
 /// </summary>
 [SugarTable("takt_routine_news_center", "新闻中心表")]
@@ -31,12 +31,12 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 public class TaktNews : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 新闻编码（租户+公司内唯一）
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
     /// </summary>
     [SugarColumn(ColumnName = "news_code", ColumnDescription = "新闻编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string NewsCode { get; set; } = string.Empty;
     /// <summary>
-    /// 新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
+    /// 新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "news_category", ColumnDescription = "新闻分类", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int NewsCategory { get; set; } = 0;
@@ -56,7 +56,7 @@ public class TaktNews : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "news_tags", ColumnDescription = "标签", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? NewsTags { get; set; }
     /// <summary>
-    /// 新闻内容
+    /// 新闻内容（富文本 HTML；插图随正文存储，无独立附件）
     /// </summary>
     [SugarColumn(ColumnName = "news_content", ColumnDescription = "新闻内容", ColumnDataType = "ntext", IsNullable = false)]
     public string NewsContent { get; set; } = string.Empty;
@@ -66,12 +66,12 @@ public class TaktNews : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "news_cover_image", ColumnDescription = "新闻封面图片URL", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? NewsCoverImage { get; set; }
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "news_is_top", ColumnDescription = "置顶", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int NewsIsTop { get; set; } = 0;
     /// <summary>
-    /// 推荐（字典 sys_yes_no_type；1=是 0=否）
+    /// 推荐（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "news_is_recommended", ColumnDescription = "推荐", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int NewsIsRecommended { get; set; } = 0;
@@ -111,18 +111,13 @@ public class TaktNews : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "news_share_count", ColumnDescription = "分享次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int NewsShareCount { get; set; } = 0;
     /// <summary>
-    /// 附件数量
-    /// </summary>
-    [SugarColumn(ColumnName = "news_attachment_count", ColumnDescription = "附件数量", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int NewsAttachmentCount { get; set; } = 0;
-    /// <summary>
-    /// 发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "发布部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 发布部门名称
+    /// 发布部门名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "发布部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
@@ -133,7 +128,7 @@ public class TaktNews : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PublisherId { get; set; }
     /// <summary>
-    /// 发布人姓名
+    /// 发布人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "publisher_name", ColumnDescription = "发布人姓名", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string PublisherName { get; set; } = string.Empty;
@@ -143,7 +138,22 @@ public class TaktNews : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "news_publish_time", ColumnDescription = "发布时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? NewsPublishTime { get; set; }
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
+    /// </summary>
+    [SugarColumn(ColumnName = "target_scope", ColumnDescription = "目标范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int TargetScope { get; set; } = 0;
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
+    /// </summary>
+    [SugarColumn(ColumnName = "target_departments", ColumnDescription = "目标部门编码", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    public string? TargetDepartments { get; set; }
+    /// <summary>
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
+    /// </summary>
+    [SugarColumn(ColumnName = "target_users", ColumnDescription = "目标用户名", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? TargetUsers { get; set; }
+    /// <summary>
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
@@ -156,11 +166,6 @@ public class TaktNews : TaktApprovalEntityBase
     // ========================================
     // 导航属性区域
     // ========================================
-    /// <summary>
-    /// 新闻附件列表（主子表关系）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktNewsAttachment.NewsId))]
-    public List<TaktNewsAttachment>? Attachments { get; set; }
     /// <summary>
     /// 新闻评论列表（主子表关系）
     /// </summary>

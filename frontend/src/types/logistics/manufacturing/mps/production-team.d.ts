@@ -50,7 +50,7 @@ export interface ProductionTeam extends CompanyDtoBase {
   shiftNo?: number;
 
   /**
-   * 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+   * 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
    */
   teamStatus?: number;
 
@@ -118,7 +118,7 @@ export interface ProductionTeamExport {
   shiftNo: number;
 
   /**
-   * 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+   * 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
    */
   teamStatus: number;
 

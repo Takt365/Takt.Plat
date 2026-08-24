@@ -83,19 +83,19 @@
         <template v-else-if="column.key === 'isOptional'">
           <TaktDictTag
             :value="getBillOfMaterialItemDictValue(record, 'isOptional')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isPhantom'">
           <TaktDictTag
             :value="getBillOfMaterialItemDictValue(record, 'isPhantom')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isObsolete'">
           <TaktDictTag
             :value="getBillOfMaterialItemDictValue(record, 'isObsolete')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -287,7 +287,7 @@
       <a-form-item :label="pi.queryLabel('isOptional')">
         <TaktSelect
           v-model:value="advancedQueryForm.isOptional"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isOptional', 'select')"
           allow-clear
         />
@@ -297,7 +297,7 @@
       <a-form-item :label="pi.queryLabel('isPhantom')">
         <TaktSelect
           v-model:value="advancedQueryForm.isPhantom"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isPhantom', 'select')"
           allow-clear
         />
@@ -307,7 +307,7 @@
       <a-form-item :label="pi.queryLabel('isObsolete')">
         <TaktSelect
           v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />

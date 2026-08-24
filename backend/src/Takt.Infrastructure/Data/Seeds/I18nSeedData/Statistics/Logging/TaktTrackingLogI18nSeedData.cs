@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktTrackingLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrackingLog 实体字段国际化种子（已对齐前端 locales：src/locales/statistics/logging/tracking-log）
 // 
@@ -90,23 +90,23 @@ public class TaktTrackingLogI18nSeedData : ITaktSeedDataCoordinator
             // entity.trackinglog._self
             new TranslationSeedItem("entity.trackinglog._self", "zh-HK", "前端交互日志信息_hk", "实体名称"),
 
-            // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "en-US", "用户名_us", "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）"),
-            // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "ja-JP", "用户名_jp", "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）"),
-            // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "zh-CN", "用户名", "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）"),
-            // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "zh-HK", "用户名_hk", "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）"),
+            // entity.trackinglog.userid
+            new TranslationSeedItem("entity.trackinglog.userid", "en-US", "用户ID_us", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.trackinglog.userid
+            new TranslationSeedItem("entity.trackinglog.userid", "ja-JP", "用户ID_jp", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.trackinglog.userid
+            new TranslationSeedItem("entity.trackinglog.userid", "zh-CN", "用户ID", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.trackinglog.userid
+            new TranslationSeedItem("entity.trackinglog.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
-            // entity.trackinglog.userid
-            new TranslationSeedItem("entity.trackinglog.userid", "en-US", "用户ID_us", "用户 ID"),
-            // entity.trackinglog.userid
-            new TranslationSeedItem("entity.trackinglog.userid", "ja-JP", "用户ID_jp", "用户 ID"),
-            // entity.trackinglog.userid
-            new TranslationSeedItem("entity.trackinglog.userid", "zh-CN", "用户ID", "用户 ID"),
-            // entity.trackinglog.userid
-            new TranslationSeedItem("entity.trackinglog.userid", "zh-HK", "用户ID_hk", "用户 ID"),
+            // entity.trackinglog.username
+            new TranslationSeedItem("entity.trackinglog.username", "en-US", "用户名_us", "用户名（冗余字段，便于查询）"),
+            // entity.trackinglog.username
+            new TranslationSeedItem("entity.trackinglog.username", "ja-JP", "用户名_jp", "用户名（冗余字段，便于查询）"),
+            // entity.trackinglog.username
+            new TranslationSeedItem("entity.trackinglog.username", "zh-CN", "用户名", "用户名（冗余字段，便于查询）"),
+            // entity.trackinglog.username
+            new TranslationSeedItem("entity.trackinglog.username", "zh-HK", "用户名_hk", "用户名（冗余字段，便于查询）"),
 
             // entity.trackinglog.eventtrackingtype
             new TranslationSeedItem("entity.trackinglog.eventtrackingtype", "en-US", "事件类型_us", "事件类型（如 longtask）"),
@@ -163,13 +163,13 @@ public class TaktTrackingLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trackinglog.entryname", "zh-HK", "Performance条目名_hk", "PerformanceEntry.name"),
 
             // entity.trackinglog.trackinglevel
-            new TranslationSeedItem("entity.trackinglog.trackinglevel", "en-US", "追踪级别_us", "追踪级别（1=warn 2=error，前端阈值映射）"),
+            new TranslationSeedItem("entity.trackinglog.trackinglevel", "en-US", "追踪级别_us", "追踪级别（字典 sys_tracking_level；1=warn 2=error）"),
             // entity.trackinglog.trackinglevel
-            new TranslationSeedItem("entity.trackinglog.trackinglevel", "ja-JP", "追踪级别_jp", "追踪级别（1=warn 2=error，前端阈值映射）"),
+            new TranslationSeedItem("entity.trackinglog.trackinglevel", "ja-JP", "追踪级别_jp", "追踪级别（字典 sys_tracking_level；1=warn 2=error）"),
             // entity.trackinglog.trackinglevel
-            new TranslationSeedItem("entity.trackinglog.trackinglevel", "zh-CN", "追踪级别", "追踪级别（1=warn 2=error，前端阈值映射）"),
+            new TranslationSeedItem("entity.trackinglog.trackinglevel", "zh-CN", "追踪级别", "追踪级别（字典 sys_tracking_level；1=warn 2=error）"),
             // entity.trackinglog.trackinglevel
-            new TranslationSeedItem("entity.trackinglog.trackinglevel", "zh-HK", "追踪级别_hk", "追踪级别（1=warn 2=error，前端阈值映射）"),
+            new TranslationSeedItem("entity.trackinglog.trackinglevel", "zh-HK", "追踪级别_hk", "追踪级别（字典 sys_tracking_level；1=warn 2=error）"),
 
             // entity.trackinglog.routepath
             new TranslationSeedItem("entity.trackinglog.routepath", "en-US", "路由路径_us", "SPA 路由路径"),

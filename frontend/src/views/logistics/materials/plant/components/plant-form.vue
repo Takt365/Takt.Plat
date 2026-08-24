@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/plant/components -->
 <!-- 文件名称：plant-form.vue -->
-<!-- 功能描述：Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -32,12 +32,10 @@
                 :label="pi.label('cultureCode')"
                 name="cultureCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
                   :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -52,7 +50,6 @@
                   show-count
                   :maxlength="140"
                   allow-clear
-                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -81,7 +78,6 @@
                   show-count
                   :maxlength="50"
                   allow-clear
-                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -688,7 +684,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.plantStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('plantStatus')"
                 />
               </a-form-item>
@@ -767,7 +763,7 @@
 
 <script setup lang="ts">
 /**
- * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/plant/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -829,6 +825,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  cultureCode: "ZH-CN",
   enterpriseNature: "150",
   industryAttribute: "C",
   enterpriseScale: "M",

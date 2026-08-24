@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Benefits
 // 文件名称：TaktBenefitItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBenefitItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -172,31 +172,31 @@ public class TaktBenefitItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.benefititem.employeeratio", "zh-HK", "个人承担比例_hk", "个人承担比例（%，如公积金个人缴存比例）"),
 
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "en-US", "是否强制福利_us", "是否强制福利（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "en-US", "是否强制福利_us", "是否强制福利（字典 sys_yes_no；0=否 1=是）"),
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "ja-JP", "是否强制福利_jp", "是否强制福利（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "ja-JP", "是否强制福利_jp", "是否强制福利（字典 sys_yes_no；0=否 1=是）"),
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-CN", "是否强制福利", "是否强制福利（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-CN", "是否强制福利", "是否强制福利（字典 sys_yes_no；0=否 1=是）"),
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-HK", "是否强制福利_hk", "是否强制福利（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-HK", "是否强制福利_hk", "是否强制福利（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.benefititem.sortorder
-            new TranslationSeedItem("entity.benefititem.sortorder", "en-US", "排序号_us", "排序号"),
+            new TranslationSeedItem("entity.benefititem.sortorder", "en-US", "排序号_us", "排序号（回填）"),
             // entity.benefititem.sortorder
-            new TranslationSeedItem("entity.benefititem.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            new TranslationSeedItem("entity.benefititem.sortorder", "ja-JP", "排序号_jp", "排序号（回填）"),
             // entity.benefititem.sortorder
-            new TranslationSeedItem("entity.benefititem.sortorder", "zh-CN", "排序号", "排序号"),
+            new TranslationSeedItem("entity.benefititem.sortorder", "zh-CN", "排序号", "排序号（回填）"),
             // entity.benefititem.sortorder
-            new TranslationSeedItem("entity.benefititem.sortorder", "zh-HK", "排序号_hk", "排序号"),
+            new TranslationSeedItem("entity.benefititem.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）"),
         };
     }
 

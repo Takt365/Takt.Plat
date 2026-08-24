@@ -20,7 +20,6 @@ export const VENDOR_SELF_I18N_KEY = buildEntitySelfI18nKey(VENDOR_ENTITY_SLUG)
 
 /** 列表业务列（不含主键） */
 export const VENDOR_LIST_FIELDS = [
-  'plantCode',
   'vendorCode',
   'vendorName1',
   'vendorName2',
@@ -28,8 +27,8 @@ export const VENDOR_LIST_FIELDS = [
   'vendorType',
   'enterpriseNature',
   'industryAttribute',
-  'defaultCulture',
   'vendorTaxNumber',
+  'taxCode',
   'taxRate',
   'registrationCountry',
   'registrationProvince',
@@ -74,8 +73,8 @@ export const VENDOR_LIST_FIELDS = [
 export const VENDOR_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   vendorCode: 'required',
   vendorName1: 'required',
   vendorName2: 'optional',
@@ -83,8 +82,8 @@ export const VENDOR_PLACEHOLDER = {
   vendorType: 'select',
   enterpriseNature: 'select',
   industryAttribute: 'select',
-  defaultCulture: 'select',
   vendorTaxNumber: 'optional',
+  taxCode: 'optional',
   taxRate: 'select',
   registrationCountry: 'optional',
   registrationProvince: 'optional',
@@ -132,6 +131,7 @@ export type VendorField = keyof typeof VENDOR_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const VENDOR_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'vendorCode',
   'vendorName1',
@@ -139,8 +139,8 @@ export const VENDOR_QUERY_STRING_FIELDS = [
   'vendorShortName',
   'enterpriseNature',
   'industryAttribute',
-  'defaultCulture',
   'vendorTaxNumber',
+  'taxCode',
   'registrationCountry',
   'registrationProvince',
   'registrationCity',

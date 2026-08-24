@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核应用服务实现
 // 
@@ -63,12 +63,20 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
     }
 
     /// <summary>
-    /// 获取供应商评价考核列表（分页）
+    /// 获取供应商评价考核列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSupplierEvaluationDto>> GetSupplierEvaluationListAsync(TaktSupplierEvaluationQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSupplierEvaluationDto>.Create(
+                new List<TaktSupplierEvaluationDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _supplierEvaluationRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -320,7 +328,15 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSupplierEvaluationAsync(TaktSupplierEvaluationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSupplierEvaluationQueryDto());
+        var queryDto = query ?? new TaktSupplierEvaluationQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSupplierEvaluationExportDto>(),
+                sheetName ?? "供应商评价考核数据",
+                fileName ?? "供应商评价考核导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _supplierEvaluationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -419,6 +435,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             {
                 var childDto = itemsForSave[i];
                 childDto.EvaluationId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.SupplierEvaluationCode = entity.SupplierEvaluationCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -437,13 +458,12 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
                     submittedIds.Add(childDto.SupplierEvaluationItemId);
                     var isUniqueUpdate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _supplierEvaluationItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.EvaluationId == x.EvaluationId
+                        x => x.EvaluationId == x.EvaluationId
                 && x.LineNumber == x.LineNumber,
                         childDto.SupplierEvaluationItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique)
                     {
-                        throw new TaktBusinessException("供应商评价考核项目明细的CompanyCode、EvaluationId、LineNumber已存在");
+                        throw new TaktBusinessException("供应商评价考核项目明细的EvaluationId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.SupplierEvaluationItemId;
@@ -455,12 +475,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _supplierEvaluationItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.EvaluationId == x.EvaluationId
+                        x => x.EvaluationId == x.EvaluationId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique)
                     {
-                        throw new TaktBusinessException("供应商评价考核项目明细的CompanyCode、EvaluationId、LineNumber已存在");
+                        throw new TaktBusinessException("供应商评价考核项目明细的EvaluationId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktSupplierEvaluationItem>();
                     child.Id = 0;
@@ -509,208 +528,362 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
     {
         var exp = Expressionable.Create<TaktSupplierEvaluation>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(keywords))
-                || SqlFunc.ToString(x.SupplierId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
-                || SqlFunc.ToString(x.EvaluationPeriod).Contains(keywords)
-                || SqlFunc.ToString(x.EvaluationType).Contains(keywords)
                 || (x.EvaluatorBy != null && x.EvaluatorBy.Contains(keywords))
                 || (x.EvaluationDept != null && x.EvaluationDept.Contains(keywords))
-                || SqlFunc.ToString(x.OverallRating).Contains(keywords)
-                || SqlFunc.ToString(x.TotalScore).Contains(keywords)
-                || SqlFunc.ToString(x.QualityScore).Contains(keywords)
-                || SqlFunc.ToString(x.DeliveryScore).Contains(keywords)
-                || SqlFunc.ToString(x.PriceScore).Contains(keywords)
-                || SqlFunc.ToString(x.ServiceScore).Contains(keywords)
-                || SqlFunc.ToString(x.TechnicalScore).Contains(keywords)
                 || (x.MainStrengths != null && x.MainStrengths.Contains(keywords))
                 || (x.MainIssues != null && x.MainIssues.Contains(keywords))
                 || (x.ImprovementRequirements != null && x.ImprovementRequirements.Contains(keywords))
-                || SqlFunc.ToString(x.EvaluationConclusion).Contains(keywords)
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
-                || SqlFunc.ToString(x.EvaluationStatus).Contains(keywords)
-                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.RectificationStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EvaluationDate).Contains(keywords)
-                || SqlFunc.ToString(x.RectificationDeadline).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierEvaluationCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(queryDto.SupplierEvaluationCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierEvaluationCode))
+        {
+            var supplierEvaluationCode = queryDto.SupplierEvaluationCode;
+            exp = exp.And(x => x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(supplierEvaluationCode));
         }
 
         if (queryDto?.SupplierId.HasValue == true)
         {
-            exp = exp.And(x => x.SupplierId == queryDto.SupplierId);
+            var supplierId = queryDto.SupplierId.Value;
+            exp = exp.And(x => x.SupplierId == supplierId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierName1))
         {
-            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(queryDto.SupplierName1));
+            var supplierName1 = queryDto.SupplierName1;
+            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(supplierName1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierCode))
         {
-            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
+            var supplierCode = queryDto.SupplierCode;
+            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(supplierCode));
         }
 
         if (queryDto?.EvaluationPeriod.HasValue == true)
         {
-            exp = exp.And(x => x.EvaluationPeriod == queryDto.EvaluationPeriod);
+            var evaluationPeriod = queryDto.EvaluationPeriod.Value;
+            exp = exp.And(x => x.EvaluationPeriod == evaluationPeriod);
         }
 
         if (queryDto?.EvaluationType.HasValue == true)
         {
-            exp = exp.And(x => x.EvaluationType == queryDto.EvaluationType);
+            var evaluationType = queryDto.EvaluationType.Value;
+            exp = exp.And(x => x.EvaluationType == evaluationType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EvaluatorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluatorBy))
         {
-            exp = exp.And(x => x.EvaluatorBy != null && x.EvaluatorBy.Contains(queryDto.EvaluatorBy));
+            var evaluatorBy = queryDto.EvaluatorBy;
+            exp = exp.And(x => x.EvaluatorBy != null && x.EvaluatorBy.Contains(evaluatorBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EvaluationDept))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluationDept))
         {
-            exp = exp.And(x => x.EvaluationDept != null && x.EvaluationDept.Contains(queryDto.EvaluationDept));
+            var evaluationDept = queryDto.EvaluationDept;
+            exp = exp.And(x => x.EvaluationDept != null && x.EvaluationDept.Contains(evaluationDept));
         }
 
         if (queryDto?.OverallRating.HasValue == true)
         {
-            exp = exp.And(x => x.OverallRating == queryDto.OverallRating);
+            var overallRating = queryDto.OverallRating.Value;
+            exp = exp.And(x => x.OverallRating == overallRating);
         }
 
         if (queryDto?.TotalScore.HasValue == true)
         {
-            exp = exp.And(x => x.TotalScore == queryDto.TotalScore);
+            var totalScore = queryDto.TotalScore.Value;
+            exp = exp.And(x => x.TotalScore == totalScore);
         }
 
         if (queryDto?.QualityScore.HasValue == true)
         {
-            exp = exp.And(x => x.QualityScore == queryDto.QualityScore);
+            var qualityScore = queryDto.QualityScore.Value;
+            exp = exp.And(x => x.QualityScore == qualityScore);
         }
 
         if (queryDto?.DeliveryScore.HasValue == true)
         {
-            exp = exp.And(x => x.DeliveryScore == queryDto.DeliveryScore);
+            var deliveryScore = queryDto.DeliveryScore.Value;
+            exp = exp.And(x => x.DeliveryScore == deliveryScore);
         }
 
         if (queryDto?.PriceScore.HasValue == true)
         {
-            exp = exp.And(x => x.PriceScore == queryDto.PriceScore);
+            var priceScore = queryDto.PriceScore.Value;
+            exp = exp.And(x => x.PriceScore == priceScore);
         }
 
         if (queryDto?.ServiceScore.HasValue == true)
         {
-            exp = exp.And(x => x.ServiceScore == queryDto.ServiceScore);
+            var serviceScore = queryDto.ServiceScore.Value;
+            exp = exp.And(x => x.ServiceScore == serviceScore);
         }
 
         if (queryDto?.TechnicalScore.HasValue == true)
         {
-            exp = exp.And(x => x.TechnicalScore == queryDto.TechnicalScore);
+            var technicalScore = queryDto.TechnicalScore.Value;
+            exp = exp.And(x => x.TechnicalScore == technicalScore);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MainStrengths))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MainStrengths))
         {
-            exp = exp.And(x => x.MainStrengths != null && x.MainStrengths.Contains(queryDto.MainStrengths));
+            var mainStrengths = queryDto.MainStrengths;
+            exp = exp.And(x => x.MainStrengths != null && x.MainStrengths.Contains(mainStrengths));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MainIssues))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MainIssues))
         {
-            exp = exp.And(x => x.MainIssues != null && x.MainIssues.Contains(queryDto.MainIssues));
+            var mainIssues = queryDto.MainIssues;
+            exp = exp.And(x => x.MainIssues != null && x.MainIssues.Contains(mainIssues));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ImprovementRequirements))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ImprovementRequirements))
         {
-            exp = exp.And(x => x.ImprovementRequirements != null && x.ImprovementRequirements.Contains(queryDto.ImprovementRequirements));
+            var improvementRequirements = queryDto.ImprovementRequirements;
+            exp = exp.And(x => x.ImprovementRequirements != null && x.ImprovementRequirements.Contains(improvementRequirements));
         }
 
         if (queryDto?.EvaluationConclusion.HasValue == true)
         {
-            exp = exp.And(x => x.EvaluationConclusion == queryDto.EvaluationConclusion);
+            var evaluationConclusion = queryDto.EvaluationConclusion.Value;
+            exp = exp.And(x => x.EvaluationConclusion == evaluationConclusion);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Attachments))
         {
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
+            var attachments = queryDto.Attachments;
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(attachments));
         }
 
         if (queryDto?.EvaluationStatus.HasValue == true)
         {
-            exp = exp.And(x => x.EvaluationStatus == queryDto.EvaluationStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
-        {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var evaluationStatus = queryDto.EvaluationStatus.Value;
+            exp = exp.And(x => x.EvaluationStatus == evaluationStatus);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.RectificationStatus.HasValue == true)
         {
-            exp = exp.And(x => x.RectificationStatus == queryDto.RectificationStatus);
+            var rectificationStatus = queryDto.RectificationStatus.Value;
+            exp = exp.And(x => x.RectificationStatus == rectificationStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.EvaluationDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.EvaluationDate >= queryDto.EvaluationDateStart);
+            var evaluationDateStart = queryDto.EvaluationDateStart.Value;
+            exp = exp.And(x => x.EvaluationDate >= evaluationDateStart);
         }
 
         if (queryDto?.EvaluationDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EvaluationDate <= queryDto.EvaluationDateEnd);
+            var evaluationDateEnd = queryDto.EvaluationDateEnd.Value;
+            exp = exp.And(x => x.EvaluationDate <= evaluationDateEnd);
         }
 
         if (queryDto?.RectificationDeadlineStart.HasValue == true)
         {
-            exp = exp.And(x => x.RectificationDeadline >= queryDto.RectificationDeadlineStart);
+            var rectificationDeadlineStart = queryDto.RectificationDeadlineStart.Value;
+            exp = exp.And(x => x.RectificationDeadline >= rectificationDeadlineStart);
         }
 
         if (queryDto?.RectificationDeadlineEnd.HasValue == true)
         {
-            exp = exp.And(x => x.RectificationDeadline <= queryDto.RectificationDeadlineEnd);
+            var rectificationDeadlineEnd = queryDto.RectificationDeadlineEnd.Value;
+            exp = exp.And(x => x.RectificationDeadline <= rectificationDeadlineEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSupplierEvaluationQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierEvaluationCode))
+        {
+            return true;
+        }
+        if (queryDto.SupplierId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierCode))
+        {
+            return true;
+        }
+        if (queryDto.EvaluationPeriod.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EvaluationType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EvaluatorBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EvaluationDept))
+        {
+            return true;
+        }
+        if (queryDto.OverallRating.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.QualityScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DeliveryScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PriceScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ServiceScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TechnicalScore.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MainStrengths))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MainIssues))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ImprovementRequirements))
+        {
+            return true;
+        }
+        if (queryDto.EvaluationConclusion.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Attachments))
+        {
+            return true;
+        }
+        if (queryDto.EvaluationStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RectificationStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.EvaluationDateStart.HasValue || queryDto.EvaluationDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RectificationDeadlineStart.HasValue || queryDto.RectificationDeadlineEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

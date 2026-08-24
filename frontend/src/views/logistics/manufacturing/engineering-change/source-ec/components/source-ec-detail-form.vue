@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/source-ec/components -->
 <!-- 文件名称：source-ec-detail-form.vue -->
-<!-- 功能描述：设变来源主表实体子表 sourceEcDetail 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
+<!-- 功能描述：设变来源明细列表子表 sourceEcDetail 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -14,7 +14,6 @@
     :rules="rules"
     layout="horizontal"
     label-align="right"
-    :disabled="loading || readOnly"
   >
     <a-tabs
       v-model:active-key="activeTab"
@@ -22,19 +21,57 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcefinishedproduct')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('lineNumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="pi.ph('lineNumber')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sourceFinishedProduct')"
                 name="sourceFinishedProduct"
               >
                 <a-input
                   v-model:value="formState.sourceFinishedProduct"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcefinishedproduct') })"
+                  :placeholder="pi.ph('sourceFinishedProduct')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -43,12 +80,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourceparentpart')"
+                :label="pi.label('sourceParentPart')"
                 name="sourceParentPart"
               >
                 <a-input
                   v-model:value="formState.sourceParentPart"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourceparentpart') })"
+                  :placeholder="pi.ph('sourceParentPart')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -57,66 +94,27 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcelegacypartCode')"
+                :label="pi.label('sourceLegacyPartCode')"
                 name="sourceLegacyPartCode"
               >
                 <a-input
                   v-model:value="formState.sourceLegacyPartCode"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacypartCode') })"
+                  :placeholder="pi.ph('sourceLegacyPartCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.sourceEcDetailId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcelegacypartname')"
+                :label="pi.label('sourceLegacyPartName')"
                 name="sourceLegacyPartName"
               >
                 <a-input
                   v-model:value="formState.sourceLegacyPartName"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacypartname') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sourceecdetail.sourcelegacyusage')"
-                name="sourceLegacyUsage"
-              >
-                <a-input-number
-                  v-model:value="formState.sourceLegacyUsage"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacyusage') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sourceecdetail.sourcelegacymountingposition')"
-                name="sourceLegacyMountingPosition"
-              >
-                <a-input
-                  v-model:value="formState.sourceLegacyMountingPosition"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacymountingposition') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sourceecdetail.sourcereplacementpartCode')"
-                name="sourceReplacementPartCode"
-              >
-                <a-input
-                  v-model:value="formState.sourceReplacementPartCode"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcereplacementpartCode') })"
+                  :placeholder="pi.ph('sourceLegacyPartName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -125,41 +123,42 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcereplacementpartname')"
-                name="sourceReplacementPartName"
-              >
-                <a-input
-                  v-model:value="formState.sourceReplacementPartName"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcereplacementpartname') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sourceecdetail.sourcereplacementusage')"
-                name="sourceReplacementUsage"
+                :label="pi.label('sourceLegacyUsage')"
+                name="sourceLegacyUsage"
               >
                 <a-input-number
-                  v-model:value="formState.sourceReplacementUsage"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcereplacementusage') })"
+                  v-model:value="formState.sourceLegacyUsage"
+                  :placeholder="pi.ph('sourceLegacyUsage')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcereplacementmountingposition')"
-                name="sourceReplacementMountingPosition"
+                :label="pi.label('sourceLegacyMountingPosition')"
+                name="sourceLegacyMountingPosition"
               >
                 <a-input
-                  v-model:value="formState.sourceReplacementMountingPosition"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcereplacementmountingposition') })"
+                  v-model:value="formState.sourceLegacyMountingPosition"
+                  :placeholder="pi.ph('sourceLegacyMountingPosition')"
                   show-count
-                  :maxlength="40"
+                  :maxlength="20"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sourceReplacementPartCode')"
+                name="sourceReplacementPartCode"
+              >
+                <a-input
+                  v-model:value="formState.sourceReplacementPartCode"
+                  :placeholder="pi.ph('sourceReplacementPartCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.sourceEcDetailId"
                 />
               </a-form-item>
             </a-col>
@@ -168,87 +167,173 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcebomCode')"
+                :label="pi.label('sourceReplacementPartName')"
+                name="sourceReplacementPartName"
+              >
+                <a-input
+                  v-model:value="formState.sourceReplacementPartName"
+                  :placeholder="pi.ph('sourceReplacementPartName')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sourceReplacementUsage')"
+                name="sourceReplacementUsage"
+              >
+                <a-input-number
+                  v-model:value="formState.sourceReplacementUsage"
+                  :placeholder="pi.ph('sourceReplacementUsage')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sourceReplacementMountingPosition')"
+                name="sourceReplacementMountingPosition"
+              >
+                <a-input
+                  v-model:value="formState.sourceReplacementMountingPosition"
+                  :placeholder="pi.ph('sourceReplacementMountingPosition')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sourceBomCode')"
                 name="sourceBomCode"
               >
                 <a-input
                   v-model:value="formState.sourceBomCode"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcebomCode') })"
+                  :placeholder="pi.ph('sourceBomCode')"
                   show-count
-                  :maxlength="4"
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.sourceEcDetailId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.SourceCompatibility')"
-                name="SourceCompatibility"
+                :label="pi.label('sourceCompatibility')"
+                name="sourceCompatibility"
               >
                 <TaktSelect
-                  v-model:value="formState.SourceCompatibility"
+                  v-model:value="formState.sourceCompatibility"
                   dict-type="logistics_ec_source_compatibility"
-                  allow-clear
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.SourceCompatibility') })"
+                  :placeholder="pi.ph('sourceCompatibility')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcedistinction')"
+                :label="pi.label('sourceDistinction')"
                 name="sourceDistinction"
               >
                 <TaktSelect
                   v-model:value="formState.sourceDistinction"
                   dict-type="logistics_ec_source_distinction"
-                  allow-clear
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcedistinction') })"
+                  :placeholder="pi.ph('sourceDistinction')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.SourceInstruction')"
-                name="SourceInstruction"
+                :label="pi.label('sourceInstruction')"
+                name="sourceInstruction"
               >
                 <TaktSelect
-                  v-model:value="formState.SourceInstruction"
+                  v-model:value="formState.sourceInstruction"
                   dict-type="logistics_ec_source_instruction"
-                  allow-clear
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.SourceInstruction') })"
+                  :placeholder="pi.ph('sourceInstruction')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcelegacypartdisposition')"
+                :label="pi.label('sourceLegacyPartDisposition')"
                 name="sourceLegacyPartDisposition"
               >
                 <TaktSelect
                   v-model:value="formState.sourceLegacyPartDisposition"
                   dict-type="logistics_ec_legacy_part_disposition"
-                  allow-clear
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacypartdisposition') })"
+                  :placeholder="pi.ph('sourceLegacyPartDisposition')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcebomeffectivedate')"
+                :label="pi.label('sourceBomEffectiveDate')"
                 name="sourceBomEffectiveDate"
               >
                 <a-date-picker
                   v-model:value="formState.sourceBomEffectiveDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceecdetail.sourcebomeffectivedate') })"
+                  :placeholder="pi.ph('sourceBomEffectiveDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -261,20 +346,61 @@
 
 <script setup lang="ts">
 /**
- * 设变来源主表实体子表 sourceEcDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
+ * 设变来源明细列表子表 sourceEcDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/engineering-change/source-ec/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSourceEcDetailI18n } from '../composables/use-source-ec-detail-i18n'
+
+/** 实体字段 i18n */
+const pi = useSourceEcDetailI18n()
+
 import type { SourceEcDetailCreate } from '@/types/logistics/manufacturing/engineering-change/source-ec-detail'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-/** 表单内容区高度 class（16 字段分两 Tab，每 Tab 最多 10 行双列） */
-const formContentClass = computed(() => 'takt-form-content-rows-10')
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","sourceFinishedProduct","sourceParentPart","sourceLegacyPartCode","sourceLegacyPartName","sourceLegacyUsage","sourceLegacyMountingPosition","sourceReplacementPartCode","sourceReplacementPartName","sourceReplacementUsage","sourceReplacementMountingPosition","sourceBomCode","sourceCompatibility","sourceDistinction","sourceInstruction","sourceLegacyPartDisposition","sourceBomEffectiveDate","isObsolete"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -283,15 +409,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
-  /** 详情只读模式（禁用全部字段） */
-  readOnly?: boolean
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
-  readOnly: false,
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -303,6 +429,14 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 sourceEcDetailId 才视为编辑） */
 watch(
   () => props.formData,
@@ -310,6 +444,8 @@ watch(
     if (val?.sourceEcDetailId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
+
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -318,28 +454,65 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.sourceEcDetailId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   sourceFinishedProduct: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcefinishedproduct') }),
+      message: pi.ph('sourceFinishedProduct'),
       trigger: 'blur'
     }
   ],
   sourceParentPart: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourceparentpart') }),
+      message: pi.ph('sourceParentPart'),
       trigger: 'blur'
     }
   ],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -351,18 +524,76 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 sourceEcId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
+      delete payload.lineNumber
+    } else {
+      const numlineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+      if (Number.isFinite(numlineNumber)) payload.lineNumber = numlineNumber
+      else delete payload.lineNumber
+    }
+  }
   if ('sourceLegacyUsage' in payload) {
     const rawsourceLegacyUsage = payload.sourceLegacyUsage
-    payload.sourceLegacyUsage = typeof rawsourceLegacyUsage === 'number' ? rawsourceLegacyUsage : Number(rawsourceLegacyUsage)
+    if (rawsourceLegacyUsage === undefined || rawsourceLegacyUsage === null || rawsourceLegacyUsage === '') {
+      delete payload.sourceLegacyUsage
+    } else {
+      const numsourceLegacyUsage = typeof rawsourceLegacyUsage === 'number' ? rawsourceLegacyUsage : Number(rawsourceLegacyUsage)
+      if (Number.isFinite(numsourceLegacyUsage)) payload.sourceLegacyUsage = numsourceLegacyUsage
+      else delete payload.sourceLegacyUsage
+    }
   }
   if ('sourceReplacementUsage' in payload) {
-    const rawSourceReplacementUsage = payload.sourceReplacementUsage
-    payload.sourceReplacementUsage = typeof rawSourceReplacementUsage === 'number'
-      ? rawSourceReplacementUsage
-      : Number(rawSourceReplacementUsage)
+    const rawsourceReplacementUsage = payload.sourceReplacementUsage
+    if (rawsourceReplacementUsage === undefined || rawsourceReplacementUsage === null || rawsourceReplacementUsage === '') {
+      delete payload.sourceReplacementUsage
+    } else {
+      const numsourceReplacementUsage = typeof rawsourceReplacementUsage === 'number' ? rawsourceReplacementUsage : Number(rawsourceReplacementUsage)
+      if (Number.isFinite(numsourceReplacementUsage)) payload.sourceReplacementUsage = numsourceReplacementUsage
+      else delete payload.sourceReplacementUsage
+    }
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    if (rawisObsolete === undefined || rawisObsolete === null || rawisObsolete === '') {
+      delete payload.isObsolete
+    } else {
+      const numisObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+      if (Number.isFinite(numisObsolete)) payload.isObsolete = numisObsolete
+      else delete payload.isObsolete
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.sourceEcDetailId) {
+    payload.sourceEcDetailId = props.formData.sourceEcDetailId
+  }
   payload.sourceEcId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.sourceEcCode ?? masterRow.SourceEcCode
+    const masterName = masterRow.sourceEcName ?? masterRow.SourceEcName
+    if (masterCode != null && masterCode !== '' && !payload.sourceEcCode) {
+      payload.sourceEcCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.sourceEcName) {
+      payload.sourceEcName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -373,6 +604,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.sourceEcDetailId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
@@ -382,10 +614,10 @@ defineExpose({ validate, getValues, resetFields })
 
 <style scoped lang="css">
 :deep(.ant-tabs-content-holder) {
-  min-height: auto;
+  min-height: 50vh;
 }
 
 :deep(.ant-tabs-tabpane) {
-  min-height: auto;
+  min-height: 50vh;
 }
 </style>

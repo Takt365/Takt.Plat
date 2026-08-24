@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeEducation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,22 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeeducation.enddate", "zh-HK", "结束日期_hk", "结束日期"),
 
             // entity.employeeeducation.ishighest
-            new TranslationSeedItem("entity.employeeeducation.ishighest", "en-US", "是否最高学历_us", "是否最高学历（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "en-US", "是否最高学历_us", "是否最高学历（字典 sys_yes_no；0=否 1=是）"),
             // entity.employeeeducation.ishighest
-            new TranslationSeedItem("entity.employeeeducation.ishighest", "ja-JP", "是否最高学历_jp", "是否最高学历（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "ja-JP", "是否最高学历_jp", "是否最高学历（字典 sys_yes_no；0=否 1=是）"),
             // entity.employeeeducation.ishighest
-            new TranslationSeedItem("entity.employeeeducation.ishighest", "zh-CN", "是否最高学历", "是否最高学历（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "zh-CN", "是否最高学历", "是否最高学历（字典 sys_yes_no；0=否 1=是）"),
             // entity.employeeeducation.ishighest
-            new TranslationSeedItem("entity.employeeeducation.ishighest", "zh-HK", "是否最高学历_hk", "是否最高学历（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "zh-HK", "是否最高学历_hk", "是否最高学历（字典 sys_yes_no；0=否 1=是）"),
+
+            // entity.employeeeducation.employee
+            new TranslationSeedItem("entity.employeeeducation.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeeeducation.employee
+            new TranslationSeedItem("entity.employeeeducation.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeeeducation.employee
+            new TranslationSeedItem("entity.employeeeducation.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeeeducation.employee
+            new TranslationSeedItem("entity.employeeeducation.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

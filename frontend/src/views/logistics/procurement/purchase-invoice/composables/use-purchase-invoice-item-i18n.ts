@@ -20,8 +20,6 @@ export const PURCHASEINVOICEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASE
 
 /** 列表业务列（不含主键） */
 export const PURCHASEINVOICEITEM_LIST_FIELDS = [
-  'purchaseInvoiceId',
-  'plantCode',
   'purchaseInvoiceCode',
   'lineNumber',
   'purchaseOrderCode',
@@ -58,12 +56,11 @@ export const PURCHASEINVOICEITEM_LIST_FIELDS = [
   'itemText',
   'materialDocumentItem',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PURCHASEINVOICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'purchaseInvoiceId',
-  'plantCode',
   'purchaseInvoiceCode',
   'lineNumber',
   'purchaseOrderCode',
@@ -120,45 +117,7 @@ export const PURCHASEINVOICEITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEINVOICEITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'optional',
-  lineNumber: 'select',
-  purchaseOrderCode: 'optional',
-  purchaseOrderItem: 'optional',
-  accountAssignmentSeq: 'optional',
-  materialCode: 'optional',
-  valuationArea: 'optional',
-  amount: 'optional',
-  debitCreditIndicator: 'optional',
-  taxCode: 'optional',
-  quantity: 'optional',
-  orderUnit: 'optional',
-  poPriceQuantity: 'optional',
-  poPriceUnit: 'optional',
-  valuatedStockQuantity: 'optional',
-  previousPeriodStock: 'optional',
-  baseUnit: 'optional',
-  valuationClass: 'optional',
-  updatePoHistoryFlag: 'optional',
-  subsequentDebitCredit: 'optional',
-  blockReasonPrice: 'optional',
-  blockReasonQuantity: 'optional',
-  blockReasonQuality: 'optional',
-  blockReasonEnhanced: 'optional',
-  valueString: 'optional',
-  referenceCode: 'optional',
-  conditionType: 'optional',
-  totalValuatedStockValue: 'optional',
-  previousPeriodValue: 'optional',
-  referenceDocumentCode: 'optional',
-  referenceDocumentYear: 'optional',
-  referenceDocumentItem: 'optional',
-  stockManagedMaterialCode: 'optional',
-  itemText: 'optional',
-  materialDocumentItem: 'optional',
-  isObsolete: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -166,57 +125,13 @@ export type PurchaseInvoiceItemField = keyof typeof PURCHASEINVOICEITEM_PLACEHOL
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEINVOICEITEM_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'purchaseInvoiceCode',
-  'purchaseOrderCode',
-  'accountAssignmentSeq',
-  'materialCode',
-  'valuationArea',
-  'debitCreditIndicator',
-  'taxCode',
-  'orderUnit',
-  'poPriceUnit',
-  'baseUnit',
-  'valuationClass',
-  'updatePoHistoryFlag',
-  'subsequentDebitCredit',
-  'blockReasonPrice',
-  'blockReasonQuantity',
-  'blockReasonQuality',
-  'blockReasonEnhanced',
-  'valueString',
-  'referenceCode',
-  'conditionType',
-  'referenceDocumentCode',
-  'referenceDocumentYear',
-  'stockManagedMaterialCode',
-  'itemText',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchaseInvoiceItemQuery)[]
 
-export type PurchaseInvoiceItemQueryField =
-  | (typeof PURCHASEINVOICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'purchaseOrderItem' | 'amount' | 'quantity' | 'poPriceQuantity' | 'valuatedStockQuantity' | 'previousPeriodStock' | 'totalValuatedStockValue' | 'previousPeriodValue' | 'referenceDocumentItem' | 'materialDocumentItem' | 'isObsolete'
+export type PurchaseInvoiceItemQueryField = (typeof PURCHASEINVOICEITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEINVOICEITEM_QUERY_FIELDS: readonly PurchaseInvoiceItemQueryField[] = [
-  ...PURCHASEINVOICEITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'purchaseOrderItem',
-  'amount',
-  'quantity',
-  'poPriceQuantity',
-  'valuatedStockQuantity',
-  'previousPeriodStock',
-  'totalValuatedStockValue',
-  'previousPeriodValue',
-  'referenceDocumentItem',
-  'materialDocumentItem',
-  'isObsolete',
-]
+export const PURCHASEINVOICEITEM_QUERY_FIELDS: readonly PurchaseInvoiceItemQueryField[] = [...PURCHASEINVOICEITEM_QUERY_STRING_FIELDS]
 
 /**
  * PurchaseInvoiceItem字段 i18n：index / purchase-invoice-item-form 统一入口

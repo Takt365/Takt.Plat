@@ -102,12 +102,12 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
         EnsureThreeLayerContext();
         var list = await _loginLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.Username ?? string.Empty,
+            x => x.UserName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.Username ?? e.Id.ToString(),
+            DictLabel = e.UserName ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -217,7 +217,7 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.Username != null && x.Username.Contains(keywords))
+                (x.UserName != null && x.UserName.Contains(keywords))
                 || SqlFunc.ToString(x.LoginType).Contains(keywords)
                 || (x.Browser != null && x.Browser.Contains(keywords))
                 || (x.Os != null && x.Os.Contains(keywords))
@@ -234,9 +234,9 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Username))
+        if (!string.IsNullOrEmpty(queryDto?.UserName))
         {
-            exp = exp.And(x => x.Username != null && x.Username.Contains(queryDto.Username));
+            exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.LoginType))

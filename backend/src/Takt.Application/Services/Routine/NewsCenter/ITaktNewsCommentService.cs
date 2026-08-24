@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：ITaktNewsCommentService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心评论应用服务接口
 // 
@@ -36,17 +36,18 @@ public interface ITaktNewsCommentService
     Task<TaktNewsCommentDto?> GetNewsCommentByIdAsync(long id);
 
     /// <summary>
-    /// 获取新闻评论树形选项列表
+    /// 获取新闻中心评论树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetNewsCommentTreeOptionsAsync();
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    Task<List<TaktTreeSelectOption>> GetNewsCommentTreeOptionsAsync(long parentId = 0);
 
     /// <summary>
-    /// 获取新闻中心评论树形列表
+    /// 获取新闻中心评论树形列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     Task<List<TaktNewsCommentTreeDto>> GetNewsCommentTreeAsync(long parentId = 0, bool includeDisabled = false);
 
     /// <summary>
@@ -84,6 +85,13 @@ public interface ITaktNewsCommentService
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktNewsCommentDto> UpdateNewsCommentStatusAsync(TaktNewsCommentStatusDto dto);
+
+    /// <summary>
+    /// 更新新闻中心评论作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktNewsCommentDto> UpdateNewsCommentObsoleteAsync(TaktNewsCommentObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

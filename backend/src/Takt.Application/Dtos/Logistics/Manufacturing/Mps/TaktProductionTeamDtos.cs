@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeam 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionTeam 生成，请按需审阅）
 // 
@@ -35,7 +35,6 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionTeamId { get; set; }
 
-
     /// <summary>
     /// 班组编码（唯一标识，例如：1、1SMT1、1SMT2、2自插A 等）
     /// </summary>
@@ -62,7 +61,7 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int TeamStatus { get; set; } = 0;
 
@@ -90,7 +89,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -100,7 +99,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -130,7 +129,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int? TeamStatus { get; set; }
 
@@ -180,9 +179,8 @@ public class TaktProductionTeamCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -214,7 +212,7 @@ public class TaktProductionTeamCreateDto
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int TeamStatus { get; set; } = 0;
 
@@ -278,9 +276,9 @@ public class TaktProductionTeamStatusDto
     public long ProductionTeamId { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
-    [Required(ErrorMessage = "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）不能为空")]
+    [Required(ErrorMessage = "启用状态（字典 sys_normal_disable；0=禁用，1=启用）不能为空")]
     public int TeamStatus { get; set; } = 0;
 }
 
@@ -309,7 +307,7 @@ public class TaktProductionTeamTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -339,7 +337,7 @@ public class TaktProductionTeamTemplateDto
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int? TeamStatus { get; set; }
 
@@ -381,7 +379,7 @@ public class TaktProductionTeamImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -411,7 +409,7 @@ public class TaktProductionTeamImportDto
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int? TeamStatus { get; set; }
 
@@ -454,9 +452,14 @@ public class TaktProductionTeamExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班组编码（唯一标识，例如：1、1SMT1、1SMT2、2自插A 等）
@@ -484,7 +487,7 @@ public class TaktProductionTeamExportDto
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     public int TeamStatus { get; set; } = 0;
 

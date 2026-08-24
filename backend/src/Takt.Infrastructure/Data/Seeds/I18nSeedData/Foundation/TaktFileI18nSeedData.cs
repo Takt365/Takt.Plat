@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktFileI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFile 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/file）
 // 
@@ -91,22 +91,22 @@ public class TaktFileI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.file._self", "zh-HK", "文件信息_hk", "实体名称"),
 
             // entity.file.code
-            new TranslationSeedItem("entity.file.code", "en-US", "文件编码_us", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
+            new TranslationSeedItem("entity.file.code", "en-US", "文件编码_us", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique；根据 MIME 类型自动通过 TaktNumbering 文件编码规则生成，非表单手选）"),
             // entity.file.code
-            new TranslationSeedItem("entity.file.code", "ja-JP", "文件编码_jp", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
+            new TranslationSeedItem("entity.file.code", "ja-JP", "文件编码_jp", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique；根据 MIME 类型自动通过 TaktNumbering 文件编码规则生成，非表单手选）"),
             // entity.file.code
-            new TranslationSeedItem("entity.file.code", "zh-CN", "文件编码", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
+            new TranslationSeedItem("entity.file.code", "zh-CN", "文件编码", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique；根据 MIME 类型自动通过 TaktNumbering 文件编码规则生成，非表单手选）"),
             // entity.file.code
-            new TranslationSeedItem("entity.file.code", "zh-HK", "文件编码_hk", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
+            new TranslationSeedItem("entity.file.code", "zh-HK", "文件编码_hk", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique；根据 MIME 类型自动通过 TaktNumbering 文件编码规则生成，非表单手选）"),
 
             // entity.file.name
-            new TranslationSeedItem("entity.file.name", "en-US", "文件名称_us", "文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）"),
+            new TranslationSeedItem("entity.file.name", "en-US", "文件名称_us", "文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）"),
             // entity.file.name
-            new TranslationSeedItem("entity.file.name", "ja-JP", "文件名称_jp", "文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）"),
+            new TranslationSeedItem("entity.file.name", "ja-JP", "文件名称_jp", "文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）"),
             // entity.file.name
-            new TranslationSeedItem("entity.file.name", "zh-CN", "文件名称", "文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）"),
+            new TranslationSeedItem("entity.file.name", "zh-CN", "文件名称", "文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）"),
             // entity.file.name
-            new TranslationSeedItem("entity.file.name", "zh-HK", "文件名称_hk", "文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）"),
+            new TranslationSeedItem("entity.file.name", "zh-HK", "文件名称_hk", "文件名称（字典 sys_storage_naming；0=原文件+哈希值 1=自动生成 2=自定义）"),
 
             // entity.file.originalname
             new TranslationSeedItem("entity.file.originalname", "en-US", "原始名称_us", "文件原始名称（上传时的原始文件名）"),
@@ -217,13 +217,13 @@ public class TaktFileI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.file.lastdownloadtime", "zh-HK", "最后下载_hk", "最后下载时间"),
 
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "en-US", "公开_us", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "en-US", "公开_us", "公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "ja-JP", "公开_jp", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "ja-JP", "公开_jp", "公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "zh-CN", "公开", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "zh-CN", "公开", "公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "zh-HK", "公开_hk", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "zh-HK", "公开_hk", "公开（字典 sys_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
 
             // entity.file.description
             new TranslationSeedItem("entity.file.description", "en-US", "文件描述_us", "文件描述"),
@@ -262,13 +262,13 @@ public class TaktFileI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.file.location", "zh-HK", "位置_hk", "位置（IP 对应地理位置）"),
 
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "en-US", "状态_us", "状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

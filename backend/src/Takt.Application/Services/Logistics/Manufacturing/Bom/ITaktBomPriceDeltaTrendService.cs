@@ -11,21 +11,15 @@
 // ========================================
 
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
 /// <summary>
 /// 成本差异推移（产品月成本 + 0价格组 + PriceDeltaTrend）
+/// 查询栏工厂/机种/产品选项统一走 ITaktBomMaterialCostAnalysisService。
 /// </summary>
 public interface ITaktBomPriceDeltaTrendService
 {
-    /// <summary>
-    /// 查询栏工厂选项：当前公司 RelatedPlant ∩ 成本主表 PlantCode
-    /// </summary>
-    /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetBomPriceDeltaTrendPlantOptionsAsync();
-
     /// <summary>
     /// 成本差异推移列表
     /// </summary>

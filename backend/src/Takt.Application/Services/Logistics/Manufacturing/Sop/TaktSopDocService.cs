@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopDocService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP文档头应用服务实现
 // 
@@ -370,6 +370,10 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
             {
                 var childDto = revisionsForSave[i];
                 childDto.SopId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
                 if (childDto.SopRevisionId > 0)
                 {
                     if (!existingById.TryGetValue(childDto.SopRevisionId, out var target))
@@ -463,25 +467,25 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
 
         if (queryDto?.RoutingItemId.HasValue == true)
         {
-            var routingItemId = queryDto.RoutingItemId;
+            var routingItemId = queryDto.RoutingItemId.Value;
             exp = exp.And(x => x.RoutingItemId == routingItemId);
         }
 
         if (queryDto?.WorkstationId.HasValue == true)
         {
-            var workstationId = queryDto.WorkstationId;
+            var workstationId = queryDto.WorkstationId.Value;
             exp = exp.And(x => x.WorkstationId == workstationId);
         }
 
         if (queryDto?.CurrentRevisionId.HasValue == true)
         {
-            var currentRevisionId = queryDto.CurrentRevisionId;
+            var currentRevisionId = queryDto.CurrentRevisionId.Value;
             exp = exp.And(x => x.CurrentRevisionId == currentRevisionId);
         }
 
         if (queryDto?.SopStatus.HasValue == true)
         {
-            var sopStatus = queryDto.SopStatus;
+            var sopStatus = queryDto.SopStatus.Value;
             exp = exp.And(x => x.SopStatus == sopStatus);
         }
 
@@ -499,13 +503,13 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

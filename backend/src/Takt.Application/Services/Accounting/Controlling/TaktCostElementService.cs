@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostElementService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素应用服务实现
 // 
@@ -18,7 +18,6 @@ using Takt.Domain.Entities.Accounting.Controlling;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
-using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
@@ -56,12 +55,20 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     }
 
     /// <summary>
-    /// 获取成本要素列表（分页）
+    /// 获取成本要素列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCostElementDto>> GetCostElementListAsync(TaktCostElementQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCostElementDto>.Create(
+                new List<TaktCostElementDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _costElementRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -86,119 +93,57 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         {
             return null;
         }
-        var dto = entity.Adapt<TaktCostElementDto>();
-        await FillCostElementDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktCostElementDto>();
+    }
 
     /// <summary>
-    /// 获取成本要素树形选项列表（DictValue 为 CostElementCode，DictLabel 为成本要素名称）
+    /// 获取成本要素树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync()
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    public async Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync(long parentId = 0)
     {
         EnsureThreeLayerContext();
-        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostElementStatus == 1);
-        return BuildCostElementTreeOptions(list, 0);
+        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.CostElementStatus == 1);
+        return list
+            .OrderBy(x => x.SortOrder)
+            .Select(item =>
+            {
+                var isLeaf = false;
+                return new TaktTreeSelectOption
+                {
+                    DictValue = item.Id.ToString(),
+                    DictLabel = item.CostElementName,
+                    SortOrder = item.SortOrder,
+                    IsLeaf = isLeaf,
+                    Children = null,
+                };
+            })
+            .ToList();
     }
 
     /// <summary>
-    /// 获取成本要素父级树形选项列表（DictValue 为 Id，用于 ParentId 选择）
+    /// 获取成本要素树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）
     /// </summary>
-    /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetCostElementParentTreeOptionsAsync()
-    {
-        EnsureThreeLayerContext();
-        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostElementStatus == 1);
-        return BuildCostElementParentTreeOptions(list, 0);
-    }
-
-    /// <summary>
-    /// 在内存中构建成本要素树形选项（递归，按 ParentId；DictValue 为 CostElementCode）
-    /// </summary>
-    private List<TaktTreeSelectOption> BuildCostElementTreeOptions(List<TaktCostElement> all, long parentId)
-    {
-        var result = new List<TaktTreeSelectOption>();
-        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
-        {
-            var option = new TaktTreeSelectOption
-            {
-                DictValue = item.CostElementCode,
-                DictLabel = string.IsNullOrWhiteSpace(item.CostElementName) ? item.CostElementCode : item.CostElementName,
-                ExtLabel = item.CostElementCode,
-                SortOrder = item.SortOrder,
-            };
-            var children = BuildCostElementTreeOptions(all, item.Id);
-            if (children.Count > 0)
-            {
-                option.Children = children;
-            }
-            result.Add(option);
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// 在内存中构建成本要素父级树形选项（递归，按 ParentId；DictValue 为 Id）
-    /// </summary>
-    private List<TaktTreeSelectOption> BuildCostElementParentTreeOptions(List<TaktCostElement> all, long parentId)
-    {
-        var result = new List<TaktTreeSelectOption>();
-        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
-        {
-            var option = new TaktTreeSelectOption
-            {
-                DictValue = item.Id,
-                DictLabel = string.IsNullOrWhiteSpace(item.CostElementName) ? item.Id.ToString() : item.CostElementName,
-                ExtLabel = item.CostElementCode,
-                SortOrder = item.SortOrder,
-            };
-            var children = BuildCostElementParentTreeOptions(all, item.Id);
-            if (children.Count > 0)
-            {
-                option.Children = children;
-            }
-            result.Add(option);
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// 获取成本要素树形列表
-    /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     public async Task<List<TaktCostElementTreeDto>> GetCostElementTreeAsync(long parentId = 0, bool includeDisabled = false)
     {
         EnsureThreeLayerContext();
-        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
-        var filtered = includeDisabled
-            ? list
-            : list.Where(x => x.CostElementStatus == 1).ToList();
-        return BuildCostElementTree(filtered, parentId);
-    }
-
-    /// <summary>
-    /// 在内存中构建成本要素树（递归，按 ParentId）
-    /// </summary>
-    private List<TaktCostElementTreeDto> BuildCostElementTree(List<TaktCostElement> allRecords, long parentId)
-    {
-        var children = allRecords
-            .Where(x => x.ParentId == parentId)
+        Expression<Func<TaktCostElement, bool>> predicate = includeDisabled
+            ? (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId)
+            : (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.CostElementStatus == 1);
+        var list = await _costElementRepository.GetListAsync(predicate);
+        return list
             .OrderBy(x => x.SortOrder)
-            .ToList();
-        var treeList = new List<TaktCostElementTreeDto>();
-        foreach (var item in children)
-        {
-            var treeDto = item.Adapt<TaktCostElementTreeDto>();
-            var childTree = BuildCostElementTree(allRecords, item.Id);
-            if (childTree.Count > 0)
+            .Select(item =>
             {
-                treeDto.Children = childTree;
-            }
-            treeList.Add(treeDto);
-        }
-        return treeList;
+                var treeDto = item.Adapt<TaktCostElementTreeDto>();
+                treeDto.Children = new List<TaktCostElementTreeDto>();
+                return treeDto;
+            })
+            .ToList();
     }
 
     /// <summary>
@@ -209,7 +154,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     public async Task<TaktCostElementDto> CreateCostElementAsync(TaktCostElementCreateDto dto)
     {
         var entity = dto.Adapt<TaktCostElement>();
-        ApplyCostElementKatyp(entity);
         var isUnique_ix_cost_element_code_unique = await _uniqueValidator.IsUniqueAsync(
             _costElementRepository,
             x => x.CostElementCode == entity.CostElementCode);
@@ -225,7 +169,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             entity.SortOrder = _sortOrderGenerator.GenerateNext(entity.ParentId, maxSort);
         }
         entity = await _costElementRepository.CreateAsync(entity);
-                await SaveCostElementChildrenAsync(entity, dto);
         return await GetCostElementByIdAsync(entity.Id) ?? entity.Adapt<TaktCostElementDto>();
     }
 
@@ -243,7 +186,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             throw new TaktBusinessException("成本要素不存在");
         }
         dto.Adapt(entity);
-        ApplyCostElementKatyp(entity);
         var isUnique_ix_cost_element_code_unique = await _uniqueValidator.IsUniqueAsync(
             _costElementRepository,
             x => x.CostElementCode == entity.CostElementCode,
@@ -253,7 +195,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             throw new TaktBusinessException("成本要素的CostElementCode已存在");
         }
         await _costElementRepository.UpdateAsync(entity);
-                await SaveCostElementChildrenAsync(entity, dto);
         return await GetCostElementByIdAsync(id) ?? throw new TaktBusinessException("成本要素不存在");
     }
 
@@ -264,11 +205,13 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     /// <returns>任务</returns>
     public async Task DeleteCostElementByIdAsync(long id)
     {
-        var entity = await _costElementRepository.GetByIdAsync(id);
-        if (entity == null)
+
+        var hasChildren = await _costElementRepository.ExistsAsync(x => x.ParentId == id);
+        if (hasChildren)
         {
-            throw new TaktBusinessException("成本要素不存在或已删除");
-        }        var deleted = await _costElementRepository.DeleteAsync(id);
+            throw new TaktBusinessException("存在子节点，无法删除");
+        }
+        var deleted = await _costElementRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("成本要素不存在或已删除");
@@ -363,7 +306,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             try
             {
                 var entity = rows[i].Adapt<TaktCostElement>();
-                ApplyCostElementKatyp(entity);
                 var importKey = $"{entity.CostElementCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -404,7 +346,15 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCostElementAsync(TaktCostElementQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCostElementQueryDto());
+        var queryDto = query ?? new TaktCostElementQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCostElementExportDto>(),
+                sheetName ?? "成本要素数据",
+                fileName ?? "成本要素导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _costElementRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -421,33 +371,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
-    /// <summary>
-    /// 填充成本要素详情（加载 OneToMany 子表：成本要素变更记录）
-    /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
-    /// <returns>任务</returns>
-    private async Task FillCostElementDetailsAsync(TaktCostElementDto dto, TaktCostElement entity)
-    {
-        if (dto == null)
-        {
-            return;
-        }
-    }
-
-    /// <summary>
-    /// 保存成本要素子表级联（成本要素变更记录；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveCostElementChildrenAsync(TaktCostElement entity, TaktCostElementCreateDto dto)
-    {
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -460,131 +383,205 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     {
         var exp = Expressionable.Create<TaktCostElement>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.CostElementCode != null && x.CostElementCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CostElementCode != null && x.CostElementCode.Contains(keywords))
                 || (x.CostElementName != null && x.CostElementName.Contains(keywords))
-                || SqlFunc.ToString(x.CostElementType).Contains(keywords)
-                || SqlFunc.ToString(x.CostElementCategory).Contains(keywords)
-                || SqlFunc.ToString(x.ParentId).Contains(keywords)
-                || SqlFunc.ToString(x.CostElementLevel).Contains(keywords)
-                || SqlFunc.ToString(x.CostElementStatus).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
-                || SqlFunc.ToString(x.ValidTo).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostElementCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.CostElementCode != null && x.CostElementCode.Contains(queryDto.CostElementCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostElementName))
-        {
-            exp = exp.And(x => x.CostElementName != null && x.CostElementName.Contains(queryDto.CostElementName));
-        }
-
-        if (queryDto?.CostElementType.HasValue == true)
-        {
-            exp = exp.And(x => x.CostElementType == queryDto.CostElementType);
-        }
-
-        if (queryDto?.CostElementCategory.HasValue == true)
-        {
-            exp = exp.And(x => x.CostElementCategory == queryDto.CostElementCategory);
-        }
-
-        if (queryDto?.ParentId.HasValue == true)
-        {
-            exp = exp.And(x => x.ParentId == queryDto.ParentId);
-        }
-
-        if (queryDto?.CostElementLevel.HasValue == true)
-        {
-            exp = exp.And(x => x.CostElementLevel == queryDto.CostElementLevel);
-        }
-
-        if (queryDto?.CostElementStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.CostElementStatus == queryDto.CostElementStatus);
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.ValidFromStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ValidFrom >= queryDto.ValidFromStart);
-        }
-
-        if (queryDto?.ValidFromEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ValidFrom <= queryDto.ValidFromEnd);
-        }
-
-        if (queryDto?.ValidToStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ValidTo >= queryDto.ValidToStart);
-        }
-
-        if (queryDto?.ValidToEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ValidTo <= queryDto.ValidToEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostElementCode))
+        {
+            var costElementCode = queryDto.CostElementCode;
+            exp = exp.And(x => x.CostElementCode != null && x.CostElementCode.Contains(costElementCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostElementName))
+        {
+            var costElementName = queryDto.CostElementName;
+            exp = exp.And(x => x.CostElementName != null && x.CostElementName.Contains(costElementName));
+        }
+
+        if (queryDto?.CostElementType.HasValue == true)
+        {
+            var costElementType = queryDto.CostElementType.Value;
+            exp = exp.And(x => x.CostElementType == costElementType);
+        }
+
+        if (queryDto?.CostElementCategory.HasValue == true)
+        {
+            var costElementCategory = queryDto.CostElementCategory.Value;
+            exp = exp.And(x => x.CostElementCategory == costElementCategory);
+        }
+
+        if (queryDto?.ParentId.HasValue == true)
+        {
+            var parentId = queryDto.ParentId.Value;
+            exp = exp.And(x => x.ParentId == parentId);
+        }
+
+        if (queryDto?.CostElementLevel.HasValue == true)
+        {
+            var costElementLevel = queryDto.CostElementLevel.Value;
+            exp = exp.And(x => x.CostElementLevel == costElementLevel);
+        }
+
+        if (queryDto?.SortOrder.HasValue == true)
+        {
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
+        }
+
+        if (queryDto?.CostElementStatus.HasValue == true)
+        {
+            var costElementStatus = queryDto.CostElementStatus.Value;
+            exp = exp.And(x => x.CostElementStatus == costElementStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.ValidFromStart.HasValue == true)
+        {
+            var validFromStart = queryDto.ValidFromStart.Value;
+            exp = exp.And(x => x.ValidFrom >= validFromStart);
+        }
+
+        if (queryDto?.ValidFromEnd.HasValue == true)
+        {
+            var validFromEnd = queryDto.ValidFromEnd.Value;
+            exp = exp.And(x => x.ValidFrom <= validFromEnd);
+        }
+
+        if (queryDto?.ValidToStart.HasValue == true)
+        {
+            var validToStart = queryDto.ValidToStart.Value;
+            exp = exp.And(x => x.ValidTo >= validToStart);
+        }
+
+        if (queryDto?.ValidToEnd.HasValue == true)
+        {
+            var validToEnd = queryDto.ValidToEnd.Value;
+            exp = exp.And(x => x.ValidTo <= validToEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
     }
 
     /// <summary>
-    /// 按成本要素类别推导并写入成本要素类型
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
     /// </summary>
-    /// <param name="entity">成本要素实体</param>
-    private static void ApplyCostElementKatyp(TaktCostElement entity)
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCostElementQueryDto? queryDto)
     {
-        if (!TaktCostElementKatypConstants.IsValidCategory(entity.CostElementCategory))
+        if (queryDto == null)
         {
-            throw new TaktBusinessException("成本要素类别无效，请选择有效的类别");
+            return false;
         }
-        entity.CostElementType = TaktCostElementKatypConstants.ResolveTypeFromCategory(entity.CostElementCategory);
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostElementCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostElementName))
+        {
+            return true;
+        }
+        if (queryDto.CostElementType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CostElementCategory.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ParentId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CostElementLevel.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CostElementStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ValidFromStart.HasValue || queryDto.ValidFromEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ValidToStart.HasValue || queryDto.ValidToEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

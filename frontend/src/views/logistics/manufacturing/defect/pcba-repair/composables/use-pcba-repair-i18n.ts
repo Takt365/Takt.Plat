@@ -20,7 +20,6 @@ export const PCBAREPAIR_SELF_I18N_KEY = buildEntitySelfI18nKey(PCBAREPAIR_ENTITY
 
 /** 列表业务列（不含主键） */
 export const PCBAREPAIR_LIST_FIELDS = [
-  'plantCode',
   'prodCategory',
   'prodDate',
   'TeamCode',
@@ -31,26 +30,12 @@ export const PCBAREPAIR_LIST_FIELDS = [
   'modelCode',
   'batchCode',
   'materialCode',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PCBAREPAIR_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'optional',
-  prodCategory: 'select',
-  prodDate: 'select',
-  TeamCode: 'select',
-  shiftNo: 'select',
-  prodOrderType: 'optional',
-  prodOrderCode: 'select',
-  prodOrderQty: 'select',
-  modelCode: 'required',
-  batchCode: 'optional',
-  materialCode: 'required',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -58,32 +43,13 @@ export type PcbaRepairField = keyof typeof PCBAREPAIR_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PCBAREPAIR_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'prodCategory',
-  'prodDateStart',
-  'prodDateEnd',
-  'TeamCode',
-  'prodOrderType',
-  'prodOrderCode',
-  'modelCode',
-  'batchCode',
-  'materialCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PcbaRepairQuery)[]
 
-export type PcbaRepairQueryField =
-  | (typeof PCBAREPAIR_QUERY_STRING_FIELDS)[number]
-  | 'shiftNo' | 'prodOrderQty'
+export type PcbaRepairQueryField = (typeof PCBAREPAIR_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PCBAREPAIR_QUERY_FIELDS: readonly PcbaRepairQueryField[] = [
-  ...PCBAREPAIR_QUERY_STRING_FIELDS,
-  'shiftNo',
-  'prodOrderQty',
-]
+export const PCBAREPAIR_QUERY_FIELDS: readonly PcbaRepairQueryField[] = [...PCBAREPAIR_QUERY_STRING_FIELDS]
 
 /**
  * PCBA改修日报实体 不良率字段 i18n：index / pcba-repair-form 统一入口

@@ -63,9 +63,9 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
         // 定义标准用户列表（admin, guest, demo）
         var standardUsers = new[]
         {
-            new { Username = "admin", NicknameSuffix = "管理员", EmployeeCode = "900001" },
-            new { Username = "guest", NicknameSuffix = "访客", EmployeeCode = "900002" },
-            new { Username = "demo", NicknameSuffix = "演示用户", EmployeeCode = "900003" }
+            new { UserName = "admin", NickNameSuffix = "管理员", EmployeeCode = "900001" },
+            new { UserName = "guest", NickNameSuffix = "访客", EmployeeCode = "900002" },
+            new { UserName = "demo", NickNameSuffix = "演示用户", EmployeeCode = "900003" }
         };
 
         TaktLogger.Information("正在为租户 {TenantCode} 初始化用户...", tenantCode);
@@ -73,13 +73,13 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
         // 为当前租户初始化3个标准用户
         foreach (var userData in standardUsers)
         {
-            var nickname = $"{userData.Username}{userData.NicknameSuffix}";
+            var NickName = $"{userData.UserName}{userData.NickNameSuffix}";
             var (user, i, u) = await CreateOrUpdateUserAsync(
                 userRepository, 
                 employeeRepository, 
                 tenantCode, 
-                userData.Username, 
-                nickname, 
+                userData.UserName, 
+                NickName, 
                 userData.EmployeeCode, 
                 defaultPasswordHash);
             
@@ -102,8 +102,8 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
         ITaktTenantSeedRepository<TaktUser> userRepository,
         ITaktCompanySeedRepository<TaktEmployee> employeeRepository,
         string tenantCode,
-        string username,
-        string nickname,
+        string UserName,
+        string NickName,
         string EmployeeCode,
         string passwordHash)
     {
@@ -114,7 +114,7 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
             throw new InvalidOperationException($"租户 {tenantCode} 中未找到员工编码 {EmployeeCode} 的员工档案");
         }
 
-        var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == username);
+        var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == UserName);
         
         if (user == null)
         {
@@ -122,14 +122,14 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
             user = new TaktUser
             {
                 TenantCode = tenantCode,
-                Username = username,
-                Nickname = nickname,
-                UserType = username == "admin" ? 2 : 0,
+                UserName = UserName,
+                NickName = NickName,
+                UserType = UserName == "admin" ? 2 : 0,
                 PasswordHash = passwordHash,
                 EmployeeId = employee.Id,
                 IsBuiltIn = 1,
                 UserStatus = 1,
-                PasswordExpireDays = username == "admin" ? 90 : 30,
+                PasswordExpireDays = UserName == "admin" ? 90 : 30,
                 LoginCount = 0,
                 LoginFailCount = 0,
                 CultureCode = "en-US"
@@ -140,12 +140,12 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
         else
         {
             // 存在:更新记录
-            user.Nickname = nickname;
-            user.UserType = username == "admin" ? 2 : 0;
+            user.NickName = NickName;
+            user.UserType = UserName == "admin" ? 2 : 0;
             user.EmployeeId = employee.Id;
             user.IsBuiltIn = 1;
             user.UserStatus = 1;
-            user.PasswordExpireDays = username == "admin" ? 90 : 30;
+            user.PasswordExpireDays = UserName == "admin" ? 90 : 30;
             user.CultureCode = "en-US";
 
             await userRepository.UpdateAsync(user);

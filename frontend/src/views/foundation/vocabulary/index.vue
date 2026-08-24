@@ -87,7 +87,7 @@
         <template v-else-if="column.key === 'filterLevel'">
           <TaktDictTag
             :value="getVocabularyField(record, 'filterLevel')"
-            dict-type="sys_word_filter_level_category"
+            dict-type="sys_word_filter_level"
           />
         </template>
       </template>
@@ -156,7 +156,7 @@
       <a-form-item :label="t('entity.vocabulary.filterlevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.filterLevel"
-          dict-type="sys_word_filter_level_category"
+          dict-type="sys_word_filter_level"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vocabulary.filterlevel') })"
           allow-clear
         />
@@ -177,7 +177,7 @@
       <a-form-item :label="t('entity.vocabulary.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.status"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vocabulary.status') })"
           allow-clear
         />

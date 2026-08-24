@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUser 实体字段国际化种子（已对齐前端 locales：src/locales/identity/user）
 // 
@@ -91,22 +91,22 @@ public class TaktUserI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.user._self", "zh-HK", "用户信息_hk", "实体名称"),
 
             // entity.user.name
-            new TranslationSeedItem("entity.user.name", "en-US", "用户名_us", "用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）"),
+            new TranslationSeedItem("entity.user.name", "en-US", "用户名_us", "用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）"),
             // entity.user.name
-            new TranslationSeedItem("entity.user.name", "ja-JP", "用户名_jp", "用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）"),
+            new TranslationSeedItem("entity.user.name", "ja-JP", "用户名_jp", "用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）"),
             // entity.user.name
-            new TranslationSeedItem("entity.user.name", "zh-CN", "用户名", "用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）"),
+            new TranslationSeedItem("entity.user.name", "zh-CN", "用户名", "用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）"),
             // entity.user.name
-            new TranslationSeedItem("entity.user.name", "zh-HK", "用户名_hk", "用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）"),
+            new TranslationSeedItem("entity.user.name", "zh-HK", "用户名_hk", "用户名（唯一索引：租户内唯一，见 ix_user_name_unique；登录账号，最长 20 位）"),
 
             // entity.user.nickname
-            new TranslationSeedItem("entity.user.nickname", "en-US", "昵称_us", "昵称（显示名称，2–40 位，与 nvarchar(40) 一致）"),
+            new TranslationSeedItem("entity.user.nickname", "en-US", "昵称_us", "昵称（显示名称，2–40 位）"),
             // entity.user.nickname
-            new TranslationSeedItem("entity.user.nickname", "ja-JP", "昵称_jp", "昵称（显示名称，2–40 位，与 nvarchar(40) 一致）"),
+            new TranslationSeedItem("entity.user.nickname", "ja-JP", "昵称_jp", "昵称（显示名称，2–40 位）"),
             // entity.user.nickname
-            new TranslationSeedItem("entity.user.nickname", "zh-CN", "昵称", "昵称（显示名称，2–40 位，与 nvarchar(40) 一致）"),
+            new TranslationSeedItem("entity.user.nickname", "zh-CN", "昵称", "昵称（显示名称，2–40 位）"),
             // entity.user.nickname
-            new TranslationSeedItem("entity.user.nickname", "zh-HK", "昵称_hk", "昵称（显示名称，2–40 位，与 nvarchar(40) 一致）"),
+            new TranslationSeedItem("entity.user.nickname", "zh-HK", "昵称_hk", "昵称（显示名称，2–40 位）"),
 
             // entity.user.type
             new TranslationSeedItem("entity.user.type", "en-US", "用户类型_us", "用户类型（字典 sys_user_type）"),
@@ -127,22 +127,22 @@ public class TaktUserI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.user.password", "zh-HK", "密码哈希_hk", "密码哈希值（bcrypt加密）"),
 
             // entity.user.employeeid
-            new TranslationSeedItem("entity.user.employeeid", "en-US", "员工ID_us", "关联的员工ID（必须关联人事档案）"),
+            new TranslationSeedItem("entity.user.employeeid", "en-US", "员工ID_us", "关联的员工ID（（选项 TaktUsers/options；DictValue=Id,必须关联人事档案）"),
             // entity.user.employeeid
-            new TranslationSeedItem("entity.user.employeeid", "ja-JP", "员工ID_jp", "关联的员工ID（必须关联人事档案）"),
+            new TranslationSeedItem("entity.user.employeeid", "ja-JP", "员工ID_jp", "关联的员工ID（（选项 TaktUsers/options；DictValue=Id,必须关联人事档案）"),
             // entity.user.employeeid
-            new TranslationSeedItem("entity.user.employeeid", "zh-CN", "员工ID", "关联的员工ID（必须关联人事档案）"),
+            new TranslationSeedItem("entity.user.employeeid", "zh-CN", "员工ID", "关联的员工ID（（选项 TaktUsers/options；DictValue=Id,必须关联人事档案）"),
             // entity.user.employeeid
-            new TranslationSeedItem("entity.user.employeeid", "zh-HK", "员工ID_hk", "关联的员工ID（必须关联人事档案）"),
+            new TranslationSeedItem("entity.user.employeeid", "zh-HK", "员工ID_hk", "关联的员工ID（（选项 TaktUsers/options；DictValue=Id,必须关联人事档案）"),
 
             // entity.user.isbuiltin
-            new TranslationSeedItem("entity.user.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.user.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）"),
             // entity.user.isbuiltin
-            new TranslationSeedItem("entity.user.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.user.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）"),
             // entity.user.isbuiltin
-            new TranslationSeedItem("entity.user.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.user.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）"),
             // entity.user.isbuiltin
-            new TranslationSeedItem("entity.user.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.user.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）"),
 
             // entity.user.lastloginat
             new TranslationSeedItem("entity.user.lastloginat", "en-US", "最后登录时间_us", "最后登录时间（登录成功时 RecordUserLastLoginAsync 写入；登出不修改本字段）"),
@@ -199,13 +199,13 @@ public class TaktUserI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.user.lockeduntil", "zh-HK", "锁定时间_hk", "锁定时间（登录失败过多时锁定）"),
 
             // entity.user.status
-            new TranslationSeedItem("entity.user.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.user.status", "en-US", "状态_us", "状态（字典 sys_normal_disable）"),
             // entity.user.status
-            new TranslationSeedItem("entity.user.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.user.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable）"),
             // entity.user.status
-            new TranslationSeedItem("entity.user.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.user.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
             // entity.user.status
-            new TranslationSeedItem("entity.user.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.user.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable）"),
 
             // entity.user.roles
             new TranslationSeedItem("entity.user.roles", "en-US", "用户角色关联_us", "用户角色关联（RBAC，表 takt_identity_user_role）"),

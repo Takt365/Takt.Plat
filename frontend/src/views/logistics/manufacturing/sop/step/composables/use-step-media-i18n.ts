@@ -45,8 +45,7 @@ export const SOPSTEPMEDIA_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'select',
-  stepId: 'select',
+  plantCode: 'optional',
   mediaType: 'select',
   fileUrl: 'required',
   fileExt: 'optional',
@@ -59,7 +58,6 @@ export type SopStepMediaField = keyof typeof SOPSTEPMEDIA_PLACEHOLDER
 export const SOPSTEPMEDIA_QUERY_STRING_FIELDS = [
   'cultureCode',
   'plantCode',
-  'stepId',
   'fileUrl',
   'fileExt',
   'createdAtStart',

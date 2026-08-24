@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.Announcement
 // 文件名称：TaktAnnouncementDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Announcement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAnnouncement 生成，请按需审阅）
 // 
@@ -66,9 +66,14 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     public string? Tags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 发布时间（定时发布时使用）
@@ -76,12 +81,12 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 定时发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 定时发布（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsScheduled { get; set; } = 0;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsTop { get; set; } = 0;
 
@@ -101,17 +106,17 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     public int ViewCount { get; set; } = 0;
 
     /// <summary>
-    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
     /// </summary>
-    public string TargetScope { get; set; } = string.Empty;
+    public int TargetScope { get; set; } = 0;
 
     /// <summary>
-    /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
 
@@ -138,7 +143,7 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -147,11 +152,11 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 公告编码（租户+公司内唯一）
     /// </summary>
@@ -183,9 +188,14 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public string? Tags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 发布时间（定时发布时使用）（范围查询-开始）
@@ -198,12 +208,12 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public DateTime? PublishTimeEnd { get; set; }
 
     /// <summary>
-    /// 定时发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 定时发布（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsScheduled { get; set; }
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsTop { get; set; }
 
@@ -228,17 +238,17 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public int? ViewCount { get; set; }
 
     /// <summary>
-    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
     /// </summary>
-    public string? TargetScope { get; set; } = string.Empty;
+    public int? TargetScope { get; set; }
 
     /// <summary>
-    /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
 
@@ -335,16 +345,21 @@ public class TaktAnnouncementCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 公告编码（租户+公司内唯一）
     /// </summary>
     [Required(ErrorMessage = "公告编码（租户+公司内唯一）不能为空")]
     public string AnnouncementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 编码规则编码（表单选类型后自动取号；对应 TaktNumbering.RuleCode；不落库）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
 
     /// <summary>
     /// 公告标题
@@ -374,9 +389,14 @@ public class TaktAnnouncementCreateDto
     public string? Tags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 发布时间（定时发布时使用）
@@ -384,12 +404,12 @@ public class TaktAnnouncementCreateDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 定时发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 定时发布（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsScheduled { get; set; } = 0;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsTop { get; set; } = 0;
 
@@ -409,18 +429,17 @@ public class TaktAnnouncementCreateDto
     public int ViewCount { get; set; } = 0;
 
     /// <summary>
-    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
     /// </summary>
-    [Required(ErrorMessage = "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）不能为空")]
-    public string TargetScope { get; set; } = string.Empty;
+    public int TargetScope { get; set; } = 0;
 
     /// <summary>
-    /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
 
@@ -439,11 +458,6 @@ public class TaktAnnouncementCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
-
-    /// <summary>
-    /// 编码规则编码（自动取号时使用）
-    /// </summary>
-    public string? NumberingRuleCode { get; set; }
 }
 
 // ========================================
@@ -514,11 +528,11 @@ public class TaktAnnouncementTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 公告编码（租户+公司内唯一）
     /// </summary>
@@ -550,9 +564,14 @@ public class TaktAnnouncementTemplateDto
     public string? Tags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 发布时间（定时发布时使用）
@@ -560,12 +579,12 @@ public class TaktAnnouncementTemplateDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 定时发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 定时发布（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsScheduled { get; set; }
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsTop { get; set; }
 
@@ -585,17 +604,17 @@ public class TaktAnnouncementTemplateDto
     public int? ViewCount { get; set; }
 
     /// <summary>
-    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
     /// </summary>
-    public string? TargetScope { get; set; } = string.Empty;
+    public int? TargetScope { get; set; }
 
     /// <summary>
-    /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
 
@@ -636,11 +655,11 @@ public class TaktAnnouncementImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 公告编码（租户+公司内唯一）
     /// </summary>
@@ -672,9 +691,14 @@ public class TaktAnnouncementImportDto
     public string? Tags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 发布时间（定时发布时使用）
@@ -682,12 +706,12 @@ public class TaktAnnouncementImportDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 定时发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 定时发布（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsScheduled { get; set; }
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsTop { get; set; }
 
@@ -707,17 +731,17 @@ public class TaktAnnouncementImportDto
     public int? ViewCount { get; set; }
 
     /// <summary>
-    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
     /// </summary>
-    public string? TargetScope { get; set; } = string.Empty;
+    public int? TargetScope { get; set; }
 
     /// <summary>
-    /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
 
@@ -736,11 +760,6 @@ public class TaktAnnouncementImportDto
     /// </summary>
     public string? Remark { get; set; }
 
-
-    /// <summary>
-    /// 编码规则编码（自动取号时使用）
-    /// </summary>
-    public string? NumberingRuleCode { get; set; }
 }
 
 // ========================================
@@ -758,6 +777,21 @@ public class TaktAnnouncementExportDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AnnouncementId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告编码（租户+公司内唯一）
@@ -790,9 +824,14 @@ public class TaktAnnouncementExportDto
     public string? Tags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 发布时间（定时发布时使用）
@@ -800,12 +839,12 @@ public class TaktAnnouncementExportDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 定时发布（字典 sys_yes_no_type；1=是 0=否）
+    /// 定时发布（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsScheduled { get; set; } = 0;
 
     /// <summary>
-    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
+    /// 置顶（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsTop { get; set; } = 0;
 
@@ -825,17 +864,17 @@ public class TaktAnnouncementExportDto
     public int ViewCount { get; set; } = 0;
 
     /// <summary>
-    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
+    /// 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
     /// </summary>
-    public string TargetScope { get; set; } = string.Empty;
+    public int TargetScope { get; set; } = 0;
 
     /// <summary>
-    /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+    /// 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
 

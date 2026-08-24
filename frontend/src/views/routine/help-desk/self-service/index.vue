@@ -175,7 +175,7 @@
       <a-form-item :label="t('entity.selfservice.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.selfServiceStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.selfservice.status') })"
           allow-clear
         />

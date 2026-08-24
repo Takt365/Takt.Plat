@@ -201,13 +201,13 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "新闻中心";
                 menu.MenuCode = "ROUTINE_NEWS_CENTER";
-                menu.I18nKey = "menu.routine.news.center";
+                menu.I18nKey = "menu.routine.news.center._self";
                 menu.Icon = "RiArticleLine";
                 menu.ParentId = routineMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:news:center:list";
-                menu.RoutePath = "/routine/news-center/news";
-                menu.ComponentPath = "routine/news-center/news/index";
+                menu.MenuType = 0;
+                menu.Permission = string.Empty;
+                menu.RoutePath = "/routine/news-center";
+                menu.ComponentPath = "routine/news-center";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;

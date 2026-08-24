@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { Conference } from '@/types/routine/conference-center/conference'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type ConferenceRowRecord = Conference | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface ConferenceMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<Conference | null>
+  selectedMasterRow: Ref<ConferenceRowRecord | null>
 }
 
 const conferenceMasterContextKey: InjectionKey<ConferenceMasterContext> = Symbol('conferenceMasterContext')
@@ -22,7 +25,7 @@ const conferenceMasterContextKey: InjectionKey<ConferenceMasterContext> = Symbol
  * @returns {ConferenceMasterContext} 主表上下文
  */
 export function provideConferenceMasterContext(): ConferenceMasterContext {
-  const selectedMasterRow = ref<Conference | null>(null)
+  const selectedMasterRow = ref<ConferenceRowRecord | null>(null)
   const ctx: ConferenceMasterContext = { selectedMasterRow }
   provide(conferenceMasterContextKey, ctx)
   return ctx

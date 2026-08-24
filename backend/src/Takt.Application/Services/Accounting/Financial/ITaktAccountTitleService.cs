@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：ITaktAccountTitleService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目应用服务接口
 // 
@@ -36,31 +36,18 @@ public interface ITaktAccountTitleService
     Task<TaktAccountTitleDto?> GetAccountTitleByIdAsync(long id);
 
     /// <summary>
-    /// 获取会计科目树形选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
+    /// 获取会计科目树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue 为 AccountTitleCode）
     /// </summary>
-    /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync();
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync(long parentId = 0);
 
     /// <summary>
-    /// 获取会计科目父级树形选项列表（DictValue 为 Id，用于 ParentId 选择）
+    /// 获取会计科目树形列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetAccountTitleParentTreeOptionsAsync();
-
-    /// <summary>
-    /// 获取会计科目选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
-    /// </summary>
-    /// <param name="reconciliationOnly">为 true 时仅返回统驭科目（统驭标识 D/K/A）</param>
-    /// <param name="auxiliaryType">可选；按统驭标识精确过滤（如 D=客户、K=供应商）</param>
-    /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync(bool reconciliationOnly = false, string? auxiliaryType = null);
-
-    /// <summary>
-    /// 获取会计科目树形列表
-    /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     Task<List<TaktAccountTitleTreeDto>> GetAccountTitleTreeAsync(long parentId = 0, bool includeDisabled = false);
 
     /// <summary>

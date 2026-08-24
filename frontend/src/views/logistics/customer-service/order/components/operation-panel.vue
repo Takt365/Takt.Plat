@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,234 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterApsOrderId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-customer-service-order-operation"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('apsOrderCode')">
-      <a-form-item :label="pi.queryLabel('apsOrderCode')">
-        <a-input
-          v-model:value="advancedQueryForm.apsOrderCode"
-          :placeholder="pi.queryPh('apsOrderCode', 'required')"
-          show-count
-          :maxlength="12"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('routingItemId')">
-      <a-form-item :label="pi.queryLabel('routingItemId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.routingItemId"
-          api-url="TaktRoutingItems/options"
-          :placeholder="pi.queryPh('routingItemId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('processCode')">
-      <a-form-item :label="pi.queryLabel('processCode')">
-        <a-input
-          v-model:value="advancedQueryForm.processCode"
-          :placeholder="pi.queryPh('processCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('processName')">
-      <a-form-item :label="pi.queryLabel('processName')">
-        <a-input
-          v-model:value="advancedQueryForm.processName"
-          :placeholder="pi.queryPh('processName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('workCenterCode')">
-      <a-form-item :label="pi.queryLabel('workCenterCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.workCenterCode"
-          api-url="TaktWorkCenters/options"
-          :placeholder="pi.queryPh('workCenterCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('workCenterResourceId')">
-      <a-form-item :label="pi.queryLabel('workCenterResourceId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.workCenterResourceId"
-          api-url="TaktWorkCenterResources/options"
-          :placeholder="pi.queryPh('workCenterResourceId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannedStartTimeStart')">
-      <a-form-item :label="pi.queryLabel('plannedStartTimeStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedStartTimeStart"
-          :placeholder="pi.queryPh('plannedStartTimeStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannedStartTimeEnd')">
-      <a-form-item :label="pi.queryLabel('plannedStartTimeEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedStartTimeEnd"
-          :placeholder="pi.queryPh('plannedStartTimeEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannedEndTimeStart')">
-      <a-form-item :label="pi.queryLabel('plannedEndTimeStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedEndTimeStart"
-          :placeholder="pi.queryPh('plannedEndTimeStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannedEndTimeEnd')">
-      <a-form-item :label="pi.queryLabel('plannedEndTimeEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedEndTimeEnd"
-          :placeholder="pi.queryPh('plannedEndTimeEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plannedDurationMinutes')">
-      <a-form-item :label="pi.queryLabel('plannedDurationMinutes')">
-        <a-input-number
-          v-model:value="advancedQueryForm.plannedDurationMinutes"
-          :placeholder="pi.queryPh('plannedDurationMinutes', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('changeoverMinutes')">
-      <a-form-item :label="pi.queryLabel('changeoverMinutes')">
-        <a-input-number
-          v-model:value="advancedQueryForm.changeoverMinutes"
-          :placeholder="pi.queryPh('changeoverMinutes', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('operationStatus')">
-      <a-form-item :label="pi.queryLabel('operationStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.operationStatus"
-          dict-type="aps_operation_status"
-          :placeholder="pi.queryPh('operationStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isObsolete')">
-      <a-form-item :label="pi.queryLabel('isObsolete')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('isObsolete', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -396,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import ApsOperationForm from './operation-form.vue'
 import { useApsOrderMasterContext } from '../composables/use-order-master-context'
 import {
@@ -484,46 +260,6 @@ const formData = ref<Partial<ApsOperation>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(APSOPERATION_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof APSOPERATION_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    lineNumber: undefined as number | undefined,
-    plannedDurationMinutes: undefined as number | undefined,
-    changeoverMinutes: undefined as number | undefined,
-    operationStatus: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  APSOPERATION_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...APSOPERATION_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -569,16 +305,6 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: ApsOperation }) =>
       String(getApsOperationField(record, 'apsOperationId') ?? ''),
-  },
-  {
-    title: pi.label('apsOrderId'),
-    dataIndex: 'apsOrderId',
-    key: 'apsOrderId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: ApsOperation }) =>
-      String(getApsOperationField(record, 'apsOrderId') ?? ''),
   },
   {
     title: pi.label('apsOrderCode'),
@@ -710,6 +436,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: ApsOperation }) =>
       String(getApsOperationField(record, 'isObsolete') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsOperation }) =>
+      String(getApsOperationField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -727,8 +463,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:aps:schedule:delete',
         onClick: (record: ApsOperation) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -837,7 +575,7 @@ function onClickRow(record: ApsOperation) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {ApsOperationQuery} 查询 DTO
  */
@@ -861,21 +599,6 @@ function buildListQuery(overrides?: Partial<ApsOperationQuery>): ApsOperationQue
   }
   for (const key of APSOPERATION_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
-  }
-  if (form.plannedDurationMinutes !== undefined && form.plannedDurationMinutes !== null) {
-    query.plannedDurationMinutes = form.plannedDurationMinutes
-  }
-  if (form.changeoverMinutes !== undefined && form.changeoverMinutes !== null) {
-    query.changeoverMinutes = form.changeoverMinutes
-  }
-  if (form.operationStatus !== undefined && form.operationStatus !== null) {
-    query.operationStatus = form.operationStatus
-  }
-  if (form.isObsolete !== undefined && form.isObsolete !== null) {
-    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1107,6 +830,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportApsOperation(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

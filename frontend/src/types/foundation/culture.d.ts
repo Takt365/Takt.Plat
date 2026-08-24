@@ -44,7 +44,7 @@ export interface Culture extends TenantCoreDtoBase {
   icon?: string;
 
   /**
-   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
+   * 默认语言（字典 sys_yes_no；1=是 0=否）
    */
   isDefault: number;
 
@@ -74,11 +74,6 @@ export interface CultureQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
@@ -94,7 +89,7 @@ export interface CultureQuery extends TaktPagedQuery {
   icon?: string;
 
   /**
-   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
+   * 默认语言（字典 sys_yes_no；1=是 0=否）
    */
   isDefault?: number;
 
@@ -138,11 +133,6 @@ export interface CultureCreate {
   tenantCode: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
-
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
@@ -158,7 +148,7 @@ export interface CultureCreate {
   icon?: string;
 
   /**
-   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
+   * 默认语言（字典 sys_yes_no；1=是 0=否）
    */
   isDefault: number;
 
@@ -231,11 +221,6 @@ export interface CultureTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
@@ -251,7 +236,7 @@ export interface CultureTemplate {
   icon?: string;
 
   /**
-   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
+   * 默认语言（字典 sys_yes_no；1=是 0=否）
    */
   isDefault?: number;
 
@@ -285,11 +270,6 @@ export interface CultureImport {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
@@ -305,7 +285,7 @@ export interface CultureImport {
   icon?: string;
 
   /**
-   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
+   * 默认语言（字典 sys_yes_no；1=是 0=否）
    */
   isDefault?: number;
 
@@ -339,11 +319,6 @@ export interface CultureExport {
   cultureId: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
-
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
@@ -359,7 +334,7 @@ export interface CultureExport {
   icon?: string;
 
   /**
-   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
+   * 默认语言（字典 sys_yes_no；1=是 0=否）
    */
   isDefault: number;
 

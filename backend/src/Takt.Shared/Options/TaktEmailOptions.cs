@@ -32,7 +32,7 @@ public class TaktEmailOptions
     /// <summary>
     /// SMTP 用户名
     /// </summary>
-    public string SmtpUsername { get; set; } = string.Empty;
+    public string SmtpUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// SMTP 密码

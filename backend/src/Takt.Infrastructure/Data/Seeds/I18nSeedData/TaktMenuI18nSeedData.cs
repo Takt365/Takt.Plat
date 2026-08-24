@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单导航国际化翻译种子（menu.* 键，与 TaktMenuLevel1~4SeedData I18nKey 对齐）
 // 
@@ -230,14 +230,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.routine.document.center._self
             ("menu.routine.document.center._self", "zh-HK", "文管中心_hk", "菜单导航"),
 
-            // menu.routine.news.center
-            ("menu.routine.news.center", "en-US", "新闻中心_us", "菜单导航"),
-            // menu.routine.news.center
-            ("menu.routine.news.center", "ja-JP", "新闻中心_jp", "菜单导航"),
-            // menu.routine.news.center
-            ("menu.routine.news.center", "zh-CN", "新闻中心", "菜单导航"),
-            // menu.routine.news.center
-            ("menu.routine.news.center", "zh-HK", "新闻中心_hk", "菜单导航"),
+            // menu.routine.news.center._self
+            ("menu.routine.news.center._self", "en-US", "新闻中心_us", "菜单导航"),
+            // menu.routine.news.center._self
+            ("menu.routine.news.center._self", "ja-JP", "新闻中心_jp", "菜单导航"),
+            // menu.routine.news.center._self
+            ("menu.routine.news.center._self", "zh-CN", "新闻中心", "菜单导航"),
+            // menu.routine.news.center._self
+            ("menu.routine.news.center._self", "zh-HK", "新闻中心_hk", "菜单导航"),
 
             // menu.routine.help.desk._self
             ("menu.routine.help.desk._self", "en-US", "服务台_us", "菜单导航"),
@@ -932,23 +932,23 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.materials.material.moving.trend
             ("menu.logistics.materials.material.moving.trend", "zh-HK", "移动价格推移_hk", "菜单导航"),
 
-            // menu.logistics.materials.model.moving.trend
-            ("menu.logistics.materials.model.moving.trend", "en-US", "机种移动推移_us", "菜单导航"),
-            // menu.logistics.materials.model.moving.trend
-            ("menu.logistics.materials.model.moving.trend", "ja-JP", "机种移动推移_jp", "菜单导航"),
-            // menu.logistics.materials.model.moving.trend
-            ("menu.logistics.materials.model.moving.trend", "zh-CN", "机种移动推移", "菜单导航"),
-            // menu.logistics.materials.model.moving.trend
-            ("menu.logistics.materials.model.moving.trend", "zh-HK", "机种移动推移_hk", "菜单导航"),
+            // menu.logistics.materials.material.model.trend
+            ("menu.logistics.materials.material.model.trend", "en-US", "机种价格推移_us", "菜单导航"),
+            // menu.logistics.materials.material.model.trend
+            ("menu.logistics.materials.material.model.trend", "ja-JP", "机种价格推移_jp", "菜单导航"),
+            // menu.logistics.materials.material.model.trend
+            ("menu.logistics.materials.material.model.trend", "zh-CN", "机种价格推移", "菜单导航"),
+            // menu.logistics.materials.material.model.trend
+            ("menu.logistics.materials.material.model.trend", "zh-HK", "机种价格推移_hk", "菜单导航"),
 
-            // menu.logistics.materials.inventory.impairment.provision
-            ("menu.logistics.materials.inventory.impairment.provision", "en-US", "存货跌价准备_us", "菜单导航"),
-            // menu.logistics.materials.inventory.impairment.provision
-            ("menu.logistics.materials.inventory.impairment.provision", "ja-JP", "存货跌价准备_jp", "菜单导航"),
-            // menu.logistics.materials.inventory.impairment.provision
-            ("menu.logistics.materials.inventory.impairment.provision", "zh-CN", "存货跌价准备", "菜单导航"),
-            // menu.logistics.materials.inventory.impairment.provision
-            ("menu.logistics.materials.inventory.impairment.provision", "zh-HK", "存货跌价准备_hk", "菜单导航"),
+            // menu.logistics.materials.inventory.reserve
+            ("menu.logistics.materials.inventory.reserve", "en-US", "存货跌价准备_us", "菜单导航"),
+            // menu.logistics.materials.inventory.reserve
+            ("menu.logistics.materials.inventory.reserve", "ja-JP", "存货跌价准备_jp", "菜单导航"),
+            // menu.logistics.materials.inventory.reserve
+            ("menu.logistics.materials.inventory.reserve", "zh-CN", "存货跌价准备", "菜单导航"),
+            // menu.logistics.materials.inventory.reserve
+            ("menu.logistics.materials.inventory.reserve", "zh-HK", "存货跌价准备_hk", "菜单导航"),
 
             // menu.logistics.procurement.supplier
             ("menu.logistics.procurement.supplier", "en-US", "供应商_us", "菜单导航"),
@@ -1040,14 +1040,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.procurement.purchase.price.trend
             ("menu.logistics.procurement.purchase.price.trend", "zh-HK", "采购价格推移_hk", "菜单导航"),
 
-            // menu.logistics.procurement.model.purchase.trend
-            ("menu.logistics.procurement.model.purchase.trend", "en-US", "机种采购推移_us", "菜单导航"),
-            // menu.logistics.procurement.model.purchase.trend
-            ("menu.logistics.procurement.model.purchase.trend", "ja-JP", "机种采购推移_jp", "菜单导航"),
-            // menu.logistics.procurement.model.purchase.trend
-            ("menu.logistics.procurement.model.purchase.trend", "zh-CN", "机种采购推移", "菜单导航"),
-            // menu.logistics.procurement.model.purchase.trend
-            ("menu.logistics.procurement.model.purchase.trend", "zh-HK", "机种采购推移_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.model.trend
+            ("menu.logistics.procurement.purchase.model.trend", "en-US", "机种采购推移_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.model.trend
+            ("menu.logistics.procurement.purchase.model.trend", "ja-JP", "机种采购推移_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.model.trend
+            ("menu.logistics.procurement.purchase.model.trend", "zh-CN", "机种采购推移", "菜单导航"),
+            // menu.logistics.procurement.purchase.model.trend
+            ("menu.logistics.procurement.purchase.model.trend", "zh-HK", "机种采购推移_hk", "菜单导航"),
 
             // menu.logistics.procurement.purchase.invoice
             ("menu.logistics.procurement.purchase.invoice", "en-US", "采购发票_us", "菜单导航"),
@@ -1301,6 +1301,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.sales.price.trend
             ("menu.logistics.sales.price.trend", "zh-HK", "销售价格推移_hk", "菜单导航"),
 
+            // menu.logistics.sales.model.trend
+            ("menu.logistics.sales.model.trend", "en-US", "机种销售推移_us", "菜单导航"),
+            // menu.logistics.sales.model.trend
+            ("menu.logistics.sales.model.trend", "ja-JP", "机种销售推移_jp", "菜单导航"),
+            // menu.logistics.sales.model.trend
+            ("menu.logistics.sales.model.trend", "zh-CN", "机种销售推移", "菜单导航"),
+            // menu.logistics.sales.model.trend
+            ("menu.logistics.sales.model.trend", "zh-HK", "机种销售推移_hk", "菜单导航"),
+
             // menu.logistics.sales.order
             ("menu.logistics.sales.order", "en-US", "销售订单_us", "菜单导航"),
             // menu.logistics.sales.order
@@ -1409,6 +1418,60 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.human.resource.personnel.employee.onboarding
             ("menu.human.resource.personnel.employee.onboarding", "zh-HK", "入职待办_hk", "菜单导航"),
 
+            // menu.human.resource.personnel.employee.joined
+            ("menu.human.resource.personnel.employee.joined", "en-US", "入职上岗_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.joined
+            ("menu.human.resource.personnel.employee.joined", "ja-JP", "入职上岗_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.joined
+            ("menu.human.resource.personnel.employee.joined", "zh-CN", "入职上岗", "菜单导航"),
+            // menu.human.resource.personnel.employee.joined
+            ("menu.human.resource.personnel.employee.joined", "zh-HK", "入职上岗_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.address
+            ("menu.human.resource.personnel.employee.address", "en-US", "员工地址_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.address
+            ("menu.human.resource.personnel.employee.address", "ja-JP", "员工地址_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.address
+            ("menu.human.resource.personnel.employee.address", "zh-CN", "员工地址", "菜单导航"),
+            // menu.human.resource.personnel.employee.address
+            ("menu.human.resource.personnel.employee.address", "zh-HK", "员工地址_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.education
+            ("menu.human.resource.personnel.employee.education", "en-US", "教育经历_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.education
+            ("menu.human.resource.personnel.employee.education", "ja-JP", "教育经历_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.education
+            ("menu.human.resource.personnel.employee.education", "zh-CN", "教育经历", "菜单导航"),
+            // menu.human.resource.personnel.employee.education
+            ("menu.human.resource.personnel.employee.education", "zh-HK", "教育经历_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.family
+            ("menu.human.resource.personnel.employee.family", "en-US", "家庭成员_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.family
+            ("menu.human.resource.personnel.employee.family", "ja-JP", "家庭成员_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.family
+            ("menu.human.resource.personnel.employee.family", "zh-CN", "家庭成员", "菜单导航"),
+            // menu.human.resource.personnel.employee.family
+            ("menu.human.resource.personnel.employee.family", "zh-HK", "家庭成员_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.experience
+            ("menu.human.resource.personnel.employee.experience", "en-US", "工作经历_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.experience
+            ("menu.human.resource.personnel.employee.experience", "ja-JP", "工作经历_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.experience
+            ("menu.human.resource.personnel.employee.experience", "zh-CN", "工作经历", "菜单导航"),
+            // menu.human.resource.personnel.employee.experience
+            ("menu.human.resource.personnel.employee.experience", "zh-HK", "工作经历_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.skill
+            ("menu.human.resource.personnel.employee.skill", "en-US", "技能证书_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.skill
+            ("menu.human.resource.personnel.employee.skill", "ja-JP", "技能证书_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.skill
+            ("menu.human.resource.personnel.employee.skill", "zh-CN", "技能证书", "菜单导航"),
+            // menu.human.resource.personnel.employee.skill
+            ("menu.human.resource.personnel.employee.skill", "zh-HK", "技能证书_hk", "菜单导航"),
+
             // menu.human.resource.personnel.employee.contract
             ("menu.human.resource.personnel.employee.contract", "en-US", "员工合同_us", "菜单导航"),
             // menu.human.resource.personnel.employee.contract
@@ -1418,15 +1481,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.human.resource.personnel.employee.contract
             ("menu.human.resource.personnel.employee.contract", "zh-HK", "员工合同_hk", "菜单导航"),
 
-            // menu.human.resource.personnel.employee.delegate
-            ("menu.human.resource.personnel.employee.delegate", "en-US", "员工代理_us", "菜单导航"),
-            // menu.human.resource.personnel.employee.delegate
-            ("menu.human.resource.personnel.employee.delegate", "ja-JP", "员工代理_jp", "菜单导航"),
-            // menu.human.resource.personnel.employee.delegate
-            ("menu.human.resource.personnel.employee.delegate", "zh-CN", "员工代理", "菜单导航"),
-            // menu.human.resource.personnel.employee.delegate
-            ("menu.human.resource.personnel.employee.delegate", "zh-HK", "员工代理_hk", "菜单导航"),
-
             // menu.human.resource.personnel.employee.reassignment
             ("menu.human.resource.personnel.employee.reassignment", "en-US", "员工调动_us", "菜单导航"),
             // menu.human.resource.personnel.employee.reassignment
@@ -1435,6 +1489,33 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.human.resource.personnel.employee.reassignment", "zh-CN", "员工调动", "菜单导航"),
             // menu.human.resource.personnel.employee.reassignment
             ("menu.human.resource.personnel.employee.reassignment", "zh-HK", "员工调动_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.resignation
+            ("menu.human.resource.personnel.employee.resignation", "en-US", "员工离职_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.resignation
+            ("menu.human.resource.personnel.employee.resignation", "ja-JP", "员工离职_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.resignation
+            ("menu.human.resource.personnel.employee.resignation", "zh-CN", "员工离职", "菜单导航"),
+            // menu.human.resource.personnel.employee.resignation
+            ("menu.human.resource.personnel.employee.resignation", "zh-HK", "员工离职_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.delegation
+            ("menu.human.resource.personnel.employee.delegation", "en-US", "员工代理_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.delegation
+            ("menu.human.resource.personnel.employee.delegation", "ja-JP", "员工代理_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.delegation
+            ("menu.human.resource.personnel.employee.delegation", "zh-CN", "员工代理", "菜单导航"),
+            // menu.human.resource.personnel.employee.delegation
+            ("menu.human.resource.personnel.employee.delegation", "zh-HK", "员工代理_hk", "菜单导航"),
+
+            // menu.human.resource.personnel.employee.attachment
+            ("menu.human.resource.personnel.employee.attachment", "en-US", "档案附件_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.attachment
+            ("menu.human.resource.personnel.employee.attachment", "ja-JP", "档案附件_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.attachment
+            ("menu.human.resource.personnel.employee.attachment", "zh-CN", "档案附件", "菜单导航"),
+            // menu.human.resource.personnel.employee.attachment
+            ("menu.human.resource.personnel.employee.attachment", "zh-HK", "档案附件_hk", "菜单导航"),
 
             // menu.human.resource.attendance.calendar
             ("menu.human.resource.attendance.calendar", "en-US", "工厂日历_us", "菜单导航"),
@@ -1813,6 +1894,24 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.routine.document.center.document", "zh-CN", "文档管理", "菜单导航"),
             // menu.routine.document.center.document
             ("menu.routine.document.center.document", "zh-HK", "文档管理_hk", "菜单导航"),
+
+            // menu.routine.news.center.news
+            ("menu.routine.news.center.news", "en-US", "新闻_us", "菜单导航"),
+            // menu.routine.news.center.news
+            ("menu.routine.news.center.news", "ja-JP", "新闻_jp", "菜单导航"),
+            // menu.routine.news.center.news
+            ("menu.routine.news.center.news", "zh-CN", "新闻", "菜单导航"),
+            // menu.routine.news.center.news
+            ("menu.routine.news.center.news", "zh-HK", "新闻_hk", "菜单导航"),
+
+            // menu.routine.news.center.comment
+            ("menu.routine.news.center.comment", "en-US", "评论_us", "菜单导航"),
+            // menu.routine.news.center.comment
+            ("menu.routine.news.center.comment", "ja-JP", "评论_jp", "菜单导航"),
+            // menu.routine.news.center.comment
+            ("menu.routine.news.center.comment", "zh-CN", "评论", "菜单导航"),
+            // menu.routine.news.center.comment
+            ("menu.routine.news.center.comment", "zh-HK", "评论_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.bom.bill.of.material
             ("menu.logistics.manufacturing.bom.bill.of.material", "en-US", "物料清单_us", "菜单导航"),

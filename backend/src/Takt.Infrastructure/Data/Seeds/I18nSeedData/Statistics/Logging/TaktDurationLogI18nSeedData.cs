@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktDurationLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDurationLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,23 +90,23 @@ public class TaktDurationLogI18nSeedData : ITaktSeedDataCoordinator
             // entity.durationlog._self
             new TranslationSeedItem("entity.durationlog._self", "zh-HK", "在线时长日志信息_hk", "实体名称"),
 
-            // entity.durationlog.username
-            new TranslationSeedItem("entity.durationlog.username", "en-US", "用户名_us", "用户名（登录账号）"),
-            // entity.durationlog.username
-            new TranslationSeedItem("entity.durationlog.username", "ja-JP", "用户名_jp", "用户名（登录账号）"),
-            // entity.durationlog.username
-            new TranslationSeedItem("entity.durationlog.username", "zh-CN", "用户名", "用户名（登录账号）"),
-            // entity.durationlog.username
-            new TranslationSeedItem("entity.durationlog.username", "zh-HK", "用户名_hk", "用户名（登录账号）"),
+            // entity.durationlog.userid
+            new TranslationSeedItem("entity.durationlog.userid", "en-US", "用户ID_us", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.durationlog.userid
+            new TranslationSeedItem("entity.durationlog.userid", "ja-JP", "用户ID_jp", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.durationlog.userid
+            new TranslationSeedItem("entity.durationlog.userid", "zh-CN", "用户ID", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.durationlog.userid
+            new TranslationSeedItem("entity.durationlog.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
-            // entity.durationlog.userid
-            new TranslationSeedItem("entity.durationlog.userid", "en-US", "用户ID_us", "用户 ID"),
-            // entity.durationlog.userid
-            new TranslationSeedItem("entity.durationlog.userid", "ja-JP", "用户ID_jp", "用户 ID"),
-            // entity.durationlog.userid
-            new TranslationSeedItem("entity.durationlog.userid", "zh-CN", "用户ID", "用户 ID"),
-            // entity.durationlog.userid
-            new TranslationSeedItem("entity.durationlog.userid", "zh-HK", "用户ID_hk", "用户 ID"),
+            // entity.durationlog.username
+            new TranslationSeedItem("entity.durationlog.username", "en-US", "用户名_us", "用户名（冗余字段，便于查询）"),
+            // entity.durationlog.username
+            new TranslationSeedItem("entity.durationlog.username", "ja-JP", "用户名_jp", "用户名（冗余字段，便于查询）"),
+            // entity.durationlog.username
+            new TranslationSeedItem("entity.durationlog.username", "zh-CN", "用户名", "用户名（冗余字段，便于查询）"),
+            // entity.durationlog.username
+            new TranslationSeedItem("entity.durationlog.username", "zh-HK", "用户名_hk", "用户名（冗余字段，便于查询）"),
 
             // entity.durationlog.statdate
             new TranslationSeedItem("entity.durationlog.statdate", "en-US", "统计日期_us", "统计日期（自然日，不含时分秒）"),

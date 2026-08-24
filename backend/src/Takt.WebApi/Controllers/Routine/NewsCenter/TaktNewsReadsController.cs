@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsReadsController.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心阅读记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:news:center:list", "新闻中心阅读记录列表")]
+    [TaktPermission("routine:news:center:read:list", "新闻中心阅读记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetNewsReadListAsync([FromQuery] TaktNewsReadQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心阅读记录ID</param>
     /// <returns>新闻中心阅读记录DTO</returns>
-    [TaktPermission("routine:news:center:query", "新闻中心阅读记录详情")]
+    [TaktPermission("routine:news:center:read:query", "新闻中心阅读记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNewsReadByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// 获取新闻阅读记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:news:center:query", "新闻中心阅读记录选项")]
+    [TaktPermission("routine:news:center:read:query", "新闻中心阅读记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetNewsReadOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>新闻中心阅读记录DTO</returns>
-    [TaktPermission("routine:news:center:create", "创建新闻中心阅读记录")]
+    [TaktPermission("routine:news:center:read:create", "创建新闻中心阅读记录")]
     [HttpPost]
     public async Task<IActionResult> CreateNewsReadAsync([FromBody] TaktNewsReadCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// <param name="id">新闻中心阅读记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>新闻中心阅读记录DTO</returns>
-    [TaktPermission("routine:news:center:update", "更新新闻中心阅读记录")]
+    [TaktPermission("routine:news:center:read:update", "更新新闻中心阅读记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNewsReadAsync(long id, [FromBody] TaktNewsReadUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心阅读记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:news:center:delete", "删除新闻中心阅读记录")]
+    [TaktPermission("routine:news:center:read:delete", "删除新闻中心阅读记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNewsReadByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:news:center:delete", "批量删除新闻中心阅读记录")]
+    [TaktPermission("routine:news:center:read:delete", "批量删除新闻中心阅读记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteNewsReadBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -181,10 +181,30 @@ public class TaktNewsReadsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 更新新闻中心阅读记录作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>新闻中心阅读记录DTO</returns>
+    [TaktPermission("routine:news:center:read:update", "更新新闻中心阅读记录作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateNewsReadObsoleteAsync([FromBody] TaktNewsReadObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _newsReadService.UpdateNewsReadObsoleteAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:news:center:import", "获取新闻中心阅读记录导入模板")]
+    [TaktPermission("routine:news:center:read:import", "获取新闻中心阅读记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetNewsReadTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +224,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:news:center:import", "导入新闻中心阅读记录")]
+    [TaktPermission("routine:news:center:read:import", "导入新闻中心阅读记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportNewsReadAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +254,7 @@ public class TaktNewsReadsController : TaktControllerBase
     /// 导出新闻中心阅读记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:news:center:export", "导出新闻中心阅读记录")]
+    [TaktPermission("routine:news:center:read:export", "导出新闻中心阅读记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportNewsReadAsync([FromQuery] TaktNewsReadQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

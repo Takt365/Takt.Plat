@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPlantI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -505,22 +505,22 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.relatedcompany", "zh-HK", "关联公司_hk", "关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）"),
 
             // entity.plant.sortorder
-            new TranslationSeedItem("entity.plant.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.plant.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.plant.sortorder
-            new TranslationSeedItem("entity.plant.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.plant.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.plant.sortorder
-            new TranslationSeedItem("entity.plant.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.plant.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.plant.sortorder
-            new TranslationSeedItem("entity.plant.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.plant.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "en-US", "工厂状态_us", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.plant.status", "en-US", "工厂状态_us", "工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "ja-JP", "工厂状态_jp", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.plant.status", "ja-JP", "工厂状态_jp", "工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "zh-CN", "工厂状态", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.plant.status", "zh-CN", "工厂状态", "工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "zh-HK", "工厂状态_hk", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.plant.status", "zh-HK", "工厂状态_hk", "工厂状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
         };
     }
 

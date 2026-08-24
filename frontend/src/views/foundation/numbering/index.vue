@@ -79,10 +79,7 @@
           />
         </template>
         <template v-else-if="column.key === 'deptCode'">
-          <TaktDictTag
-            :value="getNumberingField(record, 'deptCode')"
-            dict-type="sys_numbering_dept_code"
-          />
+          <span>{{ getNumberingField(record, 'deptCode') }}</span>
         </template>
         <template v-else-if="column.key === 'dateFormat'">
           <TaktDictTag
@@ -93,13 +90,13 @@
         <template v-else-if="column.key === 'resetPeriod'">
           <TaktDictTag
             :value="mapResetPeriodDictValue(getNumberingField(record, 'resetPeriod') as string | number | undefined)"
-            dict-type="sys_reset_period_config"
+            dict-type="sys_reset_period"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getNumberingField(record, 'isBuiltIn')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -169,7 +166,8 @@
       <a-form-item :label="t('entity.numbering.documenttype')">
         <TaktTreeSelect
           v-model:value="advancedQueryForm.documentType"
-          api-url="TaktMenus/tree-options"
+          api-url="TaktMenus/tree-options?valueBy=name"
+          :lazy="false"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.documenttype') })"
           allow-clear
           :field-names="{ label: 'dictLabel', value: 'dictValue' }"
@@ -178,11 +176,13 @@
       </div>
       <div v-show="isFieldVisible('deptCode')">
       <a-form-item :label="t('entity.numbering.deptcode')">
-        <TaktSelect
+        <TaktTreeSelect
           v-model:value="advancedQueryForm.deptCode"
-          dict-type="sys_numbering_dept_code"
+          api-url="TaktDepts/iso-tree-options"
+          :lazy="true"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.deptcode') })"
           allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
         />
       </a-form-item>
       </div>
@@ -240,7 +240,7 @@
       <a-form-item :label="t('entity.numbering.resetperiod')">
         <TaktSelect
           v-model:value="advancedQueryForm.resetPeriod"
-          dict-type="sys_reset_period_config"
+          dict-type="sys_reset_period"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.resetperiod') })"
           allow-clear
         />
@@ -281,7 +281,7 @@
       <a-form-item :label="t('entity.numbering.isbuiltin')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.isbuiltin') })"
           allow-clear
         />
@@ -291,7 +291,7 @@
       <a-form-item :label="t('entity.numbering.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.status"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.status') })"
           allow-clear
         />
@@ -776,19 +776,23 @@ const getNumberingId = (record: any): string => record?.[entityIdName] ?? ''
 const getNumberingField = (record: any, field: string): any => record?.[field]
 /** 列表 TaktDictTag：resetPeriod 归一化为 sys_reset_period dictValue */
 const RESET_PERIOD_TO_DICT: Record<string, string> = {
-  none: 'none',
-  day: 'day',
-  daily: 'day',
-  month: 'month',
-  monthly: 'month',
-  year: 'year',
-  yearly: 'year',
+  none: 'None',
+  annually: 'Annually',
+  year: 'Annually',
+  yearly: 'Annually',
+  monthly: 'Monthly',
+  month: 'Monthly',
+  daily: 'Daily',
+  day: 'Daily',
+  hour: 'Daily',
+  hourly: 'Daily',
 }
 
 /** @param value 后端 resetPeriod */
 function mapResetPeriodDictValue(value?: string | number | null): string {
-  const key = String(value ?? 'year').trim().toLowerCase()
-  return RESET_PERIOD_TO_DICT[key] ?? 'year'
+  const raw = String(value ?? 'None').trim()
+  const key = raw.toLowerCase()
+  return RESET_PERIOD_TO_DICT[key] ?? raw
 }
 
 /** 行选择配置 */

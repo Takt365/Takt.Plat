@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.DocumentCenter
 // 文件名称：TaktDocumentValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Document 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktDocument 生成，请按需审阅）
 // 
@@ -36,10 +36,10 @@ public class TaktDocumentCreateValidator : AbstractValidator<TaktDocumentCreateD
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.DocumentCode)
             .NotEmpty().WithMessage("文档编码不能为空")
@@ -47,18 +47,13 @@ public class TaktDocumentCreateValidator : AbstractValidator<TaktDocumentCreateD
         RuleFor(x => x.DocumentTitle)
             .NotEmpty().WithMessage("文档标题不能为空")
             .MaximumLength(200).WithMessage("文档标题长度不能超过200个字符");
-        RuleFor(x => x.FileId)
-            .GreaterThanOrEqualTo(0).WithMessage("当前文件 ID不能为负数");
         RuleFor(x => x.PublisherId)
             .GreaterThanOrEqualTo(0).WithMessage("发布人 ID不能为负数");
         RuleFor(x => x.PublisherName)
-            .NotEmpty().WithMessage("发布人姓名不能为空")
+            .NotEmpty().WithMessage("发布人姓名不能为空").When(x => x.PublisherId <= 0)
             .MaximumLength(20).WithMessage("发布人姓名长度不能超过20个字符");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("归属部门 ID不能为负数");
-        RuleFor(x => x.TargetScope)
-            .NotEmpty().WithMessage("目标范围不能为空")
-            .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -89,10 +84,10 @@ public class TaktDocumentUpdateValidator : AbstractValidator<TaktDocumentUpdateD
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.DeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.DocumentCode)
             .NotEmpty().WithMessage("文档编码不能为空")
@@ -100,18 +95,13 @@ public class TaktDocumentUpdateValidator : AbstractValidator<TaktDocumentUpdateD
         RuleFor(x => x.DocumentTitle)
             .NotEmpty().WithMessage("文档标题不能为空")
             .MaximumLength(200).WithMessage("文档标题长度不能超过200个字符");
-        RuleFor(x => x.FileId)
-            .GreaterThanOrEqualTo(0).WithMessage("当前文件 ID不能为负数");
         RuleFor(x => x.PublisherId)
             .GreaterThanOrEqualTo(0).WithMessage("发布人 ID不能为负数");
         RuleFor(x => x.PublisherName)
-            .NotEmpty().WithMessage("发布人姓名不能为空")
+            .NotEmpty().WithMessage("发布人姓名不能为空").When(x => x.PublisherId <= 0)
             .MaximumLength(20).WithMessage("发布人姓名长度不能超过20个字符");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("归属部门 ID不能为负数");
-        RuleFor(x => x.TargetScope)
-            .NotEmpty().WithMessage("目标范围不能为空")
-            .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -147,8 +137,6 @@ public class TaktDocumentImportValidator : AbstractValidator<TaktDocumentImportD
         RuleFor(x => x.DocumentTitle)
             .NotEmpty().WithMessage("文档标题不能为空")
             .MaximumLength(200).WithMessage("文档标题长度不能超过200个字符");
-        RuleFor(x => x.FileId)
-            .GreaterThanOrEqualTo(0).WithMessage("当前文件 ID不能为负数");
         RuleFor(x => x.PublisherId)
             .GreaterThanOrEqualTo(0).WithMessage("发布人 ID不能为负数");
         RuleFor(x => x.PublisherName)
@@ -156,9 +144,6 @@ public class TaktDocumentImportValidator : AbstractValidator<TaktDocumentImportD
             .MaximumLength(20).WithMessage("发布人姓名长度不能超过20个字符");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("归属部门 ID不能为负数");
-        RuleFor(x => x.TargetScope)
-            .NotEmpty().WithMessage("目标范围不能为空")
-            .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

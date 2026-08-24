@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getDocumentId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="documentId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="routine:document:center:create"
       update-permission="routine:document:center:update"
       delete-permission="routine:document:center:delete"
@@ -50,28 +70,41 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getDocumentId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="documentId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'documentCategory'">
+          <TaktDictTag
+            :value="getDocumentDictValue(record, 'documentCategory')"
+            dict-type="routine_document_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'confidentialLevel'">
+          <TaktDictTag
+            :value="getDocumentDictValue(record, 'confidentialLevel')"
+            dict-type="routine_document_confidential_level"
+          />
+        </template>
+        <template v-else-if="column.key === 'documentIsTop'">
+          <TaktDictTag
+            :value="getDocumentDictValue(record, 'documentIsTop')"
+            dict-type="sys_yes_no"
+          />
+        </template>
+        <template v-else-if="column.key === 'targetScope'">
+          <TaktDictTag
+            :value="getDocumentDictValue(record, 'targetScope')"
+            dict-type="sys_publish_scope"
+          />
+        </template>
+        <template v-else-if="column.key === 'documentStatus'">
+          <TaktDictTag
+            :value="getDocumentDictValue(record, 'documentStatus')"
+            dict-type="sys_publish_status"
+          />
+        </template>
+      </template>
       <template #detail>
         <DocumentVersionPanel
           ref="documentVersionPanelRef"
@@ -108,22 +141,42 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('documentCode')">
-      <a-form-item :label="t('entity.document.code')">
+      <a-form-item :label="pi.queryLabel('documentCode')">
         <a-input
           v-model:value="advancedQueryForm.documentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.code') })"
+          :placeholder="pi.queryPh('documentCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('title')">
-      <a-form-item :label="t('entity.document.title')">
+      <div v-show="isFieldVisible('documentTitle')">
+      <a-form-item :label="pi.queryLabel('documentTitle')">
         <a-input
-          v-model:value="advancedQueryForm.title"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.title') })"
+          v-model:value="advancedQueryForm.documentTitle"
+          :placeholder="pi.queryPh('documentTitle', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -131,215 +184,163 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('documentCategory')">
-      <a-form-item :label="t('entity.document.category')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('documentCategory')">
+        <TaktSelect
           v-model:value="advancedQueryForm.documentCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.category') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('documentStatus')">
-      <a-form-item :label="t('entity.document.status')">
-        <a-input-number
-          v-model:value="advancedQueryForm.documentStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.status') })"
-          style="width: 100%"
+          dict-type="routine_document_category"
+          :placeholder="pi.queryPh('documentCategory', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('confidentialLevel')">
-      <a-form-item :label="t('entity.document.confidentiallevel')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('confidentialLevel')">
+        <TaktSelect
           v-model:value="advancedQueryForm.confidentialLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.confidentiallevel') })"
-          style="width: 100%"
+          dict-type="routine_document_confidential_level"
+          :placeholder="pi.queryPh('confidentialLevel', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('version')">
-      <a-form-item :label="t('entity.document.version')">
+      <a-form-item :label="pi.queryLabel('version')">
         <a-input-number
           v-model:value="advancedQueryForm.version"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.version') })"
+          :placeholder="pi.queryPh('version', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('content')">
-      <a-form-item :label="t('entity.document.content')">
+      <div v-show="isFieldVisible('documentContent')">
+      <a-form-item :label="pi.queryLabel('documentContent')">
         <a-textarea
-          v-model:value="advancedQueryForm.content"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.document.content') })"
+          v-model:value="advancedQueryForm.documentContent"
+          :placeholder="pi.queryPh('documentContent', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('summary')">
-      <a-form-item :label="t('entity.document.summary')">
+      <div v-show="isFieldVisible('documentSummary')">
+      <a-form-item :label="pi.queryLabel('documentSummary')">
         <a-input
-          v-model:value="advancedQueryForm.summary"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.summary') })"
+          v-model:value="advancedQueryForm.documentSummary"
+          :placeholder="pi.queryPh('documentSummary', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('tags')">
-      <a-form-item :label="t('entity.document.tags')">
+      <div v-show="isFieldVisible('documentTags')">
+      <a-form-item :label="pi.queryLabel('documentTags')">
         <a-input
-          v-model:value="advancedQueryForm.tags"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.tags') })"
+          v-model:value="advancedQueryForm.documentTags"
+          :placeholder="pi.queryPh('documentTags', 'required')"
           show-count
           :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('fileId')">
-      <a-form-item :label="t('entity.document.fileid')">
-        <a-input
-          v-model:value="advancedQueryForm.fileId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.fileid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('fileName')">
-      <a-form-item :label="t('entity.document.filename')">
+      <a-form-item :label="pi.queryLabel('fileName')">
         <a-input
           v-model:value="advancedQueryForm.fileName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filename') })"
+          :placeholder="pi.queryPh('fileName', 'required')"
           show-count
           :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('filePath')">
-      <a-form-item :label="t('entity.document.filepath')">
+      <div v-show="isFieldVisible('accessUrl')">
+      <a-form-item :label="pi.queryLabel('accessUrl')">
         <a-input
-          v-model:value="advancedQueryForm.filePath"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filepath') })"
+          v-model:value="advancedQueryForm.accessUrl"
+          :placeholder="pi.queryPh('accessUrl', 'required')"
           show-count
-          :maxlength="500"
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('fileSize')">
-      <a-form-item :label="t('entity.document.filesize')">
-        <a-input
-          v-model:value="advancedQueryForm.fileSize"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filesize') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('fileType')">
-      <a-form-item :label="t('entity.document.filetype')">
-        <a-input
-          v-model:value="advancedQueryForm.fileType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filetype') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('fileExtension')">
-      <a-form-item :label="t('entity.document.fileextension')">
-        <a-input
-          v-model:value="advancedQueryForm.fileExtension"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.fileextension') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('effectiveTimeStart')">
-      <a-form-item :label="t('entity.document.effectivetimestart')">
+      <div v-show="isFieldVisible('documentEffectiveTimeStart')">
+      <a-form-item :label="pi.queryLabel('documentEffectiveTimeStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.effectivetimestart') })"
+          v-model:value="advancedQueryForm.documentEffectiveTimeStart"
+          :placeholder="pi.queryPh('documentEffectiveTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveTimeEnd')">
-      <a-form-item :label="t('entity.document.effectivetimeend')">
+      <div v-show="isFieldVisible('documentEffectiveTimeEnd')">
+      <a-form-item :label="pi.queryLabel('documentEffectiveTimeEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.effectivetimeend') })"
+          v-model:value="advancedQueryForm.documentEffectiveTimeEnd"
+          :placeholder="pi.queryPh('documentEffectiveTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('expireTimeStart')">
-      <a-form-item :label="t('entity.document.expiretimestart')">
+      <div v-show="isFieldVisible('documentExpireTimeStart')">
+      <a-form-item :label="pi.queryLabel('documentExpireTimeStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.expireTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.expiretimestart') })"
+          v-model:value="advancedQueryForm.documentExpireTimeStart"
+          :placeholder="pi.queryPh('documentExpireTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('expireTimeEnd')">
-      <a-form-item :label="t('entity.document.expiretimeend')">
+      <div v-show="isFieldVisible('documentExpireTimeEnd')">
+      <a-form-item :label="pi.queryLabel('documentExpireTimeEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.expireTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.expiretimeend') })"
+          v-model:value="advancedQueryForm.documentExpireTimeEnd"
+          :placeholder="pi.queryPh('documentExpireTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('publishTimeStart')">
-      <a-form-item :label="t('entity.document.publishtimestart')">
+      <div v-show="isFieldVisible('documentPublishTimeStart')">
+      <a-form-item :label="pi.queryLabel('documentPublishTimeStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.publishTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.publishtimestart') })"
+          v-model:value="advancedQueryForm.documentPublishTimeStart"
+          :placeholder="pi.queryPh('documentPublishTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('publishTimeEnd')">
-      <a-form-item :label="t('entity.document.publishtimeend')">
+      <div v-show="isFieldVisible('documentPublishTimeEnd')">
+      <a-form-item :label="pi.queryLabel('documentPublishTimeEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.publishTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.publishtimeend') })"
+          v-model:value="advancedQueryForm.documentPublishTimeEnd"
+          :placeholder="pi.queryPh('documentPublishTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publisherId')">
-      <a-form-item :label="t('entity.document.publisherid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('publisherId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.publisherId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.publisherid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktUsers/options"
+          :placeholder="pi.queryPh('publisherId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publisherName')">
-      <a-form-item :label="t('entity.document.publishername')">
+      <a-form-item :label="pi.queryLabel('publisherName')">
         <a-input
           v-model:value="advancedQueryForm.publisherName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.publishername') })"
+          :placeholder="pi.queryPh('publisherName', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -347,69 +348,60 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.document.deptid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('deptId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.deptid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktDepts/tree-options"
+          :placeholder="pi.queryPh('deptId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="t('entity.document.deptname')">
+      <a-form-item :label="pi.queryLabel('deptName')">
         <a-input
           v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.deptname') })"
+          :placeholder="pi.queryPh('deptName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isTop')">
-      <a-form-item :label="t('entity.document.istop')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isTop"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.istop') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('documentIsTop')">
+      <a-form-item :label="pi.queryLabel('documentIsTop')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.documentIsTop"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('documentIsTop', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('viewCount')">
-      <a-form-item :label="t('entity.document.viewcount')">
+      <div v-show="isFieldVisible('documentViewCount')">
+      <a-form-item :label="pi.queryLabel('documentViewCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.viewCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.viewcount') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('downloadCount')">
-      <a-form-item :label="t('entity.document.downloadcount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.downloadCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.downloadcount') })"
+          v-model:value="advancedQueryForm.documentViewCount"
+          :placeholder="pi.queryPh('documentViewCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('targetScope')">
-      <a-form-item :label="t('entity.document.targetscope')">
-        <a-textarea
+      <a-form-item :label="pi.queryLabel('targetScope')">
+        <TaktSelect
           v-model:value="advancedQueryForm.targetScope"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.document.targetscope') })"
-          :rows="2"
+          dict-type="sys_publish_scope"
+          :placeholder="pi.queryPh('targetScope', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('targetDepartments')">
-      <a-form-item :label="t('entity.document.targetdepartments')">
+      <a-form-item :label="pi.queryLabel('targetDepartments')">
         <a-input
           v-model:value="advancedQueryForm.targetDepartments"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.targetdepartments') })"
+          :placeholder="pi.queryPh('targetDepartments', 'required')"
           show-count
           :maxlength="1000"
           allow-clear
@@ -417,31 +409,41 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('targetUsers')">
-      <a-form-item :label="t('entity.document.targetusers')">
+      <a-form-item :label="pi.queryLabel('targetUsers')">
         <a-input
           v-model:value="advancedQueryForm.targetUsers"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.targetusers') })"
+          :placeholder="pi.queryPh('targetUsers', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('documentStatus')">
+      <a-form-item :label="pi.queryLabel('documentStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.documentStatus"
+          dict-type="sys_publish_status"
+          :placeholder="pi.queryPh('documentStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.document.approvalstatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.approvalstatus') })"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.document.initiatorid')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.initiatorid') })"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -449,10 +451,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.document.initiatedatstart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.initiatedatstart') })"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -460,20 +462,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.document.initiatedatend')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.initiatedatend') })"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.document.approvedby')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.approvedby') })"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -481,10 +483,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.document.approvedatstart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.approvedatstart') })"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -492,20 +494,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.document.approvedatend')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.document.approvedatend') })"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.document.flowinstanceid')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.flowinstanceid') })"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -513,10 +515,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -524,10 +526,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -549,7 +551,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -563,10 +565,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -580,14 +582,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.document._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.document._self"
+        v-if="importVisible"
+        :entity-i18n-key="DOCUMENT_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -606,7 +609,7 @@
       :id-column-key="'documentId'"
       :action-column-key="'action'"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -626,12 +629,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import DocumentForm from './components/document-form.vue'
 import DocumentVersionPanel from './components/document-version-panel.vue'
-import { provideDocumentMasterContext } from './composables/use-document-master-context'
+import { provideDocumentMasterContext, type DocumentRowRecord } from './composables/use-document-master-context'
 import { getDocumentList, getDocumentById, createDocument, updateDocument, deleteDocumentById, deleteDocumentBatch, getDocumentTemplate, importDocument, exportDocument, updateDocumentStatus } from '@/api/routine/document-center/document'
 import type { Document, DocumentQuery } from '@/types/routine/document-center/document'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useDocumentI18n,
+  DOCUMENT_LIST_FIELDS,
+  DOCUMENT_QUERY_STRING_FIELDS,
+  DOCUMENT_QUERY_FIELDS,
+  DOCUMENT_SELF_I18N_KEY,
+} from './composables/use-document-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useDocumentI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -639,7 +655,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktDocument')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.document._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -655,9 +671,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Document | null>(null)
+const selectedRow = ref<DocumentRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Document[]>([])
+const selectedRows = ref<DocumentRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -674,97 +690,74 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of DOCUMENT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.documentCategory !== undefined && form.documentCategory !== null) {
+    return true
+  }
+  if (form.confidentialLevel !== undefined && form.confidentialLevel !== null) {
+    return true
+  }
+  if (form.version !== undefined && form.version !== null) {
+    return true
+  }
+  if (form.documentIsTop !== undefined && form.documentIsTop !== null) {
+    return true
+  }
+  if (form.documentViewCount !== undefined && form.documentViewCount !== null) {
+    return true
+  }
+  if (form.targetScope !== undefined && form.targetScope !== null) {
+    return true
+  }
+  if (form.documentStatus !== undefined && form.documentStatus !== null) {
+    return true
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(DOCUMENT_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof DOCUMENT_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    documentCategory: undefined as number | undefined,
+    confidentialLevel: undefined as number | undefined,
+    version: undefined as number | undefined,
+    documentIsTop: undefined as number | undefined,
+    documentViewCount: undefined as number | undefined,
+    targetScope: undefined as number | undefined,
+    documentStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  documentCode: '',
-  title: '',
-  documentCategory: undefined as number | undefined,
-  documentStatus: undefined as number | undefined,
-  confidentialLevel: undefined as number | undefined,
-  version: undefined as number | undefined,
-  content: '',
-  summary: '',
-  tags: '',
-  fileId: '',
-  fileName: '',
-  filePath: '',
-  fileSize: '',
-  fileType: '',
-  fileExtension: '',
-  effectiveTimeStart: '',
-  effectiveTimeEnd: '',
-  expireTimeStart: '',
-  expireTimeEnd: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
-  publisherId: '',
-  publisherName: '',
-  deptId: '',
-  deptName: '',
-  isTop: undefined as number | undefined,
-  viewCount: undefined as number | undefined,
-  downloadCount: undefined as number | undefined,
-  targetScope: '',
-  targetDepartments: '',
-  targetUsers: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'documentCode', label: t('entity.document.code') },
-  { key: 'title', label: t('entity.document.title') },
-  { key: 'documentCategory', label: t('entity.document.category') },
-  { key: 'documentStatus', label: t('entity.document.status') },
-  { key: 'confidentialLevel', label: t('entity.document.confidentiallevel') },
-  { key: 'version', label: t('entity.document.version') },
-  { key: 'content', label: t('entity.document.content') },
-  { key: 'summary', label: t('entity.document.summary') },
-  { key: 'tags', label: t('entity.document.tags') },
-  { key: 'fileId', label: t('entity.document.fileid') },
-  { key: 'fileName', label: t('entity.document.filename') },
-  { key: 'filePath', label: t('entity.document.filepath') },
-  { key: 'fileSize', label: t('entity.document.filesize') },
-  { key: 'fileType', label: t('entity.document.filetype') },
-  { key: 'fileExtension', label: t('entity.document.fileextension') },
-  { key: 'effectiveTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.document.effectivetime')) },
-  { key: 'effectiveTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.document.effectivetime')) },
-  { key: 'expireTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.document.expiretime')) },
-  { key: 'expireTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.document.expiretime')) },
-  { key: 'publishTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.document.publishtime')) },
-  { key: 'publishTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.document.publishtime')) },
-  { key: 'publisherId', label: t('entity.document.publisherid') },
-  { key: 'publisherName', label: t('entity.document.publishername') },
-  { key: 'deptId', label: t('entity.document.deptid') },
-  { key: 'deptName', label: t('entity.document.deptname') },
-  { key: 'isTop', label: t('entity.document.istop') },
-  { key: 'viewCount', label: t('entity.document.viewcount') },
-  { key: 'downloadCount', label: t('entity.document.downloadcount') },
-  { key: 'targetScope', label: t('entity.document.targetscope') },
-  { key: 'targetDepartments', label: t('entity.document.targetdepartments') },
-  { key: 'targetUsers', label: t('entity.document.targetusers') },
-  { key: 'approvalStatus', label: t('entity.document.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.document.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.document.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.document.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.document.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.document.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.document.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.document.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  DOCUMENT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -780,12 +773,14 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideDocumentMasterContext()
 const documentVersionPanelRef = ref<InstanceType<typeof DocumentVersionPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {DocumentQuery} 查询 DTO
  */
@@ -806,13 +801,11 @@ function buildListQuery(overrides?: Partial<DocumentQuery>): DocumentQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('documentCode', form.documentCode)
-  assignTrimmed('title', form.title)
+  for (const key of DOCUMENT_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.documentCategory !== undefined && form.documentCategory !== null) {
     query.documentCategory = form.documentCategory
-  }
-  if (form.documentStatus !== undefined && form.documentStatus !== null) {
-    query.documentStatus = form.documentStatus
   }
   if (form.confidentialLevel !== undefined && form.confidentialLevel !== null) {
     query.confidentialLevel = form.confidentialLevel
@@ -820,64 +813,36 @@ function buildListQuery(overrides?: Partial<DocumentQuery>): DocumentQuery {
   if (form.version !== undefined && form.version !== null) {
     query.version = form.version
   }
-  assignTrimmed('content', form.content)
-  assignTrimmed('summary', form.summary)
-  assignTrimmed('tags', form.tags)
-  assignTrimmed('fileId', form.fileId)
-  assignTrimmed('fileName', form.fileName)
-  assignTrimmed('filePath', form.filePath)
-  assignTrimmed('fileSize', form.fileSize)
-  assignTrimmed('fileType', form.fileType)
-  assignTrimmed('fileExtension', form.fileExtension)
-  assignTrimmed('effectiveTimeStart', form.effectiveTimeStart)
-  assignTrimmed('effectiveTimeEnd', form.effectiveTimeEnd)
-  assignTrimmed('expireTimeStart', form.expireTimeStart)
-  assignTrimmed('expireTimeEnd', form.expireTimeEnd)
-  assignTrimmed('publishTimeStart', form.publishTimeStart)
-  assignTrimmed('publishTimeEnd', form.publishTimeEnd)
-  assignTrimmed('publisherId', form.publisherId)
-  assignTrimmed('publisherName', form.publisherName)
-  assignTrimmed('deptId', form.deptId)
-  assignTrimmed('deptName', form.deptName)
-  if (form.isTop !== undefined && form.isTop !== null) {
-    query.isTop = form.isTop
+  if (form.documentIsTop !== undefined && form.documentIsTop !== null) {
+    query.documentIsTop = form.documentIsTop
   }
-  if (form.viewCount !== undefined && form.viewCount !== null) {
-    query.viewCount = form.viewCount
+  if (form.documentViewCount !== undefined && form.documentViewCount !== null) {
+    query.documentViewCount = form.documentViewCount
   }
-  if (form.downloadCount !== undefined && form.downloadCount !== null) {
-    query.downloadCount = form.downloadCount
+  if (form.targetScope !== undefined && form.targetScope !== null) {
+    query.targetScope = form.targetScope
   }
-  assignTrimmed('targetScope', form.targetScope)
-  assignTrimmed('targetDepartments', form.targetDepartments)
-  assignTrimmed('targetUsers', form.targetUsers)
+  if (form.documentStatus !== undefined && form.documentStatus !== null) {
+    query.documentStatus = form.documentStatus
+  }
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: Document | null) {
+function syncMasterSelection(record: DocumentRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getDocumentId(record) : ''
 }
@@ -887,7 +852,7 @@ function syncMasterSelection(record: Document | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as Document
+  const row = record as unknown as DocumentRowRecord
   const key = getDocumentId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -905,7 +870,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadDocumentDetail(record: Document): Promise<Document | null> {
+async function loadDocumentDetail(record: DocumentRowRecord): Promise<Document | null> {
   const id = getDocumentId(record)
   if (!id) {
     return null
@@ -936,7 +901,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentId') ?? ''
   },
   {
-    title: t('entity.document.code'),
+    title: pi.label('documentCode'),
     dataIndex: 'documentCode',
     key: 'documentCode',
     width: 120,
@@ -945,43 +910,32 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentCode') ?? ''
   },
   {
-    title: t('entity.document.title'),
-    dataIndex: 'title',
-    key: 'title',
+    title: pi.label('documentTitle'),
+    dataIndex: 'documentTitle',
+    key: 'documentTitle',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'title') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentTitle') ?? ''
   },
   {
-    title: t('entity.document.category'),
+    title: pi.label('documentCategory'),
     dataIndex: 'documentCategory',
     key: 'documentCategory',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentCategory') ?? ''
   },
   {
-    title: t('entity.document.status'),
-    dataIndex: 'documentStatus',
-    key: 'documentStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentStatus') ?? ''
-  },
-  {
-    title: t('entity.document.confidentiallevel'),
+    title: pi.label('confidentialLevel'),
     dataIndex: 'confidentialLevel',
     key: 'confidentialLevel',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'confidentialLevel') ?? ''
   },
   {
-    title: t('entity.document.version'),
+    title: pi.label('version'),
     dataIndex: 'version',
     key: 'version',
     width: 120,
@@ -990,43 +944,34 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'version') ?? ''
   },
   {
-    title: t('entity.document.content'),
-    dataIndex: 'content',
-    key: 'content',
+    title: pi.label('documentContent'),
+    dataIndex: 'documentContent',
+    key: 'documentContent',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'content') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentContent') ?? ''
   },
   {
-    title: t('entity.document.summary'),
-    dataIndex: 'summary',
-    key: 'summary',
+    title: pi.label('documentSummary'),
+    dataIndex: 'documentSummary',
+    key: 'documentSummary',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'summary') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentSummary') ?? ''
   },
   {
-    title: t('entity.document.tags'),
-    dataIndex: 'tags',
-    key: 'tags',
+    title: pi.label('documentTags'),
+    dataIndex: 'documentTags',
+    key: 'documentTags',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'tags') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentTags') ?? ''
   },
   {
-    title: t('entity.document.fileid'),
-    dataIndex: 'fileId',
-    key: 'fileId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'fileId') ?? ''
-  },
-  {
-    title: t('entity.document.filename'),
+    title: pi.label('fileName'),
     dataIndex: 'fileName',
     key: 'fileName',
     width: 120,
@@ -1035,70 +980,43 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'fileName') ?? ''
   },
   {
-    title: t('entity.document.filepath'),
-    dataIndex: 'filePath',
-    key: 'filePath',
+    title: pi.label('accessUrl'),
+    dataIndex: 'accessUrl',
+    key: 'accessUrl',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'filePath') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'accessUrl') ?? ''
   },
   {
-    title: t('entity.document.filesize'),
-    dataIndex: 'fileSize',
-    key: 'fileSize',
+    title: pi.label('documentEffectiveTime'),
+    dataIndex: 'documentEffectiveTime',
+    key: 'documentEffectiveTime',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'fileSize') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentEffectiveTime') ?? ''
   },
   {
-    title: t('entity.document.filetype'),
-    dataIndex: 'fileType',
-    key: 'fileType',
+    title: pi.label('documentExpireTime'),
+    dataIndex: 'documentExpireTime',
+    key: 'documentExpireTime',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'fileType') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentExpireTime') ?? ''
   },
   {
-    title: t('entity.document.fileextension'),
-    dataIndex: 'fileExtension',
-    key: 'fileExtension',
+    title: pi.label('documentPublishTime'),
+    dataIndex: 'documentPublishTime',
+    key: 'documentPublishTime',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'fileExtension') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentPublishTime') ?? ''
   },
   {
-    title: t('entity.document.effectivetime'),
-    dataIndex: 'effectiveTime',
-    key: 'effectiveTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'effectiveTime') ?? ''
-  },
-  {
-    title: t('entity.document.expiretime'),
-    dataIndex: 'expireTime',
-    key: 'expireTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'expireTime') ?? ''
-  },
-  {
-    title: t('entity.document.publishtime'),
-    dataIndex: 'publishTime',
-    key: 'publishTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'publishTime') ?? ''
-  },
-  {
-    title: t('entity.document.publisherid'),
+    title: pi.label('publisherId'),
     dataIndex: 'publisherId',
     key: 'publisherId',
     width: 120,
@@ -1107,7 +1025,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'publisherId') ?? ''
   },
   {
-    title: t('entity.document.publishername'),
+    title: pi.label('publisherName'),
     dataIndex: 'publisherName',
     key: 'publisherName',
     width: 120,
@@ -1116,7 +1034,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'publisherName') ?? ''
   },
   {
-    title: t('entity.document.deptid'),
+    title: pi.label('deptId'),
     dataIndex: 'deptId',
     key: 'deptId',
     width: 120,
@@ -1125,7 +1043,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'deptId') ?? ''
   },
   {
-    title: t('entity.document.deptname'),
+    title: pi.label('deptName'),
     dataIndex: 'deptName',
     key: 'deptName',
     width: 120,
@@ -1134,43 +1052,32 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'deptName') ?? ''
   },
   {
-    title: t('entity.document.istop'),
-    dataIndex: 'isTop',
-    key: 'isTop',
+    title: pi.label('documentIsTop'),
+    dataIndex: 'documentIsTop',
+    key: 'documentIsTop',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'isTop') ?? ''
   },
   {
-    title: t('entity.document.viewcount'),
-    dataIndex: 'viewCount',
-    key: 'viewCount',
+    title: pi.label('documentViewCount'),
+    dataIndex: 'documentViewCount',
+    key: 'documentViewCount',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'viewCount') ?? ''
+    customRender: ({ record }: { record: any }) => getDocumentField(record, 'documentViewCount') ?? ''
   },
   {
-    title: t('entity.document.downloadcount'),
-    dataIndex: 'downloadCount',
-    key: 'downloadCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'downloadCount') ?? ''
-  },
-  {
-    title: t('entity.document.targetscope'),
+    title: pi.label('targetScope'),
     dataIndex: 'targetScope',
     key: 'targetScope',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDocumentField(record, 'targetScope') ?? ''
   },
   {
-    title: t('entity.document.targetdepartments'),
+    title: pi.label('targetDepartments'),
     dataIndex: 'targetDepartments',
     key: 'targetDepartments',
     width: 120,
@@ -1179,13 +1086,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'targetDepartments') ?? ''
   },
   {
-    title: t('entity.document.targetusers'),
+    title: pi.label('targetUsers'),
     dataIndex: 'targetUsers',
     key: 'targetUsers',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getDocumentField(record, 'targetUsers') ?? ''
+  },
+  {
+    title: pi.label('documentStatus'),
+    dataIndex: 'documentStatus',
+    key: 'documentStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -1195,7 +1110,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'routine:document:center:update',
-        onClick: (record: Document) => handleEdit(record)
+        onClick: (record: DocumentRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1203,25 +1118,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'routine:document:center:delete',
-        onClick: (record: Document) => handleDeleteOne(record)
+        onClick: (record: DocumentRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getDocumentId = (record: any): string => record?.[entityIdName] ?? ''
+const getDocumentId = (record: DocumentRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getDocumentField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getDocumentDictValue = (
+  record: DocumentRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Document[]) => {
+  onChange: (keys: (string | number)[], rows: DocumentRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1231,7 +1165,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: Document, selected: boolean) => {
+  onSelect: (record: DocumentRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1240,7 +1174,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Document[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: DocumentRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1250,6 +1184,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getDocumentList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1276,37 +1215,34 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   documentCode: '',
-  title: '',
+  documentTitle: '',
   documentCategory: undefined as number | undefined,
-  documentStatus: undefined as number | undefined,
   confidentialLevel: undefined as number | undefined,
   version: undefined as number | undefined,
-  content: '',
-  summary: '',
-  tags: '',
-  fileId: '',
+  documentContent: '',
+  documentSummary: '',
+  documentTags: '',
   fileName: '',
-  filePath: '',
-  fileSize: '',
-  fileType: '',
-  fileExtension: '',
-  effectiveTimeStart: '',
-  effectiveTimeEnd: '',
-  expireTimeStart: '',
-  expireTimeEnd: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
+  accessUrl: '',
+  documentEffectiveTimeStart: '',
+  documentEffectiveTimeEnd: '',
+  documentExpireTimeStart: '',
+  documentExpireTimeEnd: '',
+  documentPublishTimeStart: '',
+  documentPublishTimeEnd: '',
   publisherId: '',
   publisherName: '',
   deptId: '',
   deptName: '',
-  isTop: undefined as number | undefined,
-  viewCount: undefined as number | undefined,
-  downloadCount: undefined as number | undefined,
-  targetScope: '',
+  documentIsTop: undefined as number | undefined,
+  documentViewCount: undefined as number | undefined,
+  targetScope: undefined as number | undefined,
   targetDepartments: '',
   targetUsers: '',
+  documentStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',
@@ -1326,14 +1262,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.document._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: Document) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.document._self') })
+async function handleEdit(record: DocumentRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadDocumentDetail(record)
@@ -1349,7 +1285,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.document._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1367,10 +1303,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateDocument(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.document._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createDocument(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.document._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1401,15 +1337,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importDocument(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importDocument(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    documentVersionPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1420,6 +1363,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportDocument(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1443,24 +1389,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.document._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Document] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.document._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Document) {
+async function handleDeleteOne(record: DocumentRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.document._self'), name: t('common.tip.this.target', { target: t('entity.document._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteDocumentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.document._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1472,18 +1418,18 @@ async function handleDeleteOne(record: Document) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.document._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.document._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteDocumentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.document._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1506,37 +1452,34 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   documentCode: '',
-  title: '',
+  documentTitle: '',
   documentCategory: undefined as number | undefined,
-  documentStatus: undefined as number | undefined,
   confidentialLevel: undefined as number | undefined,
   version: undefined as number | undefined,
-  content: '',
-  summary: '',
-  tags: '',
-  fileId: '',
+  documentContent: '',
+  documentSummary: '',
+  documentTags: '',
   fileName: '',
-  filePath: '',
-  fileSize: '',
-  fileType: '',
-  fileExtension: '',
-  effectiveTimeStart: '',
-  effectiveTimeEnd: '',
-  expireTimeStart: '',
-  expireTimeEnd: '',
-  publishTimeStart: '',
-  publishTimeEnd: '',
+  accessUrl: '',
+  documentEffectiveTimeStart: '',
+  documentEffectiveTimeEnd: '',
+  documentExpireTimeStart: '',
+  documentExpireTimeEnd: '',
+  documentPublishTimeStart: '',
+  documentPublishTimeEnd: '',
   publisherId: '',
   publisherName: '',
   deptId: '',
   deptName: '',
-  isTop: undefined as number | undefined,
-  viewCount: undefined as number | undefined,
-  downloadCount: undefined as number | undefined,
-  targetScope: '',
+  documentIsTop: undefined as number | undefined,
+  documentViewCount: undefined as number | undefined,
+  targetScope: undefined as number | undefined,
   targetDepartments: '',
   targetUsers: '',
+  documentStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',

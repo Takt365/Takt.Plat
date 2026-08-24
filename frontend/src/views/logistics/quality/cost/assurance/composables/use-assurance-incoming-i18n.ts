@@ -20,7 +20,6 @@ export const QUALITYASSURANCEINCOMING_SELF_I18N_KEY = buildEntitySelfI18nKey(QUA
 
 /** 列表业务列（不含主键） */
 export const QUALITYASSURANCEINCOMING_LIST_FIELDS = [
-  'qualityAssuranceId',
   'qualityAssuranceCode',
   'lineNumber',
   'directManpowerCostPerMinute',
@@ -30,11 +29,11 @@ export const QUALITYASSURANCEINCOMING_LIST_FIELDS = [
   'otherExpenses',
   'incomingNote',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const QUALITYASSURANCEINCOMING_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'qualityAssuranceId',
   'qualityAssuranceCode',
   'lineNumber',
   'directManpowerCostPerMinute',
@@ -59,17 +58,7 @@ export const QUALITYASSURANCEINCOMING_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const QUALITYASSURANCEINCOMING_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  directManpowerCostPerMinute: 'select',
-  incomingInspectionCost: 'select',
-  inspectionTimeMinutes: 'select',
-  travelCost: 'select',
-  otherExpenses: 'select',
-  incomingNote: 'optional',
-  isObsolete: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -77,29 +66,13 @@ export type QualityAssuranceIncomingField = keyof typeof QUALITYASSURANCEINCOMIN
 
 /** 高级查询可 trim 的字符串字段 */
 export const QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS = [
-  'qualityAssuranceCode',
-  'incomingNote',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof QualityAssuranceIncomingQuery)[]
 
-export type QualityAssuranceIncomingQueryField =
-  | (typeof QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'directManpowerCostPerMinute' | 'incomingInspectionCost' | 'inspectionTimeMinutes' | 'travelCost' | 'otherExpenses' | 'isObsolete'
+export type QualityAssuranceIncomingQueryField = (typeof QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const QUALITYASSURANCEINCOMING_QUERY_FIELDS: readonly QualityAssuranceIncomingQueryField[] = [
-  ...QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'directManpowerCostPerMinute',
-  'incomingInspectionCost',
-  'inspectionTimeMinutes',
-  'travelCost',
-  'otherExpenses',
-  'isObsolete',
-]
+export const QUALITYASSURANCEINCOMING_QUERY_FIELDS: readonly QualityAssuranceIncomingQueryField[] = [...QUALITYASSURANCEINCOMING_QUERY_STRING_FIELDS]
 
 /**
  * QualityAssuranceIncoming字段 i18n：index / assurance-incoming-form 统一入口

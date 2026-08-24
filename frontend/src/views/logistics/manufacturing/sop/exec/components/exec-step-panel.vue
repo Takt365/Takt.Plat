@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/sop/exec/components -->
 <!-- 文件名称：exec-step-panel.vue -->
-<!-- 功能描述：SOP 工位执行追溯实体主表实体右侧明细 sopExecStep 独立 CRUD（按主表选中 sopExecId 分页） -->
+<!-- 功能描述：SOP 工位执行追溯实体主表实体右侧明细 sopExecStep 独立 CRUD（按主表选中 execId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -109,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterSopExecId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -139,16 +140,6 @@
           v-model:value="advancedQueryForm.plantCode"
           api-url="TaktPlants/options"
           :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('execId')">
-      <a-form-item :label="pi.queryLabel('execId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.execId"
-          api-url="TaktSopExecs/options"
-          :placeholder="pi.queryPh('execId', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -259,7 +250,7 @@
       <a-form-item :label="pi.queryLabel('blockNextStep')">
         <TaktSelect
           v-model:value="advancedQueryForm.blockNextStep"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('blockNextStep', 'select')"
           allow-clear
         />
@@ -815,7 +806,7 @@ function buildListQuery(overrides?: Partial<SopExecStepQuery>): SopExecStepQuery
   const query: SopExecStepQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    sopExecId: masterSopExecId.value,
+    execId: masterSopExecId.value,
     ...overrides,
   }
   if (kw.length > 0) {

@@ -87,8 +87,9 @@ export const PCBAINSPECTIONDETAIL_SUMMARY_SUM_FIELDS = [
 export const PCBAINSPECTIONDETAIL_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  prodOrderCode: 'required',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  prodOrderCode: 'optional',
   lineNumber: 'select',
   pcbaBoardType: 'optional',
   visualInspectionLine: 'optional',
@@ -109,7 +110,6 @@ export const PCBAINSPECTIONDETAIL_PLACEHOLDER = {
   content: 'optional',
   defectLocation: 'optional',
   isObsolete: 'select',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -117,6 +117,7 @@ export type PcbaInspectionDetailField = keyof typeof PCBAINSPECTIONDETAIL_PLACEH
 
 /** 高级查询可 trim 的字符串字段 */
 export const PCBAINSPECTIONDETAIL_QUERY_STRING_FIELDS = [
+  'plantCode',
   'prodOrderCode',
   'pcbaBoardType',
   'visualInspectionLine',

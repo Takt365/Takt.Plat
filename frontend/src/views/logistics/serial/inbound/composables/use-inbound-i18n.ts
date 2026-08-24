@@ -33,8 +33,7 @@ export const SERIALINBOUND_LIST_FIELDS = [
 export const SERIALINBOUND_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
   inboundCode: 'required',
   inboundDate: 'select',
   inboundType: 'select',

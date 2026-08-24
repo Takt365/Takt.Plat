@@ -15,7 +15,7 @@ description: >-
 |---|------------|---------|
 | 分隔符 | `:` 冒号 | `.` 点号 |
 | 用途 | API/按钮/路由鉴权 | `t('…')` 文案 |
-| 示例 | `identity:user:create` | `entity.user.username` |
+| 示例 | `identity:user:create` | `entity.user.UserName` |
 
 ## 权限码四处一致
 

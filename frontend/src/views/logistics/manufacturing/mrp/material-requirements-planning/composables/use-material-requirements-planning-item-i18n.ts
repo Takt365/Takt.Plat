@@ -20,7 +20,6 @@ export const MATERIALREQUIREMENTSPLANNINGITEM_SELF_I18N_KEY = buildEntitySelfI18
 
 /** 列表业务列（不含主键） */
 export const MATERIALREQUIREMENTSPLANNINGITEM_LIST_FIELDS = [
-  'materialRequirementsPlanningId',
   'materialRequirementsPlanningCode',
   'lineNumber',
   'materialCode',
@@ -39,11 +38,11 @@ export const MATERIALREQUIREMENTSPLANNINGITEM_LIST_FIELDS = [
   'netRequirement',
   'procurementType',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const MATERIALREQUIREMENTSPLANNINGITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'materialRequirementsPlanningId',
   'materialRequirementsPlanningCode',
   'lineNumber',
   'materialCode',
@@ -79,27 +78,7 @@ export const MATERIALREQUIREMENTSPLANNINGITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const MATERIALREQUIREMENTSPLANNINGITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  materialCode: 'select',
-  materialDescription: 'optional',
-  materialSpecification: 'optional',
-  modelCode: 'optional',
-  modelName: 'optional',
-  parentMaterialCode: 'optional',
-  bomLevel: 'select',
-  requirementDate: 'select',
-  planUnit: 'select',
-  grossRequirement: 'select',
-  scheduledReceipts: 'select',
-  onHandQuantity: 'select',
-  projectedOnHand: 'select',
-  netRequirement: 'select',
-  procurementType: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -107,39 +86,13 @@ export type MaterialRequirementsPlanningItemField = keyof typeof MATERIALREQUIRE
 
 /** 高级查询可 trim 的字符串字段 */
 export const MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS = [
-  'materialRequirementsPlanningCode',
-  'materialCode',
-  'materialDescription',
-  'materialSpecification',
-  'modelCode',
-  'modelName',
-  'parentMaterialCode',
-  'requirementDateStart',
-  'requirementDateEnd',
-  'planUnit',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof MaterialRequirementsPlanningItemQuery)[]
 
-export type MaterialRequirementsPlanningItemQueryField =
-  | (typeof MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'bomLevel' | 'grossRequirement' | 'scheduledReceipts' | 'onHandQuantity' | 'projectedOnHand' | 'netRequirement' | 'procurementType' | 'isObsolete'
+export type MaterialRequirementsPlanningItemQueryField = (typeof MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const MATERIALREQUIREMENTSPLANNINGITEM_QUERY_FIELDS: readonly MaterialRequirementsPlanningItemQueryField[] = [
-  ...MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'bomLevel',
-  'grossRequirement',
-  'scheduledReceipts',
-  'onHandQuantity',
-  'projectedOnHand',
-  'netRequirement',
-  'procurementType',
-  'isObsolete',
-]
+export const MATERIALREQUIREMENTSPLANNINGITEM_QUERY_FIELDS: readonly MaterialRequirementsPlanningItemQueryField[] = [...MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS]
 
 /**
  * MaterialRequirementsPlanningItem字段 i18n：index / material-requirements-planning-item-form 统一入口

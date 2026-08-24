@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Workflow;
 
@@ -33,17 +32,17 @@ public class TaktFlowInstance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "instance_code", ColumnDescription = "实例编码", ColumnDataType = "varchar", Length = 64, IsNullable = false)]
     public string InstanceCode { get; set; } = string.Empty;
     /// <summary>
-    /// 流程定义 ID（<see cref="TaktFlowScheme"/> Id）
+    /// 流程定义 ID（选项 TaktFlowSchemes/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "process_definition_id", ColumnDescription = "流程定义ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ProcessDefinitionId { get; set; }
     /// <summary>
-    /// 流程键（冗余）
+    /// 流程键（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "process_key", ColumnDescription = "流程键", ColumnDataType = "varchar", Length = 64, IsNullable = false)]
     public string ProcessKey { get; set; } = string.Empty;
     /// <summary>
-    /// 流程名称（冗余）
+    /// 流程名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "process_name", ColumnDescription = "流程名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string ProcessName { get; set; } = string.Empty;
@@ -63,17 +62,17 @@ public class TaktFlowInstance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "current_activity_id", ColumnDescription = "当前节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? CurrentActivityId { get; set; }
     /// <summary>
-    /// 当前节点名称
+    /// 当前节点名称（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "current_activity_name", ColumnDescription = "当前节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? CurrentActivityName { get; set; }
     /// <summary>
-    /// 发起人 ID
+    /// 发起人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "start_user_id", ColumnDescription = "发起人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long StartUserId { get; set; }
     /// <summary>
-    /// 发起人姓名
+    /// 发起人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "start_user_name", ColumnDescription = "发起人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? StartUserName { get; set; }
@@ -93,50 +92,50 @@ public class TaktFlowInstance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "duration_ms", ColumnDescription = "历时毫秒", ColumnDataType = "bigint", IsNullable = true)]
     public long? DurationMs { get; set; }
     /// <summary>
-    /// 业务主键（关联业务单据 Id 等）
+    /// 业务主键（业务单据 Id 字符串，与 BusinessType 联合回写）
     /// </summary>
     [SugarColumn(ColumnName = "business_key", ColumnDescription = "业务主键", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? BusinessKey { get; set; }
     /// <summary>
-    /// 业务类型（由业务模块约定，用于回写）
+    /// 业务类型（业务模块约定标识，默认与 ProcessKey 一致）
     /// </summary>
     [SugarColumn(ColumnName = "business_type", ColumnDescription = "业务类型", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? BusinessType { get; set; }
     /// <summary>
-    /// 父流程实例 ID（子流程场景）
+    /// 父流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "super_instance_id", ColumnDescription = "父流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? SuperInstanceId { get; set; }
     /// <summary>
-    /// 终止原因
+    /// 终止原因（实例终止时填写）
     /// </summary>
     [SugarColumn(ColumnName = "delete_reason", ColumnDescription = "终止原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? DeleteReason { get; set; }
     /// <summary>
-    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 <see cref="TaktFlowVariable"/>）
+    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 表）
     /// </summary>
     [SugarColumn(ColumnName = "frm_data", ColumnDescription = "表单数据", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? FrmData { get; set; }
     /// <summary>
-    /// 关联表单 ID
+    /// 关联表单 ID（选项 TaktFlowForms/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "form_id", ColumnDescription = "表单ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? FormId { get; set; }
     /// <summary>
-    /// 关联表单编码
+    /// 关联表单编码（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "form_code", ColumnDescription = "表单编码", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? FormCode { get; set; }
     /// <summary>
-    /// 流程设计快照（启动时复制，避免定义变更影响在途实例）
+    /// 流程设计快照（启动时复制 ProcessContent，避免定义变更影响在途实例）
     /// </summary>
     [SugarColumn(ColumnName = "process_content_snapshot", ColumnDescription = "流程设计快照", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? ProcessContentSnapshot { get; set; }
     /// <summary>
-    /// 实例状态
+    /// 实例状态（字典 sys_flow_status；0=运行中 1=已完成 2=已驳回 3=已挂起 4=已终止 5=草稿）
     /// </summary>
     [SugarColumn(ColumnName = "instance_status", ColumnDescription = "实例状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktFlowInstanceStatus InstanceStatus { get; set; } = TaktFlowInstanceStatus.Running;
+    public int InstanceStatus { get; set; } = 0;
 
     // ========================================
     // 导航属性区域

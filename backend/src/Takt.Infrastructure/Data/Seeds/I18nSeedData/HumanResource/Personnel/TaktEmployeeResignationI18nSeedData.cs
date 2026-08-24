@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeResignationI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeResignation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -170,6 +170,15 @@ public class TaktEmployeeResignationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeresignation.handovernotes", "zh-CN", "工作交接说明", "工作交接说明"),
             // entity.employeeresignation.handovernotes
             new TranslationSeedItem("entity.employeeresignation.handovernotes", "zh-HK", "工作交接说明_hk", "工作交接说明"),
+
+            // entity.employeeresignation.employee
+            new TranslationSeedItem("entity.employeeresignation.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeeresignation.employee
+            new TranslationSeedItem("entity.employeeresignation.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeeresignation.employee
+            new TranslationSeedItem("entity.employeeresignation.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeeresignation.employee
+            new TranslationSeedItem("entity.employeeresignation.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

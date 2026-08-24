@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getAssyDefectDetailId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -108,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterAssyDefectId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -122,13 +124,33 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('prodOrderCode')">
       <a-form-item :label="pi.queryLabel('prodOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.prodOrderCode"
           :placeholder="pi.queryPh('prodOrderCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="12"
           allow-clear
         />
       </a-form-item>
@@ -259,6 +281,16 @@
           v-model:value="advancedQueryForm.repairOperator"
           api-url="TaktEmployees/options"
           :placeholder="pi.queryPh('repairOperator', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -476,7 +508,43 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of ASSYDEFECTDETAIL_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.prodActualQty !== undefined && form.prodActualQty !== null) {
+    return true
+  }
+  if (form.goodQuantity !== undefined && form.goodQuantity !== null) {
+    return true
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.defectQty !== undefined && form.defectQty !== null) {
+    return true
+  }
+  if (form.cumulativeDefectQty !== undefined && form.cumulativeDefectQty !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -491,7 +559,7 @@ function createEmptyAdvancedQueryForm() {
     lineNumber: undefined as number | undefined,
     defectQty: undefined as number | undefined,
     cumulativeDefectQty: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -559,6 +627,16 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: AssyDefectDetail }) =>
       String(getAssyDefectDetailField(record, 'assyDefectDetailId') ?? ''),
+  },
+  {
+    title: pi.label('assyDefectId'),
+    dataIndex: 'assyDefectId',
+    key: 'assyDefectId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: AssyDefectDetail }) =>
+      String(getAssyDefectDetailField(record, 'assyDefectId') ?? ''),
   },
   {
     title: pi.label('prodOrderCode'),
@@ -701,14 +779,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getAssyDefectDetailField(record, 'repairOperator') ?? ''),
   },
   {
-    title: pi.label('assyDefectId'),
-    dataIndex: 'assyDefectId',
-    key: 'assyDefectId',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: AssyDefectDetail }) =>
-      String(getAssyDefectDetailField(record, 'assyDefectId') ?? ''),
+      String(getAssyDefectDetailField(record, 'isObsolete') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -727,8 +805,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:defect:assy:delete',
         onClick: (record: AssyDefectDetail) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -837,7 +917,7 @@ function onClickRow(record: AssyDefectDetail) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {AssyDefectDetailQuery} 查询 DTO
  */
@@ -876,6 +956,9 @@ function buildListQuery(overrides?: Partial<AssyDefectDetailQuery>): AssyDefectD
   }
   if (form.cumulativeDefectQty !== undefined && form.cumulativeDefectQty !== null) {
     query.cumulativeDefectQty = form.cumulativeDefectQty
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1107,6 +1190,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportAssyDefectDetail(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

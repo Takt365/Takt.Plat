@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.Announcement
 // 文件名称：TaktAnnouncementService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公告通知应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Routine.Announcement;
-using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Routine.Announcement;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -33,7 +32,6 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     private readonly ITaktApprovalRepository<TaktAnnouncement> _announcementRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
     private readonly ITaktNumberingGenerator _numberingGenerator;
-    private readonly ITaktCompanyRepository<TaktNumbering> _numberingRepository;
 
     /// <summary>
     /// 构造函数
@@ -41,14 +39,12 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// <param name="announcementRepository">公告通知仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="numberingGenerator">编码生成器</param>
-    /// <param name="numberingRepository">编码规则仓储</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAnnouncementService(
         ITaktApprovalRepository<TaktAnnouncement> announcementRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktNumberingGenerator numberingGenerator,
-        ITaktCompanyRepository<TaktNumbering> numberingRepository,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -56,16 +52,23 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         _announcementRepository = announcementRepository;
         _uniqueValidator = uniqueValidator;
         _numberingGenerator = numberingGenerator;
-        _numberingRepository = numberingRepository;
     }
 
     /// <summary>
-    /// 获取公告通知列表（分页）
+    /// 获取公告通知列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktAnnouncementDto>> GetAnnouncementListAsync(TaktAnnouncementQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktAnnouncementDto>.Create(
+                new List<TaktAnnouncementDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _announcementRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -102,12 +105,12 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         EnsureThreeLayerContext();
         var list = await _announcementRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AnnouncementStatus == 1,
-            x => x.AnnouncementTitle ?? string.Empty,
+            x => x.AnnouncementCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.AnnouncementTitle ?? e.Id.ToString(),
+            DictValue = e.AnnouncementCode,
+            DictLabel = e.AnnouncementCode,
         }).ToList();
     }
 
@@ -118,16 +121,27 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// <returns>DTO</returns>
     public async Task<TaktAnnouncementDto> CreateAnnouncementAsync(TaktAnnouncementCreateDto dto)
     {
-        EnsureThreeLayerContext();
-        var ruleCode = dto.NumberingRuleCode?.Trim();
         var entity = dto.Adapt<TaktAnnouncement>();
-        entity.TenantCode = CurrentTenantCode;
-        entity.CompanyCode = CurrentCompanyCode;
-        if (string.IsNullOrWhiteSpace(entity.AnnouncementCode))
+        if (!string.IsNullOrWhiteSpace(dto.NumberingRuleCode))
         {
-            entity.AnnouncementCode = await GenerateAnnouncementCodeAsync(ruleCode);
+            var generated = await _numberingGenerator.GenerateNextAsync(dto.NumberingRuleCode.Trim());
+            if (string.IsNullOrWhiteSpace(generated.BusinessCode))
+            {
+                throw new TaktBusinessException("业务编码生成失败");
+            }
+            entity.AnnouncementCode = generated.BusinessCode;
         }
-        await EnsureAnnouncementCodeUniqueAsync(entity.AnnouncementCode);
+        else if (string.IsNullOrWhiteSpace(entity.AnnouncementCode))
+        {
+            throw new TaktBusinessException("公告编码不能为空");
+        }
+        var isUnique_ix_announcement_code_unique = await _uniqueValidator.IsUniqueAsync(
+            _announcementRepository,
+            x => x.AnnouncementCode == entity.AnnouncementCode);
+        if (!isUnique_ix_announcement_code_unique)
+        {
+            throw new TaktBusinessException("公告通知的AnnouncementCode已存在");
+        }
         entity = await _announcementRepository.CreateAsync(entity);
         return await GetAnnouncementByIdAsync(entity.Id) ?? entity.Adapt<TaktAnnouncementDto>();
     }
@@ -146,6 +160,14 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
             throw new TaktBusinessException("公告通知不存在");
         }
         dto.Adapt(entity);
+        var isUnique_ix_announcement_code_unique = await _uniqueValidator.IsUniqueAsync(
+            _announcementRepository,
+            x => x.AnnouncementCode == entity.AnnouncementCode,
+            id);
+        if (!isUnique_ix_announcement_code_unique)
+        {
+            throw new TaktBusinessException("公告通知的AnnouncementCode已存在");
+        }
         await _announcementRepository.UpdateAsync(entity);
         return await GetAnnouncementByIdAsync(id) ?? throw new TaktBusinessException("公告通知不存在");
     }
@@ -220,7 +242,6 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// <returns>导入结果</returns>
     public async Task<(int success, int fail, List<string> errors)> ImportAnnouncementAsync(Stream fileStream, string? sheetName = null)
     {
-        EnsureThreeLayerContext();
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
@@ -235,21 +256,19 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         {
             try
             {
-                var row = rows[i];
-                var ruleCode = row.NumberingRuleCode?.Trim();
-                var entity = row.Adapt<TaktAnnouncement>();
-                entity.TenantCode = CurrentTenantCode;
-                entity.CompanyCode = CurrentCompanyCode;
-                if (string.IsNullOrWhiteSpace(entity.AnnouncementCode))
-                {
-                    entity.AnnouncementCode = await GenerateAnnouncementCodeAsync(ruleCode);
-                }
-                var importKey = entity.AnnouncementCode;
+                var entity = rows[i].Adapt<TaktAnnouncement>();
+                var importKey = $"{entity.AnnouncementCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（AnnouncementCode）");
                 }
-                await EnsureAnnouncementCodeUniqueAsync(entity.AnnouncementCode);
+                var isUnique_ix_announcement_code_unique = await _uniqueValidator.IsUniqueAsync(
+                    _announcementRepository,
+                    x => x.AnnouncementCode == entity.AnnouncementCode);
+                if (!isUnique_ix_announcement_code_unique)
+                {
+                    throw new TaktBusinessException("公告通知的AnnouncementCode已存在");
+                }
                 await _announcementRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -271,7 +290,15 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportAnnouncementAsync(TaktAnnouncementQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktAnnouncementQueryDto());
+        var queryDto = query ?? new TaktAnnouncementQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktAnnouncementExportDto>(),
+                sheetName ?? "公告通知数据",
+                fileName ?? "公告通知导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _announcementRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -300,245 +327,292 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     {
         var exp = Expressionable.Create<TaktAnnouncement>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.AnnouncementCode != null && x.AnnouncementCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.AnnouncementCode != null && x.AnnouncementCode.Contains(keywords))
                 || (x.AnnouncementTitle != null && x.AnnouncementTitle.Contains(keywords))
-                || SqlFunc.ToString(x.AnnouncementType).Contains(keywords)
                 || (x.Content != null && x.Content.Contains(keywords))
                 || (x.Summary != null && x.Summary.Contains(keywords))
                 || (x.Tags != null && x.Tags.Contains(keywords))
-                || (x.Attachments != null && x.Attachments.Contains(keywords))
-                || SqlFunc.ToString(x.IsScheduled).Contains(keywords)
-                || SqlFunc.ToString(x.IsTop).Contains(keywords)
-                || SqlFunc.ToString(x.TopPriority).Contains(keywords)
-                || SqlFunc.ToString(x.ViewCount).Contains(keywords)
-                || (x.TargetScope != null && x.TargetScope.Contains(keywords))
+                || (x.FileName != null && x.FileName.Contains(keywords))
+                || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || (x.TargetDepartments != null && x.TargetDepartments.Contains(keywords))
                 || (x.TargetUsers != null && x.TargetUsers.Contains(keywords))
-                || SqlFunc.ToString(x.AnnouncementStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PublishTime).Contains(keywords)
-                || SqlFunc.ToString(x.ExpireTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AnnouncementTitle))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.AnnouncementTitle != null && x.AnnouncementTitle.Contains(queryDto.AnnouncementTitle));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AnnouncementCode))
-        {
-            exp = exp.And(x => x.AnnouncementCode != null && x.AnnouncementCode.Contains(queryDto.AnnouncementCode));
-        }
-
-        if (queryDto?.AnnouncementType.HasValue == true)
-        {
-            exp = exp.And(x => x.AnnouncementType == queryDto.AnnouncementType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Content))
-        {
-            exp = exp.And(x => x.Content != null && x.Content.Contains(queryDto.Content));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Summary))
-        {
-            exp = exp.And(x => x.Summary != null && x.Summary.Contains(queryDto.Summary));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Tags))
-        {
-            exp = exp.And(x => x.Tags != null && x.Tags.Contains(queryDto.Tags));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Attachments))
-        {
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
-        }
-
-        if (queryDto?.IsScheduled.HasValue == true)
-        {
-            exp = exp.And(x => x.IsScheduled == queryDto.IsScheduled);
-        }
-
-        if (queryDto?.IsTop.HasValue == true)
-        {
-            exp = exp.And(x => x.IsTop == queryDto.IsTop);
-        }
-
-        if (queryDto?.TopPriority.HasValue == true)
-        {
-            exp = exp.And(x => x.TopPriority == queryDto.TopPriority);
-        }
-
-        if (queryDto?.ViewCount.HasValue == true)
-        {
-            exp = exp.And(x => x.ViewCount == queryDto.ViewCount);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TargetScope))
-        {
-            exp = exp.And(x => x.TargetScope != null && x.TargetScope.Contains(queryDto.TargetScope));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TargetDepartments))
-        {
-            exp = exp.And(x => x.TargetDepartments != null && x.TargetDepartments.Contains(queryDto.TargetDepartments));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TargetUsers))
-        {
-            exp = exp.And(x => x.TargetUsers != null && x.TargetUsers.Contains(queryDto.TargetUsers));
-        }
-
-        if (queryDto?.AnnouncementStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.AnnouncementStatus == queryDto.AnnouncementStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.PublishTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.PublishTime >= queryDto.PublishTimeStart);
-        }
-
-        if (queryDto?.PublishTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.PublishTime <= queryDto.PublishTimeEnd);
-        }
-
-        if (queryDto?.ExpireTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ExpireTime >= queryDto.ExpireTimeStart);
-        }
-
-        if (queryDto?.ExpireTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ExpireTime <= queryDto.ExpireTimeEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.AnnouncementCode))
+        {
+            var announcementCode = queryDto.AnnouncementCode;
+            exp = exp.And(x => x.AnnouncementCode != null && x.AnnouncementCode.Contains(announcementCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AnnouncementTitle))
+        {
+            var announcementTitle = queryDto.AnnouncementTitle;
+            exp = exp.And(x => x.AnnouncementTitle != null && x.AnnouncementTitle.Contains(announcementTitle));
+        }
+
+        if (queryDto?.AnnouncementType.HasValue == true)
+        {
+            var announcementType = queryDto.AnnouncementType.Value;
+            exp = exp.And(x => x.AnnouncementType == announcementType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Content))
+        {
+            var content = queryDto.Content;
+            exp = exp.And(x => x.Content != null && x.Content.Contains(content));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Summary))
+        {
+            var summary = queryDto.Summary;
+            exp = exp.And(x => x.Summary != null && x.Summary.Contains(summary));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Tags))
+        {
+            var tags = queryDto.Tags;
+            exp = exp.And(x => x.Tags != null && x.Tags.Contains(tags));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileName))
+        {
+            var fileName = queryDto.FileName;
+            exp = exp.And(x => x.FileName != null && x.FileName.Contains(fileName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccessUrl))
+        {
+            var accessUrl = queryDto.AccessUrl;
+            exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(accessUrl));
+        }
+
+        if (queryDto?.IsScheduled.HasValue == true)
+        {
+            var isScheduled = queryDto.IsScheduled.Value;
+            exp = exp.And(x => x.IsScheduled == isScheduled);
+        }
+
+        if (queryDto?.IsTop.HasValue == true)
+        {
+            var isTop = queryDto.IsTop.Value;
+            exp = exp.And(x => x.IsTop == isTop);
+        }
+
+        if (queryDto?.TopPriority.HasValue == true)
+        {
+            var topPriority = queryDto.TopPriority.Value;
+            exp = exp.And(x => x.TopPriority == topPriority);
+        }
+
+        if (queryDto?.ViewCount.HasValue == true)
+        {
+            var viewCount = queryDto.ViewCount.Value;
+            exp = exp.And(x => x.ViewCount == viewCount);
+        }
+
+        if (queryDto?.TargetScope.HasValue == true)
+        {
+            var targetScope = queryDto.TargetScope.Value;
+            exp = exp.And(x => x.TargetScope == targetScope);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TargetDepartments))
+        {
+            var targetDepartments = queryDto.TargetDepartments;
+            exp = exp.And(x => x.TargetDepartments != null && x.TargetDepartments.Contains(targetDepartments));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TargetUsers))
+        {
+            var targetUsers = queryDto.TargetUsers;
+            exp = exp.And(x => x.TargetUsers != null && x.TargetUsers.Contains(targetUsers));
+        }
+
+        if (queryDto?.AnnouncementStatus.HasValue == true)
+        {
+            var announcementStatus = queryDto.AnnouncementStatus.Value;
+            exp = exp.And(x => x.AnnouncementStatus == announcementStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.PublishTimeStart.HasValue == true)
+        {
+            var publishTimeStart = queryDto.PublishTimeStart.Value;
+            exp = exp.And(x => x.PublishTime >= publishTimeStart);
+        }
+
+        if (queryDto?.PublishTimeEnd.HasValue == true)
+        {
+            var publishTimeEnd = queryDto.PublishTimeEnd.Value;
+            exp = exp.And(x => x.PublishTime <= publishTimeEnd);
+        }
+
+        if (queryDto?.ExpireTimeStart.HasValue == true)
+        {
+            var expireTimeStart = queryDto.ExpireTimeStart.Value;
+            exp = exp.And(x => x.ExpireTime >= expireTimeStart);
+        }
+
+        if (queryDto?.ExpireTimeEnd.HasValue == true)
+        {
+            var expireTimeEnd = queryDto.ExpireTimeEnd.Value;
+            exp = exp.And(x => x.ExpireTime <= expireTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
     }
 
-    // ========================================
-    // 编码生成
-    // ========================================
-
     /// <summary>
-    /// 按前端选定的编码规则编码生成业务编码
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
     /// </summary>
-    /// <param name="ruleCode">编码规则编码（TaktNumbering.RuleCode）</param>
-    /// <returns>公告编码</returns>
-    private async Task<string> GenerateAnnouncementCodeAsync(string? ruleCode)
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktAnnouncementQueryDto? queryDto)
     {
-        EnsureThreeLayerContext();
-        var rule = await ResolveActiveNumberingRuleAsync(ruleCode);
-        try
+        if (queryDto == null)
         {
-            var outcome = await _numberingGenerator.TryGenerateNextAsync(rule.RuleCode);
-            if (outcome == null || string.IsNullOrWhiteSpace(outcome.BusinessCode))
-            {
-                return BuildFallbackAnnouncementCode(rule);
-            }
-            return outcome.BusinessCode;
+            return false;
         }
-        catch (Exception ex)
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
         {
-            LogWarning($"编码规则 {rule.RuleCode} 不可用: {ex.Message}");
-            return BuildFallbackAnnouncementCode(rule);
+            return true;
         }
-    }
-
-    /// <summary>
-    /// 按 RuleCode 加载当前租户/公司下已启用的编码规则
-    /// </summary>
-    /// <param name="ruleCode">编码规则编码（表单选择器传入）</param>
-    /// <returns>编码规则实体</returns>
-    private async Task<TaktNumbering> ResolveActiveNumberingRuleAsync(string? ruleCode)
-    {
-        if (string.IsNullOrWhiteSpace(ruleCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
-            throw new TaktBusinessException("自动取号须选择编码规则（NumberingRuleCode）");
+            return true;
         }
-        var normalizedRuleCode = ruleCode.Trim();
-        var rule = await _numberingRepository.FirstAsync(x =>
-            x.TenantCode == CurrentTenantCode
-            && x.CompanyCode == CurrentCompanyCode
-            && x.RuleCode == normalizedRuleCode);
-        if (rule == null)
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
-            throw new TaktBusinessException($"编码规则「{normalizedRuleCode}」不存在");
+            return true;
         }
-        if (rule.NumberingStatus != 1)
+        if (!string.IsNullOrWhiteSpace(queryDto.AnnouncementCode))
         {
-            throw new TaktBusinessException($"编码规则「{normalizedRuleCode}」已禁用");
+            return true;
         }
-        return rule;
-    }
-
-    /// <summary>
-    /// 编码规则不可用时的兜底公告编码（前缀取自编码规则 PrefixCode）
-    /// </summary>
-    /// <param name="rule">编码规则</param>
-    /// <returns>兜底编码</returns>
-    private static string BuildFallbackAnnouncementCode(TaktNumbering rule)
-    {
-        var prefix = string.IsNullOrWhiteSpace(rule.PrefixCode) ? "ANN" : rule.PrefixCode.Trim();
-        return $"{prefix}{DateTime.Now:yyyyMMddHHmmss}{Random.Shared.Next(1000, 9999)}";
-    }
-
-    /// <summary>
-    /// 校验公告编码唯一
-    /// </summary>
-    /// <param name="announcementCode">公告编码</param>
-    /// <param name="excludeId">排除的主键</param>
-    /// <returns>任务</returns>
-    private async Task EnsureAnnouncementCodeUniqueAsync(string announcementCode, long? excludeId = null)
-    {
-        var isUnique = await _uniqueValidator.IsUniqueAsync(
-            _announcementRepository,
-            x => x.AnnouncementCode == announcementCode,
-            excludeId);
-        if (!isUnique)
+        if (!string.IsNullOrWhiteSpace(queryDto.AnnouncementTitle))
         {
-            ThrowValidationLocalized(TaktValidationI18nKeys.Duplicate, "entity.announcement.code");
+            return true;
         }
+        if (queryDto.AnnouncementType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Content))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Summary))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Tags))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FileName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccessUrl))
+        {
+            return true;
+        }
+        if (queryDto.IsScheduled.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsTop.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TopPriority.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ViewCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TargetScope.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TargetDepartments))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TargetUsers))
+        {
+            return true;
+        }
+        if (queryDto.AnnouncementStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.PublishTimeStart.HasValue || queryDto.PublishTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExpireTimeStart.HasValue || queryDto.ExpireTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

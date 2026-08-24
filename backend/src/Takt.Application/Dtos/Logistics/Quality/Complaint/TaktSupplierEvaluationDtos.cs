@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SupplierEvaluation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSupplierEvaluation 生成，请按需审阅）
 // 
@@ -35,9 +35,129 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierEvaluationId { get; set; }
 
+    /// <summary>
+    /// 评价表编码（组合唯一索引）
+    /// </summary>
+    public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SupplierId { get; set; }
+
+    /// <summary>
+    /// 供应商 名称（填充字段）
+    /// </summary>
+    public string? SupplierName { get; set; }
+
+    /// <summary>
+    /// 供应商名称
+    /// </summary>
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
+    /// </summary>
+    public string? SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价日期
+    /// </summary>
+    public DateTime EvaluationDate { get; set; }
+
+    /// <summary>
+    /// 评价周期（字典 logistics_quality_period）
+    /// </summary>
+    public int EvaluationPeriod { get; set; } = 0;
+
+    /// <summary>
+    /// 评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）
+    /// </summary>
+    public int EvaluationType { get; set; } = 0;
+
+    /// <summary>
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? EvaluatorBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// </summary>
+    public string? EvaluationDept { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总体评级（字典 logistics_quality_supplier_rating）
+    /// </summary>
+    public int OverallRating { get; set; } = 0;
+
+    /// <summary>
+    /// 综合评分（0-100分）
+    /// </summary>
+    public int? TotalScore { get; set; }
+
+    /// <summary>
+    /// 质量评分（0-100分）
+    /// </summary>
+    public int? QualityScore { get; set; }
+
+    /// <summary>
+    /// 交付评分（0-100分）
+    /// </summary>
+    public int? DeliveryScore { get; set; }
+
+    /// <summary>
+    /// 价格评分（0-100分）
+    /// </summary>
+    public int? PriceScore { get; set; }
+
+    /// <summary>
+    /// 服务评分（0-100分）
+    /// </summary>
+    public int? ServiceScore { get; set; }
+
+    /// <summary>
+    /// 技术能力评分（0-100分）
+    /// </summary>
+    public int? TechnicalScore { get; set; }
+
+    /// <summary>
+    /// 主要优点
+    /// </summary>
+    public string? MainStrengths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主要问题/不足
+    /// </summary>
+    public string? MainIssues { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改进要求/建议
+    /// </summary>
+    public string? ImprovementRequirements { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
+    /// </summary>
+    public int EvaluationConclusion { get; set; } = 0;
+
+    /// <summary>
+    /// 整改期限（要求完成日期）
+    /// </summary>
+    public DateTime? RectificationDeadline { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
+    /// </summary>
+    public int EvaluationStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -70,7 +190,7 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -78,6 +198,11 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价表编码（组合唯一索引）
@@ -206,12 +331,7 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public int? EvaluationStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -264,6 +384,11 @@ public class TaktSupplierEvaluationCreateDto
     /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价表编码（组合唯一索引）
@@ -384,12 +509,6 @@ public class TaktSupplierEvaluationCreateDto
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 整改跟进状态（字典 logistics_quality_rectification_status）
     /// </summary>
     public int RectificationStatus { get; set; } = 0;
@@ -478,9 +597,9 @@ public class TaktSupplierEvaluationSortDto
     public long SupplierEvaluationId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -507,6 +626,11 @@ public class TaktSupplierEvaluationTemplateDto
     /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价表编码（组合唯一索引）
@@ -623,11 +747,6 @@ public class TaktSupplierEvaluationTemplateDto
     /// 评价状态（字典 logistics_quality_evaluation_status）
     /// </summary>
     public int? EvaluationStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 整改跟进状态（字典 logistics_quality_rectification_status）
@@ -672,6 +791,11 @@ public class TaktSupplierEvaluationImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 评价表编码（组合唯一索引）
     /// </summary>
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
@@ -788,11 +912,6 @@ public class TaktSupplierEvaluationImportDto
     public int? EvaluationStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 整改跟进状态（字典 logistics_quality_rectification_status）
     /// </summary>
     public int? RectificationStatus { get; set; }
@@ -834,6 +953,16 @@ public class TaktSupplierEvaluationExportDto
     /// 公司代码
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价表编码（组合唯一索引）
@@ -952,12 +1081,7 @@ public class TaktSupplierEvaluationExportDto
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

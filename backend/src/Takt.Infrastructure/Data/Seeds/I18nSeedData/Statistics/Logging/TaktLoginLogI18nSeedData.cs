@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktLoginLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktLoginLog 实体字段国际化种子（已对齐前端 locales：src/locales/statistics/logging/login-log）
 // 
@@ -100,31 +100,31 @@ public class TaktLoginLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.loginlog.username", "zh-HK", "用户名_hk", "用户名（登录账号）"),
 
             // entity.loginlog.logintype
-            new TranslationSeedItem("entity.loginlog.logintype", "en-US", "登录方式_us", "登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）"),
+            new TranslationSeedItem("entity.loginlog.logintype", "en-US", "登录方式_us", "登录方式（TaktConstants.LoginType；如 password=账号密码、refreshtoken=刷新令牌）"),
             // entity.loginlog.logintype
-            new TranslationSeedItem("entity.loginlog.logintype", "ja-JP", "登录方式_jp", "登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）"),
+            new TranslationSeedItem("entity.loginlog.logintype", "ja-JP", "登录方式_jp", "登录方式（TaktConstants.LoginType；如 password=账号密码、refreshtoken=刷新令牌）"),
             // entity.loginlog.logintype
-            new TranslationSeedItem("entity.loginlog.logintype", "zh-CN", "登录方式", "登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）"),
+            new TranslationSeedItem("entity.loginlog.logintype", "zh-CN", "登录方式", "登录方式（TaktConstants.LoginType；如 password=账号密码、refreshtoken=刷新令牌）"),
             // entity.loginlog.logintype
-            new TranslationSeedItem("entity.loginlog.logintype", "zh-HK", "登录方式_hk", "登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）"),
+            new TranslationSeedItem("entity.loginlog.logintype", "zh-HK", "登录方式_hk", "登录方式（TaktConstants.LoginType；如 password=账号密码、refreshtoken=刷新令牌）"),
 
             // entity.loginlog.browser
-            new TranslationSeedItem("entity.loginlog.browser", "en-US", "浏览器_us", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.browser", "en-US", "浏览器_us", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.loginlog.browser
-            new TranslationSeedItem("entity.loginlog.browser", "ja-JP", "浏览器_jp", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.browser", "ja-JP", "浏览器_jp", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.loginlog.browser
-            new TranslationSeedItem("entity.loginlog.browser", "zh-CN", "浏览器", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.browser", "zh-CN", "浏览器", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.loginlog.browser
-            new TranslationSeedItem("entity.loginlog.browser", "zh-HK", "浏览器_hk", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.browser", "zh-HK", "浏览器_hk", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
 
             // entity.loginlog.os
-            new TranslationSeedItem("entity.loginlog.os", "en-US", "操作系统_us", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.os", "en-US", "操作系统_us", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.loginlog.os
-            new TranslationSeedItem("entity.loginlog.os", "ja-JP", "操作系统_jp", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.os", "ja-JP", "操作系统_jp", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.loginlog.os
-            new TranslationSeedItem("entity.loginlog.os", "zh-CN", "操作系统", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.os", "zh-CN", "操作系统", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.loginlog.os
-            new TranslationSeedItem("entity.loginlog.os", "zh-HK", "操作系统_hk", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.loginlog.os", "zh-HK", "操作系统_hk", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
 
             // entity.loginlog.useragent
             new TranslationSeedItem("entity.loginlog.useragent", "en-US", "用户代理_us", "用户代理（User-Agent）"),
@@ -136,13 +136,13 @@ public class TaktLoginLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.loginlog.useragent", "zh-HK", "用户代理_hk", "用户代理（User-Agent）"),
 
             // entity.loginlog.loginresult
-            new TranslationSeedItem("entity.loginlog.loginresult", "en-US", "登录结果_us", "登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）"),
+            new TranslationSeedItem("entity.loginlog.loginresult", "en-US", "登录结果_us", "登录结果（TaktConstants.LoginResult；如 success=成功、passworderror=密码错误）"),
             // entity.loginlog.loginresult
-            new TranslationSeedItem("entity.loginlog.loginresult", "ja-JP", "登录结果_jp", "登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）"),
+            new TranslationSeedItem("entity.loginlog.loginresult", "ja-JP", "登录结果_jp", "登录结果（TaktConstants.LoginResult；如 success=成功、passworderror=密码错误）"),
             // entity.loginlog.loginresult
-            new TranslationSeedItem("entity.loginlog.loginresult", "zh-CN", "登录结果", "登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）"),
+            new TranslationSeedItem("entity.loginlog.loginresult", "zh-CN", "登录结果", "登录结果（TaktConstants.LoginResult；如 success=成功、passworderror=密码错误）"),
             // entity.loginlog.loginresult
-            new TranslationSeedItem("entity.loginlog.loginresult", "zh-HK", "登录结果_hk", "登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）"),
+            new TranslationSeedItem("entity.loginlog.loginresult", "zh-HK", "登录结果_hk", "登录结果（TaktConstants.LoginResult；如 success=成功、passworderror=密码错误）"),
 
             // entity.loginlog.loginmessage
             new TranslationSeedItem("entity.loginlog.loginmessage", "en-US", "登录结果消息_us", "登录结果消息"),

@@ -90,77 +90,53 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         return dto;    }
 
     /// <summary>
-    /// 获取利润中心树形选项列表（DictValue 为 ProfitCenterCode，DictLabel 为利润中心名称）
+    /// 获取利润中心树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetProfitCenterTreeOptionsAsync()
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    public async Task<List<TaktTreeSelectOption>> GetProfitCenterTreeOptionsAsync(long parentId = 0)
     {
         EnsureThreeLayerContext();
-        var list = await _profitCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProfitCenterStatus == 1);
-        return BuildProfitCenterTreeOptions(list, 0);
-    }
-
-    /// <summary>
-    /// 在内存中构建利润中心树形选项（递归，按 ParentId）
-    /// </summary>
-    private List<TaktTreeSelectOption> BuildProfitCenterTreeOptions(List<TaktProfitCenter> all, long parentId)
-    {
-        var result = new List<TaktTreeSelectOption>();
-        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
-        {
-            var option = new TaktTreeSelectOption
+        var list = await _profitCenterRepository.GetListAsync(x =>
+            x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.ParentId == parentId
+            && x.ProfitCenterStatus == 1);
+        return list
+            .OrderBy(x => x.SortOrder)
+            .Select(item => new TaktTreeSelectOption
             {
-                DictValue = item.Id,
-                DictLabel = item.ProfitCenterName ?? item.Id.ToString(),
+                DictValue = item.Id.ToString(),
+                DictLabel = item.ProfitCenterName ?? item.ProfitCenterCode,
                 SortOrder = item.SortOrder,
-            };
-            var children = BuildProfitCenterTreeOptions(all, item.Id);
-            if (children.Count > 0)
-            {
-                option.Children = children;
-            }
-            result.Add(option);
-        }
-        return result;
+                IsLeaf = false,
+                Children = null,
+            })
+            .ToList();
     }
 
     /// <summary>
-    /// 获取利润中心树形列表
+    /// 获取利润中心树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）
     /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     public async Task<List<TaktProfitCenterTreeDto>> GetProfitCenterTreeAsync(long parentId = 0, bool includeDisabled = false)
     {
         EnsureThreeLayerContext();
-        var list = await _profitCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
-        var filtered = includeDisabled
-            ? list
-            : list.Where(x => x.ProfitCenterStatus == 1).ToList();
-        return BuildProfitCenterTree(filtered, parentId);
-    }
-
-    /// <summary>
-    /// 在内存中构建利润中心树（递归，按 ParentId）
-    /// </summary>
-    private List<TaktProfitCenterTreeDto> BuildProfitCenterTree(List<TaktProfitCenter> allRecords, long parentId)
-    {
-        var children = allRecords
-            .Where(x => x.ParentId == parentId)
+        Expression<Func<TaktProfitCenter, bool>> predicate = includeDisabled
+            ? (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId)
+            : (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.ProfitCenterStatus == 1);
+        var list = await _profitCenterRepository.GetListAsync(predicate);
+        return list
             .OrderBy(x => x.SortOrder)
-            .ToList();
-        var treeList = new List<TaktProfitCenterTreeDto>();
-        foreach (var item in children)
-        {
-            var treeDto = item.Adapt<TaktProfitCenterTreeDto>();
-            var childTree = BuildProfitCenterTree(allRecords, item.Id);
-            if (childTree.Count > 0)
+            .Select(item =>
             {
-                treeDto.Children = childTree;
-            }
-            treeList.Add(treeDto);
-        }
-        return treeList;
+                var treeDto = item.Adapt<TaktProfitCenterTreeDto>();
+                treeDto.Children = new List<TaktProfitCenterTreeDto>();
+                return treeDto;
+            })
+            .ToList();
     }
 
     /// <summary>

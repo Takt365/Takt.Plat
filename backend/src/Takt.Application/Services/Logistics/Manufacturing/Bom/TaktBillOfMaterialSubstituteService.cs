@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：BOM替代料应用服务实现
 // 
@@ -373,6 +373,34 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
             throw new TaktBusinessException("物料清单明细不存在");
         }
         entity.BillOfMaterialItemId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.BomCode))
+        {
+            entity.BomCode = master.BomCode;
+        }
+        if (string.IsNullOrEmpty(entity.SubstituteGroup))
+        {
+            entity.SubstituteGroup = master.SubstituteGroup;
+        }
+        if (string.IsNullOrEmpty(entity.MaterialUnit))
+        {
+            entity.MaterialUnit = master.MaterialUnit;
+        }
     }
 
     /// <summary>
@@ -393,6 +421,22 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
             throw new TaktBusinessException("工厂物料不存在");
         }
         entity.SubstituteMaterialId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -421,6 +465,7 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.BomCode != null && x.BomCode.Contains(keywords))
                 || (x.PrimaryMaterialCode != null && x.PrimaryMaterialCode.Contains(keywords))
                 || (x.SubstituteMaterialCode != null && x.SubstituteMaterialCode.Contains(keywords))
@@ -437,15 +482,21 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
             exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
         if (queryDto?.BillOfMaterialItemId.HasValue == true)
         {
-            var billOfMaterialItemId = queryDto.BillOfMaterialItemId;
+            var billOfMaterialItemId = queryDto.BillOfMaterialItemId.Value;
             exp = exp.And(x => x.BillOfMaterialItemId == billOfMaterialItemId);
         }
 
         if (queryDto?.BillOfMaterialId.HasValue == true)
         {
-            var billOfMaterialId = queryDto.BillOfMaterialId;
+            var billOfMaterialId = queryDto.BillOfMaterialId.Value;
             exp = exp.And(x => x.BillOfMaterialId == billOfMaterialId);
         }
 
@@ -463,13 +514,13 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            var lineNumber = queryDto.LineNumber;
+            var lineNumber = queryDto.LineNumber.Value;
             exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
         if (queryDto?.SubstituteMaterialId.HasValue == true)
         {
-            var substituteMaterialId = queryDto.SubstituteMaterialId;
+            var substituteMaterialId = queryDto.SubstituteMaterialId.Value;
             exp = exp.And(x => x.SubstituteMaterialId == substituteMaterialId);
         }
 
@@ -487,13 +538,13 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
 
         if (queryDto?.SubstitutePriority.HasValue == true)
         {
-            var substitutePriority = queryDto.SubstitutePriority;
+            var substitutePriority = queryDto.SubstitutePriority.Value;
             exp = exp.And(x => x.SubstitutePriority == substitutePriority);
         }
 
         if (queryDto?.UsageQuantity.HasValue == true)
         {
-            var usageQuantity = queryDto.UsageQuantity;
+            var usageQuantity = queryDto.UsageQuantity.Value;
             exp = exp.And(x => x.UsageQuantity == usageQuantity);
         }
 
@@ -505,13 +556,13 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
 
         if (queryDto?.UsageRatio.HasValue == true)
         {
-            var usageRatio = queryDto.UsageRatio;
+            var usageRatio = queryDto.UsageRatio.Value;
             exp = exp.And(x => x.UsageRatio == usageRatio);
         }
 
         if (queryDto?.IsEnabled.HasValue == true)
         {
-            var isEnabled = queryDto.IsEnabled;
+            var isEnabled = queryDto.IsEnabled.Value;
             exp = exp.And(x => x.IsEnabled == isEnabled);
         }
 
@@ -529,45 +580,39 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
 
         if (queryDto?.EffectiveDateStart.HasValue == true)
         {
-            var effectiveDateStart = queryDto.EffectiveDateStart;
+            var effectiveDateStart = queryDto.EffectiveDateStart.Value;
             exp = exp.And(x => x.EffectiveDate >= effectiveDateStart);
         }
 
         if (queryDto?.EffectiveDateEnd.HasValue == true)
         {
-            var effectiveDateEnd = queryDto.EffectiveDateEnd;
+            var effectiveDateEnd = queryDto.EffectiveDateEnd.Value;
             exp = exp.And(x => x.EffectiveDate <= effectiveDateEnd);
         }
 
         if (queryDto?.ExpiryDateStart.HasValue == true)
         {
-            var expiryDateStart = queryDto.ExpiryDateStart;
+            var expiryDateStart = queryDto.ExpiryDateStart.Value;
             exp = exp.And(x => x.ExpiryDate >= expiryDateStart);
         }
 
         if (queryDto?.ExpiryDateEnd.HasValue == true)
         {
-            var expiryDateEnd = queryDto.ExpiryDateEnd;
+            var expiryDateEnd = queryDto.ExpiryDateEnd.Value;
             exp = exp.And(x => x.ExpiryDate <= expiryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -588,6 +633,10 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }

@@ -74,31 +74,7 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'evaluationPeriod'">
-          <TaktDictTag
-            :value="getSupplierEvaluationDictValue(record, 'evaluationPeriod')"
-            dict-type="logistics_quality_period"
-          />
-        </template>
-        <template v-else-if="column.key === 'overallRating'">
-          <TaktDictTag
-            :value="getSupplierEvaluationDictValue(record, 'overallRating')"
-            dict-type="logistics_quality_supplier_rating"
-          />
-        </template>
-        <template v-else-if="column.key === 'evaluationConclusion'">
-          <TaktDictTag
-            :value="getSupplierEvaluationDictValue(record, 'evaluationConclusion')"
-            dict-type="logistics_quality_evaluation_conclusion"
-          />
-        </template>
-        <template v-else-if="column.key === 'evaluationStatus'">
-          <TaktDictTag
-            :value="getSupplierEvaluationDictValue(record, 'evaluationStatus')"
-            dict-type="logistics_quality_evaluation_status"
-          />
-        </template>
-        <template v-else-if="column.key === 'rectificationStatus'">
+        <template v-if="column.key === 'rectificationStatus'">
           <TaktDictTag
             :value="getSupplierEvaluationDictValue(record, 'rectificationStatus')"
             dict-type="logistics_quality_rectification_status"
@@ -141,337 +117,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('supplierEvaluationCode')">
-      <a-form-item :label="pi.queryLabel('supplierEvaluationCode')">
-        <a-input
-          v-model:value="advancedQueryForm.supplierEvaluationCode"
-          :placeholder="pi.queryPh('supplierEvaluationCode', 'required')"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('supplierId')">
-      <a-form-item :label="pi.queryLabel('supplierId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.supplierId"
-          api-url="TaktSuppliers/options"
-          :placeholder="pi.queryPh('supplierId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('supplierName1')">
-      <a-form-item :label="pi.queryLabel('supplierName1')">
-        <a-input
-          v-model:value="advancedQueryForm.supplierName1"
-          :placeholder="pi.queryPh('supplierName1', 'required')"
-          show-count
-          :maxlength="140"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('supplierCode')">
-      <a-form-item :label="pi.queryLabel('supplierCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.supplierCode"
-          api-url="TaktSuppliers/options"
-          :placeholder="pi.queryPh('supplierCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationDateStart')">
-      <a-form-item :label="pi.queryLabel('evaluationDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.evaluationDateStart"
-          :placeholder="pi.queryPh('evaluationDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationDateEnd')">
-      <a-form-item :label="pi.queryLabel('evaluationDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.evaluationDateEnd"
-          :placeholder="pi.queryPh('evaluationDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationPeriod')">
-      <a-form-item :label="pi.queryLabel('evaluationPeriod')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.evaluationPeriod"
-          dict-type="logistics_quality_period"
-          :placeholder="pi.queryPh('evaluationPeriod', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationType')">
-      <a-form-item :label="pi.queryLabel('evaluationType')">
-        <a-input-number
-          v-model:value="advancedQueryForm.evaluationType"
-          :placeholder="pi.queryPh('evaluationType', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluatorBy')">
-      <a-form-item :label="pi.queryLabel('evaluatorBy')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.evaluatorBy"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('evaluatorBy', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationDept')">
-      <a-form-item :label="pi.queryLabel('evaluationDept')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.evaluationDept"
-          api-url="TaktDepts/tree-options"
-          :placeholder="pi.queryPh('evaluationDept', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('overallRating')">
-      <a-form-item :label="pi.queryLabel('overallRating')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.overallRating"
-          dict-type="logistics_quality_supplier_rating"
-          :placeholder="pi.queryPh('overallRating', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('totalScore')">
-      <a-form-item :label="pi.queryLabel('totalScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.totalScore"
-          :placeholder="pi.queryPh('totalScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('qualityScore')">
-      <a-form-item :label="pi.queryLabel('qualityScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.qualityScore"
-          :placeholder="pi.queryPh('qualityScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deliveryScore')">
-      <a-form-item :label="pi.queryLabel('deliveryScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.deliveryScore"
-          :placeholder="pi.queryPh('deliveryScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('priceScore')">
-      <a-form-item :label="pi.queryLabel('priceScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.priceScore"
-          :placeholder="pi.queryPh('priceScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('serviceScore')">
-      <a-form-item :label="pi.queryLabel('serviceScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.serviceScore"
-          :placeholder="pi.queryPh('serviceScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('technicalScore')">
-      <a-form-item :label="pi.queryLabel('technicalScore')">
-        <a-input-number
-          v-model:value="advancedQueryForm.technicalScore"
-          :placeholder="pi.queryPh('technicalScore', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('mainStrengths')">
-      <a-form-item :label="pi.queryLabel('mainStrengths')">
-        <a-input
-          v-model:value="advancedQueryForm.mainStrengths"
-          :placeholder="pi.queryPh('mainStrengths', 'required')"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('mainIssues')">
-      <a-form-item :label="pi.queryLabel('mainIssues')">
-        <a-input
-          v-model:value="advancedQueryForm.mainIssues"
-          :placeholder="pi.queryPh('mainIssues', 'required')"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('improvementRequirements')">
-      <a-form-item :label="pi.queryLabel('improvementRequirements')">
-        <a-input
-          v-model:value="advancedQueryForm.improvementRequirements"
-          :placeholder="pi.queryPh('improvementRequirements', 'required')"
-          show-count
-          :maxlength="2000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationConclusion')">
-      <a-form-item :label="pi.queryLabel('evaluationConclusion')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.evaluationConclusion"
-          dict-type="logistics_quality_evaluation_conclusion"
-          :placeholder="pi.queryPh('evaluationConclusion', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('rectificationDeadlineStart')">
-      <a-form-item :label="pi.queryLabel('rectificationDeadlineStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.rectificationDeadlineStart"
-          :placeholder="pi.queryPh('rectificationDeadlineStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('rectificationDeadlineEnd')">
-      <a-form-item :label="pi.queryLabel('rectificationDeadlineEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.rectificationDeadlineEnd"
-          :placeholder="pi.queryPh('rectificationDeadlineEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('attachments')">
-      <a-form-item :label="pi.queryLabel('attachments')">
-        <a-input
-          v-model:value="advancedQueryForm.attachments"
-          :placeholder="pi.queryPh('attachments', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('evaluationStatus')">
-      <a-form-item :label="pi.queryLabel('evaluationStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.evaluationStatus"
-          dict-type="logistics_quality_evaluation_status"
-          :placeholder="pi.queryPh('evaluationStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('rectificationStatus')">
-      <a-form-item :label="pi.queryLabel('rectificationStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.rectificationStatus"
-          dict-type="logistics_quality_rectification_status"
-          :placeholder="pi.queryPh('rectificationStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -532,7 +178,7 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   useSupplierEvaluationI18n,
@@ -587,7 +233,26 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SUPPLIEREVALUATION_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -597,18 +262,6 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    evaluationPeriod: undefined as number | undefined,
-    evaluationType: undefined as number | undefined,
-    overallRating: undefined as number | undefined,
-    totalScore: undefined as number | undefined,
-    qualityScore: undefined as number | undefined,
-    deliveryScore: undefined as number | undefined,
-    priceScore: undefined as number | undefined,
-    serviceScore: undefined as number | undefined,
-    technicalScore: undefined as number | undefined,
-    evaluationConclusion: undefined as number | undefined,
-    evaluationStatus: undefined as number | undefined,
-    rectificationStatus: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -639,7 +292,7 @@ const { selectedMasterRow } = provideSupplierEvaluationMasterContext()
 const supplierEvaluationItemPanelRef = ref<InstanceType<typeof SupplierEvaluationItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SupplierEvaluationQuery} 查询 DTO
  */
@@ -663,50 +316,15 @@ function buildListQuery(overrides?: Partial<SupplierEvaluationQuery>): SupplierE
   for (const key of SUPPLIEREVALUATION_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.evaluationPeriod !== undefined && form.evaluationPeriod !== null) {
-    query.evaluationPeriod = form.evaluationPeriod
-  }
-  if (form.evaluationType !== undefined && form.evaluationType !== null) {
-    query.evaluationType = form.evaluationType
-  }
-  if (form.overallRating !== undefined && form.overallRating !== null) {
-    query.overallRating = form.overallRating
-  }
-  if (form.totalScore !== undefined && form.totalScore !== null) {
-    query.totalScore = form.totalScore
-  }
-  if (form.qualityScore !== undefined && form.qualityScore !== null) {
-    query.qualityScore = form.qualityScore
-  }
-  if (form.deliveryScore !== undefined && form.deliveryScore !== null) {
-    query.deliveryScore = form.deliveryScore
-  }
-  if (form.priceScore !== undefined && form.priceScore !== null) {
-    query.priceScore = form.priceScore
-  }
-  if (form.serviceScore !== undefined && form.serviceScore !== null) {
-    query.serviceScore = form.serviceScore
-  }
-  if (form.technicalScore !== undefined && form.technicalScore !== null) {
-    query.technicalScore = form.technicalScore
-  }
-  if (form.evaluationConclusion !== undefined && form.evaluationConclusion !== null) {
-    query.evaluationConclusion = form.evaluationConclusion
-  }
-  if (form.evaluationStatus !== undefined && form.evaluationStatus !== null) {
-    query.evaluationStatus = form.evaluationStatus
-  }
-  if (form.rectificationStatus !== undefined && form.rectificationStatus !== null) {
-    query.rectificationStatus = form.rectificationStatus
-  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -771,224 +389,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierEvaluationId') ?? ''
   },
   {
-    title: pi.label('supplierEvaluationCode'),
-    dataIndex: 'supplierEvaluationCode',
-    key: 'supplierEvaluationCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierEvaluationCode') ?? ''
-  },
-  {
-    title: pi.label('supplierId'),
-    dataIndex: 'supplierId',
-    key: 'supplierId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierId') ?? ''
-  },
-  {
-    title: pi.label('supplierName1'),
-    dataIndex: 'supplierName1',
-    key: 'supplierName1',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierName1') ?? ''
-  },
-  {
-    title: pi.label('supplierCode'),
-    dataIndex: 'supplierCode',
-    key: 'supplierCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierCode') ?? ''
-  },
-  {
-    title: pi.label('evaluationDate'),
-    dataIndex: 'evaluationDate',
-    key: 'evaluationDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationDate') ?? ''
-  },
-  {
-    title: pi.label('evaluationPeriod'),
-    dataIndex: 'evaluationPeriod',
-    key: 'evaluationPeriod',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('evaluationType'),
-    dataIndex: 'evaluationType',
-    key: 'evaluationType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationType') ?? ''
-  },
-  {
-    title: pi.label('evaluatorBy'),
-    dataIndex: 'evaluatorBy',
-    key: 'evaluatorBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluatorBy') ?? ''
-  },
-  {
-    title: pi.label('evaluationDept'),
-    dataIndex: 'evaluationDept',
-    key: 'evaluationDept',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationDept') ?? ''
-  },
-  {
-    title: pi.label('overallRating'),
-    dataIndex: 'overallRating',
-    key: 'overallRating',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('totalScore'),
-    dataIndex: 'totalScore',
-    key: 'totalScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'totalScore') ?? ''
-  },
-  {
-    title: pi.label('qualityScore'),
-    dataIndex: 'qualityScore',
-    key: 'qualityScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'qualityScore') ?? ''
-  },
-  {
-    title: pi.label('deliveryScore'),
-    dataIndex: 'deliveryScore',
-    key: 'deliveryScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'deliveryScore') ?? ''
-  },
-  {
-    title: pi.label('priceScore'),
-    dataIndex: 'priceScore',
-    key: 'priceScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'priceScore') ?? ''
-  },
-  {
-    title: pi.label('serviceScore'),
-    dataIndex: 'serviceScore',
-    key: 'serviceScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'serviceScore') ?? ''
-  },
-  {
-    title: pi.label('technicalScore'),
-    dataIndex: 'technicalScore',
-    key: 'technicalScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'technicalScore') ?? ''
-  },
-  {
-    title: pi.label('mainStrengths'),
-    dataIndex: 'mainStrengths',
-    key: 'mainStrengths',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'mainStrengths') ?? ''
-  },
-  {
-    title: pi.label('mainIssues'),
-    dataIndex: 'mainIssues',
-    key: 'mainIssues',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'mainIssues') ?? ''
-  },
-  {
-    title: pi.label('improvementRequirements'),
-    dataIndex: 'improvementRequirements',
-    key: 'improvementRequirements',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'improvementRequirements') ?? ''
-  },
-  {
-    title: pi.label('evaluationConclusion'),
-    dataIndex: 'evaluationConclusion',
-    key: 'evaluationConclusion',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('rectificationDeadline'),
-    dataIndex: 'rectificationDeadline',
-    key: 'rectificationDeadline',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'rectificationDeadline') ?? ''
-  },
-  {
-    title: pi.label('attachments'),
-    dataIndex: 'attachments',
-    key: 'attachments',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'attachments') ?? ''
-  },
-  {
-    title: pi.label('evaluationStatus'),
-    dataIndex: 'evaluationStatus',
-    key: 'evaluationStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('rectificationStatus'),
     dataIndex: 'rectificationStatus',
     key: 'rectificationStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
+  },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'remark') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1038,6 +453,8 @@ const getSupplierEvaluationDictValue = (
   return String(value)
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1070,6 +487,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSupplierEvaluationList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1096,37 +518,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  supplierEvaluationCode: '',
-  supplierId: '',
-  supplierName1: '',
-  supplierCode: '',
-  evaluationDateStart: '',
-  evaluationDateEnd: '',
-  evaluationPeriod: undefined as number | undefined,
-  evaluationType: undefined as number | undefined,
-  evaluatorBy: '',
-  evaluationDept: '',
-  overallRating: undefined as number | undefined,
-  totalScore: undefined as number | undefined,
-  qualityScore: undefined as number | undefined,
-  deliveryScore: undefined as number | undefined,
-  priceScore: undefined as number | undefined,
-  serviceScore: undefined as number | undefined,
-  technicalScore: undefined as number | undefined,
-  mainStrengths: '',
-  mainIssues: '',
-  improvementRequirements: '',
-  evaluationConclusion: undefined as number | undefined,
-  rectificationDeadlineStart: '',
-  rectificationDeadlineEnd: '',
-  attachments: '',
-  evaluationStatus: undefined as number | undefined,
-  plantCode: '',
-  rectificationStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -1235,6 +627,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSupplierEvaluation(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1321,37 +716,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  supplierEvaluationCode: '',
-  supplierId: '',
-  supplierName1: '',
-  supplierCode: '',
-  evaluationDateStart: '',
-  evaluationDateEnd: '',
-  evaluationPeriod: undefined as number | undefined,
-  evaluationType: undefined as number | undefined,
-  evaluatorBy: '',
-  evaluationDept: '',
-  overallRating: undefined as number | undefined,
-  totalScore: undefined as number | undefined,
-  qualityScore: undefined as number | undefined,
-  deliveryScore: undefined as number | undefined,
-  priceScore: undefined as number | undefined,
-  serviceScore: undefined as number | undefined,
-  technicalScore: undefined as number | undefined,
-  mainStrengths: '',
-  mainIssues: '',
-  improvementRequirements: '',
-  evaluationConclusion: undefined as number | undefined,
-  rectificationDeadlineStart: '',
-  rectificationDeadlineEnd: '',
-  attachments: '',
-  evaluationStatus: undefined as number | undefined,
-  plantCode: '',
-  rectificationStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

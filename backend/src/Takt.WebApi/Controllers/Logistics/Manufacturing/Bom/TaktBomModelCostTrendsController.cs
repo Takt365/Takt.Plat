@@ -15,7 +15,6 @@ using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
 using Takt.Application.Services.Logistics.Manufacturing.Bom;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
-using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
 
@@ -35,56 +34,6 @@ public class TaktBomModelCostTrendsController : TaktControllerBase
     public TaktBomModelCostTrendsController(ITaktBomModelCostTrendService bomModelCostTrendService)
     {
         _bomModelCostTrendService = bomModelCostTrendService;
-    }
-
-    /// <summary>
-    /// 机种选项（分析：工厂 + 期间最后月本表去重；❌ 非 CRUD 主数据）
-    /// </summary>
-    /// <param name="queryDto">工厂与 FocusPeriod</param>
-    /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:model:cost:trend:query", "机种成本推移机种选项")]
-    [HttpGet("model-options")]
-    public async Task<IActionResult> GetBomModelCostTrendModelOptionsAsync(
-        [FromQuery] TaktBomModelCostTrendOptionsQueryDto queryDto)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(queryDto.PlantCode) || string.IsNullOrWhiteSpace(queryDto.FocusPeriod))
-            {
-                return Success(new List<TaktSelectOption>(), "查询成功");
-            }
-            var result = await _bomModelCostTrendService.GetBomModelCostTrendModelOptionsAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 物料/组件选项（工厂 + 期间最后月 + X + F + 未删除去重；keyword 远程）
-    /// </summary>
-    /// <param name="queryDto">工厂、FocusPeriod、可选 Keyword</param>
-    /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:model:cost:trend:query", "机种成本推移物料选项")]
-    [HttpGet("component-options")]
-    public async Task<IActionResult> GetBomModelCostTrendComponentOptionsAsync(
-        [FromQuery] TaktBomModelCostTrendOptionsQueryDto queryDto)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(queryDto.PlantCode) || string.IsNullOrWhiteSpace(queryDto.FocusPeriod))
-            {
-                return Success(new List<TaktSelectOption>(), "查询成功");
-            }
-            var result = await _bomModelCostTrendService.GetBomModelCostTrendComponentOptionsAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
     }
 
     /// <summary>

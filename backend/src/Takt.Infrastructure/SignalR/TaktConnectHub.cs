@@ -74,20 +74,20 @@ public class TaktConnectHub : Hub
             var httpContext = Context.GetHttpContext();
             RequireResolvedLoginUser();
 
-            var userName = _userContext.UserName!.Trim();
+            var UserName = _userContext.UserName!.Trim();
             var userId = _userContext.UserId!.Value;
             var companyCode = await TaktSignalRHubCompanyResolver.ResolveAsync(
                 _userContext,
                 _authService,
                 userId,
-                userName);
+                UserName);
             var client = TaktHttpAuditHelper.ResolveClientLogContext(httpContext);
             var connectTime = DateTime.Now;
 
             await _onlineService.RegisterOnlineSessionAsync(new TaktOnlineCreateDto
             {
                 ConnectionId = connectionId ?? string.Empty,
-                UserName = userName,
+                UserName = UserName,
                 UserId = userId,
                 OnlineStatus = 0,
                 ConnectIp = client.Ip,
@@ -101,14 +101,14 @@ public class TaktConnectHub : Hub
 
             if (!string.IsNullOrEmpty(connectionId))
             {
-                await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
+                await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, UserName));
             }
 
             var userIdStr = userId.ToString();
             await Clients.Caller.SendAsync("OnlineMessage", new
             {
-                Message = $"欢迎 {userName} 上线！连接成功，当前时间：{connectTime:yyyy-MM-dd HH:mm:ss}",
-                UserName = userName,
+                Message = $"欢迎 {UserName} 上线！连接成功，当前时间：{connectTime:yyyy-MM-dd HH:mm:ss}",
+                UserName = UserName,
                 UserId = userIdStr,
                 ConnectTime = connectTime,
                 ConnectIp = client.Ip,
@@ -118,19 +118,19 @@ public class TaktConnectHub : Hub
 
             await Clients.Others.SendAsync("UserConnected", new
             {
-                UserName = userName,
+                UserName = UserName,
                 UserId = userIdStr,
                 ConnectTime = connectTime,
                 ConnectIp = client.Ip,
                 ConnectLocation = client.Location,
             });
 
-            await _signalRDispatchService.PushOnlineStatisticsToUserAsync(companyCode, userName, userId);
+            await _signalRDispatchService.PushOnlineStatisticsToUserAsync(companyCode, UserName, userId);
 
             TaktSignalRLogging.LogHubConnected(
                 nameof(TaktConnectHub),
                 connectionId,
-                userName,
+                UserName,
                 userId,
                 companyCode,
                 _userContext.TenantCode,
@@ -157,13 +157,13 @@ public class TaktConnectHub : Hub
         {
             var connectionId = Context.ConnectionId;
             RequireResolvedLoginUser();
-            var userName = _userContext.UserName!.Trim();
+            var UserName = _userContext.UserName!.Trim();
             var userId = _userContext.UserId!.Value;
             var companyCode = await TaktSignalRHubCompanyResolver.ResolveAsync(
                 _userContext,
                 _authService,
                 userId,
-                userName);
+                UserName);
 
             var httpContext = Context.GetHttpContext();
             var disconnectIp = TaktLocationHelper.ResolveClientIp(httpContext);
@@ -188,21 +188,21 @@ public class TaktConnectHub : Hub
 
             if (!string.IsNullOrEmpty(connectionId))
             {
-                await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
+                await Groups.RemoveFromGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, UserName));
             }
 
             await Clients.Others.SendAsync("UserDisconnected", new
             {
-                UserName = userName,
+                UserName = UserName,
                 DisconnectTime = DateTime.Now,
             });
 
-            await _signalRDispatchService.PushOnlineStatisticsToUserAsync(companyCode, userName, _userContext.UserId);
+            await _signalRDispatchService.PushOnlineStatisticsToUserAsync(companyCode, UserName, _userContext.UserId);
 
             TaktSignalRLogging.LogHubDisconnected(
                 nameof(TaktConnectHub),
                 connectionId,
-                userName,
+                UserName,
                 _userContext.UserId,
                 companyCode,
                 _userContext.TenantCode,
@@ -230,16 +230,16 @@ public class TaktConnectHub : Hub
             await _onlineService.RefreshOnlineConnectionDurationAsync(connectionId, DateTime.Now);
         }
 
-        var userName = _userContext.UserName!.Trim();
+        var UserName = _userContext.UserName!.Trim();
         var userId = _userContext.UserId!.Value;
         var companyCode = await TaktSignalRHubCompanyResolver.ResolveAsync(
             _userContext,
             _authService,
             userId,
-            userName);
-        if (!string.IsNullOrWhiteSpace(companyCode) && !string.IsNullOrWhiteSpace(userName))
+            UserName);
+        if (!string.IsNullOrWhiteSpace(companyCode) && !string.IsNullOrWhiteSpace(UserName))
         {
-            await _signalRDispatchService.PushOnlineStatisticsToUserAsync(companyCode, userName, _userContext.UserId);
+            await _signalRDispatchService.PushOnlineStatisticsToUserAsync(companyCode, UserName, _userContext.UserId);
         }
     }
 
@@ -250,13 +250,13 @@ public class TaktConnectHub : Hub
     public async Task<List<object>> GetOnlineUsers()
     {
         RequireResolvedLoginUser();
-        var userName = _userContext.UserName!.Trim();
+        var UserName = _userContext.UserName!.Trim();
         var userId = _userContext.UserId!.Value;
         var companyCode = await TaktSignalRHubCompanyResolver.ResolveAsync(
             _userContext,
             _authService,
             userId,
-            userName);
+            UserName);
         var onlines = await _onlineRepository.GetListAsync(
             o => o.OnlineStatus == 0 && o.CompanyCode == companyCode);
         return onlines.Select(u => (object)new
@@ -275,8 +275,8 @@ public class TaktConnectHub : Hub
     /// </summary>
     private void RequireResolvedLoginUser()
     {
-        var (userId, userName) = ResolveUserFromContext();
-        if (!userId.HasValue || userId.Value <= 0 || string.IsNullOrWhiteSpace(userName))
+        var (userId, UserName) = ResolveUserFromContext();
+        if (!userId.HasValue || userId.Value <= 0 || string.IsNullOrWhiteSpace(UserName))
         {
             throw new HubException("无法解析当前登录用户，请重新登录后重试。");
         }

@@ -43,7 +43,7 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "post_id", ColumnDescription = "申请岗位ID", ColumnDataType = "bigint", IsNullable = false)]
     public long PostId { get; set; }
     /// <summary>
-    /// 职级（可参照字典 sys_post_level_category；列存业务码，如 P3/M2）
+    /// 职级（可参照字典 sys_post_level；列存业务码，如 P3/M2）
     /// </summary>
     [SugarColumn(ColumnName = "job_grade", ColumnDescription = "职级", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? JobGrade { get; set; }

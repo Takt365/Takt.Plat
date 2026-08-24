@@ -31,14 +31,30 @@
         <a-row :gutter="16">
           <a-col :span="12">
             <a-form-item
+              v-if="!form.flowFormId"
+              :label="t('common.page.form.numberingRule')"
+              name="numberingRuleCode"
+              required
+            >
+              <TaktSelect
+                v-model:value="form.numberingRuleCode"
+                api-url="TaktNumberings/options"
+                :api-params="{ documentType: '表单管理' }"
+                style="width: 100%"
+                :placeholder="t('common.page.form.placeholder.selectonly')"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item
               :label="t('entity.flowform.formcode')"
               name="formCode"
               required
             >
               <a-input
                 v-model:value="form.formCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowform.formcode') })"
-                :disabled="!!form.flowFormId"
+                :placeholder="t('common.page.form.numberingCodePreview')"
+                disabled
               />
             </a-form-item>
           </a-col>
@@ -381,6 +397,7 @@ interface TableColumnItem {
 import { getDictTypeOptions } from '@/api/foundation/dict-type'
 import { getFlowEngineApprovalTables } from '@/api/workflow/flow-engine'
 import { useTenantStore } from '@/stores/identity/tenant'
+import { useTaktFormNumbering } from '@/composables/use-takt-form-numbering'
 import type { FlowFormCreate } from '@/types/workflow/flow-form'
 const getStringValue = (obj: unknown, key: string): string | undefined => {
   if (!obj || typeof obj !== 'object') return undefined
@@ -438,6 +455,38 @@ const relatedTableNameModel = computed<string>({
 const formConfigModel = computed<string>({
   get: () => form.formConfig ?? '',
   set: (value) => { form.formConfig = value }
+})
+
+/** 是否编辑态 */
+const isEditMode = computed(() => !!form.flowFormId)
+
+/**
+ * 按表单分类同步编码规则（WF-FORM0/1/2 ↔ sys_form_category）
+ * @param category 表单分类
+ */
+function resolveFlowFormNumberingRule(category: number | undefined | null): string {
+  const n = Number(category)
+  if (!Number.isFinite(n) || n < 0 || n > 2) {
+    return 'WF-FORM0'
+  }
+  return `WF-FORM${n}`
+}
+
+watch(
+  () => form.formCategory,
+  (category) => {
+    if (isEditMode.value) {
+      return
+    }
+    form.numberingRuleCode = resolveFlowFormNumberingRule(category)
+  },
+  { immediate: true },
+)
+
+useTaktFormNumbering({
+  formState: form as Record<string, unknown>,
+  isEdit: isEditMode,
+  businessCodeField: 'formCode',
 })
 
 /** 当前步骤（0=表单信息，1=数据源+字段网格，2=表单设计），提前声明避免 watch 注册时 TDZ */
@@ -831,15 +880,44 @@ const dataTableColumns = computed(() => [
   { title: t('entity.gentablecolumn.dicttype'), dataIndex: 'dictTypeCode', key: 'dictTypeCode', width: 160 }
 ])
 
-/** 当前步骤需要校验的字段名：第一步 表单信息 必填 formCode、formName */
+/** 当前步骤需要校验的字段名：第一步 表单信息（新增含编码规则） */
 const stepFieldNames = computed<Record<number, string[]>>(
-  () => ({ 0: ['formCode', 'formName'], 1: [], 2: [] })
+  () => ({
+    0: isEditMode.value
+      ? ['formCode', 'formName']
+      : ['numberingRuleCode', 'formCode', 'formName'],
+    1: [],
+    2: [],
+  })
 )
 
-/** 表单校验规则：formCode、formName 必填 */
+/** 表单校验规则：新增须选规则；编码只读预览 */
 const formRules = computed(() => ({
-  formCode: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowform.formcode') }) }],
-  formName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowform.formname') }) }]
+  numberingRuleCode: [{
+    validator: async (_rule: unknown, value: unknown) => {
+      if (isEditMode.value) {
+        return Promise.resolve()
+      }
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingRuleRequired'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],
+  formCode: [{
+    validator: async (_rule: unknown, value: unknown) => {
+      if (!String(value ?? '').trim()) {
+        return Promise.reject(t('common.page.form.numberingCodePreview'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }],
+  formName: [{
+    required: true,
+    message: t('common.page.form.placeholder.required', { field: t('entity.flowform.formname') }),
+  }],
 }))
 
 /**

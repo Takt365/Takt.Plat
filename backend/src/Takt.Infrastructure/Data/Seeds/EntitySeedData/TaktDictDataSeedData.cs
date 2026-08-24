@@ -41,6 +41,27 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
     };
 
     /// <summary>
+    /// 编码规则重置周期标准 DictValue（sys_reset_period）
+    /// </summary>
+    private static readonly HashSet<string> SupportedResetPeriodDictValues = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "None",
+        "Annually",
+        "Monthly",
+        "Daily",
+    };
+
+    /// <summary>
+    /// 发布范围标准 DictValue（sys_publish_scope；不含指定角色）
+    /// </summary>
+    private static readonly HashSet<string> SupportedPublishScopeDictValues = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "0",
+        "1",
+        "2",
+    };
+
+    /// <summary>
     /// 执行顺序（在 DictType 之后）
     /// </summary>
     public int Order => 46;
@@ -105,6 +126,22 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             TaktLogger.Information(
                 "sys_culture_code 非 UI 支持项已软删除 {Count} 条（仅保留 EN-US/JA-JP/ZH-CN/ZH-HK）",
                 softDeletedCultures);
+        }
+
+        var softDeletedResetPeriods = await SoftDeleteUnsupportedResetPeriodsAsync(seedContext, tenantCode);
+        if (softDeletedResetPeriods > 0)
+        {
+            TaktLogger.Information(
+                "sys_reset_period 非标准项已软删除 {Count} 条（仅保留 None|Annually|Monthly|Daily）",
+                softDeletedResetPeriods);
+        }
+
+        var softDeletedPublishScopes = await SoftDeleteUnsupportedPublishScopesAsync(seedContext, tenantCode);
+        if (softDeletedPublishScopes > 0)
+        {
+            TaktLogger.Information(
+                "sys_publish_scope 非标准项已软删除 {Count} 条（仅保留 0|1|2，不含指定角色）",
+                softDeletedPublishScopes);
         }
 
         TaktLogger.Information("字典数据种子数据初始化完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
@@ -996,8 +1033,8 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("logistics_mds_product_category","CAD","CAD","dict.logistics.mds.product.category.cad",1,1,0,"销售预测产品类别.CAD",1,"mul","",""),
             ("logistics_mds_product_category","ISD","ISD","dict.logistics.mds.product.category.isd",2,2,0,"销售预测产品类别.ISD",2,"mul","",""),
             ("logistics_mds_product_category","PAD","PAD","dict.logistics.mds.product.category.pad",3,3,0,"销售预测产品类别.PAD",3,"mul","",""),
-            ("logistics_inventory_provision_scope","按单个存货项目","1","dict.logistics.inventory.provision.scope.item",1,1,1,"存货跌价计提范围.按单个存货项目",1,"mul","",""),
-            ("logistics_inventory_provision_scope","按存货类别","2","dict.logistics.inventory.provision.scope.category",2,2,0,"存货跌价计提范围.按存货类别",2,"mul","",""),
+            ("logistics_inventory_reserve_scope","按单个存货项目","1","dict.logistics.inventory.reserve.scope.item",1,1,1,"存货跌价计提范围.按单个存货项目",1,"mul","",""),
+            ("logistics_inventory_reserve_scope","按存货类别","2","dict.logistics.inventory.reserve.scope.category",2,2,0,"存货跌价计提范围.按存货类别",2,"mul","",""),
             ("logistics_inbound_type","采购入库","0","dict.logistics.inbound.type.0",1,1,0,"入库类型.采购入库",1,"mul","",""),
             ("logistics_inbound_type","生产入库","1","dict.logistics.inbound.type.1",2,2,0,"入库类型.生产入库",2,"mul","",""),
             ("logistics_inbound_type","退货入库","2","dict.logistics.inbound.type.2",3,3,0,"入库类型.退货入库",3,"mul","",""),
@@ -2225,10 +2262,36 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("sys_flow_category","系统流程","2","dict.sys.flow.category.2",3,3,0,"流程分类.系统流程",3,"mul","",""),
             ("sys_flow_status","运行中","0","dict.sys.flow.status.0",1,1,0,"流程状态.运行中",1,"mul","",""),
             ("sys_flow_status","已完成","1","dict.sys.flow.status.1",2,2,0,"流程状态.已完成",2,"mul","",""),
-            ("sys_flow_status","已终止","2","dict.sys.flow.status.2",3,3,0,"流程状态.已终止",3,"mul","",""),
+            ("sys_flow_status","已驳回","2","dict.sys.flow.status.2",3,3,0,"流程状态.已驳回",3,"mul","",""),
             ("sys_flow_status","已挂起","3","dict.sys.flow.status.3",4,4,0,"流程状态.已挂起",4,"mul","",""),
-            ("sys_flow_status","已撤回","4","dict.sys.flow.status.4",5,5,0,"流程状态.已撤回",5,"mul","",""),
+            ("sys_flow_status","已终止","4","dict.sys.flow.status.4",5,5,0,"流程状态.已终止",5,"mul","",""),
             ("sys_flow_status","草稿","5","dict.sys.flow.status.5",6,6,0,"流程状态.草稿",6,"mul","",""),
+            ("sys_flow_add_sign_type","顺序加签","sequential","dict.sys.flow.add.sign.type.sequential",1,1,0,"加签方式.顺序加签",1,"mul","",""),
+            ("sys_flow_add_sign_type","会签加签","all","dict.sys.flow.add.sign.type.all",2,2,0,"加签方式.会签加签",2,"mul","",""),
+            ("sys_flow_add_sign_type","或签加签","one","dict.sys.flow.add.sign.type.one",3,3,0,"加签方式.或签加签",3,"mul","",""),
+            ("sys_flow_suspension_state","激活","1","dict.sys.flow.suspension.state.1",1,1,0,"流程定义挂起状态.激活",1,"mul","",""),
+            ("sys_flow_suspension_state","挂起","2","dict.sys.flow.suspension.state.2",2,2,0,"流程定义挂起状态.挂起",2,"mul","",""),
+            ("sys_flow_task_status","待办","0","dict.sys.flow.task.status.0",1,1,0,"流程任务状态.待办",1,"mul","",""),
+            ("sys_flow_task_status","已完成","1","dict.sys.flow.task.status.1",2,2,0,"流程任务状态.已完成",2,"mul","",""),
+            ("sys_flow_task_status","已取消","2","dict.sys.flow.task.status.2",3,3,0,"流程任务状态.已取消",3,"mul","",""),
+            ("sys_flow_sign_type","或签","1","dict.sys.flow.sign.type.1",1,1,0,"会签类型.或签",1,"mul","",""),
+            ("sys_flow_sign_type","会签","2","dict.sys.flow.sign.type.2",2,2,0,"会签类型.会签",2,"mul","",""),
+            ("sys_flow_action_type","发起","0","dict.sys.flow.action.type.0",1,1,0,"流程动作类型.发起",1,"mul","",""),
+            ("sys_flow_action_type","通过","1","dict.sys.flow.action.type.1",2,2,0,"流程动作类型.通过",2,"mul","",""),
+            ("sys_flow_action_type","驳回","2","dict.sys.flow.action.type.2",3,3,0,"流程动作类型.驳回",3,"mul","",""),
+            ("sys_flow_action_type","撤回","3","dict.sys.flow.action.type.3",4,4,0,"流程动作类型.撤回",4,"mul","",""),
+            ("sys_flow_action_type","转办","4","dict.sys.flow.action.type.4",5,5,0,"流程动作类型.转办",5,"mul","",""),
+            ("sys_flow_action_type","加签","5","dict.sys.flow.action.type.5",6,6,0,"流程动作类型.加签",6,"mul","",""),
+            ("sys_flow_action_type","减签","6","dict.sys.flow.action.type.6",7,7,0,"流程动作类型.减签",7,"mul","",""),
+            ("sys_flow_action_type","挂起","7","dict.sys.flow.action.type.7",8,8,0,"流程动作类型.挂起",8,"mul","",""),
+            ("sys_flow_action_type","恢复","8","dict.sys.flow.action.type.8",9,9,0,"流程动作类型.恢复",9,"mul","",""),
+            ("sys_flow_action_type","终止","9","dict.sys.flow.action.type.9",10,10,0,"流程动作类型.终止",10,"mul","",""),
+            ("sys_flow_action_type","抄送","10","dict.sys.flow.action.type.10",11,11,0,"流程动作类型.抄送",11,"mul","",""),
+            ("sys_flow_variable_type","字符串","0","dict.sys.flow.variable.type.0",1,1,0,"流程变量类型.字符串",1,"mul","",""),
+            ("sys_flow_variable_type","长整型","1","dict.sys.flow.variable.type.1",2,2,0,"流程变量类型.长整型",2,"mul","",""),
+            ("sys_flow_variable_type","双精度","2","dict.sys.flow.variable.type.2",3,3,0,"流程变量类型.双精度",3,"mul","",""),
+            ("sys_flow_variable_type","布尔","3","dict.sys.flow.variable.type.3",4,4,0,"流程变量类型.布尔",4,"mul","",""),
+            ("sys_flow_variable_type","JSON","4","dict.sys.flow.variable.type.4",5,5,0,"流程变量类型.JSON",5,"mul","",""),
             ("sys_form_category","通用表单","0","dict.sys.form.category.0",1,1,0,"表单分类.通用表单",1,"mul","",""),
             ("sys_form_category","业务表单","1","dict.sys.form.category.1",2,2,0,"表单分类.业务表单",2,"mul","",""),
             ("sys_form_category","系统表单","2","dict.sys.form.category.2",3,3,0,"表单分类.系统表单",3,"mul","",""),
@@ -2237,12 +2300,12 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("sys_form_type","自定义表单","2","dict.sys.form.type.2",3,3,0,"表单类型.自定义表单",3,"mul","",""),
             ("sys_ftp_provider_type","TEAC FTP中国","TEAC_CN","dict.sys.ftp.provider.type.teac_cn",1,1,0,"ftp服务提供商.teac ftp中国",1,"mul","",""),
             ("sys_ftp_provider_type","TEAC FTP日本","TEAC_JP","dict.sys.ftp.provider.type.teac_jp",2,2,0,"ftp服务提供商.teac ftp日本",2,"mul","",""),
-            ("sys_is_builtin_type","是","1","dict.sys.is.builtin.type.1",1,1,0,"内置.是",1,"mul","",""),
-            ("sys_is_builtin_type","否","0","dict.sys.is.builtin.type.0",2,2,0,"内置.否",2,"mul","",""),
-            ("sys_is_default_type","是","1","dict.sys.is.default.type.1",1,1,0,"是否默认.是",1,"mul","",""),
-            ("sys_is_default_type","否","0","dict.sys.is.default.type.0",2,2,0,"是否默认.否",2,"mul","",""),
-            ("sys_is_public_type","公开","0","dict.sys.is.public.type.0",1,1,0,"公开.公开",1,"mul","",""),
-            ("sys_is_public_type","私有","1","dict.sys.is.public.type.1",2,2,0,"公开.私有",2,"mul","",""),
+            ("sys_builtin_type","是","1","dict.sys.is.builtin.type.1",1,1,0,"内置.是",1,"mul","",""),
+            ("sys_builtin_type","否","0","dict.sys.is.builtin.type.0",2,2,0,"内置.否",2,"mul","",""),
+            ("sys_default_type","是","1","dict.sys.is.default.type.1",1,1,0,"是否默认.是",1,"mul","",""),
+            ("sys_default_type","否","0","dict.sys.is.default.type.0",2,2,0,"是否默认.否",2,"mul","",""),
+            ("sys_public_type","公开","0","dict.sys.is.public.type.0",1,1,0,"公开.公开",1,"mul","",""),
+            ("sys_public_type","私有","1","dict.sys.is.public.type.1",2,2,0,"公开.私有",2,"mul","",""),
             ("sys_leave_type","事假","AFFAIR","dict.sys.leave.type.affair",1,1,0,"请假类型.事假",1,"mul","",""),
             ("sys_leave_type","病假","SICK","dict.sys.leave.type.sick",2,2,0,"请假类型.病假",2,"mul","",""),
             ("sys_leave_type","年假","ANNUAL","dict.sys.leave.type.annual",3,3,0,"请假类型.年假",3,"mul","",""),
@@ -2253,76 +2316,76 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("sys_leave_type","调休","COMPENSATORY","dict.sys.leave.type.compensatory",8,8,0,"请假类型.调休",8,"mul","",""),
             ("sys_leave_type","私假","PERSONAL","dict.sys.leave.type.personal",9,9,0,"请假类型.私假",9,"mul","",""),
             ("sys_leave_type","其他","OTHER","dict.sys.leave.type.other",10,10,0,"请假类型.其他",10,"mul","",""),
-            ("sys_list_class_category","默认","0","dict.sys.list.class.category.0",0,0,1,"字典样式类别.默认",1,"mul","",""),
-            ("sys_list_class_category","成功","1","dict.sys.list.class.category.1",1,1,0,"字典样式类别.成功",2,"mul","",""),
-            ("sys_list_class_category","危险","2","dict.sys.list.class.category.2",2,2,0,"字典样式类别.危险",3,"mul","",""),
-            ("sys_list_class_category","警告","3","dict.sys.list.class.category.3",3,3,0,"字典样式类别.警告",4,"mul","",""),
-            ("sys_list_class_category","进行中","4","dict.sys.list.class.category.4",4,4,0,"字典样式类别.进行中",5,"mul","",""),
-            ("sys_list_class_category","信息","5","dict.sys.list.class.category.5",5,5,0,"字典样式类别.信息",6,"mul","",""),
-            ("sys_list_class_category","大红","6","dict.sys.list.class.category.6",6,6,0,"字典样式类别.大红",7,"mul","",""),
-            ("sys_list_class_category","朱红","7","dict.sys.list.class.category.7",7,7,0,"字典样式类别.朱红",8,"mul","",""),
-            ("sys_list_class_category","朱砂","8","dict.sys.list.class.category.8",8,8,0,"字典样式类别.朱砂",9,"mul","",""),
-            ("sys_list_class_category","火红","9","dict.sys.list.class.category.9",9,9,0,"字典样式类别.火红",10,"mul","",""),
-            ("sys_list_class_category","妃色","10","dict.sys.list.class.category.10",10,10,0,"字典样式类别.妃色",11,"mul","",""),
-            ("sys_list_class_category","桃红","11","dict.sys.list.class.category.11",11,11,0,"字典样式类别.桃红",12,"mul","",""),
-            ("sys_list_class_category","粉红","12","dict.sys.list.class.category.12",12,12,0,"字典样式类别.粉红",13,"mul","",""),
-            ("sys_list_class_category","橙色","13","dict.sys.list.class.category.13",13,13,0,"字典样式类别.橙色",14,"mul","",""),
-            ("sys_list_class_category","橘红","14","dict.sys.list.class.category.14",14,14,0,"字典样式类别.橘红",15,"mul","",""),
-            ("sys_list_class_category","橘黄","15","dict.sys.list.class.category.15",15,15,0,"字典样式类别.橘黄",16,"mul","",""),
-            ("sys_list_class_category","橙黄","16","dict.sys.list.class.category.16",16,16,0,"字典样式类别.橙黄",17,"mul","",""),
-            ("sys_list_class_category","杏黄","17","dict.sys.list.class.category.17",17,17,0,"字典样式类别.杏黄",18,"mul","",""),
-            ("sys_list_class_category","枣红","18","dict.sys.list.class.category.18",18,18,0,"字典样式类别.枣红",19,"mul","",""),
-            ("sys_list_class_category","栗色","19","dict.sys.list.class.category.19",19,19,0,"字典样式类别.栗色",20,"mul","",""),
-            ("sys_list_class_category","鹅黄","20","dict.sys.list.class.category.20",20,20,0,"字典样式类别.鹅黄",21,"mul","",""),
-            ("sys_list_class_category","鸭黄","21","dict.sys.list.class.category.21",21,21,0,"字典样式类别.鸭黄",22,"mul","",""),
-            ("sys_list_class_category","樱草色","22","dict.sys.list.class.category.22",22,22,0,"字典样式类别.樱草色",23,"mul","",""),
-            ("sys_list_class_category","姜黄","23","dict.sys.list.class.category.23",23,23,0,"字典样式类别.姜黄",24,"mul","",""),
-            ("sys_list_class_category","缃色","24","dict.sys.list.class.category.24",24,24,0,"字典样式类别.缃色",25,"mul","",""),
-            ("sys_list_class_category","秋香色","25","dict.sys.list.class.category.25",25,25,0,"字典样式类别.秋香色",26,"mul","",""),
-            ("sys_list_class_category","绿色","26","dict.sys.list.class.category.26",26,26,0,"字典样式类别.绿色",27,"mul","",""),
-            ("sys_list_class_category","草绿","27","dict.sys.list.class.category.27",27,27,0,"字典样式类别.草绿",28,"mul","",""),
-            ("sys_list_class_category","嫩绿","28","dict.sys.list.class.category.28",28,28,0,"字典样式类别.嫩绿",29,"mul","",""),
-            ("sys_list_class_category","柳绿","29","dict.sys.list.class.category.29",29,29,0,"字典样式类别.柳绿",30,"mul","",""),
-            ("sys_list_class_category","葱绿","30","dict.sys.list.class.category.30",30,30,0,"字典样式类别.葱绿",31,"mul","",""),
-            ("sys_list_class_category","油绿","31","dict.sys.list.class.category.31",31,31,0,"字典样式类别.油绿",32,"mul","",""),
-            ("sys_list_class_category","松柏绿","32","dict.sys.list.class.category.32",32,32,0,"字典样式类别.松柏绿",33,"mul","",""),
-            ("sys_list_class_category","青色","33","dict.sys.list.class.category.33",33,33,0,"字典样式类别.青色",34,"mul","",""),
-            ("sys_list_class_category","青翠","34","dict.sys.list.class.category.34",34,34,0,"字典样式类别.青翠",35,"mul","",""),
-            ("sys_list_class_category","碧色","35","dict.sys.list.class.category.35",35,35,0,"字典样式类别.碧色",36,"mul","",""),
-            ("sys_list_class_category","青碧","36","dict.sys.list.class.category.36",36,36,0,"字典样式类别.青碧",37,"mul","",""),
-            ("sys_list_class_category","翡翠色","37","dict.sys.list.class.category.37",37,37,0,"字典样式类别.翡翠色",38,"mul","",""),
-            ("sys_list_class_category","鸭卵青","38","dict.sys.list.class.category.38",38,38,0,"字典样式类别.鸭卵青",39,"mul","",""),
-            ("sys_list_class_category","水色","39","dict.sys.list.class.category.39",39,39,0,"字典样式类别.水色",40,"mul","",""),
-            ("sys_list_class_category","蓝","40","dict.sys.list.class.category.40",40,40,0,"字典样式类别.蓝",41,"mul","",""),
-            ("sys_list_class_category","碧蓝","41","dict.sys.list.class.category.41",41,41,0,"字典样式类别.碧蓝",42,"mul","",""),
-            ("sys_list_class_category","蔚蓝","42","dict.sys.list.class.category.42",42,42,0,"字典样式类别.蔚蓝",43,"mul","",""),
-            ("sys_list_class_category","宝蓝","43","dict.sys.list.class.category.43",43,43,0,"字典样式类别.宝蓝",44,"mul","",""),
-            ("sys_list_class_category","靛青","44","dict.sys.list.class.category.44",44,44,0,"字典样式类别.靛青",45,"mul","",""),
-            ("sys_list_class_category","藏青","45","dict.sys.list.class.category.45",45,45,0,"字典样式类别.藏青",46,"mul","",""),
-            ("sys_list_class_category","月白","46","dict.sys.list.class.category.46",46,46,0,"字典样式类别.月白",47,"mul","",""),
-            ("sys_list_class_category","紫色","47","dict.sys.list.class.category.47",47,47,0,"字典样式类别.紫色",48,"mul","",""),
-            ("sys_list_class_category","桜色","48","dict.sys.list.class.category.48",48,48,0,"字典样式类别.桜色",49,"mul","",""),
-            ("sys_list_class_category","桃色","49","dict.sys.list.class.category.49",49,49,0,"字典样式类别.桃色",50,"mul","",""),
-            ("sys_list_class_category","赤紫","50","dict.sys.list.class.category.50",50,50,0,"字典样式类别.赤紫",51,"mul","",""),
-            ("sys_list_class_category","紅梅色","51","dict.sys.list.class.category.51",51,51,0,"字典样式类别.紅梅色",52,"mul","",""),
-            ("sys_list_class_category","甚三紅","52","dict.sys.list.class.category.52",52,52,0,"字典样式类别.甚三紅",53,"mul","",""),
-            ("sys_list_class_category","紅藤色","53","dict.sys.list.class.category.53",53,53,0,"字典样式类别.紅藤色",54,"mul","",""),
-            ("sys_list_class_category","真朱","54","dict.sys.list.class.category.54",54,54,0,"字典样式类别.真朱",55,"mul","",""),
-            ("sys_list_class_category","櫨染","55","dict.sys.list.class.category.55",55,55,0,"字典样式类别.櫨染",56,"mul","",""),
-            ("sys_list_class_category","黄金","56","dict.sys.list.class.category.56",56,56,0,"字典样式类别.黄金",57,"mul","",""),
-            ("sys_list_class_category","紅鬱金","57","dict.sys.list.class.category.57",57,57,0,"字典样式类别.紅鬱金",58,"mul","",""),
-            ("sys_list_class_category","柿渋色","58","dict.sys.list.class.category.58",58,58,0,"字典样式类别.柿渋色",59,"mul","",""),
-            ("sys_list_class_category","鶸色","59","dict.sys.list.class.category.59",59,59,0,"字典样式类别.鶸色",60,"mul","",""),
-            ("sys_list_class_category","躑躅色","60","dict.sys.list.class.category.60",60,60,0,"字典样式类别.躑躅色",61,"mul","",""),
-            ("sys_list_class_category","黄朽葉色","61","dict.sys.list.class.category.61",61,61,0,"字典样式类别.黄朽葉色",62,"mul","",""),
-            ("sys_list_class_category","菜種油色","62","dict.sys.list.class.category.62",62,62,0,"字典样式类别.菜種油色",63,"mul","",""),
-            ("sys_list_class_category","鴇色","63","dict.sys.list.class.category.63",63,63,0,"字典样式类别.鴇色",64,"mul","",""),
-            ("sys_list_class_category","萌葱色","64","dict.sys.list.class.category.64",64,64,0,"字典样式类别.萌葱色",65,"mul","",""),
-            ("sys_list_class_category","花浅葱","65","dict.sys.list.class.category.65",65,65,0,"字典样式类别.花浅葱",66,"mul","",""),
-            ("sys_list_class_category","浅葱色","66","dict.sys.list.class.category.66",66,66,0,"字典样式类别.浅葱色",67,"mul","",""),
-            ("sys_list_class_category","青緑","67","dict.sys.list.class.category.67",67,67,0,"字典样式类别.青緑",68,"mul","",""),
-            ("sys_list_class_category","青碧","68","dict.sys.list.class.category.68",68,68,0,"字典样式类别.青碧",69,"mul","",""),
-            ("sys_list_class_category","山吹茶","69","dict.sys.list.class.category.69",69,69,0,"字典样式类别.山吹茶",70,"mul","",""),
+            ("sys_style_type​","默认","0","dict.sys.list.class.category.0",0,0,1,"字典样式类别.默认",1,"mul","",""),
+            ("sys_style_type​","成功","1","dict.sys.list.class.category.1",1,1,0,"字典样式类别.成功",2,"mul","",""),
+            ("sys_style_type​","危险","2","dict.sys.list.class.category.2",2,2,0,"字典样式类别.危险",3,"mul","",""),
+            ("sys_style_type​","警告","3","dict.sys.list.class.category.3",3,3,0,"字典样式类别.警告",4,"mul","",""),
+            ("sys_style_type​","进行中","4","dict.sys.list.class.category.4",4,4,0,"字典样式类别.进行中",5,"mul","",""),
+            ("sys_style_type​","信息","5","dict.sys.list.class.category.5",5,5,0,"字典样式类别.信息",6,"mul","",""),
+            ("sys_style_type​","大红","6","dict.sys.list.class.category.6",6,6,0,"字典样式类别.大红",7,"mul","",""),
+            ("sys_style_type​","朱红","7","dict.sys.list.class.category.7",7,7,0,"字典样式类别.朱红",8,"mul","",""),
+            ("sys_style_type​","朱砂","8","dict.sys.list.class.category.8",8,8,0,"字典样式类别.朱砂",9,"mul","",""),
+            ("sys_style_type​","火红","9","dict.sys.list.class.category.9",9,9,0,"字典样式类别.火红",10,"mul","",""),
+            ("sys_style_type​","妃色","10","dict.sys.list.class.category.10",10,10,0,"字典样式类别.妃色",11,"mul","",""),
+            ("sys_style_type​","桃红","11","dict.sys.list.class.category.11",11,11,0,"字典样式类别.桃红",12,"mul","",""),
+            ("sys_style_type​","粉红","12","dict.sys.list.class.category.12",12,12,0,"字典样式类别.粉红",13,"mul","",""),
+            ("sys_style_type​","橙色","13","dict.sys.list.class.category.13",13,13,0,"字典样式类别.橙色",14,"mul","",""),
+            ("sys_style_type​","橘红","14","dict.sys.list.class.category.14",14,14,0,"字典样式类别.橘红",15,"mul","",""),
+            ("sys_style_type​","橘黄","15","dict.sys.list.class.category.15",15,15,0,"字典样式类别.橘黄",16,"mul","",""),
+            ("sys_style_type​","橙黄","16","dict.sys.list.class.category.16",16,16,0,"字典样式类别.橙黄",17,"mul","",""),
+            ("sys_style_type​","杏黄","17","dict.sys.list.class.category.17",17,17,0,"字典样式类别.杏黄",18,"mul","",""),
+            ("sys_style_type​","枣红","18","dict.sys.list.class.category.18",18,18,0,"字典样式类别.枣红",19,"mul","",""),
+            ("sys_style_type​","栗色","19","dict.sys.list.class.category.19",19,19,0,"字典样式类别.栗色",20,"mul","",""),
+            ("sys_style_type​","鹅黄","20","dict.sys.list.class.category.20",20,20,0,"字典样式类别.鹅黄",21,"mul","",""),
+            ("sys_style_type​","鸭黄","21","dict.sys.list.class.category.21",21,21,0,"字典样式类别.鸭黄",22,"mul","",""),
+            ("sys_style_type​","樱草色","22","dict.sys.list.class.category.22",22,22,0,"字典样式类别.樱草色",23,"mul","",""),
+            ("sys_style_type​","姜黄","23","dict.sys.list.class.category.23",23,23,0,"字典样式类别.姜黄",24,"mul","",""),
+            ("sys_style_type​","缃色","24","dict.sys.list.class.category.24",24,24,0,"字典样式类别.缃色",25,"mul","",""),
+            ("sys_style_type​","秋香色","25","dict.sys.list.class.category.25",25,25,0,"字典样式类别.秋香色",26,"mul","",""),
+            ("sys_style_type​","绿色","26","dict.sys.list.class.category.26",26,26,0,"字典样式类别.绿色",27,"mul","",""),
+            ("sys_style_type​","草绿","27","dict.sys.list.class.category.27",27,27,0,"字典样式类别.草绿",28,"mul","",""),
+            ("sys_style_type​","嫩绿","28","dict.sys.list.class.category.28",28,28,0,"字典样式类别.嫩绿",29,"mul","",""),
+            ("sys_style_type​","柳绿","29","dict.sys.list.class.category.29",29,29,0,"字典样式类别.柳绿",30,"mul","",""),
+            ("sys_style_type​","葱绿","30","dict.sys.list.class.category.30",30,30,0,"字典样式类别.葱绿",31,"mul","",""),
+            ("sys_style_type​","油绿","31","dict.sys.list.class.category.31",31,31,0,"字典样式类别.油绿",32,"mul","",""),
+            ("sys_style_type​","松柏绿","32","dict.sys.list.class.category.32",32,32,0,"字典样式类别.松柏绿",33,"mul","",""),
+            ("sys_style_type​","青色","33","dict.sys.list.class.category.33",33,33,0,"字典样式类别.青色",34,"mul","",""),
+            ("sys_style_type​","青翠","34","dict.sys.list.class.category.34",34,34,0,"字典样式类别.青翠",35,"mul","",""),
+            ("sys_style_type​","碧色","35","dict.sys.list.class.category.35",35,35,0,"字典样式类别.碧色",36,"mul","",""),
+            ("sys_style_type​","青碧","36","dict.sys.list.class.category.36",36,36,0,"字典样式类别.青碧",37,"mul","",""),
+            ("sys_style_type​","翡翠色","37","dict.sys.list.class.category.37",37,37,0,"字典样式类别.翡翠色",38,"mul","",""),
+            ("sys_style_type​","鸭卵青","38","dict.sys.list.class.category.38",38,38,0,"字典样式类别.鸭卵青",39,"mul","",""),
+            ("sys_style_type​","水色","39","dict.sys.list.class.category.39",39,39,0,"字典样式类别.水色",40,"mul","",""),
+            ("sys_style_type​","蓝","40","dict.sys.list.class.category.40",40,40,0,"字典样式类别.蓝",41,"mul","",""),
+            ("sys_style_type​","碧蓝","41","dict.sys.list.class.category.41",41,41,0,"字典样式类别.碧蓝",42,"mul","",""),
+            ("sys_style_type​","蔚蓝","42","dict.sys.list.class.category.42",42,42,0,"字典样式类别.蔚蓝",43,"mul","",""),
+            ("sys_style_type​","宝蓝","43","dict.sys.list.class.category.43",43,43,0,"字典样式类别.宝蓝",44,"mul","",""),
+            ("sys_style_type​","靛青","44","dict.sys.list.class.category.44",44,44,0,"字典样式类别.靛青",45,"mul","",""),
+            ("sys_style_type​","藏青","45","dict.sys.list.class.category.45",45,45,0,"字典样式类别.藏青",46,"mul","",""),
+            ("sys_style_type​","月白","46","dict.sys.list.class.category.46",46,46,0,"字典样式类别.月白",47,"mul","",""),
+            ("sys_style_type​","紫色","47","dict.sys.list.class.category.47",47,47,0,"字典样式类别.紫色",48,"mul","",""),
+            ("sys_style_type​","桜色","48","dict.sys.list.class.category.48",48,48,0,"字典样式类别.桜色",49,"mul","",""),
+            ("sys_style_type​","桃色","49","dict.sys.list.class.category.49",49,49,0,"字典样式类别.桃色",50,"mul","",""),
+            ("sys_style_type​","赤紫","50","dict.sys.list.class.category.50",50,50,0,"字典样式类别.赤紫",51,"mul","",""),
+            ("sys_style_type​","紅梅色","51","dict.sys.list.class.category.51",51,51,0,"字典样式类别.紅梅色",52,"mul","",""),
+            ("sys_style_type​","甚三紅","52","dict.sys.list.class.category.52",52,52,0,"字典样式类别.甚三紅",53,"mul","",""),
+            ("sys_style_type​","紅藤色","53","dict.sys.list.class.category.53",53,53,0,"字典样式类别.紅藤色",54,"mul","",""),
+            ("sys_style_type​","真朱","54","dict.sys.list.class.category.54",54,54,0,"字典样式类别.真朱",55,"mul","",""),
+            ("sys_style_type​","櫨染","55","dict.sys.list.class.category.55",55,55,0,"字典样式类别.櫨染",56,"mul","",""),
+            ("sys_style_type​","黄金","56","dict.sys.list.class.category.56",56,56,0,"字典样式类别.黄金",57,"mul","",""),
+            ("sys_style_type​","紅鬱金","57","dict.sys.list.class.category.57",57,57,0,"字典样式类别.紅鬱金",58,"mul","",""),
+            ("sys_style_type​","柿渋色","58","dict.sys.list.class.category.58",58,58,0,"字典样式类别.柿渋色",59,"mul","",""),
+            ("sys_style_type​","鶸色","59","dict.sys.list.class.category.59",59,59,0,"字典样式类别.鶸色",60,"mul","",""),
+            ("sys_style_type​","躑躅色","60","dict.sys.list.class.category.60",60,60,0,"字典样式类别.躑躅色",61,"mul","",""),
+            ("sys_style_type​","黄朽葉色","61","dict.sys.list.class.category.61",61,61,0,"字典样式类别.黄朽葉色",62,"mul","",""),
+            ("sys_style_type​","菜種油色","62","dict.sys.list.class.category.62",62,62,0,"字典样式类别.菜種油色",63,"mul","",""),
+            ("sys_style_type​","鴇色","63","dict.sys.list.class.category.63",63,63,0,"字典样式类别.鴇色",64,"mul","",""),
+            ("sys_style_type​","萌葱色","64","dict.sys.list.class.category.64",64,64,0,"字典样式类别.萌葱色",65,"mul","",""),
+            ("sys_style_type​","花浅葱","65","dict.sys.list.class.category.65",65,65,0,"字典样式类别.花浅葱",66,"mul","",""),
+            ("sys_style_type​","浅葱色","66","dict.sys.list.class.category.66",66,66,0,"字典样式类别.浅葱色",67,"mul","",""),
+            ("sys_style_type​","青緑","67","dict.sys.list.class.category.67",67,67,0,"字典样式类别.青緑",68,"mul","",""),
+            ("sys_style_type​","青碧","68","dict.sys.list.class.category.68",68,68,0,"字典样式类别.青碧",69,"mul","",""),
+            ("sys_style_type​","山吹茶","69","dict.sys.list.class.category.69",69,69,0,"字典样式类别.山吹茶",70,"mul","",""),
             ("sys_mail_status","草稿","0","dict.sys.mail.status.0",1,1,0,"邮件状态.草稿",1,"mul","",""),
             ("sys_mail_status","已发送","1","dict.sys.mail.status.1",2,2,0,"邮件状态.已发送",2,"mul","",""),
             ("sys_mail_status","发送失败","2","dict.sys.mail.status.2",3,3,0,"邮件状态.发送失败",3,"mul","",""),
@@ -2335,18 +2398,18 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("sys_menu_type","目录","0","dict.sys.menu.type.0",1,1,0,"菜单类型.目录",1,"mul","",""),
             ("sys_menu_type","菜单","1","dict.sys.menu.type.1",2,2,0,"菜单类型.菜单",2,"mul","",""),
             ("sys_menu_type","按钮","2","dict.sys.menu.type.2",3,3,0,"菜单类型.按钮",3,"mul","",""),
-            ("sys_message_group_category","协同","COLLABORATION","dict.sys.message.group.category.collaboration",1,1,0,"消息分组.协同",1,"mul","",""),
-            ("sys_message_group_category","消息","MESSAGE","dict.sys.message.group.category.message",2,2,0,"消息分组.消息",2,"mul","",""),
-            ("sys_message_group_category","提醒","REMINDER","dict.sys.message.group.category.reminder",3,3,0,"消息分组.提醒",3,"mul","",""),
+            ("sys_message_group","协同","COLLABORATION","dict.sys.message.group.category.collaboration",1,1,0,"消息分组.协同",1,"mul","",""),
+            ("sys_message_group","消息","MESSAGE","dict.sys.message.group.category.message",2,2,0,"消息分组.消息",2,"mul","",""),
+            ("sys_message_group","提醒","REMINDER","dict.sys.message.group.category.reminder",3,3,0,"消息分组.提醒",3,"mul","",""),
             ("sys_message_type","文本","TEXT","dict.sys.message.type.text",1,1,0,"消息类型.文本",1,"mul","",""),
             ("sys_message_type","系统","SYSTEM","dict.sys.message.type.system",2,2,0,"消息类型.系统",2,"mul","",""),
             ("sys_message_type","多媒体","MULTIMEDIA","dict.sys.message.type.multimedia",3,3,0,"消息类型.多媒体",3,"mul","",""),
-            ("sys_news_category","公司新闻","0","dict.sys.news.category.0",1,1,0,"新闻分类.公司新闻",1,"mul","",""),
-            ("sys_news_category","行业动态","1","dict.sys.news.category.1",2,2,0,"新闻分类.行业动态",2,"mul","",""),
-            ("sys_news_category","技术分享","2","dict.sys.news.category.2",3,3,0,"新闻分类.技术分享",3,"mul","",""),
-            ("sys_news_category","产品发布","3","dict.sys.news.category.3",4,4,0,"新闻分类.产品发布",4,"mul","",""),
-            ("sys_news_category","活动资讯","4","dict.sys.news.category.4",5,5,0,"新闻分类.活动资讯",5,"mul","",""),
-            ("sys_news_category","其他","5","dict.sys.news.category.5",6,6,0,"新闻分类.其他",6,"mul","",""),
+            ("sys_news_type","公司新闻","0","dict.sys.news.category.0",1,1,0,"新闻分类.公司新闻",1,"mul","",""),
+            ("sys_news_type","行业动态","1","dict.sys.news.category.1",2,2,0,"新闻分类.行业动态",2,"mul","",""),
+            ("sys_news_type","技术分享","2","dict.sys.news.category.2",3,3,0,"新闻分类.技术分享",3,"mul","",""),
+            ("sys_news_type","产品发布","3","dict.sys.news.category.3",4,4,0,"新闻分类.产品发布",4,"mul","",""),
+            ("sys_news_type","活动资讯","4","dict.sys.news.category.4",5,5,0,"新闻分类.活动资讯",5,"mul","",""),
+            ("sys_news_type","其他","5","dict.sys.news.category.5",6,6,0,"新闻分类.其他",6,"mul","",""),
             ("sys_publish_status","草稿","0","dict.sys.publish.status.0",1,1,1,"发布状态.草稿",1,"mul","",""),
             ("sys_publish_status","已发布","1","dict.sys.publish.status.1",2,2,0,"发布状态.已发布",2,"mul","",""),
             ("sys_publish_status","已撤回","2","dict.sys.publish.status.2",3,3,0,"发布状态.已撤回",3,"mul","",""),
@@ -2425,60 +2488,58 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("sys_online_status","在线","0","dict.sys.online.status.0",1,1,0,"在线状态.在线",1,"mul","",""),
             ("sys_online_status","离线","1","dict.sys.online.status.1",2,2,0,"在线状态.离线",2,"mul","",""),
             ("sys_online_status","离开","2","dict.sys.online.status.2",3,3,0,"在线状态.离开",3,"mul","",""),
-            ("sys_oss_provider_type","阿里云OSS","ALIYUN","dict.sys.oss.provider.type.aliyun",1,1,0,"oss提供商类型.阿里云oss",1,"mul","",""),
-            ("sys_oss_provider_type","腾讯云COS","TENCENT","dict.sys.oss.provider.type.tencent",2,2,0,"oss提供商类型.腾讯云cos",2,"mul","",""),
-            ("sys_oss_provider_type","华为云OBS","HUAWEI","dict.sys.oss.provider.type.huawei",3,3,0,"oss提供商类型.华为云obs",3,"mul","",""),
-            ("sys_oss_provider_type","AWS S3","AWS","dict.sys.oss.provider.type.aws",4,4,0,"oss提供商类型.aws s3",4,"mul","",""),
+            ("sys_oss_provider","阿里云OSS","ALIYUN","dict.sys.oss.provider.type.aliyun",1,1,0,"oss提供商类型.阿里云oss",1,"mul","",""),
+            ("sys_oss_provider","腾讯云COS","TENCENT","dict.sys.oss.provider.type.tencent",2,2,0,"oss提供商类型.腾讯云cos",2,"mul","",""),
+            ("sys_oss_provider","华为云OBS","HUAWEI","dict.sys.oss.provider.type.huawei",3,3,0,"oss提供商类型.华为云obs",3,"mul","",""),
+            ("sys_oss_provider","AWS S3","AWS","dict.sys.oss.provider.type.aws",4,4,0,"oss提供商类型.aws s3",4,"mul","",""),
             ("sys_post_category","管理岗","MGT","dict.sys.post.category.mgt",1,1,0,"岗位类别.管理岗",1,"mul","",""),
             ("sys_post_category","专业岗","PRO","dict.sys.post.category.pro",2,2,0,"岗位类别.专业岗（财/人/法/市 专家层）",2,"mul","",""),
             ("sys_post_category","技术岗","TEC","dict.sys.post.category.tec",3,3,0,"岗位类别.技术岗（研发/工程/IT高阶）",3,"mul","",""),
             ("sys_post_category","支持岗","SUP","dict.sys.post.category.sup",4,4,0,"岗位类别.支持岗（事务/保障/辅助）",4,"mul","",""),
             ("sys_post_category","操作岗","OPS","dict.sys.post.category.ops",5,5,0,"岗位类别.操作岗（产线/直接作业）",5,"mul","",""),
-            ("sys_post_level_category","助理","P1","dict.sys.post.level.category.p1",1,1,0,"P序列.助理",1,"mul","",""),
-            ("sys_post_level_category","专员/工程师","P2","dict.sys.post.level.category.p2",2,2,0,"P序列.专员/工程师",2,"mul","",""),
-            ("sys_post_level_category","高级专员/高级工程师","P3","dict.sys.post.level.category.p3",3,3,0,"P序列.高级专员/高级工程师",3,"mul","",""),
-            ("sys_post_level_category","专家/资深工程师","P4","dict.sys.post.level.category.p4",4,4,0,"P序列.专家/资深工程师",4,"mul","",""),
-            ("sys_post_level_category","主管","M1","dict.sys.post.level.category.m1",5,5,0,"M序列.主管",5,"mul","",""),
-            ("sys_post_level_category","经理","M2","dict.sys.post.level.category.m2",6,6,0,"M序列.经理",6,"mul","",""),
-            ("sys_post_level_category","总监","M3","dict.sys.post.level.category.m3",7,7,0,"M序列.总监",7,"mul","",""),
-            ("sys_post_level_category","副总裁","M4","dict.sys.post.level.category.m4",8,8,0,"M序列.副总裁",8,"mul","",""),
-            ("sys_post_level_category","C-LEVEL","M5","dict.sys.post.level.category.m5",9,9,0,"M序列.C-Level",9,"mul","",""),
-            ("sys_priority_level_category","最高","1","dict.sys.priority.level.category.1",1,1,0,"优先级.最高",1,"mul","",""),
-            ("sys_priority_level_category","高","2","dict.sys.priority.level.category.2",2,2,0,"优先级.高",2,"mul","",""),
-            ("sys_priority_level_category","普通","3","dict.sys.priority.level.category.3",3,3,1,"优先级.普通",3,"mul","",""),
-            ("sys_priority_level_category","低","4","dict.sys.priority.level.category.4",4,4,0,"优先级.低",4,"mul","",""),
-            ("sys_publish_scope_type","全部","0","dict.sys.publish.scope.type.0",1,1,0,"发布范围.全部",1,"mul","",""),
-            ("sys_publish_scope_type","指定部门","1","dict.sys.publish.scope.type.1",2,2,0,"发布范围.指定部门",2,"mul","",""),
-            ("sys_publish_scope_type","指定用户","2","dict.sys.publish.scope.type.2",3,3,0,"发布范围.指定用户",3,"mul","",""),
-            ("sys_publish_scope_type","指定角色","3","dict.sys.publish.scope.type.3",4,4,0,"发布范围.指定角色",4,"mul","",""),
+            ("sys_post_level","助理","P1","dict.sys.post.level.category.p1",1,1,0,"P序列.助理",1,"mul","",""),
+            ("sys_post_level","专员/工程师","P2","dict.sys.post.level.category.p2",2,2,0,"P序列.专员/工程师",2,"mul","",""),
+            ("sys_post_level","高级专员/高级工程师","P3","dict.sys.post.level.category.p3",3,3,0,"P序列.高级专员/高级工程师",3,"mul","",""),
+            ("sys_post_level","专家/资深工程师","P4","dict.sys.post.level.category.p4",4,4,0,"P序列.专家/资深工程师",4,"mul","",""),
+            ("sys_post_level","主管","M1","dict.sys.post.level.category.m1",5,5,0,"M序列.主管",5,"mul","",""),
+            ("sys_post_level","经理","M2","dict.sys.post.level.category.m2",6,6,0,"M序列.经理",6,"mul","",""),
+            ("sys_post_level","总监","M3","dict.sys.post.level.category.m3",7,7,0,"M序列.总监",7,"mul","",""),
+            ("sys_post_level","副总裁","M4","dict.sys.post.level.category.m4",8,8,0,"M序列.副总裁",8,"mul","",""),
+            ("sys_post_level","C-LEVEL","M5","dict.sys.post.level.category.m5",9,9,0,"M序列.C-Level",9,"mul","",""),
+            ("sys_priority_level","最高","1","dict.sys.priority.level.category.1",1,1,0,"优先级.最高",1,"mul","",""),
+            ("sys_priority_level","高","2","dict.sys.priority.level.category.2",2,2,0,"优先级.高",2,"mul","",""),
+            ("sys_priority_level","普通","3","dict.sys.priority.level.category.3",3,3,1,"优先级.普通",3,"mul","",""),
+            ("sys_priority_level","低","4","dict.sys.priority.level.category.4",4,4,0,"优先级.低",4,"mul","",""),
+            ("sys_publish_scope","全部","0","dict.sys.publish.scope.0",1,1,0,"发布范围.全部",1,"mul","",""),
+            ("sys_publish_scope","指定部门","1","dict.sys.publish.scope.1",2,2,0,"发布范围.指定部门",2,"mul","",""),
+            ("sys_publish_scope","指定用户","2","dict.sys.publish.scope.2",3,3,0,"发布范围.指定用户",3,"mul","",""),
             ("sys_read_status","未读","0","dict.sys.read.status.0",1,1,0,"读取状态.未读",1,"mul","",""),
             ("sys_read_status","已读","1","dict.sys.read.status.1",2,2,0,"读取状态.已读",2,"mul","",""),
-            ("sys_reset_period_config","不重置","NONE","dict.sys.reset.period.config.none",1,1,1,"重置周期.不重置",1,"mul","",""),
-            ("sys_reset_period_config","按年","YEAR","dict.sys.reset.period.config.year",2,2,0,"重置周期.按年",2,"mul","",""),
-            ("sys_reset_period_config","按月","MONTH","dict.sys.reset.period.config.month",3,3,0,"重置周期.按月",3,"mul","",""),
-            ("sys_reset_period_config","按日","DAY","dict.sys.reset.period.config.day",4,4,0,"重置周期.按日",4,"mul","",""),
-            ("sys_reset_period_config","按时","HOUR","dict.sys.reset.period.config.hour",5,5,0,"重置周期.按时",5,"mul","",""),
+            ("sys_reset_period","不重置","None","dict.sys.reset.period.config.none",1,1,1,"重置周期.None",1,"mul","",""),
+            ("sys_reset_period","按年","Annually","dict.sys.reset.period.config.annually",2,2,0,"重置周期.Annually",2,"mul","",""),
+            ("sys_reset_period","按月","Monthly","dict.sys.reset.period.config.monthly",3,3,0,"重置周期.Monthly",3,"mul","",""),
+            ("sys_reset_period","按日","Daily","dict.sys.reset.period.config.daily",4,4,0,"重置周期.Daily",4,"mul","",""),
             ("sys_resource_type","前端","FRONTEND","dict.sys.resource.type.frontend",1,1,0,"资源类型.前端（frontend）",1,"mul","",""),
             ("sys_resource_type","后端","BACKEND","dict.sys.resource.type.backend",2,2,0,"资源类型.后端（backend）",2,"mul","",""),
             ("sys_scheme_status","草稿","0","dict.sys.scheme.status.0",1,1,0,"方案状态.草稿",1,"mul","",""),
             ("sys_scheme_status","已发布","1","dict.sys.scheme.status.1",2,2,0,"方案状态.已发布",2,"mul","",""),
             ("sys_scheme_status","已禁用","2","dict.sys.scheme.status.2",3,3,0,"方案状态.已禁用",3,"mul","",""),
-            ("sys_setting_group_category","后端","BACKEND","dict.sys.setting.group.category.backend",1,1,0,"设置分组.后端",1,"mul","",""),
-            ("sys_setting_group_category","前端","FRONTEND","dict.sys.setting.group.category.frontend",2,2,0,"设置分组.前端",2,"mul","",""),
+            ("sys_setting_group","后端","BACKEND","dict.sys.setting.group.category.backend",1,1,0,"设置分组.后端",1,"mul","",""),
+            ("sys_setting_group","前端","FRONTEND","dict.sys.setting.group.category.frontend",2,2,0,"设置分组.前端",2,"mul","",""),
             ("sys_sort_type","升序","ASC","dict.sys.sort.type.asc",1,1,0,"排序类型.升序",1,"mul","",""),
             ("sys_sort_type","降序","DESC","dict.sys.sort.type.desc",2,2,0,"排序类型.降序",2,"mul","",""),
-            ("sys_storage_naming_config","原文件+哈希值","0","dict.sys.storage.naming.config.0",1,1,0,"存储命名规则.原文件+哈希值",1,"mul","",""),
-            ("sys_storage_naming_config","自动生成","1","dict.sys.storage.naming.config.1",2,2,0,"存储命名规则.自动生成",2,"mul","",""),
-            ("sys_storage_naming_config","自定义","2","dict.sys.storage.naming.config.2",3,3,0,"存储命名规则.自定义",3,"mul","",""),
+            ("sys_storage_naming","原文件+哈希值","0","dict.sys.storage.naming.config.0",1,1,0,"存储命名规则.原文件+哈希值",1,"mul","",""),
+            ("sys_storage_naming","自动生成","1","dict.sys.storage.naming.config.1",2,2,0,"存储命名规则.自动生成",2,"mul","",""),
+            ("sys_storage_naming","自定义","2","dict.sys.storage.naming.config.2",3,3,0,"存储命名规则.自定义",3,"mul","",""),
             ("sys_storage_type","本地存储","0","dict.sys.storage.type.0",1,1,0,"存储方式.本地存储",1,"mul","",""),
             ("sys_storage_type","OSS对象存储","1","dict.sys.storage.type.1",2,2,0,"存储方式.oss对象存储",2,"mul","",""),
             ("sys_storage_type","FTP","2","dict.sys.storage.type.2",3,3,0,"存储方式.ftp",3,"mul","",""),
-            ("sys_urgency_level_category","高","1","dict.sys.urgency.level.category.1",1,1,0,"紧急度.高",1,"mul","",""),
-            ("sys_urgency_level_category","中","2","dict.sys.urgency.level.category.2",2,2,0,"紧急度.中",2,"mul","",""),
-            ("sys_urgency_level_category","低","3","dict.sys.urgency.level.category.3",3,3,1,"紧急度.低",3,"mul","",""),
-            ("sys_impact_level_category","高","1","dict.sys.impact.level.category.1",1,1,0,"影响范围.高",1,"mul","",""),
-            ("sys_impact_level_category","中","2","dict.sys.impact.level.category.2",2,2,0,"影响范围.中",2,"mul","",""),
-            ("sys_impact_level_category","低","3","dict.sys.impact.level.category.3",3,3,1,"影响范围.低",3,"mul","",""),
+            ("sys_urgency_level","高","1","dict.sys.urgency.level.category.1",1,1,0,"紧急度.高",1,"mul","",""),
+            ("sys_urgency_level","中","2","dict.sys.urgency.level.category.2",2,2,0,"紧急度.中",2,"mul","",""),
+            ("sys_urgency_level","低","3","dict.sys.urgency.level.category.3",3,3,1,"紧急度.低",3,"mul","",""),
+            ("sys_impact_level","高","1","dict.sys.impact.level.category.1",1,1,0,"影响范围.高",1,"mul","",""),
+            ("sys_impact_level","中","2","dict.sys.impact.level.category.2",2,2,0,"影响范围.中",2,"mul","",""),
+            ("sys_impact_level","低","3","dict.sys.impact.level.category.3",3,3,1,"影响范围.低",3,"mul","",""),
             ("sys_user_gender_category","未知","0","dict.sys.user.gender.category.0",1,1,0,"用户性别.未知",1,"mul","",""),
             ("sys_user_gender_category","男","1","dict.sys.user.gender.category.1",2,2,0,"用户性别.男",2,"mul","",""),
             ("sys_user_gender_category","女","2","dict.sys.user.gender.category.2",3,3,0,"用户性别.女",3,"mul","",""),
@@ -2490,22 +2551,11 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("sys_word_category","色情低俗","3","dict.sys.word.category.3",3,3,0,"敏感词词性类别.色情低俗",3,"mul","",""),
             ("sys_word_category","广告营销","4","dict.sys.word.category.4",4,4,0,"敏感词词性类别.广告营销",4,"mul","",""),
             ("sys_word_category","辱骂歧视","5","dict.sys.word.category.5",5,5,0,"敏感词词性类别.辱骂歧视",5,"mul","",""),
-            ("sys_numbering_dept_code","总务部","R","dict.sys.numbering.dept.code.r",1,1,0,"编码规则部门短码.总务部.D0100",1,"mul","",""),
-            ("sys_numbering_dept_code","财务部","F","dict.sys.numbering.dept.code.f",1,1,0,"编码规则部门短码.财务部.D0200",2,"mul","",""),
-            ("sys_numbering_dept_code","IT部","D","dict.sys.numbering.dept.code.d",1,1,0,"编码规则部门短码.IT部.D0300",3,"mul","",""),
-            ("sys_numbering_dept_code","文管中心","M","dict.sys.numbering.dept.code.m",1,1,0,"编码规则部门短码.文管中心.D0410",4,"mul","",""),
-            ("sys_numbering_dept_code","生管课","S","dict.sys.numbering.dept.code.s",1,1,0,"编码规则部门短码.生管课.D0420",5,"mul","",""),
-            ("sys_numbering_dept_code","部管课","B","dict.sys.numbering.dept.code.b",1,1,0,"编码规则部门短码.部管课.D0430",6,"mul","",""),
-            ("sys_numbering_dept_code","资材部","C","dict.sys.numbering.dept.code.c",1,1,0,"编码规则部门短码.资材部.D0500",7,"mul","",""),
-            ("sys_numbering_dept_code","制造部","Z","dict.sys.numbering.dept.code.z",1,1,0,"编码规则部门短码.制造部.D0600",8,"mul","",""),
-            ("sys_numbering_dept_code","制技部","P","dict.sys.numbering.dept.code.p",1,1,0,"编码规则部门短码.制技部.D0630",9,"mul","",""),
-            ("sys_numbering_dept_code","技术部","T","dict.sys.numbering.dept.code.t",1,1,0,"编码规则部门短码.技术部.D0700",10,"mul","",""),
-            ("sys_numbering_dept_code","品保部","Q","dict.sys.numbering.dept.code.q",1,1,0,"编码规则部门短码.品保部.D0800",11,"mul","",""),
-            ("sys_word_filter_level_category","低","1","dict.sys.word.filter.level.category.1",1,1,0,"敏感词过滤等级.低",1,"mul","",""),
-            ("sys_word_filter_level_category","中","2","dict.sys.word.filter.level.category.2",2,2,0,"敏感词过滤等级.中",2,"mul","",""),
-            ("sys_word_filter_level_category","高","3","dict.sys.word.filter.level.category.3",3,3,0,"敏感词过滤等级.高",3,"mul","",""),
-            ("sys_yes_no_type","是","1","dict.sys.yes.no.type.1",1,1,0,"是否.是",1,"mul","",""),
-            ("sys_yes_no_type","否","0","dict.sys.yes.no.type.0",2,2,0,"是否.否",2,"mul","",""),
+            ("sys_word_filter_level","低","1","dict.sys.word.filter.level.category.1",1,1,0,"敏感词过滤等级.低",1,"mul","",""),
+            ("sys_word_filter_level","中","2","dict.sys.word.filter.level.category.2",2,2,0,"敏感词过滤等级.中",2,"mul","",""),
+            ("sys_word_filter_level","高","3","dict.sys.word.filter.level.category.3",3,3,0,"敏感词过滤等级.高",3,"mul","",""),
+            ("sys_yes_no","是","1","dict.sys.yes.no.type.1",1,1,0,"是否.是",1,"mul","",""),
+            ("sys_yes_no","否","0","dict.sys.yes.no.type.0",2,2,0,"是否.否",2,"mul","",""),
             ("sys_numbering_date_format_config","不使用","NONE","dict.sys.numbering.date.format.config.none",1,1,1,"编码日期格式.不使用",1,"mul","",""),
             ("sys_numbering_date_format_config","年(YYYY)","YYYY","dict.sys.numbering.date.format.config.yyyy",2,2,0,"编码日期格式.年",2,"mul","",""),
             ("sys_numbering_date_format_config","年月(YYYYMM)","YYYYMM","dict.sys.numbering.date.format.config.yyyymm",3,3,0,"编码日期格式.年月",3,"mul","",""),
@@ -3071,6 +3121,33 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("sys_quartz_misfire_policy","不触发","3","dict.sys.quartz.misfire.policy.3",4,4,0,"Quartz Misfire策略.不触发",4,"mul","",""),
             ("sys_quartz_task_status","正常","0","dict.sys.quartz.task.status.0",1,1,1,"Quartz任务状态.正常",1,"mul","",""),
             ("sys_quartz_task_status","暂停","1","dict.sys.quartz.task.status.1",2,2,0,"Quartz任务状态.暂停",2,"mul","",""),
+            ("sys_job_run_status","进行中","0","dict.sys.job.run.status.0",1,1,0,"作业运行状态.进行中",1,"mul","",""),
+            ("sys_job_run_status","成功","1","dict.sys.job.run.status.1",2,2,0,"作业运行状态.成功",2,"mul","",""),
+            ("sys_job_run_status","失败","2","dict.sys.job.run.status.2",3,3,0,"作业运行状态.失败",3,"mul","",""),
+            ("sys_success_fail_status","失败","0","dict.sys.success.fail.status.0",1,1,0,"成功失败状态.失败",1,"mul","",""),
+            ("sys_success_fail_status","成功","1","dict.sys.success.fail.status.1",2,2,0,"成功失败状态.成功",2,"mul","",""),
+            ("sys_tracking_level","警告","1","dict.sys.tracking.level.1",1,1,0,"追踪级别.警告",1,"mul","",""),
+            ("sys_tracking_level","错误","2","dict.sys.tracking.level.2",2,2,0,"追踪级别.错误",2,"mul","",""),
+            ("sys_backup_sync_mode","完整","1","dict.sys.backup.sync.mode.1",1,1,0,"备份同步模式.完整",1,"mul","",""),
+            ("sys_backup_sync_mode","增量","2","dict.sys.backup.sync.mode.2",2,2,0,"备份同步模式.增量",2,"mul","",""),
+            ("sys_backup_execute_mode","立即","1","dict.sys.backup.execute.mode.1",1,1,0,"备份执行方式.立即",1,"mul","",""),
+            ("sys_backup_execute_mode","后台","2","dict.sys.backup.execute.mode.2",2,2,0,"备份执行方式.后台",2,"mul","",""),
+            ("sys_backup_path_type","无","0","dict.sys.backup.path.type.0",1,1,0,"备份路径类型.无",1,"mul","",""),
+            ("sys_backup_path_type","本地","1","dict.sys.backup.path.type.1",2,2,0,"备份路径类型.本地",2,"mul","",""),
+            ("sys_backup_path_type","网络","2","dict.sys.backup.path.type.2",3,3,0,"备份路径类型.网络",3,"mul","",""),
+            ("sys_backup_path_type","FTP","3","dict.sys.backup.path.type.3",4,4,0,"备份路径类型.FTP",4,"mul","",""),
+            ("sys_configurable_join_type","内连接","1","dict.sys.configurable.join.type.1",1,1,0,"报表关联类型.内连接",1,"mul","",""),
+            ("sys_configurable_join_type","左连接","2","dict.sys.configurable.join.type.2",2,2,0,"报表关联类型.左连接",2,"mul","",""),
+            ("sys_configurable_join_type","右连接","3","dict.sys.configurable.join.type.3",3,3,0,"报表关联类型.右连接",3,"mul","",""),
+            ("sys_configurable_join_type","全连接","4","dict.sys.configurable.join.type.4",4,4,0,"报表关联类型.全连接",4,"mul","",""),
+            ("sys_configurable_aggregate_func","无","0","dict.sys.configurable.aggregate.func.0",1,1,0,"报表聚合函数.无",1,"mul","",""),
+            ("sys_configurable_aggregate_func","COUNT","1","dict.sys.configurable.aggregate.func.1",2,2,0,"报表聚合函数.COUNT",2,"mul","",""),
+            ("sys_configurable_aggregate_func","SUM","2","dict.sys.configurable.aggregate.func.2",3,3,0,"报表聚合函数.SUM",3,"mul","",""),
+            ("sys_configurable_aggregate_func","AVG","3","dict.sys.configurable.aggregate.func.3",4,4,0,"报表聚合函数.AVG",4,"mul","",""),
+            ("sys_configurable_aggregate_func","MIN","4","dict.sys.configurable.aggregate.func.4",5,5,0,"报表聚合函数.MIN",5,"mul","",""),
+            ("sys_configurable_aggregate_func","MAX","5","dict.sys.configurable.aggregate.func.5",6,6,0,"报表聚合函数.MAX",6,"mul","",""),
+            ("sys_configurable_sort_direction","升序","1","dict.sys.configurable.sort.direction.1",1,1,0,"报表排序方向.升序",1,"mul","",""),
+            ("sys_configurable_sort_direction","降序","2","dict.sys.configurable.sort.direction.2",2,2,0,"报表排序方向.降序",2,"mul","",""),
 
 
         };
@@ -3261,6 +3338,60 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             .Where(d =>
                 d.TenantCode == tenantCode &&
                 d.DictTypeCode == "sys_culture_code" &&
+                d.IsDeleted == 0 &&
+                !supported.Contains(d.DictValue))
+            .ExecuteCommandAsync();
+    }
+
+    /// <summary>
+    /// 将非标准 sys_reset_period 项软删除（IsDeleted=1；仅保留 None|Annually|Monthly|Daily）
+    /// </summary>
+    /// <param name="seedContext">种子上下文</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <returns>软删除条数</returns>
+    private static async Task<int> SoftDeleteUnsupportedResetPeriodsAsync(
+        TaktSeedContext seedContext,
+        string tenantCode)
+    {
+        var now = DateTime.Now;
+        var supported = SupportedResetPeriodDictValues.ToArray();
+        return await seedContext.Db.Updateable<TaktDictData>()
+            .SetColumns(d => new TaktDictData
+            {
+                IsDeleted = 1,
+                UpdatedAt = now,
+                DeletedAt = now,
+            })
+            .Where(d =>
+                d.TenantCode == tenantCode &&
+                d.DictTypeCode == "sys_reset_period" &&
+                d.IsDeleted == 0 &&
+                !supported.Contains(d.DictValue))
+            .ExecuteCommandAsync();
+    }
+
+    /// <summary>
+    /// 将非标准 sys_publish_scope 项软删除（IsDeleted=1；仅保留 0|1|2，不含指定角色）
+    /// </summary>
+    /// <param name="seedContext">种子上下文</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <returns>软删除条数</returns>
+    private static async Task<int> SoftDeleteUnsupportedPublishScopesAsync(
+        TaktSeedContext seedContext,
+        string tenantCode)
+    {
+        var now = DateTime.Now;
+        var supported = SupportedPublishScopeDictValues.ToArray();
+        return await seedContext.Db.Updateable<TaktDictData>()
+            .SetColumns(d => new TaktDictData
+            {
+                IsDeleted = 1,
+                UpdatedAt = now,
+                DeletedAt = now,
+            })
+            .Where(d =>
+                d.TenantCode == tenantCode &&
+                d.DictTypeCode == "sys_publish_scope" &&
                 d.IsDeleted == 0 &&
                 !supported.Contains(d.DictValue))
             .ExecuteCommandAsync();

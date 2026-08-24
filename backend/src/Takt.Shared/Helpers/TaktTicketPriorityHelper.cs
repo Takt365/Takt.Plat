@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Shared.Helpers
 // 文件名称：TaktTicketPriorityHelper.cs
-// 功能描述：ITSM 紧急度×影响范围 → 优先级矩阵（与 sys_priority_level_category 字典对齐）
+// 功能描述：ITSM 紧急度×影响范围 → 优先级矩阵（与 sys_priority_level 字典对齐）
 // ========================================
 
 namespace Takt.Shared.Helpers;
@@ -28,7 +28,7 @@ public static class TaktTicketPriorityHelper
         level is >= 1 and <= 3 ? level : 3;
 
     /// <summary>
-    /// 根据 ITSM 3×3 矩阵计算优先级（字典 sys_priority_level_category）。
+    /// 根据 ITSM 3×3 矩阵计算优先级（字典 sys_priority_level）。
     /// </summary>
     /// <param name="urgency">紧急度 1～3</param>
     /// <param name="impact">影响范围 1～3</param>

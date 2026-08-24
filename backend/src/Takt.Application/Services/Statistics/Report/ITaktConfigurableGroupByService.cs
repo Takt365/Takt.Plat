@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Report
 // 文件名称：ITaktConfigurableGroupByService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自定义报表分组应用服务接口
 // 

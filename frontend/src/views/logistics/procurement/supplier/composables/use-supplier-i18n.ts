@@ -20,7 +20,6 @@ export const SUPPLIER_SELF_I18N_KEY = buildEntitySelfI18nKey(SUPPLIER_ENTITY_SLU
 
 /** 列表业务列（不含主键） */
 export const SUPPLIER_LIST_FIELDS = [
-  'plantCode',
   'supplierCode',
   'supplierName1',
   'supplierName2',
@@ -28,8 +27,8 @@ export const SUPPLIER_LIST_FIELDS = [
   'supplierType',
   'enterpriseNature',
   'industryAttribute',
-  'cultureCode',
   'supplierTaxNumber',
+  'taxCode',
   'taxRate',
   'registrationCountry',
   'registrationProvince',
@@ -70,8 +69,8 @@ export const SUPPLIER_LIST_FIELDS = [
 export const SUPPLIER_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   supplierCode: 'required',
   supplierName1: 'required',
   supplierName2: 'optional',
@@ -79,8 +78,8 @@ export const SUPPLIER_PLACEHOLDER = {
   supplierType: 'select',
   enterpriseNature: 'select',
   industryAttribute: 'select',
-  cultureCode: 'select',
   supplierTaxNumber: 'optional',
+  taxCode: 'optional',
   taxRate: 'select',
   registrationCountry: 'optional',
   registrationProvince: 'optional',
@@ -124,6 +123,7 @@ export type SupplierField = keyof typeof SUPPLIER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SUPPLIER_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'supplierCode',
   'supplierName1',
@@ -131,8 +131,8 @@ export const SUPPLIER_QUERY_STRING_FIELDS = [
   'supplierShortName',
   'enterpriseNature',
   'industryAttribute',
-  'cultureCode',
   'supplierTaxNumber',
+  'taxCode',
   'registrationCountry',
   'registrationProvince',
   'registrationCity',

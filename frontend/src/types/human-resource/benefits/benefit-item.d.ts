@@ -98,7 +98,7 @@ export interface BenefitItemExport {
   employeeRatio: number;
 
   /**
-   * 是否强制福利（字典 sys_yes_no_type）
+   * 是否强制福利（字典 sys_yes_no）
    */
   isMandatory: number;
 
@@ -108,7 +108,7 @@ export interface BenefitItemExport {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   itemStatus: number;
 

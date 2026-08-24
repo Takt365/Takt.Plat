@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Generator
 // 文件名称：TaktGenTableColumnI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktGenTableColumn 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -172,94 +172,94 @@ public class TaktGenTableColumnI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentablecolumn.decimaldigits", "zh-HK", "精度_hk", "C#小数位数（decimal等数值类型的小数位数）"),
 
             // entity.gentablecolumn.ispk
-            new TranslationSeedItem("entity.gentablecolumn.ispk", "en-US", "主键_us", "主键（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.ispk", "en-US", "主键_us", "主键（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.ispk
-            new TranslationSeedItem("entity.gentablecolumn.ispk", "ja-JP", "主键_jp", "主键（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.ispk", "ja-JP", "主键_jp", "主键（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.ispk
-            new TranslationSeedItem("entity.gentablecolumn.ispk", "zh-CN", "主键", "主键（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.ispk", "zh-CN", "主键", "主键（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.ispk
-            new TranslationSeedItem("entity.gentablecolumn.ispk", "zh-HK", "主键_hk", "主键（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.ispk", "zh-HK", "主键_hk", "主键（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.isincrement
-            new TranslationSeedItem("entity.gentablecolumn.isincrement", "en-US", "自增_us", "自增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isincrement", "en-US", "自增_us", "自增（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isincrement
-            new TranslationSeedItem("entity.gentablecolumn.isincrement", "ja-JP", "自增_jp", "自增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isincrement", "ja-JP", "自增_jp", "自增（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isincrement
-            new TranslationSeedItem("entity.gentablecolumn.isincrement", "zh-CN", "自增", "自增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isincrement", "zh-CN", "自增", "自增（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isincrement
-            new TranslationSeedItem("entity.gentablecolumn.isincrement", "zh-HK", "自增_hk", "自增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isincrement", "zh-HK", "自增_hk", "自增（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.isrequired
-            new TranslationSeedItem("entity.gentablecolumn.isrequired", "en-US", "必填_us", "必填（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isrequired", "en-US", "必填_us", "必填（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isrequired
-            new TranslationSeedItem("entity.gentablecolumn.isrequired", "ja-JP", "必填_jp", "必填（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isrequired", "ja-JP", "必填_jp", "必填（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isrequired
-            new TranslationSeedItem("entity.gentablecolumn.isrequired", "zh-CN", "必填", "必填（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isrequired", "zh-CN", "必填", "必填（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isrequired
-            new TranslationSeedItem("entity.gentablecolumn.isrequired", "zh-HK", "必填_hk", "必填（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isrequired", "zh-HK", "必填_hk", "必填（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.iscreate
-            new TranslationSeedItem("entity.gentablecolumn.iscreate", "en-US", "新增_us", "新增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.iscreate", "en-US", "新增_us", "新增（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.iscreate
-            new TranslationSeedItem("entity.gentablecolumn.iscreate", "ja-JP", "新增_jp", "新增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.iscreate", "ja-JP", "新增_jp", "新增（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.iscreate
-            new TranslationSeedItem("entity.gentablecolumn.iscreate", "zh-CN", "新增", "新增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.iscreate", "zh-CN", "新增", "新增（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.iscreate
-            new TranslationSeedItem("entity.gentablecolumn.iscreate", "zh-HK", "新增_hk", "新增（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.iscreate", "zh-HK", "新增_hk", "新增（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.isupdate
-            new TranslationSeedItem("entity.gentablecolumn.isupdate", "en-US", "更新_us", "更新（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isupdate", "en-US", "更新_us", "更新（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isupdate
-            new TranslationSeedItem("entity.gentablecolumn.isupdate", "ja-JP", "更新_jp", "更新（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isupdate", "ja-JP", "更新_jp", "更新（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isupdate
-            new TranslationSeedItem("entity.gentablecolumn.isupdate", "zh-CN", "更新", "更新（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isupdate", "zh-CN", "更新", "更新（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isupdate
-            new TranslationSeedItem("entity.gentablecolumn.isupdate", "zh-HK", "更新_hk", "更新（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isupdate", "zh-HK", "更新_hk", "更新（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.isunique
-            new TranslationSeedItem("entity.gentablecolumn.isunique", "en-US", "查重_us", "查重（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isunique", "en-US", "查重_us", "查重（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isunique
-            new TranslationSeedItem("entity.gentablecolumn.isunique", "ja-JP", "查重_jp", "查重（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isunique", "ja-JP", "查重_jp", "查重（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isunique
-            new TranslationSeedItem("entity.gentablecolumn.isunique", "zh-CN", "查重", "查重（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isunique", "zh-CN", "查重", "查重（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isunique
-            new TranslationSeedItem("entity.gentablecolumn.isunique", "zh-HK", "查重_hk", "查重（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isunique", "zh-HK", "查重_hk", "查重（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.islist
-            new TranslationSeedItem("entity.gentablecolumn.islist", "en-US", "列表_us", "列表（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.islist", "en-US", "列表_us", "列表（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.islist
-            new TranslationSeedItem("entity.gentablecolumn.islist", "ja-JP", "列表_jp", "列表（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.islist", "ja-JP", "列表_jp", "列表（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.islist
-            new TranslationSeedItem("entity.gentablecolumn.islist", "zh-CN", "列表", "列表（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.islist", "zh-CN", "列表", "列表（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.islist
-            new TranslationSeedItem("entity.gentablecolumn.islist", "zh-HK", "列表_hk", "列表（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.islist", "zh-HK", "列表_hk", "列表（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.isexport
-            new TranslationSeedItem("entity.gentablecolumn.isexport", "en-US", "导出_us", "导出（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isexport", "en-US", "导出_us", "导出（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isexport
-            new TranslationSeedItem("entity.gentablecolumn.isexport", "ja-JP", "导出_jp", "导出（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isexport", "ja-JP", "导出_jp", "导出（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isexport
-            new TranslationSeedItem("entity.gentablecolumn.isexport", "zh-CN", "导出", "导出（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isexport", "zh-CN", "导出", "导出（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isexport
-            new TranslationSeedItem("entity.gentablecolumn.isexport", "zh-HK", "导出_hk", "导出（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isexport", "zh-HK", "导出_hk", "导出（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.issort
-            new TranslationSeedItem("entity.gentablecolumn.issort", "en-US", "排序_us", "可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
+            new TranslationSeedItem("entity.gentablecolumn.issort", "en-US", "排序_us", "可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
             // entity.gentablecolumn.issort
-            new TranslationSeedItem("entity.gentablecolumn.issort", "ja-JP", "排序_jp", "可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
+            new TranslationSeedItem("entity.gentablecolumn.issort", "ja-JP", "排序_jp", "可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
             // entity.gentablecolumn.issort
-            new TranslationSeedItem("entity.gentablecolumn.issort", "zh-CN", "排序", "可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
+            new TranslationSeedItem("entity.gentablecolumn.issort", "zh-CN", "排序", "可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
             // entity.gentablecolumn.issort
-            new TranslationSeedItem("entity.gentablecolumn.issort", "zh-HK", "排序_hk", "可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
+            new TranslationSeedItem("entity.gentablecolumn.issort", "zh-HK", "排序_hk", "可排序（字典 sys_yes_no；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。"),
 
             // entity.gentablecolumn.isquery
-            new TranslationSeedItem("entity.gentablecolumn.isquery", "en-US", "查询_us", "查询（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isquery", "en-US", "查询_us", "查询（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isquery
-            new TranslationSeedItem("entity.gentablecolumn.isquery", "ja-JP", "查询_jp", "查询（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isquery", "ja-JP", "查询_jp", "查询（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isquery
-            new TranslationSeedItem("entity.gentablecolumn.isquery", "zh-CN", "查询", "查询（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isquery", "zh-CN", "查询", "查询（字典 sys_yes_no；0=否 1=是）"),
             // entity.gentablecolumn.isquery
-            new TranslationSeedItem("entity.gentablecolumn.isquery", "zh-HK", "查询_hk", "查询（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.gentablecolumn.isquery", "zh-HK", "查询_hk", "查询（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.querytype
             new TranslationSeedItem("entity.gentablecolumn.querytype", "en-US", "查询方式_us", "查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),

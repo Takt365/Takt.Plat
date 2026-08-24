@@ -23,7 +23,7 @@ public interface ITaktVisitLogTenantWriter
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="userId">用户 ID</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="visitAt">访问时刻；默认当前时间</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
@@ -31,7 +31,7 @@ public interface ITaktVisitLogTenantWriter
         string tenantCode,
         string companyCode,
         long userId,
-        string userName,
+        string UserName,
         DateTime? visitAt = null,
         CancellationToken cancellationToken = default);
 

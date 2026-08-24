@@ -36,8 +36,7 @@ export const SERIALOUTBOUND_LIST_FIELDS = [
 export const SERIALOUTBOUND_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
   outboundCode: 'required',
   shippingInvoiceCode: 'required',
   outboundDate: 'select',

@@ -123,17 +123,46 @@ export function updateNumberingStatus(dto: NumberingStatus): Promise<Numbering> 
 }
 
 // ========================================
+// 预览取号
+// ========================================
+
+/** 预览下一个业务编码（不占用流水号） */
+export interface NumberingPreview {
+  /** 规则编码 */
+  ruleCode: string;
+  /** 预览业务编码 */
+  businessCode: string;
+  /** 预览流水号 */
+  currentSequence: number;
+}
+
+/**
+ * 预览下一个业务编码
+ * @param {string} ruleCode 规则编码（TaktNumbering.RuleCode）
+ * @returns {Promise<NumberingPreview>} 预览结果
+ */
+export function previewNumberingNext(ruleCode: string): Promise<NumberingPreview> {
+  return request<NumberingPreview>({
+    url: `${NUMBERING_API_BASE}/preview-next`,
+    method: 'get',
+    params: { ruleCode },
+  });
+}
+
+// ========================================
 // 选项
 // ========================================
 
 /**
  * 获取编码规则选项列表
+ * @param documentType 单据类型（TaktMenu.MenuName）；有值时仅返回该类型规则
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getNumberingOptions(): Promise<TaktSelectOption[]> {
+export function getNumberingOptions(documentType?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${NUMBERING_API_BASE}/options`,
     method: 'get',
+    params: documentType?.trim() ? { documentType: documentType.trim() } : undefined,
   });
 }
 

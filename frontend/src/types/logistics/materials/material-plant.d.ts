@@ -170,12 +170,12 @@ export interface MaterialPlant extends CompanyDtoBase {
   storageLocation?: string;
 
   /**
-   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   * 检验（字典 sys_yes_no；0=否，1=是）
    */
   isInspection?: number;
 
   /**
-   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
+   * 批次标识（字典 sys_yes_no；0=否，1=是）
    */
   isBatch?: number;
 
@@ -185,7 +185,7 @@ export interface MaterialPlant extends CompanyDtoBase {
   isEndOfLife?: string;
 
   /**
-   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   materialStatus?: number;
 
@@ -368,12 +368,12 @@ export interface MaterialPlantExport {
   storageLocation: string;
 
   /**
-   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   * 检验（字典 sys_yes_no；0=否，1=是）
    */
   isInspection: number;
 
   /**
-   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
+   * 批次标识（字典 sys_yes_no；0=否，1=是）
    */
   isBatch: number;
 
@@ -383,7 +383,7 @@ export interface MaterialPlantExport {
   isEndOfLife: string;
 
   /**
-   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
 

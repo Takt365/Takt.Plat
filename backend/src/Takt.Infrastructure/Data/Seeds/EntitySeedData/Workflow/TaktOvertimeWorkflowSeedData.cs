@@ -76,8 +76,8 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
             database.CompanyCodes,
             companies,
             c => c.CompanyCode);
-        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "admin");
-        var guestUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == "guest");
+        var adminUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "admin");
+        var guestUser = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.UserName == "guest");
         if (adminUser == null || guestUser == null)
         {
             return (0, 0);
@@ -96,9 +96,9 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
             updateCount += fu;
             var processContent = BuildProcessContent(
                 adminUser.Id,
-                adminUser.Nickname ?? adminUser.Username,
+                adminUser.NickName ?? adminUser.UserName,
                 guestUser.Id,
-                guestUser.Nickname ?? guestUser.Username);
+                guestUser.NickName ?? guestUser.UserName);
             var (_, si, su) = await UpsertSchemeAsync(
                 schemeRepository,
                 tenantCode,

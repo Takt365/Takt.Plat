@@ -30,38 +30,38 @@
       >
         <template #bodyCell="{ column, record, text }">
           <template v-if="String(column.key).startsWith('period_')">
-            <template v-if="isCarriedPeriodPrice(record as PurchasePriceMonthlyTrend, String(column.key))">
+            <template v-if="isCarriedPeriodPrice(record as PurchasePriceTrend, String(column.key))">
               <a-tooltip
-                :title="carriedPeriodTooltip(record as PurchasePriceMonthlyTrend, String(column.key))"
+                :title="carriedPeriodTooltip(record as PurchasePriceTrend, String(column.key))"
               >
                 <span class="cursor-help border-b border-dotted border-text-secondary text-text-secondary">
-                  {{ formatPeriodPrice(record as PurchasePriceMonthlyTrend, String(column.key)) }}*
+                  {{ formatPeriodPrice(record as PurchasePriceTrend, String(column.key)) }}*
                 </span>
               </a-tooltip>
             </template>
             <template v-else>
-              {{ formatPeriodPrice(record as PurchasePriceMonthlyTrend, String(column.key)) }}
+              {{ formatPeriodPrice(record as PurchasePriceTrend, String(column.key)) }}
             </template>
           </template>
           <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
-              :value="(record as PurchasePriceMonthlyTrend).currencyCode"
+              :value="(record as PurchasePriceTrend).currencyCode"
               dict-type="accounting_currency_code"
             />
           </template>
           <template v-else-if="column.key === 'trend'">
-            <span :class="trendClass((record as PurchasePriceMonthlyTrend).trend || 'none')">
-              {{ trendLabel((record as PurchasePriceMonthlyTrend).trend || 'none') }}
+            <span :class="trendClass((record as PurchasePriceTrend).trend || 'none')">
+              {{ trendLabel((record as PurchasePriceTrend).trend || 'none') }}
             </span>
           </template>
           <template v-else-if="column.key === 'varianceAmount'">
-            <span :class="varianceClass((record as PurchasePriceMonthlyTrend).varianceAmount)">
-              {{ formatCost((record as PurchasePriceMonthlyTrend).varianceAmount) }}
+            <span :class="varianceClass((record as PurchasePriceTrend).varianceAmount)">
+              {{ formatCost((record as PurchasePriceTrend).varianceAmount) }}
             </span>
           </template>
           <template v-else-if="column.key === 'variancePercent'">
-            <span :class="varianceClass((record as PurchasePriceMonthlyTrend).varianceAmount)">
-              {{ formatPercent((record as PurchasePriceMonthlyTrend).variancePercent) }}
+            <span :class="varianceClass((record as PurchasePriceTrend).varianceAmount)">
+              {{ formatPercent((record as PurchasePriceTrend).variancePercent) }}
             </span>
           </template>
           <template v-else>
@@ -108,15 +108,10 @@ import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import {
-  exportPurchasePriceModelTrendAnalysis,
-  exportPurchasePriceMonthlyTrendAnalysis,
-  getPurchasePriceModelTrendAnalysis,
-  getPurchasePriceMonthlyTrendAnalysis,
+  exportPurchasePriceTrendAnalysis,
+  getPurchasePriceTrendAnalysis,
 } from '@/api/logistics/procurement/purchase-price-trend'
-import type {
-  PurchasePriceModelTrend,
-  PurchasePriceMonthlyTrend,
-} from '@/types/logistics/procurement/purchase-price-trend'
+import type { PurchasePriceTrend } from '@/types/logistics/procurement/purchase-price-trend'
 import { useTableRefresh } from '@/composables/use-table-refresh'
 import {
   ensureTaktPaginationConfigAsync,
@@ -129,8 +124,6 @@ import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 const props = defineProps<{
   /** 涨跌筛选 */
   trendFilter?: string
-  /** 当前 Tab */
-  activeTab: 'price' | 'model'
   /** 工厂代码 */
   plantCode?: string
   /** 年月区间 */
@@ -152,7 +145,7 @@ const localePrefix = 'logistics.procurement.purchase-price-trend.page'
 const { t } = useI18n()
 
 /** 行数据 */
-const rows = ref<Array<PurchasePriceMonthlyTrend | PurchasePriceModelTrend>>([])
+const rows = ref<PurchasePriceTrend[]>([])
 /** 期间列 */
 const periodOrder = ref<string[]>([])
 /** 行总数（筛选后） */
@@ -184,90 +177,11 @@ const summaryText = computed(() => {
   if (!props.plantCode?.trim()) {
     return t(`${localePrefix}.selectPlantRequired`)
   }
-  return t(
-    props.activeTab === 'model' ? `${localePrefix}.summaryModel` : `${localePrefix}.summary`,
-    { count: materialCount.value },
-  )
+  return t(`${localePrefix}.summary`, { count: materialCount.value })
 })
 
 /** 动态列 */
 const columns = computed<TableColumnsType>(() => {
-  // 机种价格推移：对齐 material-moving-trend model Tab（物料 + BOM 组 + 期间）；采购多供应商维度
-  if (props.activeTab === 'model') {
-    const cols: TableColumnsType = [
-      {
-        title: t('entity.purchaseprice.materialcode'),
-        dataIndex: 'materialCode',
-        key: 'materialCode',
-        width: 140,
-        ellipsis: true,
-        fixed: 'left',
-      },
-      {
-        title: t(`${localePrefix}.columns.modelGroup`),
-        dataIndex: 'modelGroup',
-        key: 'modelGroup',
-        width: 220,
-        ellipsis: true,
-      },
-      {
-        title: t(`${localePrefix}.columns.productGroup`),
-        dataIndex: 'productGroup',
-        key: 'productGroup',
-        width: 220,
-        ellipsis: true,
-      },
-      {
-        title: t('entity.purchaseprice.materialdescription'),
-        dataIndex: 'materialText',
-        key: 'materialText',
-        width: 180,
-        ellipsis: true,
-      },
-      {
-        title: t('entity.purchaseprice.suppliercode'),
-        dataIndex: 'supplierCode',
-        key: 'supplierCode',
-        width: 120,
-        ellipsis: true,
-      }]
-    for (const period of periodOrder.value) {
-      cols.push({
-        title: period,
-        dataIndex: ['periodUnitPrices', period],
-        key: `period_${period}`,
-        width: 110,
-        align: 'right',
-      })
-    }
-    cols.push(
-      {
-        title: t(`${localePrefix}.columns.trend`),
-        dataIndex: 'trend',
-        key: 'trend',
-        width: 80,
-        fixed: 'right',
-      },
-      {
-        title: t(`${localePrefix}.columns.varianceAmount`),
-        dataIndex: 'varianceAmount',
-        key: 'varianceAmount',
-        width: 110,
-        align: 'right',
-        fixed: 'right',
-      },
-      {
-        title: t(`${localePrefix}.columns.variancePercent`),
-        dataIndex: 'variancePercent',
-        key: 'variancePercent',
-        width: 90,
-        align: 'right',
-        fixed: 'right',
-      },
-    )
-    return cols
-  }
-  // 采购价格推移：工厂×物料×供应商×月份
   const cols: TableColumnsType = [
     {
       title: t('entity.purchaseprice.materialcode'),
@@ -351,10 +265,10 @@ const visibleColumnKeys = computed(() => columns.value.map((c) => String(c.key))
 
 /**
  * 行主键
- * @param {PurchasePriceMonthlyTrend} record 行
+ * @param {PurchasePriceTrend} record 行
  * @returns {string} key
  */
-function getRowKey(record: PurchasePriceMonthlyTrend): string {
+function getRowKey(record: PurchasePriceTrend): string {
   return `${record.plantCode}|${record.materialCode}|${record.supplierCode}`
 }
 
@@ -411,11 +325,11 @@ function varianceClass(amount?: number | null): string {
 
 /**
  * 格式化期间单价
- * @param {PurchasePriceMonthlyTrend} record 行
+ * @param {PurchasePriceTrend} record 行
  * @param {string} columnKey period_yyyy-MM
  * @returns {string} 文本
  */
-function formatPeriodPrice(record: PurchasePriceMonthlyTrend, columnKey: string): string {
+function formatPeriodPrice(record: PurchasePriceTrend, columnKey: string): string {
   const period = columnKey.replace(/^period_/, '')
   const value = record.periodUnitPrices?.[period]
   if (value == null || Number.isNaN(value)) return '—'
@@ -424,11 +338,11 @@ function formatPeriodPrice(record: PurchasePriceMonthlyTrend, columnKey: string)
 
 /**
  * 是否缺月回填价（来源 ≠ 展示月：回填为最近价格日期 yyyy-MM-dd）
- * @param {PurchasePriceMonthlyTrend} record 行
+ * @param {PurchasePriceTrend} record 行
  * @param {string} columnKey period_yyyy-MM
  * @returns {boolean} 是否回填
  */
-function isCarriedPeriodPrice(record: PurchasePriceMonthlyTrend, columnKey: string): boolean {
+function isCarriedPeriodPrice(record: PurchasePriceTrend, columnKey: string): boolean {
   const period = columnKey.replace(/^period_/, '')
   const price = record.periodUnitPrices?.[period]
   if (price == null || Number.isNaN(price)) return false
@@ -439,11 +353,11 @@ function isCarriedPeriodPrice(record: PurchasePriceMonthlyTrend, columnKey: stri
 
 /**
  * 回填悬停提示（最近价格日期）
- * @param {PurchasePriceMonthlyTrend} record 行
+ * @param {PurchasePriceTrend} record 行
  * @param {string} columnKey period_yyyy-MM
  * @returns {string} 提示
  */
-function carriedPeriodTooltip(record: PurchasePriceMonthlyTrend, columnKey: string): string {
+function carriedPeriodTooltip(record: PurchasePriceTrend, columnKey: string): string {
   const period = columnKey.replace(/^period_/, '')
   const source = record.periodPriceSourcePeriods?.[period] || '—'
   return t(`${localePrefix}.carriedFrom`, { period: source })
@@ -479,7 +393,7 @@ function buildQuery() {
   if (!plant) {
     return null
   }
-  if (props.activeTab === 'model' && !type) {
+  if (!type) {
     return null
   }
   return {
@@ -520,9 +434,7 @@ async function loadData() {
   }
   loading.value = true
   try {
-    const result = props.activeTab === 'model'
-      ? await getPurchasePriceModelTrendAnalysis(query)
-      : await getPurchasePriceMonthlyTrendAnalysis(query)
+    const result = await getPurchasePriceTrendAnalysis(query)
     rows.value = result.paged?.data ?? []
     total.value = result.paged?.total ?? 0
     periodOrder.value = result.periodOrder ?? []
@@ -573,9 +485,7 @@ async function handleExport() {
     return
   }
   try {
-    const exportFn = props.activeTab === 'model'
-      ? exportPurchasePriceModelTrendAnalysis
-      : exportPurchasePriceMonthlyTrendAnalysis
+    const exportFn = exportPurchasePriceTrendAnalysis
     const exportMeta = await exportFn({
       ...query,
       pageIndex: 1,
@@ -585,9 +495,7 @@ async function handleExport() {
     const fileName = resolveExportDownloadFileName({
       contentDisposition: (exportMeta as { contentDisposition?: string | null }).contentDisposition ?? null,
       contentType: (exportMeta as { contentType?: string | null }).contentType ?? null,
-      fallbackBase: props.activeTab === 'model'
-        ? `purchase-model-trend_${query.plantCode}`
-        : `purchase-price-trend_${query.plantCode}`,
+      fallbackBase: `purchase-price-trend_${query.plantCode}`,
     })
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -628,7 +536,7 @@ function stopTableScrollObserve(): void {
 }
 
 watch(
-  () => [props.trendFilter, props.activeTab] as const,
+  () => props.trendFilter,
   () => {
     if (!props.plantCode?.trim()) {
       return

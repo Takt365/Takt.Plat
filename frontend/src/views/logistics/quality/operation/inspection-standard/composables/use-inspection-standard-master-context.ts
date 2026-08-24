@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { InspectionStandard } from '@/types/logistics/quality/operation/inspection-standard'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type InspectionStandardRowRecord = InspectionStandard | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface InspectionStandardMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<InspectionStandard | null>
+  selectedMasterRow: Ref<InspectionStandardRowRecord | null>
 }
 
 const inspectionStandardMasterContextKey: InjectionKey<InspectionStandardMasterContext> = Symbol('inspection-standardMasterContext')
@@ -22,7 +25,7 @@ const inspectionStandardMasterContextKey: InjectionKey<InspectionStandardMasterC
  * @returns {InspectionStandardMasterContext} 主表上下文
  */
 export function provideInspectionStandardMasterContext(): InspectionStandardMasterContext {
-  const selectedMasterRow = ref<InspectionStandard | null>(null)
+  const selectedMasterRow = ref<InspectionStandardRowRecord | null>(null)
   const ctx: InspectionStandardMasterContext = { selectedMasterRow }
   provide(inspectionStandardMasterContextKey, ctx)
   return ctx

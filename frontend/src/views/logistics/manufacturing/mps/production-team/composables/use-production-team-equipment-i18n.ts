@@ -20,28 +20,23 @@ export const PRODUCTIONTEAMEQUIPMENT_SELF_I18N_KEY = buildEntitySelfI18nKey(PROD
 
 /** 列表业务列（不含主键） */
 export const PRODUCTIONTEAMEQUIPMENT_LIST_FIELDS = [
-  'plantCode',
   'prodTeamId',
-  'prodTeamName',
   'teamCode',
   'lineNumber',
   'prodEquipId',
-  'prodEquipName',
   'prodEquipCode',
   'equipQuantity',
   'teamEquipStatus',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PRODUCTIONTEAMEQUIPMENT_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'plantCode',
   'prodTeamId',
-  'prodTeamName',
   'teamCode',
   'lineNumber',
   'prodEquipId',
-  'prodEquipName',
   'prodEquipCode',
   'equipQuantity',
   'teamEquipStatus',
@@ -58,17 +53,7 @@ export const PRODUCTIONTEAMEQUIPMENT_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PRODUCTIONTEAMEQUIPMENT_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  teamCode: 'required',
-  lineNumber: 'select',
-  prodEquipId: 'required',
-  prodEquipCode: 'required',
-  equipQuantity: 'select',
-  teamEquipStatus: 'select',
-  isObsolete: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -76,28 +61,13 @@ export type ProductionTeamEquipmentField = keyof typeof PRODUCTIONTEAMEQUIPMENT_
 
 /** 高级查询可 trim 的字符串字段 */
 export const PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'teamCode',
-  'prodEquipId',
-  'prodEquipCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ProductionTeamEquipmentQuery)[]
 
-export type ProductionTeamEquipmentQueryField =
-  | (typeof PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'equipQuantity' | 'teamEquipStatus' | 'isObsolete'
+export type ProductionTeamEquipmentQueryField = (typeof PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PRODUCTIONTEAMEQUIPMENT_QUERY_FIELDS: readonly ProductionTeamEquipmentQueryField[] = [
-  ...PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'equipQuantity',
-  'teamEquipStatus',
-  'isObsolete',
-]
+export const PRODUCTIONTEAMEQUIPMENT_QUERY_FIELDS: readonly ProductionTeamEquipmentQueryField[] = [...PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS]
 
 /**
  * ProductionTeamEquipment字段 i18n：index / production-team-equipment-form 统一入口

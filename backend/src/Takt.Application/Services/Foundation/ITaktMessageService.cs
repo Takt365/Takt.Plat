@@ -145,9 +145,9 @@ public interface ITaktMessageService
     /// <summary>
     /// 获取指定用户未读消息数量（SignalR Hub 调用）
     /// </summary>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <returns>未读数量</returns>
-    Task<int> GetUnreadMessageCountAsync(string userName);
+    Task<int> GetUnreadMessageCountAsync(string UserName);
 
     /// <summary>
     /// 导出在线消息
@@ -167,9 +167,9 @@ public interface ITaktMessageService
     /// <summary>
     /// 获取指定用户在线消息统计（SignalR 实时推送调用）
     /// </summary>
-    /// <param name="userName">用户名（接收者）</param>
+    /// <param name="UserName">用户名（接收者）</param>
     /// <param name="userId">用户 ID</param>
     /// <returns>统计 DTO</returns>
-    Task<TaktMessageStatisticsDto> GetMessageStatisticsByUserNameAsync(string userName, long? userId = null);
+    Task<TaktMessageStatisticsDto> GetMessageStatisticsByUserNameAsync(string UserName, long? userId = null);
 
 }

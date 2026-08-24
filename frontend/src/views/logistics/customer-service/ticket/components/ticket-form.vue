@@ -37,8 +37,7 @@
                   :placeholder="pi.ph('plantCode')"
                   show-count
                   :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -216,7 +215,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.priority"
-                  dict-type="sys_priority_level_category"
+                  dict-type="sys_priority_level"
                   :placeholder="pi.ph('priority')"
                 />
               </a-form-item>

@@ -37,7 +37,7 @@ public class TaktLogContext
     /// <summary>
     /// 用户名
     /// </summary>
-    public string? Username { get; set; }
+    public string? UserName { get; set; }
 
     /// <summary>
     /// 租户编码

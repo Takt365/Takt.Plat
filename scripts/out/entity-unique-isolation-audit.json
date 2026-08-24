@@ -1,0 +1,349 @@
+{
+  "byBase": {
+    "TaktCompanyEntityBase": {
+      "total": 265,
+      "withUnique": 213,
+      "violate": 0,
+      "ok": 213,
+      "noUnique": 52
+    },
+    "TaktTenantEntityBase": {
+      "total": 1,
+      "withUnique": 1,
+      "violate": 0,
+      "ok": 1,
+      "noUnique": 0
+    },
+    "TaktApprovalEntityBase": {
+      "total": 31,
+      "withUnique": 23,
+      "violate": 0,
+      "ok": 23,
+      "noUnique": 8
+    },
+    "TaktTenantCoreEntityBase": {
+      "total": 20,
+      "withUnique": 20,
+      "violate": 0,
+      "ok": 20,
+      "noUnique": 0
+    },
+    "TaktTenantCultureEntityBase": {
+      "total": 4,
+      "withUnique": 4,
+      "violate": 0,
+      "ok": 4,
+      "noUnique": 0
+    }
+  },
+  "violations": [],
+  "noUnique": [
+    {
+      "entityName": "TaktDataClone",
+      "base": "TaktCompanyEntityBase",
+      "file": "Code/Database/TaktDataClone.cs"
+    },
+    {
+      "entityName": "TaktTableClone",
+      "base": "TaktCompanyEntityBase",
+      "file": "Code/Database/TaktTableClone.cs"
+    },
+    {
+      "entityName": "TaktMessage",
+      "base": "TaktCompanyEntityBase",
+      "file": "Foundation/TaktMessage.cs"
+    },
+    {
+      "entityName": "TaktLeave",
+      "base": "TaktApprovalEntityBase",
+      "file": "HumanResource/Attendance/TaktLeave.cs"
+    },
+    {
+      "entityName": "TaktShiftSchedule",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Attendance/TaktShiftSchedule.cs"
+    },
+    {
+      "entityName": "TaktEmpBenefitPlan",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Benefits/TaktEmpBenefitPlan.cs"
+    },
+    {
+      "entityName": "TaktSocialInsurance",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Benefits/TaktSocialInsurance.cs"
+    },
+    {
+      "entityName": "TaktEmpSalary",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Compensation/TaktEmpSalary.cs"
+    },
+    {
+      "entityName": "TaktPayslip",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Compensation/TaktPayslip.cs"
+    },
+    {
+      "entityName": "TaktPerfAnalysis",
+      "base": "TaktApprovalEntityBase",
+      "file": "HumanResource/Performance/TaktPerfAnalysis.cs"
+    },
+    {
+      "entityName": "TaktPerfAssessment",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Performance/TaktPerfAssessment.cs"
+    },
+    {
+      "entityName": "TaktPerfObjective",
+      "base": "TaktApprovalEntityBase",
+      "file": "HumanResource/Performance/TaktPerfObjective.cs"
+    },
+    {
+      "entityName": "TaktEmployeeAttachment",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeAttachment.cs"
+    },
+    {
+      "entityName": "TaktEmployeeEducation",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeEducation.cs"
+    },
+    {
+      "entityName": "TaktEmployeeExperience",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeExperience.cs"
+    },
+    {
+      "entityName": "TaktEmployeeFamily",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeFamily.cs"
+    },
+    {
+      "entityName": "TaktEmployeeJoined",
+      "base": "TaktApprovalEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeJoined.cs"
+    },
+    {
+      "entityName": "TaktEmployeeOnboarding",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeOnboarding.cs"
+    },
+    {
+      "entityName": "TaktEmployeeReassignment",
+      "base": "TaktApprovalEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeReassignment.cs"
+    },
+    {
+      "entityName": "TaktEmployeeResignation",
+      "base": "TaktApprovalEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeResignation.cs"
+    },
+    {
+      "entityName": "TaktEmployeeSkill",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Personnel/TaktEmployeeSkill.cs"
+    },
+    {
+      "entityName": "TaktTalentOffer",
+      "base": "TaktApprovalEntityBase",
+      "file": "HumanResource/Talent/TaktTalentOffer.cs"
+    },
+    {
+      "entityName": "TaktTrainingAttendee",
+      "base": "TaktCompanyEntityBase",
+      "file": "HumanResource/Training/TaktTrainingAttendee.cs"
+    },
+    {
+      "entityName": "TaktRoutingItemArgument",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Bom/TaktRoutingItemArgument.cs"
+    },
+    {
+      "entityName": "TaktSourceEcDetail",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/EngineeringChange/TaktSourceEcDetail.cs"
+    },
+    {
+      "entityName": "TaktSopAck",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopAck.cs"
+    },
+    {
+      "entityName": "TaktSopArgument",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopArgument.cs"
+    },
+    {
+      "entityName": "TaktSopCall",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopCall.cs"
+    },
+    {
+      "entityName": "TaktSopEsdCheck",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopEsdCheck.cs"
+    },
+    {
+      "entityName": "TaktSopExec",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopExec.cs"
+    },
+    {
+      "entityName": "TaktSopExecScan",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopExecScan.cs"
+    },
+    {
+      "entityName": "TaktSopExecStep",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopExecStep.cs"
+    },
+    {
+      "entityName": "TaktSopStep",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopStep.cs"
+    },
+    {
+      "entityName": "TaktSopStepCheckItem",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopStepCheckItem.cs"
+    },
+    {
+      "entityName": "TaktSopStepMedia",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopStepMedia.cs"
+    },
+    {
+      "entityName": "TaktConferenceAgenda",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/ConferenceCenter/TaktConferenceAgenda.cs"
+    },
+    {
+      "entityName": "TaktKnowledge",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/HelpDesk/TaktKnowledge.cs"
+    },
+    {
+      "entityName": "TaktSelfService",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/HelpDesk/TaktSelfService.cs"
+    },
+    {
+      "entityName": "TaktTicketCategoryAssign",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/HelpDesk/TaktTicketCategoryAssign.cs"
+    },
+    {
+      "entityName": "TaktTicketReply",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/HelpDesk/TaktTicketReply.cs"
+    },
+    {
+      "entityName": "TaktNewsAttachment",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/NewsCenter/TaktNewsAttachment.cs"
+    },
+    {
+      "entityName": "TaktNewsComment",
+      "base": "TaktApprovalEntityBase",
+      "file": "Routine/NewsCenter/TaktNewsComment.cs"
+    },
+    {
+      "entityName": "TaktNewsShare",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/NewsCenter/TaktNewsShare.cs"
+    },
+    {
+      "entityName": "TaktVisitorCompanion",
+      "base": "TaktCompanyEntityBase",
+      "file": "Routine/VisitorCenter/TaktVisitorCompanion.cs"
+    },
+    {
+      "entityName": "TaktArchiveLog",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Logging/TaktArchiveLog.cs"
+    },
+    {
+      "entityName": "TaktBackupLog",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Logging/TaktBackupLog.cs"
+    },
+    {
+      "entityName": "TaktDeltaLog",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Logging/TaktDeltaLog.cs"
+    },
+    {
+      "entityName": "TaktLoginLog",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Logging/TaktLoginLog.cs"
+    },
+    {
+      "entityName": "TaktOperLog",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Logging/TaktOperLog.cs"
+    },
+    {
+      "entityName": "TaktQuartzLog",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Logging/TaktQuartzLog.cs"
+    },
+    {
+      "entityName": "TaktTrackingLog",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Logging/TaktTrackingLog.cs"
+    },
+    {
+      "entityName": "TaktConfigurableField",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Report/TaktConfigurableField.cs"
+    },
+    {
+      "entityName": "TaktConfigurableGroupBy",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Report/TaktConfigurableGroupBy.cs"
+    },
+    {
+      "entityName": "TaktConfigurableJoin",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Report/TaktConfigurableJoin.cs"
+    },
+    {
+      "entityName": "TaktConfigurableOrderBy",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Report/TaktConfigurableOrderBy.cs"
+    },
+    {
+      "entityName": "TaktConfigurableSelection",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Report/TaktConfigurableSelection.cs"
+    },
+    {
+      "entityName": "TaktConfigurableSource",
+      "base": "TaktCompanyEntityBase",
+      "file": "Statistics/Report/TaktConfigurableSource.cs"
+    },
+    {
+      "entityName": "TaktFlowAddSign",
+      "base": "TaktCompanyEntityBase",
+      "file": "Workflow/TaktFlowAddSign.cs"
+    },
+    {
+      "entityName": "TaktFlowTask",
+      "base": "TaktCompanyEntityBase",
+      "file": "Workflow/TaktFlowTask.cs"
+    },
+    {
+      "entityName": "TaktFlowTransition",
+      "base": "TaktCompanyEntityBase",
+      "file": "Workflow/TaktFlowTransition.cs"
+    }
+  ],
+  "cultureRedundant": [
+    {
+      "entityName": "TaktSopContent",
+      "base": "TaktCompanyEntityBase",
+      "file": "Logistics/Manufacturing/Sop/TaktSopContent.cs"
+    }
+  ]
+}

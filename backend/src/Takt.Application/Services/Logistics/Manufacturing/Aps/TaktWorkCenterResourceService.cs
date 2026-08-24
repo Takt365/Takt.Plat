@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Aps
 // 文件名称：TaktWorkCenterResourceService.cs
-// 创建时间：2026-07-24
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工作中心资源应用服务实现
 // 
@@ -51,12 +51,20 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
     }
 
     /// <summary>
-    /// 获取工作中心资源列表（分页）
+    /// 获取工作中心资源列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktWorkCenterResourceDto>> GetWorkCenterResourceListAsync(TaktWorkCenterResourceQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktWorkCenterResourceDto>.Create(
+                new List<TaktWorkCenterResourceDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _workCenterResourceRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -268,7 +276,15 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportWorkCenterResourceAsync(TaktWorkCenterResourceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktWorkCenterResourceQueryDto());
+        var queryDto = query ?? new TaktWorkCenterResourceQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktWorkCenterResourceExportDto>(),
+                sheetName ?? "工作中心资源数据",
+                fileName ?? "工作中心资源导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _workCenterResourceRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -297,96 +313,174 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
     {
         var exp = Expressionable.Create<TaktWorkCenterResource>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.WorkCenterId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WorkCenterCode != null && x.WorkCenterCode.Contains(keywords))
                 || (x.ResourceCode != null && x.ResourceCode.Contains(keywords))
                 || (x.ResourceName != null && x.ResourceName.Contains(keywords))
-                || SqlFunc.ToString(x.ResourceType).Contains(keywords)
-                || SqlFunc.ToString(x.ParallelCapacity).Contains(keywords)
-                || SqlFunc.ToString(x.EfficiencyRate).Contains(keywords)
-                || SqlFunc.ToString(x.ResourceStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.WorkCenterId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.WorkCenterId == queryDto.WorkCenterId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkCenterCode))
-        {
-            exp = exp.And(x => x.WorkCenterCode != null && x.WorkCenterCode.Contains(queryDto.WorkCenterCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ResourceCode))
-        {
-            exp = exp.And(x => x.ResourceCode != null && x.ResourceCode.Contains(queryDto.ResourceCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ResourceName))
-        {
-            exp = exp.And(x => x.ResourceName != null && x.ResourceName.Contains(queryDto.ResourceName));
-        }
-
-        if (queryDto?.ResourceType.HasValue == true)
-        {
-            exp = exp.And(x => x.ResourceType == queryDto.ResourceType);
-        }
-
-        if (queryDto?.ParallelCapacity.HasValue == true)
-        {
-            exp = exp.And(x => x.ParallelCapacity == queryDto.ParallelCapacity);
-        }
-
-        if (queryDto?.EfficiencyRate.HasValue == true)
-        {
-            exp = exp.And(x => x.EfficiencyRate == queryDto.EfficiencyRate);
-        }
-
-        if (queryDto?.ResourceStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.ResourceStatus == queryDto.ResourceStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.WorkCenterId.HasValue == true)
+        {
+            var workCenterId = queryDto.WorkCenterId.Value;
+            exp = exp.And(x => x.WorkCenterId == workCenterId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkCenterCode))
+        {
+            var workCenterCode = queryDto.WorkCenterCode;
+            exp = exp.And(x => x.WorkCenterCode != null && x.WorkCenterCode.Contains(workCenterCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResourceCode))
+        {
+            var resourceCode = queryDto.ResourceCode;
+            exp = exp.And(x => x.ResourceCode != null && x.ResourceCode.Contains(resourceCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResourceName))
+        {
+            var resourceName = queryDto.ResourceName;
+            exp = exp.And(x => x.ResourceName != null && x.ResourceName.Contains(resourceName));
+        }
+
+        if (queryDto?.ResourceType.HasValue == true)
+        {
+            var resourceType = queryDto.ResourceType.Value;
+            exp = exp.And(x => x.ResourceType == resourceType);
+        }
+
+        if (queryDto?.ParallelCapacity.HasValue == true)
+        {
+            var parallelCapacity = queryDto.ParallelCapacity.Value;
+            exp = exp.And(x => x.ParallelCapacity == parallelCapacity);
+        }
+
+        if (queryDto?.EfficiencyRate.HasValue == true)
+        {
+            var efficiencyRate = queryDto.EfficiencyRate.Value;
+            exp = exp.And(x => x.EfficiencyRate == efficiencyRate);
+        }
+
+        if (queryDto?.ResourceStatus.HasValue == true)
+        {
+            var resourceStatus = queryDto.ResourceStatus.Value;
+            exp = exp.And(x => x.ResourceStatus == resourceStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktWorkCenterResourceQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.WorkCenterId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkCenterCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ResourceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ResourceName))
+        {
+            return true;
+        }
+        if (queryDto.ResourceType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ParallelCapacity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EfficiencyRate.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ResourceStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

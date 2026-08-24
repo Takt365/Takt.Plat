@@ -22,13 +22,13 @@ public interface ITaktLoginTicketService
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>票据字符串</returns>
     Task<string> CreateLoginTicketAsync(
         long userId,
         string tenantCode,
-        string username,
+        string UserName,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -36,12 +36,12 @@ public interface ITaktLoginTicketService
     /// </summary>
     /// <param name="ticket">票据</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>用户 ID；无效或过期返回 null</returns>
     Task<long?> ConsumeLoginTicketAsync(
         string ticket,
         string tenantCode,
-        string username,
+        string UserName,
         CancellationToken cancellationToken = default);
 }

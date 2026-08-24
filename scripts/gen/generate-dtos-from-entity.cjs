@@ -24,6 +24,7 @@ const {
   entityBaseHasRelatedPlant,
   entityBaseHasCultureCode,
   ENTITY_CLASS_HEADER_REGEX,
+  isTaktNumberingAutoFormFieldSummary,
 } = require('./generate-script-common.cjs');
 const {
   isRbacJunctionEntity,
@@ -35,6 +36,7 @@ const { isTransposableEntity, appendTransposedDtoBlock } = require('./generate-t
 const {
   resolveRbacCreateFieldFromNav,
   appendInverseRbacCreateFields,
+  RBAC_JUNCTION_NAMESPACE,
 } = require('./rbac-parent-config.cjs');
 const { syncAllRbacParentEntityNavigations } = require('./generate-entity-rbac-navigations.cjs');
 const {
@@ -93,6 +95,28 @@ const CREATE_EXCLUDE_NAME_PATTERNS = [
 
 /** CreateDto / UpdateDto 排除：排序由服务端自动生成或走 TaktXxxSortDto 专用接口 */
 const CREATE_EXCLUDE_PROPERTY_NAMES = new Set(['SortOrder']);
+
+/**
+ * 子表冗余码/名：存在对应 *Id 外键时由服务 Stamp 从主表回填，CreateDto 不加 [Required]
+ * 全库主子表通用（不限人事）：XxxCode/XxxName ← XxxId；OriginalYyyCode ← OriginalYyyId
+ * @param {string} propName
+ * @param {Set<string>} propNames CreateDto 业务字段名集合
+ * @returns {boolean}
+ */
+function isMasterStampFilledRedundantString(propName, propNames) {
+  if (!propName || !propNames || propNames.size === 0) {
+    return false;
+  }
+  if (propName.endsWith('Code')) {
+    const idName = `${propName.slice(0, -4)}Id`;
+    return propNames.has(idName);
+  }
+  if (propName.endsWith('Name')) {
+    const idName = `${propName.slice(0, -4)}Id`;
+    return propNames.has(idName);
+  }
+  return false;
+}
 
 /**
  * 聚合实体 DTO 类名（统一为 Takt{Entity}{Suffix}Dto，禁止 TaktCreate{Entity}Dto / TaktUpdate{Entity}Dto）
@@ -817,6 +841,10 @@ function appendMasterDetailCreateProperties(lines, navigationProperties, entityS
   }
   oneToMany.forEach((nav) => {
     if (isRbacJunctionEntity(nav.relatedEntityShort)) {
+      // Update 继承 Create 的 *Ids，勿重复声明（否则 CS0108）
+      if (useChildUpdateDto || useNewKeyword) {
+        return;
+      }
       const field = resolveRbacCreateFieldFromNav(entityShort, nav);
       if (!field) {
         return;
@@ -856,19 +884,28 @@ function collectNavigationDtoUsings(entity, navigationProperties, entityRegistry
     if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isStandaloneChildVueEntity(nav.relatedEntityShort)) {
       return;
     }
-    if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isRbacJunctionEntity(nav.relatedEntityShort)) {
-      return;
-    }
     const related = entityRegistry.get(nav.relatedEntityType);
     if (related && related.dtoNamespace !== entity.dtoNamespace) {
       usings.add(related.dtoNamespace);
+      return;
+    }
+    // RBAC 关联实体不进 registry，按八表命名空间映射到 Application.Dtos
+    if (isRbacJunctionEntity(nav.relatedEntityShort)) {
+      const domainNs = RBAC_JUNCTION_NAMESPACE[nav.relatedEntityShort];
+      if (!domainNs) {
+        return;
+      }
+      const dtoNs = domainNs.replace(/^Takt\.Domain\.Entities/, 'Takt.Application.Dtos');
+      if (dtoNs !== entity.dtoNamespace) {
+        usings.add(dtoNs);
+      }
     }
   });
   return [...usings].sort();
 }
 
 /**
- * 在响应 DTO 中写入导航属性（主子表：主表 List&lt;子Dto&gt;，子表 子Dto? 主表）
+ * 在响应 DTO 中写入导航属性（主子表：主表 List&lt;子Dto&gt;，子表 子Dto? 主表；RBAC 关联表亦写入 List 供 GetById 填充）
  * @param {string[]} lines
  * @param {object[]} navigationProperties
  */
@@ -881,12 +918,11 @@ function appendNavigationDtoProperties(lines, navigationProperties) {
     if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isStandaloneChildVueEntity(nav.relatedEntityShort)) {
       return;
     }
-    if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isRbacJunctionEntity(nav.relatedEntityShort)) {
-      return;
-    }
     const dtoTypeName = `Takt${nav.relatedEntityShort}Dto`;
     const csharpType = nav.isCollection ? `List<${dtoTypeName}>?` : `${dtoTypeName}?`;
-    const roleLabel = nav.isCollection ? '子表' : '主表';
+    const roleLabel = isRbacJunctionEntity(nav.relatedEntityShort)
+      ? 'RBAC'
+      : (nav.isCollection ? '子表' : '主表');
 
     lines.push('    /// <summary>');
     lines.push(`    /// ${nav.summary || nav.name}`);
@@ -1151,9 +1187,9 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     lines.push(`public class Takt${entityShort}TreeDto : Takt${entityShort}Dto`);
     lines.push('{');
     lines.push('    /// <summary>');
-    lines.push('    /// 子节点');
+    lines.push('    /// 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）');
     lines.push('    /// </summary>');
-    lines.push(`    public List<Takt${entityShort}TreeDto> Children { get; set; } = new();`);
+    lines.push(`    public List<Takt${entityShort}TreeDto>? Children { get; set; }`);
     lines.push('}');
     lines.push('');
   }
@@ -1219,10 +1255,24 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
   lines.push(`public class ${dtoNames.create}`);
   lines.push('{');
   appendTenantCompanyCreateImportProperties(lines, entity.entityBase, { entityShort });
+  const createPropNames = new Set(createProps.map((p) => p.name));
   createProps.forEach((prop) => {
-    const required = prop.bareType === 'string' && !prop.isNullable && !prop.name.includes('Hash');
+    // 主表外键冗余码/名由服务 Stamp* 回填：勿加 [Required]，否则 [ApiController] 在 FluentValidation 前对空串直接 400
+    const stampFilledRedundant = isMasterStampFilledRedundantString(prop.name, createPropNames);
+    const required =
+      prop.bareType === 'string'
+      && !prop.isNullable
+      && !prop.name.includes('Hash')
+      && !stampFilledRedundant;
     emitProperty(prop, { required }).forEach((l) => lines.push(`    ${l.trimStart()}`));
     lines.push('');
+    if (isTaktNumberingAutoFormFieldSummary(prop.summary)) {
+      lines.push('    /// <summary>');
+      lines.push('    /// 编码规则编码（前端表单从 TaktNumberings/options 选择；对应 TaktNumbering.RuleCode；不落库）');
+      lines.push('    /// </summary>');
+      lines.push('    public string? NumberingRuleCode { get; set; }');
+      lines.push('');
+    }
   });
   appendMasterDetailCreateProperties(lines, navigationProperties, entityShort, {
     cascadeChildUseUpdateDto: false,
@@ -1292,6 +1342,30 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     lines.push('');
   }
 
+  const hasIsBuiltIn = !relationOnly && entity.properties.some((p) => p.name === 'IsBuiltIn');
+  if (hasIsBuiltIn) {
+    lines.push('// ========================================');
+    lines.push(`// ${entityShort} 内置 DTO`);
+    lines.push('// ========================================');
+    lines.push('');
+    lines.push('/// <summary>');
+    lines.push(`/// ${entityShort} 内置更新 DTO`);
+    lines.push('/// </summary>');
+    lines.push(`public class Takt${entityShort}BuiltInDto`);
+    lines.push('{');
+    appendEntityIdProperty(lines, idProp, {
+      required: true,
+      summary: `${entityShort}ID`,
+    });
+    lines.push('    /// <summary>');
+    lines.push('    /// 内置（字典 sys_yes_no；1=是，0=否）');
+    lines.push('    /// </summary>');
+    lines.push('    [Required(ErrorMessage = "内置不能为空")]');
+    lines.push('    public int IsBuiltIn { get; set; } = 0;');
+    lines.push('}');
+    lines.push('');
+  }
+
   const hasIsObsolete = !relationOnly && entity.properties.some((p) => p.name === 'IsObsolete');
   if (hasIsObsolete) {
     lines.push('// ========================================');
@@ -1308,7 +1382,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
       summary: `${entityShort}ID`,
     });
     lines.push('    /// <summary>');
-    lines.push('    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）');
+    lines.push('    /// 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）');
     lines.push('    /// </summary>');
     lines.push('    public int IsObsolete { get; set; }');
     lines.push('}');
@@ -1431,6 +1505,47 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
   return lines.join('\n');
 }
 
+/** *Dtos.cs 内手工商附加类型保留标记（覆盖生成时原样拼回文件末尾） */
+const HAND_MAINTAINED_BEGIN = '// <takt:hand-maintained-begin>';
+const HAND_MAINTAINED_END = '// <takt:hand-maintained-end>';
+
+/**
+ * 从已有 *Dtos.cs 提取手工商附加块（含 begin/end 标记行）
+ * @param {string} existingContent
+ * @returns {string}
+ */
+function extractHandMaintainedDtoBlock(existingContent) {
+  if (!existingContent) {
+    return '';
+  }
+  const start = existingContent.indexOf(HAND_MAINTAINED_BEGIN);
+  const end = existingContent.indexOf(HAND_MAINTAINED_END);
+  if (start < 0 || end < 0 || end <= start) {
+    return '';
+  }
+  return existingContent.slice(start, end + HAND_MAINTAINED_END.length).trimEnd();
+}
+
+/**
+ * 生成内容末尾拼回手工商块；推荐非 CRUD DTO 另建 TaktXxxExtraDtos.cs，勿写进本文件
+ * @param {string} content
+ * @param {string} outputFile
+ * @returns {{ content: string, preserved: boolean }}
+ */
+function mergeHandMaintainedDtoBlock(content, outputFile) {
+  if (!fs.existsSync(outputFile)) {
+    return { content, preserved: false };
+  }
+  const block = extractHandMaintainedDtoBlock(fs.readFileSync(outputFile, 'utf8'));
+  if (!block) {
+    return { content, preserved: false };
+  }
+  return {
+    content: `${content.trimEnd()}\n\n${block}\n`,
+    preserved: true,
+  };
+}
+
 /**
  * 生成单个实体的 Dtos 文件
  * @param {object} entity
@@ -1450,11 +1565,16 @@ function generateEntityDtos(entity, options, entityRegistry) {
 
   const relation = isRelationEntity(entity);
   const tree = !relation && isTreeEntity(entity);
-  const content = relation
+  let content = relation
     ? generateAggregateDtoFileContent(entity, entityRegistry, { relationOnly: true })
     : generateAggregateDtoFileContent(entity, entityRegistry);
+  const merged = mergeHandMaintainedDtoBlock(content, outputFile);
+  content = merged.content;
 
   const writeResult = writeGeneratedFile(outputFile, content);
+  if (merged.preserved) {
+    console.log(`  ℹ️  已保留手工商附加 DTO 块（${HAND_MAINTAINED_BEGIN}）`);
+  }
   const extras = [];
   if (!relation) {
     if (tree) {
@@ -1473,6 +1593,9 @@ function generateEntityDtos(entity, options, entityRegistry) {
     }
     if (findSortOrderProperty(entity)) {
       extras.push('SortDto');
+    }
+    if (entity.properties.some((p) => p.name === 'IsBuiltIn')) {
+      extras.push('BuiltInDto');
     }
   }
   const actionLabel = writeResult.created ? '已创建' : '已更新';
@@ -1550,6 +1673,8 @@ function printUsage() {
 说明:
   - 已禁用 --all；每次必须指定一个实体
   - 输出策略：目标 *Dtos.cs 不存在则创建，已存在则整文件覆盖更新（writeGeneratedFile，无需 --force）
+  - 附加非 CRUD DTO：优先独立文件 TaktXxxExtraDtos.cs（本脚本不碰）；若须同文件则用
+    // <takt:hand-maintained-begin> … // <takt:hand-maintained-end> 包裹，覆盖时会拼回末尾
   - 排除：User（密码等）、Online、Message；RBAC 八表（UserRole…EmployeePost）；Holiday（含 TaktHolidayThemeDto 手工 DTO）
   - 对应 TaktUserDtos.cs、TaktOnlineDtos.cs、TaktMessageDtos.cs、TaktHolidayDtos.cs 及八张关联 *Dtos.cs
   - 主子表：响应 TaktXxxDto 含 List<子Dto>；Create 级联 List<子CreateDto>?；Update 级联 new List<子UpdateDto>?（含主键，新增行主键为 0）；导入/模板仍为 List<子CreateDto>?

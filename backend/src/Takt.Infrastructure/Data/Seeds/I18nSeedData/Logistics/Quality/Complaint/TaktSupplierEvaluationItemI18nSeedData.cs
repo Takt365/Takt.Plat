@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -235,13 +235,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "zh-HK", "整改状态_hk", "整改状态（字典 logistics_quality_rectification_status）"),
 
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.supplierevaluationitem.evaluation
             new TranslationSeedItem("entity.supplierevaluationitem.evaluation", "en-US", "评价表主表_us", "评价表主表"),

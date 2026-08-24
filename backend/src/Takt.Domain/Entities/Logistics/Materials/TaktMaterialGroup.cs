@@ -38,7 +38,7 @@ public class TaktMaterialGroup : TaktTenantCoreEntityBase
     public string MaterialGroupName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（sort；越小越靠前）
+    /// 排序号（回填）（sort；越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;

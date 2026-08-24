@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：setting.ts
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -111,19 +111,6 @@ export function deleteSettingBatch(ids: string[]): Promise<void> {
 }
 
 /**
- * 更新系统设置排序
- * @param {SettingSort} dto 排序DTO
- * @returns {Promise<Setting>} 系统设置DTO
- */
-export function updateSettingSort(dto: SettingSort): Promise<Setting> {
-  return request<Setting>({
-    url: `${SETTING_API_BASE}/sort`,
-    method: 'put',
-    data: dto,
-  });
-}
-
-/**
  * 更新系统设置状态
  * @param {SettingStatus} dto 状态 DTO
  * @returns {Promise<Setting>} 系统设置DTO
@@ -131,6 +118,19 @@ export function updateSettingSort(dto: SettingSort): Promise<Setting> {
 export function updateSettingStatus(dto: SettingStatus): Promise<Setting> {
   return request<Setting>({
     url: `${SETTING_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新系统设置排序
+ * @param {SettingSort} dto 排序DTO
+ * @returns {Promise<Setting>} 系统设置DTO
+ */
+export function updateSettingSort(dto: SettingSort): Promise<Setting> {
+  return request<Setting>({
+    url: `${SETTING_API_BASE}/sort`,
     method: 'put',
     data: dto,
   });

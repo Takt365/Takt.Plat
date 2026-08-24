@@ -64,7 +64,7 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PresenterId { get; set; }
     /// <summary>
-    /// 主讲人姓名（议程项）
+    /// 主讲人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "presenter_name", ColumnDescription = "主讲人姓名", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? PresenterName { get; set; }
@@ -85,7 +85,7 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RecorderId { get; set; }
     /// <summary>
-    /// 记录人姓名（会议纪要）
+    /// 记录人姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "recorder_name", ColumnDescription = "记录人姓名", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? RecorderName { get; set; }
@@ -96,13 +96,12 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     public string? Attachments { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;
 
-
-// ========================================
+    // ========================================
     // 导航属性区域
     // ========================================
     /// <summary>

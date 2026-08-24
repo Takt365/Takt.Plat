@@ -46,7 +46,7 @@ public class TaktTicketReply : TaktCompanyEntityBase
     public long AuthorId { get; set; }
 
     /// <summary>
-    /// 作者姓名
+    /// 作者姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "author_name", ColumnDescription = "作者姓名", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? AuthorName { get; set; }
@@ -58,13 +58,13 @@ public class TaktTicketReply : TaktCompanyEntityBase
     public string TicketReplyContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? Attachments { get; set; }
 
     /// <summary>
-    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no；0=否 1=是；仅客服可见）
     /// </summary>
     [SugarColumn(ColumnName = "is_internal", ColumnDescription = "是否内部备注", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsInternal { get; set; } = 0;

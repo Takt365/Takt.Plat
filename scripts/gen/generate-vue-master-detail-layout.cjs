@@ -34,7 +34,10 @@ const {
   buildGeneratedFormVueScriptFragments,
   buildFormResetScopeDefaultsBlock,
   buildMasterDetailFormTypeImportLines,
+  SCOPE_FORM_FIELD_NAMES,
   hasScopeContextFormFields,
+  resolveScopeFormFieldPresence,
+  buildScopeContextFormScriptFragments,
   buildVueImportResultUtilImportLine,
   buildImportModalVueBlock,
   buildImportHandlersScriptBlock,
@@ -57,8 +60,8 @@ const {
  */
 function mapFormFieldToEditableColumn(field, piVar = 'pi') {
   const title = fieldLabelTExpr(field, 'form', piVar);
-  const width = field.htmlType === 'textarea' ? 180 : 140;
-  if (field.readOnly) {
+  const width = field.htmlType === 'textarea' || field.htmlType === 'richEditor' || field.htmlType === 'fileUpload' ? 180 : 140;
+  if (field.readOnly || field.htmlType === 'fileNameReadonly') {
     return `  {
     key: '${field.name}',
     title: ${title},
@@ -73,7 +76,7 @@ function mapFormFieldToEditableColumn(field, piVar = 'pi') {
     width: ${width},
   }`;
   }
-  if (field.htmlType === 'textarea') {
+  if (field.htmlType === 'textarea' || field.htmlType === 'richEditor') {
     const rows = isFixedLongTextareaField(field) ? 2 : 1;
     const placeholder = field.optional
       ? fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional', 'form', piVar)
@@ -379,7 +382,10 @@ function generateChildDetailFormVue(ctx, child) {
   const childPascal = child.childPascal;
   const childIdField = child.childIdField;
   const generatorScript = 'generate-vue-master-detail-from-api.cjs';
-  const formFields = (child.formFields || []).filter((f) => !f.readOnly);
+  // 隔离字段（租户/公司/语言/工厂）只读但仍须展示 + applyScopeDefaults；其它 readOnly 派生字段不入子表单
+  const formFields = (child.formFields || []).filter(
+    (f) => !f.readOnly || SCOPE_FORM_FIELD_NAMES.includes(f.name),
+  );
   const formCodeControlOptions = {
     entityIdField: childIdField,
     colSpanFieldCount: FORM_TAB_FIELDS_PER_TAB,
@@ -399,44 +405,11 @@ function generateChildDetailFormVue(ctx, child) {
 ${formTemplate.body}
     </div>`;
   const hasScopeContextFields = hasScopeContextFormFields(formFields, []);
-  const scopeStoreImports = hasScopeContextFields
-    ? "import { useTenantStore } from '@/stores/identity/tenant'\nimport { useUserStore } from '@/stores/identity/user'\n"
-    : '';
-  const scopeStoreScript = hasScopeContextFields ? `
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-}
-` : '';
-  const scopeContextWatch = hasScopeContextFields ? `
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.${childIdField}
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-` : '';
+  const scopePresence = resolveScopeFormFieldPresence(formFields, []);
+  const scopeFragments = buildScopeContextFormScriptFragments(scopePresence, childIdField, childPascal);
+  const scopeStoreImports = hasScopeContextFields ? scopeFragments.imports : '';
+  const scopeStoreScript = hasScopeContextFields ? scopeFragments.script : '';
+  const scopeContextWatch = hasScopeContextFields ? scopeFragments.watch : '';
   const masterTypeImport = `import type { ${childPascal}Create } from '@/types/${modulePath}/${child.childKebab}'`;
   const formScriptFragments = buildGeneratedFormVueScriptFragments({
     formFields,
@@ -446,9 +419,44 @@ watch(
     watchSyncChild: '',
     useBuildSubmitPayload: false,
   });
+  const masterCamel = ctx.entityCamel;
+  const masterPascal = ctx.entityPascal;
+  const masterFkCamel = String(child.masterFkField || '');
+  const fkPrefixCamel = masterFkCamel.replace(/Id$/i, '');
+  const altFkPrefixBackfill =
+    fkPrefixCamel && fkPrefixCamel !== masterCamel
+      ? `    if (masterCode != null && masterCode !== '' && !payload.${fkPrefixCamel}Code) {
+      payload.${fkPrefixCamel}Code = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.${fkPrefixCamel}Name) {
+      payload.${fkPrefixCamel}Name = masterName
+    }
+`
+      : '';
   const getValuesBody = `${formScriptFragments.getValuesBody.replace(
     '  return payload',
-    `  payload.${child.masterFkField} = props.masterId\n  return payload`,
+    `  payload.${child.masterFkField} = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.${masterCamel}Code ?? masterRow.${masterPascal}Code
+    const masterName = masterRow.${masterCamel}Name ?? masterRow.${masterPascal}Name
+    if (masterCode != null && masterCode !== '' && !payload.${masterCamel}Code) {
+      payload.${masterCamel}Code = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.${masterCamel}Name) {
+      payload.${masterCamel}Name = masterName
+    }
+${altFkPrefixBackfill}    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
+  return payload`,
   )}`;
   const resetScopeDefaultsLine = buildFormResetScopeDefaultsBlock(childIdField, hasScopeContextFields);
   const needsTaktSelect = formFields.some((f) => f.htmlType === 'select' && f.dictType);
@@ -473,12 +481,15 @@ watch(
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }`,
   ).replace(
     `  loading: false,
 })`,
     `  loading: false,
   masterId: '',
+  masterRow: null,
 })`,
   );
   const activeTabReset = useFormTabs ? "  activeTab.value = 'tab-0'\n" : '';
@@ -513,11 +524,13 @@ import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 ${buildEntityI18nFormImportBlock(childPascal, viewChildKebab)}
 ${masterTypeImport}
-${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
+${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${formScriptFragments.fileUploadImportLine}${formScriptFragments.numberingImportLine || ''}${scopeStoreImports}
 ${formScriptState}
 ${formScriptFragments.defaultsBlock}
 ${formScriptFragments.normalizerBlock}
 ${formScriptFragments.dictBootstrap}
+${formScriptFragments.fileUploadBootstrap}
+${formScriptFragments.numberingBootstrap || ''}
 ${formScriptFragments.watchBlock}
 ${scopeContextWatch}
 /** 表单校验规则（与 FluentValidation 必填对齐） */
@@ -790,6 +803,11 @@ function generateChildDetailPanelVue(ctx, child) {
     entityPascal,
     queryFields,
   );
+  if (!child.masterFkField) {
+    console.warn(
+      `⚠️  子表 ${child.childPascal} 缺少 masterFkField，右栏 list 无法按主表 Id 过滤`,
+    );
+  }
   const importHandlers = (childCaps.hasImport && childCaps.hasGetTemplate)
     ? buildImportHandlersScriptBlock({
       apiGetTemplate: childCaps.apiGetTemplate,
@@ -1000,6 +1018,7 @@ ${toolsBarImportExport}
         ref="formRef"
         :form-data="formData"
         :master-id="master${entityPascal}Id"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>

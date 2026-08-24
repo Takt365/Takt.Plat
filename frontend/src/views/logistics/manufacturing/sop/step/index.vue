@@ -77,7 +77,7 @@
         <template v-if="column.key === 'safetyPopupRequired'">
           <TaktDictTag
             :value="getSopStepDictValue(record, 'safetyPopupRequired')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -192,7 +192,7 @@
       <a-form-item :label="pi.queryLabel('safetyPopupRequired')">
         <TaktSelect
           v-model:value="advancedQueryForm.safetyPopupRequired"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('safetyPopupRequired', 'select')"
           allow-clear
         />

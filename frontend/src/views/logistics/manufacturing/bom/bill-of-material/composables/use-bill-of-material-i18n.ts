@@ -20,7 +20,6 @@ export const BILLOFMATERIAL_SELF_I18N_KEY = buildEntitySelfI18nKey(BILLOFMATERIA
 
 /** 列表业务列（不含主键） */
 export const BILLOFMATERIAL_LIST_FIELDS = [
-  'plantCode',
   'bomCode',
   'bomName',
   'parentMaterialCode',
@@ -41,7 +40,7 @@ export const BILLOFMATERIAL_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'select',
+  plantCode: 'optional',
   bomCode: 'required',
   bomName: 'required',
   parentMaterialCode: 'select',

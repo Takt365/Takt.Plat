@@ -20,7 +20,6 @@ export const PURCHASEPRICEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASEPR
 
 /** 列表业务列（不含主键） */
 export const PURCHASEPRICEITEM_LIST_FIELDS = [
-  'purchasePriceId',
   'purchasePriceCode',
   'purchasePriceSeq',
   'priceType',
@@ -42,11 +41,11 @@ export const PURCHASEPRICEITEM_LIST_FIELDS = [
   'roundingValue',
   'plannedDeliveryTimeDays',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PURCHASEPRICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'purchasePriceId',
   'purchasePriceCode',
   'purchasePriceSeq',
   'priceType',
@@ -89,32 +88,7 @@ export const PURCHASEPRICEITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEPRICEITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  purchasePriceSeq: 'select',
-  priceType: 'select',
-  scaleType: 'optional',
-  scaleBasis: 'optional',
-  scaleQuantity: 'select',
-  scaleUnit: 'optional',
-  scaleValue: 'select',
-  scaleCurrencyCode: 'optional',
-  calculationType: 'select',
-  price: 'select',
-  untaxedPrice: 'select',
-  taxIncludedPrice: 'select',
-  taxAmount: 'select',
-  conditionCurrencyCode: 'select',
-  priceUnit: 'select',
-  unitOfMeasure: 'select',
-  minOrderQuantity: 'select',
-  roundingValue: 'select',
-  plannedDeliveryTimeDays: 'select',
-  isObsolete: 'select',
-  scaleQuantities: 'optional',
-  scaleValues: 'optional',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -122,41 +96,13 @@ export type PurchasePriceItemField = keyof typeof PURCHASEPRICEITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEPRICEITEM_QUERY_STRING_FIELDS = [
-  'purchasePriceCode',
-  'priceType',
-  'scaleType',
-  'scaleBasis',
-  'scaleUnit',
-  'scaleCurrencyCode',
-  'calculationType',
-  'conditionCurrencyCode',
-  'unitOfMeasure',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchasePriceItemQuery)[]
 
-export type PurchasePriceItemQueryField =
-  | (typeof PURCHASEPRICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'purchasePriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'taxAmount' | 'priceUnit' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'isObsolete'
+export type PurchasePriceItemQueryField = (typeof PURCHASEPRICEITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEPRICEITEM_QUERY_FIELDS: readonly PurchasePriceItemQueryField[] = [
-  ...PURCHASEPRICEITEM_QUERY_STRING_FIELDS,
-  'purchasePriceSeq',
-  'scaleQuantity',
-  'scaleValue',
-  'price',
-  'untaxedPrice',
-  'taxIncludedPrice',
-  'taxAmount',
-  'priceUnit',
-  'minOrderQuantity',
-  'roundingValue',
-  'plannedDeliveryTimeDays',
-  'isObsolete',
-]
+export const PURCHASEPRICEITEM_QUERY_FIELDS: readonly PurchasePriceItemQueryField[] = [...PURCHASEPRICEITEM_QUERY_STRING_FIELDS]
 
 /**
  * PurchasePriceItem字段 i18n：index / purchase-price-item-form 统一入口

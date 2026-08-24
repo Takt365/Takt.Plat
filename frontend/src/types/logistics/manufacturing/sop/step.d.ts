@@ -59,7 +59,7 @@ export interface SopStep extends CompanyDtoBase {
   safetyAlert?: string;
 
   /**
-   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
+   * 弹窗（字典 sys_yes_no；0=否，1=是）
    */
   safetyPopupRequired: number;
 
@@ -134,7 +134,7 @@ export interface SopStepQuery extends TaktPagedQuery {
   safetyAlert?: string;
 
   /**
-   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
+   * 弹窗（字典 sys_yes_no；0=否，1=是）
    */
   safetyPopupRequired?: number;
 
@@ -213,7 +213,7 @@ export interface SopStepCreate {
   safetyAlert?: string;
 
   /**
-   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
+   * 弹窗（字典 sys_yes_no；0=否，1=是）
    */
   safetyPopupRequired: number;
 
@@ -317,7 +317,7 @@ export interface SopStepTemplate {
   safetyAlert?: string;
 
   /**
-   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
+   * 弹窗（字典 sys_yes_no；0=否，1=是）
    */
   safetyPopupRequired?: number;
 
@@ -396,7 +396,7 @@ export interface SopStepImport {
   safetyAlert?: string;
 
   /**
-   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
+   * 弹窗（字典 sys_yes_no；0=否，1=是）
    */
   safetyPopupRequired?: number;
 
@@ -470,7 +470,7 @@ export interface SopStepExport {
   safetyAlert?: string;
 
   /**
-   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
+   * 弹窗（字典 sys_yes_no；0=否，1=是）
    */
   safetyPopupRequired: number;
 

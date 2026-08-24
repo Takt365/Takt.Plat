@@ -117,10 +117,10 @@
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { getBomCostOptionPlantOptions } from '@/api/logistics/manufacturing/bom/cost-option'
 import {
   exportBomPriceDeltaTrendData,
   getBomPriceDeltaTrendList,
-  getBomPriceDeltaTrendPlantOptions,
 } from '@/api/logistics/manufacturing/bom/price-delta-trend'
 import type { BomPriceDeltaTrend } from '@/types/logistics/manufacturing/bom/price-delta-trend'
 import {
@@ -379,7 +379,7 @@ async function applyDefaultPlant(): Promise<void> {
   let matched: string | undefined
   if (related) {
     try {
-      const plants = await getBomPriceDeltaTrendPlantOptions()
+      const plants = await getBomCostOptionPlantOptions()
       const hit = (plants ?? []).find(
         (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
       )

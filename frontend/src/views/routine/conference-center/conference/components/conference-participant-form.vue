@@ -26,122 +26,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conferenceparticipant.userid')"
-                name="userId"
-              >
-                <a-input
-                  v-model:value="formState.userId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.userid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conferenceparticipant.username')"
-                name="userName"
-              >
-                <a-input
-                  v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.username') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conferenceparticipant.participantrole')"
-                name="participantRole"
-              >
-                <a-input-number
-                  v-model:value="formState.participantRole"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.participantrole') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conferenceparticipant.attendancestatus')"
-                name="attendanceStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.attendanceStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.attendancestatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conferenceparticipant.checkintime')"
-                name="checkInTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.checkInTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkintime') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conferenceparticipant.checkouttime')"
-                name="checkOutTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.checkOutTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkouttime') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conferenceparticipant.checkinmethod')"
-                name="checkInMethod"
-              >
-                <a-input-number
-                  v-model:value="formState.checkInMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.checkinmethod') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
+
           </a-row>
         </div>
       </a-tab-pane>
@@ -157,8 +42,12 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useConferenceParticipantI18n } from '../composables/use-conference-participant-i18n'
+
+/** 实体字段 i18n */
+const pi = useConferenceParticipantI18n()
+
 import type { ConferenceParticipantCreate } from '@/types/routine/conference-center/conference-participant'
-import { RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -167,7 +56,9 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["userId","userName","participantRole","attendanceStatus","checkInTime","checkOutTime","checkInMethod","extField"]
+const formFields = []
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -176,12 +67,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -192,6 +86,7 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 conferenceParticipantId 才视为编辑） */
 watch(
@@ -217,59 +112,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  userId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.userid') }),
-      trigger: 'blur'
-    }
-  ],
-  userName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.conferenceparticipant.username') }),
-      trigger: 'blur'
-    }
-  ],
-  participantRole: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.participantrole') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.participantrole') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  attendanceStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.attendancestatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.attendancestatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  checkInMethod: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkinmethod') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkinmethod') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -281,20 +124,32 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 conferenceId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('participantRole' in payload) {
-    const rawparticipantRole = payload.participantRole
-    payload.participantRole = typeof rawparticipantRole === 'number' ? rawparticipantRole : Number(rawparticipantRole)
-  }
-  if ('attendanceStatus' in payload) {
-    const rawattendanceStatus = payload.attendanceStatus
-    payload.attendanceStatus = typeof rawattendanceStatus === 'number' ? rawattendanceStatus : Number(rawattendanceStatus)
-  }
-  if ('checkInMethod' in payload) {
-    const rawcheckInMethod = payload.checkInMethod
-    payload.checkInMethod = typeof rawcheckInMethod === 'number' ? rawcheckInMethod : Number(rawcheckInMethod)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.conferenceParticipantId) {
+    payload.conferenceParticipantId = props.formData.conferenceParticipantId
+  }
   payload.conferenceId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.conferenceCode ?? masterRow.ConferenceCode
+    const masterName = masterRow.conferenceName ?? masterRow.ConferenceName
+    if (masterCode != null && masterCode !== '' && !payload.conferenceCode) {
+      payload.conferenceCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.conferenceName) {
+      payload.conferenceName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 

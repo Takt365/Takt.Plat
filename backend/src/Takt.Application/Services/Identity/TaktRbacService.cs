@@ -136,7 +136,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
 
         foreach (var dto in dtos)
         {
-            dto.UserName = user.Username;
+            dto.UserName = user.UserName;
             if (roleNameMap.TryGetValue(dto.RoleId, out var roleName))
             {
                 dto.RoleName = roleName;
@@ -238,7 +238,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         var dtos = list.Adapt<List<TaktUserTenantDto>>();
         foreach (var dto in dtos)
         {
-            dto.UserName = user.Username;
+            dto.UserName = user.UserName;
         }
 
         return dtos;
@@ -263,7 +263,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         var dtos = list.Adapt<List<TaktUserCompanyDto>>();
         foreach (var dto in dtos)
         {
-            dto.UserName = user.Username;
+            dto.UserName = user.UserName;
         }
 
         return dtos;
@@ -327,12 +327,12 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         }
         var userIds = dtos.Select(d => d.UserId).Distinct().ToList();
         var users = await _userRepository.GetListAsync(u => userIds.Contains(u.Id));
-        var userNameMap = users.ToDictionary(u => u.Id, u => u.Username);
+        var UserNameMap = users.ToDictionary(u => u.Id, u => u.UserName);
         foreach (var dto in dtos)
         {
-            if (userNameMap.TryGetValue(dto.UserId, out var userName))
+            if (UserNameMap.TryGetValue(dto.UserId, out var UserName))
             {
-                dto.UserName = userName;
+                dto.UserName = UserName;
             }
         }
         return dtos;
@@ -639,7 +639,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         // 【查询】部门主数据，填充 DeptName
         var deptIds = dtos.Select(d => d.DeptId).Distinct().ToList();
         var depts = await _deptRepository.GetListAsync(d => deptIds.Contains(d.Id));
-        var deptNameMap = depts.ToDictionary(d => d.Id, d => d.DeptName);
+        var deptNameMap = depts.ToDictionary(d => d.Id, d => d.DeptName1);
 
         foreach (var dto in dtos)
         {
@@ -720,7 +720,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         // 【查询】部门主数据，填充 DeptName
         var deptIds = dtos.Select(d => d.DeptId).Distinct().ToList();
         var depts = await _deptRepository.GetListAsync(d => deptIds.Contains(d.Id));
-        var deptNameMap = depts.ToDictionary(d => d.Id, d => d.DeptName);
+        var deptNameMap = depts.ToDictionary(d => d.Id, d => d.DeptName1);
 
         foreach (var dto in dtos)
         {
@@ -830,7 +830,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.EmployeeName);
         foreach (var dto in dtos)
         {
-            dto.DeptName = dept.DeptName;
+            dto.DeptName = dept.DeptName1;
             if (employeeNameMap.TryGetValue(dto.EmployeeId, out var employeeName))
             {
                 dto.EmployeeName = employeeName;

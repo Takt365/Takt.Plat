@@ -2,29 +2,49 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/news-center/news-comment -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：新闻中心评论实体 支持多级回复管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="routine:news:center:comment:create"
-      update-permission="routine:news:center:comment:update"
-      delete-permission="routine:news:center:comment:delete"
-      import-permission="routine:news:center:comment:import"
-      export-permission="routine:news:center:comment:export"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getNewsId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="newsId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="routine:news:center:create"
+      update-permission="routine:news:center:update"
+      delete-permission="routine:news:center:delete"
+      import-permission="routine:news:center:import"
+      export-permission="routine:news:center:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -50,31 +70,44 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getNewsCommentId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="newsCommentId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'newsCategory'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'newsCategory')"
+            dict-type="sys_news_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'newsIsTop'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'newsIsTop')"
+            dict-type="sys_yes_no"
+          />
+        </template>
+        <template v-else-if="column.key === 'newsIsRecommended'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'newsIsRecommended')"
+            dict-type="sys_yes_no"
+          />
+        </template>
+        <template v-else-if="column.key === 'targetScope'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'targetScope')"
+            dict-type="sys_publish_scope"
+          />
+        </template>
+        <template v-else-if="column.key === 'newsStatus'">
+          <TaktDictTag
+            :value="getNewsDictValue(record, 'newsStatus')"
+            dict-type="sys_publish_status"
+          />
+        </template>
+      </template>
       <template #detail>
-        <NewsCommentLikePanel
-          ref="newsCommentLikePanelRef"
+        <NewsCommentPanel
+          ref="newsCommentPanelRef"
           class="h-full min-h-0 flex-1"
         />
       </template>
@@ -90,8 +123,8 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <NewsCommentForm
-        :key="formData?.newsCommentId ?? 'create'"
+      <NewsForm
+        :key="formData?.newsId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -108,164 +141,325 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('newsId')">
-      <a-form-item :label="t('entity.newscomment.newsid')">
-        <a-input
-          v-model:value="advancedQueryForm.newsId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.newsid') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('parentId')">
-      <a-form-item :label="t('entity.newscomment.parentid')">
-        <a-input
-          v-model:value="advancedQueryForm.parentId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.parentid') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('userId')">
-      <a-form-item :label="t('entity.newscomment.userid')">
+      <div v-show="isFieldVisible('newsCode')">
+      <a-form-item :label="pi.queryLabel('newsCode')">
         <a-input
-          v-model:value="advancedQueryForm.userId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.userid') })"
+          v-model:value="advancedQueryForm.newsCode"
+          :placeholder="pi.queryPh('newsCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('userName')">
-      <a-form-item :label="t('entity.newscomment.username')">
-        <a-input
-          v-model:value="advancedQueryForm.userName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.username') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('newsCategory')">
+      <a-form-item :label="pi.queryLabel('newsCategory')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.newsCategory"
+          dict-type="sys_news_type"
+          :placeholder="pi.queryPh('newsCategory', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('userAvatar')">
-      <a-form-item :label="t('entity.newscomment.useravatar')">
+      <div v-show="isFieldVisible('newsTitle')">
+      <a-form-item :label="pi.queryLabel('newsTitle')">
         <a-input
-          v-model:value="advancedQueryForm.userAvatar"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.useravatar') })"
+          v-model:value="advancedQueryForm.newsTitle"
+          :placeholder="pi.queryPh('newsTitle', 'required')"
+          show-count
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsSummary')">
+      <a-form-item :label="pi.queryLabel('newsSummary')">
+        <a-input
+          v-model:value="advancedQueryForm.newsSummary"
+          :placeholder="pi.queryPh('newsSummary', 'required')"
+          show-count
+          :maxlength="2000"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsTags')">
+      <a-form-item :label="pi.queryLabel('newsTags')">
+        <a-input
+          v-model:value="advancedQueryForm.newsTags"
+          :placeholder="pi.queryPh('newsTags', 'required')"
           show-count
           :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('replyToUserId')">
-      <a-form-item :label="t('entity.newscomment.replytouserid')">
-        <a-input
-          v-model:value="advancedQueryForm.replyToUserId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.replytouserid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('replyToUserName')">
-      <a-form-item :label="t('entity.newscomment.replytousername')">
-        <a-input
-          v-model:value="advancedQueryForm.replyToUserName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.replytousername') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('commentContent')">
-      <a-form-item :label="t('entity.newscomment.commentcontent')">
+      <div v-show="isFieldVisible('newsContent')">
+      <a-form-item :label="pi.queryLabel('newsContent')">
         <a-textarea
-          v-model:value="advancedQueryForm.commentContent"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.newscomment.commentcontent') })"
+          v-model:value="advancedQueryForm.newsContent"
+          :placeholder="pi.queryPh('newsContent', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('commentTimeStart')">
-      <a-form-item :label="t('entity.newscomment.commenttimestart')">
+      <div v-show="isFieldVisible('newsCoverImage')">
+      <a-form-item :label="pi.queryLabel('newsCoverImage')">
+        <a-input
+          v-model:value="advancedQueryForm.newsCoverImage"
+          :placeholder="pi.queryPh('newsCoverImage', 'required')"
+          show-count
+          :maxlength="500"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsIsTop')">
+      <a-form-item :label="pi.queryLabel('newsIsTop')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.newsIsTop"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('newsIsTop', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsIsRecommended')">
+      <a-form-item :label="pi.queryLabel('newsIsRecommended')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.newsIsRecommended"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('newsIsRecommended', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsEffectiveTimeStart')">
+      <a-form-item :label="pi.queryLabel('newsEffectiveTimeStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.commentTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.newscomment.commenttimestart') })"
+          v-model:value="advancedQueryForm.newsEffectiveTimeStart"
+          :placeholder="pi.queryPh('newsEffectiveTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('commentTimeEnd')">
-      <a-form-item :label="t('entity.newscomment.commenttimeend')">
+      <div v-show="isFieldVisible('newsEffectiveTimeEnd')">
+      <a-form-item :label="pi.queryLabel('newsEffectiveTimeEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.commentTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.newscomment.commenttimeend') })"
+          v-model:value="advancedQueryForm.newsEffectiveTimeEnd"
+          :placeholder="pi.queryPh('newsEffectiveTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('likeCount')">
-      <a-form-item :label="t('entity.newscomment.likecount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.likeCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.likecount') })"
+      <div v-show="isFieldVisible('newsExpireTimeStart')">
+      <a-form-item :label="pi.queryLabel('newsExpireTimeStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.newsExpireTimeStart"
+          :placeholder="pi.queryPh('newsExpireTimeStart', 'select')"
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('replyCount')">
-      <a-form-item :label="t('entity.newscomment.replycount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.replyCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.replycount') })"
+      <div v-show="isFieldVisible('newsExpireTimeEnd')">
+      <a-form-item :label="pi.queryLabel('newsExpireTimeEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.newsExpireTimeEnd"
+          :placeholder="pi.queryPh('newsExpireTimeEnd', 'select')"
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('commentLevel')">
-      <a-form-item :label="t('entity.newscomment.commentlevel')">
+      <div v-show="isFieldVisible('newsReadCount')">
+      <a-form-item :label="pi.queryLabel('newsReadCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.commentLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.commentlevel') })"
+          v-model:value="advancedQueryForm.newsReadCount"
+          :placeholder="pi.queryPh('newsReadCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('commentStatus')">
-      <a-form-item :label="t('entity.newscomment.commentstatus')">
+      <div v-show="isFieldVisible('newsLikeCount')">
+      <a-form-item :label="pi.queryLabel('newsLikeCount')">
         <a-input-number
-          v-model:value="advancedQueryForm.commentStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.commentstatus') })"
+          v-model:value="advancedQueryForm.newsLikeCount"
+          :placeholder="pi.queryPh('newsLikeCount', 'required')"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsCommentCount')">
+      <a-form-item :label="pi.queryLabel('newsCommentCount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.newsCommentCount"
+          :placeholder="pi.queryPh('newsCommentCount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsFavoriteCount')">
+      <a-form-item :label="pi.queryLabel('newsFavoriteCount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.newsFavoriteCount"
+          :placeholder="pi.queryPh('newsFavoriteCount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsShareCount')">
+      <a-form-item :label="pi.queryLabel('newsShareCount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.newsShareCount"
+          :placeholder="pi.queryPh('newsShareCount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('deptId')">
+      <a-form-item :label="pi.queryLabel('deptId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.deptId"
+          api-url="TaktDepts/tree-options"
+          :placeholder="pi.queryPh('deptId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('deptName')">
+      <a-form-item :label="pi.queryLabel('deptName')">
+        <a-input
+          v-model:value="advancedQueryForm.deptName"
+          :placeholder="pi.queryPh('deptName', 'required')"
+          show-count
+          :maxlength="100"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('publisherId')">
+      <a-form-item :label="pi.queryLabel('publisherId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.publisherId"
+          api-url="TaktUsers/options"
+          :placeholder="pi.queryPh('publisherId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('publisherName')">
+      <a-form-item :label="pi.queryLabel('publisherName')">
+        <a-input
+          v-model:value="advancedQueryForm.publisherName"
+          :placeholder="pi.queryPh('publisherName', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsPublishTimeStart')">
+      <a-form-item :label="pi.queryLabel('newsPublishTimeStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.newsPublishTimeStart"
+          :placeholder="pi.queryPh('newsPublishTimeStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsPublishTimeEnd')">
+      <a-form-item :label="pi.queryLabel('newsPublishTimeEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.newsPublishTimeEnd"
+          :placeholder="pi.queryPh('newsPublishTimeEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('targetScope')">
+      <a-form-item :label="pi.queryLabel('targetScope')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.targetScope"
+          dict-type="sys_publish_scope"
+          :placeholder="pi.queryPh('targetScope', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('targetDepartments')">
+      <a-form-item :label="pi.queryLabel('targetDepartments')">
+        <a-input
+          v-model:value="advancedQueryForm.targetDepartments"
+          :placeholder="pi.queryPh('targetDepartments', 'required')"
+          show-count
+          :maxlength="1000"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('targetUsers')">
+      <a-form-item :label="pi.queryLabel('targetUsers')">
+        <a-input
+          v-model:value="advancedQueryForm.targetUsers"
+          :placeholder="pi.queryPh('targetUsers', 'required')"
+          show-count
+          :maxlength="2000"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('newsStatus')">
+      <a-form-item :label="pi.queryLabel('newsStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.newsStatus"
+          dict-type="sys_publish_status"
+          :placeholder="pi.queryPh('newsStatus', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.newscomment.approvalstatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.newscomment.approvalstatus') })"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.newscomment.initiatorid')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.initiatorid') })"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -273,10 +467,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.newscomment.initiatedatstart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.initiatedatstart') })"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -284,20 +478,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.newscomment.initiatedatend')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.newscomment.initiatedatend') })"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.newscomment.approvedby')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.approvedby') })"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -305,10 +499,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.newscomment.approvedatstart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.approvedatstart') })"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -316,20 +510,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.newscomment.approvedatend')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.newscomment.approvedatend') })"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.newscomment.flowinstanceid')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newscomment.flowinstanceid') })"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -337,10 +531,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -348,10 +542,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -373,7 +567,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -387,10 +581,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -404,14 +598,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.newscomment._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.newscomment._self"
+        v-if="importVisible"
+        :entity-i18n-key="NEWS_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -427,10 +622,10 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'newsCommentId'"
+      :id-column-key="'newsId'"
       :action-column-key="'action'"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -439,7 +634,7 @@
 
 <script setup lang="ts">
 /**
- * 新闻中心评论实体 支持多级回复管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 新闻中心主实体 支持分类、置顶、推荐、社交统计管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/news-center/news-comment
  */
 import { ref, computed, onMounted } from 'vue'
@@ -448,22 +643,35 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import NewsCommentForm from './components/news-comment-form.vue'
-import NewsCommentLikePanel from './components/news-comment-like-panel.vue'
-import { provideNewsCommentMasterContext } from './composables/use-news-comment-master-context'
-import { getNewsCommentList, getNewsCommentById, createNewsComment, updateNewsComment, deleteNewsCommentById, deleteNewsCommentBatch, getNewsCommentTemplate, importNewsComment, exportNewsComment, updateNewsCommentStatus } from '@/api/routine/news-center/news-comment'
-import type { NewsComment, NewsCommentQuery } from '@/types/routine/news-center/news-comment'
+import NewsForm from './components/news-form.vue'
+import NewsCommentPanel from './components/news-comment-panel.vue'
+import { provideNewsMasterContext, type NewsRowRecord } from './composables/use-news-master-context'
+import { getNewsList, getNewsById, createNews, updateNews, deleteNewsById, deleteNewsBatch, getNewsTemplate, importNews, exportNews, updateNewsStatus } from '@/api/routine/news-center/news'
+import type { News, NewsQuery } from '@/types/routine/news-center/news'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useNewsI18n,
+  NEWS_LIST_FIELDS,
+  NEWS_QUERY_STRING_FIELDS,
+  NEWS_QUERY_FIELDS,
+  NEWS_SELF_I18N_KEY,
+} from './composables/use-news-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useNewsI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktNewsComment')
+const excelNames = taktExcelEntityNames('TaktNews')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.newscomment._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -471,7 +679,7 @@ const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
 /** 分页列表数据 */
-const dataSource = ref<NewsComment[]>([])
+const dataSource = ref<News[]>([])
 /** 当前页码 */
 const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
@@ -479,9 +687,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<NewsComment | null>(null)
+const selectedRow = ref<NewsRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<NewsComment[]>([])
+const selectedRows = ref<NewsRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -490,7 +698,7 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<NewsComment> | null>(null)
+const formData = ref<Partial<News> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
@@ -498,63 +706,86 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of NEWS_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.newsCategory !== undefined && form.newsCategory !== null) {
+    return true
+  }
+  if (form.newsIsTop !== undefined && form.newsIsTop !== null) {
+    return true
+  }
+  if (form.newsIsRecommended !== undefined && form.newsIsRecommended !== null) {
+    return true
+  }
+  if (form.newsReadCount !== undefined && form.newsReadCount !== null) {
+    return true
+  }
+  if (form.newsLikeCount !== undefined && form.newsLikeCount !== null) {
+    return true
+  }
+  if (form.newsCommentCount !== undefined && form.newsCommentCount !== null) {
+    return true
+  }
+  if (form.newsFavoriteCount !== undefined && form.newsFavoriteCount !== null) {
+    return true
+  }
+  if (form.newsShareCount !== undefined && form.newsShareCount !== null) {
+    return true
+  }
+  if (form.targetScope !== undefined && form.targetScope !== null) {
+    return true
+  }
+  if (form.newsStatus !== undefined && form.newsStatus !== null) {
+    return true
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(NEWS_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof NEWS_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    newsCategory: undefined as number | undefined,
+    newsIsTop: undefined as number | undefined,
+    newsIsRecommended: undefined as number | undefined,
+    newsReadCount: undefined as number | undefined,
+    newsLikeCount: undefined as number | undefined,
+    newsCommentCount: undefined as number | undefined,
+    newsFavoriteCount: undefined as number | undefined,
+    newsShareCount: undefined as number | undefined,
+    targetScope: undefined as number | undefined,
+    newsStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  newsId: '',
-  parentId: '',
-  userId: '',
-  userName: '',
-  userAvatar: '',
-  replyToUserId: '',
-  replyToUserName: '',
-  commentContent: '',
-  commentTimeStart: '',
-  commentTimeEnd: '',
-  likeCount: undefined as number | undefined,
-  replyCount: undefined as number | undefined,
-  commentLevel: undefined as number | undefined,
-  commentStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'newsId', label: t('entity.newscomment.newsid') },
-  { key: 'parentId', label: t('entity.newscomment.parentid') },
-  { key: 'userId', label: t('entity.newscomment.userid') },
-  { key: 'userName', label: t('entity.newscomment.username') },
-  { key: 'userAvatar', label: t('entity.newscomment.useravatar') },
-  { key: 'replyToUserId', label: t('entity.newscomment.replytouserid') },
-  { key: 'replyToUserName', label: t('entity.newscomment.replytousername') },
-  { key: 'commentContent', label: t('entity.newscomment.commentcontent') },
-  { key: 'commentTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.newscomment.commenttime')) },
-  { key: 'commentTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.newscomment.commenttime')) },
-  { key: 'likeCount', label: t('entity.newscomment.likecount') },
-  { key: 'replyCount', label: t('entity.newscomment.replycount') },
-  { key: 'commentLevel', label: t('entity.newscomment.commentlevel') },
-  { key: 'commentStatus', label: t('entity.newscomment.commentstatus') },
-  { key: 'approvalStatus', label: t('entity.newscomment.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.newscomment.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.newscomment.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.newscomment.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.newscomment.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.newscomment.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.newscomment.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.newscomment.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  NEWS_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -564,25 +795,27 @@ const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
-const entityIdName = 'newsCommentId'
+const entityIdName = 'newsId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
-const { selectedMasterRow } = provideNewsCommentMasterContext()
-const newsCommentLikePanelRef = ref<InstanceType<typeof NewsCommentLikePanel> | null>(null)
+const { selectedMasterRow } = provideNewsMasterContext()
+const newsCommentPanelRef = ref<InstanceType<typeof NewsCommentPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
- * @returns {NewsCommentQuery} 查询 DTO
+ * @returns {NewsQuery} 查询 DTO
  */
-function buildListQuery(overrides?: Partial<NewsCommentQuery>): NewsCommentQuery {
+function buildListQuery(overrides?: Partial<NewsQuery>): NewsQuery {
   const form = advancedQueryForm.value
   const kw = (queryKeyword.value ?? '').trim()
-  const query: NewsCommentQuery = {
+  const query: NewsQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
     ...overrides,
@@ -590,63 +823,65 @@ function buildListQuery(overrides?: Partial<NewsCommentQuery>): NewsCommentQuery
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: keyof NewsCommentQuery, value: string | undefined) => {
+  const assignTrimmed = (key: keyof NewsQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
       query[key] = v as never
     }
   }
-  assignTrimmed('newsId', form.newsId)
-  assignTrimmed('parentId', form.parentId)
-  assignTrimmed('userId', form.userId)
-  assignTrimmed('userName', form.userName)
-  assignTrimmed('userAvatar', form.userAvatar)
-  assignTrimmed('replyToUserId', form.replyToUserId)
-  assignTrimmed('replyToUserName', form.replyToUserName)
-  assignTrimmed('commentContent', form.commentContent)
-  assignTrimmed('commentTimeStart', form.commentTimeStart)
-  assignTrimmed('commentTimeEnd', form.commentTimeEnd)
-  if (form.likeCount !== undefined && form.likeCount !== null) {
-    query.likeCount = form.likeCount
+  for (const key of NEWS_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  if (form.replyCount !== undefined && form.replyCount !== null) {
-    query.replyCount = form.replyCount
+  if (form.newsCategory !== undefined && form.newsCategory !== null) {
+    query.newsCategory = form.newsCategory
   }
-  if (form.commentLevel !== undefined && form.commentLevel !== null) {
-    query.commentLevel = form.commentLevel
+  if (form.newsIsTop !== undefined && form.newsIsTop !== null) {
+    query.newsIsTop = form.newsIsTop
   }
-  if (form.commentStatus !== undefined && form.commentStatus !== null) {
-    query.commentStatus = form.commentStatus
+  if (form.newsIsRecommended !== undefined && form.newsIsRecommended !== null) {
+    query.newsIsRecommended = form.newsIsRecommended
+  }
+  if (form.newsReadCount !== undefined && form.newsReadCount !== null) {
+    query.newsReadCount = form.newsReadCount
+  }
+  if (form.newsLikeCount !== undefined && form.newsLikeCount !== null) {
+    query.newsLikeCount = form.newsLikeCount
+  }
+  if (form.newsCommentCount !== undefined && form.newsCommentCount !== null) {
+    query.newsCommentCount = form.newsCommentCount
+  }
+  if (form.newsFavoriteCount !== undefined && form.newsFavoriteCount !== null) {
+    query.newsFavoriteCount = form.newsFavoriteCount
+  }
+  if (form.newsShareCount !== undefined && form.newsShareCount !== null) {
+    query.newsShareCount = form.newsShareCount
+  }
+  if (form.targetScope !== undefined && form.targetScope !== null) {
+    query.targetScope = form.targetScope
+  }
+  if (form.newsStatus !== undefined && form.newsStatus !== null) {
+    query.newsStatus = form.newsStatus
   }
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: NewsComment | null) {
+function syncMasterSelection(record: NewsRowRecord | null) {
   selectedMasterRow.value = record
-  selectedMasterKey.value = record ? getNewsCommentId(record) : ''
+  selectedMasterKey.value = record ? getNewsId(record) : ''
 }
 
 /**
@@ -654,8 +889,8 @@ function syncMasterSelection(record: NewsComment | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as NewsComment
-  const key = getNewsCommentId(row)
+  const row = record as unknown as NewsRowRecord
+  const key = getNewsId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
   selectedRow.value = row
@@ -672,16 +907,16 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadNewsCommentDetail(record: NewsComment): Promise<NewsComment | null> {
-  const id = getNewsCommentId(record)
+async function loadNewsDetail(record: NewsRowRecord): Promise<News | null> {
+  const id = getNewsId(record)
   if (!id) {
     return null
   }
   try {
-    const detail = await getNewsCommentById(id)
-    const index = dataSource.value.findIndex((row) => getNewsCommentId(row) === id)
+    const detail = await getNewsById(id)
+    const index = dataSource.value.findIndex((row) => getNewsId(row) === id)
     if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as NewsComment
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as News
     }
     return detail
   } catch (error: any) {
@@ -694,139 +929,233 @@ async function loadNewsCommentDetail(record: NewsComment): Promise<NewsComment |
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'newsCommentId',
-    key: 'newsCommentId',
+    dataIndex: 'newsId',
+    key: 'newsId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'newsCommentId') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsId') ?? ''
   },
   {
-    title: t('entity.newscomment.newsid'),
-    dataIndex: 'newsId',
-    key: 'newsId',
+    title: pi.label('newsCode'),
+    dataIndex: 'newsCode',
+    key: 'newsCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'newsId') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCode') ?? ''
   },
   {
-    title: t('entity.newscomment.parentid'),
-    dataIndex: 'parentId',
-    key: 'parentId',
+    title: pi.label('newsCategory'),
+    dataIndex: 'newsCategory',
+    key: 'newsCategory',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'parentId') ?? ''
   },
   {
-    title: t('entity.newscomment.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
+    title: pi.label('newsTitle'),
+    dataIndex: 'newsTitle',
+    key: 'newsTitle',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'userId') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsTitle') ?? ''
   },
   {
-    title: t('entity.newscomment.username'),
-    dataIndex: 'userName',
-    key: 'userName',
+    title: pi.label('newsSummary'),
+    dataIndex: 'newsSummary',
+    key: 'newsSummary',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'userName') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsSummary') ?? ''
   },
   {
-    title: t('entity.newscomment.useravatar'),
-    dataIndex: 'userAvatar',
-    key: 'userAvatar',
+    title: pi.label('newsTags'),
+    dataIndex: 'newsTags',
+    key: 'newsTags',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'userAvatar') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsTags') ?? ''
   },
   {
-    title: t('entity.newscomment.replytouserid'),
-    dataIndex: 'replyToUserId',
-    key: 'replyToUserId',
+    title: pi.label('newsContent'),
+    dataIndex: 'newsContent',
+    key: 'newsContent',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'replyToUserId') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsContent') ?? ''
   },
   {
-    title: t('entity.newscomment.replytousername'),
-    dataIndex: 'replyToUserName',
-    key: 'replyToUserName',
+    title: pi.label('newsCoverImage'),
+    dataIndex: 'newsCoverImage',
+    key: 'newsCoverImage',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'replyToUserName') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCoverImage') ?? ''
   },
   {
-    title: t('entity.newscomment.commentcontent'),
-    dataIndex: 'commentContent',
-    key: 'commentContent',
+    title: pi.label('newsIsTop'),
+    dataIndex: 'newsIsTop',
+    key: 'newsIsTop',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'commentContent') ?? ''
   },
   {
-    title: t('entity.newscomment.commenttime'),
-    dataIndex: 'commentTime',
-    key: 'commentTime',
+    title: pi.label('newsIsRecommended'),
+    dataIndex: 'newsIsRecommended',
+    key: 'newsIsRecommended',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'commentTime') ?? ''
   },
   {
-    title: t('entity.newscomment.likecount'),
-    dataIndex: 'likeCount',
-    key: 'likeCount',
+    title: pi.label('newsEffectiveTime'),
+    dataIndex: 'newsEffectiveTime',
+    key: 'newsEffectiveTime',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'likeCount') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsEffectiveTime') ?? ''
   },
   {
-    title: t('entity.newscomment.replycount'),
-    dataIndex: 'replyCount',
-    key: 'replyCount',
+    title: pi.label('newsExpireTime'),
+    dataIndex: 'newsExpireTime',
+    key: 'newsExpireTime',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'replyCount') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsExpireTime') ?? ''
   },
   {
-    title: t('entity.newscomment.commentlevel'),
-    dataIndex: 'commentLevel',
-    key: 'commentLevel',
+    title: pi.label('newsReadCount'),
+    dataIndex: 'newsReadCount',
+    key: 'newsReadCount',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'commentLevel') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsReadCount') ?? ''
   },
   {
-    title: t('entity.newscomment.commentstatus'),
-    dataIndex: 'commentStatus',
-    key: 'commentStatus',
+    title: pi.label('newsLikeCount'),
+    dataIndex: 'newsLikeCount',
+    key: 'newsLikeCount',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'commentStatus') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsLikeCount') ?? ''
   },
   {
-    title: t('entity.newscomment.news'),
-    dataIndex: 'news',
-    key: 'news',
+    title: pi.label('newsCommentCount'),
+    dataIndex: 'newsCommentCount',
+    key: 'newsCommentCount',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsCommentField(record, 'news') ?? ''
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCommentCount') ?? ''
+  },
+  {
+    title: pi.label('newsFavoriteCount'),
+    dataIndex: 'newsFavoriteCount',
+    key: 'newsFavoriteCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsFavoriteCount') ?? ''
+  },
+  {
+    title: pi.label('newsShareCount'),
+    dataIndex: 'newsShareCount',
+    key: 'newsShareCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsShareCount') ?? ''
+  },
+  {
+    title: pi.label('deptId'),
+    dataIndex: 'deptId',
+    key: 'deptId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'deptId') ?? ''
+  },
+  {
+    title: pi.label('deptName'),
+    dataIndex: 'deptName',
+    key: 'deptName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'deptName') ?? ''
+  },
+  {
+    title: pi.label('publisherId'),
+    dataIndex: 'publisherId',
+    key: 'publisherId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'publisherId') ?? ''
+  },
+  {
+    title: pi.label('publisherName'),
+    dataIndex: 'publisherName',
+    key: 'publisherName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'publisherName') ?? ''
+  },
+  {
+    title: pi.label('newsPublishTime'),
+    dataIndex: 'newsPublishTime',
+    key: 'newsPublishTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsPublishTime') ?? ''
+  },
+  {
+    title: pi.label('targetScope'),
+    dataIndex: 'targetScope',
+    key: 'targetScope',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('targetDepartments'),
+    dataIndex: 'targetDepartments',
+    key: 'targetDepartments',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'targetDepartments') ?? ''
+  },
+  {
+    title: pi.label('targetUsers'),
+    dataIndex: 'targetUsers',
+    key: 'targetUsers',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'targetUsers') ?? ''
+  },
+  {
+    title: pi.label('newsStatus'),
+    dataIndex: 'newsStatus',
+    key: 'newsStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -835,34 +1164,53 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:news:center:comment:update',
-        onClick: (record: NewsComment) => handleEdit(record)
+        permission: 'routine:news:center:update',
+        onClick: (record: NewsRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:news:center:comment:delete',
-        onClick: (record: NewsComment) => handleDeleteOne(record)
+        permission: 'routine:news:center:delete',
+        onClick: (record: NewsRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getNewsCommentId = (record: any): string => record?.[entityIdName] ?? ''
+const getNewsId = (record: NewsRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
-const getNewsCommentField = (record: any, field: string): any => record?.[field]
+const getNewsField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getNewsDictValue = (
+  record: NewsRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: NewsComment[]) => {
+  onChange: (keys: (string | number)[], rows: NewsRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -872,16 +1220,16 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: NewsComment, selected: boolean) => {
+  onSelect: (record: NewsRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (selectedRow.value && getNewsCommentId(selectedRow.value) === getNewsCommentId(record)) {
+    } else if (selectedRow.value && getNewsId(selectedRow.value) === getNewsId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: NewsComment[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: NewsRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -891,11 +1239,16 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
-    const res = await getNewsCommentList(buildListQuery())
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
+    const res = await getNewsList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[NewsComment] 加载数据失败', { error })
+    logger.error('[News] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -917,20 +1270,36 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  newsId: '',
-  parentId: '',
-  userId: '',
-  userName: '',
-  userAvatar: '',
-  replyToUserId: '',
-  replyToUserName: '',
-  commentContent: '',
-  commentTimeStart: '',
-  commentTimeEnd: '',
-  likeCount: undefined as number | undefined,
-  replyCount: undefined as number | undefined,
-  commentLevel: undefined as number | undefined,
-  commentStatus: undefined as number | undefined,
+  cultureCode: '',
+  plantCode: '',
+  newsCode: '',
+  newsCategory: undefined as number | undefined,
+  newsTitle: '',
+  newsSummary: '',
+  newsTags: '',
+  newsContent: '',
+  newsCoverImage: '',
+  newsIsTop: undefined as number | undefined,
+  newsIsRecommended: undefined as number | undefined,
+  newsEffectiveTimeStart: '',
+  newsEffectiveTimeEnd: '',
+  newsExpireTimeStart: '',
+  newsExpireTimeEnd: '',
+  newsReadCount: undefined as number | undefined,
+  newsLikeCount: undefined as number | undefined,
+  newsCommentCount: undefined as number | undefined,
+  newsFavoriteCount: undefined as number | undefined,
+  newsShareCount: undefined as number | undefined,
+  deptId: '',
+  deptName: '',
+  publisherId: '',
+  publisherName: '',
+  newsPublishTimeStart: '',
+  newsPublishTimeEnd: '',
+  targetScope: undefined as number | undefined,
+  targetDepartments: '',
+  targetUsers: '',
+  newsStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',
@@ -950,17 +1319,17 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.newscomment._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: NewsComment) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.newscomment._self') })
+async function handleEdit(record: NewsRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
-    const detail = await loadNewsCommentDetail(record)
+    const detail = await loadNewsDetail(record)
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -973,7 +1342,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.newscomment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -990,17 +1359,17 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateNewsComment(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.newscomment._self') }))
+      await updateNews(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
-      await createNewsComment(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.newscomment._self') }))
+      await createNews(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
     if (selectedMasterKey.value) {
-  newsCommentLikePanelRef.value?.reload?.()
+  newsCommentPanelRef.value?.reload?.()
     }
     loadData()
   } finally {
@@ -1021,19 +1390,26 @@ function handleImport() {
 
 /** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getNewsCommentTemplate(sheetName, fileName)
+  const res = await getNewsTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importNewsComment(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importNews(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    newsCommentPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1044,7 +1420,10 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const exportMeta = await exportNewsComment(
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
+    const exportMeta = await exportNews(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
       excelNames.fileBase
@@ -1067,24 +1446,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.newscomment._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
-    logger.error('[NewsComment] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.newscomment._self') }))
+    logger.error('[News] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: NewsComment) {
+async function handleDeleteOne(record: NewsRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.newscomment._self'), name: t('common.tip.this.target', { target: t('entity.newscomment._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteNewsCommentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.newscomment._self') }))
+      await deleteNewsById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1096,18 +1475,18 @@ async function handleDeleteOne(record: NewsComment) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.newscomment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.newscomment._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteNewsCommentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.newscomment._self') }))
+      await deleteNewsBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1130,20 +1509,36 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  newsId: '',
-  parentId: '',
-  userId: '',
-  userName: '',
-  userAvatar: '',
-  replyToUserId: '',
-  replyToUserName: '',
-  commentContent: '',
-  commentTimeStart: '',
-  commentTimeEnd: '',
-  likeCount: undefined as number | undefined,
-  replyCount: undefined as number | undefined,
-  commentLevel: undefined as number | undefined,
-  commentStatus: undefined as number | undefined,
+  cultureCode: '',
+  plantCode: '',
+  newsCode: '',
+  newsCategory: undefined as number | undefined,
+  newsTitle: '',
+  newsSummary: '',
+  newsTags: '',
+  newsContent: '',
+  newsCoverImage: '',
+  newsIsTop: undefined as number | undefined,
+  newsIsRecommended: undefined as number | undefined,
+  newsEffectiveTimeStart: '',
+  newsEffectiveTimeEnd: '',
+  newsExpireTimeStart: '',
+  newsExpireTimeEnd: '',
+  newsReadCount: undefined as number | undefined,
+  newsLikeCount: undefined as number | undefined,
+  newsCommentCount: undefined as number | undefined,
+  newsFavoriteCount: undefined as number | undefined,
+  newsShareCount: undefined as number | undefined,
+  deptId: '',
+  deptName: '',
+  publisherId: '',
+  publisherName: '',
+  newsPublishTimeStart: '',
+  newsPublishTimeEnd: '',
+  targetScope: undefined as number | undefined,
+  targetDepartments: '',
+  targetUsers: '',
+  newsStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',

@@ -36,22 +36,6 @@ export function getBomMaterialCostItemModelCostTrendAnalysis(
 }
 
 /**
- * 机种选项 URL（分析：期间最后月本表机种去重；❌ 非 CRUD 主数据 TaktBomMaterialCosts/model-options）
- * @returns {string} 相对 API 路径
- */
-export function getBomModelCostTrendModelOptionsUrl(): string {
-  return `/${BOM_MODEL_COST_TREND_API_BASE}/model-options`;
-}
-
-/**
- * 物料/组件选项 URL（工厂 + 期间最后月；ProductionRelated=X 且 PurchaseType=F）
- * @returns {string} 相对 API 路径
- */
-export function getBomModelCostTrendComponentOptionsUrl(): string {
-  return `/${BOM_MODEL_COST_TREND_API_BASE}/component-options`;
-}
-
-/**
  * 导出机种成本推移分析
  * @param {BomMaterialCostItemModelCostTrendQuery} query 查询条件
  * @param {string} [sheetName] 工作表名

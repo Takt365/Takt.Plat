@@ -31,12 +31,12 @@
               </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.durationlog.username')"
-                name="userName"
+                :label="t('entity.durationlog.userid')"
+                name="userId"
               >
                 <a-input
-                  v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.durationlog.username') })"
+                  v-model:value="formState.userId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.durationlog.userid') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -45,12 +45,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.durationlog.userid')"
-                name="userId"
+                :label="t('entity.durationlog.username')"
+                name="userName"
               >
                 <a-input
-                  v-model:value="formState.userId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.durationlog.userid') })"
+                  v-model:value="formState.userName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.durationlog.username') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -169,7 +169,7 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
 
 }
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","userName","userId","statDate","durationSeconds","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","userId","userName","statDate","durationSeconds","extField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

@@ -57,6 +57,10 @@ loading?: boolean
 - 栅格：`a-row` / `a-col`（`:gutter="24"`）
 - 文案：`t('entity.*')` 标签；`common.page.form.placeholder.*` 占位
 - 字典：`TaktSelect` + `api-url` 或 `dict-type`（与后端 `DictTypeCode` 一致）
+- **「xxx内容」正文**：`takt-rich-editor`（字段名 `content` / `XxxContent`，或 XML 摘要标题以「内容」结尾；备注 `remark` 仍用 `a-textarea`）
+- **文件名称 + 访问地址**：同表同时有 `fileName` 与 `accessUrl` 时用 `takt-upload-file`（上传后回填 `fileName`，禁止手输）；**排除** Foundation `TaktFile` 自身。查询抽屉仍用普通输入；子表行内单元格仍用输入框
+- **TaktNumbering 自动编码（表单）**：实体字段 XML 描述含「自动通过 TaktNumbering」且**不含** MIME → 新增态 **编码规则下拉**（`TaktSelect` + `TaktNumberings/options`，`:api-params="{ documentType: '<菜单 MenuName>' }"` 仅显示该单据类型规则，字段 `numberingRuleCode`）+ **业务编码只读预览**（`previewNumberingNext` / `useTaktFormNumbering`）；编辑态规则隐藏、编码 `disabled`。`DocumentType` 存 **MenuName**（非 Id）。文案：`common.page.form.numberingRule` / `numberingCodePreview` / `numberingRuleRequired`。参照 `announcement-form.vue` / `employee-form.vue`。❌ 禁止按类型/性别猜规则码；❌ 禁止手输业务编码；❌ 禁止无 `documentType` 过滤拉全量规则
+- **TaktNumbering 自动编码（上传引擎）**：字段描述含「自动通过 TaktNumbering」且含 MIME → **不走表单选规则**；由 `TaktFileUploadEngine` 按 MIME→`FD-F*` 调 `ITaktNumberingGenerator`
 - 长表单：`a-tabs` 分 Tab；Tab 文案用 `{路径}.page.tabs.*` 静态 locales
 
 ❌ 在 form 内再包 `TaktModal`；❌ 硬编码中文；❌ 表单控件 `size="small"`（须 Ant Design 默认 `middle`）；❌ 隔离/只读字段用 HTML `readonly`（须 `disabled`，参照 `user-form.vue`）；❌ 大块 scoped 布局 CSS（Tailwind / 极简 `:deep` 例外见 `02-frontend` §1.2）
@@ -71,7 +75,7 @@ loading?: boolean
 
 ```text
 a-form（或 a-form 外包 a-tabs）
-  → a-form-item + a-input / TaktSelect / a-input-number …
+  → a-form-item + a-input / TaktSelect / a-input-number / takt-rich-editor / takt-upload-file …
   → 业务复杂时分 a-tab-pane
 ```
 
@@ -203,4 +207,7 @@ async function handleFormSubmit() {
 - 主子表：**必须** getValues 含子表数组；与后端 Create/UpdateDto 字段名一致
 - 树表：**必须** parentId 为 string + tree-options API
 - 字段标签优先 `entity.*`；Tab/页面专有文案 `{路径}.page.*`
+- 「xxx内容」字段：**必须** `takt-rich-editor`，禁止用 `a-input` / `a-textarea` 代替
+- 同时有 `fileName` + `accessUrl` 的业务实体：**必须** `takt-upload-file`，`fileName` 仅上传回填；禁止给 `TaktFile` 自身生成该控件
+- 实体字段含「自动通过 TaktNumbering」且无 MIME：**必须** 规则下拉 + 只读编码（`useTaktFormNumbering`）；含 MIME 的文件编码走上传引擎，不生成表单规则选择
 - 实现清单：`.cursor/skills/14-vue-form/SKILL.md`

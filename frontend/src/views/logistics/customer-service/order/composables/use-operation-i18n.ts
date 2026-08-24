@@ -20,7 +20,6 @@ export const APSOPERATION_SELF_I18N_KEY = buildEntitySelfI18nKey(APSOPERATION_EN
 
 /** 列表业务列（不含主键） */
 export const APSOPERATION_LIST_FIELDS = [
-  'apsOrderId',
   'apsOrderCode',
   'lineNumber',
   'routingItemId',
@@ -34,11 +33,11 @@ export const APSOPERATION_LIST_FIELDS = [
   'changeoverMinutes',
   'operationStatus',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const APSOPERATION_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'apsOrderId',
   'apsOrderCode',
   'lineNumber',
   'routingItemId',
@@ -65,21 +64,7 @@ export const APSOPERATION_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const APSOPERATION_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  routingItemId: 'optional',
-  processCode: 'required',
-  processName: 'optional',
-  workCenterCode: 'optional',
-  workCenterResourceId: 'optional',
-  plannedStartTime: 'optional',
-  plannedEndTime: 'optional',
-  plannedDurationMinutes: 'select',
-  changeoverMinutes: 'select',
-  operationStatus: 'select',
-  isObsolete: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -87,35 +72,13 @@ export type ApsOperationField = keyof typeof APSOPERATION_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const APSOPERATION_QUERY_STRING_FIELDS = [
-  'apsOrderCode',
-  'routingItemId',
-  'processCode',
-  'processName',
-  'workCenterCode',
-  'workCenterResourceId',
-  'plannedStartTimeStart',
-  'plannedStartTimeEnd',
-  'plannedEndTimeStart',
-  'plannedEndTimeEnd',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ApsOperationQuery)[]
 
-export type ApsOperationQueryField =
-  | (typeof APSOPERATION_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'plannedDurationMinutes' | 'changeoverMinutes' | 'operationStatus' | 'isObsolete'
+export type ApsOperationQueryField = (typeof APSOPERATION_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const APSOPERATION_QUERY_FIELDS: readonly ApsOperationQueryField[] = [
-  ...APSOPERATION_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'plannedDurationMinutes',
-  'changeoverMinutes',
-  'operationStatus',
-  'isObsolete',
-]
+export const APSOPERATION_QUERY_FIELDS: readonly ApsOperationQueryField[] = [...APSOPERATION_QUERY_STRING_FIELDS]
 
 /**
  * ApsOperation字段 i18n：index / operation-form 统一入口

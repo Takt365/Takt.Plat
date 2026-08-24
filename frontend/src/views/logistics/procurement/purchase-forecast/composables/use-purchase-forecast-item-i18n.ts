@@ -20,7 +20,6 @@ export const PURCHASEFORECASTITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHAS
 
 /** 列表业务列（不含主键） */
 export const PURCHASEFORECASTITEM_LIST_FIELDS = [
-  'purchaseForecastId',
   'purchaseForecastCode',
   'lineNumber',
   'fiscalYear',
@@ -32,11 +31,11 @@ export const PURCHASEFORECASTITEM_LIST_FIELDS = [
   'estimatedUnitPrice',
   'estimatedAmount',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PURCHASEFORECASTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'purchaseForecastId',
   'purchaseForecastCode',
   'lineNumber',
   'fiscalYear',
@@ -65,20 +64,7 @@ export const PURCHASEFORECASTITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEFORECASTITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  fiscalYear: 'select',
-  planMonth: 'select',
-  planQuantity001: 'select',
-  planQuantity002: 'select',
-  planQuantityDelta: 'select',
-  convertedQuantity: 'select',
-  estimatedUnitPrice: 'select',
-  estimatedAmount: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -86,31 +72,13 @@ export type PurchaseForecastItemField = keyof typeof PURCHASEFORECASTITEM_PLACEH
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEFORECASTITEM_QUERY_STRING_FIELDS = [
-  'purchaseForecastCode',
-  'fiscalYear',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchaseForecastItemQuery)[]
 
-export type PurchaseForecastItemQueryField =
-  | (typeof PURCHASEFORECASTITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'planMonth' | 'planQuantity001' | 'planQuantity002' | 'planQuantityDelta' | 'convertedQuantity' | 'estimatedUnitPrice' | 'estimatedAmount' | 'isObsolete'
+export type PurchaseForecastItemQueryField = (typeof PURCHASEFORECASTITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEFORECASTITEM_QUERY_FIELDS: readonly PurchaseForecastItemQueryField[] = [
-  ...PURCHASEFORECASTITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'planMonth',
-  'planQuantity001',
-  'planQuantity002',
-  'planQuantityDelta',
-  'convertedQuantity',
-  'estimatedUnitPrice',
-  'estimatedAmount',
-  'isObsolete',
-]
+export const PURCHASEFORECASTITEM_QUERY_FIELDS: readonly PurchaseForecastItemQueryField[] = [...PURCHASEFORECASTITEM_QUERY_STRING_FIELDS]
 
 /**
  * PurchaseForecastItem字段 i18n：index / purchase-forecast-item-form 统一入口

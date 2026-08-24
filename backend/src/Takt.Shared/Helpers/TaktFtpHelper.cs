@@ -67,10 +67,10 @@ public static class TaktFtpHelper
     {
         ArgumentNullException.ThrowIfNull(config);
         ArgumentException.ThrowIfNullOrWhiteSpace(config.Host);
-        ArgumentException.ThrowIfNullOrWhiteSpace(config.Username);
+        ArgumentException.ThrowIfNullOrWhiteSpace(config.UserName);
         ArgumentException.ThrowIfNullOrWhiteSpace(config.Password);
 
-        var client = new AsyncFtpClient(config.Host, config.Username, config.Password, config.Port);
+        var client = new AsyncFtpClient(config.Host, config.UserName, config.Password, config.Port);
         
         if (config.EnableSsl)
         {

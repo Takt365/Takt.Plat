@@ -68,8 +68,18 @@ public class TaktEmployeeFamily : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "birth_date", ColumnDescription = "出生日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? BirthDate { get; set; }
     /// <summary>
-    /// 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否紧急联系人（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_emergency_contact", ColumnDescription = "是否紧急联系人", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsEmergencyContact { get; set; } = 0;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

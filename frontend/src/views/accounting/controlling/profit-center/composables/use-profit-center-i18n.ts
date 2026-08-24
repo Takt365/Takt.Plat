@@ -30,7 +30,6 @@ export const PROFITCENTER_LIST_FIELDS = [
   'profitCenterLevel',
   'validFrom',
   'validTo',
-  'plantCode',
   'profitCenterStatus',
 ] as const
 
@@ -38,8 +37,7 @@ export const PROFITCENTER_LIST_FIELDS = [
 export const PROFITCENTER_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  profitCenterCode: 'required',
+  cultureCode: 'optional',
   profitCenterName: 'required',
   parentId: 'required',
   managerId: 'optional',

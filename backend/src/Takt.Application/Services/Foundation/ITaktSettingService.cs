@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktSettingService.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：系统设置应用服务接口
 // 
@@ -71,18 +71,25 @@ public interface ITaktSettingService
     Task DeleteSettingBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新系统设置排序
-    /// </summary>
-    /// <param name="dto">排序DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktSettingDto> UpdateSettingSortAsync(TaktSettingSortDto dto);
-
-    /// <summary>
     /// 更新系统设置状态
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktSettingDto> UpdateSettingStatusAsync(TaktSettingStatusDto dto);
+
+    /// <summary>
+    /// 更新系统设置内置
+    /// </summary>
+    /// <param name="dto">内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktSettingDto> UpdateSettingBuiltInAsync(TaktSettingBuiltInDto dto);
+
+    /// <summary>
+    /// 更新系统设置排序
+    /// </summary>
+    /// <param name="dto">排序DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktSettingDto> UpdateSettingSortAsync(TaktSettingSortDto dto);
 
     /// <summary>
     /// 获取导入模板

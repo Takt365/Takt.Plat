@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktDeltaLogI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDeltaLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktDeltaLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.deltalog.username", "zh-HK", "用户名_hk", "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）"),
 
             // entity.deltalog.opertype
-            new TranslationSeedItem("entity.deltalog.opertype", "en-US", "操作类型_us", "操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）"),
+            new TranslationSeedItem("entity.deltalog.opertype", "en-US", "操作类型_us", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
             // entity.deltalog.opertype
-            new TranslationSeedItem("entity.deltalog.opertype", "ja-JP", "操作类型_jp", "操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）"),
+            new TranslationSeedItem("entity.deltalog.opertype", "ja-JP", "操作类型_jp", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
             // entity.deltalog.opertype
-            new TranslationSeedItem("entity.deltalog.opertype", "zh-CN", "操作类型", "操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）"),
+            new TranslationSeedItem("entity.deltalog.opertype", "zh-CN", "操作类型", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
             // entity.deltalog.opertype
-            new TranslationSeedItem("entity.deltalog.opertype", "zh-HK", "操作类型_hk", "操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）"),
+            new TranslationSeedItem("entity.deltalog.opertype", "zh-HK", "操作类型_hk", "操作类型（TaktConstants.OperType；如 create=新增、update=修改、delete=删除、query=查询）"),
 
             // entity.deltalog.tablename
             new TranslationSeedItem("entity.deltalog.tablename", "en-US", "表名_us", "数据库表名（SugarTable 物理表名）"),
@@ -190,31 +190,31 @@ public class TaktDeltaLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.deltalog.useragent", "zh-HK", "用户代理_hk", "用户代理（User-Agent）"),
 
             // entity.deltalog.browser
-            new TranslationSeedItem("entity.deltalog.browser", "en-US", "浏览器_us", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.browser", "en-US", "浏览器_us", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.deltalog.browser
-            new TranslationSeedItem("entity.deltalog.browser", "ja-JP", "浏览器_jp", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.browser", "ja-JP", "浏览器_jp", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.deltalog.browser
-            new TranslationSeedItem("entity.deltalog.browser", "zh-CN", "浏览器", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.browser", "zh-CN", "浏览器", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
             // entity.deltalog.browser
-            new TranslationSeedItem("entity.deltalog.browser", "zh-HK", "浏览器_hk", "浏览器（TaktConstants.BrowserType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.browser", "zh-HK", "浏览器_hk", "浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）"),
 
             // entity.deltalog.os
-            new TranslationSeedItem("entity.deltalog.os", "en-US", "操作系统_us", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.os", "en-US", "操作系统_us", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.deltalog.os
-            new TranslationSeedItem("entity.deltalog.os", "ja-JP", "操作系统_jp", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.os", "ja-JP", "操作系统_jp", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.deltalog.os
-            new TranslationSeedItem("entity.deltalog.os", "zh-CN", "操作系统", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.os", "zh-CN", "操作系统", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
             // entity.deltalog.os
-            new TranslationSeedItem("entity.deltalog.os", "zh-HK", "操作系统_hk", "操作系统（TaktConstants.OperatingSystem，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.os", "zh-HK", "操作系统_hk", "操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）"),
 
             // entity.deltalog.devicetype
-            new TranslationSeedItem("entity.deltalog.devicetype", "en-US", "登录设备_us", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.devicetype", "en-US", "登录设备_us", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
             // entity.deltalog.devicetype
-            new TranslationSeedItem("entity.deltalog.devicetype", "ja-JP", "登录设备_jp", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.devicetype", "ja-JP", "登录设备_jp", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
             // entity.deltalog.devicetype
-            new TranslationSeedItem("entity.deltalog.devicetype", "zh-CN", "登录设备", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.devicetype", "zh-CN", "登录设备", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
             // entity.deltalog.devicetype
-            new TranslationSeedItem("entity.deltalog.devicetype", "zh-HK", "登录设备_hk", "登录设备（TaktConstants.DeviceType，默认 unknown）"),
+            new TranslationSeedItem("entity.deltalog.devicetype", "zh-HK", "登录设备_hk", "登录设备（TaktConstants.DeviceType；如 unknown、pc、mobile、tablet）"),
 
             // entity.deltalog.opertime
             new TranslationSeedItem("entity.deltalog.opertime", "en-US", "操作时间_us", "操作时间（数据变更发生时刻）"),

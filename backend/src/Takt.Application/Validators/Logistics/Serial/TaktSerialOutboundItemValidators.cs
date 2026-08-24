@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Serial
 // 文件名称：TaktSerialOutboundItemValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialOutboundItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSerialOutboundItem 生成，请按需审阅）
 // 
@@ -36,15 +36,15 @@ public class TaktSerialOutboundItemCreateValidator : AbstractValidator<TaktSeria
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.OutboundId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.OutboundId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.OutboundId)
             .GreaterThanOrEqualTo(0).WithMessage("出库主表 ID不能为负数");
         RuleFor(x => x.OutboundCode)
-            .NotEmpty().WithMessage("出库单号不能为空")
+            .NotEmpty().WithMessage("出库单号不能为空").When(x => x.OutboundId <= 0)
             .MaximumLength(10).WithMessage("出库单号长度不能超过10个字符");
         RuleFor(x => x.OutboundSerialCode)
             .NotEmpty().WithMessage("出库序列号不能为空")
@@ -52,7 +52,7 @@ public class TaktSerialOutboundItemCreateValidator : AbstractValidator<TaktSeria
         RuleFor(x => x.ReferenceInboundId)
             .GreaterThanOrEqualTo(0).WithMessage("关联入库主表 ID不能为负数");
         RuleFor(x => x.ReferenceInboundCode)
-            .NotEmpty().WithMessage("关联入库单号不能为空")
+            .NotEmpty().WithMessage("关联入库单号不能为空").When(x => x.ReferenceInboundId <= 0)
             .MaximumLength(10).WithMessage("关联入库单号长度不能超过10个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -84,15 +84,15 @@ public class TaktSerialOutboundItemUpdateValidator : AbstractValidator<TaktSeria
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.OutboundId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.OutboundId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.OutboundId)
             .GreaterThanOrEqualTo(0).WithMessage("出库主表 ID不能为负数");
         RuleFor(x => x.OutboundCode)
-            .NotEmpty().WithMessage("出库单号不能为空")
+            .NotEmpty().WithMessage("出库单号不能为空").When(x => x.OutboundId <= 0)
             .MaximumLength(10).WithMessage("出库单号长度不能超过10个字符");
         RuleFor(x => x.OutboundSerialCode)
             .NotEmpty().WithMessage("出库序列号不能为空")
@@ -100,7 +100,7 @@ public class TaktSerialOutboundItemUpdateValidator : AbstractValidator<TaktSeria
         RuleFor(x => x.ReferenceInboundId)
             .GreaterThanOrEqualTo(0).WithMessage("关联入库主表 ID不能为负数");
         RuleFor(x => x.ReferenceInboundCode)
-            .NotEmpty().WithMessage("关联入库单号不能为空")
+            .NotEmpty().WithMessage("关联入库单号不能为空").When(x => x.ReferenceInboundId <= 0)
             .MaximumLength(10).WithMessage("关联入库单号长度不能超过10个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");

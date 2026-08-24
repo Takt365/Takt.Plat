@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/customer -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt客户信息实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt客户信息实体 <para>业务唯一键：TenantCode+CompanyCode+CustomerCode管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -97,16 +97,16 @@
             dict-type="sys_industry_attribute_type"
           />
         </template>
-        <template v-else-if="column.key === 'cultureCode'">
+        <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
-            :value="getCustomerDictValue(record, 'cultureCode')"
-            dict-type="sys_culture_code"
+            :value="getCustomerDictValue(record, 'taxCode')"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_rate_param"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'registrationCountry'">
@@ -136,13 +136,13 @@
         <template v-else-if="column.key === 'centralPostingBlock'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'centralPostingBlock')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'clearingWithVendor'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'clearingWithVendor')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'paymentTerms'">
@@ -234,6 +234,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
@@ -318,16 +328,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('cultureCode')">
-      <a-form-item :label="pi.queryLabel('cultureCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.cultureCode"
-          dict-type="sys_culture_code"
-          :placeholder="pi.queryPh('cultureCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('customerTaxNumber')">
       <a-form-item :label="pi.queryLabel('customerTaxNumber')">
         <a-input
@@ -339,11 +339,21 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('taxRate')">
       <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_rate_param"
+          dict-type="accounting_tax_code"
           :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
@@ -573,7 +583,7 @@
       <a-form-item :label="pi.queryLabel('centralPostingBlock')">
         <TaktSelect
           v-model:value="advancedQueryForm.centralPostingBlock"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('centralPostingBlock', 'select')"
           allow-clear
         />
@@ -603,7 +613,7 @@
       <a-form-item :label="pi.queryLabel('clearingWithVendor')">
         <TaktSelect
           v-model:value="advancedQueryForm.clearingWithVendor"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('clearingWithVendor', 'select')"
           allow-clear
         />
@@ -742,7 +752,7 @@
       <a-form-item :label="pi.queryLabel('customerStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('customerStatus', 'select')"
           allow-clear
         />
@@ -852,7 +862,7 @@
 
 <script setup lang="ts">
 /**
- * Takt客户信息实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * Takt客户信息实体 <para>业务唯一键：TenantCode+CompanyCode+CustomerCode管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/customer
  */
 import { ref, computed, onMounted } from 'vue'
@@ -1021,6 +1031,7 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
@@ -1087,6 +1098,7 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /**
  * 构建列表标准文本列
@@ -1162,6 +1174,8 @@ const toCustomerNumber = (value: string | number | undefined | null): number => 
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

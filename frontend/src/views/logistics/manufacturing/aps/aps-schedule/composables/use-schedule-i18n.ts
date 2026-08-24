@@ -20,7 +20,6 @@ export const APSSCHEDULE_SELF_I18N_KEY = buildEntitySelfI18nKey(APSSCHEDULE_ENTI
 
 /** 列表业务列（不含主键） */
 export const APSSCHEDULE_LIST_FIELDS = [
-  'materialRequirementsPlanningId',
   'materialRequirementsPlanningCode',
   'plantCode',
   'scheduleCode',
@@ -44,39 +43,12 @@ export const APSSCHEDULE_LIST_FIELDS = [
   'publishUserId',
   'publishUserName',
   'scheduleDescription',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const APSSCHEDULE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  materialRequirementsPlanningId: 'optional',
-  materialRequirementsPlanningCode: 'optional',
-  plantCode: 'select',
-  scheduleCode: 'required',
-  scheduleName: 'required',
-  scheduleType: 'select',
-  planDate: 'select',
-  planStartTime: 'select',
-  planEndTime: 'select',
-  planCycle: 'select',
-  workshopCode: 'optional',
-  workshopName: 'optional',
-  productionLineCode: 'optional',
-  productionLineName: 'optional',
-  scheduleStrategy: 'select',
-  scheduleAlgorithm: 'select',
-  optimizationObjective: 'select',
-  scheduleStatus: 'select',
-  plannerId: 'optional',
-  plannerName: 'optional',
-  publishTime: 'optional',
-  publishUserId: 'optional',
-  publishUserName: 'optional',
-  scheduleDescription: 'optional',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -84,48 +56,13 @@ export type ApsScheduleField = keyof typeof APSSCHEDULE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const APSSCHEDULE_QUERY_STRING_FIELDS = [
-  'materialRequirementsPlanningId',
-  'materialRequirementsPlanningCode',
-  'plantCode',
-  'scheduleCode',
-  'scheduleName',
-  'planDateStart',
-  'planDateEnd',
-  'planStartTimeStart',
-  'planStartTimeEnd',
-  'planEndTimeStart',
-  'planEndTimeEnd',
-  'workshopCode',
-  'workshopName',
-  'productionLineCode',
-  'productionLineName',
-  'plannerId',
-  'plannerName',
-  'publishTimeStart',
-  'publishTimeEnd',
-  'publishUserId',
-  'publishUserName',
-  'scheduleDescription',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ApsScheduleQuery)[]
 
-export type ApsScheduleQueryField =
-  | (typeof APSSCHEDULE_QUERY_STRING_FIELDS)[number]
-  | 'scheduleType' | 'planCycle' | 'scheduleStrategy' | 'scheduleAlgorithm' | 'optimizationObjective' | 'scheduleStatus'
+export type ApsScheduleQueryField = (typeof APSSCHEDULE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const APSSCHEDULE_QUERY_FIELDS: readonly ApsScheduleQueryField[] = [
-  ...APSSCHEDULE_QUERY_STRING_FIELDS,
-  'scheduleType',
-  'planCycle',
-  'scheduleStrategy',
-  'scheduleAlgorithm',
-  'optimizationObjective',
-  'scheduleStatus',
-]
+export const APSSCHEDULE_QUERY_FIELDS: readonly ApsScheduleQueryField[] = [...APSSCHEDULE_QUERY_STRING_FIELDS]
 
 /**
  * APS排程主表字段 i18n：index / schedule-form 统一入口

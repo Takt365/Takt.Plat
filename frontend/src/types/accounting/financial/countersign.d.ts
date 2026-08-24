@@ -99,7 +99,7 @@ export interface Countersign extends ApprovalDtoBase {
   costBearerDept?: string;
 
   /**
-   * 预算否（字典 sys_yes_no_type）
+   * 预算否（字典 sys_yes_no）
    */
   isBudget: number;
 
@@ -244,7 +244,7 @@ export interface CountersignQuery extends TaktPagedQuery {
   costBearerDept?: string;
 
   /**
-   * 预算否（字典 sys_yes_no_type）
+   * 预算否（字典 sys_yes_no）
    */
   isBudget?: number;
 
@@ -451,7 +451,7 @@ export interface CountersignCreate {
   costBearerDept?: string;
 
   /**
-   * 预算否（字典 sys_yes_no_type）
+   * 预算否（字典 sys_yes_no）
    */
   isBudget: number;
 
@@ -639,7 +639,7 @@ export interface CountersignTemplate {
   costBearerDept?: string;
 
   /**
-   * 预算否（字典 sys_yes_no_type）
+   * 预算否（字典 sys_yes_no）
    */
   isBudget?: number;
 
@@ -801,7 +801,7 @@ export interface CountersignImport {
   costBearerDept?: string;
 
   /**
-   * 预算否（字典 sys_yes_no_type）
+   * 预算否（字典 sys_yes_no）
    */
   isBudget?: number;
 
@@ -945,7 +945,7 @@ export interface CountersignExport {
   costBearerDept?: string;
 
   /**
-   * 预算否（字典 sys_yes_no_type）
+   * 预算否（字典 sys_yes_no）
    */
   isBudget: number;
 

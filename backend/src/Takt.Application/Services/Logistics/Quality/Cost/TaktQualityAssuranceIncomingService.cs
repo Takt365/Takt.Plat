@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceIncomingService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务来料检验费用明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktQualityAssuranceIncomingService : TaktServiceBase, ITaktQuality
     }
 
     /// <summary>
-    /// 获取品质业务来料检验费用明细列表（分页）
+    /// 获取品质业务来料检验费用明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktQualityAssuranceIncomingDto>> GetQualityAssuranceIncomingListAsync(TaktQualityAssuranceIncomingQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktQualityAssuranceIncomingDto>.Create(
+                new List<TaktQualityAssuranceIncomingDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _qualityAssuranceIncomingRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -311,7 +319,15 @@ public class TaktQualityAssuranceIncomingService : TaktServiceBase, ITaktQuality
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportQualityAssuranceIncomingAsync(TaktQualityAssuranceIncomingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityAssuranceIncomingQueryDto());
+        var queryDto = query ?? new TaktQualityAssuranceIncomingQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktQualityAssuranceIncomingExportDto>(),
+                sheetName ?? "品质业务来料检验费用明细数据",
+                fileName ?? "品质业务来料检验费用明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _qualityAssuranceIncomingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -349,6 +365,26 @@ public class TaktQualityAssuranceIncomingService : TaktServiceBase, ITaktQuality
             throw new TaktBusinessException("品质业务主不存在");
         }
         entity.QualityAssuranceId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.QualityAssuranceCode))
+        {
+            entity.QualityAssuranceCode = master.QualityAssuranceCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -372,102 +408,187 @@ public class TaktQualityAssuranceIncomingService : TaktServiceBase, ITaktQuality
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QualityAssuranceId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.DirectManpowerCostPerMinute).Contains(keywords)
-                || SqlFunc.ToString(x.IncomingInspectionCost).Contains(keywords)
-                || SqlFunc.ToString(x.InspectionTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.TravelCost).Contains(keywords)
-                || SqlFunc.ToString(x.OtherExpenses).Contains(keywords)
                 || (x.IncomingNote != null && x.IncomingNote.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.QualityAssuranceId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.QualityAssuranceId == queryDto.QualityAssuranceId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityAssuranceCode))
-        {
-            exp = exp.And(x => x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(queryDto.QualityAssuranceCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.DirectManpowerCostPerMinute.HasValue == true)
-        {
-            exp = exp.And(x => x.DirectManpowerCostPerMinute == queryDto.DirectManpowerCostPerMinute);
-        }
-
-        if (queryDto?.IncomingInspectionCost.HasValue == true)
-        {
-            exp = exp.And(x => x.IncomingInspectionCost == queryDto.IncomingInspectionCost);
-        }
-
-        if (queryDto?.InspectionTimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.InspectionTimeMinutes == queryDto.InspectionTimeMinutes);
-        }
-
-        if (queryDto?.TravelCost.HasValue == true)
-        {
-            exp = exp.And(x => x.TravelCost == queryDto.TravelCost);
-        }
-
-        if (queryDto?.OtherExpenses.HasValue == true)
-        {
-            exp = exp.And(x => x.OtherExpenses == queryDto.OtherExpenses);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.IncomingNote))
-        {
-            exp = exp.And(x => x.IncomingNote != null && x.IncomingNote.Contains(queryDto.IncomingNote));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.QualityAssuranceId.HasValue == true)
+        {
+            var qualityAssuranceId = queryDto.QualityAssuranceId.Value;
+            exp = exp.And(x => x.QualityAssuranceId == qualityAssuranceId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityAssuranceCode))
+        {
+            var qualityAssuranceCode = queryDto.QualityAssuranceCode;
+            exp = exp.And(x => x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(qualityAssuranceCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.DirectManpowerCostPerMinute.HasValue == true)
+        {
+            var directManpowerCostPerMinute = queryDto.DirectManpowerCostPerMinute.Value;
+            exp = exp.And(x => x.DirectManpowerCostPerMinute == directManpowerCostPerMinute);
+        }
+
+        if (queryDto?.IncomingInspectionCost.HasValue == true)
+        {
+            var incomingInspectionCost = queryDto.IncomingInspectionCost.Value;
+            exp = exp.And(x => x.IncomingInspectionCost == incomingInspectionCost);
+        }
+
+        if (queryDto?.InspectionTimeMinutes.HasValue == true)
+        {
+            var inspectionTimeMinutes = queryDto.InspectionTimeMinutes.Value;
+            exp = exp.And(x => x.InspectionTimeMinutes == inspectionTimeMinutes);
+        }
+
+        if (queryDto?.TravelCost.HasValue == true)
+        {
+            var travelCost = queryDto.TravelCost.Value;
+            exp = exp.And(x => x.TravelCost == travelCost);
+        }
+
+        if (queryDto?.OtherExpenses.HasValue == true)
+        {
+            var otherExpenses = queryDto.OtherExpenses.Value;
+            exp = exp.And(x => x.OtherExpenses == otherExpenses);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.IncomingNote))
+        {
+            var incomingNote = queryDto.IncomingNote;
+            exp = exp.And(x => x.IncomingNote != null && x.IncomingNote.Contains(incomingNote));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktQualityAssuranceIncomingQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.QualityAssuranceId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.QualityAssuranceCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DirectManpowerCostPerMinute.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IncomingInspectionCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.InspectionTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TravelCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OtherExpenses.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IncomingNote))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

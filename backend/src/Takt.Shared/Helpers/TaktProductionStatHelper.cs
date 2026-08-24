@@ -27,7 +27,7 @@ public static class TaktProductionStatHelper
     public const int AssyStandardOperationRateTypePersonnel = 1;
 
     /// <summary>
-    /// 标准生产稼动率启用状态（字典 sys_normal_disable_status=1）
+    /// 标准生产稼动率启用状态（字典 sys_normal_disable=1）
     /// </summary>
     public const int StandardOperationRateStatusEnabled = 1;
 

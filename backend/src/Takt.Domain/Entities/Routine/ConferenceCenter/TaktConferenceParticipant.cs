@@ -33,13 +33,18 @@ public class TaktConferenceParticipant : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
     /// <summary>
+    /// 行号（固定步长=10）
+    /// </summary>
+    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    public int LineNumber { get; set; } = 10;
+    /// <summary>
     /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
     /// <summary>
-    /// 用户姓名
+    /// 用户姓名（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户姓名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string UserName { get; set; } = string.Empty;
@@ -68,6 +73,11 @@ public class TaktConferenceParticipant : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "attendance_status", ColumnDescription = "出席状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AttendanceStatus { get; set; } = 0;
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     // ========================================
     // 导航属性区域

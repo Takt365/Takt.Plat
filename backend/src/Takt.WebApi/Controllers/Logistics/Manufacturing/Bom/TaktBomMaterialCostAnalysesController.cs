@@ -15,7 +15,6 @@ using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
 using Takt.Application.Services.Logistics.Manufacturing.Bom;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
-using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
 
@@ -36,99 +35,6 @@ public class TaktBomMaterialCostAnalysesController : TaktControllerBase
         ITaktBomMaterialCostAnalysisService bomMaterialCostAnalysisService)
     {
         _bomMaterialCostAnalysisService = bomMaterialCostAnalysisService;
-    }
-
-    /// <summary>
-    /// 三页共用：工厂选项（级联第 1 级；仅当前公司 RelatedPlant 且存在于本表）
-    /// </summary>
-    /// <returns>下拉选项（通常仅一项）</returns>
-    [HttpGet("plant-options")]
-    public async Task<IActionResult> GetBomMaterialCostAnalysisPlantOptionsAsync()
-    {
-        try
-        {
-            var result = await _bomMaterialCostAnalysisService.GetBomMaterialCostAnalysisPlantOptionsAsync();
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 三页共用：本表物料类型去重选项（分析视图专用）
-    /// <para>数据源仅 takt_bom_material_cost.MaterialType；❌ 非字典 logistics_material_type（CRUD 表单用）。</para>
-    /// </summary>
-    /// <param name="queryDto">须 PlantCode</param>
-    /// <returns>DictValue/DictLabel=MaterialType</returns>
-    [HttpGet("material-type-options")]
-    public async Task<IActionResult> GetBomMaterialCostAnalysisMaterialTypeOptionsAsync(
-        [FromQuery] TaktBomMaterialCostAnalysisMaterialTypeOptionsQueryDto queryDto)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-            {
-                return Success(new List<TaktSelectOption>(), "查询成功");
-            }
-            var result = await _bomMaterialCostAnalysisService.GetBomMaterialCostAnalysisMaterialTypeOptionsAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 三页共用：本表机种去重选项（分析视图；须工厂 + MaterialType）
-    /// <para>数据源仅 takt_logistics_manufacturing_bom_material_cost.ModelCode；❌ 非 CRUD 主数据 TaktModelDestination。</para>
-    /// </summary>
-    /// <param name="queryDto">机种选项查询</param>
-    /// <returns>下拉选项</returns>
-    [HttpGet("model-options")]
-    public async Task<IActionResult> GetBomMaterialCostAnalysisModelOptionsAsync(
-        [FromQuery] TaktBomMaterialCostAnalysisModelOptionsQueryDto queryDto)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-            {
-                return Success(new List<TaktSelectOption>(), "查询成功");
-            }
-            var result = await _bomMaterialCostAnalysisService.GetBomMaterialCostAnalysisModelOptionsAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 三页共用：本表物料/产品去重选项（级联第 3 级）
-    /// <para>数据源仅 takt_logistics_manufacturing_bom_material_cost.ProductCode（按工厂+物料类型+可选机种去重），非 MaterialPlant、非字典。</para>
-    /// </summary>
-    /// <param name="queryDto">须 PlantCode；建议 MaterialType；ModelCode 可空</param>
-    /// <returns>DictValue=ProductCode；DictLabel=编码+描述；ExtValue=ModelCode；ExtLabel=MaterialType</returns>
-    [HttpGet("product-options")]
-    public async Task<IActionResult> GetBomMaterialCostAnalysisProductOptionsAsync(
-        [FromQuery] TaktBomMaterialCostAnalysisProductOptionsQueryDto queryDto)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-            {
-                return Success(new List<TaktSelectOption>(), "查询成功");
-            }
-            var result = await _bomMaterialCostAnalysisService.GetBomMaterialCostAnalysisProductOptionsAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
     }
 
     /// <summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Organization
 // 文件名称：TaktDeptDtos.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Dept 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDept 生成，请按需审阅）
 // 
@@ -41,14 +41,19 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// 部门简称（与 ISO 编码一致，长度 6）
     /// </summary>
     public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称1
     /// </summary>
-    public string DeptName { get; set; } = string.Empty;
+    public string DeptName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门名称2
+    /// </summary>
+    public string DeptName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -67,12 +72,12 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string DeptPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 叶子节点（字典 sys_yes_no_type；0=否 1=是）
+    /// 叶子节点（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// ISO 编码
+    /// ISO 编码（与部门简称一致，长度 6）
     /// </summary>
     public string IsoCode { get; set; } = string.Empty;
 
@@ -93,7 +98,7 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public long HeadUserId { get; set; }
 
     /// <summary>
-    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
     /// </summary>
     public string HeadUserName { get; set; } = string.Empty;
 
@@ -113,7 +118,7 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -123,14 +128,26 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（同级部门排序）
+    /// 排序号（回填）（同级部门排序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int DeptStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）
+    /// （RBAC：TaktRoleDept）
+    /// </summary>
+    public List<TaktRoleDeptDto>? RoleDepts { get; set; }
+
+    /// <summary>
+    /// 员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）
+    /// （RBAC：TaktEmployeeDept）
+    /// </summary>
+    public List<TaktEmployeeDeptDto>? EmployeeDepts { get; set; }
 
 }
 
@@ -145,9 +162,9 @@ public class TaktDeptDto : TaktCompanyDtoBase
 public class TaktDeptTreeDto : TaktDeptDto
 {
     /// <summary>
-    /// 子节点
+    /// 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
     /// </summary>
-    public List<TaktDeptTreeDto> Children { get; set; } = new();
+    public List<TaktDeptTreeDto>? Children { get; set; }
 }
 
 // ========================================
@@ -186,14 +203,19 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// 部门简称（与 ISO 编码一致，长度 6）
     /// </summary>
     public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称1
     /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
+    public string? DeptName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门名称2
+    /// </summary>
+    public string? DeptName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -212,12 +234,12 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? DeptPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 叶子节点（字典 sys_yes_no_type；0=否 1=是）
+    /// 叶子节点（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsLeaf { get; set; }
 
     /// <summary>
-    /// ISO 编码
+    /// ISO 编码（与部门简称一致，长度 6）
     /// </summary>
     public string? IsoCode { get; set; } = string.Empty;
 
@@ -238,7 +260,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public long? HeadUserId { get; set; }
 
     /// <summary>
-    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
     /// </summary>
     public string? HeadUserName { get; set; } = string.Empty;
 
@@ -258,7 +280,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -268,12 +290,12 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（同级部门排序）
+    /// 排序号（回填）（同级部门排序）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? DeptStatus { get; set; }
 
@@ -334,16 +356,22 @@ public class TaktDeptCreateDto
     public string DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// 部门简称（与 ISO 编码一致，长度 6）
     /// </summary>
-    [Required(ErrorMessage = "部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）不能为空")]
+    [Required(ErrorMessage = "部门简称不能为空")]
     public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称1
     /// </summary>
-    [Required(ErrorMessage = "部门名称不能为空")]
-    public string DeptName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "部门名称1不能为空")]
+    public string DeptName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门名称2
+    /// </summary>
+    [Required(ErrorMessage = "部门名称2不能为空")]
+    public string DeptName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -352,7 +380,7 @@ public class TaktDeptCreateDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// ISO 编码
+    /// ISO 编码（与部门简称一致，长度 6）
     /// </summary>
     [Required(ErrorMessage = "ISO 编码不能为空")]
     public string IsoCode { get; set; } = string.Empty;
@@ -375,9 +403,8 @@ public class TaktDeptCreateDto
     public long HeadUserId { get; set; }
 
     /// <summary>
-    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
     /// </summary>
-    [Required(ErrorMessage = "部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）不能为空")]
     public string HeadUserName { get; set; } = string.Empty;
 
     /// <summary>
@@ -399,7 +426,7 @@ public class TaktDeptCreateDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -410,7 +437,7 @@ public class TaktDeptCreateDto
     public string DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int DeptStatus { get; set; } = 0;
 
@@ -474,9 +501,9 @@ public class TaktDeptStatusDto
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）不能为空")]
     public int DeptStatus { get; set; } = 0;
 }
 
@@ -498,10 +525,34 @@ public class TaktDeptSortDto
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 排序号（同级部门排序）
+    /// 排序号（回填）（同级部门排序）
     /// </summary>
-    [Required(ErrorMessage = "排序号（同级部门排序）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（同级部门排序）不能为空")]
     public int SortOrder { get; set; } = 0;
+}
+
+// ========================================
+// Dept 内置 DTO
+// ========================================
+
+/// <summary>
+/// Dept 内置更新 DTO
+/// </summary>
+public class TaktDeptBuiltInDto
+{
+    /// <summary>
+    /// DeptID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long DeptId { get; set; }
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no；1=是，0=否）
+    /// </summary>
+    [Required(ErrorMessage = "内置不能为空")]
+    public int IsBuiltIn { get; set; } = 0;
 }
 
 // ========================================
@@ -539,14 +590,19 @@ public class TaktDeptTemplateDto
     public string? DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// 部门简称（与 ISO 编码一致，长度 6）
     /// </summary>
     public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称1
     /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
+    public string? DeptName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门名称2
+    /// </summary>
+    public string? DeptName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -555,7 +611,7 @@ public class TaktDeptTemplateDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// ISO 编码
+    /// ISO 编码（与部门简称一致，长度 6）
     /// </summary>
     public string? IsoCode { get; set; } = string.Empty;
 
@@ -576,7 +632,7 @@ public class TaktDeptTemplateDto
     public long? HeadUserId { get; set; }
 
     /// <summary>
-    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
     /// </summary>
     public string? HeadUserName { get; set; } = string.Empty;
 
@@ -596,7 +652,7 @@ public class TaktDeptTemplateDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -606,7 +662,7 @@ public class TaktDeptTemplateDto
     public string? DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? DeptStatus { get; set; }
 
@@ -663,14 +719,19 @@ public class TaktDeptImportDto
     public string? DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// 部门简称（与 ISO 编码一致，长度 6）
     /// </summary>
     public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称1
     /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
+    public string? DeptName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门名称2
+    /// </summary>
+    public string? DeptName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -679,7 +740,7 @@ public class TaktDeptImportDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// ISO 编码
+    /// ISO 编码（与部门简称一致，长度 6）
     /// </summary>
     public string? IsoCode { get; set; } = string.Empty;
 
@@ -700,7 +761,7 @@ public class TaktDeptImportDto
     public long? HeadUserId { get; set; }
 
     /// <summary>
-    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
     /// </summary>
     public string? HeadUserName { get; set; } = string.Empty;
 
@@ -720,7 +781,7 @@ public class TaktDeptImportDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -730,7 +791,7 @@ public class TaktDeptImportDto
     public string? DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? DeptStatus { get; set; }
 
@@ -793,14 +854,19 @@ public class TaktDeptExportDto
     public string DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// 部门简称（与 ISO 编码一致，长度 6）
     /// </summary>
     public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称1
     /// </summary>
-    public string DeptName { get; set; } = string.Empty;
+    public string DeptName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门名称2
+    /// </summary>
+    public string DeptName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
@@ -819,12 +885,12 @@ public class TaktDeptExportDto
     public string DeptPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 叶子节点（字典 sys_yes_no_type；0=否 1=是）
+    /// 叶子节点（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// ISO 编码
+    /// ISO 编码（与部门简称一致，长度 6）
     /// </summary>
     public string IsoCode { get; set; } = string.Empty;
 
@@ -845,7 +911,7 @@ public class TaktDeptExportDto
     public long HeadUserId { get; set; }
 
     /// <summary>
-    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.NickName联动）
     /// </summary>
     public string HeadUserName { get; set; } = string.Empty;
 
@@ -865,7 +931,7 @@ public class TaktDeptExportDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -875,12 +941,12 @@ public class TaktDeptExportDto
     public string DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（同级部门排序）
+    /// 排序号（回填）（同级部门排序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int DeptStatus { get; set; } = 0;
 

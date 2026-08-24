@@ -217,13 +217,13 @@ public class TaktQuartzTaskI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.quartztask.executeparams", "zh-HK", "执行参数_hk", "执行参数"),
 
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "en-US", "并发_us", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "en-US", "并发_us", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "ja-JP", "并发_jp", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "ja-JP", "并发_jp", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "zh-CN", "并发", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "zh-CN", "并发", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "zh-HK", "并发_hk", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "zh-HK", "并发_hk", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.quartztask.misfirepolicy
             new TranslationSeedItem("entity.quartztask.misfirepolicy", "en-US", "Misfire策略_us", "Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）"),

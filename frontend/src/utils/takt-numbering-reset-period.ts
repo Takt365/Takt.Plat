@@ -5,7 +5,7 @@
 // 功能描述：编码规则 DateFormat ↔ ResetPeriod 对齐（与 TaktNumberingHelper 一致）
 // ========================================
 
-/** 日期格式 → 必须使用的重置周期（sys_reset_period_config dictValue） */
+/** 日期格式 → 必须使用的重置周期（sys_reset_period dictValue） */
 const DATE_FORMAT_TO_RESET_PERIOD: Readonly<Record<string, string>> = {
   none: 'none',
   yyyy: 'year',
@@ -51,7 +51,7 @@ export function normalizeNumberingDateFormatKey(dateFormat?: string | null): str
 /**
  * 归一化重置周期为字典 dictValue
  * @param resetPeriod 重置周期
- * @returns sys_reset_period_config dictValue
+ * @returns sys_reset_period dictValue
  */
 export function normalizeNumberingResetPeriod(resetPeriod?: string | null): string {
   const key = resetPeriod?.trim().toLowerCase() ?? 'none'

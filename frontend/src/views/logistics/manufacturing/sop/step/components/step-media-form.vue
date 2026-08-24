@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -35,18 +35,20 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('stepId')"
-                name="stepId"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <TaktSelect
-                  v-model:value="formState.stepId"
-                  api-url="TaktSopSteps/options"
-                  :placeholder="pi.ph('stepId')"
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -93,6 +95,43 @@
           </a-row>
         </div>
       </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
     </a-tabs>
   </a-form>
 </template>
@@ -113,15 +152,45 @@ const pi = useSopStepMediaI18n()
 import type { SopStepMediaCreate } from '@/types/logistics/manufacturing/sop/step-media'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["plantCode","stepId","mediaType","fileUrl","fileExt"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","mediaType","fileUrl","fileExt"]
 
 
 
@@ -132,12 +201,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -165,6 +237,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -173,28 +246,25 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.sopStepMediaId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  stepId: [
-    {
-      required: true,
-      message: pi.ph('stepId'),
-      trigger: 'change'
-    }
-  ],
   mediaType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -223,15 +293,55 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 sopStepId） */
+/** 映射为 Create/Update DTO（含主表外键 stepId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('mediaType' in payload) {
     const rawmediaType = payload.mediaType
-    payload.mediaType = typeof rawmediaType === 'number' ? rawmediaType : Number(rawmediaType)
+    if (rawmediaType === undefined || rawmediaType === null || rawmediaType === '') {
+      delete payload.mediaType
+    } else {
+      const nummediaType = typeof rawmediaType === 'number' ? rawmediaType : Number(rawmediaType)
+      if (Number.isFinite(nummediaType)) payload.mediaType = nummediaType
+      else delete payload.mediaType
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.sopStepId = props.masterId
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.sopStepMediaId) {
+    payload.sopStepMediaId = props.formData.sopStepMediaId
+  }
+  payload.stepId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.sopStepCode ?? masterRow.SopStepCode
+    const masterName = masterRow.sopStepName ?? masterRow.SopStepName
+    if (masterCode != null && masterCode !== '' && !payload.sopStepCode) {
+      payload.sopStepCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.sopStepName) {
+      payload.sopStepName = masterName
+    }
+    if (masterCode != null && masterCode !== '' && !payload.stepCode) {
+      payload.stepCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.stepName) {
+      payload.stepName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -242,6 +352,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.sopStepMediaId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

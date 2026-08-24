@@ -124,7 +124,7 @@ export interface MaterialRequirementsPlanningItem extends CompanyDtoBase {
   procurementType?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
+   * 是否作废（字典 sys_yes_no；0=否 1=是）
    */
   isObsolete?: number;
 
@@ -247,7 +247,7 @@ export interface MaterialRequirementsPlanningItemExport {
   procurementType: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
+   * 是否作废（字典 sys_yes_no；0=否 1=是）
    */
   isObsolete: number;
 

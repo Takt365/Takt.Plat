@@ -242,7 +242,7 @@ public class TaktWarehouseSeedData : ITaktSeedDataCoordinator
     /// <param name="WarehouseCode">存货地点编码</param>
     /// <param name="WarehouseName">仓库名称</param>
     /// <param name="WarehouseType">仓库类型（字典 logistics_warehouse_type）</param>
-    /// <param name="IsVirtual">是否虚拟仓（字典 sys_yes_no_type）</param>
+    /// <param name="IsVirtual">是否虚拟仓（字典 sys_yes_no）</param>
     /// <param name="SortOrder">排序号</param>
     private sealed record WarehouseSeedItem(
         string PlantCode,

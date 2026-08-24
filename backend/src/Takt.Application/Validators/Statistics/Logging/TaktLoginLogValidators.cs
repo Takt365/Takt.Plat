@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktLoginLogValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：LoginLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktLoginLog 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktLoginLogCreateValidator : AbstractValidator<TaktLoginLogCreateD
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.Username)
+        RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.LoginType)
@@ -103,7 +103,7 @@ public class TaktLoginLogUpdateValidator : AbstractValidator<TaktLoginLogUpdateD
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.Username)
+        RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.LoginType)

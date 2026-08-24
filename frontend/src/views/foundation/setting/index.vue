@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getSettingId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -71,42 +72,41 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'settingStatus'">
+          <a-switch
+            :checked="getSettingDictValue(record, 'settingStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleSettingStatusChange(record, Boolean(checked))"
+          />
+        </template>
         <template v-else-if="column.key === 'settingGroup'">
           <TaktDictTag
-            :value="getSettingField(record, 'settingGroup')"
+            :value="getSettingDictValue(record, 'settingGroup')"
             dict-type="sys_resource_type"
           />
         </template>
         <template v-else-if="column.key === 'valueType'">
           <TaktDictTag
-            :value="getSettingField(record, 'valueType')"
+            :value="getSettingDictValue(record, 'valueType')"
             dict-type="gen_display_type"
-          />
-        </template>
-        <template v-else-if="column.key === 'settingStatus'">
-          <a-switch
-            :checked="getSettingField(record, 'settingStatus') === 1"
-            :checked-children="t('common.page.button.enable')"
-            :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: unknown) => handleSettingStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'isReadonly'">
           <TaktDictTag
-            :value="getSettingField(record, 'isReadonly')"
-            dict-type="sys_yes_no_type"
+            :value="getSettingDictValue(record, 'isReadonly')"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isEncrypted'">
           <TaktDictTag
-            :value="getSettingField(record, 'isEncrypted')"
-            dict-type="sys_yes_no_type"
+            :value="getSettingDictValue(record, 'isEncrypted')"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
-            :value="getSettingField(record, 'isBuiltIn')"
-            dict-type="sys_yes_no_type"
+            :value="getSettingDictValue(record, 'isBuiltIn')"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -150,11 +150,31 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('settingKey')">
-      <a-form-item :label="t('entity.setting.key')">
+      <a-form-item :label="pi.queryLabel('settingKey')">
         <a-input
           v-model:value="advancedQueryForm.settingKey"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.key') })"
+          :placeholder="pi.queryPh('settingKey', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -162,10 +182,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('settingValue')">
-      <a-form-item :label="t('entity.setting.value')">
+      <a-form-item :label="pi.queryLabel('settingValue')">
         <a-input
           v-model:value="advancedQueryForm.settingValue"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.value') })"
+          :placeholder="pi.queryPh('settingValue', 'required')"
           show-count
           :maxlength="4000"
           allow-clear
@@ -173,10 +193,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('settingName')">
-      <a-form-item :label="t('entity.setting.name')">
+      <a-form-item :label="pi.queryLabel('settingName')">
         <a-input
           v-model:value="advancedQueryForm.settingName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.name') })"
+          :placeholder="pi.queryPh('settingName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -184,70 +204,80 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('settingDescription')">
-      <a-form-item :label="t('entity.setting.description')">
+      <a-form-item :label="pi.queryLabel('settingDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.settingDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.setting.description') })"
+          :placeholder="pi.queryPh('settingDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('settingGroup')">
-      <a-form-item :label="t('entity.setting.group')">
+      <a-form-item :label="pi.queryLabel('settingGroup')">
         <TaktSelect
           v-model:value="advancedQueryForm.settingGroup"
           dict-type="sys_resource_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.group') })"
+          :placeholder="pi.queryPh('settingGroup', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('valueType')">
-      <a-form-item :label="t('entity.setting.valuetype')">
+      <a-form-item :label="pi.queryLabel('valueType')">
         <TaktSelect
           v-model:value="advancedQueryForm.valueType"
           dict-type="gen_display_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.valuetype') })"
+          :placeholder="pi.queryPh('valueType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBuiltIn')">
-      <a-form-item :label="t('entity.setting.isbuiltin')">
+      <a-form-item :label="pi.queryLabel('isBuiltIn')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isbuiltin') })"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isBuiltIn', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isReadonly')">
-      <a-form-item :label="t('entity.setting.isreadonly')">
+      <a-form-item :label="pi.queryLabel('isReadonly')">
         <TaktSelect
           v-model:value="advancedQueryForm.isReadonly"
-          dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isreadonly') })"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isReadonly', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isEncrypted')">
-      <a-form-item :label="t('entity.setting.isencrypted')">
+      <a-form-item :label="pi.queryLabel('isEncrypted')">
         <TaktSelect
           v-model:value="advancedQueryForm.isEncrypted"
-          dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isencrypted') })"
+          dict-type="sys_yes_no"
+          :placeholder="pi.queryPh('isEncrypted', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('settingStatus')">
+      <a-form-item :label="pi.queryLabel('settingStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.settingStatus"
+          dict-type="sys_normal_disable"
+          :placeholder="pi.queryPh('settingStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -255,23 +285,13 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('settingStatus')">
-      <a-form-item :label="t('entity.setting.status')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.settingStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.status') })"
-          allow-clear
         />
       </a-form-item>
       </div>
@@ -290,7 +310,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -304,10 +324,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -321,7 +341,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.setting._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -329,7 +349,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.setting._self"
+        :entity-i18n-key="SETTING_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -375,13 +395,25 @@ import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useSettingI18n,
+  SETTING_LIST_FIELDS,
+  SETTING_QUERY_STRING_FIELDS,
+  SETTING_QUERY_FIELDS,
+  SETTING_SELF_I18N_KEY,
+} from './composables/use-setting-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSettingI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type SettingRowRecord = Setting | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktSetting')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.setting._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -397,9 +429,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Setting | null>(null)
+const selectedRow = ref<SettingRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Setting[]>([])
+const selectedRows = ref<SettingRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -416,39 +448,58 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SETTING_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    return true
+  }
+  if (form.isReadonly !== undefined && form.isReadonly !== null) {
+    return true
+  }
+  if (form.isEncrypted !== undefined && form.isEncrypted !== null) {
+    return true
+  }
+  if (form.settingStatus !== undefined && form.settingStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SETTING_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SETTING_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    isBuiltIn: undefined as number | undefined,
+    isReadonly: undefined as number | undefined,
+    isEncrypted: undefined as number | undefined,
+    settingStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  settingKey: '',
-  settingValue: '',
-  settingName: '',
-  settingDescription: '',
-  settingGroup: undefined as string | undefined,
-  valueType: undefined as string | undefined,
-  isBuiltIn: undefined as number | undefined,
-  isReadonly: undefined as number | undefined,
-  isEncrypted: undefined as number | undefined,
-  settingStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'settingKey', label: t('entity.setting.key') },
-  { key: 'settingValue', label: t('entity.setting.value') },
-  { key: 'settingName', label: t('entity.setting.name') },
-  { key: 'settingDescription', label: t('entity.setting.description') },
-  { key: 'settingGroup', label: t('entity.setting.group') },
-  { key: 'valueType', label: t('entity.setting.valuetype') },
-  { key: 'isBuiltIn', label: t('entity.setting.isbuiltin') },
-  { key: 'isReadonly', label: t('entity.setting.isreadonly') },
-  { key: 'isEncrypted', label: t('entity.setting.isencrypted') },
-  { key: 'settingStatus', label: t('entity.setting.status') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  SETTING_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -467,8 +518,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SettingQuery} 查询 DTO
  */
@@ -489,15 +541,8 @@ function buildListQuery(overrides?: Partial<SettingQuery>): SettingQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('settingKey', form.settingKey)
-  assignTrimmed('settingValue', form.settingValue)
-  assignTrimmed('settingName', form.settingName)
-  assignTrimmed('settingDescription', form.settingDescription)
-  if (form.settingGroup !== undefined && form.settingGroup !== null && form.settingGroup !== '') {
-    query.settingGroup = form.settingGroup
-  }
-  if (form.valueType !== undefined && form.valueType !== null && form.valueType !== '') {
-    query.valueType = form.valueType
+  for (const key of SETTING_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn
@@ -511,115 +556,42 @@ function buildListQuery(overrides?: Partial<SettingQuery>): SettingQuery {
   if (form.settingStatus !== undefined && form.settingStatus !== null) {
     query.settingStatus = form.settingStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
+
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildSettingListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'settingId',
-    key: 'settingId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'settingId') ?? ''
-  },
-  {
-    title: t('entity.setting.key'),
-    dataIndex: 'settingKey',
-    key: 'settingKey',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'settingKey') ?? ''
-  },
-  {
-    title: t('entity.setting.value'),
-    dataIndex: 'settingValue',
-    key: 'settingValue',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'settingValue') ?? ''
-  },
-  {
-    title: t('entity.setting.name'),
-    dataIndex: 'settingName',
-    key: 'settingName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'settingName') ?? ''
-  },
-  {
-    title: t('entity.setting.description'),
-    dataIndex: 'settingDescription',
-    key: 'settingDescription',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'settingDescription') ?? ''
-  },
-  {
-    title: t('entity.setting.group'),
-    dataIndex: 'settingGroup',
-    key: 'settingGroup',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.setting.valuetype'),
-    dataIndex: 'valueType',
-    key: 'valueType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.setting.isbuiltin'),
-    dataIndex: 'isBuiltIn',
-    key: 'isBuiltIn',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.setting.isreadonly'),
-    dataIndex: 'isReadonly',
-    key: 'isReadonly',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.setting.isencrypted'),
-    dataIndex: 'isEncrypted',
-    key: 'isEncrypted',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.setting.status'),
-    dataIndex: 'settingStatus',
-    key: 'settingStatus',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-  },
+  buildSettingListColumn('settingId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...SETTING_LIST_FIELDS.map((key) => buildSettingListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -628,7 +600,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'foundation:setting:update',
-        onClick: (record: Setting) => handleEdit(record)
+        onClick: (record: SettingRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -636,43 +608,63 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'foundation:setting:delete',
-        onClick: (record: Setting) => handleDeleteOne(record)
+        onClick: (record: SettingRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSettingId = (record: any): string => record?.[entityIdName] ?? ''
+const getSettingId = (record: SettingRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getSettingField = (record: any, field: string): any => record?.[field]
+const getSettingDictValue = (
+  record: SettingRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toSettingNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Setting[]) => {
+  onChange: (keys: (string | number)[], rows: SettingRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: Setting, selected: boolean) => {
+  onSelect: (record: SettingRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getSettingId(selectedRow.value) === getSettingId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Setting[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SettingRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Setting) => ({
+const onClickRow = (record: SettingRowRecord) => ({
   onClick: () => {
     const key = getSettingId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -693,6 +685,11 @@ const onClickRow = (record: Setting) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSettingList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -718,46 +715,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  settingKey: '',
-  settingValue: '',
-  settingName: '',
-  settingDescription: '',
-  settingGroup: undefined as string | undefined,
-  valueType: undefined as string | undefined,
-  isBuiltIn: undefined as number | undefined,
-  isReadonly: undefined as number | undefined,
-  isEncrypted: undefined as number | undefined,
-  settingStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.setting._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Setting) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.setting._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: SettingRowRecord) {
+  const id = getSettingId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getSettingById(id)
+    formData.value = detail ?? ({ ...record } as Partial<Setting>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.setting._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -775,10 +769,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSetting(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.setting._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSetting(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.setting._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -828,6 +822,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSetting(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -851,24 +848,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.setting._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Setting] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.setting._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Setting) {
+async function handleDeleteOne(record: SettingRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.setting._self'), name: t('common.tip.this.target', { target: t('entity.setting._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSettingById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.setting._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -876,18 +873,18 @@ async function handleDeleteOne(record: Setting) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.setting._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.setting._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSettingBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.setting._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -897,9 +894,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleSettingStatusChange(record: Setting, checked: boolean) {
+async function handleSettingStatusChange(record: SettingRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getSettingField(record, 'settingStatus')
+  const oldVal = toSettingNumber(getSettingDictValue(record, 'settingStatus'))
   const id = getSettingId(record)
   const row = dataSource.value.find((item) => getSettingId(item) === id)
   if (row) {
@@ -908,7 +905,8 @@ async function handleSettingStatusChange(record: Setting, checked: boolean) {
   try {
     await updateSettingStatus({ settingId: id, settingStatus: newVal })
     message.success(t('common.feedback.updated'))
-  } catch {
+    
+  } catch (error: unknown) {
     if (row) {
       row.settingStatus = oldVal
     }
@@ -928,22 +926,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  settingKey: '',
-  settingValue: '',
-  settingName: '',
-  settingDescription: '',
-  settingGroup: undefined as string | undefined,
-  valueType: undefined as string | undefined,
-  isBuiltIn: undefined as number | undefined,
-  isReadonly: undefined as number | undefined,
-  isEncrypted: undefined as number | undefined,
-  settingStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

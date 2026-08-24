@@ -36,6 +36,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -44,11 +45,10 @@
                 :label="pi.label('cultureCode')"
                 name="cultureCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
                   :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -126,7 +126,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isLocked"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isLocked')"
                 />
               </a-form-item>
@@ -138,7 +138,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.forceLeaderAck"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('forceLeaderAck')"
                 />
               </a-form-item>
@@ -206,11 +206,10 @@
                 :label="pi.label('companyCode')"
                 name="companyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
                   :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -274,28 +273,6 @@
       section-border
       class="w-full min-w-0"
     >
-      <template #cell-plantCode="{ record }">
-        <TaktSelect
-          v-model:value="record.plantCode"
-          api-url="TaktPlants/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="sopContentPi.queryPh('plantCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-revisionId="{ record }">
-        <TaktSelect
-          v-model:value="record.revisionId"
-          api-url="TaktSopRevisions/options"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="sopContentPi.queryPh('revisionId', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
       <template #cell-sopId="{ record }">
         <TaktSelect
           v-model:value="record.sopId"
@@ -334,25 +311,31 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -383,16 +366,6 @@ const sopContentTableRef = ref<{
 /** 子表 sopContent 可编辑列 */
 const sopContentFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    key: 'plantCode',
-    title: sopContentPi.label('plantCode'),
-    width: 140,
-  },
-  {
-    key: 'revisionId',
-    title: sopContentPi.label('revisionId'),
-    width: 140,
-  },
-  {
     key: 'sopId',
     title: sopContentPi.label('sopId'),
     width: 140,
@@ -421,8 +394,6 @@ function syncChildRowsFromFormData(val: Partial<SopRevisionCreate & { sopRevisio
 
 function createDefaultSopContentRow(): Record<string, unknown> {
   return {
-    plantCode: '',
-    revisionId: '',
     sopId: '',
     contentTitle: '',
     steps: '',
@@ -440,7 +411,7 @@ function buildSubmitPayload() {
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      sopRevisionId: masterId,
+      revisionId: masterId,
     })),
   }
 }
@@ -506,10 +477,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.sopRevisionId
-    if (isCreate) {
+    if (!props.formData?.sopRevisionId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -517,13 +487,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   sopId: [
     {
       required: true,
@@ -604,21 +567,53 @@ function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
   if ('isLocked' in payload) {
     const rawisLocked = payload.isLocked
-    payload.isLocked = typeof rawisLocked === 'number' ? rawisLocked : Number(rawisLocked)
+    if (rawisLocked === undefined || rawisLocked === null || rawisLocked === '') {
+      delete payload.isLocked
+    } else {
+      const numisLocked = typeof rawisLocked === 'number' ? rawisLocked : Number(rawisLocked)
+      if (Number.isFinite(numisLocked)) payload.isLocked = numisLocked
+      else delete payload.isLocked
+    }
   }
   if ('forceLeaderAck' in payload) {
     const rawforceLeaderAck = payload.forceLeaderAck
-    payload.forceLeaderAck = typeof rawforceLeaderAck === 'number' ? rawforceLeaderAck : Number(rawforceLeaderAck)
+    if (rawforceLeaderAck === undefined || rawforceLeaderAck === null || rawforceLeaderAck === '') {
+      delete payload.forceLeaderAck
+    } else {
+      const numforceLeaderAck = typeof rawforceLeaderAck === 'number' ? rawforceLeaderAck : Number(rawforceLeaderAck)
+      if (Number.isFinite(numforceLeaderAck)) payload.forceLeaderAck = numforceLeaderAck
+      else delete payload.forceLeaderAck
+    }
   }
   if ('revisionStatus' in payload) {
     const rawrevisionStatus = payload.revisionStatus
-    payload.revisionStatus = typeof rawrevisionStatus === 'number' ? rawrevisionStatus : Number(rawrevisionStatus)
+    if (rawrevisionStatus === undefined || rawrevisionStatus === null || rawrevisionStatus === '') {
+      delete payload.revisionStatus
+    } else {
+      const numrevisionStatus = typeof rawrevisionStatus === 'number' ? rawrevisionStatus : Number(rawrevisionStatus)
+      if (Number.isFinite(numrevisionStatus)) payload.revisionStatus = numrevisionStatus
+      else delete payload.revisionStatus
+    }
   }
   if ('effectiveRule' in payload) {
     const raweffectiveRule = payload.effectiveRule
-    payload.effectiveRule = typeof raweffectiveRule === 'number' ? raweffectiveRule : Number(raweffectiveRule)
+    if (raweffectiveRule === undefined || raweffectiveRule === null || raweffectiveRule === '') {
+      delete payload.effectiveRule
+    } else {
+      const numeffectiveRule = typeof raweffectiveRule === 'number' ? raweffectiveRule : Number(raweffectiveRule)
+      if (Number.isFinite(numeffectiveRule)) payload.effectiveRule = numeffectiveRule
+      else delete payload.effectiveRule
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.sopRevisionId) {
+    payload.sopRevisionId = props.formData.sopRevisionId
+  }
   return payload
 }
 

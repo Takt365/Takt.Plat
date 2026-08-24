@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/sop/revision/components -->
 <!-- 文件名称：content-panel.vue -->
-<!-- 功能描述：SOP 版本实体主表实体右侧明细 sopContent 独立 CRUD（按主表选中 sopRevisionId 分页） -->
+<!-- 功能描述：SOP 版本实体主表实体右侧明细 sopContent 独立 CRUD（按主表选中 revisionId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -95,6 +95,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterSopRevisionId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -125,16 +126,6 @@
           v-model:value="advancedQueryForm.plantCode"
           api-url="TaktPlants/options"
           :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('revisionId')">
-      <a-form-item :label="pi.queryLabel('revisionId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.revisionId"
-          api-url="TaktSopRevisions/options"
-          :placeholder="pi.queryPh('revisionId', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -563,7 +554,7 @@ function buildListQuery(overrides?: Partial<SopContentQuery>): SopContentQuery {
   const query: SopContentQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    sopRevisionId: masterSopRevisionId.value,
+    revisionId: masterSopRevisionId.value,
     ...overrides,
   }
   if (kw.length > 0) {

@@ -131,5 +131,10 @@ export default {
         },
       },
     },
+    form: {
+      numberingRule: "採番ルール",
+      numberingCodePreview: "採番ルール選択後に自動生成",
+      numberingRuleRequired: "採番ルールを選択してください",
+    },
   },
 };

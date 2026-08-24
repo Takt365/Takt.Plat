@@ -93,7 +93,7 @@
         <template v-else-if="column.key === 'concurrent'">
           <TaktDictTag
             :value="getQuartzTaskDictValue(record, 'concurrent')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'misfirePolicy'">
@@ -408,7 +408,7 @@
       <a-form-item :label="pi.queryLabel('concurrent')">
         <TaktSelect
           v-model:value="advancedQueryForm.concurrent"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('concurrent', 'select')"
           allow-clear
         />

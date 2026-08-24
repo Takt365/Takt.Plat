@@ -11,32 +11,12 @@
 // ========================================
 
 import request from '@/api/request'
-import type { TaktSelectOption } from '@/types/common'
 import type {
   BomPriceDeltaTrendQuery,
   BomPriceDeltaTrendResult,
 } from '@/types/logistics/manufacturing/bom/price-delta-trend'
 
 const API_BASE = 'TaktBomPriceDeltaTrends'
-
-/**
- * 工厂选项 URL
- * @returns 相对路径
- */
-export function getBomPriceDeltaTrendPlantOptionsUrl(): string {
-  return `${API_BASE}/plant-options`
-}
-
-/**
- * 工厂选项
- * @returns 下拉选项
- */
-export function getBomPriceDeltaTrendPlantOptions(): Promise<TaktSelectOption[]> {
-  return request<TaktSelectOption[]>({
-    url: `${API_BASE}/plant-options`,
-    method: 'get',
-  })
-}
 
 /**
  * 成本差异推移列表

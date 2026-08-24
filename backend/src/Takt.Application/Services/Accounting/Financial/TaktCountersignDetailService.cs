@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktCountersignDetailService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会签单明细应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktCountersignDetailService : TaktServiceBase, ITaktCountersignDet
     }
 
     /// <summary>
-    /// 获取会签单明细列表（分页）
+    /// 获取会签单明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCountersignDetailDto>> GetCountersignDetailListAsync(TaktCountersignDetailQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCountersignDetailDto>.Create(
+                new List<TaktCountersignDetailDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _countersignDetailRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -96,13 +104,13 @@ public class TaktCountersignDetailService : TaktServiceBase, ITaktCountersignDet
     {
         EnsureThreeLayerContext();
         var list = await _countersignDetailRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.CountersignCode ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
+            x => x.ItemName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CountersignCode ?? e.Id.ToString(),
+            DictValue = e.CountersignCode,
+            DictLabel = e.ItemName ?? e.CountersignCode,
         }).ToList();
     }
 
@@ -303,7 +311,15 @@ public class TaktCountersignDetailService : TaktServiceBase, ITaktCountersignDet
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCountersignDetailAsync(TaktCountersignDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCountersignDetailQueryDto());
+        var queryDto = query ?? new TaktCountersignDetailQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCountersignDetailExportDto>(),
+                sheetName ?? "会签单明细数据",
+                fileName ?? "会签单明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _countersignDetailRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -341,102 +357,190 @@ public class TaktCountersignDetailService : TaktServiceBase, ITaktCountersignDet
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.CountersignId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.CountersignCode != null && x.CountersignCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.AllocationCategory != null && x.AllocationCategory.Contains(keywords))
                 || (x.AccountTitle != null && x.AccountTitle.Contains(keywords))
                 || (x.ItemName != null && x.ItemName.Contains(keywords))
                 || (x.ItemDescription != null && x.ItemDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ItemQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.ItemAmount).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.CountersignId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.CountersignId == queryDto.CountersignId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CountersignCode))
-        {
-            exp = exp.And(x => x.CountersignCode != null && x.CountersignCode.Contains(queryDto.CountersignCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.AllocationCategory))
-        {
-            exp = exp.And(x => x.AllocationCategory != null && x.AllocationCategory.Contains(queryDto.AllocationCategory));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.AccountTitle))
-        {
-            exp = exp.And(x => x.AccountTitle != null && x.AccountTitle.Contains(queryDto.AccountTitle));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ItemName))
-        {
-            exp = exp.And(x => x.ItemName != null && x.ItemName.Contains(queryDto.ItemName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ItemDescription))
-        {
-            exp = exp.And(x => x.ItemDescription != null && x.ItemDescription.Contains(queryDto.ItemDescription));
-        }
-
-        if (queryDto?.ItemQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.ItemQuantity == queryDto.ItemQuantity);
-        }
-
-        if (queryDto?.ItemAmount.HasValue == true)
-        {
-            exp = exp.And(x => x.ItemAmount == queryDto.ItemAmount);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.CountersignId.HasValue == true)
+        {
+            var countersignId = queryDto.CountersignId.Value;
+            exp = exp.And(x => x.CountersignId == countersignId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountersignCode))
+        {
+            var countersignCode = queryDto.CountersignCode;
+            exp = exp.And(x => x.CountersignCode != null && x.CountersignCode.Contains(countersignCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AllocationCategory))
+        {
+            var allocationCategory = queryDto.AllocationCategory;
+            exp = exp.And(x => x.AllocationCategory != null && x.AllocationCategory.Contains(allocationCategory));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountTitle))
+        {
+            var accountTitle = queryDto.AccountTitle;
+            exp = exp.And(x => x.AccountTitle != null && x.AccountTitle.Contains(accountTitle));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ItemName))
+        {
+            var itemName = queryDto.ItemName;
+            exp = exp.And(x => x.ItemName != null && x.ItemName.Contains(itemName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ItemDescription))
+        {
+            var itemDescription = queryDto.ItemDescription;
+            exp = exp.And(x => x.ItemDescription != null && x.ItemDescription.Contains(itemDescription));
+        }
+
+        if (queryDto?.ItemQuantity.HasValue == true)
+        {
+            var itemQuantity = queryDto.ItemQuantity.Value;
+            exp = exp.And(x => x.ItemQuantity == itemQuantity);
+        }
+
+        if (queryDto?.ItemAmount.HasValue == true)
+        {
+            var itemAmount = queryDto.ItemAmount.Value;
+            exp = exp.And(x => x.ItemAmount == itemAmount);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCountersignDetailQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.CountersignId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountersignCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AllocationCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountTitle))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ItemName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ItemDescription))
+        {
+            return true;
+        }
+        if (queryDto.ItemQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ItemAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

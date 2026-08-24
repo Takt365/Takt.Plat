@@ -36,10 +36,11 @@ public interface ITaktProfitCenterService
     Task<TaktProfitCenterDto?> GetProfitCenterByIdAsync(long id);
 
     /// <summary>
-    /// 获取利润中心树形选项列表（DictValue 为 ProfitCenterCode，DictLabel 为利润中心名称）
+    /// 获取利润中心树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetProfitCenterTreeOptionsAsync();
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    Task<List<TaktTreeSelectOption>> GetProfitCenterTreeOptionsAsync(long parentId = 0);
 
     /// <summary>
     /// 获取利润中心树形列表

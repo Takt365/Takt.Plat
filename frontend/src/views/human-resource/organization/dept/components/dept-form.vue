@@ -53,6 +53,7 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -94,19 +95,34 @@
                   show-count
                   :maxlength="6"
                   allow-clear
+                  @update:value="syncDeptIsoFromShortName"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('deptName')"
-                name="deptName"
+                :label="pi.label('deptName1')"
+                name="deptName1"
               >
                 <a-input
-                  v-model:value="formState.deptName"
-                  :placeholder="pi.ph('deptName')"
+                  v-model:value="formState.deptName1"
+                  :placeholder="pi.ph('deptName1')"
                   show-count
-                  :maxlength="100"
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('deptName2')"
+                name="deptName2"
+              >
+                <a-input
+                  v-model:value="formState.deptName2"
+                  :placeholder="pi.ph('deptName2')"
+                  show-count
+                  :maxlength="70"
                   allow-clear
                 />
               </a-form-item>
@@ -120,9 +136,9 @@
                   v-model:value="formState.isoCode"
                   :placeholder="pi.ph('isoCode')"
                   show-count
-                  :maxlength="3"
+                  :maxlength="6"
                   allow-clear
-                  :disabled="!!formData?.deptId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -236,7 +252,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isBuiltIn')"
                 />
               </a-form-item>
@@ -260,7 +276,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.deptStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="pi.ph('deptStatus')"
                 />
               </a-form-item>
@@ -374,25 +390,31 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -400,7 +422,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","deptCode","deptShortName","deptName","isoCode","costCenterCode","costCategory","headUserId","headUserName","phone","email","location","isBuiltIn","deptDescription","deptStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","deptCode","deptShortName","deptName1","deptName2","isoCode","costCenterCode","costCategory","headUserId","headUserName","phone","email","location","isBuiltIn","deptDescription","deptStatus","extField","remark"]
 
 
 
@@ -427,6 +449,12 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
 }
 
 
+/** 部门简称变更时同步 ISO 编码（最多 6 位，与后端一致） */
+function syncDeptIsoFromShortName(value: string) {
+  const next = (value ?? '').trim().slice(0, 6)
+  formState.deptShortName = next
+  formState.isoCode = next
+}
 /** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
 function normalizeTreeParentId(target: Record<string, unknown>) {
   const raw = target.parentId
@@ -457,6 +485,7 @@ watch(
       applyScopeDefaults(next)
       Object.assign(formState, next)
       normalizeTreeParentId(formState)
+      syncDeptIsoFromShortName(String(formState.deptShortName ?? ''))
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -473,10 +502,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.deptId
-    if (isCreate) {
+    if (!props.formData?.deptId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -488,13 +516,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('parentId'),
-      trigger: 'change'
-    }
-  ],
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
       trigger: 'change'
     }
   ],
@@ -512,10 +533,17 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  deptName: [
+  deptName1: [
     {
       required: true,
-      message: pi.ph('deptName'),
+      message: pi.ph('deptName1'),
+      trigger: 'blur'
+    }
+  ],
+  deptName2: [
+    {
+      required: true,
+      message: pi.ph('deptName2'),
       trigger: 'blur'
     }
   ],
@@ -620,20 +648,43 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('costCategory' in payload) {
     const rawcostCategory = payload.costCategory
-    payload.costCategory = typeof rawcostCategory === 'number' ? rawcostCategory : Number(rawcostCategory)
+    if (rawcostCategory === undefined || rawcostCategory === null || rawcostCategory === '') {
+      delete payload.costCategory
+    } else {
+      const numcostCategory = typeof rawcostCategory === 'number' ? rawcostCategory : Number(rawcostCategory)
+      if (Number.isFinite(numcostCategory)) payload.costCategory = numcostCategory
+      else delete payload.costCategory
+    }
   }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn
-    payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+    if (rawisBuiltIn === undefined || rawisBuiltIn === null || rawisBuiltIn === '') {
+      delete payload.isBuiltIn
+    } else {
+      const numisBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+      if (Number.isFinite(numisBuiltIn)) payload.isBuiltIn = numisBuiltIn
+      else delete payload.isBuiltIn
+    }
   }
   if ('deptStatus' in payload) {
     const rawdeptStatus = payload.deptStatus
-    payload.deptStatus = typeof rawdeptStatus === 'number' ? rawdeptStatus : Number(rawdeptStatus)
+    if (rawdeptStatus === undefined || rawdeptStatus === null || rawdeptStatus === '') {
+      delete payload.deptStatus
+    } else {
+      const numdeptStatus = typeof rawdeptStatus === 'number' ? rawdeptStatus : Number(rawdeptStatus)
+      if (Number.isFinite(numdeptStatus)) payload.deptStatus = numdeptStatus
+      else delete payload.deptStatus
+    }
   }
-  const parentRaw = payload.parentId
-  const parentId = parentRaw === '' || parentRaw === undefined || parentRaw === null ? '0' : String(parentRaw)
-  payload.parentId = parentId
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.deptId) {
+    payload.deptId = props.formData.deptId
+  }
   return payload
 }
 

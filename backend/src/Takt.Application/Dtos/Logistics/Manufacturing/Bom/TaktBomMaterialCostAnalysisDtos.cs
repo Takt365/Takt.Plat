@@ -4,7 +4,7 @@
 // 文件名称：TaktBomMaterialCostAnalysisDtos.cs
 // 创建时间：2026-08-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：BOM 成本分析 DTO（转置 / 差异 / 月度涨跌；三页共用工厂/机种/物料级联选项查询）
+// 功能描述：BOM 成本分析 DTO（转置 / 差异 / 月度涨跌）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -14,67 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Takt.Shared.Models;
 
 namespace Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-
-// ========================================
-// 三页共用级联选项查询（工厂 → 物料类型 → 机种 → 物料/产品；本表去重）
-// 产品成本推移 / 机种成本推移查询栏统一引用本栈选项，不另建 Cascade 服务
-// ❌ 分析视图物料类型选项勿用字典 logistics_material_type（CRUD 表单专用）
-// ❌ 分析视图机种选项勿用 TaktBomMaterialCosts/model-options（CRUD 主数据 TaktModelDestination）
-// ========================================
-
-/// <summary>
-/// 物料类型选项查询（分析视图；本表 MaterialType 去重；须工厂）
-/// <para>❌ 非字典 logistics_material_type（CRUD 用）；仅返回头表真实存在的类型码。</para>
-/// </summary>
-public class TaktBomMaterialCostAnalysisMaterialTypeOptionsQueryDto
-{
-    /// <summary>
-    /// 工厂代码（必填；空则返回空列表）
-    /// </summary>
-    [Required]
-    public string PlantCode { get; set; } = string.Empty;
-}
-
-/// <summary>
-/// 机种选项查询（分析视图；本表 ModelCode 去重；须工厂；MaterialType 可空）
-/// <para>❌ 非 CRUD 主数据 TaktModelDestination / TaktBomMaterialCosts/model-options。</para>
-/// </summary>
-public class TaktBomMaterialCostAnalysisModelOptionsQueryDto
-{
-    /// <summary>
-    /// 工厂代码（必填；空则返回空列表）
-    /// </summary>
-    [Required]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料类型（本表 MaterialType；空=不过滤，返回该工厂全部机种）
-    /// </summary>
-    public string? MaterialType { get; set; }
-}
-
-/// <summary>
-/// 物料/产品选项查询（级联；须工厂；机种/物料类型可空）
-/// <para>仅查本表 TaktBomMaterialCost.ProductCode 去重；物料类型筛选用本表值，勿与 CRUD 字典选项混淆。</para>
-/// </summary>
-public class TaktBomMaterialCostAnalysisProductOptionsQueryDto
-{
-    /// <summary>
-    /// 工厂代码（必填；空则返回空列表）
-    /// </summary>
-    [Required]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 机种编码（可空；空则工厂下全部产品）
-    /// </summary>
-    public string? ModelCode { get; set; }
-
-    /// <summary>
-    /// 物料类型筛选（本表 MaterialType；空=不过滤）
-    /// </summary>
-    public string? MaterialType { get; set; }
-}
 
 // ========================================
 // BOM 物料成本明细转置/差异/涨跌分析 DTO

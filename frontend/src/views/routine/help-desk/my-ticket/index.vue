@@ -56,7 +56,7 @@
         <template v-else-if="column.key === 'priority'">
           <TaktDictTag
             :value="record.priority"
-            dict-type="sys_priority_level_category"
+            dict-type="sys_priority_level"
           />
         </template>
       </template>
@@ -85,21 +85,21 @@
         <a-form-item :label="t('entity.ticket.urgency')" name="urgency">
           <TaktSelect
             v-model:value="formState.urgency"
-            dict-type="sys_urgency_level_category"
+            dict-type="sys_urgency_level"
             size="small"
           />
         </a-form-item>
         <a-form-item :label="t('entity.ticket.impact')" name="impact">
           <TaktSelect
             v-model:value="formState.impact"
-            dict-type="sys_impact_level_category"
+            dict-type="sys_impact_level"
             size="small"
           />
         </a-form-item>
         <a-form-item :label="t('entity.ticket.priority')" name="priority">
           <TaktSelect
             v-model:value="computedPriority"
-            dict-type="sys_priority_level_category"
+            dict-type="sys_priority_level"
             size="small"
             disabled
           />

@@ -65,7 +65,7 @@ public sealed class TaktNumberingModel
     /// <summary>
     /// 重置周期
     /// </summary>
-    public string ResetPeriod { get; set; } = "none";
+    public string ResetPeriod { get; set; } = "None";
 
     /// <summary>
     /// 当前流水
@@ -83,7 +83,7 @@ public sealed class TaktNumberingModel
     public string? Description { get; set; }
 
     /// <summary>
-    /// 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// 单据类型（关联 TaktMenu.MenuName，选项 TaktMenus/tree-options?valueBy=name）
     /// </summary>
     public string DocumentType { get; set; } = string.Empty;
 

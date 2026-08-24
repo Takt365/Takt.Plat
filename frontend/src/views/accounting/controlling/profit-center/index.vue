@@ -9,7 +9,7 @@
 
 <template>
   <div class="accounting-controlling-profit-center">
-    <!-- 查询栏 -->
+    <!-- 第一行：左树查询栏 | 右表查询栏 -->
     <div class="accounting-controlling-profit-center-query-row">
       <TaktTreeLeftQueryBar
         v-model="treeQueryKeyword"
@@ -24,7 +24,7 @@
       />
     </div>
 
-    <!-- 工具栏 -->
+    <!-- 第二行：左树工具栏 | 右表工具栏 -->
     <div class="accounting-controlling-profit-center-toolbar-row">
       <TaktTreeLeftToolsBar
         v-model:expanded="treeExpanded"
@@ -66,7 +66,7 @@
       />
     </div>
 
-    <!-- 左树右表 -->
+    <!-- 第三行：左树 | 右树表 -->
     <div class="accounting-controlling-profit-center-tree-table-wrap">
       <TaktTreeLeftTable
         v-model:expanded-keys="treeExpandedKeys"
@@ -75,39 +75,31 @@
         :tree-field-names="{ title: 'title', key: 'key', children: 'children' }"
         :tree-width-ratio="0.2"
         :loading="loading"
-        :virtual="false"
+        :virtual="true"
         :draggable="true"
         @tree-select="handleTreeSelect"
         @tree-drop="handleTreeDrop"
       />
       <TaktTreeRightTable
         entity-scope="company"
-        v-model:current="tableCurrentPage"
-        v-model:page-size="tablePageSize"
         :columns="columns"
         :visible-column-keys="visibleColumnKeys"
         :id-column-key="'profitCenterId'"
         :action-column-key="'action'"
         table-mode="tree"
-        :data-source="paginatedFlatTableRows"
+        :data-source="tableFilteredTree"
+        v-model:expanded-row-keys="tableExpandedRowKeys"
         :loading="loading"
         :row-key="getProfitCenterId"
         :stripe="true"
         :row-selection="rowSelection"
-        :show-pagination="true"
-        :total="tableFlatTotal"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
       >
         <!-- 自定义列渲染 -->
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'profitCenterName'">
-            <span
-              class="inline-block"
-              :style="{ paddingLeft: `${(record._treeDepth ?? 0) * 16}px` }"
-            >
-              {{ getProfitCenterField(record, 'profitCenterName') }}
-            </span>
+            <span>{{ getProfitCenterField(record, 'profitCenterName') }}</span>
           </template>
         <template v-else-if="column.key === 'profitCenterStatus'">
           <a-switch
@@ -289,7 +281,7 @@
       <a-form-item :label="pi.queryLabel('profitCenterStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.profitCenterStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('profitCenterStatus', 'select')"
           allow-clear
         />
@@ -399,7 +391,7 @@
 
 <script setup lang="ts">
 /**
- * 利润中心实体树表管理页 · ParentId 左树右表（参照 dept/index.vue）
+ * 利润中心实体树表管理页 · 全量树左树右表（参照 identity/menu/index.vue）
  * @module views/accounting/controlling/profit-center
  */
 import { ref, computed, watch, watchEffect, onMounted } from 'vue'
@@ -408,7 +400,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { useTableRefresh } from '@/composables/use-table-refresh'
 import ProfitCenterForm from './components/profit-center-form.vue'
 import { getProfitCenterTree, getProfitCenterById, createProfitCenter, updateProfitCenter, deleteProfitCenterById, deleteProfitCenterBatch, getProfitCenterTemplate, importProfitCenter, exportProfitCenter, updateProfitCenterStatus, updateProfitCenterSort } from '@/api/accounting/controlling/profit-center'
 import type { ProfitCenter, ProfitCenterTree, ProfitCenterUpdate } from '@/types/accounting/controlling/profit-center'
@@ -419,7 +411,11 @@ import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import { useUserStore } from '@/stores/identity/user'
-
+import {
+  collectTaktTreeTableExpandableKeys,
+  filterTaktTreeTableNodes,
+  taktTreeTableNodeKey,
+} from '@/utils/takt-tree-table'
 import {
   useProfitCenterI18n,
   PROFITCENTER_QUERY_STRING_FIELDS,
@@ -451,12 +447,10 @@ const queryKeyword = ref('')
 const treeExpanded = ref(false)
 /** 左侧树当前展开的节点 key 列表 */
 const treeExpandedKeys = ref<(string | number)[]>([])
-/** 右侧表格展开状态（预留） */
+/** 右侧树表工具栏「全部展开/收缩」 */
 const tableExpanded = ref(false)
-/** 右侧拍平列表当前页码 */
-const tableCurrentPage = ref(getTaktDefaultPageIndex())
-/** 右侧拍平列表每页条数 */
-const tablePageSize = ref(getTaktDefaultPageSize())
+/** 右侧 a-table 树表当前展开行 key */
+const tableExpandedRowKeys = ref<(string | number)[]>([])
 /** 页面 loading（树加载、提交、导出等） */
 const loading = ref(false)
 /** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
@@ -486,7 +480,31 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PROFITCENTER_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.profitCenterLevel !== undefined && form.profitCenterLevel !== null) {
+    return true
+  }
+  if (form.profitCenterStatus !== undefined && form.profitCenterStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -497,8 +515,7 @@ function createEmptyAdvancedQueryForm() {
   return {
     ...form,
     profitCenterLevel: undefined as number | undefined,
-    profitCenterStatus: undefined as number | undefined,
-  }
+    profitCenterStatus: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -516,17 +533,11 @@ const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'profitCenterId'
-/** 树节点标题字段名（左侧树 title：ProfitCenterName 按 ParentId 递归） */
+/** 树节点标题字段名（左侧树 title） */
 const treeTitleField = 'profitCenterName'
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-
-/** 解析树节点 key（与列表 profitCenterId、左侧树 key 一致） */
-function resolveProfitCenterNodeKey(node: Record<string, unknown>): string {
-  const raw = node.key ?? node.profitCenterId ?? node.id
-  return raw == null ? '' : String(raw)
-}
 
 /**
  * 将接口树转为树表节点（保留 children，供 getSubtree 与左侧树共用 key）
@@ -542,6 +553,12 @@ function profitCenterTreeToTableNodes(nodes: ProfitCenterTree[]): Array<Record<s
       children: childNodes.length > 0 ? childNodes : undefined,
     }
   })
+}
+
+/** 解析树节点 key（与列表 profitCenterId、左侧树 key 一致） */
+function resolveProfitCenterNodeKey(node: Record<string, unknown>): string {
+  const raw = node.key ?? node.profitCenterId ?? node.id
+  return raw == null ? '' : String(raw)
 }
 
 /** 将 fullTableTree 转为左侧 a-tree（与右侧表共用 key，保证点选联动） */
@@ -593,9 +610,9 @@ function filterTreeByKeyword(nodes: TreeDataItem[], keyword: string): TreeDataIt
   const k = (keyword ?? '').trim().toLowerCase()
   if (!k) return nodes
   /** 递归过滤子树 */
-  function filter(nodes: TreeDataItem[]): TreeDataItem[] {
-    if (!nodes?.length) return []
-    return nodes
+  function filter(list: TreeDataItem[]): TreeDataItem[] {
+    if (!list?.length) return []
+    return list
       .map((node) => {
         const title = String(node.title ?? '').toLowerCase()
         const matched = title.includes(k)
@@ -622,39 +639,7 @@ const filteredTreeData = computed(() =>
 
 /** 从树数据中收集所有有子节点的 key（用于左侧树展开全部） */
 function collectTreeExpandableKeys(nodes: Array<Record<string, unknown>>): (string | number)[] {
-  if (!nodes?.length) return []
-  const keys: (string | number)[] = []
-  for (const node of nodes) {
-    const rawKey = node.key ?? node.profitCenterId ?? node.id
-    if (rawKey == null) continue
-    const key: string | number =
-      typeof rawKey === 'string' || typeof rawKey === 'number' ? rawKey : String(rawKey)
-    const children = (node.children as Array<Record<string, unknown>> | undefined) ?? []
-    if (children.length > 0) {
-      keys.push(key)
-      keys.push(...collectTreeExpandableKeys(children))
-    }
-  }
-  return keys
-}
-
-/**
- * 深度优先拍平树表行（附带 _treeDepth 供缩进列渲染）
- * @param nodes 树表节点
- * @param depth 当前层级
- */
-function flattenProfitCenterTableRows(nodes: Array<Record<string, unknown>>, depth = 0): Array<Record<string, unknown>> {
-  if (!nodes?.length) return []
-  const rows: Array<Record<string, unknown>> = []
-  for (const node of nodes) {
-    const childList = node.children as Array<Record<string, unknown>> | undefined
-    const { children: _children, ...rest } = node
-    rows.push({ ...rest, _treeDepth: depth })
-    if (childList?.length) {
-      rows.push(...flattenProfitCenterTableRows(childList, depth + 1))
-    }
-  }
-  return rows
+  return collectTaktTreeTableExpandableKeys(nodes, (node) => taktTreeTableNodeKey(node, 'profitCenterId'))
 }
 
 /** 右侧树表数据：选中左侧节点时显示该节点（含子级）；未选中时显示整棵树 */
@@ -676,8 +661,7 @@ function matchesProfitCenterRightQuery(record: Record<string, unknown>): boolean
   const kw = queryKeyword.value.trim()
   if (kw) {
     const k = kw.toLowerCase()
-    if (!String(record.profitCenterName ?? '').toLowerCase().includes(k)) return false
-    if (!String(record.profitCenterCode ?? '').toLowerCase().includes(k)) return false
+    if (!String(record.profitCenterName ?? '').toLowerCase().includes(k) && !String(record.profitCenterCode ?? '').toLowerCase().includes(k)) return false
   }
   if (advancedQueryForm.value.profitCenterCode && !String(record.profitCenterCode ?? '').includes(String(advancedQueryForm.value.profitCenterCode))) return false
   if (advancedQueryForm.value.profitCenterName && !String(record.profitCenterName ?? '').includes(String(advancedQueryForm.value.profitCenterName))) return false
@@ -700,27 +684,31 @@ function matchesProfitCenterRightQuery(record: Record<string, unknown>): boolean
   return true
 }
 
-/** 右侧拍平后的全部行（先左侧子树，再右侧查询过滤） */
-const tableFlatRows = computed(() =>
-  flattenProfitCenterTableRows(tableTreeData.value).filter(matchesProfitCenterRightQuery)
+/** 右侧过滤后的树（保留 children，供组件按展开路径拍平） */
+const tableFilteredTree = computed(() =>
+  filterTaktTreeTableNodes(tableTreeData.value, matchesProfitCenterRightQuery)
 )
-/** 右侧拍平总行数（分页 total） */
-const tableFlatTotal = computed(() => tableFlatRows.value.length)
-/** 当前页行数据 */
-const paginatedFlatTableRows = computed(() => {
-  const start = (tableCurrentPage.value - 1) * tablePageSize.value
-  return tableFlatRows.value.slice(start, start + tablePageSize.value)
+
+/**
+ * 同步右侧树表全部展开/收缩
+ * @returns {void}
+ */
+function applyProfitCenterTableExpandState() {
+  tableExpandedRowKeys.value = tableExpanded.value
+    ? collectTaktTreeTableExpandableKeys(tableFilteredTree.value, (node) =>
+        taktTreeTableNodeKey(node, 'profitCenterId'),
+      )
+    : []
+}
+
+watch(tableExpanded, applyProfitCenterTableExpandState)
+watch(tableFilteredTree, () => {
+  if (tableExpanded.value) applyProfitCenterTableExpandState()
 })
 
-/** 左侧选中节点或查询变化时，右侧拍平列表重置到第一页 */
-watch(tableTreeData, () => {
-  tableCurrentPage.value = getTaktDefaultPageIndex()
-})
-
-/** 左侧树选中：重置右侧分页到第一页 */
+/** 左侧树选中：过滤右侧子树 */
 const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   selectedTreeKeys.value = selectedKeys
-  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /**
@@ -738,7 +726,6 @@ function buildProfitCenterUpdateDto(
     tenantCode: profitCenter.tenantCode,
     companyCode: profitCenter.companyCode,
     cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-    profitCenterCode: profitCenter.profitCenterCode,
     profitCenterName: profitCenter.profitCenterName,
     parentId: overrides.parentId,
     managerId: profitCenter.managerId,
@@ -787,7 +774,7 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
   if (!pos) return
   try {
     loading.value = true
-    entityTreeData.value = newTreeData
+    entityTreeData.value = newTreeData as TreeDataItem[]
     const full = await getProfitCenterById(String(dragKey))
     await updateProfitCenter(String(dragKey), buildProfitCenterUpdateDto(full, {
       parentId: pos.parentId,
@@ -859,6 +846,8 @@ const toProfitCenterNumber = (value: string | number | undefined | null): number
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
+
+
 
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
@@ -974,15 +963,6 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'validTo') ?? ''
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('profitCenterStatus'),
     dataIndex: 'profitCenterStatus',
     key: 'profitCenterStatus',
@@ -1009,7 +989,8 @@ watchEffect(() => {
         onClick: (record: ProfitCenterRowRecord) => handleDeleteOne(record)
       }
     ],
-  })]
+  }),
+  ]
 })
 
 /** 行选择配置 */
@@ -1058,16 +1039,14 @@ async function loadData() {
 }
 
 /** 右侧查询（客户端过滤，不请求接口） */
-const handleSearch = () => {
-  tableCurrentPage.value = getTaktDefaultPageIndex()
-}
+const handleSearch = () => {}
 
 /** 右侧重置（不影响左侧树与 fullTableTree） */
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
-  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
+
 
 /**
  * 行内状态切换
@@ -1185,6 +1164,7 @@ async function handleDelete() {
   })
 }
 
+
 /** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
@@ -1252,10 +1232,9 @@ function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
-/** 高级查询提交：关闭抽屉并重置右侧分页 */
+/** 高级查询提交：关闭抽屉（过滤为 computed，无需重新请求） */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 重置高级查询表单（不自动查询） */
@@ -1283,17 +1262,17 @@ function handleRefresh() {
   void loadData()
 }
 
-/** 表格 change / 列宽拖拽占位（树表分页在 TaktTreeRightTable 内） */
+/** 表格 change / 列宽拖拽占位 */
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉树数据 */
-onMounted(async () => {
-  await ensureTaktPaginationConfigAsync()
+/** 页面挂载：加载字典与全量树 */
+onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
   void loadData()
 })
+useTableRefresh(loadData)
 </script>
 
 <style scoped lang="css">
@@ -1302,21 +1281,28 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 .accounting-controlling-profit-center-query-row {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
+  flex-shrink: 0;
 }
 .accounting-controlling-profit-center-toolbar-row {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
+  flex-shrink: 0;
 }
 .accounting-controlling-profit-center-tree-table-wrap {
   display: flex;
   flex: 1;
   min-height: 0;
   gap: 8px;
+  overflow: hidden;
+  align-items: stretch;
 }
 </style>

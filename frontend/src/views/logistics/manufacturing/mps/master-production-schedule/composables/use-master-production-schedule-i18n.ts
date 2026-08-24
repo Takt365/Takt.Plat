@@ -20,7 +20,6 @@ export const MASTERPRODUCTIONSCHEDULE_SELF_I18N_KEY = buildEntitySelfI18nKey(MAS
 
 /** 列表业务列（不含主键） */
 export const MASTERPRODUCTIONSCHEDULE_LIST_FIELDS = [
-  'plantCode',
   'mpsCode',
   'masterDemandScheduleId',
   'mdsCode',
@@ -28,23 +27,12 @@ export const MASTERPRODUCTIONSCHEDULE_LIST_FIELDS = [
   'planPeriodEnd',
   'bucketType',
   'scheduleStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const MASTERPRODUCTIONSCHEDULE_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  mpsCode: 'required',
-  masterDemandScheduleId: 'optional',
-  mdsCode: 'optional',
-  planPeriodStart: 'select',
-  planPeriodEnd: 'select',
-  bucketType: 'select',
-  scheduleStatus: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -52,38 +40,13 @@ export type MasterProductionScheduleField = keyof typeof MASTERPRODUCTIONSCHEDUL
 
 /** 高级查询可 trim 的字符串字段 */
 export const MASTERPRODUCTIONSCHEDULE_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'mpsCode',
-  'masterDemandScheduleId',
-  'mdsCode',
-  'planPeriodStartStart',
-  'planPeriodStartEnd',
-  'planPeriodEndStart',
-  'planPeriodEndEnd',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof MasterProductionScheduleQuery)[]
 
-export type MasterProductionScheduleQueryField =
-  | (typeof MASTERPRODUCTIONSCHEDULE_QUERY_STRING_FIELDS)[number]
-  | 'bucketType' | 'scheduleStatus' | 'approvalStatus'
+export type MasterProductionScheduleQueryField = (typeof MASTERPRODUCTIONSCHEDULE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const MASTERPRODUCTIONSCHEDULE_QUERY_FIELDS: readonly MasterProductionScheduleQueryField[] = [
-  ...MASTERPRODUCTIONSCHEDULE_QUERY_STRING_FIELDS,
-  'bucketType',
-  'scheduleStatus',
-  'approvalStatus',
-]
+export const MASTERPRODUCTIONSCHEDULE_QUERY_FIELDS: readonly MasterProductionScheduleQueryField[] = [...MASTERPRODUCTIONSCHEDULE_QUERY_STRING_FIELDS]
 
 /**
  * 主生产计划 MPS 头表字段 i18n：index / master-production-schedule-form 统一入口

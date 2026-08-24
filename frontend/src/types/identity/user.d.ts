@@ -24,12 +24,12 @@ export interface User extends TenantCultureDtoBase {
   /**
    * 用户名（登录账号，20位）
    */
-  username: string;
+  userName: string;
 
   /**
    * 昵称（显示名称）
    */
-  nickname?: string;
+  nickName?: string;
 
   /**
    * 员工编码（用于查找员工）
@@ -87,12 +87,12 @@ export interface UserExport {
   /**
    * 用户名（登录账号）
    */
-  username: string;
+  userName: string;
 
   /**
    * 昵称（显示名称）
    */
-  nickname?: string;
+  nickName?: string;
 
   /**
    * 用户类型

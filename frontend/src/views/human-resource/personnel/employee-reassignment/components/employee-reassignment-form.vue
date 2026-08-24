@@ -2,15 +2,14 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-reassignment/components -->
 <!-- 文件名称：employee-reassignment-form.vue -->
-<!-- 功能描述：员工调动记录维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：员工实体子表 employeeReassignment 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
-<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form"
+    class="takt-generated-form employee-reassignment-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,56 +26,219 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('reassignmentType')"
+                name="reassignmentType"
+              >
+                <TaktSelect
+                  v-model:value="formState.reassignmentType"
+                  dict-type="hr_reassignment_type"
+                  :placeholder="pi.ph('reassignmentType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('fromDeptId')"
+                name="fromDeptId"
+              >
+                <TaktSelect
+                  v-model:value="formState.fromDeptId"
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('fromDeptId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('fromDeptName')"
+                name="fromDeptName"
+              >
+                <a-input
+                  v-model:value="formState.fromDeptName"
+                  :placeholder="pi.ph('fromDeptName')"
                   show-count
-                  :maxlength="400"
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('remark')"
-                name="remark"
+                :label="pi.label('fromPostId')"
+                name="fromPostId"
               >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="pi.ph('remark')"
-                  :rows="4"
+                <TaktSelect
+                  v-model:value="formState.fromPostId"
+                  api-url="TaktPosts/options"
+                  :placeholder="pi.ph('fromPostId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('fromPostName')"
+                name="fromPostName"
+              >
+                <a-input
+                  v-model:value="formState.fromPostName"
+                  :placeholder="pi.ph('fromPostName')"
                   show-count
-                  :maxlength="400"
+                  :maxlength="20"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('toDeptId')"
+                name="toDeptId"
+              >
+                <TaktSelect
+                  v-model:value="formState.toDeptId"
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('toDeptId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('toDeptName')"
+                name="toDeptName"
+              >
+                <a-input
+                  v-model:value="formState.toDeptName"
+                  :placeholder="pi.ph('toDeptName')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('toPostId')"
+                name="toPostId"
+              >
+                <TaktSelect
+                  v-model:value="formState.toPostId"
+                  api-url="TaktPosts/options"
+                  :placeholder="pi.ph('toPostId')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('toPostName')"
+                name="toPostName"
+              >
+                <a-input
+                  v-model:value="formState.toPostName"
+                  :placeholder="pi.ph('toPostName')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('effectiveDate')"
+                name="effectiveDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.effectiveDate"
+                  :placeholder="pi.ph('effectiveDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('reason')"
+                name="reason"
+              >
+                <a-input
+                  v-model:value="formState.reason"
+                  :placeholder="pi.ph('reason')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -89,7 +251,7 @@
 
 <script setup lang="ts">
 /**
- * 员工调动记录维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 员工实体子表 employeeReassignment 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/human-resource/personnel/employee-reassignment/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -99,9 +261,9 @@ import { useEmployeeReassignmentI18n } from '../composables/use-employee-reassig
 
 /** 实体字段 i18n */
 const pi = useEmployeeReassignmentI18n()
+
 import type { EmployeeReassignmentCreate } from '@/types/human-resource/personnel/employee-reassignment'
 import TaktSelect from '@/components/business/takt-select/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -111,11 +273,11 @@ const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -130,25 +292,37 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
-const formContentClass = 'takt-form-content-rows-10'
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","reassignmentType","fromDeptId","fromDeptName","fromPostId","fromPostName","toDeptId","toDeptName","toPostId","toPostName","effectiveDate","reason"]
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<EmployeeReassignmentCreate & { employeeReassignmentId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
+  /** 主表选中行 Id（Create/Update 提交时写入外键） */
+  masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
+  masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -194,7 +368,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.employeeReassignmentId) {
       applyScopeDefaults(formState, true)
@@ -204,27 +378,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  employeeId: [
-    {
-      required: true,
-      message: pi.ph('employeeId'),
-      trigger: 'change'
-    }
-  ],
-  employeeCode: [
-    {
-      required: true,
-      message: pi.ph('employeeCode'),
-      trigger: 'blur'
-    }
-  ],
-  employeeName: [
-    {
-      required: true,
-      message: pi.ph('employeeName'),
-      trigger: 'blur'
-    }
-  ],
   reassignmentType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -274,18 +427,53 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO */
+/** 映射为 Create/Update DTO（含主表外键 employeeId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('reassignmentType' in payload) {
     const rawreassignmentType = payload.reassignmentType
-    payload.reassignmentType = typeof rawreassignmentType === 'number' ? rawreassignmentType : Number(rawreassignmentType)
+    if (rawreassignmentType === undefined || rawreassignmentType === null || rawreassignmentType === '') {
+      delete payload.reassignmentType
+    } else {
+      const numreassignmentType = typeof rawreassignmentType === 'number' ? rawreassignmentType : Number(rawreassignmentType)
+      if (Number.isFinite(numreassignmentType)) payload.reassignmentType = numreassignmentType
+      else delete payload.reassignmentType
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.employeeReassignmentId) {
+    payload.employeeReassignmentId = props.formData.employeeReassignmentId
+  }
+  payload.employeeId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.employeeCode ?? masterRow.EmployeeCode
+    const masterName = masterRow.employeeName ?? masterRow.EmployeeName
+    if (masterCode != null && masterCode !== '' && !payload.employeeCode) {
+      payload.employeeCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.employeeName) {
+      payload.employeeName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
-/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
+/** 重置表单（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
@@ -293,7 +481,6 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.employeeReassignmentId)
-
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

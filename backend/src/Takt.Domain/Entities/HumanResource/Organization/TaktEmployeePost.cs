@@ -45,11 +45,12 @@ public class TaktEmployeePost : TaktCompanyEntityBase
     /// <summary>
     /// 员工（多对一）
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId), nameof(TaktEmployee.Id))]
-    public TaktEmployee Employee { get; set; } = null!;
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
+
     /// <summary>
     /// 岗位（多对一）
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(PostId), nameof(TaktPost.Id))]
-    public TaktPost Post { get; set; } = null!;
+    [Navigate(NavigateType.ManyToOne, nameof(PostId))]
+    public TaktPost? Post { get; set; }
 }

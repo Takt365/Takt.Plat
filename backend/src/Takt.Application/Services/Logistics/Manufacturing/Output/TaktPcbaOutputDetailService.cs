@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报明细应用服务实现
 // 
@@ -382,6 +382,30 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             throw new TaktBusinessException("PCBA日报不存在");
         }
         entity.PcbaOutputId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.ProdOrderCode))
+        {
+            entity.ProdOrderCode = master.ProdOrderCode;
+        }
+        if (string.IsNullOrEmpty(entity.SerialCode))
+        {
+            entity.SerialCode = master.SerialCode ?? string.Empty;
+        }
     }
     // ========================================
     // 查询表达式
@@ -409,7 +433,9 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || (x.TimePeriod != null && x.TimePeriod.Contains(keywords))
                 || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || (x.ProdEquipCode != null && x.ProdEquipCode.Contains(keywords))
@@ -420,15 +446,26 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
                 || (x.DowntimeDescription != null && x.DowntimeDescription.Contains(keywords))
                 || (x.UnachievedReason != null && x.UnachievedReason.Contains(keywords))
                 || (x.UnachievedDescription != null && x.UnachievedDescription.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
         if (queryDto?.PcbaOutputId.HasValue == true)
         {
-            var pcbaOutputId = queryDto.PcbaOutputId;
+            var pcbaOutputId = queryDto.PcbaOutputId.Value;
             exp = exp.And(x => x.PcbaOutputId == pcbaOutputId);
         }
 
@@ -440,7 +477,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            var lineNumber = queryDto.LineNumber;
+            var lineNumber = queryDto.LineNumber.Value;
             exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
@@ -464,43 +501,43 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
 
         if (queryDto?.DirectLabor.HasValue == true)
         {
-            var directLabor = queryDto.DirectLabor;
+            var directLabor = queryDto.DirectLabor.Value;
             exp = exp.And(x => x.DirectLabor == directLabor);
         }
 
         if (queryDto?.IndirectLabor.HasValue == true)
         {
-            var indirectLabor = queryDto.IndirectLabor;
+            var indirectLabor = queryDto.IndirectLabor.Value;
             exp = exp.And(x => x.IndirectLabor == indirectLabor);
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
         {
-            var shiftNo = queryDto.ShiftNo;
+            var shiftNo = queryDto.ShiftNo.Value;
             exp = exp.And(x => x.ShiftNo == shiftNo);
         }
 
         if (queryDto?.StdMinutes.HasValue == true)
         {
-            var stdMinutes = queryDto.StdMinutes;
+            var stdMinutes = queryDto.StdMinutes.Value;
             exp = exp.And(x => x.StdMinutes == stdMinutes);
         }
 
         if (queryDto?.StdLaborCapacity.HasValue == true)
         {
-            var stdLaborCapacity = queryDto.StdLaborCapacity;
+            var stdLaborCapacity = queryDto.StdLaborCapacity.Value;
             exp = exp.And(x => x.StdLaborCapacity == stdLaborCapacity);
         }
 
         if (queryDto?.StdShorts.HasValue == true)
         {
-            var stdShorts = queryDto.StdShorts;
+            var stdShorts = queryDto.StdShorts.Value;
             exp = exp.And(x => x.StdShorts == stdShorts);
         }
 
         if (queryDto?.StdEquipmentCapacity.HasValue == true)
         {
-            var stdEquipmentCapacity = queryDto.StdEquipmentCapacity;
+            var stdEquipmentCapacity = queryDto.StdEquipmentCapacity.Value;
             exp = exp.And(x => x.StdEquipmentCapacity == stdEquipmentCapacity);
         }
 
@@ -518,25 +555,25 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
 
         if (queryDto?.BatchQty.HasValue == true)
         {
-            var batchQty = queryDto.BatchQty;
+            var batchQty = queryDto.BatchQty.Value;
             exp = exp.And(x => x.BatchQty == batchQty);
         }
 
         if (queryDto?.DailyCompletedQty.HasValue == true)
         {
-            var dailyCompletedQty = queryDto.DailyCompletedQty;
+            var dailyCompletedQty = queryDto.DailyCompletedQty.Value;
             exp = exp.And(x => x.DailyCompletedQty == dailyCompletedQty);
         }
 
         if (queryDto?.TotalCompletedQty.HasValue == true)
         {
-            var totalCompletedQty = queryDto.TotalCompletedQty;
+            var totalCompletedQty = queryDto.TotalCompletedQty.Value;
             exp = exp.And(x => x.TotalCompletedQty == totalCompletedQty);
         }
 
         if (queryDto?.CompletedStatus.HasValue == true)
         {
-            var completedStatus = queryDto.CompletedStatus;
+            var completedStatus = queryDto.CompletedStatus.Value;
             exp = exp.And(x => x.CompletedStatus == completedStatus);
         }
 
@@ -548,13 +585,13 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
 
         if (queryDto?.DefectCount.HasValue == true)
         {
-            var defectCount = queryDto.DefectCount;
+            var defectCount = queryDto.DefectCount.Value;
             exp = exp.And(x => x.DefectCount == defectCount);
         }
 
         if (queryDto?.DowntimeMinutes.HasValue == true)
         {
-            var downtimeMinutes = queryDto.DowntimeMinutes;
+            var downtimeMinutes = queryDto.DowntimeMinutes.Value;
             exp = exp.And(x => x.DowntimeMinutes == downtimeMinutes);
         }
 
@@ -572,43 +609,43 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
 
         if (queryDto?.InputMinutes.HasValue == true)
         {
-            var inputMinutes = queryDto.InputMinutes;
+            var inputMinutes = queryDto.InputMinutes.Value;
             exp = exp.And(x => x.InputMinutes == inputMinutes);
         }
 
         if (queryDto?.ActualMinutes.HasValue == true)
         {
-            var actualMinutes = queryDto.ActualMinutes;
+            var actualMinutes = queryDto.ActualMinutes.Value;
             exp = exp.And(x => x.ActualMinutes == actualMinutes);
         }
 
         if (queryDto?.RepairMinutes.HasValue == true)
         {
-            var repairMinutes = queryDto.RepairMinutes;
+            var repairMinutes = queryDto.RepairMinutes.Value;
             exp = exp.And(x => x.RepairMinutes == repairMinutes);
         }
 
         if (queryDto?.SwitchCount.HasValue == true)
         {
-            var switchCount = queryDto.SwitchCount;
+            var switchCount = queryDto.SwitchCount.Value;
             exp = exp.And(x => x.SwitchCount == switchCount);
         }
 
         if (queryDto?.SwitchTime.HasValue == true)
         {
-            var switchTime = queryDto.SwitchTime;
+            var switchTime = queryDto.SwitchTime.Value;
             exp = exp.And(x => x.SwitchTime == switchTime);
         }
 
         if (queryDto?.StopTime.HasValue == true)
         {
-            var stopTime = queryDto.StopTime;
+            var stopTime = queryDto.StopTime.Value;
             exp = exp.And(x => x.StopTime == stopTime);
         }
 
         if (queryDto?.TotalMinutes.HasValue == true)
         {
-            var totalMinutes = queryDto.TotalMinutes;
+            var totalMinutes = queryDto.TotalMinutes.Value;
             exp = exp.And(x => x.TotalMinutes == totalMinutes);
         }
 
@@ -626,19 +663,19 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
 
         if (queryDto?.ConfirmMinutes.HasValue == true)
         {
-            var confirmMinutes = queryDto.ConfirmMinutes;
+            var confirmMinutes = queryDto.ConfirmMinutes.Value;
             exp = exp.And(x => x.ConfirmMinutes == confirmMinutes);
         }
 
         if (queryDto?.MixedProd.HasValue == true)
         {
-            var mixedProd = queryDto.MixedProd;
+            var mixedProd = queryDto.MixedProd.Value;
             exp = exp.And(x => x.MixedProd == mixedProd);
         }
 
         if (queryDto?.AchievementRate.HasValue == true)
         {
-            var achievementRate = queryDto.AchievementRate;
+            var achievementRate = queryDto.AchievementRate.Value;
             exp = exp.And(x => x.AchievementRate == achievementRate);
         }
 
@@ -656,26 +693,15 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -692,6 +718,14 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }

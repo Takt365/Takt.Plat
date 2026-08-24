@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopArgumentService.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP作业参数应用服务实现
 // 
@@ -282,6 +282,22 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
             throw new TaktBusinessException("SOP工位执行不存在");
         }
         entity.ExecId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -322,19 +338,19 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
 
         if (queryDto?.ExecId.HasValue == true)
         {
-            var execId = queryDto.ExecId;
+            var execId = queryDto.ExecId.Value;
             exp = exp.And(x => x.ExecId == execId);
         }
 
         if (queryDto?.ExecStepId.HasValue == true)
         {
-            var execStepId = queryDto.ExecStepId;
+            var execStepId = queryDto.ExecStepId.Value;
             exp = exp.And(x => x.ExecStepId == execStepId);
         }
 
         if (queryDto?.RoutingItemParameterId.HasValue == true)
         {
-            var routingItemParameterId = queryDto.RoutingItemParameterId;
+            var routingItemParameterId = queryDto.RoutingItemParameterId.Value;
             exp = exp.And(x => x.RoutingItemParameterId == routingItemParameterId);
         }
 
@@ -346,13 +362,13 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
 
         if (queryDto?.ActualValue.HasValue == true)
         {
-            var actualValue = queryDto.ActualValue;
+            var actualValue = queryDto.ActualValue.Value;
             exp = exp.And(x => x.ActualValue == actualValue);
         }
 
         if (queryDto?.IsOutOfRange.HasValue == true)
         {
-            var isOutOfRange = queryDto.IsOutOfRange;
+            var isOutOfRange = queryDto.IsOutOfRange.Value;
             exp = exp.And(x => x.IsOutOfRange == isOutOfRange);
         }
 
@@ -370,25 +386,25 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
 
         if (queryDto?.RecordedAtStart.HasValue == true)
         {
-            var recordedAtStart = queryDto.RecordedAtStart;
+            var recordedAtStart = queryDto.RecordedAtStart.Value;
             exp = exp.And(x => x.RecordedAt >= recordedAtStart);
         }
 
         if (queryDto?.RecordedAtEnd.HasValue == true)
         {
-            var recordedAtEnd = queryDto.RecordedAtEnd;
+            var recordedAtEnd = queryDto.RecordedAtEnd.Value;
             exp = exp.And(x => x.RecordedAt <= recordedAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

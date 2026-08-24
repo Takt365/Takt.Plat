@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialPlantI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -352,22 +352,22 @@ public class TaktMaterialPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialplant.storagelocation", "zh-HK", "库位_hk", "库位（选项 TaktStorageLocations/options；DictValue=LocationCode）"),
 
             // entity.materialplant.isinspection
-            new TranslationSeedItem("entity.materialplant.isinspection", "en-US", "检验_us", "检验（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isinspection", "en-US", "检验_us", "检验（字典 sys_yes_no；0=否，1=是）"),
             // entity.materialplant.isinspection
-            new TranslationSeedItem("entity.materialplant.isinspection", "ja-JP", "检验_jp", "检验（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isinspection", "ja-JP", "检验_jp", "检验（字典 sys_yes_no；0=否，1=是）"),
             // entity.materialplant.isinspection
-            new TranslationSeedItem("entity.materialplant.isinspection", "zh-CN", "检验", "检验（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isinspection", "zh-CN", "检验", "检验（字典 sys_yes_no；0=否，1=是）"),
             // entity.materialplant.isinspection
-            new TranslationSeedItem("entity.materialplant.isinspection", "zh-HK", "检验_hk", "检验（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isinspection", "zh-HK", "检验_hk", "检验（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.materialplant.isbatch
-            new TranslationSeedItem("entity.materialplant.isbatch", "en-US", "批次标识_us", "批次标识（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isbatch", "en-US", "批次标识_us", "批次标识（字典 sys_yes_no；0=否，1=是）"),
             // entity.materialplant.isbatch
-            new TranslationSeedItem("entity.materialplant.isbatch", "ja-JP", "批次标识_jp", "批次标识（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isbatch", "ja-JP", "批次标识_jp", "批次标识（字典 sys_yes_no；0=否，1=是）"),
             // entity.materialplant.isbatch
-            new TranslationSeedItem("entity.materialplant.isbatch", "zh-CN", "批次标识", "批次标识（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isbatch", "zh-CN", "批次标识", "批次标识（字典 sys_yes_no；0=否，1=是）"),
             // entity.materialplant.isbatch
-            new TranslationSeedItem("entity.materialplant.isbatch", "zh-HK", "批次标识_hk", "批次标识（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.materialplant.isbatch", "zh-HK", "批次标识_hk", "批次标识（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.materialplant.isendoflife
             new TranslationSeedItem("entity.materialplant.isendoflife", "en-US", "停产状态_us", "停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
@@ -379,13 +379,13 @@ public class TaktMaterialPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialplant.isendoflife", "zh-HK", "停产状态_hk", "停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
 
             // entity.materialplant.materialstatus
-            new TranslationSeedItem("entity.materialplant.materialstatus", "en-US", "物料状态_us", "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.materialplant.materialstatus", "en-US", "物料状态_us", "物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.materialplant.materialstatus
-            new TranslationSeedItem("entity.materialplant.materialstatus", "ja-JP", "物料状态_jp", "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.materialplant.materialstatus", "ja-JP", "物料状态_jp", "物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.materialplant.materialstatus
-            new TranslationSeedItem("entity.materialplant.materialstatus", "zh-CN", "物料状态", "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.materialplant.materialstatus", "zh-CN", "物料状态", "物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
             // entity.materialplant.materialstatus
-            new TranslationSeedItem("entity.materialplant.materialstatus", "zh-HK", "物料状态_hk", "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            new TranslationSeedItem("entity.materialplant.materialstatus", "zh-HK", "物料状态_hk", "物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),
         };
     }
 

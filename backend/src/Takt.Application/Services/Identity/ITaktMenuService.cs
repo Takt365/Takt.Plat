@@ -38,8 +38,9 @@ public interface ITaktMenuService
     /// <summary>
     /// 获取菜单树形选项列表
     /// </summary>
+    /// <param name="valueBy">选项值：id=菜单Id（默认）；name=菜单名称 MenuName（编码规则 DocumentType）</param>
     /// <returns>树形选项</returns>
-    Task<List<TaktTreeSelectOption>> GetMenuTreeOptionsAsync();
+    Task<List<TaktTreeSelectOption>> GetMenuTreeOptionsAsync(string? valueBy = null);
 
     /// <summary>
     /// 获取菜单树形列表

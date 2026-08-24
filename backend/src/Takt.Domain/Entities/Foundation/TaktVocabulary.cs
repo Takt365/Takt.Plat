@@ -39,7 +39,7 @@ public class TaktVocabulary : TaktTenantCoreEntityBase
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
     /// </summary>
     [SugarColumn(ColumnName = "filter_level", ColumnDescription = "过滤等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FilterLevel { get; set; } = 1;
@@ -51,7 +51,7 @@ public class TaktVocabulary : TaktTenantCoreEntityBase
     public string ReplaceText { get; set; } = "*";
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "vocabulary_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int VocabularyStatus { get; set; } = 1;

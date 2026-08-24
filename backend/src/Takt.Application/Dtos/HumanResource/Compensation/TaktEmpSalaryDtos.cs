@@ -37,7 +37,7 @@ public class TaktEmpSalaryDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
 
@@ -133,7 +133,7 @@ public class TaktEmpSalaryQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? EmpSalaryStatus { get; set; }
 
@@ -245,7 +245,7 @@ public class TaktEmpSalaryCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
 
@@ -299,9 +299,9 @@ public class TaktEmpSalaryStatusDto
     public long EmpSalaryId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
     public int EmpSalaryStatus { get; set; } = 0;
 }
 
@@ -389,7 +389,7 @@ public class TaktEmpSalaryTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? EmpSalaryStatus { get; set; }
 
@@ -486,7 +486,7 @@ public class TaktEmpSalaryImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int? EmpSalaryStatus { get; set; }
 
@@ -583,7 +583,7 @@ public class TaktEmpSalaryExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
 

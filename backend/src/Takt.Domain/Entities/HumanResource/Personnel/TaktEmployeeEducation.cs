@@ -73,8 +73,18 @@ public class TaktEmployeeEducation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "end_date", ColumnDescription = "结束日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? EndDate { get; set; }
     /// <summary>
-    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
+    /// 是否最高学历（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_highest", ColumnDescription = "是否最高学历", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsHighest { get; set; } = 0;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

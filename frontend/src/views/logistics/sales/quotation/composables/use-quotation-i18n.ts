@@ -20,7 +20,6 @@ export const SALESQUOTATION_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESQUOTATIO
 
 /** 列表业务列（不含主键） */
 export const SALESQUOTATION_LIST_FIELDS = [
-  'plantCode',
   'salesQuotationCode',
   'customerCode',
   'customerName1',
@@ -31,6 +30,7 @@ export const SALESQUOTATION_LIST_FIELDS = [
   'totalAmount',
   'discountAmount',
   'currencyCode',
+  'taxCode',
   'taxRate',
   'taxAmount',
   'actualAmount',
@@ -42,11 +42,11 @@ export const SALESQUOTATION_LIST_FIELDS = [
 export const SALESQUOTATION_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
+  cultureCode: 'optional',
+  plantCode: 'optional',
   salesQuotationCode: 'required',
   customerCode: 'select',
-  customerName1: 'required',
+  customerName1: 'optional',
   quotationDate: 'select',
   validUntilDate: 'optional',
   salesBy: 'optional',
@@ -54,6 +54,7 @@ export const SALESQUOTATION_PLACEHOLDER = {
   totalAmount: 'select',
   discountAmount: 'select',
   currencyCode: 'select',
+  taxCode: 'optional',
   taxRate: 'select',
   taxAmount: 'select',
   actualAmount: 'select',
@@ -68,6 +69,7 @@ export type SalesQuotationField = keyof typeof SALESQUOTATION_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESQUOTATION_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'salesQuotationCode',
   'customerCode',
@@ -78,6 +80,7 @@ export const SALESQUOTATION_QUERY_STRING_FIELDS = [
   'validUntilDateEnd',
   'salesBy',
   'currencyCode',
+  'taxCode',
   'salesOrderCode',
   'createdAtStart',
   'createdAtEnd',

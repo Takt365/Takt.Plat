@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExchangeRateI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExchangeRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktExchangeRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.exchangerate.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.exchangerate.status
-            new TranslationSeedItem("entity.exchangerate.status", "en-US", "汇率状态_us", "汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.exchangerate.status", "en-US", "汇率状态_us", "汇率状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.exchangerate.status
-            new TranslationSeedItem("entity.exchangerate.status", "ja-JP", "汇率状态_jp", "汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.exchangerate.status", "ja-JP", "汇率状态_jp", "汇率状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.exchangerate.status
-            new TranslationSeedItem("entity.exchangerate.status", "zh-CN", "汇率状态", "汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.exchangerate.status", "zh-CN", "汇率状态", "汇率状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.exchangerate.status
-            new TranslationSeedItem("entity.exchangerate.status", "zh-HK", "汇率状态_hk", "汇率状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.exchangerate.status", "zh-HK", "汇率状态_hk", "汇率状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

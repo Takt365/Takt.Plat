@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceRequestDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerServiceRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerServiceRequest 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktCustomerServiceRequestDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerServiceRequestId { get; set; }
-
 
     /// <summary>
     /// 服务请求单号（组合唯一索引）
@@ -99,7 +98,7 @@ public class TaktCustomerServiceRequestDto : TaktCompanyDtoBase
     public int SourceChannel { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level）
     /// </summary>
     public int Priority { get; set; } = 0;
 
@@ -160,7 +159,7 @@ public class TaktCustomerServiceRequestDto : TaktCompanyDtoBase
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -188,7 +187,7 @@ public class TaktCustomerServiceRequestQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -198,7 +197,7 @@ public class TaktCustomerServiceRequestQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -265,7 +264,7 @@ public class TaktCustomerServiceRequestQueryDto : TaktPagedQuery
     public int? SourceChannel { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level）
     /// </summary>
     public int? Priority { get; set; }
 
@@ -336,7 +335,7 @@ public class TaktCustomerServiceRequestQueryDto : TaktPagedQuery
     public DateTime? ClosedAtEnd { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -386,9 +385,8 @@ public class TaktCustomerServiceRequestCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -406,7 +404,6 @@ public class TaktCustomerServiceRequestCreateDto
     /// <summary>
     /// 客户端编码（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "客户端编码（冗余字段，便于查询）不能为空")]
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -447,7 +444,7 @@ public class TaktCustomerServiceRequestCreateDto
     public int SourceChannel { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level）
     /// </summary>
     public int Priority { get; set; } = 0;
 
@@ -583,9 +580,9 @@ public class TaktCustomerServiceRequestSortDto
     public long CustomerServiceRequestId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -614,7 +611,7 @@ public class TaktCustomerServiceRequestTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -671,7 +668,7 @@ public class TaktCustomerServiceRequestTemplateDto
     public int? SourceChannel { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level）
     /// </summary>
     public int? Priority { get; set; }
 
@@ -764,7 +761,7 @@ public class TaktCustomerServiceRequestImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -821,7 +818,7 @@ public class TaktCustomerServiceRequestImportDto
     public int? SourceChannel { get; set; }
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level）
     /// </summary>
     public int? Priority { get; set; }
 
@@ -915,9 +912,14 @@ public class TaktCustomerServiceRequestExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务请求单号（组合唯一索引）
@@ -972,7 +974,7 @@ public class TaktCustomerServiceRequestExportDto
     public int SourceChannel { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level）
     /// </summary>
     public int Priority { get; set; } = 0;
 
@@ -1033,7 +1035,7 @@ public class TaktCustomerServiceRequestExportDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

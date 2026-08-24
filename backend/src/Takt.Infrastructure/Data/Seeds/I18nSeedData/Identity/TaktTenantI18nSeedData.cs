@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktTenantI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTenant 实体字段国际化种子（已对齐前端 locales：src/locales/identity/tenant）
 // 
@@ -145,22 +145,22 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.tenant.contactemail", "zh-HK", "联系邮箱_hk", "联系邮箱"),
 
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
 
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.tenant.status", "en-US", "状态_us", "状态（字典 sys_normal_disable）"),
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.tenant.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable）"),
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.tenant.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
+            new TranslationSeedItem("entity.tenant.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable）"),
 
             // entity.tenant.usertenants
             new TranslationSeedItem("entity.tenant.usertenants", "en-US", "可访问该租户的用户关联_us", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),

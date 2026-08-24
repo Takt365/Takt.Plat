@@ -27,7 +27,7 @@ export default {
     errorcolmessage: '說明',
     selectuserdialogtitle: '選擇用戶',
     selectusersearchplaceholder: '搜尋用戶名、電郵或手機',
-    colusername: '用戶名',
+    colUserName: '用戶名',
     coluseremail: '電郵',
     coluserphone: '手機',
     pagetotal: '共 {total} 條',

@@ -122,10 +122,10 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('username')">
+      <div v-show="isFieldVisible('userName')">
       <a-form-item :label="t('entity.loginlog.username')">
         <a-input
-          v-model:value="advancedQueryForm.username"
+          v-model:value="advancedQueryForm.userName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.username') })"
           allow-clear
         />
@@ -340,7 +340,7 @@ const selectedRowKeys = ref<(string | number)[]>([])
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
-  username: '',
+  userName: '',
   loginType: undefined as string | undefined,
   browser: undefined as string | undefined,
   os: undefined as string | undefined,
@@ -358,7 +358,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'username', label: t('entity.loginlog.username') },
+  { key: 'userName', label: t('entity.loginlog.username') },
   { key: 'loginType', label: t('entity.loginlog.logintype') },
   { key: 'browser', label: t('entity.loginlog.browser') },
   { key: 'os', label: t('entity.loginlog.os') },
@@ -409,12 +409,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.loginlog.username'),
-    dataIndex: 'username',
-    key: 'username',
+    dataIndex: 'userName',
+    key: 'userName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'username') ?? ''
+    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'userName') ?? ''
   },
   {
     title: t('entity.loginlog.logintype'),
@@ -637,7 +637,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  username: '',
+  userName: '',
   loginType: undefined as string | undefined,
   browser: undefined as string | undefined,
   os: undefined as string | undefined,
@@ -744,7 +744,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  username: '',
+  userName: '',
   loginType: undefined as string | undefined,
   browser: undefined as string | undefined,
   os: undefined as string | undefined,

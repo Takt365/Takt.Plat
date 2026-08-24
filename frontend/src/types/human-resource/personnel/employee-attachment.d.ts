@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-attachment.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -24,14 +24,222 @@ import type {
  */
 export interface EmployeeAttachment extends CompanyDtoBase {
   /**
-   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   * EmployeeAttachmentID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
-  cultureCode: string
+  employeeAttachmentId: string;
+
+  /**
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
+   */
+  employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 附件名称（业务称谓，如毕业证、就业证）
+   */
+  attachmentName: string;
+
+  /**
+   * 访问地址（关联 TaktFile.AccessUrl）
+   */
+  accessUrl: string;
+
+  /**
+   * 员工主档（多对一） （主表：TaktEmployee）
+   */
+  employee?: Employee;
+
+}
+
+
+/**
+ * EmployeeAttachment 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 EmployeeAttachmentQuery
+ * @description 对应后端 TaktEmployeeAttachmentQueryDto
+ */
+export interface EmployeeAttachmentQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
 
   /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode?: string
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
+   */
+  employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 附件名称（业务称谓，如毕业证、就业证）
+   */
+  attachmentName?: string;
+
+  /**
+   * 访问地址（关联 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建EmployeeAttachment DTO
+ * 对应前端 EmployeeAttachmentCreate
+ * @description 对应后端 TaktEmployeeAttachmentCreateDto
+ */
+export interface EmployeeAttachmentCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
+   */
+  employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 附件名称（业务称谓，如毕业证、就业证）
+   */
+  attachmentName: string;
+
+  /**
+   * 访问地址（关联 TaktFile.AccessUrl）
+   */
+  accessUrl: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新EmployeeAttachment DTO
+ * 继承 TaktEmployeeAttachmentCreateDto，添加 EmployeeAttachmentId 字段
+ * 对应前端 EmployeeAttachmentUpdate
+ * @description 对应后端 TaktEmployeeAttachmentUpdateDto
+ */
+export interface EmployeeAttachmentUpdate extends EmployeeAttachmentCreate {
+  /**
+   * EmployeeAttachmentID（标识要更新的实体）
+   */
+  employeeAttachmentId: string;
+
+}
+
+
+/**
+ * EmployeeAttachment 导入模板行 DTO
+ * 对应前端 EmployeeAttachmentTemplate
+ * @description 对应后端 TaktEmployeeAttachmentTemplateDto
+ */
+export interface EmployeeAttachmentTemplate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
 
   /**
    * 员工（选项 TaktEmployees/options；DictValue=Id）
@@ -70,6 +278,71 @@ export interface EmployeeAttachment extends CompanyDtoBase {
 
 }
 
+
+/**
+ * EmployeeAttachment 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 EmployeeAttachmentImport
+ * @description 对应后端 TaktEmployeeAttachmentImportDto
+ */
+export interface EmployeeAttachmentImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
+   */
+  employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 附件名称（业务称谓，如毕业证、就业证）
+   */
+  attachmentName?: string;
+
+  /**
+   * 访问地址（关联 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
 /**
  * EmployeeAttachment 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 EmployeeAttachmentExport
@@ -85,6 +358,16 @@ export interface EmployeeAttachmentExport {
    * 公司代码
    */
   companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 员工（选项 TaktEmployees/options；DictValue=Id）

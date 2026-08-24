@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/logistics/materials/plant/composables
 // 文件名称：use-plant-i18n.ts
-// 功能描述：Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称字段清单 + usePlantI18n（字段名映射一次，文案由 entity.plant.* 种子动态解析）
+// 功能描述：Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言字段清单 + usePlantI18n（字段名映射一次，文案由 entity.plant.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -195,7 +195,7 @@ export const PLANT_QUERY_FIELDS: readonly PlantQueryField[] = [
 ]
 
 /**
- * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称字段 i18n：index / plant-form 统一入口
+ * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言字段 i18n：index / plant-form 统一入口
  */
 export function usePlantI18n() {
   const ef = useEntityFieldI18n(PLANT_ENTITY_SLUG)

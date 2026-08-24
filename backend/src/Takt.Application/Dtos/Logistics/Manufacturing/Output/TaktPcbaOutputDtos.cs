@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaOutput 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaOutput 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktPcbaOutputDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PcbaOutputId { get; set; }
-
 
     /// <summary>
     /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
@@ -105,7 +104,7 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -115,7 +114,7 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -215,9 +214,8 @@ public class TaktPcbaOutputCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（回填：随工单）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -336,7 +334,7 @@ public class TaktPcbaOutputTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -423,7 +421,7 @@ public class TaktPcbaOutputImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -511,9 +509,14 @@ public class TaktPcbaOutputExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（回填：随工单）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
@@ -574,34 +577,4 @@ public class TaktPcbaOutputExportDto
     /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
-}
-
-// ========================================
-// PCBA 默认明细预览（非实体 CRUD）
-// ========================================
-
-/// <summary>
-/// 按标准工序时间生成的默认明细预览行
-/// </summary>
-public class TaktPcbaOutputDefaultDetailDto
-{
-    /// <summary>
-    /// 行号（10 起递增）
-    /// </summary>
-    public int LineNumber { get; set; }
-
-    /// <summary>
-    /// 工作中心
-    /// </summary>
-    public string WorkCenter { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工序描述
-    /// </summary>
-    public string? OperationDesc { get; set; }
-
-    /// <summary>
-    /// 标准工时（短）
-    /// </summary>
-    public int StandardShorts { get; set; }
 }

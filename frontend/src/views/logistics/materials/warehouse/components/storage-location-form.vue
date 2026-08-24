@@ -26,127 +26,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.plantcode')"
-                name="plantCode"
-              >
-                <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.storageLocationId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.storagelocation.locationcode')"
-                name="locationCode"
-              >
-                <a-input
-                  v-model:value="formState.locationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationcode') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.storageLocationId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.storagelocation.locationname')"
-                name="locationName"
-              >
-                <a-input
-                  v-model:value="formState.locationName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationname') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.storagelocation.locationtype')"
-                name="locationType"
-              >
-                <a-input-number
-                  v-model:value="formState.locationType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationtype') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.storagelocation.locationstatus')"
-                name="locationStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.locationStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.storagelocation.locationstatus') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.storagelocation.isbuiltin')"
-                name="isBuiltIn"
-              >
-                <TaktSelect
-                  v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.storagelocation.isbuiltin') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
+
           </a-row>
         </div>
       </a-tab-pane>
@@ -159,13 +39,15 @@
  * Takt仓库主数据实体子表 storageLocation 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/materials/warehouse/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useStorageLocationI18n } from '../composables/use-storage-location-i18n'
+
+/** 实体字段 i18n */
+const pi = useStorageLocationI18n()
+
 import type { StorageLocationCreate } from '@/types/logistics/materials/storage-location'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -174,7 +56,9 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["plantCode","locationCode","locationName","locationType","locationStatus","isBuiltIn","extField","remark"]
+const formFields = []
+
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -183,36 +67,26 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  locationStatus: 1,
-  isBuiltIn: 0
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载全量字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 storageLocationId 才视为编辑） */
 watch(
@@ -238,66 +112,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') }),
-      trigger: 'blur'
-    }
-  ],
-  locationCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationcode') }),
-      trigger: 'blur'
-    }
-  ],
-  locationName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationname') }),
-      trigger: 'blur'
-    }
-  ],
-  locationType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.storagelocation.locationtype') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.storagelocation.locationtype') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  locationStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.storagelocation.locationstatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.storagelocation.locationstatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  isBuiltIn: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.storagelocation.isbuiltin') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.storagelocation.isbuiltin') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -309,20 +124,32 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 warehouseId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('locationType' in payload) {
-    const rawlocationType = payload.locationType
-    payload.locationType = typeof rawlocationType === 'number' ? rawlocationType : Number(rawlocationType)
-  }
-  if ('locationStatus' in payload) {
-    const rawlocationStatus = payload.locationStatus
-    payload.locationStatus = typeof rawlocationStatus === 'number' ? rawlocationStatus : Number(rawlocationStatus)
-  }
-  if ('isBuiltIn' in payload) {
-    const rawisBuiltIn = payload.isBuiltIn
-    payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
+
+  if (props.formData?.storageLocationId) {
+    payload.storageLocationId = props.formData.storageLocationId
+  }
   payload.warehouseId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.warehouseCode ?? masterRow.WarehouseCode
+    const masterName = masterRow.warehouseName ?? masterRow.WarehouseName
+    if (masterCode != null && masterCode !== '' && !payload.warehouseCode) {
+      payload.warehouseCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.warehouseName) {
+      payload.warehouseName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 

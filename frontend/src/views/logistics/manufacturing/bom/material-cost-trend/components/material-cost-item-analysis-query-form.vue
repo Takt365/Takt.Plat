@@ -28,6 +28,7 @@
         :placeholder="[
           t(`${localePrefix}.periodRange`),
           t(`${localePrefix}.periodRange`)]"
+        @change="handlePeriodChange"
       />
       <TaktSelect
         v-model:value="materialType"
@@ -35,31 +36,31 @@
         class="material-cost-analysis-query-bar__control material-cost-analysis-query-bar__control--type"
         :allow-clear="false"
         show-search
-        :disabled="!plantCode || materialTypeOptionsLoading"
+        :disabled="!canSelectType || materialTypeOptionsLoading"
         :placeholder="t('entity.bommaterialcost.materialtype')"
         @change="handleMaterialTypeChange"
       />
       <TaktSelect
-        :key="`model-${modelSelectKey}-${materialType || ''}`"
+        :key="`model-${modelSelectKey}-${materialType || ''}-${periodKey}`"
         v-model:value="modelCode"
         :api-url="modelOptionsUrl"
         :api-params="modelApiParams"
         class="material-cost-analysis-query-bar__control material-cost-analysis-query-bar__control--model"
         allow-clear
         show-search
-        :disabled="!canSelectModelOrProduct"
+        :disabled="!canSelectModel"
         :placeholder="t('entity.bommaterialcost.modelcode')"
         @change="handleModelChange"
       />
       <TaktSelect
-        :key="`product-${productSelectKey}-${materialType || ''}-${modelCode || ''}`"
+        :key="`product-${productSelectKey}-${materialType || ''}-${modelCode || ''}-${periodKey}`"
         v-model:value="productCode"
         :api-url="productOptionsUrl"
         :api-params="productApiParams"
         class="material-cost-analysis-query-bar__control material-cost-analysis-query-bar__control--product"
         allow-clear
         show-search
-        :disabled="!canSelectModelOrProduct"
+        :disabled="!canSelectProduct"
         :placeholder="t('entity.bommaterialcost.productcode')"
       />
     </div>
@@ -97,11 +98,12 @@
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
 import {
-  getBomMaterialCostAnalysisModelOptionsUrl,
-  getBomMaterialCostAnalysisPlantOptionsUrl,
-  getBomMaterialCostAnalysisProductOptionsUrl,
-} from '@/api/logistics/manufacturing/bom/material-cost-analysis'
+  getBomCostOptionModelOptionsUrl,
+  getBomCostOptionPlantOptionsUrl,
+  getBomCostOptionProductOptionsUrl,
+} from '@/api/logistics/manufacturing/bom/cost-option'
 import type { TaktSelectOption } from '@/types/common'
+import { buildBomCostOptionParams, hasBomCostOptionPeriod } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-cost-option-params'
 import { isCostingPeriodMonthDisabled } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import {
   loadBomMaterialTypeOptionsWithDefault,
@@ -142,39 +144,43 @@ const materialTypeOptionsLoading = ref(false)
 const materialTypeOptionsPlant = ref('')
 /** 选项请求序号 */
 let materialTypeLoadToken = 0
-const plantOptionsUrl = getBomMaterialCostAnalysisPlantOptionsUrl()
-const modelOptionsUrl = getBomMaterialCostAnalysisModelOptionsUrl()
-const productOptionsUrl = getBomMaterialCostAnalysisProductOptionsUrl()
-
-/** 可选机种/产品：须工厂 + 物料类型 */
-const canSelectModelOrProduct = computed(
-  () => !!plantCode.value?.trim() && !!materialType.value?.trim(),
+const plantOptionsUrl = getBomCostOptionPlantOptionsUrl()
+const modelOptionsUrl = getBomCostOptionModelOptionsUrl()
+const productOptionsUrl = getBomCostOptionProductOptionsUrl()
+/** 期间键（驱动下拉刷新） */
+const periodKey = computed(
+  () => `${periodRange.value?.[0] || ''}_${periodRange.value?.[1] || ''}`,
 )
 
-/** 机种下拉参数（工厂 + 必选物料类型） */
-const modelApiParams = computed(() => {
-  const plant = plantCode.value?.trim()
-  const type = materialType.value?.trim()
-  if (!plant || !type) {
-    return undefined
-  }
-  return { plantCode: plant, materialType: type }
-})
+/** 期间是否可解析 */
+const hasPeriod = computed(() => hasBomCostOptionPeriod(periodRange.value))
+/** 类型：工厂 + 期间 */
+const canSelectType = computed(() => !!plantCode.value?.trim() && hasPeriod.value)
+/** 机种：工厂 + 期间 + 类型；机种可空 */
+const canSelectModel = computed(
+  () => canSelectType.value && !!materialType.value?.trim(),
+)
+/** 产品：机种可空时不过滤机种 */
+const canSelectProduct = computed(() => canSelectModel.value)
 
-/** 产品下拉参数（工厂 + 必选物料类型；机种可选） */
-const productApiParams = computed(() => {
-  const plant = plantCode.value?.trim()
-  const type = materialType.value?.trim()
-  if (!plant || !type) {
-    return undefined
-  }
-  const params: Record<string, string> = { plantCode: plant, materialType: type }
-  const model = modelCode.value?.trim()
-  if (model) {
-    params.modelCode = model
-  }
-  return params
-})
+/** 机种下拉参数（工厂 + 期间 + 必选物料类型） */
+const modelApiParams = computed(() =>
+  buildBomCostOptionParams({
+    plantCode: plantCode.value,
+    periodRange: periodRange.value,
+    materialType: materialType.value,
+  }),
+)
+
+/** 产品下拉参数（工厂 + 期间 + 必选物料类型；机种可选） */
+const productApiParams = computed(() =>
+  buildBomCostOptionParams({
+    plantCode: plantCode.value,
+    periodRange: periodRange.value,
+    materialType: materialType.value,
+    modelCode: modelCode.value,
+  }),
+)
 
 /** 刷新机种/产品下拉 */
 function refreshModelProductSelects() {
@@ -191,7 +197,10 @@ async function ensureMaterialTypeOptions(plant: string): Promise<string | undefi
   const token = ++materialTypeLoadToken
   materialTypeOptionsLoading.value = true
   try {
-    const { options, defaultType } = await loadBomMaterialTypeOptionsWithDefault(plant)
+    const { options, defaultType } = await loadBomMaterialTypeOptionsWithDefault(
+      plant,
+      periodRange.value,
+    )
     if (token !== materialTypeLoadToken) {
       return undefined
     }
@@ -223,6 +232,18 @@ function handlePlantChange() {
   refreshModelProductSelects()
 }
 
+/** 期间变更：重拉类型并清空机种/产品 */
+async function handlePeriodChange() {
+  modelCode.value = undefined
+  productCode.value = undefined
+  const p = plantCode.value?.trim()
+  if (p && hasBomCostOptionPeriod(periodRange.value)) {
+    const defaultType = await ensureMaterialTypeOptions(p)
+    materialType.value = defaultType
+  }
+  refreshModelProductSelects()
+}
+
 /** 物料类型变更 */
 function handleMaterialTypeChange() {
   applyDefaultMaterialTypeIfEmpty()
@@ -241,12 +262,14 @@ watch(
   plantCode,
   async (plant) => {
     const p = plant?.trim()
-    if (!p) {
+    if (!p || !hasBomCostOptionPeriod(periodRange.value)) {
       materialTypeLoadToken += 1
       materialTypeOptions.value = []
       materialTypeOptionsPlant.value = ''
       materialTypeOptionsLoading.value = false
-      materialType.value = undefined
+      if (!p) {
+        materialType.value = undefined
+      }
       modelCode.value = undefined
       productCode.value = undefined
       refreshModelProductSelects()

@@ -80,7 +80,7 @@ public sealed class TaktQuartzJobExecutor
         var tenantCode = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.TenantCode) ?? string.Empty;
         var companyCode = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.CompanyCode) ?? string.Empty;
         var taskId = TaktQuartzJobDataMapHelper.GetLongOrDefault(data, TaktQuartzJobDataKeys.QuartzTaskId);
-        var userName = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.UserName);
+        var UserName = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.UserName);
         var triggerExecuteParams = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.ExecuteParams);
         var manualTrigger = TaktQuartzJobDataMapHelper.GetIntOrDefault(data, TaktQuartzJobDataKeys.ManualTrigger) == 1;
         if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(companyCode) || taskId <= 0)
@@ -109,7 +109,7 @@ public sealed class TaktQuartzJobExecutor
             task.Id,
             task.TaskCode,
             task.TaskType,
-            userName,
+            UserName,
             manualTrigger))
         {
             var stopwatch = Stopwatch.StartNew();
@@ -120,14 +120,14 @@ public sealed class TaktQuartzJobExecutor
             var effectiveExecuteParams = TaktQuartzSchedulingHelper.ResolveEffectiveExecuteParams(task, triggerExecuteParams);
             Exception? executionException = null;
             TaktQuartzLog? executionLog = null;
-            TaktQuartzJobExecutionLogger.LogStarted(task, manualTrigger, userName);
+            TaktQuartzJobExecutionLogger.LogStarted(task, manualTrigger, UserName);
             try
             {
                 TaktQuartzSchedulingHelper.ValidateQuartzTaskForExecution(task, manualTrigger);
                 executeMessage = await DispatchAsync(
                     task,
                     effectiveExecuteParams,
-                    userName,
+                    UserName,
                     seedContext,
                     cancellationToken);
             }
@@ -171,7 +171,7 @@ public sealed class TaktQuartzJobExecutor
                     executionLog.Id,
                     executeMessage,
                     errorInfo);
-                await _quartzJobSignalRPushService.PushTaskExecutedAsync(task, executionLog, userName);
+                await _quartzJobSignalRPushService.PushTaskExecutedAsync(task, executionLog, UserName);
             }
             if (executionException != null)
             {
@@ -185,14 +185,14 @@ public sealed class TaktQuartzJobExecutor
     /// </summary>
     /// <param name="task">定时任务实体</param>
     /// <param name="executeParams">有效执行参数</param>
-    /// <param name="userName">触发用户</param>
+    /// <param name="UserName">触发用户</param>
     /// <param name="seedContext">租户种子上下文</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>执行摘要消息</returns>
     private async Task<string> DispatchAsync(
         TaktQuartzTask task,
         string? executeParams,
-        string? userName,
+        string? UserName,
         TaktSeedContext seedContext,
         CancellationToken cancellationToken)
     {
@@ -200,7 +200,7 @@ public sealed class TaktQuartzJobExecutor
         return taskType switch
         {
             "assembly" => await ExecuteAssemblyAsync(
-                task, executeParams, userName, cancellationToken),
+                task, executeParams, UserName, cancellationToken),
             "http" => await ExecuteHttpAsync(task, executeParams, cancellationToken),
             "sql" => await ExecuteSqlAsync(task, executeParams, seedContext, cancellationToken),
             _ => throw new InvalidOperationException($"不支持的任务类型：{task.TaskType}"),
@@ -212,7 +212,7 @@ public sealed class TaktQuartzJobExecutor
     /// </summary>
     /// <param name="task">定时任务</param>
     /// <param name="executeParams">执行参数</param>
-    /// <param name="userName">触发用户</param>
+    /// <param name="UserName">触发用户</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>执行摘要</returns>
     /// <summary>
@@ -220,13 +220,13 @@ public sealed class TaktQuartzJobExecutor
     /// </summary>
     /// <param name="task">定时任务</param>
     /// <param name="executeParams">执行参数</param>
-    /// <param name="userName">触发用户</param>
+    /// <param name="UserName">触发用户</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>执行摘要</returns>
     private async Task<string> ExecuteAssemblyAsync(
         TaktQuartzTask task,
         string? executeParams,
-        string? userName,
+        string? UserName,
         CancellationToken cancellationToken)
     {
         IDisposable? targetDbScope = null;
@@ -253,7 +253,7 @@ public sealed class TaktQuartzJobExecutor
             {
                 Task = task,
                 ExecuteParams = executeParams,
-                UserName = userName,
+                UserName = UserName,
             };
             await handler.ExecuteAsync(jobContext, cancellationToken);
             var assemblyHint = string.IsNullOrWhiteSpace(task.AssemblyName)

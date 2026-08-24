@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.VisitorCenter
 // 文件名称：TaktVisitorCompanionI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVisitorCompanion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,6 +99,15 @@ public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
             // entity.visitorcompanion.visitorid
             new TranslationSeedItem("entity.visitorcompanion.visitorid", "zh-HK", "来访记录ID_hk", "来访记录 ID（选项 TaktVisitors/options；DictValue=Id）"),
 
+            // entity.visitorcompanion.linenumber
+            new TranslationSeedItem("entity.visitorcompanion.linenumber", "en-US", "行号_us", "行号（固定步长=10）"),
+            // entity.visitorcompanion.linenumber
+            new TranslationSeedItem("entity.visitorcompanion.linenumber", "ja-JP", "行号_jp", "行号（固定步长=10）"),
+            // entity.visitorcompanion.linenumber
+            new TranslationSeedItem("entity.visitorcompanion.linenumber", "zh-CN", "行号", "行号（固定步长=10）"),
+            // entity.visitorcompanion.linenumber
+            new TranslationSeedItem("entity.visitorcompanion.linenumber", "zh-HK", "行号_hk", "行号（固定步长=10）"),
+
             // entity.visitorcompanion.department
             new TranslationSeedItem("entity.visitorcompanion.department", "en-US", "部门_us", "部门"),
             // entity.visitorcompanion.department
@@ -125,6 +134,15 @@ public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.visitorcompanion.companionname", "zh-CN", "来访人员姓名", "来访人员姓名"),
             // entity.visitorcompanion.companionname
             new TranslationSeedItem("entity.visitorcompanion.companionname", "zh-HK", "来访人员姓名_hk", "来访人员姓名"),
+
+            // entity.visitorcompanion.isobsolete
+            new TranslationSeedItem("entity.visitorcompanion.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.visitorcompanion.isobsolete
+            new TranslationSeedItem("entity.visitorcompanion.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.visitorcompanion.isobsolete
+            new TranslationSeedItem("entity.visitorcompanion.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.visitorcompanion.isobsolete
+            new TranslationSeedItem("entity.visitorcompanion.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.visitorcompanion.visitor
             new TranslationSeedItem("entity.visitorcompanion.visitor", "en-US", "来访记录_us", "来访记录（主表）"),

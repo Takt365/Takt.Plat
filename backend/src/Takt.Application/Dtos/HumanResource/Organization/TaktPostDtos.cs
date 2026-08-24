@@ -62,7 +62,7 @@ public class TaktPostDto : TaktCompanyDtoBase
     public string PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string PostLevel { get; set; } = string.Empty;
 
@@ -107,7 +107,7 @@ public class TaktPostDto : TaktCompanyDtoBase
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -117,12 +117,12 @@ public class TaktPostDto : TaktCompanyDtoBase
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int PostStatus { get; set; } = 0;
 
@@ -185,7 +185,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     public string? PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string? PostLevel { get; set; } = string.Empty;
 
@@ -230,7 +230,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -240,12 +240,12 @@ public class TaktPostQueryDto : TaktPagedQuery
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? PostStatus { get; set; }
 
@@ -330,9 +330,9 @@ public class TaktPostCreateDto
     public string PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
-    [Required(ErrorMessage = "岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）不能为空")]
+    [Required(ErrorMessage = "岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）不能为空")]
     public string PostLevel { get; set; } = string.Empty;
 
     /// <summary>
@@ -378,7 +378,7 @@ public class TaktPostCreateDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -388,7 +388,7 @@ public class TaktPostCreateDto
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int PostStatus { get; set; } = 0;
 
@@ -447,9 +447,9 @@ public class TaktPostStatusDto
     public long PostId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）不能为空")]
     public int PostStatus { get; set; } = 0;
 }
 
@@ -471,7 +471,7 @@ public class TaktPostSortDto
     public long PostId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -533,7 +533,7 @@ public class TaktPostTemplateDto
     public string? PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string? PostLevel { get; set; } = string.Empty;
 
@@ -578,7 +578,7 @@ public class TaktPostTemplateDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -588,7 +588,7 @@ public class TaktPostTemplateDto
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? PostStatus { get; set; }
 
@@ -661,7 +661,7 @@ public class TaktPostImportDto
     public string? PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string? PostLevel { get; set; } = string.Empty;
 
@@ -706,7 +706,7 @@ public class TaktPostImportDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -716,7 +716,7 @@ public class TaktPostImportDto
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? PostStatus { get; set; }
 
@@ -795,7 +795,7 @@ public class TaktPostExportDto
     public string PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string PostLevel { get; set; } = string.Empty;
 
@@ -840,7 +840,7 @@ public class TaktPostExportDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -850,12 +850,12 @@ public class TaktPostExportDto
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
+    /// 状态（字典 sys_normal_disable；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int PostStatus { get; set; } = 0;
 

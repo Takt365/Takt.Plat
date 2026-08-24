@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/identity/user/components -->
 <!-- 文件名称：user-form.vue -->
-<!-- 功能描述：用户维护弹窗内嵌表单。由 user/index.vue 引用；defineExpose 提供 validate、getValues、resetFields、setServerValidationErrors。员工/用户信息/权限多标签；TaktSelect 字典 sys_user_type、sys_normal_disable_status；视图模型见 `@/types/identity/user-form-view`（勿写入自动生成的 user.d.ts）；新增密码由父组件映射为 UserCreate.passwordHash。 -->
+<!-- 功能描述：用户维护弹窗内嵌表单。由 user/index.vue 引用；defineExpose 提供 validate、getValues、resetFields、setServerValidationErrors。员工/用户信息/权限多标签；TaktSelect 字典 sys_user_type、sys_normal_disable；视图模型见 `@/types/identity/user-form-view`（勿写入自动生成的 user.d.ts）；新增密码由父组件映射为 UserCreate.passwordHash。 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -152,7 +152,7 @@
                   v-model:value="formState.nickName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.user.nickname') })"
                   show-count
-                  :maxlength="USER_NICKNAME_MAX_LENGTH"
+                  :maxlength="USER_NICK_NAME_MAX_LENGTH"
                   allow-clear
                 />
               </a-form-item>
@@ -180,7 +180,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.userStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.user.status') })"
                 />
               </a-form-item>
@@ -273,20 +273,20 @@ import { getEmployeeOptions } from '@/api/human-resource/personnel/employee'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useUserStore } from '@/stores/identity/user'
 import {
-  isValidUsername,
+  isValidUserName,
   isValidUserNickName,
   isValidPassword,
-  USER_NICKNAME_MIN_LENGTH,
-  USER_NICKNAME_MAX_LENGTH,
+  USER_NICK_NAME_MIN_LENGTH,
+  USER_NICK_NAME_MAX_LENGTH,
 } from '@/utils/regex'
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 
-/** 用户名长度下限（与 `RegexPatterns.USERNAME` 一致） */
-const USERNAME_MIN_LENGTH = 4
-/** 用户名长度上限（与 `RegexPatterns.USERNAME` 一致） */
-const USERNAME_MAX_LENGTH = 20
+/** 用户名长度下限（与 `RegexPatterns.userName` 一致） */
+const UserName_MIN_LENGTH = 4
+/** 用户名长度上限（与 `RegexPatterns.userName` 一致） */
+const UserName_MAX_LENGTH = 20
 
 /** 用户表单日志器 */
 const userFormLogger = createLogger('identity.user.form')
@@ -303,7 +303,7 @@ const formContentClass = 'takt-form-content-rows-10'
  * 组件入参：由列表页传入当前编辑用户或空对象（新增）。
  */
 interface Props {
-  /** 当前用户数据（编辑时含 userId）；API 为 `username`/`nickname`，列表可带 `userName`/`nickName` 别名 */
+  /** 当前用户数据（编辑时含 userId）；API 为 `userName`/`nickName`，列表可带 `userName`/`nickName` 别名 */
   formData?: UserFormDataInput
   /** 提交中状态，由父级传入 */
   loading?: boolean
@@ -457,18 +457,18 @@ const rules = computed<Record<string, Rule[]>>(() => {
   ]
 
   /** 对应 name=userName：新增必填 + 用户名格式；编辑禁用输入故跳过 */
-  const userNameRules: Rule[] = [
+  const UserNameRules: Rule[] = [
     {
       validator: (_rule: any, value: string) => {
         if (props.formData?.userId) return Promise.resolve()
         if (!value) {
           return Promise.reject(t('common.page.form.placeholder.required', { field: t('entity.user.name') }))
         }
-        if (!isValidUsername(value)) {
+        if (!isValidUserName(value)) {
           return Promise.reject(t('common.validation.length.between', {
             field: t('entity.user.name'),
-            min: USERNAME_MIN_LENGTH,
-            max: USERNAME_MAX_LENGTH
+            min: UserName_MIN_LENGTH,
+            max: UserName_MAX_LENGTH
           }))
         }
         return Promise.resolve()
@@ -479,7 +479,7 @@ const rules = computed<Record<string, Rule[]>>(() => {
 
   return {
     employeeId: employeeIdRules,
-    userName: userNameRules,
+    userName: UserNameRules,
     nickName: [
       {
         validator: (_rule: any, value: string) => {
@@ -487,8 +487,8 @@ const rules = computed<Record<string, Rule[]>>(() => {
           if (!isValidUserNickName(String(value))) {
             return Promise.reject(t('common.validation.length.between', {
               field: t('entity.user.nickname'),
-              min: USER_NICKNAME_MIN_LENGTH,
-              max: USER_NICKNAME_MAX_LENGTH
+              min: USER_NICK_NAME_MIN_LENGTH,
+              max: USER_NICK_NAME_MAX_LENGTH
             }))
           }
           return Promise.resolve()
@@ -516,7 +516,7 @@ const rules = computed<Record<string, Rule[]>>(() => {
     ],
     // userType：字典 sys_user_type，必选
     userType: [dictIntRule('entity.user.type')],
-    // userStatus：字典 sys_normal_disable_status，必选
+    // userStatus：字典 sys_normal_disable，必选
     userStatus: [dictIntRule('entity.user.status')],
   }
 })
@@ -528,8 +528,8 @@ watch(
     if (newData?.userId) {
       Object.assign(formState, {
         employeeId: newData.employeeId != null ? String(newData.employeeId) : '',
-        userName: newData.userName ?? newData.username ?? '',
-        nickName: newData.nickName ?? newData.nickname ?? '',
+        userName: newData.userName ?? newData.userName ?? '',
+        nickName: newData.nickName ?? '',
         userType: newData.userType !== undefined && newData.userType !== null ? newData.userType : 0,
         password: '',
         userStatus: newData.userStatus !== undefined && newData.userStatus !== null ? newData.userStatus : 1,

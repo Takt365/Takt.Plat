@@ -88,7 +88,7 @@ export interface BonusPlanExport {
   effectiveDate: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status）
+   * 状态（字典 sys_normal_disable）
    */
   planStatus: number;
 

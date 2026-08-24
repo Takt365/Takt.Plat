@@ -75,7 +75,8 @@
               >
                 <TaktTreeSelect
                   v-model:value="formState.documentType"
-                  api-url="TaktMenus/tree-options"
+                  api-url="TaktMenus/tree-options?valueBy=name"
+                  :lazy="false"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.documenttype') })"
                   allow-clear
                   :field-names="{ label: 'dictLabel', value: 'dictValue' }"
@@ -88,12 +89,14 @@
                 :label="t('entity.numbering.deptcode')"
                 name="deptCode"
               >
-                <TaktSelect
+                <TaktTreeSelect
                   v-model:value="formState.deptCode"
-                  dict-type="sys_numbering_dept_code"
+                  api-url="TaktDepts/iso-tree-options"
+                  :lazy="true"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.deptcode') })"
                   allow-clear
                   :disabled="props.loading"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
                 />
               </a-form-item>
             </a-col>
@@ -180,7 +183,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.resetPeriod"
-                  dict-type="sys_reset_period_config"
+                  dict-type="sys_reset_period"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.resetperiod') })"
                 />
               </a-form-item>
@@ -233,7 +236,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.isbuiltin') })"
                 />
               </a-form-item>
@@ -245,7 +248,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.status"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.status') })"
                 />
               </a-form-item>
@@ -389,7 +392,7 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   dateFormat: "yyyyMMddHH",
-  resetPeriod: "none",
+  resetPeriod: "None",
   isBuiltIn: 0,
   status: 1
 }
@@ -398,29 +401,32 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
 function applyFormDefaults(target: Record<string, unknown>) {
   Object.assign(target, FORM_FIELD_DEFAULTS)
 }
-/** resetPeriod：后端 legacy 与字典 dictValue 归一化 */
+/** resetPeriod：后端 legacy 与字典 dictValue 归一化（None|Annually|Monthly|Daily） */
 const RESET_PERIOD_TO_DICT: Record<string, string> = {
-  none: 'none',
-  day: 'day',
-  daily: 'day',
-  month: 'month',
-  monthly: 'month',
-  year: 'year',
-  yearly: 'year',
+  none: 'None',
+  annually: 'Annually',
+  year: 'Annually',
+  yearly: 'Annually',
+  monthly: 'Monthly',
+  month: 'Monthly',
+  daily: 'Daily',
+  day: 'Daily',
+  hour: 'Daily',
+  hourly: 'Daily',
 }
 
 /** 编辑回填：归一化为 sys_reset_period dictValue */
 function normalizeResetPeriodForForm(value: unknown): string {
-  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'year')
+  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'None')
   const key = String(value ?? fallback).trim().toLowerCase()
-  return RESET_PERIOD_TO_DICT[key] ?? fallback
+  return RESET_PERIOD_TO_DICT[key] ?? (typeof value === 'string' && value.trim() ? value.trim() : fallback)
 }
 
 /** 提交：与实体 reset_period、字典 sys_reset_period 一致 */
 function normalizeResetPeriodForSubmit(value: unknown): string {
-  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'year')
+  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'None')
   const key = String(value ?? '').trim().toLowerCase()
-  return RESET_PERIOD_TO_DICT[key] ?? fallback
+  return RESET_PERIOD_TO_DICT[key] ?? (typeof value === 'string' && value.trim() ? value.trim() : fallback)
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */

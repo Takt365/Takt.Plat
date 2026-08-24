@@ -44,12 +44,12 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "process_version", ColumnDescription = "版本标签", ColumnDataType = "varchar", Length = 32, IsNullable = false, DefaultValue = "v1.0.0")]
     public string ProcessVersion { get; set; } = "v1.0.0";
     /// <summary>
-    /// 是否当前最新版（同键仅一条为 1）
+    /// 是否当前最新版（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_latest", ColumnDescription = "是否最新版", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsLatest { get; set; } = 1;
     /// <summary>
-    /// 流程分类
+    /// 流程分类（字典 sys_flow_category；0=通用流程 1=业务流程 2=系统流程）
     /// </summary>
     [SugarColumn(ColumnName = "process_category", ColumnDescription = "流程分类", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ProcessCategory { get; set; }
@@ -59,7 +59,7 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "process_description", ColumnDescription = "流程说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ProcessDescription { get; set; }
     /// <summary>
-    /// 挂起状态（1 激活，2 挂起）
+    /// 挂起状态（字典 sys_flow_suspension_state；1=激活 2=挂起）
     /// </summary>
     [SugarColumn(ColumnName = "suspension_state", ColumnDescription = "挂起状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SuspensionState { get; set; } = 1;
@@ -69,27 +69,27 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "process_content", ColumnDescription = "流程设计", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? ProcessContent { get; set; }
     /// <summary>
-    /// 部署批次号
+    /// 部署批次号（引擎发布时生成）
     /// </summary>
     [SugarColumn(ColumnName = "deployment_id", ColumnDescription = "部署批次号", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? DeploymentId { get; set; }
     /// <summary>
-    /// 关联表单 ID
+    /// 关联表单 ID（选项 TaktFlowForms/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "form_id", ColumnDescription = "关联表单ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? FormId { get; set; }
     /// <summary>
-    /// 关联表单编码
+    /// 关联表单编码（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "form_code", ColumnDescription = "关联表单编码", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? FormCode { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 发布状态
+    /// 发布状态（字典 sys_scheme_status；0=草稿 1=已发布 2=已禁用）
     /// </summary>
     [SugarColumn(ColumnName = "process_status", ColumnDescription = "发布状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ProcessStatus { get; set; } = 0;

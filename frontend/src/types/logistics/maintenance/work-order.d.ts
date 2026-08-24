@@ -234,7 +234,7 @@ export interface MaintenanceWorkOrder extends ApprovalDtoBase {
   acceptedSummary?: string;
 
   /**
-   * 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+   * 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
    */
   isHistoryArchived?: number;
 
@@ -472,7 +472,7 @@ export interface MaintenanceWorkOrderExport {
   acceptedSummary?: string;
 
   /**
-   * 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+   * 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
    */
   isHistoryArchived: number;
 

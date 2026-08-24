@@ -20,7 +20,7 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 /// </summary>
 /// <remarks>
 /// 记录用户登录行为和结果（统计日志域）。
-/// 数据隔离：租户 + 公司（<see cref="TaktCompanyEntityBase"/>）。
+/// 数据隔离：租户 + 公司（TaktCompanyEntityBase）。
 /// </remarks>
 [SugarTable("takt_statistics_logging_login_log", "登录日志表")]
 [SugarIndex("ix_login_log_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -28,29 +28,29 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 [SugarIndex("ix_takt_statistics_logging_login_log_created_at", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CreatedAt), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_statistics_logging_login_log_login_ip", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(LoginIp), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_statistics_logging_login_log_login_result", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(LoginResult), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_statistics_logging_login_log_username", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(Username), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_statistics_logging_login_log_UserName", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(UserName), OrderByType.Asc, false)]
 public class TaktLoginLog : TaktCompanyEntityBase
 {
     /// <summary>
     /// 用户名（登录账号）
     /// </summary>
-    [SugarColumn(ColumnName = "username", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
-    public string Username { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
+    /// 登录方式（TaktConstants.LoginType；如 password=账号密码、refreshtoken=刷新令牌）
     /// </summary>
     [SugarColumn(ColumnName = "login_type", ColumnDescription = "登录方式", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.LoginType.Unknown)]
     public string LoginType { get; set; } = TaktConstants.LoginType.Unknown;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
+    /// 浏览器（TaktConstants.BrowserType；如 unknown、chrome、firefox、safari、edge）
     /// </summary>
     [SugarColumn(ColumnName = "browser", ColumnDescription = "浏览器", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.BrowserType.Unknown)]
     public string Browser { get; set; } = TaktConstants.BrowserType.Unknown;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
+    /// 操作系统（TaktConstants.OperatingSystem；如 unknown、windows、macos、linux、android、ios）
     /// </summary>
     [SugarColumn(ColumnName = "os", ColumnDescription = "操作系统", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.OperatingSystem.Unknown)]
     public string Os { get; set; } = TaktConstants.OperatingSystem.Unknown;
@@ -62,7 +62,7 @@ public class TaktLoginLog : TaktCompanyEntityBase
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）
+    /// 登录结果（TaktConstants.LoginResult；如 success=成功、passworderror=密码错误）
     /// </summary>
     [SugarColumn(ColumnName = "login_result", ColumnDescription = "登录结果", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.LoginResult.Success)]
     public string LoginResult { get; set; } = TaktConstants.LoginResult.Success;

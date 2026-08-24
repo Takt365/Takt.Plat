@@ -41,6 +41,7 @@ export const PURCHASEORDERITEM_LIST_FIELDS = [
   'purchaseAmount',
   'deliveryStatus',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
@@ -88,30 +89,7 @@ export const PURCHASEORDERITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEORDERITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  requestCode: 'optional',
-  requestLineNumber: 'optional',
-  materialCode: 'optional',
-  materialDescription: 'optional',
-  materialSpecification: 'optional',
-  purchaseUnit: 'select',
-  orderQuantity: 'select',
-  receivedQuantity: 'select',
-  purchasePerUnit: 'select',
-  purchaseUnitPrice: 'select',
-  discountRate: 'select',
-  discountAmount: 'select',
-  taxIncludedAmount: 'select',
-  untaxedAmount: 'select',
-  taxAmount: 'select',
-  purchaseAmount: 'select',
-  deliveryStatus: 'select',
-  isObsolete: 'select',
-  cultureCode: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -119,41 +97,13 @@ export type PurchaseOrderItemField = keyof typeof PURCHASEORDERITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEORDERITEM_QUERY_STRING_FIELDS = [
-  'purchaseOrderCode',
-  'requestCode',
-  'materialCode',
-  'materialDescription',
-  'materialSpecification',
-  'purchaseUnit',
-  'createdAtStart',
-  'createdAtEnd',
-  'cultureCode',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchaseOrderItemQuery)[]
 
-export type PurchaseOrderItemQueryField =
-  | (typeof PURCHASEORDERITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'requestLineNumber' | 'orderQuantity' | 'receivedQuantity' | 'purchasePerUnit' | 'purchaseUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'purchaseAmount' | 'deliveryStatus' | 'isObsolete'
+export type PurchaseOrderItemQueryField = (typeof PURCHASEORDERITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEORDERITEM_QUERY_FIELDS: readonly PurchaseOrderItemQueryField[] = [
-  ...PURCHASEORDERITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'requestLineNumber',
-  'orderQuantity',
-  'receivedQuantity',
-  'purchasePerUnit',
-  'purchaseUnitPrice',
-  'discountRate',
-  'discountAmount',
-  'taxIncludedAmount',
-  'untaxedAmount',
-  'taxAmount',
-  'purchaseAmount',
-  'deliveryStatus',
-  'isObsolete',
-]
+export const PURCHASEORDERITEM_QUERY_FIELDS: readonly PurchaseOrderItemQueryField[] = [...PURCHASEORDERITEM_QUERY_STRING_FIELDS]
 
 /**
  * PurchaseOrderItem字段 i18n：index / purchase-order-item-form 统一入口

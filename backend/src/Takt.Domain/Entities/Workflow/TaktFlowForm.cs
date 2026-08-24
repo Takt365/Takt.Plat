@@ -25,7 +25,7 @@ public class TaktFlowForm : TaktCompanyEntityBase
 {
 
     /// <summary>
-    /// 表单编码（公司内唯一）
+    /// 表单编码（公司内唯一；前端表单按表单分类选择编码规则后自动通过 TaktNumbering 表单编码规则生成并展示，非手输；单据类型菜单：表单管理）
     /// </summary>
     [SugarColumn(ColumnName = "form_code", ColumnDescription = "表单编码", ColumnDataType = "varchar", Length = 64, IsNullable = false)]
     public string FormCode { get; set; } = string.Empty;
@@ -60,17 +60,17 @@ public class TaktFlowForm : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "form_version", ColumnDescription = "表单版本", ColumnDataType = "varchar", Length = 32, IsNullable = false, DefaultValue = "v1.0.0")]
     public string FormVersion { get; set; } = "v1.0.0";
     /// <summary>
-    /// 是否绑定数据源
+    /// 是否绑定数据源（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_datasource", ColumnDescription = "数据源表单", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsDatasource { get; set; }
     /// <summary>
-    /// 关联库名
+    /// 关联库名（选项 TaktDatabaseInfos/list；DictValue=TenantCode）
     /// </summary>
     [SugarColumn(ColumnName = "related_database_name", ColumnDescription = "关联库名", ColumnDataType = "varchar", Length = 128, IsNullable = true)]
     public string? RelatedDataBaseName { get; set; }
     /// <summary>
-    /// 关联表名
+    /// 关联表名（选项 TaktDatabaseInfos/tables；DictValue=TableName）
     /// </summary>
     [SugarColumn(ColumnName = "related_table_name", ColumnDescription = "关联表名", ColumnDataType = "varchar", Length = 128, IsNullable = true)]
     public string? RelatedTableName { get; set; }
@@ -80,12 +80,12 @@ public class TaktFlowForm : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "related_form_field", ColumnDescription = "关联映射", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
     public string? RelatedFormField { get; set; }
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 表单状态
+    /// 表单状态（字典 sys_scheme_status；0=草稿 1=已发布 2=已禁用）
     /// </summary>
     [SugarColumn(ColumnName = "form_status", ColumnDescription = "表单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int FormStatus { get; set; }

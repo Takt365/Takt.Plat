@@ -69,9 +69,14 @@ export interface Announcement extends ApprovalDtoBase {
   tags?: string;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 文件名称（原始文件名）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件 URL）
+   */
+  accessUrl?: string;
 
   /**
    * 发布时间（定时发布时使用）
@@ -104,17 +109,17 @@ export interface Announcement extends ApprovalDtoBase {
   viewCount?: number;
 
   /**
-   * 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+   * 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
    */
-  targetScope?: string;
+  targetScope?: number;
 
   /**
-   * 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+   * 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
    */
   targetDepartments?: string;
 
   /**
-   * 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+   * 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
    */
   targetUsers?: string;
 
@@ -177,9 +182,14 @@ export interface AnnouncementExport {
   tags?: string;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 文件名称（原始文件名）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件 URL）
+   */
+  accessUrl?: string;
 
   /**
    * 发布时间（定时发布时使用）
@@ -212,17 +222,17 @@ export interface AnnouncementExport {
   viewCount: number;
 
   /**
-   * 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+   * 目标范围（字典 sys_publish_scope；0=全部 1=指定部门 2=指定用户）
    */
-  targetScope: string;
+  targetScope: number;
 
   /**
-   * 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
+   * 目标部门编码（多个用逗号分隔；TargetScope=1 时使用）
    */
   targetDepartments?: string;
 
   /**
-   * 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+   * 目标用户名（多个用逗号分隔；TargetScope=2 时使用；关联 TaktUser.UserName）
    */
   targetUsers?: string;
 

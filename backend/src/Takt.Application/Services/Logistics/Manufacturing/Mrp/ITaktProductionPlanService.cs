@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mrp
 // 文件名称：ITaktProductionPlanService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产计划应用服务接口
 // 

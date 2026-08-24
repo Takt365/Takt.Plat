@@ -57,12 +57,12 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
     /// <summary>
-    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int IsBlocked { get; set; } = 0;
 
@@ -107,12 +107,12 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
+    /// 排序号（回填）（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int SourceStatus { get; set; } = 0;
 
@@ -169,12 +169,12 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
     /// <summary>
-    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int? IsBlocked { get; set; }
 
@@ -229,12 +229,12 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
+    /// 排序号（回填）（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? SourceStatus { get; set; }
 
@@ -313,12 +313,12 @@ public class TaktSourceOfSupplyCreateDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
     /// <summary>
-    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int IsBlocked { get; set; } = 0;
 
@@ -364,7 +364,7 @@ public class TaktSourceOfSupplyCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int SourceStatus { get; set; } = 0;
 
@@ -418,9 +418,9 @@ public class TaktSourceOfSupplyStatusDto
     public long SourceOfSupplyId { get; set; }
 
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int SourceStatus { get; set; } = 0;
 }
 
@@ -442,7 +442,7 @@ public class TaktSourceOfSupplySortDto
     public long SourceOfSupplyId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
+    /// 排序号（回填）（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     [Required(ErrorMessage = "排序号（越小越靠前；同物料多货源清单时的优先级）不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -498,12 +498,12 @@ public class TaktSourceOfSupplyTemplateDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
     /// <summary>
-    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int? IsBlocked { get; set; }
 
@@ -548,7 +548,7 @@ public class TaktSourceOfSupplyTemplateDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? SourceStatus { get; set; }
 
@@ -610,12 +610,12 @@ public class TaktSourceOfSupplyImportDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
     /// <summary>
-    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int? IsBlocked { get; set; }
 
@@ -660,7 +660,7 @@ public class TaktSourceOfSupplyImportDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? SourceStatus { get; set; }
 
@@ -723,12 +723,12 @@ public class TaktSourceOfSupplyExportDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
     /// <summary>
-    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int IsBlocked { get; set; } = 0;
 
@@ -773,12 +773,12 @@ public class TaktSourceOfSupplyExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
+    /// 排序号（回填）（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int SourceStatus { get; set; } = 0;
 

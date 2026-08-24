@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsCommentsController.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心评论控制器
 // 
@@ -41,7 +41,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:news:center:list", "新闻中心评论列表")]
+    [TaktPermission("routine:news:center:comment:list", "新闻中心评论列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetNewsCommentListAsync([FromQuery] TaktNewsCommentQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心评论ID</param>
     /// <returns>新闻中心评论DTO</returns>
-    [TaktPermission("routine:news:center:query", "新闻中心评论详情")]
+    [TaktPermission("routine:news:center:comment:query", "新闻中心评论详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNewsCommentByIdAsync(long id)
     {
@@ -81,16 +81,17 @@ public class TaktNewsCommentsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取新闻评论树形选项列表
+    /// 获取新闻中心评论树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
+    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>
     /// <returns>树形选项</returns>
-    [TaktPermission("routine:news:center:query", "新闻中心评论树形选项")]
+    [TaktPermission("routine:news:center:comment:query", "新闻中心评论树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetNewsCommentTreeOptionsAsync()
+    public async Task<IActionResult> GetNewsCommentTreeOptionsAsync([FromQuery] long parentId = 0)
     {
         try
         {
-            var result = await _newsCommentService.GetNewsCommentTreeOptionsAsync();
+            var result = await _newsCommentService.GetNewsCommentTreeOptionsAsync(parentId);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -100,11 +101,12 @@ public class TaktNewsCommentsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取新闻中心评论树形列表
+    /// 获取新闻中心评论树形列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
+    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 字段）</param>
     /// <returns>树形数据</returns>
-    [TaktPermission("routine:news:center:query", "新闻中心评论树")]
+    [TaktPermission("routine:news:center:comment:query", "新闻中心评论树")]
     [HttpGet("tree")]
     public async Task<IActionResult> GetNewsCommentTreeAsync([FromQuery] long parentId = 0, [FromQuery] bool includeDisabled = false)
     {
@@ -124,7 +126,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>新闻中心评论DTO</returns>
-    [TaktPermission("routine:news:center:create", "创建新闻中心评论")]
+    [TaktPermission("routine:news:center:comment:create", "创建新闻中心评论")]
     [HttpPost]
     public async Task<IActionResult> CreateNewsCommentAsync([FromBody] TaktNewsCommentCreateDto dto)
     {
@@ -145,7 +147,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// <param name="id">新闻中心评论ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>新闻中心评论DTO</returns>
-    [TaktPermission("routine:news:center:update", "更新新闻中心评论")]
+    [TaktPermission("routine:news:center:comment:update", "更新新闻中心评论")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNewsCommentAsync(long id, [FromBody] TaktNewsCommentUpdateDto dto)
     {
@@ -165,7 +167,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心评论ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:news:center:delete", "删除新闻中心评论")]
+    [TaktPermission("routine:news:center:comment:delete", "删除新闻中心评论")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNewsCommentByIdAsync(long id)
     {
@@ -185,7 +187,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:news:center:delete", "批量删除新闻中心评论")]
+    [TaktPermission("routine:news:center:comment:delete", "批量删除新闻中心评论")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteNewsCommentBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -205,7 +207,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>新闻中心评论DTO</returns>
-    [TaktPermission("routine:news:center:update", "更新新闻中心评论状态")]
+    [TaktPermission("routine:news:center:comment:update", "更新新闻中心评论状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateNewsCommentStatusAsync([FromBody] TaktNewsCommentStatusDto dto)
     {
@@ -221,10 +223,30 @@ public class TaktNewsCommentsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 更新新闻中心评论作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>新闻中心评论DTO</returns>
+    [TaktPermission("routine:news:center:comment:update", "更新新闻中心评论作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateNewsCommentObsoleteAsync([FromBody] TaktNewsCommentObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _newsCommentService.UpdateNewsCommentObsoleteAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:news:center:import", "获取新闻中心评论导入模板")]
+    [TaktPermission("routine:news:center:comment:import", "获取新闻中心评论导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetNewsCommentTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +266,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:news:center:import", "导入新闻中心评论")]
+    [TaktPermission("routine:news:center:comment:import", "导入新闻中心评论")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportNewsCommentAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +296,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// 导出新闻中心评论
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:news:center:export", "导出新闻中心评论")]
+    [TaktPermission("routine:news:center:comment:export", "导出新闻中心评论")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportNewsCommentAsync([FromQuery] TaktNewsCommentQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

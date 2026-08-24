@@ -41,12 +41,12 @@
               </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trackinglog.username')"
-                name="userName"
+                :label="t('entity.trackinglog.userid')"
+                name="userId"
               >
                 <a-input
-                  v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trackinglog.username') })"
+                  v-model:value="formState.userId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trackinglog.userid') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -55,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trackinglog.userid')"
-                name="userId"
+                :label="t('entity.trackinglog.username')"
+                name="userName"
               >
                 <a-input
-                  v-model:value="formState.userId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trackinglog.userid') })"
+                  v-model:value="formState.userName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trackinglog.username') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -398,7 +398,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","userName","userId","eventTrackingType","eventTrackingCategory","eventTime","durationMs","performanceStartMs","entryName","trackingLevel","routePath","pageUrl","containerType","containerName","containerSrc","containerId","attributionJson","userAgent","clientIp","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","userId","userName","eventTrackingType","eventTrackingCategory","eventTime","durationMs","performanceStartMs","entryName","trackingLevel","routePath","pageUrl","containerType","containerName","containerSrc","containerId","attributionJson","userAgent","clientIp","extField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

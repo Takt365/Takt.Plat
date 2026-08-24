@@ -71,7 +71,7 @@ public class TaktTableArchiveDto : TaktCompanyDtoBase
     public string ArchiveName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -148,7 +148,7 @@ public class TaktTableArchiveQueryDto : TaktPagedQuery
     public string? ArchiveName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -326,7 +326,7 @@ public class TaktTableArchiveSortDto
     public long TableArchiveId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -548,7 +548,7 @@ public class TaktTableArchiveExportDto
     public string ArchiveName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

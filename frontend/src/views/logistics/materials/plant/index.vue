@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/plant -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -25,7 +25,7 @@
       delete-permission="logistics:materials:plant:delete"
       import-permission="logistics:materials:plant:import"
       export-permission="logistics:materials:plant:export"
-      :show-create="false"
+      :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
@@ -670,7 +670,7 @@
       <a-form-item :label="pi.queryLabel('plantStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.plantStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('plantStatus', 'select')"
           allow-clear
         />
@@ -780,7 +780,7 @@
 
 <script setup lang="ts">
 /**
- * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称 组合 2：无关联工厂、有语言管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/plant
  */
 import { ref, computed, onMounted } from 'vue'

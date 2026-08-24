@@ -36,12 +36,12 @@
         class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--type"
         :allow-clear="false"
         show-search
-        :disabled="!plantCode || materialTypeOptionsLoading"
+        :disabled="!canSelectType || materialTypeOptionsLoading"
         :placeholder="t('entity.bommaterialcost.materialtype')"
         @change="handleMaterialTypeChange"
       />
       <TaktSelect
-        :key="`model-${modelSelectKey}-${materialType || ''}-${focusPeriod}`"
+        :key="`model-${modelSelectKey}-${materialType || ''}-${periodKey}`"
         v-model="modelCodes"
         :api-url="modelOptionsUrl"
         :api-params="modelApiParams"
@@ -49,11 +49,12 @@
         multiple
         allow-clear
         show-search
-        :disabled="!canSelectModelOrComponent"
+        :disabled="!canSelectModel"
         :placeholder="t(`${localePrefix}.modelCodesOptional`)"
+        @change="handleModelCodesChange"
       />
       <TaktSelect
-        :key="`component-${componentSelectKey}-${focusPeriod}`"
+        :key="`component-${componentSelectKey}-${periodKey}-${modelCodesKey}`"
         v-model="componentCodes"
         :api-url="componentOptionsUrl"
         :api-params="componentApiParams"
@@ -63,7 +64,7 @@
         show-search
         remote-search
         virtual
-        :disabled="!canSelectModelOrComponent"
+        :disabled="!canSelectComponent"
         :placeholder="t(`${localePrefix}.componentCodesOptional`)"
       />
     </div>
@@ -96,17 +97,18 @@
 /**
  * 机种成本推移查询栏：
  * - 物料类型：先 get material-type-options 全量，再默认选中 FERT（仅影响机种 options）
- * - 机种：工厂 + 期间最后月 + 物料类型
- * - 物料：工厂 + 期间最后月 + X+F 去重；remote-search + virtual
+ * - 机种：工厂 + 整个期间 + 物料类型
+ * - 物料：工厂 + 整个期间 + X+F 去重；remote-search + virtual
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
-import { getBomMaterialCostAnalysisPlantOptionsUrl } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
 import {
-  getBomModelCostTrendComponentOptionsUrl,
-  getBomModelCostTrendModelOptionsUrl,
-} from '@/api/logistics/manufacturing/bom/model-cost-trend'
+  getBomCostOptionMaterialOptionsUrl,
+  getBomCostOptionModelOptionsUrl,
+  getBomCostOptionPlantOptionsUrl,
+} from '@/api/logistics/manufacturing/bom/cost-option'
 import type { TaktSelectOption } from '@/types/common'
+import { buildBomCostOptionParams, hasBomCostOptionPeriod } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-cost-option-params'
 import { isCostingPeriodMonthDisabled } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import {
   loadBomMaterialTypeOptionsWithDefault,
@@ -147,44 +149,47 @@ const materialTypeOptionsLoading = ref(false)
 const materialTypeOptionsPlant = ref('')
 /** 选项请求序号 */
 let materialTypeLoadToken = 0
-const plantOptionsUrl = getBomMaterialCostAnalysisPlantOptionsUrl()
-const modelOptionsUrl = getBomModelCostTrendModelOptionsUrl()
-const componentOptionsUrl = getBomModelCostTrendComponentOptionsUrl()
-
-/** 期间最后月 yyyy-MM */
-const focusPeriod = computed(() => periodRange.value?.[1]?.trim() || periodRange.value?.[0]?.trim() || '')
-
-/** 可选机种/物料（须工厂 + 期间止 + 物料类型；类型选项加载完成后再拉） */
-const canSelectModelOrComponent = computed(
-  () =>
-    !!plantCode.value?.trim()
-    && !!focusPeriod.value
-    && !!materialType.value?.trim()
-    && !materialTypeOptionsLoading.value,
+const plantOptionsUrl = getBomCostOptionPlantOptionsUrl()
+const modelOptionsUrl = getBomCostOptionModelOptionsUrl()
+const componentOptionsUrl = getBomCostOptionMaterialOptionsUrl()
+/** 期间键（驱动下拉刷新） */
+const periodKey = computed(
+  () => `${periodRange.value?.[0] || ''}_${periodRange.value?.[1] || ''}`,
+)
+/** 已选机种键（空=全部机种，物料不过滤机种） */
+const modelCodesKey = computed(
+  () => (modelCodes.value ?? []).map((c) => c.trim()).filter(Boolean).sort().join(','),
+)
+/** 期间是否可解析 */
+const hasPeriod = computed(() => hasBomCostOptionPeriod(periodRange.value))
+/** 类型：工厂 + 期间 */
+const canSelectType = computed(() => !!plantCode.value?.trim() && hasPeriod.value)
+/** 机种：工厂 + 期间 + 类型；机种可空 */
+const canSelectModel = computed(
+  () => canSelectType.value && !!materialType.value?.trim() && !materialTypeOptionsLoading.value,
+)
+/** 物料：工厂 + 期间即可；机种可空=不过滤 */
+const canSelectComponent = computed(
+  () => !!plantCode.value?.trim() && hasPeriod.value,
 )
 
-/** 机种下拉参数（工厂 + 期间最后月 + 必选物料类型） */
-const modelApiParams = computed(() => {
-  if (!canSelectModelOrComponent.value) {
-    return { plantCode: '', focusPeriod: '' }
-  }
-  return {
-    plantCode: plantCode.value!.trim(),
-    focusPeriod: focusPeriod.value,
-    materialType: materialType.value!.trim(),
-  }
-})
+/** 机种下拉参数（工厂 + 整个期间 + 类型） */
+const modelApiParams = computed(() =>
+  buildBomCostOptionParams({
+    plantCode: plantCode.value,
+    periodRange: periodRange.value,
+    materialType: materialType.value,
+  }),
+)
 
-/** 物料下拉参数（工厂 + 期间最后月；与物料类型无关；keyword 由 remote-search 注入） */
-const componentApiParams = computed(() => {
-  if (!canSelectModelOrComponent.value) {
-    return { plantCode: '', focusPeriod: '' }
-  }
-  return {
-    plantCode: plantCode.value!.trim(),
-    focusPeriod: focusPeriod.value,
-  }
-})
+/** 物料下拉参数（工厂 + 期间；机种多选可空过滤） */
+const componentApiParams = computed(() =>
+  buildBomCostOptionParams({
+    plantCode: plantCode.value,
+    periodRange: periodRange.value,
+    modelCodes: modelCodes.value,
+  }),
+)
 
 /** 刷新机种下拉 */
 function refreshModelSelect() {
@@ -211,7 +216,10 @@ async function ensureMaterialTypeOptions(plant: string): Promise<string | undefi
   const token = ++materialTypeLoadToken
   materialTypeOptionsLoading.value = true
   try {
-    const { options, defaultType } = await loadBomMaterialTypeOptionsWithDefault(plant)
+    const { options, defaultType } = await loadBomMaterialTypeOptionsWithDefault(
+      plant,
+      periodRange.value,
+    )
     if (token !== materialTypeLoadToken) {
       return undefined
     }
@@ -236,6 +244,12 @@ function applyDefaultMaterialTypeIfEmpty() {
   }
 }
 
+/** 机种变更：清空物料并按新机种（可空=全部）重拉物料 */
+function handleModelCodesChange() {
+  componentCodes.value = []
+  refreshComponentSelect()
+}
+
 /** 工厂变更：清空机种/物料（类型由 watch 重拉并默认 FERT） */
 function handlePlantChange() {
   modelCodes.value = []
@@ -243,30 +257,38 @@ function handlePlantChange() {
   refreshModelComponentSelects()
 }
 
-/** 期间变更：选项跟最后月走，清空已选机种/物料 */
-function handlePeriodChange() {
+/** 期间变更：选项跟整个期间走，重拉类型并清空已选机种/物料 */
+async function handlePeriodChange() {
   modelCodes.value = []
   componentCodes.value = []
+  const p = plantCode.value?.trim()
+  if (p && hasBomCostOptionPeriod(periodRange.value)) {
+    const defaultType = await ensureMaterialTypeOptions(p)
+    materialType.value = defaultType
+  }
   refreshModelComponentSelects()
 }
 
-/** 物料类型变更：清空机种并刷新机种下拉；物料 options 与类型无关不重拉 */
+/** 物料类型变更：清空机种；机种空则物料不过滤机种并重拉 */
 function handleMaterialTypeChange() {
   applyDefaultMaterialTypeIfEmpty()
   modelCodes.value = []
-  refreshModelSelect()
+  componentCodes.value = []
+  refreshModelComponentSelects()
 }
 
 watch(
   plantCode,
   async (plant) => {
     const p = plant?.trim()
-    if (!p) {
+    if (!p || !hasBomCostOptionPeriod(periodRange.value)) {
       materialTypeLoadToken += 1
       materialTypeOptions.value = []
       materialTypeOptionsPlant.value = ''
       materialTypeOptionsLoading.value = false
-      materialType.value = undefined
+      if (!p) {
+        materialType.value = undefined
+      }
       modelCodes.value = []
       componentCodes.value = []
       refreshModelComponentSelects()

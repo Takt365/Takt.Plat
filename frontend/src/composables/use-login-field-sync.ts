@@ -25,7 +25,7 @@ import {
   TAKT_LOGIN_TENANT_VALIDATE_DEBOUNCE_MS,
   TAKT_TENANT_CODE_LENGTH,
 } from '@/utils/common';
-import { isValidLoginUsername, isValidTenantCode, LOGIN_USERNAME_MAX_LENGTH } from '@/utils/regex';
+import { isValidLoginUserName, isValidTenantCode, LOGIN_USER_NAME_MAX_LENGTH } from '@/utils/regex';
 
 export type { UseLoginFieldSyncOptions };
 
@@ -66,17 +66,17 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
    * 规范化用户名（小写字母与数字）
    * @param value 原始输入
    */
-  function normalizeUsername(value: string): string {
-    return String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, LOGIN_USERNAME_MAX_LENGTH);
+  function normalizeUserName(value: string): string {
+    return String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, LOGIN_USER_NAME_MAX_LENGTH);
   }
 
   /**
    * 构建登录预览上下文键
    * @param tenantCode 租户编码
-   * @param username 用户名
+   * @param userName 用户名
    */
-  function buildPreviewKey(tenantCode: string, username: string): string {
-    return `${tenantCode.trim()}|${username.trim()}`;
+  function buildPreviewKey(tenantCode: string, userName: string): string {
+    return `${tenantCode.trim()}|${userName.trim()}`;
   }
 
   /**
@@ -123,7 +123,7 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
    * @param level 级别
    */
   function notifyPreviewToast(text: string, level: 'error' | 'warning' = 'warning'): void {
-    const key = `${options.getTenantCode().trim()}|${options.getUsername().trim()}|${text}|${level}`;
+    const key = `${options.getTenantCode().trim()}|${options.getUserName().trim()}|${text}|${level}`;
     if (previewToastKey === key) {
       return;
     }
@@ -237,15 +237,15 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
       return;
     }
     const tenantCode = tenantStore.tenantCode.trim();
-    const username = options.getUsername().trim();
-    if (!tenantCode || !username || !isValidLoginUsername(username)) {
+    const userName = options.getUserName().trim();
+    if (!tenantCode || !userName || !isValidLoginUserName(userName)) {
       return;
     }
-    const previewKey = buildPreviewKey(tenantCode, username);
+    const previewKey = buildPreviewKey(tenantCode, userName);
     if (previewKey !== lastPreviewKey) {
       localeStore.clearLoginLocaleUserOverride();
     }
-    const result = await userStore.syncLoginPreviewAsync(tenantCode, username, previewKey).catch(() => null);
+    const result = await userStore.syncLoginPreviewAsync(tenantCode, userName, previewKey).catch(() => null);
     if (!result || generation !== tenantGeneration) {
       return;
     }
@@ -260,8 +260,8 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
     if (!tenantValidated.value || !tenantStore.tenantCode) {
       return;
     }
-    const username = options.getUsername().trim();
-    if (!username || !isValidLoginUsername(username)) {
+    const userName = options.getUserName().trim();
+    if (!userName || !isValidLoginUserName(userName)) {
       return;
     }
     const generation = tenantGeneration;
@@ -331,18 +331,18 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
   /**
    * 用户名输入变更：租户已校验通过时防抖拉取登录预览
    */
-  function onUsernameInputChange(): void {
-    const raw = options.getUsername();
-    const username = normalizeUsername(raw);
-    if (username !== raw) {
-      options.setUsername(username);
+  function onUserNameInputChange(): void {
+    const raw = options.getUserName();
+    const userName = normalizeUserName(raw);
+    if (userName !== raw) {
+      options.setUserName(userName);
       return;
     }
     invalidatePreviewContext();
     if (!tenantValidated.value || !tenantStore.tenantCode) {
       return;
     }
-    if (!isValidLoginUsername(username)) {
+    if (!isValidLoginUserName(userName)) {
       return;
     }
     scheduleLoginPreview(false);
@@ -351,21 +351,21 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
   /**
    * 立即提交登录预览（用户名失焦）
    */
-  async function commitUsernamePreviewAsync(): Promise<void> {
+  async function commitUserNamePreviewAsync(): Promise<void> {
     cancelPreviewDebounce();
     if (!tenantValidated.value || !tenantStore.tenantCode) {
       return;
     }
-    const username = normalizeUsername(options.getUsername());
-    if (username !== options.getUsername()) {
-      options.setUsername(username);
+    const userName = normalizeUserName(options.getUserName());
+    if (userName !== options.getUserName()) {
+      options.setUserName(userName);
       return;
     }
-    if (!isValidLoginUsername(username)) {
+    if (!isValidLoginUserName(userName)) {
       return;
     }
     await runLoginPreview(tenantGeneration);
-    await options.formRef.value?.validateFields(['username']).catch(() => undefined);
+    await options.formRef.value?.validateFields(['userName']).catch(() => undefined);
   }
 
   /**
@@ -381,9 +381,9 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
     tenantValidated,
     tenantValidating,
     onTenantInputChange,
-    onUsernameInputChange,
+    onUserNameInputChange,
     commitTenantAsync,
-    commitUsernamePreviewAsync,
+    commitUserNamePreviewAsync,
     dispose,
   };
 }

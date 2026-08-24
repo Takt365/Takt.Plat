@@ -670,7 +670,7 @@
       <a-form-item :label="pi.queryLabel('companyStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.companyStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('companyStatus', 'select')"
           allow-clear
         />

@@ -98,11 +98,11 @@ public sealed class TaktBomMaterialCostItemRecalculateBackgroundService : ITaktB
         var tenantCode = _userContext.TenantCode?.Trim() ?? string.Empty;
         var companyCode = _userContext.CompanyCode?.Trim() ?? string.Empty;
         var userId = _userContext.UserId;
-        var userName = _userContext.UserName?.Trim() ?? string.Empty;
+        var UserName = _userContext.UserName?.Trim() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(tenantCode)
             || string.IsNullOrWhiteSpace(companyCode)
             || userId is not > 0
-            || string.IsNullOrWhiteSpace(userName))
+            || string.IsNullOrWhiteSpace(UserName))
         {
             throw new TaktBusinessException("用户上下文缺失，无法提交后台重算");
         }
@@ -118,7 +118,7 @@ public sealed class TaktBomMaterialCostItemRecalculateBackgroundService : ITaktB
             tenantCode,
             companyCode,
             userId.Value,
-            userName,
+            UserName,
             prepared.Query,
             prepared.ProcessedMonth,
             forceRecalculate,
@@ -226,13 +226,13 @@ public sealed class TaktBomMaterialCostItemRecalculateBackgroundService : ITaktB
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="userId">用户 ID</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     private void ConfigureBackgroundHttpContext(
         IHttpContextAccessor httpContextAccessor,
         string tenantCode,
         string companyCode,
         long userId,
-        string userName)
+        string UserName)
     {
         ArgumentNullException.ThrowIfNull(httpContextAccessor);
         var httpContext = new DefaultHttpContext();
@@ -240,7 +240,7 @@ public sealed class TaktBomMaterialCostItemRecalculateBackgroundService : ITaktB
         var claims = new List<Claim>
         {
             new("sub", userId.ToString(CultureInfo.InvariantCulture)),
-            new(TaktClaimNames.PreferredUsername, userName),
+            new(TaktClaimNames.PreferredUsername, UserName),
             new(TaktClaimNames.TenantCode, tenantCode),
             new(TaktClaimNames.CompanyCode, companyCode),
         };

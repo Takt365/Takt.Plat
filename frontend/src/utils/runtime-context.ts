@@ -55,8 +55,8 @@ export function mergeRuntimeContext(context?: LogContext): LogContext {
     if (userStore.userId) {
       merged.userId = merged.userId ?? userStore.userId;
     }
-    if (userStore.username) {
-      merged.username = merged.username ?? userStore.username;
+    if (userStore.userName) {
+      merged.userName = merged.userName ?? userStore.userName;
     }
   } catch {
     // Pinia 尚未挂载时忽略

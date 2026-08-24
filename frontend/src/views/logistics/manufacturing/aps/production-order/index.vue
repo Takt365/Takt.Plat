@@ -86,7 +86,7 @@
         <template v-else-if="column.key === 'priority'">
           <TaktDictTag
             :value="getProductionOrderDictValue(record, 'priority')"
-            dict-type="sys_priority_level_category"
+            dict-type="sys_priority_level"
           />
         </template>
         <template v-else-if="column.key === 'orderStatus'">
@@ -249,7 +249,7 @@
       <a-form-item :label="pi.queryLabel('priority')">
         <TaktSelect
           v-model:value="advancedQueryForm.priority"
-          dict-type="sys_priority_level_category"
+          dict-type="sys_priority_level"
           :placeholder="pi.queryPh('priority', 'select')"
           allow-clear
         />

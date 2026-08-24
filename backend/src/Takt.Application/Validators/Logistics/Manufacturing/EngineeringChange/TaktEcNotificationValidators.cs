@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotification 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcNotification 生成，请按需审阅）
 // 
@@ -36,10 +36,10 @@ public class TaktEcNotificationCreateValidator : AbstractValidator<TaktEcNotific
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.EcId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.EcId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EcNotificationCode)
             .NotEmpty().WithMessage("通知单号不能为空")
@@ -47,7 +47,7 @@ public class TaktEcNotificationCreateValidator : AbstractValidator<TaktEcNotific
         RuleFor(x => x.EcId)
             .GreaterThanOrEqualTo(0).WithMessage("关联的设变主表ID不能为负数");
         RuleFor(x => x.EcCode)
-            .NotEmpty().WithMessage("设变单号不能为空")
+            .NotEmpty().WithMessage("设变单号不能为空").When(x => x.EcId <= 0)
             .MaximumLength(30).WithMessage("设变单号长度不能超过30个字符");
         RuleFor(x => x.EcNotificationNotifierId)
             .GreaterThanOrEqualTo(0).WithMessage("通知人ID不能为负数");
@@ -81,10 +81,10 @@ public class TaktEcNotificationUpdateValidator : AbstractValidator<TaktEcNotific
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.EcId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.EcId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EcNotificationCode)
             .NotEmpty().WithMessage("通知单号不能为空")
@@ -92,7 +92,7 @@ public class TaktEcNotificationUpdateValidator : AbstractValidator<TaktEcNotific
         RuleFor(x => x.EcId)
             .GreaterThanOrEqualTo(0).WithMessage("关联的设变主表ID不能为负数");
         RuleFor(x => x.EcCode)
-            .NotEmpty().WithMessage("设变单号不能为空")
+            .NotEmpty().WithMessage("设变单号不能为空").When(x => x.EcId <= 0)
             .MaximumLength(30).WithMessage("设变单号长度不能超过30个字符");
         RuleFor(x => x.EcNotificationNotifierId)
             .GreaterThanOrEqualTo(0).WithMessage("通知人ID不能为负数");

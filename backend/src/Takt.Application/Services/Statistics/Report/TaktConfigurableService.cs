@@ -41,6 +41,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
     private readonly ITaktStatQueryExecutor _statQueryExecutor;
+    private readonly ITaktNumberingGenerator _numberingGenerator;
 
     /// <summary>
     /// 构造函数
@@ -55,6 +56,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="statQueryExecutor">SqlSugar Queryable 报表执行器</param>
+    /// <param name="numberingGenerator">编码生成器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktConfigurableService(
@@ -68,6 +70,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktStatQueryExecutor statQueryExecutor,
+        ITaktNumberingGenerator numberingGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -82,6 +85,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
         _statQueryExecutor = statQueryExecutor;
+        _numberingGenerator = numberingGenerator;
     }
 
     /// <summary>
@@ -147,6 +151,19 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     public async Task<TaktConfigurableDto> CreateConfigurableAsync(TaktConfigurableCreateDto dto)
     {
         var entity = dto.Adapt<TaktConfigurable>();
+        if (!string.IsNullOrWhiteSpace(dto.NumberingRuleCode))
+        {
+            var generated = await _numberingGenerator.GenerateNextAsync(dto.NumberingRuleCode.Trim());
+            if (string.IsNullOrWhiteSpace(generated.BusinessCode))
+            {
+                throw new TaktBusinessException("业务编码生成失败");
+            }
+            entity.ReportCode = generated.BusinessCode;
+        }
+        else if (string.IsNullOrWhiteSpace(entity.ReportCode))
+        {
+            throw new TaktBusinessException("报表编码不能为空");
+        }
         var isUnique_ix_configurable_code_unique = await _uniqueValidator.IsUniqueAsync(
             _configurableRepository,
             x => x.ReportCode == entity.ReportCode);

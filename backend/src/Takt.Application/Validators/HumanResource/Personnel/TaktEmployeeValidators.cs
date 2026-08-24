@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Personnel
 // 文件名称：TaktEmployeeValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Employee 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployee 生成，请按需审阅）
 // 
@@ -47,6 +47,9 @@ public class TaktEmployeeCreateValidator : AbstractValidator<TaktEmployeeCreateD
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("姓名不能为空")
             .MaximumLength(80).WithMessage("姓名长度不能超过80个字符");
+        RuleFor(x => x.IdCardCode)
+            .NotEmpty().WithMessage("身份证号不能为空")
+            .MaximumLength(18).WithMessage("身份证号长度不能超过18个字符");
         RuleFor(x => x.Mobile)
             .NotEmpty().WithMessage("手机号码不能为空")
             .MaximumLength(11).WithMessage("手机号码长度不能超过11个字符");
@@ -94,6 +97,9 @@ public class TaktEmployeeUpdateValidator : AbstractValidator<TaktEmployeeUpdateD
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("姓名不能为空")
             .MaximumLength(80).WithMessage("姓名长度不能超过80个字符");
+        RuleFor(x => x.IdCardCode)
+            .NotEmpty().WithMessage("身份证号不能为空")
+            .MaximumLength(18).WithMessage("身份证号长度不能超过18个字符");
         RuleFor(x => x.Mobile)
             .NotEmpty().WithMessage("手机号码不能为空")
             .MaximumLength(11).WithMessage("手机号码长度不能超过11个字符");
@@ -135,6 +141,9 @@ public class TaktEmployeeImportValidator : AbstractValidator<TaktEmployeeImportD
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("姓名不能为空")
             .MaximumLength(80).WithMessage("姓名长度不能超过80个字符");
+        RuleFor(x => x.IdCardCode)
+            .NotEmpty().WithMessage("身份证号不能为空")
+            .MaximumLength(18).WithMessage("身份证号长度不能超过18个字符");
         RuleFor(x => x.Mobile)
             .NotEmpty().WithMessage("手机号码不能为空")
             .MaximumLength(11).WithMessage("手机号码长度不能超过11个字符");

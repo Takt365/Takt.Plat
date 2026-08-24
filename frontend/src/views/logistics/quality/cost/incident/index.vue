@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getQualityIncidentId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="qualityIncidentId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:quality:cost:incident:create"
       update-permission="logistics:quality:cost:incident:update"
       delete-permission="logistics:quality:cost:incident:delete"
@@ -50,28 +70,8 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getQualityIncidentId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="qualityIncidentId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <template #detail>
         <QualityIncidentItemPanel
           ref="qualityIncidentItemPanelRef"
@@ -108,184 +108,22 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('common.page.entity.plantcode')">
-        <a-input
-          v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('qualityIncidentCode')">
-      <a-form-item :label="t('entity.qualityincident.code')">
-        <a-input
-          v-model:value="advancedQueryForm.qualityIncidentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.code') })"
-          show-count
-          :maxlength="30"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('incidentDateStart')">
-      <a-form-item :label="t('entity.qualityincident.incidentdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.incidentDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.qualityincident.incidentdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('incidentDateEnd')">
-      <a-form-item :label="t('entity.qualityincident.incidentdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.incidentDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.qualityincident.incidentdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('indirectManpowerCostPerMinute')">
-      <a-form-item :label="t('entity.qualityincident.indirectmanpowercostperminute')">
-        <a-input-number
-          v-model:value="advancedQueryForm.indirectManpowerCostPerMinute"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.indirectmanpowercostperminute') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('model')">
-      <a-form-item :label="t('entity.qualityincident.model')">
-        <a-input
-          v-model:value="advancedQueryForm.model"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.model') })"
-          show-count
-          :maxlength="255"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('incidentReason')">
-      <a-form-item :label="t('entity.qualityincident.incidentreason')">
-        <a-input
-          v-model:value="advancedQueryForm.incidentReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.incidentreason') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('totalScrapQuantity')">
-      <a-form-item :label="t('entity.qualityincident.totalscrapquantity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.totalScrapQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.totalscrapquantity') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('totalScrapCost')">
-      <a-form-item :label="t('entity.qualityincident.totalscrapcost')">
-        <a-input-number
-          v-model:value="advancedQueryForm.totalScrapCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.totalscrapcost') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="t('entity.qualityincident.currencyCode')">
-        <a-input
-          v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.currencyCode') })"
-          show-count
-          :maxlength="3"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.qualityincident._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.qualityincident._self"
+        v-if="importVisible"
+        :entity-i18n-key="QUALITYINCIDENT_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -304,7 +142,7 @@
       :id-column-key="'qualityIncidentId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -324,12 +162,24 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import QualityIncidentForm from './components/incident-form.vue'
 import QualityIncidentItemPanel from './components/incident-item-panel.vue'
-import { provideQualityIncidentMasterContext } from './composables/use-incident-master-context'
+import { provideQualityIncidentMasterContext, type QualityIncidentRowRecord } from './composables/use-incident-master-context'
 import { getQualityIncidentList, getQualityIncidentById, createQualityIncident, updateQualityIncident, deleteQualityIncidentById, deleteQualityIncidentBatch, getQualityIncidentTemplate, importQualityIncident, exportQualityIncident } from '@/api/logistics/quality/cost/incident'
 import type { QualityIncident, QualityIncidentQuery } from '@/types/logistics/quality/cost/incident'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+
+import {
+  useQualityIncidentI18n,
+  QUALITYINCIDENT_LIST_FIELDS,
+  QUALITYINCIDENT_QUERY_STRING_FIELDS,
+  QUALITYINCIDENT_QUERY_FIELDS,
+  QUALITYINCIDENT_SELF_I18N_KEY,
+} from './composables/use-incident-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useQualityIncidentI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -337,7 +187,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktQualityIncident')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.qualityincident._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -353,9 +203,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<QualityIncident | null>(null)
+const selectedRow = ref<QualityIncidentRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<QualityIncident[]>([])
+const selectedRows = ref<QualityIncidentRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -372,39 +222,44 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of QUALITYINCIDENT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(QUALITYINCIDENT_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof QUALITYINCIDENT_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  qualityIncidentCode: '',
-  incidentDateStart: '',
-  incidentDateEnd: '',
-  indirectManpowerCostPerMinute: undefined as number | undefined,
-  model: '',
-  incidentReason: '',
-  totalScrapQuantity: undefined as number | undefined,
-  totalScrapCost: undefined as number | undefined,
-  currencyCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('common.page.entity.plantcode') },
-  { key: 'qualityIncidentCode', label: t('entity.qualityincident.code') },
-  { key: 'incidentDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.qualityincident.incidentdate')) },
-  { key: 'incidentDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.qualityincident.incidentdate')) },
-  { key: 'indirectManpowerCostPerMinute', label: t('entity.qualityincident.indirectmanpowercostperminute') },
-  { key: 'model', label: t('entity.qualityincident.model') },
-  { key: 'incidentReason', label: t('entity.qualityincident.incidentreason') },
-  { key: 'totalScrapQuantity', label: t('entity.qualityincident.totalscrapquantity') },
-  { key: 'totalScrapCost', label: t('entity.qualityincident.totalscrapcost') },
-  { key: 'currencyCode', label: t('entity.qualityincident.currencyCode') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  QUALITYINCIDENT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -425,7 +280,7 @@ const { selectedMasterRow } = provideQualityIncidentMasterContext()
 const qualityIncidentItemPanelRef = ref<InstanceType<typeof QualityIncidentItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {QualityIncidentQuery} 查询 DTO
  */
@@ -446,39 +301,23 @@ function buildListQuery(overrides?: Partial<QualityIncidentQuery>): QualityIncid
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('qualityIncidentCode', form.qualityIncidentCode)
-  assignTrimmed('incidentDateStart', form.incidentDateStart)
-  assignTrimmed('incidentDateEnd', form.incidentDateEnd)
-  if (form.indirectManpowerCostPerMinute !== undefined && form.indirectManpowerCostPerMinute !== null) {
-    query.indirectManpowerCostPerMinute = form.indirectManpowerCostPerMinute
+  for (const key of QUALITYINCIDENT_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('model', form.model)
-  assignTrimmed('incidentReason', form.incidentReason)
-  if (form.totalScrapQuantity !== undefined && form.totalScrapQuantity !== null) {
-    query.totalScrapQuantity = form.totalScrapQuantity
-  }
-  if (form.totalScrapCost !== undefined && form.totalScrapCost !== null) {
-    query.totalScrapCost = form.totalScrapCost
-  }
-  assignTrimmed('currencyCode', form.currencyCode)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
+
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: QualityIncident | null) {
+function syncMasterSelection(record: QualityIncidentRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getQualityIncidentId(record) : ''
 }
@@ -488,7 +327,7 @@ function syncMasterSelection(record: QualityIncident | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as QualityIncident
+  const row = record as unknown as QualityIncidentRowRecord
   const key = getQualityIncidentId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -506,7 +345,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadQualityIncidentDetail(record: QualityIncident): Promise<QualityIncident | null> {
+async function loadQualityIncidentDetail(record: QualityIncidentRowRecord): Promise<QualityIncident | null> {
   const id = getQualityIncidentId(record)
   if (!id) {
     return null
@@ -537,16 +376,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'qualityIncidentId') ?? ''
   },
   {
-    title: t('common.page.entity.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.qualityincident.code'),
+    title: pi.label('qualityIncidentCode'),
     dataIndex: 'qualityIncidentCode',
     key: 'qualityIncidentCode',
     width: 120,
@@ -555,7 +385,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'qualityIncidentCode') ?? ''
   },
   {
-    title: t('entity.qualityincident.incidentdate'),
+    title: pi.label('incidentDate'),
     dataIndex: 'incidentDate',
     key: 'incidentDate',
     width: 120,
@@ -564,7 +394,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'incidentDate') ?? ''
   },
   {
-    title: t('entity.qualityincident.indirectmanpowercostperminute'),
+    title: pi.label('indirectManpowerCostPerMinute'),
     dataIndex: 'indirectManpowerCostPerMinute',
     key: 'indirectManpowerCostPerMinute',
     width: 120,
@@ -573,7 +403,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'indirectManpowerCostPerMinute') ?? ''
   },
   {
-    title: t('entity.qualityincident.model'),
+    title: pi.label('model'),
     dataIndex: 'model',
     key: 'model',
     width: 120,
@@ -582,7 +412,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'model') ?? ''
   },
   {
-    title: t('entity.qualityincident.incidentreason'),
+    title: pi.label('incidentReason'),
     dataIndex: 'incidentReason',
     key: 'incidentReason',
     width: 120,
@@ -591,7 +421,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'incidentReason') ?? ''
   },
   {
-    title: t('entity.qualityincident.totalscrapquantity'),
+    title: pi.label('totalScrapQuantity'),
     dataIndex: 'totalScrapQuantity',
     key: 'totalScrapQuantity',
     width: 120,
@@ -600,7 +430,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'totalScrapQuantity') ?? ''
   },
   {
-    title: t('entity.qualityincident.totalscrapcost'),
+    title: pi.label('totalScrapCost'),
     dataIndex: 'totalScrapCost',
     key: 'totalScrapCost',
     width: 120,
@@ -609,13 +439,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'totalScrapCost') ?? ''
   },
   {
-    title: t('entity.qualityincident.currencyCode'),
+    title: pi.label('currencyCode'),
     dataIndex: 'currencyCode',
     key: 'currencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'currencyCode') ?? ''
+  },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'remark') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -625,7 +464,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:quality:cost:incident:update',
-        onClick: (record: QualityIncident) => handleEdit(record)
+        onClick: (record: QualityIncidentRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -633,14 +472,17 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:cost:incident:delete',
-        onClick: (record: QualityIncident) => handleDeleteOne(record)
+        onClick: (record: QualityIncidentRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getQualityIncidentId = (record: any): string => record?.[entityIdName] ?? ''
+const getQualityIncidentId = (record: QualityIncidentRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
@@ -648,10 +490,12 @@ const getQualityIncidentId = (record: any): string => record?.[entityIdName] ?? 
  */
 const getQualityIncidentField = (record: any, field: string): any => record?.[field]
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: QualityIncident[]) => {
+  onChange: (keys: (string | number)[], rows: QualityIncidentRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -661,7 +505,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: QualityIncident, selected: boolean) => {
+  onSelect: (record: QualityIncidentRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -670,7 +514,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: QualityIncident[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: QualityIncidentRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -680,6 +524,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getQualityIncidentList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -706,20 +555,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  plantCode: '',
-  qualityIncidentCode: '',
-  incidentDateStart: '',
-  incidentDateEnd: '',
-  indirectManpowerCostPerMinute: undefined as number | undefined,
-  model: '',
-  incidentReason: '',
-  totalScrapQuantity: undefined as number | undefined,
-  totalScrapCost: undefined as number | undefined,
-  currencyCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -727,14 +563,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.qualityincident._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: QualityIncident) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.qualityincident._self') })
+async function handleEdit(record: QualityIncidentRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadQualityIncidentDetail(record)
@@ -750,7 +586,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.qualityincident._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -768,10 +604,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateQualityIncident(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.qualityincident._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createQualityIncident(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.qualityincident._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -802,15 +638,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importQualityIncident(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importQualityIncident(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    qualityIncidentItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -821,6 +664,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportQualityIncident(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -844,24 +690,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.qualityincident._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[QualityIncident] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.qualityincident._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: QualityIncident) {
+async function handleDeleteOne(record: QualityIncidentRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.qualityincident._self'), name: t('common.tip.this.target', { target: t('entity.qualityincident._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteQualityIncidentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.qualityincident._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -873,18 +719,18 @@ async function handleDeleteOne(record: QualityIncident) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.qualityincident._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.qualityincident._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteQualityIncidentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.qualityincident._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -907,20 +753,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  plantCode: '',
-  qualityIncidentCode: '',
-  incidentDateStart: '',
-  incidentDateEnd: '',
-  indirectManpowerCostPerMinute: undefined as number | undefined,
-  model: '',
-  incidentReason: '',
-  totalScrapQuantity: undefined as number | undefined,
-  totalScrapCost: undefined as number | undefined,
-  currencyCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

@@ -89,12 +89,12 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int ProfitCenterStatus { get; set; } = 0;
 }
@@ -110,9 +110,9 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
 public class TaktProfitCenterTreeDto : TaktProfitCenterDto
 {
     /// <summary>
-    /// 子节点
+    /// 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
     /// </summary>
-    public List<TaktProfitCenterTreeDto> Children { get; set; } = new();
+    public List<TaktProfitCenterTreeDto>? Children { get; set; }
 }
 
 // ========================================
@@ -209,12 +209,12 @@ public class TaktProfitCenterQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? ProfitCenterStatus { get; set; }
 
@@ -326,7 +326,7 @@ public class TaktProfitCenterCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int ProfitCenterStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
@@ -378,9 +378,9 @@ public class TaktProfitCenterStatusDto
     public long ProfitCenterId { get; set; }
 
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int ProfitCenterStatus { get; set; } = 0;
 }
 
@@ -402,7 +402,7 @@ public class TaktProfitCenterSortDto
     public long ProfitCenterId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -491,7 +491,7 @@ public class TaktProfitCenterTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? ProfitCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
@@ -585,7 +585,7 @@ public class TaktProfitCenterImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? ProfitCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
@@ -679,12 +679,12 @@ public class TaktProfitCenterExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 利润中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int ProfitCenterStatus { get; set; } = 0;
 

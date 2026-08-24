@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopArgumentI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopArgument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktSopArgumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopargument.actualvalue", "zh-HK", "实际值_hk", "实际值"),
 
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "en-US", "是否超差_us", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "en-US", "是否超差_us", "是否超差（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "ja-JP", "是否超差_jp", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "ja-JP", "是否超差_jp", "是否超差（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-CN", "是否超差", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-CN", "是否超差", "是否超差（字典 sys_yes_no；0=否，1=是）"),
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-HK", "是否超差_hk", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-HK", "是否超差_hk", "是否超差（字典 sys_yes_no；0=否，1=是）"),
 
             // entity.sopargument.recordedat
             new TranslationSeedItem("entity.sopargument.recordedat", "en-US", "记录时间_us", "记录时间"),

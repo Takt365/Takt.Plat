@@ -187,7 +187,7 @@ public class TaktExceptionMiddleware
             TenantCode = TaktUserContext.TryResolveTenantCode(context),
             CompanyCode = TaktUserContext.TryResolveCompanyCode(context),
             UserId = TaktUserContext.TryResolveUserId(principal)?.ToString(),
-            Username = TaktUserContext.TryResolveUserName(principal)
+            UserName = TaktUserContext.TryResolveUserName(principal)
         };
     }
 }

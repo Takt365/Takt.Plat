@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceWorkOrder 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktMaintenanceWorkOrderDto : TaktApprovalDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaintenanceWorkOrderId { get; set; }
-
 
     /// <summary>
     /// 维护工单号
@@ -251,7 +250,7 @@ public class TaktMaintenanceWorkOrderDto : TaktApprovalDtoBase
     public string? AcceptedSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsHistoryArchived { get; set; } = 0;
 
@@ -297,7 +296,7 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -307,7 +306,7 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -551,7 +550,7 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     public string? AcceptedSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsHistoryArchived { get; set; }
 
@@ -644,9 +643,8 @@ public class TaktMaintenanceWorkOrderCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -681,7 +679,6 @@ public class TaktMaintenanceWorkOrderCreateDto
     /// <summary>
     /// 设备名称（冗余）
     /// </summary>
-    [Required(ErrorMessage = "设备名称（冗余）不能为空")]
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
@@ -852,7 +849,7 @@ public class TaktMaintenanceWorkOrderCreateDto
     public string? AcceptedSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsHistoryArchived { get; set; } = 0;
 
@@ -957,7 +954,7 @@ public class TaktMaintenanceWorkOrderTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -1161,7 +1158,7 @@ public class TaktMaintenanceWorkOrderTemplateDto
     public string? AcceptedSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsHistoryArchived { get; set; }
 
@@ -1208,7 +1205,7 @@ public class TaktMaintenanceWorkOrderImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -1412,7 +1409,7 @@ public class TaktMaintenanceWorkOrderImportDto
     public string? AcceptedSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int? IsHistoryArchived { get; set; }
 
@@ -1455,9 +1452,19 @@ public class TaktMaintenanceWorkOrderExportDto
     public long MaintenanceWorkOrderId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护工单号
@@ -1659,7 +1666,7 @@ public class TaktMaintenanceWorkOrderExportDto
     public string? AcceptedSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// 是否已归档至维护履历（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     public int IsHistoryArchived { get; set; } = 0;
 

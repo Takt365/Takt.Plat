@@ -129,7 +129,7 @@
       <UserChangePassword
         v-if="currentChangePasswordUser"
         ref="changePasswordFormRef"
-        :user-name="getUsername(currentChangePasswordUser) || ''"
+        :user-name="getUserName(currentChangePasswordUser) || ''"
         :loading="changePasswordLoading"
       />
     </TaktModal>
@@ -142,15 +142,15 @@
       @reset="handleAdvancedQueryReset"
     >
       <a-form-item :label="t('entity.user.name')">
-        <a-input v-model:value="advancedQueryForm.username" />
+        <a-input v-model:value="advancedQueryForm.userName" />
       </a-form-item>
       <a-form-item :label="t('entity.user.nickname')">
-        <a-input v-model:value="advancedQueryForm.nickname" />
+        <a-input v-model:value="advancedQueryForm.nickName" />
       </a-form-item>
       <a-form-item :label="t('entity.user.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.userStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.user.status') })"
           allow-clear
         />
@@ -218,7 +218,7 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 /**
  * 用户列表页脚本模块。
  * - API：@/api/identity/user；表单子组件为 ./components/user-form.vue。
- * - 列表字段与后端 User / UserQuery 对齐（username、nickname 等）。
+ * - 列表字段与后端 User / UserQuery 对齐（userName、nickName 等）。
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
@@ -304,8 +304,8 @@ const changePasswordLoading = ref(false)
 const currentChangePasswordUser = ref<User | null>(null)
 // 高级查询抽屉（字段与 UserQuery 一致）
 const advancedQueryVisible = ref(false)
-type UserAdvancedQueryForm = { username: string; nickname: string; userStatus?: number }
-const emptyUserAdvancedQueryForm = (): UserAdvancedQueryForm => ({ username: '', nickname: '' })
+type UserAdvancedQueryForm = { userName: string; nickName: string; userStatus?: number }
+const emptyUserAdvancedQueryForm = (): UserAdvancedQueryForm => ({ userName: '', nickName: '' })
 const advancedQueryForm = ref<UserAdvancedQueryForm>(emptyUserAdvancedQueryForm())
 // 导入弹窗
 const importVisible = ref(false)
@@ -333,11 +333,11 @@ function buildListQuery(overrides?: Partial<UserQuery>): UserQuery {
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  if (advancedQueryForm.value.username) {
-    query.username = advancedQueryForm.value.username
+  if (advancedQueryForm.value.userName) {
+    query.userName = advancedQueryForm.value.userName
   }
-  if (advancedQueryForm.value.nickname) {
-    query.nickname = advancedQueryForm.value.nickname
+  if (advancedQueryForm.value.nickName) {
+    query.nickName = advancedQueryForm.value.nickName
   }
   if (advancedQueryForm.value.userStatus !== undefined) {
     query.userStatus = advancedQueryForm.value.userStatus
@@ -375,17 +375,17 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.user.name'),
-    dataIndex: 'username',
-    key: 'username',
+    dataIndex: 'userName',
+    key: 'userName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    sorter: (a: User, b: User) => getUsername(a).localeCompare(getUsername(b))
+    sorter: (a: User, b: User) => getUserName(a).localeCompare(getUserName(b))
   },
   {
     title: t('entity.user.nickname'),
-    dataIndex: 'nickname',
-    key: 'nickname',
+    dataIndex: 'nickName',
+    key: 'nickName',
     width: 140,
     resizable: true,
     ellipsis: true
@@ -498,11 +498,11 @@ const asUserRow = (record: UserTableRow): User => record as unknown as User
 /** 表格 row-key */
 const userRowKey = (record: UserTableRow) => getUserId(asUserRow(record))
 
-/** 读取用户名（API 字段 username） */
-const getUsername = (user: User | null | undefined): string => user?.username ?? ''
+/** 读取用户名（API 字段 userName） */
+const getUserName = (user: User | null | undefined): string => user?.userName ?? ''
 
-/** 读取昵称（API 字段 nickname） */
-const getNickname = (user: User | null | undefined): string => user?.nickname ?? ''
+/** 读取昵称（API 字段 nickName） */
+const getNickName = (user: User | null | undefined): string => user?.nickName ?? ''
 
 // 辅助函数：获取字段值
 const getUserField = (user: User | null | undefined, field: keyof User): unknown =>
@@ -514,14 +514,14 @@ const getUserField = (user: User | null | undefined, field: keyof User): unknown
  */
 const toUserAssignRecord = (record: User): UserAssignRecord => ({
   ...record,
-  userName: getUsername(record),
-  nickName: getNickname(record)
+  userName: getUserName(record),
+  nickName: getNickName(record)
 })
 
 // 辅助函数：判断是否为受保护的管理员用户（admin、guest）
 const isAdminUser = (user: User | null): boolean => {
   if (!user) return false
-  const lowerUserName = getUsername(user).toLowerCase()
+  const lowerUserName = getUserName(user).toLowerCase()
   return lowerUserName === 'admin' || lowerUserName === 'guest'
 }
 
@@ -637,7 +637,7 @@ const handleSearch = () => {
 }
 
 /**
- * 表格行内切换用户状态（sys_normal_disable_status：1=启用，0=禁用）
+ * 表格行内切换用户状态（sys_normal_disable：1=启用，0=禁用）
  * @param record 当前行
  * @param checked 开关是否选中（启用）
  */
@@ -737,7 +737,7 @@ const handleDeleteOne = (record: User) => {
     message.warning(t('common.tip.subject.cannot.action', { subject: t('common.tip.super.user'), action: t('common.page.button.delete') }))
     return
   }
-  const userName = getUsername(record) || t('common.tip.this.target', { target: t('entity.user._self') })
+  const userName = getUserName(record) || t('common.tip.this.target', { target: t('entity.user._self') })
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', { entity: t('entity.user._self'), name: userName }),
@@ -882,7 +882,7 @@ const handleResetPassword = (record: User) => {
     message.warning(t('common.tip.subject.cannot.action', { subject: t('common.tip.super.user'), action: t('common.page.button.reset') + ' ' + t('common.page.button.password') }))
     return
   }
-  const userName = getUsername(record) || t('common.tip.this.target', { target: t('entity.user._self') })
+  const userName = getUserName(record) || t('common.tip.this.target', { target: t('entity.user._self') })
   Modal.confirm({
     title: t('common.page.button.reset') + ' ' + t('common.page.button.password'),
     content: t('common.tip.confirm.entity.action', { action: t('common.page.button.resetpwd'), entity: t('entity.user._self'), name: userName }),
@@ -913,7 +913,7 @@ const handleUnlock = (record: User) => {
     message.warning(t('common.tip.subject.cannot.action', { subject: t('common.tip.super.user'), action: t('common.page.button.unlock') }))
     return
   }
-  const userName = getUsername(record) || t('common.tip.this.target', { target: t('entity.user._self') })
+  const userName = getUserName(record) || t('common.tip.this.target', { target: t('entity.user._self') })
   Modal.confirm({
     title: t('common.tip.confirm.title', { action: t('common.page.button.unlock') }),
     content: t('common.tip.confirm.entity.action', { action: t('common.page.button.unlock'), entity: t('entity.user._self'), name: userName }),
@@ -984,11 +984,11 @@ const handleExport = async () => {
     if (queryKeyword.value) {
       queryParams.keyWords = queryKeyword.value
     }
-    if (advancedQueryForm.value.username) {
-      queryParams.username = advancedQueryForm.value.username
+    if (advancedQueryForm.value.userName) {
+      queryParams.userName = advancedQueryForm.value.userName
     }
-    if (advancedQueryForm.value.nickname) {
-      queryParams.nickname = advancedQueryForm.value.nickname
+    if (advancedQueryForm.value.nickName) {
+      queryParams.nickName = advancedQueryForm.value.nickName
     }
     if (advancedQueryForm.value.userStatus !== undefined) {
       queryParams.userStatus = advancedQueryForm.value.userStatus
@@ -1087,7 +1087,7 @@ const handleFormSubmit = async () => {
       if (currentUser && isAdminUser(currentUser)) {
         message.warning(
           t('common.tip.user.cannot.action', {
-            name: getUsername(currentUser) || 'admin',
+            name: getUserName(currentUser) || 'admin',
             action: t('common.page.button.update')
           })
         )
@@ -1098,8 +1098,8 @@ const handleFormSubmit = async () => {
       const updateData: UpdateUser = {
         userId: formData.value.userId,
         employeeId: fv.employeeId ? String(fv.employeeId) : '',
-        username: fv.userName ?? '',
-        nickname: fv.nickName?.trim() ?? '',
+        userName: fv.userName ?? '',
+        nickName: fv.nickName?.trim() ?? '',
         userType: fv.userType ?? 0,
         userStatus: fv.userStatus ?? 1,
         cultureCode: currentUser?.cultureCode?.trim() || resolveRequestLocale(),
@@ -1114,8 +1114,8 @@ const handleFormSubmit = async () => {
       const fv = formValues as UserFormValues
       const createData: CreateUser = {
         employeeId: String(fv.employeeId || ''),
-        username: fv.userName ?? '',
-        nickname: fv.nickName?.trim() ?? '',
+        userName: fv.userName ?? '',
+        nickName: fv.nickName?.trim() ?? '',
         userType: fv.userType ?? 0,
         passwordHash: fv.password ?? '',
         userStatus: fv.userStatus ?? 1,

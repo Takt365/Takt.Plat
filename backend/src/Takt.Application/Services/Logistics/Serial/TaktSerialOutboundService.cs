@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Serial
 // 文件名称：TaktSerialOutboundService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号出库应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
     }
 
     /// <summary>
-    /// 获取序列号出库列表（分页）
+    /// 获取序列号出库列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSerialOutboundDto>> GetSerialOutboundListAsync(TaktSerialOutboundQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSerialOutboundDto>.Create(
+                new List<TaktSerialOutboundDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _serialOutboundRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -94,7 +102,7 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
         return dto;    }
 
     /// <summary>
-    /// 获取产品序列号出库选项列表
+    /// 获取序列号出库选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSerialOutboundOptionsAsync()
@@ -102,12 +110,12 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
         EnsureThreeLayerContext();
         var list = await _serialOutboundRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PlantCode ?? string.Empty,
+            x => x.OutboundCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.OutboundCode,
+            DictLabel = e.OutboundCode,
         }).ToList();
     }
 
@@ -268,7 +276,15 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSerialOutboundAsync(TaktSerialOutboundQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSerialOutboundQueryDto());
+        var queryDto = query ?? new TaktSerialOutboundQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSerialOutboundExportDto>(),
+                sheetName ?? "序列号出库数据",
+                fileName ?? "序列号出库导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _serialOutboundRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -338,7 +354,20 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
     private async Task SaveSerialOutboundChildrenAsync(TaktSerialOutbound entity, TaktSerialOutboundCreateDto dto)
     {
         // 序列号出库明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktSerialOutboundItemUpdateDto>? itemsForSave;
+        if (dto is TaktSerialOutboundUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktSerialOutboundItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkSerialOutboundItemsObsoleteAsync(entity.Id);
             return;
@@ -350,10 +379,15 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktSerialOutboundItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.OutboundId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.OutboundCode = entity.OutboundCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -396,7 +430,7 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
                 var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
                 if (needLine.Count > 0)
                 {
-                    var businessCode = entity.Id.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.OutboundCode) ? entity.OutboundCode : entity.Id.ToString();
                     var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
                     var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
                     var lineIdx = 0;
@@ -425,107 +459,193 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
     {
         var exp = Expressionable.Create<TaktSerialOutbound>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.OutboundCode != null && x.OutboundCode.Contains(keywords))
                 || (x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(keywords))
                 || (x.Destination != null && x.Destination.Contains(keywords))
                 || (x.DestinationPort != null && x.DestinationPort.Contains(keywords))
-                || SqlFunc.ToString(x.OutboundType).Contains(keywords)
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.LocationCode != null && x.LocationCode.Contains(keywords))
-                || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.OutboundDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OutboundCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.OutboundCode != null && x.OutboundCode.Contains(queryDto.OutboundCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ShippingInvoiceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.OutboundCode))
         {
-            exp = exp.And(x => x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(queryDto.ShippingInvoiceCode));
+            var outboundCode = queryDto.OutboundCode;
+            exp = exp.And(x => x.OutboundCode != null && x.OutboundCode.Contains(outboundCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Destination))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ShippingInvoiceCode))
         {
-            exp = exp.And(x => x.Destination != null && x.Destination.Contains(queryDto.Destination));
+            var shippingInvoiceCode = queryDto.ShippingInvoiceCode;
+            exp = exp.And(x => x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(shippingInvoiceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DestinationPort))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Destination))
         {
-            exp = exp.And(x => x.DestinationPort != null && x.DestinationPort.Contains(queryDto.DestinationPort));
+            var destination = queryDto.Destination;
+            exp = exp.And(x => x.Destination != null && x.Destination.Contains(destination));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DestinationPort))
+        {
+            var destinationPort = queryDto.DestinationPort;
+            exp = exp.And(x => x.DestinationPort != null && x.DestinationPort.Contains(destinationPort));
         }
 
         if (queryDto?.OutboundType.HasValue == true)
         {
-            exp = exp.And(x => x.OutboundType == queryDto.OutboundType);
+            var outboundType = queryDto.OutboundType.Value;
+            exp = exp.And(x => x.OutboundType == outboundType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WarehouseCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseCode))
         {
-            exp = exp.And(x => x.WarehouseCode != null && x.WarehouseCode.Contains(queryDto.WarehouseCode));
+            var warehouseCode = queryDto.WarehouseCode;
+            exp = exp.And(x => x.WarehouseCode != null && x.WarehouseCode.Contains(warehouseCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LocationCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LocationCode))
         {
-            exp = exp.And(x => x.LocationCode != null && x.LocationCode.Contains(queryDto.LocationCode));
+            var locationCode = queryDto.LocationCode;
+            exp = exp.And(x => x.LocationCode != null && x.LocationCode.Contains(locationCode));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TotalQuantity == queryDto.TotalQuantity);
+            var totalQuantity = queryDto.TotalQuantity.Value;
+            exp = exp.And(x => x.TotalQuantity == totalQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.OutboundDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.OutboundDate >= queryDto.OutboundDateStart);
+            var outboundDateStart = queryDto.OutboundDateStart.Value;
+            exp = exp.And(x => x.OutboundDate >= outboundDateStart);
         }
 
         if (queryDto?.OutboundDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.OutboundDate <= queryDto.OutboundDateEnd);
+            var outboundDateEnd = queryDto.OutboundDateEnd.Value;
+            exp = exp.And(x => x.OutboundDate <= outboundDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSerialOutboundQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OutboundCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ShippingInvoiceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Destination))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DestinationPort))
+        {
+            return true;
+        }
+        if (queryDto.OutboundType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WarehouseCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.LocationCode))
+        {
+            return true;
+        }
+        if (queryDto.TotalQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.OutboundDateStart.HasValue || queryDto.OutboundDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

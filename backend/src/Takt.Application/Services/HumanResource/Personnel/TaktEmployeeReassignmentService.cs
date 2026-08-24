@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工调动应用服务实现
 // 
@@ -30,33 +30,45 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeReassignmentService
 {
     private readonly ITaktApprovalRepository<TaktEmployeeReassignment> _employeeReassignmentRepository;
+    private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeReassignmentRepository">员工调动仓储</param>
+    /// <param name="employeeRepository">员工仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeReassignmentService(
         ITaktApprovalRepository<TaktEmployeeReassignment> employeeReassignmentRepository,
+        ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeReassignmentRepository = employeeReassignmentRepository;
+        _employeeRepository = employeeRepository;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取员工调动列表（分页）
+    /// 获取员工调动列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEmployeeReassignmentDto>> GetEmployeeReassignmentListAsync(TaktEmployeeReassignmentQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEmployeeReassignmentDto>.Create(
+                new List<TaktEmployeeReassignmentDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _employeeReassignmentRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,6 +122,7 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
     public async Task<TaktEmployeeReassignmentDto> CreateEmployeeReassignmentAsync(TaktEmployeeReassignmentCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployeeReassignment>();
+        await StampEmployeeReassignmentEmployeeAsync(entity, dto);
         entity = await _employeeReassignmentRepository.CreateAsync(entity);
         return await GetEmployeeReassignmentByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeReassignmentDto>();
     }
@@ -128,6 +141,7 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
             throw new TaktBusinessException("员工调动不存在");
         }
         dto.Adapt(entity);
+        await StampEmployeeReassignmentEmployeeAsync(entity, dto);
         await _employeeReassignmentRepository.UpdateAsync(entity);
         return await GetEmployeeReassignmentByIdAsync(id) ?? throw new TaktBusinessException("员工调动不存在");
     }
@@ -199,6 +213,8 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
             try
             {
                 var entity = rows[i].Adapt<TaktEmployeeReassignment>();
+                var importDto = rows[i].Adapt<TaktEmployeeReassignmentCreateDto>();
+                await StampEmployeeReassignmentEmployeeAsync(entity, importDto);
                 await _employeeReassignmentRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -220,7 +236,15 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeReassignmentAsync(TaktEmployeeReassignmentQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmployeeReassignmentQueryDto());
+        var queryDto = query ?? new TaktEmployeeReassignmentQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEmployeeReassignmentExportDto>(),
+                sheetName ?? "员工调动数据",
+                fileName ?? "员工调动导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _employeeReassignmentRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -237,6 +261,53 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步员工调动主表外键（ManyToOne → 员工）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampEmployeeReassignmentEmployeeAsync(TaktEmployeeReassignment entity, TaktEmployeeReassignmentCreateDto dto)
+    {
+        if (dto.EmployeeId <= 0)
+        {
+            return;
+        }
+        var master = await _employeeRepository.GetByIdAsync(dto.EmployeeId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("员工不存在");
+        }
+        entity.EmployeeId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeCode))
+        {
+            entity.EmployeeCode = master.EmployeeCode;
+        }
+        if (string.IsNullOrEmpty(entity.EmployeeName))
+        {
+            entity.EmployeeName = master.EmployeeName;
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -249,137 +320,244 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
     {
         var exp = Expressionable.Create<TaktEmployeeReassignment>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
-                || SqlFunc.ToString(x.ReassignmentType).Contains(keywords)
-                || SqlFunc.ToString(x.FromDeptId).Contains(keywords)
                 || (x.FromDeptName != null && x.FromDeptName.Contains(keywords))
-                || SqlFunc.ToString(x.FromPostId).Contains(keywords)
                 || (x.FromPostName != null && x.FromPostName.Contains(keywords))
-                || SqlFunc.ToString(x.ToDeptId).Contains(keywords)
                 || (x.ToDeptName != null && x.ToDeptName.Contains(keywords))
-                || SqlFunc.ToString(x.ToPostId).Contains(keywords)
                 || (x.ToPostName != null && x.ToPostName.Contains(keywords))
                 || (x.Reason != null && x.Reason.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.EmployeeId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
-        {
-            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
-        {
-            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
-        }
-
-        if (queryDto?.ReassignmentType.HasValue == true)
-        {
-            exp = exp.And(x => x.ReassignmentType == queryDto.ReassignmentType);
-        }
-
-        if (queryDto?.FromDeptId.HasValue == true)
-        {
-            exp = exp.And(x => x.FromDeptId == queryDto.FromDeptId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FromDeptName))
-        {
-            exp = exp.And(x => x.FromDeptName != null && x.FromDeptName.Contains(queryDto.FromDeptName));
-        }
-
-        if (queryDto?.FromPostId.HasValue == true)
-        {
-            exp = exp.And(x => x.FromPostId == queryDto.FromPostId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FromPostName))
-        {
-            exp = exp.And(x => x.FromPostName != null && x.FromPostName.Contains(queryDto.FromPostName));
-        }
-
-        if (queryDto?.ToDeptId.HasValue == true)
-        {
-            exp = exp.And(x => x.ToDeptId == queryDto.ToDeptId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ToDeptName))
-        {
-            exp = exp.And(x => x.ToDeptName != null && x.ToDeptName.Contains(queryDto.ToDeptName));
-        }
-
-        if (queryDto?.ToPostId.HasValue == true)
-        {
-            exp = exp.And(x => x.ToPostId == queryDto.ToPostId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ToPostName))
-        {
-            exp = exp.And(x => x.ToPostName != null && x.ToPostName.Contains(queryDto.ToPostName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Reason))
-        {
-            exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.EffectiveDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EffectiveDate >= queryDto.EffectiveDateStart);
-        }
-
-        if (queryDto?.EffectiveDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EffectiveDate <= queryDto.EffectiveDateEnd);
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.EmployeeId.HasValue == true)
+        {
+            var employeeId = queryDto.EmployeeId.Value;
+            exp = exp.And(x => x.EmployeeId == employeeId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeCode))
+        {
+            var employeeCode = queryDto.EmployeeCode;
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(employeeCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeName))
+        {
+            var employeeName = queryDto.EmployeeName;
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
+        }
+
+        if (queryDto?.ReassignmentType.HasValue == true)
+        {
+            var reassignmentType = queryDto.ReassignmentType.Value;
+            exp = exp.And(x => x.ReassignmentType == reassignmentType);
+        }
+
+        if (queryDto?.FromDeptId.HasValue == true)
+        {
+            var fromDeptId = queryDto.FromDeptId.Value;
+            exp = exp.And(x => x.FromDeptId == fromDeptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.FromDeptName))
+        {
+            var fromDeptName = queryDto.FromDeptName;
+            exp = exp.And(x => x.FromDeptName != null && x.FromDeptName.Contains(fromDeptName));
+        }
+
+        if (queryDto?.FromPostId.HasValue == true)
+        {
+            var fromPostId = queryDto.FromPostId.Value;
+            exp = exp.And(x => x.FromPostId == fromPostId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.FromPostName))
+        {
+            var fromPostName = queryDto.FromPostName;
+            exp = exp.And(x => x.FromPostName != null && x.FromPostName.Contains(fromPostName));
+        }
+
+        if (queryDto?.ToDeptId.HasValue == true)
+        {
+            var toDeptId = queryDto.ToDeptId.Value;
+            exp = exp.And(x => x.ToDeptId == toDeptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ToDeptName))
+        {
+            var toDeptName = queryDto.ToDeptName;
+            exp = exp.And(x => x.ToDeptName != null && x.ToDeptName.Contains(toDeptName));
+        }
+
+        if (queryDto?.ToPostId.HasValue == true)
+        {
+            var toPostId = queryDto.ToPostId.Value;
+            exp = exp.And(x => x.ToPostId == toPostId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ToPostName))
+        {
+            var toPostName = queryDto.ToPostName;
+            exp = exp.And(x => x.ToPostName != null && x.ToPostName.Contains(toPostName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Reason))
+        {
+            var reason = queryDto.Reason;
+            exp = exp.And(x => x.Reason != null && x.Reason.Contains(reason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.EffectiveDateStart.HasValue == true)
+        {
+            var effectiveDateStart = queryDto.EffectiveDateStart.Value;
+            exp = exp.And(x => x.EffectiveDate >= effectiveDateStart);
+        }
+
+        if (queryDto?.EffectiveDateEnd.HasValue == true)
+        {
+            var effectiveDateEnd = queryDto.EffectiveDateEnd.Value;
+            exp = exp.And(x => x.EffectiveDate <= effectiveDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEmployeeReassignmentQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.EmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeName))
+        {
+            return true;
+        }
+        if (queryDto.ReassignmentType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.FromDeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FromDeptName))
+        {
+            return true;
+        }
+        if (queryDto.FromPostId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FromPostName))
+        {
+            return true;
+        }
+        if (queryDto.ToDeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ToDeptName))
+        {
+            return true;
+        }
+        if (queryDto.ToPostId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ToPostName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Reason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.EffectiveDateStart.HasValue || queryDto.EffectiveDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

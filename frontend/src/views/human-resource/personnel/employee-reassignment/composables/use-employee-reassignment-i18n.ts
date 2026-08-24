@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/human-resource/personnel/employee-reassignment/composables
 // 文件名称：use-employee-reassignment-i18n.ts
-// 功能描述：员工调动记录字段清单 + useEmployeeReassignmentI18n（字段名映射一次，文案由 entity.employeereassignment.* 种子动态解析）
+// 功能描述：EmployeeReassignment字段清单 + useEmployeeReassignmentI18n（字段名映射一次，文案由 entity.employeereassignment.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -36,14 +36,37 @@ export const EMPLOYEEREASSIGNMENT_LIST_FIELDS = [
   'reason',
 ] as const
 
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const EMPLOYEEREASSIGNMENT_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'employeeId',
+  'employeeCode',
+  'employeeName',
+  'reassignmentType',
+  'fromDeptId',
+  'fromDeptName',
+  'fromPostId',
+  'fromPostName',
+  'toDeptId',
+  'toDeptName',
+  'toPostId',
+  'toPostName',
+  'effectiveDate',
+  'reason',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const EMPLOYEEREASSIGNMENT_SUMMARY_SUM_FIELDS = [
+  'reassignmentType',
+] as const
+
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const EMPLOYEEREASSIGNMENT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  employeeId: 'select',
-  employeeCode: 'required',
-  employeeName: 'required',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  employeeName: 'optional',
   reassignmentType: 'select',
   fromDeptId: 'select',
   fromDeptName: 'required',
@@ -55,9 +78,6 @@ export const EMPLOYEEREASSIGNMENT_PLACEHOLDER = {
   toPostName: 'optional',
   effectiveDate: 'optional',
   reason: 'optional',
-  extField: 'optional',
-  remark: 'optional',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -65,7 +85,8 @@ export type EmployeeReassignmentField = keyof typeof EMPLOYEEREASSIGNMENT_PLACEH
 
 /** 高级查询可 trim 的字符串字段 */
 export const EMPLOYEEREASSIGNMENT_QUERY_STRING_FIELDS = [
-  'employeeId',
+  'cultureCode',
+  'plantCode',
   'employeeCode',
   'employeeName',
   'fromDeptId',
@@ -104,7 +125,7 @@ export const EMPLOYEEREASSIGNMENT_QUERY_FIELDS: readonly EmployeeReassignmentQue
 ]
 
 /**
- * 员工调动记录字段 i18n：index / employee-reassignment-form 统一入口
+ * EmployeeReassignment字段 i18n：index / employee-reassignment-form 统一入口
  */
 export function useEmployeeReassignmentI18n() {
   const ef = useEntityFieldI18n(EMPLOYEEREASSIGNMENT_ENTITY_SLUG)

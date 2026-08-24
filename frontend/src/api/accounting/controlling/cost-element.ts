@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：cost-element.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -60,9 +60,9 @@ export function getCostElementById(id: string): Promise<CostElement> {
 }
 
 /**
- * 获取成本要素树形列表
- * @param {string} parentId parentId
- * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
+ * 获取成本要素树形列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 字段）
  * @returns {Promise<CostElementTree[]>} 树形数据
  */
 export function getCostElementTree(parentId: string, includeDisabled: boolean): Promise<CostElementTree[]> {
@@ -159,24 +159,17 @@ export function updateCostElementSort(dto: CostElementSort): Promise<CostElement
 // ========================================
 
 /**
- * 获取成本要素树形选项列表
+ * 获取成本要素树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue 为 CostElementCode）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
  * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
  */
-export function getCostElementTreeOptions(): Promise<TaktTreeSelectOption[]> {
+export function getCostElementTreeOptions(parentId: string): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${COST_ELEMENT_API_BASE}/tree-options`,
     method: 'get',
-  });
-}
-
-/**
- * 获取成本要素父级树形选项列表
- * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
- */
-export function getCostElementParentTreeOptions(): Promise<TaktTreeSelectOption[]> {
-  return request<TaktTreeSelectOption[]>({
-    url: `${COST_ELEMENT_API_BASE}/parent-tree-options`,
-    method: 'get',
+    params: {
+      parentId
+    },
   });
 }
 

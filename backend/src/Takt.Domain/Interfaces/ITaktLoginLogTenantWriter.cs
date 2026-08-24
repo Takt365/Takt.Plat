@@ -38,7 +38,7 @@ public interface ITaktLoginLogTenantWriter
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码（为空时按最近未关闭会话推断）</param>
-    /// <param name="username">用户名（小写）</param>
+    /// <param name="UserName">用户名（小写）</param>
     /// <param name="logoutAt">登出时间</param>
     /// <param name="operatorUserId">操作人 ID；无效时按各条 CreatedBy 或 SystemAuditUser.Id</param>
     /// <param name="cancellationToken">取消令牌</param>
@@ -46,7 +46,7 @@ public interface ITaktLoginLogTenantWriter
     Task<int> CloseOpenLoginSessionAsync(
         string tenantCode,
         string? companyCode,
-        string username,
+        string UserName,
         DateTime logoutAt,
         long? operatorUserId = null,
         CancellationToken cancellationToken = default);
@@ -70,7 +70,7 @@ public interface ITaktLoginLogTenantWriter
     /// <param name="userId">用户 ID</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>用户名；不存在时返回 null</returns>
-    Task<string?> ResolveUsernameByUserIdAsync(
+    Task<string?> ResolveUserNameByUserIdAsync(
         string tenantCode,
         long userId,
         CancellationToken cancellationToken = default);

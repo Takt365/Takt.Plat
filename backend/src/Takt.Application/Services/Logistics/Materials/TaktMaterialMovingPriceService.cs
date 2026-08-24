@@ -347,13 +347,13 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
 
         if (queryDto?.StockQuantity.HasValue == true)
         {
-            var stockQuantity = queryDto.StockQuantity;
+            var stockQuantity = queryDto.StockQuantity.Value;
             exp = exp.And(x => x.StockQuantity == stockQuantity);
         }
 
         if (queryDto?.StockAmount.HasValue == true)
         {
-            var stockAmount = queryDto.StockAmount;
+            var stockAmount = queryDto.StockAmount.Value;
             exp = exp.And(x => x.StockAmount == stockAmount);
         }
 
@@ -365,13 +365,13 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
 
         if (queryDto?.MovingPrice.HasValue == true)
         {
-            var movingPrice = queryDto.MovingPrice;
+            var movingPrice = queryDto.MovingPrice.Value;
             exp = exp.And(x => x.MovingPrice == movingPrice);
         }
 
         if (queryDto?.PriceUnit.HasValue == true)
         {
-            var priceUnit = queryDto.PriceUnit;
+            var priceUnit = queryDto.PriceUnit.Value;
             exp = exp.And(x => x.PriceUnit == priceUnit);
         }
 
@@ -395,13 +395,13 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

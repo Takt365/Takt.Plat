@@ -20,7 +20,6 @@ export const SALESPRICESCALEQUANTITY_SELF_I18N_KEY = buildEntitySelfI18nKey(SALE
 
 /** 列表业务列（不含主键） */
 export const SALESPRICESCALEQUANTITY_LIST_FIELDS = [
-  'salesPriceItemId',
   'salesPriceCode',
   'salesPriceSeq',
   'salesScaleSeq',
@@ -30,11 +29,11 @@ export const SALESPRICESCALEQUANTITY_LIST_FIELDS = [
   'taxIncludedPrice',
   'taxAmount',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const SALESPRICESCALEQUANTITY_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'salesPriceItemId',
   'salesPriceCode',
   'salesPriceSeq',
   'salesScaleSeq',
@@ -61,18 +60,7 @@ export const SALESPRICESCALEQUANTITY_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESPRICESCALEQUANTITY_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  salesPriceCode: 'required',
-  salesPriceSeq: 'select',
-  salesScaleSeq: 'select',
-  scaleQuantity: 'select',
-  price: 'select',
-  untaxedPrice: 'select',
-  taxIncludedPrice: 'select',
-  taxAmount: 'select',
-  isObsolete: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -80,29 +68,13 @@ export type SalesPriceScaleQuantityField = keyof typeof SALESPRICESCALEQUANTITY_
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS = [
-  'salesPriceCode',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof SalesPriceScaleQuantityQuery)[]
 
-export type SalesPriceScaleQuantityQueryField =
-  | (typeof SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS)[number]
-  | 'salesPriceSeq' | 'salesScaleSeq' | 'scaleQuantity' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'taxAmount' | 'isObsolete'
+export type SalesPriceScaleQuantityQueryField = (typeof SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESPRICESCALEQUANTITY_QUERY_FIELDS: readonly SalesPriceScaleQuantityQueryField[] = [
-  ...SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS,
-  'salesPriceSeq',
-  'salesScaleSeq',
-  'scaleQuantity',
-  'price',
-  'untaxedPrice',
-  'taxIncludedPrice',
-  'taxAmount',
-  'isObsolete',
-]
+export const SALESPRICESCALEQUANTITY_QUERY_FIELDS: readonly SalesPriceScaleQuantityQueryField[] = [...SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS]
 
 /**
  * SalesPriceScaleQuantity字段 i18n：index / price-scale-quantity-form 统一入口

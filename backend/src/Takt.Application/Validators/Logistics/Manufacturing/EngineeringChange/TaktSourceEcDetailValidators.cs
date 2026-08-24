@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailValidators.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceEcDetail 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSourceEcDetail 生成，请按需审阅）
 // 
@@ -36,13 +36,16 @@ public class TaktSourceEcDetailCreateValidator : AbstractValidator<TaktSourceEcD
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.SourceEcId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.SourceEcId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.SourceEcId)
             .GreaterThanOrEqualTo(0).WithMessage("主ID不能为负数");
+        RuleFor(x => x.SourceEcCode)
+            .NotEmpty().WithMessage("设变号码不能为空").When(x => x.SourceEcId <= 0)
+            .MaximumLength(6).WithMessage("设变号码长度不能超过6个字符");
         RuleFor(x => x.SourceFinishedProduct)
             .NotEmpty().WithMessage("完成品不能为空")
             .MaximumLength(20).WithMessage("完成品长度不能超过20个字符");
@@ -79,13 +82,16 @@ public class TaktSourceEcDetailUpdateValidator : AbstractValidator<TaktSourceEcD
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.SourceEcId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.SourceEcId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.SourceEcId)
             .GreaterThanOrEqualTo(0).WithMessage("主ID不能为负数");
+        RuleFor(x => x.SourceEcCode)
+            .NotEmpty().WithMessage("设变号码不能为空").When(x => x.SourceEcId <= 0)
+            .MaximumLength(6).WithMessage("设变号码长度不能超过6个字符");
         RuleFor(x => x.SourceFinishedProduct)
             .NotEmpty().WithMessage("完成品不能为空")
             .MaximumLength(20).WithMessage("完成品长度不能超过20个字符");
@@ -123,6 +129,9 @@ public class TaktSourceEcDetailImportValidator : AbstractValidator<TaktSourceEcD
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.SourceEcId)
             .GreaterThanOrEqualTo(0).WithMessage("主ID不能为负数");
+        RuleFor(x => x.SourceEcCode)
+            .NotEmpty().WithMessage("设变号码不能为空")
+            .MaximumLength(6).WithMessage("设变号码长度不能超过6个字符");
         RuleFor(x => x.SourceFinishedProduct)
             .NotEmpty().WithMessage("完成品不能为空")
             .MaximumLength(20).WithMessage("完成品长度不能超过20个字符");

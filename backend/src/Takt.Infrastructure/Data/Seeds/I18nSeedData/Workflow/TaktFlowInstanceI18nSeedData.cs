@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowInstanceI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowInstance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,31 +100,31 @@ public class TaktFlowInstanceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowinstance.instancecode", "zh-HK", "实例编码_hk", "实例编码（对外业务单号）"),
 
             // entity.flowinstance.processdefinitionid
-            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "en-US", "流程定义ID_us", "流程定义 ID（TaktFlowScheme Id）"),
+            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "en-US", "流程定义ID_us", "流程定义 ID（选项 TaktFlowSchemes/options；DictValue=Id）"),
             // entity.flowinstance.processdefinitionid
-            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "ja-JP", "流程定义ID_jp", "流程定义 ID（TaktFlowScheme Id）"),
+            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "ja-JP", "流程定义ID_jp", "流程定义 ID（选项 TaktFlowSchemes/options；DictValue=Id）"),
             // entity.flowinstance.processdefinitionid
-            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "zh-CN", "流程定义ID", "流程定义 ID（TaktFlowScheme Id）"),
+            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "zh-CN", "流程定义ID", "流程定义 ID（选项 TaktFlowSchemes/options；DictValue=Id）"),
             // entity.flowinstance.processdefinitionid
-            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "zh-HK", "流程定义ID_hk", "流程定义 ID（TaktFlowScheme Id）"),
+            new TranslationSeedItem("entity.flowinstance.processdefinitionid", "zh-HK", "流程定义ID_hk", "流程定义 ID（选项 TaktFlowSchemes/options；DictValue=Id）"),
 
             // entity.flowinstance.processkey
-            new TranslationSeedItem("entity.flowinstance.processkey", "en-US", "流程键_us", "流程键（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processkey", "en-US", "流程键_us", "流程键（冗余字段，便于查询）"),
             // entity.flowinstance.processkey
-            new TranslationSeedItem("entity.flowinstance.processkey", "ja-JP", "流程键_jp", "流程键（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processkey", "ja-JP", "流程键_jp", "流程键（冗余字段，便于查询）"),
             // entity.flowinstance.processkey
-            new TranslationSeedItem("entity.flowinstance.processkey", "zh-CN", "流程键", "流程键（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processkey", "zh-CN", "流程键", "流程键（冗余字段，便于查询）"),
             // entity.flowinstance.processkey
-            new TranslationSeedItem("entity.flowinstance.processkey", "zh-HK", "流程键_hk", "流程键（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processkey", "zh-HK", "流程键_hk", "流程键（冗余字段，便于查询）"),
 
             // entity.flowinstance.processname
-            new TranslationSeedItem("entity.flowinstance.processname", "en-US", "流程名称_us", "流程名称（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processname", "en-US", "流程名称_us", "流程名称（冗余字段，便于查询）"),
             // entity.flowinstance.processname
-            new TranslationSeedItem("entity.flowinstance.processname", "ja-JP", "流程名称_jp", "流程名称（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processname", "ja-JP", "流程名称_jp", "流程名称（冗余字段，便于查询）"),
             // entity.flowinstance.processname
-            new TranslationSeedItem("entity.flowinstance.processname", "zh-CN", "流程名称", "流程名称（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processname", "zh-CN", "流程名称", "流程名称（冗余字段，便于查询）"),
             // entity.flowinstance.processname
-            new TranslationSeedItem("entity.flowinstance.processname", "zh-HK", "流程名称_hk", "流程名称（冗余）"),
+            new TranslationSeedItem("entity.flowinstance.processname", "zh-HK", "流程名称_hk", "流程名称（冗余字段，便于查询）"),
 
             // entity.flowinstance.definitionversion
             new TranslationSeedItem("entity.flowinstance.definitionversion", "en-US", "定义版本号_us", "发起时锁定的定义版本号"),
@@ -154,31 +154,31 @@ public class TaktFlowInstanceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowinstance.currentactivityid", "zh-HK", "当前节点ID_hk", "当前节点 ID（设计器 nodeId）"),
 
             // entity.flowinstance.currentactivityname
-            new TranslationSeedItem("entity.flowinstance.currentactivityname", "en-US", "当前节点名称_us", "当前节点名称"),
+            new TranslationSeedItem("entity.flowinstance.currentactivityname", "en-US", "当前节点名称_us", "当前节点名称（冗余字段，便于查询）"),
             // entity.flowinstance.currentactivityname
-            new TranslationSeedItem("entity.flowinstance.currentactivityname", "ja-JP", "当前节点名称_jp", "当前节点名称"),
+            new TranslationSeedItem("entity.flowinstance.currentactivityname", "ja-JP", "当前节点名称_jp", "当前节点名称（冗余字段，便于查询）"),
             // entity.flowinstance.currentactivityname
-            new TranslationSeedItem("entity.flowinstance.currentactivityname", "zh-CN", "当前节点名称", "当前节点名称"),
+            new TranslationSeedItem("entity.flowinstance.currentactivityname", "zh-CN", "当前节点名称", "当前节点名称（冗余字段，便于查询）"),
             // entity.flowinstance.currentactivityname
-            new TranslationSeedItem("entity.flowinstance.currentactivityname", "zh-HK", "当前节点名称_hk", "当前节点名称"),
+            new TranslationSeedItem("entity.flowinstance.currentactivityname", "zh-HK", "当前节点名称_hk", "当前节点名称（冗余字段，便于查询）"),
 
             // entity.flowinstance.startuserid
-            new TranslationSeedItem("entity.flowinstance.startuserid", "en-US", "发起人ID_us", "发起人 ID"),
+            new TranslationSeedItem("entity.flowinstance.startuserid", "en-US", "发起人ID_us", "发起人 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.flowinstance.startuserid
-            new TranslationSeedItem("entity.flowinstance.startuserid", "ja-JP", "发起人ID_jp", "发起人 ID"),
+            new TranslationSeedItem("entity.flowinstance.startuserid", "ja-JP", "发起人ID_jp", "发起人 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.flowinstance.startuserid
-            new TranslationSeedItem("entity.flowinstance.startuserid", "zh-CN", "发起人ID", "发起人 ID"),
+            new TranslationSeedItem("entity.flowinstance.startuserid", "zh-CN", "发起人ID", "发起人 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.flowinstance.startuserid
-            new TranslationSeedItem("entity.flowinstance.startuserid", "zh-HK", "发起人ID_hk", "发起人 ID"),
+            new TranslationSeedItem("entity.flowinstance.startuserid", "zh-HK", "发起人ID_hk", "发起人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.flowinstance.startusername
-            new TranslationSeedItem("entity.flowinstance.startusername", "en-US", "发起人姓名_us", "发起人姓名"),
+            new TranslationSeedItem("entity.flowinstance.startusername", "en-US", "发起人姓名_us", "发起人姓名（冗余字段，便于查询）"),
             // entity.flowinstance.startusername
-            new TranslationSeedItem("entity.flowinstance.startusername", "ja-JP", "发起人姓名_jp", "发起人姓名"),
+            new TranslationSeedItem("entity.flowinstance.startusername", "ja-JP", "发起人姓名_jp", "发起人姓名（冗余字段，便于查询）"),
             // entity.flowinstance.startusername
-            new TranslationSeedItem("entity.flowinstance.startusername", "zh-CN", "发起人姓名", "发起人姓名"),
+            new TranslationSeedItem("entity.flowinstance.startusername", "zh-CN", "发起人姓名", "发起人姓名（冗余字段，便于查询）"),
             // entity.flowinstance.startusername
-            new TranslationSeedItem("entity.flowinstance.startusername", "zh-HK", "发起人姓名_hk", "发起人姓名"),
+            new TranslationSeedItem("entity.flowinstance.startusername", "zh-HK", "发起人姓名_hk", "发起人姓名（冗余字段，便于查询）"),
 
             // entity.flowinstance.starttime
             new TranslationSeedItem("entity.flowinstance.starttime", "en-US", "开始时间_us", "开始时间"),
@@ -208,85 +208,85 @@ public class TaktFlowInstanceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowinstance.durationms", "zh-HK", "历时毫秒_hk", "历时毫秒"),
 
             // entity.flowinstance.businesskey
-            new TranslationSeedItem("entity.flowinstance.businesskey", "en-US", "业务主键_us", "业务主键（关联业务单据 Id 等）"),
+            new TranslationSeedItem("entity.flowinstance.businesskey", "en-US", "业务主键_us", "业务主键（业务单据 Id 字符串，与 BusinessType 联合回写）"),
             // entity.flowinstance.businesskey
-            new TranslationSeedItem("entity.flowinstance.businesskey", "ja-JP", "业务主键_jp", "业务主键（关联业务单据 Id 等）"),
+            new TranslationSeedItem("entity.flowinstance.businesskey", "ja-JP", "业务主键_jp", "业务主键（业务单据 Id 字符串，与 BusinessType 联合回写）"),
             // entity.flowinstance.businesskey
-            new TranslationSeedItem("entity.flowinstance.businesskey", "zh-CN", "业务主键", "业务主键（关联业务单据 Id 等）"),
+            new TranslationSeedItem("entity.flowinstance.businesskey", "zh-CN", "业务主键", "业务主键（业务单据 Id 字符串，与 BusinessType 联合回写）"),
             // entity.flowinstance.businesskey
-            new TranslationSeedItem("entity.flowinstance.businesskey", "zh-HK", "业务主键_hk", "业务主键（关联业务单据 Id 等）"),
+            new TranslationSeedItem("entity.flowinstance.businesskey", "zh-HK", "业务主键_hk", "业务主键（业务单据 Id 字符串，与 BusinessType 联合回写）"),
 
             // entity.flowinstance.businesstype
-            new TranslationSeedItem("entity.flowinstance.businesstype", "en-US", "业务类型_us", "业务类型（由业务模块约定，用于回写）"),
+            new TranslationSeedItem("entity.flowinstance.businesstype", "en-US", "业务类型_us", "业务类型（业务模块约定标识，默认与 ProcessKey 一致）"),
             // entity.flowinstance.businesstype
-            new TranslationSeedItem("entity.flowinstance.businesstype", "ja-JP", "业务类型_jp", "业务类型（由业务模块约定，用于回写）"),
+            new TranslationSeedItem("entity.flowinstance.businesstype", "ja-JP", "业务类型_jp", "业务类型（业务模块约定标识，默认与 ProcessKey 一致）"),
             // entity.flowinstance.businesstype
-            new TranslationSeedItem("entity.flowinstance.businesstype", "zh-CN", "业务类型", "业务类型（由业务模块约定，用于回写）"),
+            new TranslationSeedItem("entity.flowinstance.businesstype", "zh-CN", "业务类型", "业务类型（业务模块约定标识，默认与 ProcessKey 一致）"),
             // entity.flowinstance.businesstype
-            new TranslationSeedItem("entity.flowinstance.businesstype", "zh-HK", "业务类型_hk", "业务类型（由业务模块约定，用于回写）"),
+            new TranslationSeedItem("entity.flowinstance.businesstype", "zh-HK", "业务类型_hk", "业务类型（业务模块约定标识，默认与 ProcessKey 一致）"),
 
             // entity.flowinstance.superinstanceid
-            new TranslationSeedItem("entity.flowinstance.superinstanceid", "en-US", "父流程实例ID_us", "父流程实例 ID（子流程场景）"),
+            new TranslationSeedItem("entity.flowinstance.superinstanceid", "en-US", "父流程实例ID_us", "父流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）"),
             // entity.flowinstance.superinstanceid
-            new TranslationSeedItem("entity.flowinstance.superinstanceid", "ja-JP", "父流程实例ID_jp", "父流程实例 ID（子流程场景）"),
+            new TranslationSeedItem("entity.flowinstance.superinstanceid", "ja-JP", "父流程实例ID_jp", "父流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）"),
             // entity.flowinstance.superinstanceid
-            new TranslationSeedItem("entity.flowinstance.superinstanceid", "zh-CN", "父流程实例ID", "父流程实例 ID（子流程场景）"),
+            new TranslationSeedItem("entity.flowinstance.superinstanceid", "zh-CN", "父流程实例ID", "父流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）"),
             // entity.flowinstance.superinstanceid
-            new TranslationSeedItem("entity.flowinstance.superinstanceid", "zh-HK", "父流程实例ID_hk", "父流程实例 ID（子流程场景）"),
+            new TranslationSeedItem("entity.flowinstance.superinstanceid", "zh-HK", "父流程实例ID_hk", "父流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）"),
 
             // entity.flowinstance.deletereason
-            new TranslationSeedItem("entity.flowinstance.deletereason", "en-US", "终止原因_us", "终止原因"),
+            new TranslationSeedItem("entity.flowinstance.deletereason", "en-US", "终止原因_us", "终止原因（实例终止时填写）"),
             // entity.flowinstance.deletereason
-            new TranslationSeedItem("entity.flowinstance.deletereason", "ja-JP", "终止原因_jp", "终止原因"),
+            new TranslationSeedItem("entity.flowinstance.deletereason", "ja-JP", "终止原因_jp", "终止原因（实例终止时填写）"),
             // entity.flowinstance.deletereason
-            new TranslationSeedItem("entity.flowinstance.deletereason", "zh-CN", "终止原因", "终止原因"),
+            new TranslationSeedItem("entity.flowinstance.deletereason", "zh-CN", "终止原因", "终止原因（实例终止时填写）"),
             // entity.flowinstance.deletereason
-            new TranslationSeedItem("entity.flowinstance.deletereason", "zh-HK", "终止原因_hk", "终止原因"),
+            new TranslationSeedItem("entity.flowinstance.deletereason", "zh-HK", "终止原因_hk", "终止原因（实例终止时填写）"),
 
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "en-US", "表单数据_us", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "en-US", "表单数据_us", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 表）"),
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "ja-JP", "表单数据_jp", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "ja-JP", "表单数据_jp", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 表）"),
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-CN", "表单数据", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-CN", "表单数据", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 表）"),
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-HK", "表单数据_hk", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-HK", "表单数据_hk", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 表）"),
 
             // entity.flowinstance.formid
-            new TranslationSeedItem("entity.flowinstance.formid", "en-US", "表单ID_us", "关联表单 ID"),
+            new TranslationSeedItem("entity.flowinstance.formid", "en-US", "表单ID_us", "关联表单 ID（选项 TaktFlowForms/options；DictValue=Id）"),
             // entity.flowinstance.formid
-            new TranslationSeedItem("entity.flowinstance.formid", "ja-JP", "表单ID_jp", "关联表单 ID"),
+            new TranslationSeedItem("entity.flowinstance.formid", "ja-JP", "表单ID_jp", "关联表单 ID（选项 TaktFlowForms/options；DictValue=Id）"),
             // entity.flowinstance.formid
-            new TranslationSeedItem("entity.flowinstance.formid", "zh-CN", "表单ID", "关联表单 ID"),
+            new TranslationSeedItem("entity.flowinstance.formid", "zh-CN", "表单ID", "关联表单 ID（选项 TaktFlowForms/options；DictValue=Id）"),
             // entity.flowinstance.formid
-            new TranslationSeedItem("entity.flowinstance.formid", "zh-HK", "表单ID_hk", "关联表单 ID"),
+            new TranslationSeedItem("entity.flowinstance.formid", "zh-HK", "表单ID_hk", "关联表单 ID（选项 TaktFlowForms/options；DictValue=Id）"),
 
             // entity.flowinstance.formcode
-            new TranslationSeedItem("entity.flowinstance.formcode", "en-US", "表单编码_us", "关联表单编码"),
+            new TranslationSeedItem("entity.flowinstance.formcode", "en-US", "表单编码_us", "关联表单编码（冗余字段，便于查询）"),
             // entity.flowinstance.formcode
-            new TranslationSeedItem("entity.flowinstance.formcode", "ja-JP", "表单编码_jp", "关联表单编码"),
+            new TranslationSeedItem("entity.flowinstance.formcode", "ja-JP", "表单编码_jp", "关联表单编码（冗余字段，便于查询）"),
             // entity.flowinstance.formcode
-            new TranslationSeedItem("entity.flowinstance.formcode", "zh-CN", "表单编码", "关联表单编码"),
+            new TranslationSeedItem("entity.flowinstance.formcode", "zh-CN", "表单编码", "关联表单编码（冗余字段，便于查询）"),
             // entity.flowinstance.formcode
-            new TranslationSeedItem("entity.flowinstance.formcode", "zh-HK", "表单编码_hk", "关联表单编码"),
+            new TranslationSeedItem("entity.flowinstance.formcode", "zh-HK", "表单编码_hk", "关联表单编码（冗余字段，便于查询）"),
 
             // entity.flowinstance.processcontentsnapshot
-            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "en-US", "流程设计快照_us", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
+            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "en-US", "流程设计快照_us", "流程设计快照（启动时复制 ProcessContent，避免定义变更影响在途实例）"),
             // entity.flowinstance.processcontentsnapshot
-            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "ja-JP", "流程设计快照_jp", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
+            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "ja-JP", "流程设计快照_jp", "流程设计快照（启动时复制 ProcessContent，避免定义变更影响在途实例）"),
             // entity.flowinstance.processcontentsnapshot
-            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "zh-CN", "流程设计快照", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
+            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "zh-CN", "流程设计快照", "流程设计快照（启动时复制 ProcessContent，避免定义变更影响在途实例）"),
             // entity.flowinstance.processcontentsnapshot
-            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "zh-HK", "流程设计快照_hk", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
+            new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "zh-HK", "流程设计快照_hk", "流程设计快照（启动时复制 ProcessContent，避免定义变更影响在途实例）"),
 
             // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "en-US", "实例状态_us", "实例状态"),
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "en-US", "实例状态_us", "实例状态（字典 sys_flow_status；0=运行中 1=已完成 2=已驳回 3=已挂起 4=已终止 5=草稿）"),
             // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "ja-JP", "实例状态_jp", "实例状态"),
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "ja-JP", "实例状态_jp", "实例状态（字典 sys_flow_status；0=运行中 1=已完成 2=已驳回 3=已挂起 4=已终止 5=草稿）"),
             // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-CN", "实例状态", "实例状态"),
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-CN", "实例状态", "实例状态（字典 sys_flow_status；0=运行中 1=已完成 2=已驳回 3=已挂起 4=已终止 5=草稿）"),
             // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-HK", "实例状态_hk", "实例状态"),
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-HK", "实例状态_hk", "实例状态（字典 sys_flow_status；0=运行中 1=已完成 2=已驳回 3=已挂起 4=已终止 5=草稿）"),
 
             // entity.flowinstance.processdefinition
             new TranslationSeedItem("entity.flowinstance.processdefinition", "en-US", "流程定义_us", "流程定义"),

@@ -113,7 +113,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.selfServiceStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.selfservice.status') })"
                 />
               </a-form-item>

@@ -361,19 +361,19 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
 
         if (queryDto?.Priority.HasValue == true)
         {
-            var priority = queryDto.Priority;
+            var priority = queryDto.Priority.Value;
             exp = exp.And(x => x.Priority == priority);
         }
 
         if (queryDto?.Urgency.HasValue == true)
         {
-            var urgency = queryDto.Urgency;
+            var urgency = queryDto.Urgency.Value;
             exp = exp.And(x => x.Urgency == urgency);
         }
 
         if (queryDto?.Impact.HasValue == true)
         {
-            var impact = queryDto.Impact;
+            var impact = queryDto.Impact.Value;
             exp = exp.And(x => x.Impact == impact);
         }
 
@@ -385,13 +385,13 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
 
         if (queryDto?.TicketSource.HasValue == true)
         {
-            var ticketSource = queryDto.TicketSource;
+            var ticketSource = queryDto.TicketSource.Value;
             exp = exp.And(x => x.TicketSource == ticketSource);
         }
 
         if (queryDto?.SubmitterId.HasValue == true)
         {
-            var submitterId = queryDto.SubmitterId;
+            var submitterId = queryDto.SubmitterId.Value;
             exp = exp.And(x => x.SubmitterId == submitterId);
         }
 
@@ -403,7 +403,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
 
         if (queryDto?.AssigneeId.HasValue == true)
         {
-            var assigneeId = queryDto.AssigneeId;
+            var assigneeId = queryDto.AssigneeId.Value;
             exp = exp.And(x => x.AssigneeId == assigneeId);
         }
 
@@ -415,19 +415,19 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
 
         if (queryDto?.KnowledgeId.HasValue == true)
         {
-            var knowledgeId = queryDto.KnowledgeId;
+            var knowledgeId = queryDto.KnowledgeId.Value;
             exp = exp.And(x => x.KnowledgeId == knowledgeId);
         }
 
         if (queryDto?.ParentTicketId.HasValue == true)
         {
-            var parentTicketId = queryDto.ParentTicketId;
+            var parentTicketId = queryDto.ParentTicketId.Value;
             exp = exp.And(x => x.ParentTicketId == parentTicketId);
         }
 
         if (queryDto?.ItAssetId.HasValue == true)
         {
-            var itAssetId = queryDto.ItAssetId;
+            var itAssetId = queryDto.ItAssetId.Value;
             exp = exp.And(x => x.ItAssetId == itAssetId);
         }
 
@@ -439,7 +439,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
 
         if (queryDto?.ApplicantDeptId.HasValue == true)
         {
-            var applicantDeptId = queryDto.ApplicantDeptId;
+            var applicantDeptId = queryDto.ApplicantDeptId.Value;
             exp = exp.And(x => x.ApplicantDeptId == applicantDeptId);
         }
 
@@ -451,13 +451,13 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
 
         if (queryDto?.ApplicantBy.HasValue == true)
         {
-            var applicantBy = queryDto.ApplicantBy;
+            var applicantBy = queryDto.ApplicantBy.Value;
             exp = exp.And(x => x.ApplicantBy == applicantBy);
         }
 
         if (queryDto?.TicketStatus.HasValue == true)
         {
-            var ticketStatus = queryDto.TicketStatus;
+            var ticketStatus = queryDto.TicketStatus.Value;
             exp = exp.And(x => x.TicketStatus == ticketStatus);
         }
 
@@ -475,73 +475,73 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
 
         if (queryDto?.FirstResponseAtStart.HasValue == true)
         {
-            var firstResponseAtStart = queryDto.FirstResponseAtStart;
+            var firstResponseAtStart = queryDto.FirstResponseAtStart.Value;
             exp = exp.And(x => x.FirstResponseAt >= firstResponseAtStart);
         }
 
         if (queryDto?.FirstResponseAtEnd.HasValue == true)
         {
-            var firstResponseAtEnd = queryDto.FirstResponseAtEnd;
+            var firstResponseAtEnd = queryDto.FirstResponseAtEnd.Value;
             exp = exp.And(x => x.FirstResponseAt <= firstResponseAtEnd);
         }
 
         if (queryDto?.FirstResponseDueByStart.HasValue == true)
         {
-            var firstResponseDueByStart = queryDto.FirstResponseDueByStart;
+            var firstResponseDueByStart = queryDto.FirstResponseDueByStart.Value;
             exp = exp.And(x => x.FirstResponseDueBy >= firstResponseDueByStart);
         }
 
         if (queryDto?.FirstResponseDueByEnd.HasValue == true)
         {
-            var firstResponseDueByEnd = queryDto.FirstResponseDueByEnd;
+            var firstResponseDueByEnd = queryDto.FirstResponseDueByEnd.Value;
             exp = exp.And(x => x.FirstResponseDueBy <= firstResponseDueByEnd);
         }
 
         if (queryDto?.ResolvedAtStart.HasValue == true)
         {
-            var resolvedAtStart = queryDto.ResolvedAtStart;
+            var resolvedAtStart = queryDto.ResolvedAtStart.Value;
             exp = exp.And(x => x.ResolvedAt >= resolvedAtStart);
         }
 
         if (queryDto?.ResolvedAtEnd.HasValue == true)
         {
-            var resolvedAtEnd = queryDto.ResolvedAtEnd;
+            var resolvedAtEnd = queryDto.ResolvedAtEnd.Value;
             exp = exp.And(x => x.ResolvedAt <= resolvedAtEnd);
         }
 
         if (queryDto?.ResolutionDueByStart.HasValue == true)
         {
-            var resolutionDueByStart = queryDto.ResolutionDueByStart;
+            var resolutionDueByStart = queryDto.ResolutionDueByStart.Value;
             exp = exp.And(x => x.ResolutionDueBy >= resolutionDueByStart);
         }
 
         if (queryDto?.ResolutionDueByEnd.HasValue == true)
         {
-            var resolutionDueByEnd = queryDto.ResolutionDueByEnd;
+            var resolutionDueByEnd = queryDto.ResolutionDueByEnd.Value;
             exp = exp.And(x => x.ResolutionDueBy <= resolutionDueByEnd);
         }
 
         if (queryDto?.ClosedAtStart.HasValue == true)
         {
-            var closedAtStart = queryDto.ClosedAtStart;
+            var closedAtStart = queryDto.ClosedAtStart.Value;
             exp = exp.And(x => x.ClosedAt >= closedAtStart);
         }
 
         if (queryDto?.ClosedAtEnd.HasValue == true)
         {
-            var closedAtEnd = queryDto.ClosedAtEnd;
+            var closedAtEnd = queryDto.ClosedAtEnd.Value;
             exp = exp.And(x => x.ClosedAt <= closedAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))

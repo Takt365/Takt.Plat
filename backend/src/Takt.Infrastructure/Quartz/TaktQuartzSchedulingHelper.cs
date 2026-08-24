@@ -134,7 +134,7 @@ public static class TaktQuartzSchedulingHelper
             ErrorInfo = Truncate(errorInfo, TaktQuartzJobExecutionLogger.MaxErrorInfoLength),
             ExecuteIp = Truncate(executeIp, 50),
             ExecuteHost = Truncate(executeHost, 100),
-            ExecuteStatus = executeStatus,
+            ExecuteStatus = (int)executeStatus,
             ExtField = task.ExtField,
             Remark = task.Remark,
         };

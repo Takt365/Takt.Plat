@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputsController.cs
-// 创建时间：2026-07-06
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报控制器
 // 
@@ -91,45 +91,6 @@ public class TaktAssyOutputsController : TaktControllerBase
         try
         {
             var result = await _assyOutputService.GetAssyOutputOptionsAsync();
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取组立不良日报新增用工单选项（来源已生产的组立日报，排除同日同工单已存在不良日报）
-    /// </summary>
-    /// <param name="excludeAssyDefectId">编辑态当前不良日报 ID</param>
-    /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:defect:assy:query", "组立不良日报工单选项")]
-    [HttpGet("prod-order-options")]
-    public async Task<IActionResult> GetAssyOutputProdOrderOptionsAsync([FromQuery] long? excludeAssyDefectId = null)
-    {
-        try
-        {
-            var result = await _assyOutputService.GetAssyOutputProdOrderOptionsAsync(excludeAssyDefectId);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取组立日报新增时固定的生产时段列表
-    /// </summary>
-    /// <returns>生产时段列表（13 条）</returns>
-    [TaktPermission("logistics:manufacturing:output:assy:query", "组立日报固定生产时段")]
-    [HttpGet("default-time-periods")]
-    public async Task<IActionResult> GetAssyOutputDefaultTimePeriodsAsync()
-    {
-        try
-        {
-            var result = await _assyOutputService.GetAssyOutputDefaultTimePeriodsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)

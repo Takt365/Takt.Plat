@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单应用服务实现
 // 
@@ -63,12 +63,20 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
     }
 
     /// <summary>
-    /// 获取维护工单列表（分页）
+    /// 获取维护工单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktMaintenanceWorkOrderDto>> GetMaintenanceWorkOrderListAsync(TaktMaintenanceWorkOrderQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktMaintenanceWorkOrderDto>.Create(
+                new List<TaktMaintenanceWorkOrderDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _maintenanceWorkOrderRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,8 +118,8 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EquipmentName ?? e.Id.ToString(),
+            DictValue = e.WorkOrderCode,
+            DictLabel = e.EquipmentName ?? e.WorkOrderCode,
         }).ToList();
     }
 
@@ -290,7 +298,15 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaintenanceWorkOrderAsync(TaktMaintenanceWorkOrderQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktMaintenanceWorkOrderQueryDto());
+        var queryDto = query ?? new TaktMaintenanceWorkOrderQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktMaintenanceWorkOrderExportDto>(),
+                sheetName ?? "维护工单数据",
+                fileName ?? "维护工单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _maintenanceWorkOrderRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -386,12 +402,11 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
     /// <returns>任务</returns>
     private async Task SaveMaintenanceWorkOrderChildrenAsync(TaktMaintenanceWorkOrder entity, TaktMaintenanceWorkOrderCreateDto dto)
     {
-        var workOrderUpdateDto = dto as TaktMaintenanceWorkOrderUpdateDto;
         // 维护工单领料（Materials）
         List<TaktMaintenanceWorkOrderMaterialUpdateDto>? materialsForSave;
-        if (workOrderUpdateDto?.Materials != null)
+        if (dto is TaktMaintenanceWorkOrderUpdateDto updateDtoForMaterials && updateDtoForMaterials.Materials != null)
         {
-            materialsForSave = workOrderUpdateDto.Materials;
+            materialsForSave = updateDtoForMaterials.Materials;
         }
         else if (dto.Materials != null)
         {
@@ -416,6 +431,11 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
             {
                 var childDto = materialsForSave[i];
                 childDto.MaintenanceWorkOrderId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.WorkOrderCode = entity.WorkOrderCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -434,14 +454,13 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
                     submittedIds.Add(childDto.MaintenanceWorkOrderMaterialId);
                     var isUniqueUpdate_ix_takt_logistics_maintenance_work_order_material_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _maintenanceWorkOrderMaterialRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                        x => x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
                 && x.LineNumber == x.LineNumber
                 && x.MaterialCode == x.MaterialCode,
                         childDto.MaintenanceWorkOrderMaterialId);
                     if (!isUniqueUpdate_ix_takt_logistics_maintenance_work_order_material_order_line_unique)
                     {
-                        throw new TaktBusinessException("维护工单领料的CompanyCode、MaintenanceWorkOrderId、LineNumber、MaterialCode已存在");
+                        throw new TaktBusinessException("维护工单领料的MaintenanceWorkOrderId、LineNumber、MaterialCode已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.MaintenanceWorkOrderMaterialId;
@@ -453,13 +472,12 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
                 {
                     var isUniqueCreate_ix_takt_logistics_maintenance_work_order_material_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _maintenanceWorkOrderMaterialRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                        x => x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
                 && x.LineNumber == x.LineNumber
                 && x.MaterialCode == x.MaterialCode);
                     if (!isUniqueCreate_ix_takt_logistics_maintenance_work_order_material_order_line_unique)
                     {
-                        throw new TaktBusinessException("维护工单领料的CompanyCode、MaintenanceWorkOrderId、LineNumber、MaterialCode已存在");
+                        throw new TaktBusinessException("维护工单领料的MaintenanceWorkOrderId、LineNumber、MaterialCode已存在");
                     }
                     var child = childDto.Adapt<TaktMaintenanceWorkOrderMaterial>();
                     child.Id = 0;
@@ -496,9 +514,9 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
         }
         // 维护工单报工（Labors）
         List<TaktMaintenanceWorkOrderLaborUpdateDto>? laborsForSave;
-        if (workOrderUpdateDto?.Labors != null)
+        if (dto is TaktMaintenanceWorkOrderUpdateDto updateDtoForLabors && updateDtoForLabors.Labors != null)
         {
-            laborsForSave = workOrderUpdateDto.Labors;
+            laborsForSave = updateDtoForLabors.Labors;
         }
         else if (dto.Labors != null)
         {
@@ -523,6 +541,11 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
             {
                 var childDto = laborsForSave[i];
                 childDto.MaintenanceWorkOrderId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.WorkOrderCode = entity.WorkOrderCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -541,14 +564,13 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
                     submittedIds.Add(childDto.MaintenanceWorkOrderLaborId);
                     var isUniqueUpdate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _maintenanceWorkOrderLaborRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                        x => x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
                 && x.LineNumber == x.LineNumber
                 && x.EmployeeCode == x.EmployeeCode,
                         childDto.MaintenanceWorkOrderLaborId);
                     if (!isUniqueUpdate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique)
                     {
-                        throw new TaktBusinessException("维护工单报工的CompanyCode、MaintenanceWorkOrderId、LineNumber、EmployeeCode已存在");
+                        throw new TaktBusinessException("维护工单报工的MaintenanceWorkOrderId、LineNumber、EmployeeCode已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.MaintenanceWorkOrderLaborId;
@@ -560,13 +582,12 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
                 {
                     var isUniqueCreate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _maintenanceWorkOrderLaborRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                        x => x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
                 && x.LineNumber == x.LineNumber
                 && x.EmployeeCode == x.EmployeeCode);
                     if (!isUniqueCreate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique)
                     {
-                        throw new TaktBusinessException("维护工单报工的CompanyCode、MaintenanceWorkOrderId、LineNumber、EmployeeCode已存在");
+                        throw new TaktBusinessException("维护工单报工的MaintenanceWorkOrderId、LineNumber、EmployeeCode已存在");
                     }
                     var child = childDto.Adapt<TaktMaintenanceWorkOrderLabor>();
                     child.Id = 0;
@@ -602,44 +623,6 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
             }
         }
     }
-
-    /// <summary>
-    /// 获取维护工单统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>维护工单统计</returns>
-    public async Task<TaktMaintenanceWorkOrderStatDto> GetMaintenanceWorkOrderStatAsync(TaktMaintenanceWorkOrderStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.CreatedAtStart,
-            queryDto.CreatedAtEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktMaintenanceWorkOrder, bool>> predicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.CreatedAt >= start
-            && x.CreatedAt <= end;
-        var monthWorkOrderCount = await _maintenanceWorkOrderRepository.CountAsync(predicate);
-        var monthTotalCost = await _maintenanceWorkOrderRepository.SumAsync(x => x.TotalCost, predicate);
-        Expression<Func<TaktMaintenanceWorkOrder, bool>> openPredicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.CreatedAt >= start
-            && x.CreatedAt <= end
-            && x.WorkOrderStatus >= 0
-            && x.WorkOrderStatus <= 3;
-        var monthOpenWorkOrderCount = await _maintenanceWorkOrderRepository.CountAsync(openPredicate);
-        return new TaktMaintenanceWorkOrderStatDto
-        {
-            StatMonth = statMonth,
-            MonthWorkOrderCount = monthWorkOrderCount,
-            MonthOpenWorkOrderCount = monthOpenWorkOrderCount,
-            MonthTotalCost = monthTotalCost,
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -653,329 +636,555 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
     {
         var exp = Expressionable.Create<TaktMaintenanceWorkOrder>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WorkOrderCode != null && x.WorkOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.MaintenanceNotificationId).Contains(keywords)
                 || (x.NotificationCode != null && x.NotificationCode.Contains(keywords))
-                || SqlFunc.ToString(x.EquipmentId).Contains(keywords)
                 || (x.EquipCode != null && x.EquipCode.Contains(keywords))
                 || (x.EquipmentName != null && x.EquipmentName.Contains(keywords))
-                || SqlFunc.ToString(x.MaintenanceCategory).Contains(keywords)
-                || SqlFunc.ToString(x.MaintenanceType).Contains(keywords)
-                || SqlFunc.ToString(x.WorkOrderStatus).Contains(keywords)
-                || SqlFunc.ToString(x.Priority).Contains(keywords)
                 || (x.WorkCenter != null && x.WorkCenter.Contains(keywords))
                 || (x.AssignedTechnician != null && x.AssignedTechnician.Contains(keywords))
                 || (x.MaintenanceCompany != null && x.MaintenanceCompany.Contains(keywords))
                 || (x.FaultDescription != null && x.FaultDescription.Contains(keywords))
                 || (x.MaintenanceContent != null && x.MaintenanceContent.Contains(keywords))
                 || (x.Solution != null && x.Solution.Contains(keywords))
-                || SqlFunc.ToString(x.CostCenterId).Contains(keywords)
                 || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
-                || SqlFunc.ToString(x.CostElementId).Contains(keywords)
                 || (x.CostElementCode != null && x.CostElementCode.Contains(keywords))
-                || SqlFunc.ToString(x.TotalMaterialCost).Contains(keywords)
-                || SqlFunc.ToString(x.TotalLaborCost).Contains(keywords)
-                || SqlFunc.ToString(x.TotalOtherCost).Contains(keywords)
-                || SqlFunc.ToString(x.TotalCost).Contains(keywords)
-                || SqlFunc.ToString(x.SettlementStatus).Contains(keywords)
                 || (x.AcceptedBy != null && x.AcceptedBy.Contains(keywords))
-                || SqlFunc.ToString(x.MaintenanceResult).Contains(keywords)
-                || SqlFunc.ToString(x.MaintenanceCycleDays).Contains(keywords)
                 || (x.MaintenanceImages != null && x.MaintenanceImages.Contains(keywords))
                 || (x.MaintenanceDocuments != null && x.MaintenanceDocuments.Contains(keywords))
                 || (x.AcceptedSummary != null && x.AcceptedSummary.Contains(keywords))
-                || SqlFunc.ToString(x.IsHistoryArchived).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
-                || SqlFunc.ToString(x.PlannedEndTime).Contains(keywords)
-                || SqlFunc.ToString(x.ActualStartTime).Contains(keywords)
-                || SqlFunc.ToString(x.ActualEndTime).Contains(keywords)
-                || SqlFunc.ToString(x.SettlementTime).Contains(keywords)
-                || SqlFunc.ToString(x.CompletedAt).Contains(keywords)
-                || SqlFunc.ToString(x.AcceptedAt).Contains(keywords)
-                || SqlFunc.ToString(x.NextMaintenanceDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(queryDto.WorkOrderCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkOrderCode))
+        {
+            var workOrderCode = queryDto.WorkOrderCode;
+            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(workOrderCode));
         }
 
         if (queryDto?.MaintenanceNotificationId.HasValue == true)
         {
-            exp = exp.And(x => x.MaintenanceNotificationId == queryDto.MaintenanceNotificationId);
+            var maintenanceNotificationId = queryDto.MaintenanceNotificationId.Value;
+            exp = exp.And(x => x.MaintenanceNotificationId == maintenanceNotificationId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NotificationCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.NotificationCode))
         {
-            exp = exp.And(x => x.NotificationCode != null && x.NotificationCode.Contains(queryDto.NotificationCode));
+            var notificationCode = queryDto.NotificationCode;
+            exp = exp.And(x => x.NotificationCode != null && x.NotificationCode.Contains(notificationCode));
         }
 
         if (queryDto?.EquipmentId.HasValue == true)
         {
-            exp = exp.And(x => x.EquipmentId == queryDto.EquipmentId);
+            var equipmentId = queryDto.EquipmentId.Value;
+            exp = exp.And(x => x.EquipmentId == equipmentId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipCode))
         {
-            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(queryDto.EquipCode));
+            var equipCode = queryDto.EquipCode;
+            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(equipCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentName))
         {
-            exp = exp.And(x => x.EquipmentName != null && x.EquipmentName.Contains(queryDto.EquipmentName));
+            var equipmentName = queryDto.EquipmentName;
+            exp = exp.And(x => x.EquipmentName != null && x.EquipmentName.Contains(equipmentName));
         }
 
         if (queryDto?.MaintenanceCategory.HasValue == true)
         {
-            exp = exp.And(x => x.MaintenanceCategory == queryDto.MaintenanceCategory);
+            var maintenanceCategory = queryDto.MaintenanceCategory.Value;
+            exp = exp.And(x => x.MaintenanceCategory == maintenanceCategory);
         }
 
         if (queryDto?.MaintenanceType.HasValue == true)
         {
-            exp = exp.And(x => x.MaintenanceType == queryDto.MaintenanceType);
+            var maintenanceType = queryDto.MaintenanceType.Value;
+            exp = exp.And(x => x.MaintenanceType == maintenanceType);
         }
 
         if (queryDto?.WorkOrderStatus.HasValue == true)
         {
-            exp = exp.And(x => x.WorkOrderStatus == queryDto.WorkOrderStatus);
+            var workOrderStatus = queryDto.WorkOrderStatus.Value;
+            exp = exp.And(x => x.WorkOrderStatus == workOrderStatus);
         }
 
         if (queryDto?.Priority.HasValue == true)
         {
-            exp = exp.And(x => x.Priority == queryDto.Priority);
+            var priority = queryDto.Priority.Value;
+            exp = exp.And(x => x.Priority == priority);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkCenter))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkCenter))
         {
-            exp = exp.And(x => x.WorkCenter != null && x.WorkCenter.Contains(queryDto.WorkCenter));
+            var workCenter = queryDto.WorkCenter;
+            exp = exp.And(x => x.WorkCenter != null && x.WorkCenter.Contains(workCenter));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssignedTechnician))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssignedTechnician))
         {
-            exp = exp.And(x => x.AssignedTechnician != null && x.AssignedTechnician.Contains(queryDto.AssignedTechnician));
+            var assignedTechnician = queryDto.AssignedTechnician;
+            exp = exp.And(x => x.AssignedTechnician != null && x.AssignedTechnician.Contains(assignedTechnician));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaintenanceCompany))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaintenanceCompany))
         {
-            exp = exp.And(x => x.MaintenanceCompany != null && x.MaintenanceCompany.Contains(queryDto.MaintenanceCompany));
+            var maintenanceCompany = queryDto.MaintenanceCompany;
+            exp = exp.And(x => x.MaintenanceCompany != null && x.MaintenanceCompany.Contains(maintenanceCompany));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FaultDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FaultDescription))
         {
-            exp = exp.And(x => x.FaultDescription != null && x.FaultDescription.Contains(queryDto.FaultDescription));
+            var faultDescription = queryDto.FaultDescription;
+            exp = exp.And(x => x.FaultDescription != null && x.FaultDescription.Contains(faultDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaintenanceContent))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaintenanceContent))
         {
-            exp = exp.And(x => x.MaintenanceContent != null && x.MaintenanceContent.Contains(queryDto.MaintenanceContent));
+            var maintenanceContent = queryDto.MaintenanceContent;
+            exp = exp.And(x => x.MaintenanceContent != null && x.MaintenanceContent.Contains(maintenanceContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Solution))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Solution))
         {
-            exp = exp.And(x => x.Solution != null && x.Solution.Contains(queryDto.Solution));
+            var solution = queryDto.Solution;
+            exp = exp.And(x => x.Solution != null && x.Solution.Contains(solution));
         }
 
         if (queryDto?.CostCenterId.HasValue == true)
         {
-            exp = exp.And(x => x.CostCenterId == queryDto.CostCenterId);
+            var costCenterId = queryDto.CostCenterId.Value;
+            exp = exp.And(x => x.CostCenterId == costCenterId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostCenterCode))
         {
-            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(queryDto.CostCenterCode));
+            var costCenterCode = queryDto.CostCenterCode;
+            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(costCenterCode));
         }
 
         if (queryDto?.CostElementId.HasValue == true)
         {
-            exp = exp.And(x => x.CostElementId == queryDto.CostElementId);
+            var costElementId = queryDto.CostElementId.Value;
+            exp = exp.And(x => x.CostElementId == costElementId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostElementCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostElementCode))
         {
-            exp = exp.And(x => x.CostElementCode != null && x.CostElementCode.Contains(queryDto.CostElementCode));
+            var costElementCode = queryDto.CostElementCode;
+            exp = exp.And(x => x.CostElementCode != null && x.CostElementCode.Contains(costElementCode));
         }
 
         if (queryDto?.TotalMaterialCost.HasValue == true)
         {
-            exp = exp.And(x => x.TotalMaterialCost == queryDto.TotalMaterialCost);
+            var totalMaterialCost = queryDto.TotalMaterialCost.Value;
+            exp = exp.And(x => x.TotalMaterialCost == totalMaterialCost);
         }
 
         if (queryDto?.TotalLaborCost.HasValue == true)
         {
-            exp = exp.And(x => x.TotalLaborCost == queryDto.TotalLaborCost);
+            var totalLaborCost = queryDto.TotalLaborCost.Value;
+            exp = exp.And(x => x.TotalLaborCost == totalLaborCost);
         }
 
         if (queryDto?.TotalOtherCost.HasValue == true)
         {
-            exp = exp.And(x => x.TotalOtherCost == queryDto.TotalOtherCost);
+            var totalOtherCost = queryDto.TotalOtherCost.Value;
+            exp = exp.And(x => x.TotalOtherCost == totalOtherCost);
         }
 
         if (queryDto?.TotalCost.HasValue == true)
         {
-            exp = exp.And(x => x.TotalCost == queryDto.TotalCost);
+            var totalCost = queryDto.TotalCost.Value;
+            exp = exp.And(x => x.TotalCost == totalCost);
         }
 
         if (queryDto?.SettlementStatus.HasValue == true)
         {
-            exp = exp.And(x => x.SettlementStatus == queryDto.SettlementStatus);
+            var settlementStatus = queryDto.SettlementStatus.Value;
+            exp = exp.And(x => x.SettlementStatus == settlementStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AcceptedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedBy))
         {
-            exp = exp.And(x => x.AcceptedBy != null && x.AcceptedBy.Contains(queryDto.AcceptedBy));
+            var acceptedBy = queryDto.AcceptedBy;
+            exp = exp.And(x => x.AcceptedBy != null && x.AcceptedBy.Contains(acceptedBy));
         }
 
         if (queryDto?.MaintenanceResult.HasValue == true)
         {
-            exp = exp.And(x => x.MaintenanceResult == queryDto.MaintenanceResult);
+            var maintenanceResult = queryDto.MaintenanceResult.Value;
+            exp = exp.And(x => x.MaintenanceResult == maintenanceResult);
         }
 
         if (queryDto?.MaintenanceCycleDays.HasValue == true)
         {
-            exp = exp.And(x => x.MaintenanceCycleDays == queryDto.MaintenanceCycleDays);
+            var maintenanceCycleDays = queryDto.MaintenanceCycleDays.Value;
+            exp = exp.And(x => x.MaintenanceCycleDays == maintenanceCycleDays);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaintenanceImages))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaintenanceImages))
         {
-            exp = exp.And(x => x.MaintenanceImages != null && x.MaintenanceImages.Contains(queryDto.MaintenanceImages));
+            var maintenanceImages = queryDto.MaintenanceImages;
+            exp = exp.And(x => x.MaintenanceImages != null && x.MaintenanceImages.Contains(maintenanceImages));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaintenanceDocuments))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaintenanceDocuments))
         {
-            exp = exp.And(x => x.MaintenanceDocuments != null && x.MaintenanceDocuments.Contains(queryDto.MaintenanceDocuments));
+            var maintenanceDocuments = queryDto.MaintenanceDocuments;
+            exp = exp.And(x => x.MaintenanceDocuments != null && x.MaintenanceDocuments.Contains(maintenanceDocuments));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AcceptedSummary))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedSummary))
         {
-            exp = exp.And(x => x.AcceptedSummary != null && x.AcceptedSummary.Contains(queryDto.AcceptedSummary));
+            var acceptedSummary = queryDto.AcceptedSummary;
+            exp = exp.And(x => x.AcceptedSummary != null && x.AcceptedSummary.Contains(acceptedSummary));
         }
 
         if (queryDto?.IsHistoryArchived.HasValue == true)
         {
-            exp = exp.And(x => x.IsHistoryArchived == queryDto.IsHistoryArchived);
+            var isHistoryArchived = queryDto.IsHistoryArchived.Value;
+            exp = exp.And(x => x.IsHistoryArchived == isHistoryArchived);
         }
 
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.PlannedStartTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartTime >= queryDto.PlannedStartTimeStart);
+            var plannedStartTimeStart = queryDto.PlannedStartTimeStart.Value;
+            exp = exp.And(x => x.PlannedStartTime >= plannedStartTimeStart);
         }
 
         if (queryDto?.PlannedStartTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartTime <= queryDto.PlannedStartTimeEnd);
+            var plannedStartTimeEnd = queryDto.PlannedStartTimeEnd.Value;
+            exp = exp.And(x => x.PlannedStartTime <= plannedStartTimeEnd);
         }
 
         if (queryDto?.PlannedEndTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndTime >= queryDto.PlannedEndTimeStart);
+            var plannedEndTimeStart = queryDto.PlannedEndTimeStart.Value;
+            exp = exp.And(x => x.PlannedEndTime >= plannedEndTimeStart);
         }
 
         if (queryDto?.PlannedEndTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndTime <= queryDto.PlannedEndTimeEnd);
+            var plannedEndTimeEnd = queryDto.PlannedEndTimeEnd.Value;
+            exp = exp.And(x => x.PlannedEndTime <= plannedEndTimeEnd);
         }
 
         if (queryDto?.ActualStartTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.ActualStartTime >= queryDto.ActualStartTimeStart);
+            var actualStartTimeStart = queryDto.ActualStartTimeStart.Value;
+            exp = exp.And(x => x.ActualStartTime >= actualStartTimeStart);
         }
 
         if (queryDto?.ActualStartTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ActualStartTime <= queryDto.ActualStartTimeEnd);
+            var actualStartTimeEnd = queryDto.ActualStartTimeEnd.Value;
+            exp = exp.And(x => x.ActualStartTime <= actualStartTimeEnd);
         }
 
         if (queryDto?.ActualEndTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.ActualEndTime >= queryDto.ActualEndTimeStart);
+            var actualEndTimeStart = queryDto.ActualEndTimeStart.Value;
+            exp = exp.And(x => x.ActualEndTime >= actualEndTimeStart);
         }
 
         if (queryDto?.ActualEndTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ActualEndTime <= queryDto.ActualEndTimeEnd);
+            var actualEndTimeEnd = queryDto.ActualEndTimeEnd.Value;
+            exp = exp.And(x => x.ActualEndTime <= actualEndTimeEnd);
         }
 
         if (queryDto?.SettlementTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.SettlementTime >= queryDto.SettlementTimeStart);
+            var settlementTimeStart = queryDto.SettlementTimeStart.Value;
+            exp = exp.And(x => x.SettlementTime >= settlementTimeStart);
         }
 
         if (queryDto?.SettlementTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.SettlementTime <= queryDto.SettlementTimeEnd);
+            var settlementTimeEnd = queryDto.SettlementTimeEnd.Value;
+            exp = exp.And(x => x.SettlementTime <= settlementTimeEnd);
         }
 
         if (queryDto?.CompletedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CompletedAt >= queryDto.CompletedAtStart);
+            var completedAtStart = queryDto.CompletedAtStart.Value;
+            exp = exp.And(x => x.CompletedAt >= completedAtStart);
         }
 
         if (queryDto?.CompletedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CompletedAt <= queryDto.CompletedAtEnd);
+            var completedAtEnd = queryDto.CompletedAtEnd.Value;
+            exp = exp.And(x => x.CompletedAt <= completedAtEnd);
         }
 
         if (queryDto?.AcceptedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.AcceptedAt >= queryDto.AcceptedAtStart);
+            var acceptedAtStart = queryDto.AcceptedAtStart.Value;
+            exp = exp.And(x => x.AcceptedAt >= acceptedAtStart);
         }
 
         if (queryDto?.AcceptedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.AcceptedAt <= queryDto.AcceptedAtEnd);
+            var acceptedAtEnd = queryDto.AcceptedAtEnd.Value;
+            exp = exp.And(x => x.AcceptedAt <= acceptedAtEnd);
         }
 
         if (queryDto?.NextMaintenanceDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.NextMaintenanceDate >= queryDto.NextMaintenanceDateStart);
+            var nextMaintenanceDateStart = queryDto.NextMaintenanceDateStart.Value;
+            exp = exp.And(x => x.NextMaintenanceDate >= nextMaintenanceDateStart);
         }
 
         if (queryDto?.NextMaintenanceDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.NextMaintenanceDate <= queryDto.NextMaintenanceDateEnd);
+            var nextMaintenanceDateEnd = queryDto.NextMaintenanceDateEnd.Value;
+            exp = exp.And(x => x.NextMaintenanceDate <= nextMaintenanceDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktMaintenanceWorkOrderQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceNotificationId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NotificationCode))
+        {
+            return true;
+        }
+        if (queryDto.EquipmentId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipmentName))
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceCategory.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WorkOrderStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Priority.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkCenter))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AssignedTechnician))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaintenanceCompany))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FaultDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaintenanceContent))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Solution))
+        {
+            return true;
+        }
+        if (queryDto.CostCenterId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostCenterCode))
+        {
+            return true;
+        }
+        if (queryDto.CostElementId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostElementCode))
+        {
+            return true;
+        }
+        if (queryDto.TotalMaterialCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalLaborCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalOtherCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SettlementStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedBy))
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceResult.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MaintenanceCycleDays.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaintenanceImages))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaintenanceDocuments))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedSummary))
+        {
+            return true;
+        }
+        if (queryDto.IsHistoryArchived.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.PlannedStartTimeStart.HasValue || queryDto.PlannedStartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlannedEndTimeStart.HasValue || queryDto.PlannedEndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualStartTimeStart.HasValue || queryDto.ActualStartTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualEndTimeStart.HasValue || queryDto.ActualEndTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SettlementTimeStart.HasValue || queryDto.SettlementTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CompletedAtStart.HasValue || queryDto.CompletedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AcceptedAtStart.HasValue || queryDto.AcceptedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NextMaintenanceDateStart.HasValue || queryDto.NextMaintenanceDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

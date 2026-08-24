@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质事故明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
     }
 
     /// <summary>
-    /// 获取品质事故明细列表（分页）
+    /// 获取品质事故明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktQualityIncidentItemDto>> GetQualityIncidentItemListAsync(TaktQualityIncidentItemQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktQualityIncidentItemDto>.Create(
+                new List<TaktQualityIncidentItemDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _qualityIncidentItemRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -100,13 +108,13 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
     {
         EnsureThreeLayerContext();
         var list = await _qualityIncidentItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialDescription ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
+            x => x.QualityIncidentCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialDescription ?? e.Id.ToString(),
+            DictValue = e.QualityIncidentCode,
+            DictLabel = e.QualityIncidentCode,
         }).ToList();
     }
 
@@ -314,7 +322,15 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportQualityIncidentItemAsync(TaktQualityIncidentItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityIncidentItemQueryDto());
+        var queryDto = query ?? new TaktQualityIncidentItemQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktQualityIncidentItemExportDto>(),
+                sheetName ?? "品质事故明细数据",
+                fileName ?? "品质事故明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _qualityIncidentItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -352,6 +368,26 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
             throw new TaktBusinessException("品质事故主不存在");
         }
         entity.QualityIncidentId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.QualityIncidentCode))
+        {
+            entity.QualityIncidentCode = master.QualityIncidentCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -375,138 +411,249 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QualityIncidentId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.QualityIncidentCode != null && x.QualityIncidentCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ScrapCost).Contains(keywords)
-                || SqlFunc.ToString(x.ScrapSize).Contains(keywords)
-                || SqlFunc.ToString(x.PartPrice).Contains(keywords)
-                || SqlFunc.ToString(x.ScrapReasonCost).Contains(keywords)
-                || SqlFunc.ToString(x.FreightCharges).Contains(keywords)
-                || SqlFunc.ToString(x.OtherExpenses).Contains(keywords)
-                || SqlFunc.ToString(x.ReasonWorkTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.Tax).Contains(keywords)
-                || SqlFunc.ToString(x.ReasonOtherExpenses).Contains(keywords)
                 || (x.ScrapNote != null && x.ScrapNote.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.QualityIncidentId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.QualityIncidentId == queryDto.QualityIncidentId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityIncidentCode))
-        {
-            exp = exp.And(x => x.QualityIncidentCode != null && x.QualityIncidentCode.Contains(queryDto.QualityIncidentCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
-        {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
-        {
-            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
-        }
-
-        if (queryDto?.ScrapCost.HasValue == true)
-        {
-            exp = exp.And(x => x.ScrapCost == queryDto.ScrapCost);
-        }
-
-        if (queryDto?.ScrapSize.HasValue == true)
-        {
-            exp = exp.And(x => x.ScrapSize == queryDto.ScrapSize);
-        }
-
-        if (queryDto?.PartPrice.HasValue == true)
-        {
-            exp = exp.And(x => x.PartPrice == queryDto.PartPrice);
-        }
-
-        if (queryDto?.ScrapReasonCost.HasValue == true)
-        {
-            exp = exp.And(x => x.ScrapReasonCost == queryDto.ScrapReasonCost);
-        }
-
-        if (queryDto?.FreightCharges.HasValue == true)
-        {
-            exp = exp.And(x => x.FreightCharges == queryDto.FreightCharges);
-        }
-
-        if (queryDto?.OtherExpenses.HasValue == true)
-        {
-            exp = exp.And(x => x.OtherExpenses == queryDto.OtherExpenses);
-        }
-
-        if (queryDto?.ReasonWorkTimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.ReasonWorkTimeMinutes == queryDto.ReasonWorkTimeMinutes);
-        }
-
-        if (queryDto?.Tax.HasValue == true)
-        {
-            exp = exp.And(x => x.Tax == queryDto.Tax);
-        }
-
-        if (queryDto?.ReasonOtherExpenses.HasValue == true)
-        {
-            exp = exp.And(x => x.ReasonOtherExpenses == queryDto.ReasonOtherExpenses);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ScrapNote))
-        {
-            exp = exp.And(x => x.ScrapNote != null && x.ScrapNote.Contains(queryDto.ScrapNote));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.QualityIncidentId.HasValue == true)
+        {
+            var qualityIncidentId = queryDto.QualityIncidentId.Value;
+            exp = exp.And(x => x.QualityIncidentId == qualityIncidentId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityIncidentCode))
+        {
+            var qualityIncidentCode = queryDto.QualityIncidentCode;
+            exp = exp.And(x => x.QualityIncidentCode != null && x.QualityIncidentCode.Contains(qualityIncidentCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
+        {
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDescription))
+        {
+            var materialDescription = queryDto.MaterialDescription;
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(materialDescription));
+        }
+
+        if (queryDto?.ScrapCost.HasValue == true)
+        {
+            var scrapCost = queryDto.ScrapCost.Value;
+            exp = exp.And(x => x.ScrapCost == scrapCost);
+        }
+
+        if (queryDto?.ScrapSize.HasValue == true)
+        {
+            var scrapSize = queryDto.ScrapSize.Value;
+            exp = exp.And(x => x.ScrapSize == scrapSize);
+        }
+
+        if (queryDto?.PartPrice.HasValue == true)
+        {
+            var partPrice = queryDto.PartPrice.Value;
+            exp = exp.And(x => x.PartPrice == partPrice);
+        }
+
+        if (queryDto?.ScrapReasonCost.HasValue == true)
+        {
+            var scrapReasonCost = queryDto.ScrapReasonCost.Value;
+            exp = exp.And(x => x.ScrapReasonCost == scrapReasonCost);
+        }
+
+        if (queryDto?.FreightCharges.HasValue == true)
+        {
+            var freightCharges = queryDto.FreightCharges.Value;
+            exp = exp.And(x => x.FreightCharges == freightCharges);
+        }
+
+        if (queryDto?.OtherExpenses.HasValue == true)
+        {
+            var otherExpenses = queryDto.OtherExpenses.Value;
+            exp = exp.And(x => x.OtherExpenses == otherExpenses);
+        }
+
+        if (queryDto?.ReasonWorkTimeMinutes.HasValue == true)
+        {
+            var reasonWorkTimeMinutes = queryDto.ReasonWorkTimeMinutes.Value;
+            exp = exp.And(x => x.ReasonWorkTimeMinutes == reasonWorkTimeMinutes);
+        }
+
+        if (queryDto?.Tax.HasValue == true)
+        {
+            var tax = queryDto.Tax.Value;
+            exp = exp.And(x => x.Tax == tax);
+        }
+
+        if (queryDto?.ReasonOtherExpenses.HasValue == true)
+        {
+            var reasonOtherExpenses = queryDto.ReasonOtherExpenses.Value;
+            exp = exp.And(x => x.ReasonOtherExpenses == reasonOtherExpenses);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ScrapNote))
+        {
+            var scrapNote = queryDto.ScrapNote;
+            exp = exp.And(x => x.ScrapNote != null && x.ScrapNote.Contains(scrapNote));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktQualityIncidentItemQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.QualityIncidentId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.QualityIncidentCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (queryDto.ScrapCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ScrapSize.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PartPrice.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ScrapReasonCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.FreightCharges.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OtherExpenses.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ReasonWorkTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Tax.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ReasonOtherExpenses.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ScrapNote))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

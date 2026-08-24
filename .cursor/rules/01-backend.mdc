@@ -160,7 +160,7 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
     - `ValidFrom`/`ValidTo` 等业务字段保持在末段三字段之前，不参与上述四种重排
     - DTO 顺序随 `generate-dtos-from-entity.cjs` 与实体属性声明顺序对齐
   - **`RelatedPlant`（强制）**：`public string RelatedPlant { get; set; } = string.Empty;`（非 `string?`）；与同实体其他必填 `string` 一致；❌ 禁止业务默认值（如 `= "0001"`）；`[SugarColumn]` 须 `IsNullable = false` 且无 `DefaultValue`
-  - **参照**：`TaktAnnouncement`（`AnnouncementCode`/`AnnouncementTitle`/`AnnouncementType`/`AnnouncementStatus` + 无前缀 `Content`/`Summary`/`PublishTime`）；`TaktUser`（`Username`、`UserType`）；`TaktCostCenter`（`ValidFrom`/`ValidTo` 在 `RelatedPlant` 之前）
+  - **参照**：`TaktAnnouncement`（`AnnouncementCode`/`AnnouncementTitle`/`AnnouncementType`/`AnnouncementStatus` + 无前缀 `Content`/`Summary`/`PublishTime`）；`TaktUser`（`UserName`、`UserType`）；`TaktCostCenter`（`ValidFrom`/`ValidTo` 在 `RelatedPlant` 之前）
   - ❌ 禁止同实体混用 `Title` 与 `AnnouncementType` 这类「核心字段部分有前缀、部分无前缀」
   - **i18n 末段**：`entity.{slug}.*` 由属性 camelCase 去掉 slug 重复前缀生成（`announcementTitle` → `entity.announcement.title`），与属性名一致即可。
 - 多租户字段：`TenantCode`（3 位）、`CompanyCode`（4 位）、`PlantCode`（4 位）
@@ -215,9 +215,9 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 
 ```text
 ✅ 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
-✅ 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+✅ 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
 ✅ 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
-❌ 具有供应商的清算（字典 sys_yes_no_type，0=否 1=是；外系统字段码）
+❌ 具有供应商的清算（字典 sys_yes_no，0=否 1=是；外系统字段码）
 ❌ 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3；外系统字段码）
 ```
 

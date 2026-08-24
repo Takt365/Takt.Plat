@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktSupplierI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplier 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -316,13 +316,13 @@ public class TaktSupplierI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplier.customercode", "zh-HK", "客户_hk", "客户（选项 TaktCustomers/options；DictValue=CustomerCode）"),
 
             // entity.supplier.clearingwithcustomer
-            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "en-US", "具有客户的清算_us", "具有客户的清算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "en-US", "具有客户的清算_us", "具有客户的清算（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.clearingwithcustomer
-            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "ja-JP", "具有客户的清算_jp", "具有客户的清算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "ja-JP", "具有客户的清算_jp", "具有客户的清算（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.clearingwithcustomer
-            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "zh-CN", "具有客户的清算", "具有客户的清算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "zh-CN", "具有客户的清算", "具有客户的清算（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.clearingwithcustomer
-            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "zh-HK", "具有客户的清算_hk", "具有客户的清算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.clearingwithcustomer", "zh-HK", "具有客户的清算_hk", "具有客户的清算（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.supplier.paymentmethod
             new TranslationSeedItem("entity.supplier.paymentmethod", "en-US", "付款方式_us", "付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
@@ -370,13 +370,13 @@ public class TaktSupplierI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplier.accountholder", "zh-HK", "帐户持有人_hk", "帐户持有人"),
 
             // entity.supplier.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "en-US", "基于收货的发票验证_us", "基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "en-US", "基于收货的发票验证_us", "基于收货的发票验证（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "ja-JP", "基于收货的发票验证_jp", "基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "ja-JP", "基于收货的发票验证_jp", "基于收货的发票验证（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "zh-CN", "基于收货的发票验证", "基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "zh-CN", "基于收货的发票验证", "基于收货的发票验证（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.grbasedinvoiceinspection
-            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "zh-HK", "基于收货的发票验证_hk", "基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.grbasedinvoiceinspection", "zh-HK", "基于收货的发票验证_hk", "基于收货的发票验证（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.supplier.incoterms1
             new TranslationSeedItem("entity.supplier.incoterms1", "en-US", "国际贸易条件1_us", "国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）"),
@@ -397,13 +397,13 @@ public class TaktSupplierI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplier.incoterms2", "zh-HK", "国际贸易条件2_hk", "国际贸易条件2（地点说明）"),
 
             // entity.supplier.automaticpurchaseorder
-            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "en-US", "自动产生的采购订单_us", "自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "en-US", "自动产生的采购订单_us", "自动产生的采购订单（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.automaticpurchaseorder
-            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "ja-JP", "自动产生的采购订单_jp", "自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "ja-JP", "自动产生的采购订单_jp", "自动产生的采购订单（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.automaticpurchaseorder
-            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "zh-CN", "自动产生的采购订单", "自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "zh-CN", "自动产生的采购订单", "自动产生的采购订单（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.automaticpurchaseorder
-            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "zh-HK", "自动产生的采购订单_hk", "自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.automaticpurchaseorder", "zh-HK", "自动产生的采购订单_hk", "自动产生的采购订单（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.supplier.pricingdatecontrol
             new TranslationSeedItem("entity.supplier.pricingdatecontrol", "en-US", "定价日期控制_us", "定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
@@ -433,13 +433,13 @@ public class TaktSupplierI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplier.planneddeliverytimedays", "zh-HK", "计划交货时间_hk", "计划交货时间（天）"),
 
             // entity.supplier.evaluatedreceiptsettlement
-            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "en-US", "评估收据结算_us", "评估收据结算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "en-US", "评估收据结算_us", "评估收据结算（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.evaluatedreceiptsettlement
-            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "ja-JP", "评估收据结算_jp", "评估收据结算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "ja-JP", "评估收据结算_jp", "评估收据结算（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.evaluatedreceiptsettlement
-            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "zh-CN", "评估收据结算", "评估收据结算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "zh-CN", "评估收据结算", "评估收据结算（字典 sys_yes_no；0=否 1=是）"),
             // entity.supplier.evaluatedreceiptsettlement
-            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "zh-HK", "评估收据结算_hk", "评估收据结算（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.supplier.evaluatedreceiptsettlement", "zh-HK", "评估收据结算_hk", "评估收据结算（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.supplier.purchasingorganization
             new TranslationSeedItem("entity.supplier.purchasingorganization", "en-US", "采购组织_us", "采购组织（选项 TaktPlants/options；DictValue=PlantCode）"),
@@ -469,22 +469,22 @@ public class TaktSupplierI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplier.evaluationscore", "zh-HK", "评价分数_hk", "评价分数（0-100分）"),
 
             // entity.supplier.sortorder
-            new TranslationSeedItem("entity.supplier.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.supplier.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.supplier.sortorder
-            new TranslationSeedItem("entity.supplier.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.supplier.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.supplier.sortorder
-            new TranslationSeedItem("entity.supplier.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.supplier.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.supplier.sortorder
-            new TranslationSeedItem("entity.supplier.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.supplier.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.supplier.status
-            new TranslationSeedItem("entity.supplier.status", "en-US", "供货商状态_us", "供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.supplier.status", "en-US", "供货商状态_us", "供货商状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.supplier.status
-            new TranslationSeedItem("entity.supplier.status", "ja-JP", "供货商状态_jp", "供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.supplier.status", "ja-JP", "供货商状态_jp", "供货商状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.supplier.status
-            new TranslationSeedItem("entity.supplier.status", "zh-CN", "供货商状态", "供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.supplier.status", "zh-CN", "供货商状态", "供货商状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.supplier.status
-            new TranslationSeedItem("entity.supplier.status", "zh-HK", "供货商状态_hk", "供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.supplier.status", "zh-HK", "供货商状态_hk", "供货商状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

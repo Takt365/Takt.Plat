@@ -17,7 +17,7 @@
     :wrapper-col="{ span: 18 }"
     layout="horizontal"
   >
-    <a-form-item :label="t('entity.user.username')">
+    <a-form-item :label="t('entity.user.name')">
       <a-input
         :value="userName"
         disabled

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户满意度调查应用服务实现
 // 
@@ -63,12 +63,20 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
     }
 
     /// <summary>
-    /// 获取客户满意度调查列表（分页）
+    /// 获取客户满意度调查列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCustomerSatisfactionSurveyDto>> GetCustomerSatisfactionSurveyListAsync(TaktCustomerSatisfactionSurveyQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCustomerSatisfactionSurveyDto>.Create(
+                new List<TaktCustomerSatisfactionSurveyDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _customerSatisfactionSurveyRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -320,7 +328,15 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCustomerSatisfactionSurveyAsync(TaktCustomerSatisfactionSurveyQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCustomerSatisfactionSurveyQueryDto());
+        var queryDto = query ?? new TaktCustomerSatisfactionSurveyQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCustomerSatisfactionSurveyExportDto>(),
+                sheetName ?? "客户满意度调查数据",
+                fileName ?? "客户满意度调查导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _customerSatisfactionSurveyRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -419,6 +435,12 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
             {
                 var childDto = itemsForSave[i];
                 childDto.SurveyId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.CustomerSatisfactionSurveyCode = entity.CustomerSatisfactionSurveyCode;
+                childDto.CustomerFeedback = entity.CustomerFeedback;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -437,13 +459,12 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
                     submittedIds.Add(childDto.CustomerSatisfactionSurveyItemId);
                     var isUniqueUpdate_ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _customerSatisfactionSurveyItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SurveyId == x.SurveyId
+                        x => x.SurveyId == x.SurveyId
                 && x.LineNumber == x.LineNumber,
                         childDto.CustomerSatisfactionSurveyItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique)
                     {
-                        throw new TaktBusinessException("客户满意度调查项目明细的CompanyCode、SurveyId、LineNumber已存在");
+                        throw new TaktBusinessException("客户满意度调查项目明细的SurveyId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.CustomerSatisfactionSurveyItemId;
@@ -455,12 +476,11 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
                 {
                     var isUniqueCreate_ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _customerSatisfactionSurveyItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SurveyId == x.SurveyId
+                        x => x.SurveyId == x.SurveyId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique)
                     {
-                        throw new TaktBusinessException("客户满意度调查项目明细的CompanyCode、SurveyId、LineNumber已存在");
+                        throw new TaktBusinessException("客户满意度调查项目明细的SurveyId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktCustomerSatisfactionSurveyItem>();
                     child.Id = 0;
@@ -509,209 +529,367 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
     {
         var exp = Expressionable.Create<TaktCustomerSatisfactionSurvey>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.CustomerSatisfactionSurveyCode != null && x.CustomerSatisfactionSurveyCode.Contains(keywords))
-                || SqlFunc.ToString(x.CustomerId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CustomerSatisfactionSurveyCode != null && x.CustomerSatisfactionSurveyCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || SqlFunc.ToString(x.SurveyMethod).Contains(keywords)
-                || SqlFunc.ToString(x.SurveyType).Contains(keywords)
-                || SqlFunc.ToString(x.SurveyPeriod).Contains(keywords)
                 || (x.SurveyorBy != null && x.SurveyorBy.Contains(keywords))
                 || (x.CustomerContact != null && x.CustomerContact.Contains(keywords))
                 || (x.CustomerPhone != null && x.CustomerPhone.Contains(keywords))
-                || SqlFunc.ToString(x.OverallSatisfaction).Contains(keywords)
-                || SqlFunc.ToString(x.TotalScore).Contains(keywords)
-                || SqlFunc.ToString(x.QualityScore).Contains(keywords)
-                || SqlFunc.ToString(x.DeliveryScore).Contains(keywords)
-                || SqlFunc.ToString(x.ServiceScore).Contains(keywords)
-                || SqlFunc.ToString(x.PriceScore).Contains(keywords)
-                || SqlFunc.ToString(x.TechnicalScore).Contains(keywords)
                 || (x.CustomerPraise != null && x.CustomerPraise.Contains(keywords))
                 || (x.CustomerFeedback != null && x.CustomerFeedback.Contains(keywords))
                 || (x.ImprovementPlan != null && x.ImprovementPlan.Contains(keywords))
-                || SqlFunc.ToString(x.RelatedComplaintId).Contains(keywords)
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
-                || SqlFunc.ToString(x.SurveyStatus).Contains(keywords)
-                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.FollowUpStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.SurveyDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerSatisfactionSurveyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.CustomerSatisfactionSurveyCode != null && x.CustomerSatisfactionSurveyCode.Contains(queryDto.CustomerSatisfactionSurveyCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerSatisfactionSurveyCode))
+        {
+            var customerSatisfactionSurveyCode = queryDto.CustomerSatisfactionSurveyCode;
+            exp = exp.And(x => x.CustomerSatisfactionSurveyCode != null && x.CustomerSatisfactionSurveyCode.Contains(customerSatisfactionSurveyCode));
         }
 
         if (queryDto?.CustomerId.HasValue == true)
         {
-            exp = exp.And(x => x.CustomerId == queryDto.CustomerId);
+            var customerId = queryDto.CustomerId.Value;
+            exp = exp.And(x => x.CustomerId == customerId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
+            var customerName1 = queryDto.CustomerName1;
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(customerName1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerCode))
         {
-            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
+            var customerCode = queryDto.CustomerCode;
+            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(customerCode));
         }
 
         if (queryDto?.SurveyMethod.HasValue == true)
         {
-            exp = exp.And(x => x.SurveyMethod == queryDto.SurveyMethod);
+            var surveyMethod = queryDto.SurveyMethod.Value;
+            exp = exp.And(x => x.SurveyMethod == surveyMethod);
         }
 
         if (queryDto?.SurveyType.HasValue == true)
         {
-            exp = exp.And(x => x.SurveyType == queryDto.SurveyType);
+            var surveyType = queryDto.SurveyType.Value;
+            exp = exp.And(x => x.SurveyType == surveyType);
         }
 
         if (queryDto?.SurveyPeriod.HasValue == true)
         {
-            exp = exp.And(x => x.SurveyPeriod == queryDto.SurveyPeriod);
+            var surveyPeriod = queryDto.SurveyPeriod.Value;
+            exp = exp.And(x => x.SurveyPeriod == surveyPeriod);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SurveyorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SurveyorBy))
         {
-            exp = exp.And(x => x.SurveyorBy != null && x.SurveyorBy.Contains(queryDto.SurveyorBy));
+            var surveyorBy = queryDto.SurveyorBy;
+            exp = exp.And(x => x.SurveyorBy != null && x.SurveyorBy.Contains(surveyorBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerContact))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerContact))
         {
-            exp = exp.And(x => x.CustomerContact != null && x.CustomerContact.Contains(queryDto.CustomerContact));
+            var customerContact = queryDto.CustomerContact;
+            exp = exp.And(x => x.CustomerContact != null && x.CustomerContact.Contains(customerContact));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerPhone))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerPhone))
         {
-            exp = exp.And(x => x.CustomerPhone != null && x.CustomerPhone.Contains(queryDto.CustomerPhone));
+            var customerPhone = queryDto.CustomerPhone;
+            exp = exp.And(x => x.CustomerPhone != null && x.CustomerPhone.Contains(customerPhone));
         }
 
         if (queryDto?.OverallSatisfaction.HasValue == true)
         {
-            exp = exp.And(x => x.OverallSatisfaction == queryDto.OverallSatisfaction);
+            var overallSatisfaction = queryDto.OverallSatisfaction.Value;
+            exp = exp.And(x => x.OverallSatisfaction == overallSatisfaction);
         }
 
         if (queryDto?.TotalScore.HasValue == true)
         {
-            exp = exp.And(x => x.TotalScore == queryDto.TotalScore);
+            var totalScore = queryDto.TotalScore.Value;
+            exp = exp.And(x => x.TotalScore == totalScore);
         }
 
         if (queryDto?.QualityScore.HasValue == true)
         {
-            exp = exp.And(x => x.QualityScore == queryDto.QualityScore);
+            var qualityScore = queryDto.QualityScore.Value;
+            exp = exp.And(x => x.QualityScore == qualityScore);
         }
 
         if (queryDto?.DeliveryScore.HasValue == true)
         {
-            exp = exp.And(x => x.DeliveryScore == queryDto.DeliveryScore);
+            var deliveryScore = queryDto.DeliveryScore.Value;
+            exp = exp.And(x => x.DeliveryScore == deliveryScore);
         }
 
         if (queryDto?.ServiceScore.HasValue == true)
         {
-            exp = exp.And(x => x.ServiceScore == queryDto.ServiceScore);
+            var serviceScore = queryDto.ServiceScore.Value;
+            exp = exp.And(x => x.ServiceScore == serviceScore);
         }
 
         if (queryDto?.PriceScore.HasValue == true)
         {
-            exp = exp.And(x => x.PriceScore == queryDto.PriceScore);
+            var priceScore = queryDto.PriceScore.Value;
+            exp = exp.And(x => x.PriceScore == priceScore);
         }
 
         if (queryDto?.TechnicalScore.HasValue == true)
         {
-            exp = exp.And(x => x.TechnicalScore == queryDto.TechnicalScore);
+            var technicalScore = queryDto.TechnicalScore.Value;
+            exp = exp.And(x => x.TechnicalScore == technicalScore);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerPraise))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerPraise))
         {
-            exp = exp.And(x => x.CustomerPraise != null && x.CustomerPraise.Contains(queryDto.CustomerPraise));
+            var customerPraise = queryDto.CustomerPraise;
+            exp = exp.And(x => x.CustomerPraise != null && x.CustomerPraise.Contains(customerPraise));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerFeedback))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerFeedback))
         {
-            exp = exp.And(x => x.CustomerFeedback != null && x.CustomerFeedback.Contains(queryDto.CustomerFeedback));
+            var customerFeedback = queryDto.CustomerFeedback;
+            exp = exp.And(x => x.CustomerFeedback != null && x.CustomerFeedback.Contains(customerFeedback));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ImprovementPlan))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ImprovementPlan))
         {
-            exp = exp.And(x => x.ImprovementPlan != null && x.ImprovementPlan.Contains(queryDto.ImprovementPlan));
+            var improvementPlan = queryDto.ImprovementPlan;
+            exp = exp.And(x => x.ImprovementPlan != null && x.ImprovementPlan.Contains(improvementPlan));
         }
 
         if (queryDto?.RelatedComplaintId.HasValue == true)
         {
-            exp = exp.And(x => x.RelatedComplaintId == queryDto.RelatedComplaintId);
+            var relatedComplaintId = queryDto.RelatedComplaintId.Value;
+            exp = exp.And(x => x.RelatedComplaintId == relatedComplaintId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Attachments))
         {
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
+            var attachments = queryDto.Attachments;
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(attachments));
         }
 
         if (queryDto?.SurveyStatus.HasValue == true)
         {
-            exp = exp.And(x => x.SurveyStatus == queryDto.SurveyStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
-        {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var surveyStatus = queryDto.SurveyStatus.Value;
+            exp = exp.And(x => x.SurveyStatus == surveyStatus);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.FollowUpStatus.HasValue == true)
         {
-            exp = exp.And(x => x.FollowUpStatus == queryDto.FollowUpStatus);
+            var followUpStatus = queryDto.FollowUpStatus.Value;
+            exp = exp.And(x => x.FollowUpStatus == followUpStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.SurveyDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.SurveyDate >= queryDto.SurveyDateStart);
+            var surveyDateStart = queryDto.SurveyDateStart.Value;
+            exp = exp.And(x => x.SurveyDate >= surveyDateStart);
         }
 
         if (queryDto?.SurveyDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.SurveyDate <= queryDto.SurveyDateEnd);
+            var surveyDateEnd = queryDto.SurveyDateEnd.Value;
+            exp = exp.And(x => x.SurveyDate <= surveyDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCustomerSatisfactionSurveyQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerSatisfactionSurveyCode))
+        {
+            return true;
+        }
+        if (queryDto.CustomerId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerCode))
+        {
+            return true;
+        }
+        if (queryDto.SurveyMethod.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SurveyType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SurveyPeriod.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SurveyorBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerContact))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerPhone))
+        {
+            return true;
+        }
+        if (queryDto.OverallSatisfaction.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.QualityScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DeliveryScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ServiceScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PriceScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TechnicalScore.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerPraise))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerFeedback))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ImprovementPlan))
+        {
+            return true;
+        }
+        if (queryDto.RelatedComplaintId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Attachments))
+        {
+            return true;
+        }
+        if (queryDto.SurveyStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.FollowUpStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.SurveyDateStart.HasValue || queryDto.SurveyDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

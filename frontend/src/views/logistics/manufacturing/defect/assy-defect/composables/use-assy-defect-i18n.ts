@@ -20,10 +20,9 @@ export const ASSYDEFECT_SELF_I18N_KEY = buildEntitySelfI18nKey(ASSYDEFECT_ENTITY
 
 /** 列表业务列（不含主键） */
 export const ASSYDEFECT_LIST_FIELDS = [
-  'plantCode',
   'prodCategory',
   'prodDate',
-  'TeamCode',
+  'teamCode',
   'shiftNo',
   'prodOrderType',
   'prodOrderCode',
@@ -39,17 +38,17 @@ export const ASSYDEFECT_LIST_FIELDS = [
 export const ASSYDEFECT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'required',
-  prodCategory: 'required',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  prodCategory: 'select',
   prodDate: 'select',
-  TeamCode: 'required',
+  teamCode: 'select',
   shiftNo: 'select',
-  prodOrderType: 'required',
+  prodOrderType: 'optional',
   prodOrderCode: 'required',
   prodOrderQty: 'select',
   modelCode: 'required',
-  batchCode: 'required',
+  batchCode: 'optional',
   materialCode: 'required',
   prodActualQty: 'select',
   goodQuantity: 'select',
@@ -62,11 +61,12 @@ export type AssyDefectField = keyof typeof ASSYDEFECT_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const ASSYDEFECT_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'prodCategory',
   'prodDateStart',
   'prodDateEnd',
-  'TeamCode',
+  'teamCode',
   'prodOrderType',
   'prodOrderCode',
   'modelCode',

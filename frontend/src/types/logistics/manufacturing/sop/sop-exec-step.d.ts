@@ -59,7 +59,7 @@ export interface SopExecStep extends CompanyDtoBase {
   confirmedBy?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no，扫码 NG 等）
    */
   blockNextStep?: number;
 
@@ -132,7 +132,7 @@ export interface SopExecStepExport {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no，扫码 NG 等）
    */
   blockNextStep: number;
 

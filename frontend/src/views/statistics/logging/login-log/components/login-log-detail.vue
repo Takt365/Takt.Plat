@@ -26,7 +26,7 @@
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.loginlog.username')">
-                  <a-input :value="text(detail.username)" size="small" disabled />
+                  <a-input :value="text(detail.userName)" size="small" disabled />
                 </a-form-item>
               </a-col>
               <a-col :span="24">

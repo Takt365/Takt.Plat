@@ -168,7 +168,7 @@ public static class TaktMailHelper
             if (email.SkipSslCertificateValidation)
                 client.ServerCertificateValidationCallback = (_, _2, _3, _4) => true;
             await client.ConnectAsync(email.SmtpHost, email.SmtpPort, email.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
-            await client.AuthenticateAsync(email.SmtpUsername, email.SmtpPassword);
+            await client.AuthenticateAsync(email.SmtpUserName, email.SmtpPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
 
@@ -368,7 +368,7 @@ public static class TaktMailHelper
             if (email.SkipSslCertificateValidation)
                 client.ServerCertificateValidationCallback = (_, _2, _3, _4) => true;
             await client.ConnectAsync(email.SmtpHost, email.SmtpPort, email.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
-            await client.AuthenticateAsync(email.SmtpUsername, email.SmtpPassword);
+            await client.AuthenticateAsync(email.SmtpUserName, email.SmtpPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
 
@@ -518,7 +518,7 @@ public static class TaktMailHelper
             if (email.SkipSslCertificateValidation)
                 client.ServerCertificateValidationCallback = (_, _2, _3, _4) => true;
             await client.ConnectAsync(email.SmtpHost, email.SmtpPort, email.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
-            await client.AuthenticateAsync(email.SmtpUsername, email.SmtpPassword);
+            await client.AuthenticateAsync(email.SmtpUserName, email.SmtpPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
 
@@ -555,12 +555,12 @@ public static class TaktMailHelper
     {
         ArgumentNullException.ThrowIfNull(email);
         if (string.IsNullOrWhiteSpace(email.SmtpHost)
-            || string.IsNullOrWhiteSpace(email.SmtpUsername)
+            || string.IsNullOrWhiteSpace(email.SmtpUserName)
             || string.IsNullOrWhiteSpace(email.FromEmail)
             || string.IsNullOrWhiteSpace(email.FromName))
         {
             throw new InvalidOperationException(
-                "邮件 SMTP 凭据不完整，请在 appsettings Email 节配置 SmtpHost/SmtpUsername/FromEmail/FromName");
+                "邮件 SMTP 凭据不完整，请在 appsettings Email 节配置 SmtpHost/SmtpUserName/FromEmail/FromName");
         }
     }
 }

@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { Overtime } from '@/types/human-resource/attendance/overtime'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type OvertimeRowRecord = Overtime | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface OvertimeMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<Overtime | null>
+  selectedMasterRow: Ref<OvertimeRowRecord | null>
 }
 
 const overtimeMasterContextKey: InjectionKey<OvertimeMasterContext> = Symbol('overtimeMasterContext')
@@ -22,7 +25,7 @@ const overtimeMasterContextKey: InjectionKey<OvertimeMasterContext> = Symbol('ov
  * @returns {OvertimeMasterContext} 主表上下文
  */
 export function provideOvertimeMasterContext(): OvertimeMasterContext {
-  const selectedMasterRow = ref<Overtime | null>(null)
+  const selectedMasterRow = ref<OvertimeRowRecord | null>(null)
   const ctx: OvertimeMasterContext = { selectedMasterRow }
   provide(overtimeMasterContextKey, ctx)
   return ctx

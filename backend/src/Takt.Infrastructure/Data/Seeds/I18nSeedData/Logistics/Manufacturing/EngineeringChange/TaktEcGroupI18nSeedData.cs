@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGroupI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,31 +145,31 @@ public class TaktEcGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgroup.contactemail", "zh-HK", "联系邮箱_hk", "联系邮箱"),
 
             // entity.ecgroup.isbuiltin
-            new TranslationSeedItem("entity.ecgroup.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.ecgroup.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.ecgroup.isbuiltin
-            new TranslationSeedItem("entity.ecgroup.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.ecgroup.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.ecgroup.isbuiltin
-            new TranslationSeedItem("entity.ecgroup.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.ecgroup.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
             // entity.ecgroup.isbuiltin
-            new TranslationSeedItem("entity.ecgroup.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.ecgroup.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),
 
             // entity.ecgroup.sortorder
-            new TranslationSeedItem("entity.ecgroup.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.ecgroup.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),
             // entity.ecgroup.sortorder
-            new TranslationSeedItem("entity.ecgroup.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.ecgroup.sortorder", "ja-JP", "排序号_jp", "排序号（回填）（越小越靠前）"),
             // entity.ecgroup.sortorder
-            new TranslationSeedItem("entity.ecgroup.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.ecgroup.sortorder", "zh-CN", "排序号", "排序号（回填）（越小越靠前）"),
             // entity.ecgroup.sortorder
-            new TranslationSeedItem("entity.ecgroup.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.ecgroup.sortorder", "zh-HK", "排序号_hk", "排序号（回填）（越小越靠前）"),
 
             // entity.ecgroup.groupstatus
-            new TranslationSeedItem("entity.ecgroup.groupstatus", "en-US", "设变组状态_us", "设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.ecgroup.groupstatus", "en-US", "设变组状态_us", "设变组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.ecgroup.groupstatus
-            new TranslationSeedItem("entity.ecgroup.groupstatus", "ja-JP", "设变组状态_jp", "设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.ecgroup.groupstatus", "ja-JP", "设变组状态_jp", "设变组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.ecgroup.groupstatus
-            new TranslationSeedItem("entity.ecgroup.groupstatus", "zh-CN", "设变组状态", "设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.ecgroup.groupstatus", "zh-CN", "设变组状态", "设变组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
             // entity.ecgroup.groupstatus
-            new TranslationSeedItem("entity.ecgroup.groupstatus", "zh-HK", "设变组状态_hk", "设变组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.ecgroup.groupstatus", "zh-HK", "设变组状态_hk", "设变组状态（字典 sys_normal_disable；1=启用，0=禁用）"),
         };
     }
 

@@ -20,7 +20,6 @@ export const PURCHASEORDER_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASEORDER_
 
 /** 列表业务列（不含主键） */
 export const PURCHASEORDER_LIST_FIELDS = [
-  'plantCode',
   'purchaseOrderCode',
   'purchaseRequestId',
   'purchaseRequestCode',
@@ -47,43 +46,12 @@ export const PURCHASEORDER_LIST_FIELDS = [
   'deliveryAddress',
   'orderStatus',
   'deliveryStatus',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEORDER_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  purchaseOrderCode: 'required',
-  purchaseRequestId: 'optional',
-  purchaseRequestCode: 'optional',
-  supplierCode: 'select',
-  supplierName1: 'required',
-  orderDate: 'select',
-  requiredArrivalDate: 'optional',
-  actualArrivalDate: 'optional',
-  purchaseGroup: 'optional',
-  totalQuantity: 'select',
-  totalAmount: 'select',
-  discountAmount: 'select',
-  currencyCode: 'select',
-  exchangeRate: 'select',
-  taxCode: 'optional',
-  taxRate: 'select',
-  taxAmount: 'select',
-  actualAmount: 'select',
-  receivedQuantity: 'select',
-  receivedAmount: 'select',
-  paidAmount: 'select',
-  paymentMethod: 'select',
-  deliveryMethod: 'select',
-  deliveryAddress: 'optional',
-  orderStatus: 'select',
-  deliveryStatus: 'select',
-  cultureCode: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -91,51 +59,13 @@ export type PurchaseOrderField = keyof typeof PURCHASEORDER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEORDER_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'purchaseOrderCode',
-  'purchaseRequestId',
-  'purchaseRequestCode',
-  'supplierCode',
-  'supplierName1',
-  'orderDateStart',
-  'orderDateEnd',
-  'requiredArrivalDateStart',
-  'requiredArrivalDateEnd',
-  'actualArrivalDateStart',
-  'actualArrivalDateEnd',
-  'purchaseGroup',
-  'currencyCode',
-  'taxCode',
-  'deliveryAddress',
-  'createdAtStart',
-  'createdAtEnd',
-  'cultureCode',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof PurchaseOrderQuery)[]
 
-export type PurchaseOrderQueryField =
-  | (typeof PURCHASEORDER_QUERY_STRING_FIELDS)[number]
-  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'exchangeRate' | 'taxRate' | 'taxAmount' | 'actualAmount' | 'receivedQuantity' | 'receivedAmount' | 'paidAmount' | 'paymentMethod' | 'deliveryMethod' | 'orderStatus' | 'deliveryStatus'
+export type PurchaseOrderQueryField = (typeof PURCHASEORDER_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEORDER_QUERY_FIELDS: readonly PurchaseOrderQueryField[] = [
-  ...PURCHASEORDER_QUERY_STRING_FIELDS,
-  'totalQuantity',
-  'totalAmount',
-  'discountAmount',
-  'exchangeRate',
-  'taxRate',
-  'taxAmount',
-  'actualAmount',
-  'receivedQuantity',
-  'receivedAmount',
-  'paidAmount',
-  'paymentMethod',
-  'deliveryMethod',
-  'orderStatus',
-  'deliveryStatus',
-]
+export const PURCHASEORDER_QUERY_FIELDS: readonly PurchaseOrderQueryField[] = [...PURCHASEORDER_QUERY_STRING_FIELDS]
 
 /**
  * Takt采购订单实体字段 i18n：index / purchase-order-form 统一入口

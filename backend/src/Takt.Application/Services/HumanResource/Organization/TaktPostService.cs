@@ -446,7 +446,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
 
         if (queryDto?.DeptId.HasValue == true)
         {
-            var deptId = queryDto.DeptId;
+            var deptId = queryDto.DeptId.Value;
             exp = exp.And(x => x.DeptId == deptId);
         }
 
@@ -470,13 +470,13 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
 
         if (queryDto?.Headcount.HasValue == true)
         {
-            var headcount = queryDto.Headcount;
+            var headcount = queryDto.Headcount.Value;
             exp = exp.And(x => x.Headcount == headcount);
         }
 
         if (queryDto?.CurrentCount.HasValue == true)
         {
-            var currentCount = queryDto.CurrentCount;
+            var currentCount = queryDto.CurrentCount.Value;
             exp = exp.And(x => x.CurrentCount == currentCount);
         }
 
@@ -494,31 +494,31 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
 
         if (queryDto?.EducationRequired.HasValue == true)
         {
-            var educationRequired = queryDto.EducationRequired;
+            var educationRequired = queryDto.EducationRequired.Value;
             exp = exp.And(x => x.EducationRequired == educationRequired);
         }
 
         if (queryDto?.ExperienceYears.HasValue == true)
         {
-            var experienceYears = queryDto.ExperienceYears;
+            var experienceYears = queryDto.ExperienceYears.Value;
             exp = exp.And(x => x.ExperienceYears == experienceYears);
         }
 
         if (queryDto?.SalaryMin.HasValue == true)
         {
-            var salaryMin = queryDto.SalaryMin;
+            var salaryMin = queryDto.SalaryMin.Value;
             exp = exp.And(x => x.SalaryMin == salaryMin);
         }
 
         if (queryDto?.SalaryMax.HasValue == true)
         {
-            var salaryMax = queryDto.SalaryMax;
+            var salaryMax = queryDto.SalaryMax.Value;
             exp = exp.And(x => x.SalaryMax == salaryMax);
         }
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            var isBuiltIn = queryDto.IsBuiltIn;
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
             exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
@@ -530,13 +530,13 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.PostStatus.HasValue == true)
         {
-            var postStatus = queryDto.PostStatus;
+            var postStatus = queryDto.PostStatus.Value;
             exp = exp.And(x => x.PostStatus == postStatus);
         }
 
@@ -554,13 +554,13 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

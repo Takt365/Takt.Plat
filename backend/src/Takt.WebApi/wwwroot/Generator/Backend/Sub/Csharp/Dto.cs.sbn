@@ -338,7 +338,7 @@ public class {{ table.entity_class_name }}SortDto
     public long {{ table.entity_class_name | string.replace "Takt" "" }}Id { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int OrderNum { get; set; }
 }

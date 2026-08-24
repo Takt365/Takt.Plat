@@ -242,12 +242,12 @@ public class TaktCompany : TaktTenantEntityBase
     [SugarColumn(ColumnName = "financial_management_area", ColumnDescription = "财务管理范围", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "")]
     public string FinancialManagementArea { get; set; } = string.Empty;
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 公司状态（字典 sys_normal_disable_status）
+    /// 公司状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "company_status", ColumnDescription = "公司状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CompanyStatus { get; set; } = 1;

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-moving-trend/components -->
 <!-- 文件名称：material-moving-trend-panel.vue -->
-<!-- 功能描述：物料月移动价格推移 / 物料-机种-价格推移转置涨跌表 -->
+<!-- 功能描述：物料月移动价格推移转置涨跌表 -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -30,44 +30,44 @@
       >
         <template #bodyCell="{ column, record, text }">
           <template v-if="String(column.key).startsWith('period_')">
-            <template v-if="props.activeTab === 'price' && isCarriedPeriodPrice(record as MaterialMovingPriceMonthlyTrend, String(column.key))">
+            <template v-if="isCarriedPeriodPrice(record as MaterialMovingTrend, String(column.key))">
               <a-tooltip
-                :title="carriedPeriodTooltip(record as MaterialMovingPriceMonthlyTrend, String(column.key))"
+                :title="carriedPeriodTooltip(record as MaterialMovingTrend, String(column.key))"
               >
                 <span class="cursor-help border-b border-dotted border-text-secondary text-text-secondary">
-                  {{ formatPeriodPrice(record as MaterialMovingPriceMonthlyTrend, String(column.key)) }}*
+                  {{ formatPeriodPrice(record as MaterialMovingTrend, String(column.key)) }}*
                 </span>
               </a-tooltip>
             </template>
             <template v-else>
-              {{ formatPeriodPrice(record as MaterialMovingPriceMonthlyTrend, String(column.key)) }}
+              {{ formatPeriodPrice(record as MaterialMovingTrend, String(column.key)) }}
             </template>
           </template>
           <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
-              :value="(record as MaterialMovingPriceMonthlyTrend).currencyCode"
+              :value="(record as MaterialMovingTrend).currencyCode"
               dict-type="accounting_currency_code"
             />
           </template>
           <template v-else-if="column.key === 'valuation'">
             <TaktDictTag
-              :value="(record as MaterialMovingPriceMonthlyTrend).valuation"
+              :value="(record as MaterialMovingTrend).valuation"
               dict-type="logistics_valuation_class_category"
             />
           </template>
           <template v-else-if="column.key === 'trend'">
-            <span :class="trendClass((record as MaterialMovingPriceMonthlyTrend).trend || 'none')">
-              {{ trendLabel((record as MaterialMovingPriceMonthlyTrend).trend || 'none') }}
+            <span :class="trendClass((record as MaterialMovingTrend).trend || 'none')">
+              {{ trendLabel((record as MaterialMovingTrend).trend || 'none') }}
             </span>
           </template>
           <template v-else-if="column.key === 'varianceAmount'">
-            <span :class="varianceClass((record as MaterialMovingPriceMonthlyTrend).varianceAmount)">
-              {{ formatCost((record as MaterialMovingPriceMonthlyTrend).varianceAmount) }}
+            <span :class="varianceClass((record as MaterialMovingTrend).varianceAmount)">
+              {{ formatCost((record as MaterialMovingTrend).varianceAmount) }}
             </span>
           </template>
           <template v-else-if="column.key === 'variancePercent'">
-            <span :class="varianceClass((record as MaterialMovingPriceMonthlyTrend).varianceAmount)">
-              {{ formatPercent((record as MaterialMovingPriceMonthlyTrend).variancePercent) }}
+            <span :class="varianceClass((record as MaterialMovingTrend).varianceAmount)">
+              {{ formatPercent((record as MaterialMovingTrend).variancePercent) }}
             </span>
           </template>
           <template v-else>
@@ -108,21 +108,16 @@
 
 <script setup lang="ts">
 /**
- * 物料移动价格推移：物料价格 / 物料-机种-价格转置涨跌表
+ * 物料移动价格推移转置涨跌表
  */
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import {
-  exportMaterialMovingPriceModelTrendAnalysis,
-  exportMaterialMovingPriceMonthlyTrendAnalysis,
-  getMaterialMovingPriceModelTrendAnalysis,
-  getMaterialMovingPriceMonthlyTrendAnalysis,
+  exportMaterialMovingTrendAnalysis,
+  getMaterialMovingTrendAnalysis,
 } from '@/api/logistics/materials/material-moving-trend'
-import type {
-  MaterialMovingPriceModelTrend,
-  MaterialMovingPriceMonthlyTrend,
-} from '@/types/logistics/materials/material-moving-trend'
+import type { MaterialMovingTrend } from '@/types/logistics/materials/material-moving-trend'
 import { useTableRefresh } from '@/composables/use-table-refresh'
 import {
   ensureTaktPaginationConfigAsync,
@@ -135,14 +130,10 @@ import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 const props = defineProps<{
   /** 涨跌筛选 */
   trendFilter?: string
-  /** 当前 Tab */
-  activeTab: 'price' | 'model'
   /** 工厂代码 */
   plantCode?: string
   /** 期间年月 */
   periodRange?: [string, string] | null
-  /** 产品物料类型（机种推移必填） */
-  materialType?: string
   /** 评估类别 */
   valuation?: string
   /** 物料编码 */
@@ -157,7 +148,7 @@ const localePrefix = 'logistics.materials.material-moving-trend.page'
 const { t } = useI18n()
 
 /** 行数据 */
-const rows = ref<Array<MaterialMovingPriceMonthlyTrend | MaterialMovingPriceModelTrend>>([])
+const rows = ref<MaterialMovingTrend[]>([])
 /** 期间列 */
 const periodOrder = ref<string[]>([])
 /** 物料行总数（筛选后） */
@@ -189,81 +180,11 @@ const summaryText = computed(() => {
   if (!hasQuery.value) {
     return t(`${localePrefix}.selectPlantRequired`)
   }
-  return t(
-    props.activeTab === 'model' ? `${localePrefix}.summaryModel` : `${localePrefix}.summary`,
-    { count: materialCount.value },
-  )
+  return t(`${localePrefix}.summary`, { count: materialCount.value })
 })
 
 /** 动态列 */
 const columns = computed<TableColumnsType>(() => {
-  if (props.activeTab === 'model') {
-    const cols: TableColumnsType = [
-      {
-        title: t('entity.materialmovingprice.materialcode'),
-        dataIndex: 'materialCode',
-        key: 'materialCode',
-        width: 140,
-        ellipsis: true,
-        fixed: 'left',
-      },
-      {
-        title: t(`${localePrefix}.columns.modelGroup`),
-        dataIndex: 'modelGroup',
-        key: 'modelGroup',
-        width: 220,
-        ellipsis: true,
-      },
-      {
-        title: t(`${localePrefix}.columns.productGroup`),
-        dataIndex: 'productGroup',
-        key: 'productGroup',
-        width: 220,
-        ellipsis: true,
-      },
-      {
-        title: t(`${localePrefix}.columns.materialText`),
-        dataIndex: 'materialText',
-        key: 'materialText',
-        width: 180,
-        ellipsis: true,
-      }]
-    for (const period of periodOrder.value) {
-      cols.push({
-        title: period,
-        dataIndex: ['periodUnitPrices', period],
-        key: `period_${period}`,
-        width: 110,
-        align: 'right',
-      })
-    }
-    cols.push(
-      {
-        title: t(`${localePrefix}.columns.trend`),
-        dataIndex: 'trend',
-        key: 'trend',
-        width: 80,
-        fixed: 'right',
-      },
-      {
-        title: t(`${localePrefix}.columns.varianceAmount`),
-        dataIndex: 'varianceAmount',
-        key: 'varianceAmount',
-        width: 110,
-        align: 'right',
-        fixed: 'right',
-      },
-      {
-        title: t(`${localePrefix}.columns.variancePercent`),
-        dataIndex: 'variancePercent',
-        key: 'variancePercent',
-        width: 90,
-        align: 'right',
-        fixed: 'right',
-      },
-    )
-    return cols
-  }
   const cols: TableColumnsType = [
     {
       title: t('entity.materialmovingprice.materialcode'),
@@ -334,10 +255,10 @@ const visibleColumnKeys = computed(() => columns.value.map((c) => String(c.key))
 
 /**
  * 行主键
- * @param {MaterialMovingPriceMonthlyTrend} record 行
+ * @param {MaterialMovingTrend} record 行
  * @returns {string} key
  */
-function getRowKey(record: MaterialMovingPriceMonthlyTrend): string {
+function getRowKey(record: MaterialMovingTrend): string {
   return `${record.plantCode}|${record.materialCode}`
 }
 
@@ -394,11 +315,11 @@ function varianceClass(amount?: number | null): string {
 
 /**
  * 格式化期间单价
- * @param {MaterialMovingPriceMonthlyTrend} record 行
+ * @param {MaterialMovingTrend} record 行
  * @param {string} columnKey period_yyyy-MM
  * @returns {string} 文本
  */
-function formatPeriodPrice(record: MaterialMovingPriceMonthlyTrend, columnKey: string): string {
+function formatPeriodPrice(record: MaterialMovingTrend, columnKey: string): string {
   const period = columnKey.replace(/^period_/, '')
   const value = record.periodUnitPrices?.[period]
   if (value == null || Number.isNaN(value)) return '—'
@@ -407,11 +328,11 @@ function formatPeriodPrice(record: MaterialMovingPriceMonthlyTrend, columnKey: s
 
 /**
  * 是否回填价
- * @param {MaterialMovingPriceMonthlyTrend} record 行
+ * @param {MaterialMovingTrend} record 行
  * @param {string} columnKey period_yyyy-MM
  * @returns {boolean} 是否回填
  */
-function isCarriedPeriodPrice(record: MaterialMovingPriceMonthlyTrend, columnKey: string): boolean {
+function isCarriedPeriodPrice(record: MaterialMovingTrend, columnKey: string): boolean {
   const period = columnKey.replace(/^period_/, '')
   const price = record.periodUnitPrices?.[period]
   if (price == null || Number.isNaN(price)) return false
@@ -422,11 +343,11 @@ function isCarriedPeriodPrice(record: MaterialMovingPriceMonthlyTrend, columnKey
 
 /**
  * 回填悬停提示
- * @param {MaterialMovingPriceMonthlyTrend} record 行
+ * @param {MaterialMovingTrend} record 行
  * @param {string} columnKey period_yyyy-MM
  * @returns {string} 提示
  */
-function carriedPeriodTooltip(record: MaterialMovingPriceMonthlyTrend, columnKey: string): string {
+function carriedPeriodTooltip(record: MaterialMovingTrend, columnKey: string): string {
   const period = columnKey.replace(/^period_/, '')
   const source = record.periodPriceSourcePeriods?.[period] || '—'
   return t(`${localePrefix}.carriedFrom`, { period: source })
@@ -459,17 +380,11 @@ function periodRangeToQuery(range: [string, string] | null | undefined) {
 function buildQuery() {
   const plant = props.plantCode?.trim()
   const val = props.valuation?.trim()
-  const type = props.materialType?.trim()
   if (!plant || !val) {
-    return null
-  }
-  // 机种推移仍须物料类型；物料价格推移仅工厂+评估类别
-  if (props.activeTab === 'model' && !type) {
     return null
   }
   return {
     plantCode: plant,
-    materialType: type || undefined,
     valuation: val,
     materialCode: props.materialCode?.trim() || undefined,
     trendFilter: props.trendFilter || undefined,
@@ -503,9 +418,7 @@ async function loadData() {
   }
   loading.value = true
   try {
-    const result = props.activeTab === 'model'
-      ? await getMaterialMovingPriceModelTrendAnalysis(query)
-      : await getMaterialMovingPriceMonthlyTrendAnalysis(query)
+    const result = await getMaterialMovingTrendAnalysis(query)
     rows.value = result.paged?.data ?? []
     total.value = result.paged?.total ?? 0
     periodOrder.value = result.periodOrder ?? []
@@ -556,10 +469,7 @@ async function handleExport() {
     return
   }
   try {
-    const exportFn = props.activeTab === 'model'
-      ? exportMaterialMovingPriceModelTrendAnalysis
-      : exportMaterialMovingPriceMonthlyTrendAnalysis
-    const exportMeta = await exportFn({
+    const exportMeta = await exportMaterialMovingTrendAnalysis({
       ...query,
       pageIndex: 1,
       pageSize: 1,
@@ -568,9 +478,7 @@ async function handleExport() {
     const fileName = resolveExportDownloadFileName({
       contentDisposition: (exportMeta as { contentDisposition?: string | null }).contentDisposition ?? null,
       contentType: (exportMeta as { contentType?: string | null }).contentType ?? null,
-      fallbackBase: props.activeTab === 'model'
-        ? `material-model-trend_${query.plantCode}`
-        : `material-moving-trend_${query.plantCode}`,
+      fallbackBase: `material-moving-trend_${query.plantCode}`,
     })
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -611,7 +519,7 @@ function stopTableScrollObserve(): void {
 }
 
 watch(
-  () => [props.trendFilter, props.activeTab] as const,
+  () => props.trendFilter,
   () => {
     if (props.plantCode?.trim()) {
       void reload()

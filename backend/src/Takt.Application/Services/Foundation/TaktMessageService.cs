@@ -98,7 +98,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             orderBy: x => x.CreatedAt,
             isDesc: true);
         var dtos = items.Adapt<List<TaktMessageDto>>();
-        await FillMessageSenderNicknamesAsync(dtos);
+        await FillMessageSenderNickNamesAsync(dtos);
         return TaktPagedResult<TaktMessageDto>.Create(dtos, total, queryDto.PageIndex, queryDto.PageSize);
     }
 
@@ -138,7 +138,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             return null;
         }
         var dto = entity.Adapt<TaktMessageDto>();
-        await FillMessageSenderNicknamesAsync(new List<TaktMessageDto> { dto });
+        await FillMessageSenderNickNamesAsync(new List<TaktMessageDto> { dto });
         return dto;
     }
 
@@ -429,7 +429,8 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             ToUserId = entity.ToUserId,
             MessageTitle = entity.MessageTitle,
             MessageContent = entity.MessageContent,
-            Attachments = entity.MessageAttachments,
+            FileName = entity.FileName,
+            AccessUrl = entity.AccessUrl,
             MessageType = entity.MessageType,
             MessageGroup = entity.MessageGroup,
             SendTime = entity.SendTime,
@@ -499,7 +500,8 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             ToUserId = entity.ToUserId,
             MessageTitle = entity.MessageTitle,
             MessageContent = entity.MessageContent,
-            Attachments = entity.MessageAttachments,
+            FileName = entity.FileName,
+            AccessUrl = entity.AccessUrl,
             MessageType = entity.MessageType,
             MessageGroup = entity.MessageGroup,
             SendTime = entity.SendTime,
@@ -520,8 +522,8 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         EnsureThreeLayerContext();
         ArgumentException.ThrowIfNullOrWhiteSpace(messageContent);
         var userId = CurrentUserId ?? 0L;
-        var userName = CurrentUserName?.Trim() ?? string.Empty;
-        if (userId <= 0 || string.IsNullOrWhiteSpace(userName))
+        var UserName = CurrentUserName?.Trim() ?? string.Empty;
+        if (userId <= 0 || string.IsNullOrWhiteSpace(UserName))
         {
             throw new TaktBusinessException("操作消息缺少当前用户信息");
         }
@@ -536,9 +538,9 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             TenantCode = CurrentTenantCode,
             CompanyCode = CurrentCompanyCode,
             FromUserId = userId,
-            FromUserName = userName,
+            FromUserName = UserName,
             ToUserId = userId,
-            ToUserName = userName,
+            ToUserName = UserName,
             MessageTitle = BuildAutoMessageTitle(messageType, group, content),
             MessageContent = content,
             MessageType = messageType,
@@ -560,7 +562,8 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             ToUserId = entity.ToUserId,
             MessageTitle = entity.MessageTitle,
             MessageContent = entity.MessageContent,
-            Attachments = entity.MessageAttachments,
+            FileName = entity.FileName,
+            AccessUrl = entity.AccessUrl,
             MessageType = entity.MessageType,
             MessageGroup = entity.MessageGroup,
             SendTime = entity.SendTime,
@@ -641,17 +644,17 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// <summary>
     /// 获取指定用户未读消息数量（SignalR Hub 调用）
     /// </summary>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <returns>未读数量</returns>
-    public Task<int> GetUnreadMessageCountAsync(string userName)
+    public Task<int> GetUnreadMessageCountAsync(string UserName)
     {
         EnsureThreeLayerContext();
-        if (string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(UserName))
         {
             throw new TaktBusinessException("用户名不能为空");
         }
 
-        return CountInboxMessagesAsync(userName.Trim(), recipientUserId: null, 0);
+        return CountInboxMessagesAsync(UserName.Trim(), recipientUserId: null, 0);
     }
 
     /// <summary>
@@ -692,18 +695,18 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// <summary>
     /// 获取指定用户在线消息统计（SignalR 实时推送调用）
     /// </summary>
-    /// <param name="userName">用户名（接收者）</param>
+    /// <param name="UserName">用户名（接收者）</param>
     /// <param name="userId">用户 ID</param>
     /// <returns>统计 DTO</returns>
-    public async Task<TaktMessageStatisticsDto> GetMessageStatisticsByUserNameAsync(string userName, long? userId = null)
+    public async Task<TaktMessageStatisticsDto> GetMessageStatisticsByUserNameAsync(string UserName, long? userId = null)
     {
         EnsureThreeLayerContext();
-        if (string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(UserName))
         {
             throw new TaktBusinessException("用户名不能为空");
         }
 
-        var normalizedUserName = userName.Trim();
+        var normalizedUserName = UserName.Trim();
         long? recipientUserId = null;
         if (userId is > 0)
         {
@@ -808,7 +811,8 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
                 || SqlFunc.ToString(x.IsCc).Contains(keywords)
                 || x.MessageTitle.Contains(keywords)
                 || (x.MessageContent != null && x.MessageContent.Contains(keywords))
-                || (x.MessageAttachments != null && x.MessageAttachments.Contains(keywords))
+                || (x.FileName != null && x.FileName.Contains(keywords))
+                || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || x.MessageType.Contains(keywords)
                 || x.MessageGroup.Contains(keywords)
                 || SqlFunc.ToString(x.ReadStatus).Contains(keywords)
@@ -857,9 +861,13 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             exp = exp.And(x => x.MessageContent != null && x.MessageContent.Contains(queryDto.MessageContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MessageAttachments))
+        if (!string.IsNullOrEmpty(queryDto?.FileName))
         {
-            exp = exp.And(x => x.MessageAttachments != null && x.MessageAttachments.Contains(queryDto.MessageAttachments));
+            exp = exp.And(x => x.FileName != null && x.FileName.Contains(queryDto.FileName));
+        }
+        if (!string.IsNullOrEmpty(queryDto?.AccessUrl))
+        {
+            exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(queryDto.AccessUrl));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.MessageType))
@@ -934,11 +942,11 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     }
 
     /// <summary>
-    /// 批量填充消息 DTO 发送者昵称（来自用户表 Nickname）
+    /// 批量填充消息 DTO 发送者昵称（来自用户表 NickName）
     /// </summary>
     /// <param name="messages">消息 DTO 列表</param>
     /// <returns>任务</returns>
-    private async Task FillMessageSenderNicknamesAsync(IReadOnlyList<TaktMessageDto> messages)
+    private async Task FillMessageSenderNickNamesAsync(IReadOnlyList<TaktMessageDto> messages)
     {
         if (messages == null || messages.Count == 0)
         {
@@ -957,16 +965,16 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
 
         var users = await _userRepository.GetListAsync(user =>
             user.TenantCode == CurrentTenantCode && userIds.Contains(user.Id));
-        var nicknameByUserId = users.ToDictionary(
+        var NickNameByUserId = users.ToDictionary(
             user => user.Id,
-            user => string.IsNullOrWhiteSpace(user.Nickname) ? null : user.Nickname.Trim());
+            user => string.IsNullOrWhiteSpace(user.NickName) ? null : user.NickName.Trim());
 
         foreach (var message in messages)
         {
             if (message.FromUserId > 0
-                && nicknameByUserId.TryGetValue(message.FromUserId, out var nickname))
+                && NickNameByUserId.TryGetValue(message.FromUserId, out var NickName))
             {
-                message.FromUserNickname = nickname;
+                message.FromUserNickName = NickName;
             }
         }
     }
@@ -994,7 +1002,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         if (!toUserId.HasValue || toUserId.Value <= 0)
         {
             var recipient = await _userRepository.FirstAsync(user =>
-                user.TenantCode == CurrentTenantCode && user.Username == toUserName);
+                user.TenantCode == CurrentTenantCode && user.UserName == toUserName);
             toUserId = recipient?.Id;
         }
 
@@ -1006,12 +1014,13 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             MessageId = message.MessageId,
             FromUserName = message.FromUserName,
             FromUserId = message.FromUserId,
-            FromUserNickname = message.FromUserNickname,
+            FromUserNickName = message.FromUserNickName,
             ToUserName = toUserName,
             ToUserId = toUserId,
             MessageTitle = message.MessageTitle,
             MessageContent = message.MessageContent,
-            Attachments = message.MessageAttachments,
+            FileName = message.FileName,
+            AccessUrl = message.AccessUrl,
             MessageType = message.MessageType,
             MessageGroup = message.MessageGroup,
             SendTime = message.SendTime,
@@ -1130,21 +1139,21 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// 解析消息接收者用户 ID
     /// </summary>
     /// <param name="userId">表单或 DTO 传入的用户 ID</param>
-    /// <param name="userName">接收者用户名</param>
+    /// <param name="UserName">接收者用户名</param>
     /// <returns>用户 ID</returns>
     /// <exception cref="TaktBusinessException">无法解析时抛出</exception>
-    private async Task<long> ResolveMessageToUserIdAsync(long userId, string? userName)
+    private async Task<long> ResolveMessageToUserIdAsync(long userId, string? UserName)
     {
         if (userId > 0)
         {
             return userId;
         }
 
-        if (!string.IsNullOrWhiteSpace(userName))
+        if (!string.IsNullOrWhiteSpace(UserName))
         {
-            var normalizedUserName = NormalizeMessageUserNameLabel(userName);
+            var normalizedUserName = NormalizeMessageUserNameLabel(UserName);
             var recipient = await _userRepository.FirstAsync(user =>
-                user.TenantCode == CurrentTenantCode && user.Username == normalizedUserName);
+                user.TenantCode == CurrentTenantCode && user.UserName == normalizedUserName);
             if (recipient != null && recipient.Id > 0)
             {
                 return recipient.Id;
@@ -1158,10 +1167,10 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// 解析消息发送者用户 ID
     /// </summary>
     /// <param name="userId">表单或 DTO 传入的用户 ID</param>
-    /// <param name="userName">发送者用户名</param>
+    /// <param name="UserName">发送者用户名</param>
     /// <returns>用户 ID</returns>
     /// <exception cref="TaktBusinessException">无法解析时抛出</exception>
-    private async Task<long> ResolveMessageFromUserIdAsync(long userId, string? userName)
+    private async Task<long> ResolveMessageFromUserIdAsync(long userId, string? UserName)
     {
         if (userId > 0)
         {
@@ -1173,11 +1182,11 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             return CurrentUserId.Value;
         }
 
-        if (!string.IsNullOrWhiteSpace(userName))
+        if (!string.IsNullOrWhiteSpace(UserName))
         {
-            var normalizedUserName = userName.Trim();
+            var normalizedUserName = UserName.Trim();
             var sender = await _userRepository.FirstAsync(user =>
-                user.TenantCode == CurrentTenantCode && user.Username == normalizedUserName);
+                user.TenantCode == CurrentTenantCode && user.UserName == normalizedUserName);
             if (sender != null && sender.Id > 0)
             {
                 return sender.Id;
@@ -1190,39 +1199,39 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// <summary>
     /// 按登录用户名解析用户 ID 字符串
     /// </summary>
-    /// <param name="userName">登录用户名</param>
+    /// <param name="UserName">登录用户名</param>
     /// <returns>用户 ID 字符串；查无用户时返回 null</returns>
-    private async Task<string?> ResolveMessageUserIdFromUserNameAsync(string userName)
+    private async Task<string?> ResolveMessageUserIdFromUserNameAsync(string UserName)
     {
-        if (string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(UserName))
         {
             return null;
         }
 
         var recipient = await _userRepository.FirstAsync(user =>
-            user.TenantCode == CurrentTenantCode && user.Username == userName.Trim());
+            user.TenantCode == CurrentTenantCode && user.UserName == UserName.Trim());
         return recipient == null || recipient.Id <= 0 ? null : recipient.Id.ToString();
     }
 
     /// <summary>
-    /// 解析消息收发用户名（SignalR 组名须与登录 Username 一致，非下拉展示文案）
+    /// 解析消息收发用户名（SignalR 组名须与登录 UserName 一致，非下拉展示文案）
     /// </summary>
     /// <param name="userId">用户 ID</param>
-    /// <param name="userName">表单传入用户名或展示标签</param>
+    /// <param name="UserName">表单传入用户名或展示标签</param>
     /// <returns>规范化登录用户名</returns>
     /// <exception cref="TaktBusinessException">无法解析时抛出</exception>
-    private async Task<string> ResolveMessageUserNameAsync(long? userId, string? userName)
+    private async Task<string> ResolveMessageUserNameAsync(long? userId, string? UserName)
     {
         if (userId.HasValue && userId.Value > 0)
         {
             var user = await _userRepository.GetByIdAsync(userId.Value);
-            if (user != null && !string.IsNullOrWhiteSpace(user.Username))
+            if (user != null && !string.IsNullOrWhiteSpace(user.UserName))
             {
-                return user.Username.Trim();
+                return user.UserName.Trim();
             }
         }
 
-        var normalized = NormalizeMessageUserNameLabel(userName);
+        var normalized = NormalizeMessageUserNameLabel(UserName);
         if (!string.IsNullOrWhiteSpace(normalized))
         {
             return normalized;
@@ -1234,16 +1243,16 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// <summary>
     /// 从下拉展示标签提取登录用户名（如 admin (昵称) → admin）
     /// </summary>
-    /// <param name="userName">用户名或展示标签</param>
+    /// <param name="UserName">用户名或展示标签</param>
     /// <returns>登录用户名；无法解析时返回空串</returns>
-    private static string NormalizeMessageUserNameLabel(string? userName)
+    private static string NormalizeMessageUserNameLabel(string? UserName)
     {
-        if (string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(UserName))
         {
             return string.Empty;
         }
 
-        var trimmed = userName.Trim();
+        var trimmed = UserName.Trim();
         var parenIndex = trimmed.IndexOf('(');
         if (parenIndex > 0)
         {
@@ -1267,10 +1276,10 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         if (!string.IsNullOrWhiteSpace(normalized))
         {
             var byName = await _userRepository.FirstAsync(user =>
-                user.TenantCode == tenantCode && user.Username == normalized);
-            if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+                user.TenantCode == tenantCode && user.UserName == normalized);
+            if (byName != null && !string.IsNullOrWhiteSpace(byName.UserName))
             {
-                return (byName.Id, byName.Username.Trim());
+                return (byName.Id, byName.UserName.Trim());
             }
         }
 
@@ -1293,10 +1302,10 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         if (!string.IsNullOrWhiteSpace(normalized))
         {
             var byName = await _userRepository.FirstAsync(user =>
-                user.TenantCode == tenantCode && user.Username == normalized);
-            if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+                user.TenantCode == tenantCode && user.UserName == normalized);
+            if (byName != null && !string.IsNullOrWhiteSpace(byName.UserName))
             {
-                return (byName.Id, byName.Username.Trim());
+                return (byName.Id, byName.UserName.Trim());
             }
         }
 
@@ -1305,9 +1314,9 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             var creator = await _userRepository.GetByIdAsync(taskCreatedBy);
             if (creator != null
                 && creator.TenantCode == tenantCode
-                && !string.IsNullOrWhiteSpace(creator.Username))
+                && !string.IsNullOrWhiteSpace(creator.UserName))
             {
-                return (creator.Id, creator.Username.Trim());
+                return (creator.Id, creator.UserName.Trim());
             }
         }
 
@@ -1324,17 +1333,17 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         var byId = await _userRepository.GetByIdAsync(TaktConstants.SystemAuditUser.Id);
         if (byId != null
             && byId.TenantCode == tenantCode
-            && !string.IsNullOrWhiteSpace(byId.Username))
+            && !string.IsNullOrWhiteSpace(byId.UserName))
         {
-            return (byId.Id, byId.Username.Trim());
+            return (byId.Id, byId.UserName.Trim());
         }
 
         var systemName = TaktQuartzConstants.SystemSenderUserName;
         var byName = await _userRepository.FirstAsync(user =>
-            user.TenantCode == tenantCode && user.Username == systemName);
-        if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+            user.TenantCode == tenantCode && user.UserName == systemName);
+        if (byName != null && !string.IsNullOrWhiteSpace(byName.UserName))
         {
-            return (byName.Id, byName.Username.Trim());
+            return (byName.Id, byName.UserName.Trim());
         }
 
         return (TaktConstants.SystemAuditUser.Id, systemName);
@@ -1354,7 +1363,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         string executorUserName,
         string recipientUserName)
     {
-        var statusText = log.ExecuteStatus == TaktExecuteStatus.Success ? "成功" : "失败";
+        var statusText = log.ExecuteStatus == (int)TaktExecuteStatus.Success ? "成功" : "失败";
         var summary = string.IsNullOrWhiteSpace(log.ExecuteMessage)
             ? "（无摘要）"
             : log.ExecuteMessage.Trim();
@@ -1419,9 +1428,9 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             var operatorUser = await _userRepository.GetByIdAsync(fromUserId.Value);
             if (operatorUser != null
                 && operatorUser.TenantCode == tenantCode
-                && !string.IsNullOrWhiteSpace(operatorUser.Username))
+                && !string.IsNullOrWhiteSpace(operatorUser.UserName))
             {
-                return (operatorUser.Id, operatorUser.Username.Trim());
+                return (operatorUser.Id, operatorUser.UserName.Trim());
             }
         }
 
@@ -1429,10 +1438,10 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         if (!string.IsNullOrWhiteSpace(normalizedUserName))
         {
             var byName = await _userRepository.FirstAsync(user =>
-                user.TenantCode == tenantCode && user.Username == normalizedUserName);
-            if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+                user.TenantCode == tenantCode && user.UserName == normalizedUserName);
+            if (byName != null && !string.IsNullOrWhiteSpace(byName.UserName))
             {
-                return (byName.Id, byName.Username.Trim());
+                return (byName.Id, byName.UserName.Trim());
             }
         }
 

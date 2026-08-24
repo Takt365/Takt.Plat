@@ -81,19 +81,19 @@
         <template v-else-if="column.key === 'pobkCurAc'">
           <TaktDictTag
             :value="getBankDictValue(record, 'pobkCurAc')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'sddB2b'">
           <TaktDictTag
             :value="getBankDictValue(record, 'sddB2b')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'sddCore'">
           <TaktDictTag
             :value="getBankDictValue(record, 'sddCore')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'sddRtrans'">
@@ -302,7 +302,7 @@
       <a-form-item :label="pi.queryLabel('pobkCurAc')">
         <TaktSelect
           v-model:value="advancedQueryForm.pobkCurAc"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('pobkCurAc', 'select')"
           allow-clear
         />
@@ -388,7 +388,7 @@
       <a-form-item :label="pi.queryLabel('sddB2b')">
         <TaktSelect
           v-model:value="advancedQueryForm.sddB2b"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('sddB2b', 'select')"
           allow-clear
         />
@@ -398,7 +398,7 @@
       <a-form-item :label="pi.queryLabel('sddCore')">
         <TaktSelect
           v-model:value="advancedQueryForm.sddCore"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('sddCore', 'select')"
           allow-clear
         />

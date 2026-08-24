@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueMeetingService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题会议调查试验费用明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
     }
 
     /// <summary>
-    /// 获取质量问题会议调查试验费用明细列表（分页）
+    /// 获取质量问题会议调查试验费用明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktQualityIssueMeetingDto>> GetQualityIssueMeetingListAsync(TaktQualityIssueMeetingQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktQualityIssueMeetingDto>.Create(
+                new List<TaktQualityIssueMeetingDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _qualityIssueMeetingRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -311,7 +319,15 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportQualityIssueMeetingAsync(TaktQualityIssueMeetingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityIssueMeetingQueryDto());
+        var queryDto = query ?? new TaktQualityIssueMeetingQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktQualityIssueMeetingExportDto>(),
+                sheetName ?? "质量问题会议调查试验费用明细数据",
+                fileName ?? "质量问题会议调查试验费用明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _qualityIssueMeetingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -349,6 +365,26 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
             throw new TaktBusinessException("品质问题应对主不存在");
         }
         entity.QualityIssueId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.QualityIssueCode))
+        {
+            entity.QualityIssueCode = master.QualityIssueCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -372,144 +408,258 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QualityIssueId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.QualityIssueCode != null && x.QualityIssueCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.DirectManpowerCostPerMinute).Contains(keywords)
-                || SqlFunc.ToString(x.IndirectManpowerCostPerMinute).Contains(keywords)
                 || (x.MeetingInvestigationContent != null && x.MeetingInvestigationContent.Contains(keywords))
-                || SqlFunc.ToString(x.MeetingInvestigationCost).Contains(keywords)
-                || SqlFunc.ToString(x.MeetingTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.DirectParticipantCount).Contains(keywords)
-                || SqlFunc.ToString(x.IndirectParticipantCount).Contains(keywords)
-                || SqlFunc.ToString(x.InvestigationWorkTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.TravelCost).Contains(keywords)
-                || SqlFunc.ToString(x.OtherExpenses).Contains(keywords)
-                || SqlFunc.ToString(x.OtherWorkTimeMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.OtherApparatusCost).Contains(keywords)
                 || (x.MeetingRecorder != null && x.MeetingRecorder.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.QualityIssueId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.QualityIssueId == queryDto.QualityIssueId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityIssueCode))
-        {
-            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(queryDto.QualityIssueCode));
-        }
-
-        if (queryDto?.LineNumber.HasValue == true)
-        {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.DirectManpowerCostPerMinute.HasValue == true)
-        {
-            exp = exp.And(x => x.DirectManpowerCostPerMinute == queryDto.DirectManpowerCostPerMinute);
-        }
-
-        if (queryDto?.IndirectManpowerCostPerMinute.HasValue == true)
-        {
-            exp = exp.And(x => x.IndirectManpowerCostPerMinute == queryDto.IndirectManpowerCostPerMinute);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MeetingInvestigationContent))
-        {
-            exp = exp.And(x => x.MeetingInvestigationContent != null && x.MeetingInvestigationContent.Contains(queryDto.MeetingInvestigationContent));
-        }
-
-        if (queryDto?.MeetingInvestigationCost.HasValue == true)
-        {
-            exp = exp.And(x => x.MeetingInvestigationCost == queryDto.MeetingInvestigationCost);
-        }
-
-        if (queryDto?.MeetingTimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.MeetingTimeMinutes == queryDto.MeetingTimeMinutes);
-        }
-
-        if (queryDto?.DirectParticipantCount.HasValue == true)
-        {
-            exp = exp.And(x => x.DirectParticipantCount == queryDto.DirectParticipantCount);
-        }
-
-        if (queryDto?.IndirectParticipantCount.HasValue == true)
-        {
-            exp = exp.And(x => x.IndirectParticipantCount == queryDto.IndirectParticipantCount);
-        }
-
-        if (queryDto?.InvestigationWorkTimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.InvestigationWorkTimeMinutes == queryDto.InvestigationWorkTimeMinutes);
-        }
-
-        if (queryDto?.TravelCost.HasValue == true)
-        {
-            exp = exp.And(x => x.TravelCost == queryDto.TravelCost);
-        }
-
-        if (queryDto?.OtherExpenses.HasValue == true)
-        {
-            exp = exp.And(x => x.OtherExpenses == queryDto.OtherExpenses);
-        }
-
-        if (queryDto?.OtherWorkTimeMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.OtherWorkTimeMinutes == queryDto.OtherWorkTimeMinutes);
-        }
-
-        if (queryDto?.OtherApparatusCost.HasValue == true)
-        {
-            exp = exp.And(x => x.OtherApparatusCost == queryDto.OtherApparatusCost);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MeetingRecorder))
-        {
-            exp = exp.And(x => x.MeetingRecorder != null && x.MeetingRecorder.Contains(queryDto.MeetingRecorder));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.QualityIssueId.HasValue == true)
+        {
+            var qualityIssueId = queryDto.QualityIssueId.Value;
+            exp = exp.And(x => x.QualityIssueId == qualityIssueId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityIssueCode))
+        {
+            var qualityIssueCode = queryDto.QualityIssueCode;
+            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(qualityIssueCode));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
+        if (queryDto?.DirectManpowerCostPerMinute.HasValue == true)
+        {
+            var directManpowerCostPerMinute = queryDto.DirectManpowerCostPerMinute.Value;
+            exp = exp.And(x => x.DirectManpowerCostPerMinute == directManpowerCostPerMinute);
+        }
+
+        if (queryDto?.IndirectManpowerCostPerMinute.HasValue == true)
+        {
+            var indirectManpowerCostPerMinute = queryDto.IndirectManpowerCostPerMinute.Value;
+            exp = exp.And(x => x.IndirectManpowerCostPerMinute == indirectManpowerCostPerMinute);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MeetingInvestigationContent))
+        {
+            var meetingInvestigationContent = queryDto.MeetingInvestigationContent;
+            exp = exp.And(x => x.MeetingInvestigationContent != null && x.MeetingInvestigationContent.Contains(meetingInvestigationContent));
+        }
+
+        if (queryDto?.MeetingInvestigationCost.HasValue == true)
+        {
+            var meetingInvestigationCost = queryDto.MeetingInvestigationCost.Value;
+            exp = exp.And(x => x.MeetingInvestigationCost == meetingInvestigationCost);
+        }
+
+        if (queryDto?.MeetingTimeMinutes.HasValue == true)
+        {
+            var meetingTimeMinutes = queryDto.MeetingTimeMinutes.Value;
+            exp = exp.And(x => x.MeetingTimeMinutes == meetingTimeMinutes);
+        }
+
+        if (queryDto?.DirectParticipantCount.HasValue == true)
+        {
+            var directParticipantCount = queryDto.DirectParticipantCount.Value;
+            exp = exp.And(x => x.DirectParticipantCount == directParticipantCount);
+        }
+
+        if (queryDto?.IndirectParticipantCount.HasValue == true)
+        {
+            var indirectParticipantCount = queryDto.IndirectParticipantCount.Value;
+            exp = exp.And(x => x.IndirectParticipantCount == indirectParticipantCount);
+        }
+
+        if (queryDto?.InvestigationWorkTimeMinutes.HasValue == true)
+        {
+            var investigationWorkTimeMinutes = queryDto.InvestigationWorkTimeMinutes.Value;
+            exp = exp.And(x => x.InvestigationWorkTimeMinutes == investigationWorkTimeMinutes);
+        }
+
+        if (queryDto?.TravelCost.HasValue == true)
+        {
+            var travelCost = queryDto.TravelCost.Value;
+            exp = exp.And(x => x.TravelCost == travelCost);
+        }
+
+        if (queryDto?.OtherExpenses.HasValue == true)
+        {
+            var otherExpenses = queryDto.OtherExpenses.Value;
+            exp = exp.And(x => x.OtherExpenses == otherExpenses);
+        }
+
+        if (queryDto?.OtherWorkTimeMinutes.HasValue == true)
+        {
+            var otherWorkTimeMinutes = queryDto.OtherWorkTimeMinutes.Value;
+            exp = exp.And(x => x.OtherWorkTimeMinutes == otherWorkTimeMinutes);
+        }
+
+        if (queryDto?.OtherApparatusCost.HasValue == true)
+        {
+            var otherApparatusCost = queryDto.OtherApparatusCost.Value;
+            exp = exp.And(x => x.OtherApparatusCost == otherApparatusCost);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MeetingRecorder))
+        {
+            var meetingRecorder = queryDto.MeetingRecorder;
+            exp = exp.And(x => x.MeetingRecorder != null && x.MeetingRecorder.Contains(meetingRecorder));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktQualityIssueMeetingQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.QualityIssueId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.QualityIssueCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DirectManpowerCostPerMinute.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IndirectManpowerCostPerMinute.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MeetingInvestigationContent))
+        {
+            return true;
+        }
+        if (queryDto.MeetingInvestigationCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MeetingTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DirectParticipantCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IndirectParticipantCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.InvestigationWorkTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TravelCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OtherExpenses.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OtherWorkTimeMinutes.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OtherApparatusCost.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MeetingRecorder))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

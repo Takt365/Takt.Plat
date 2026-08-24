@@ -36,15 +36,15 @@ public class TaktTrackingLogDto : TaktCompanyDtoBase
     public long TrackingLogId { get; set; }
 
     /// <summary>
-    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 事件类型（如 longtask）
@@ -159,15 +159,15 @@ public class TaktTrackingLogQueryDto : TaktPagedQuery
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
-    /// </summary>
-    public string? UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 事件类型（如 longtask）
@@ -305,16 +305,16 @@ public class TaktTrackingLogCreateDto
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
-    /// </summary>
-    [Required(ErrorMessage = "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）不能为空")]
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
+    /// </summary>
+    [Required(ErrorMessage = "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）不能为空")]
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 事件类型（如 longtask）
@@ -462,15 +462,15 @@ public class TaktTrackingLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 事件类型（如 longtask）

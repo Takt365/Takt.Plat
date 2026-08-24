@@ -820,11 +820,11 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         }
         var materialsByCode = await LoadMaterialPlantsByCodesAsync(plantCode, materialCodes);
         var lineNumber = 0;
-        var ecDetails = new List<TaktEcDetailUpdateDto>(sourceDetails.Count);
+        var ecDetails = new List<TaktEcDetailCreateDto>(sourceDetails.Count);
         foreach (var detail in sourceDetails.OrderBy(x => x.Id))
         {
             lineNumber += 10;
-            var dto = new TaktEcDetailUpdateDto
+            var dto = new TaktEcDetailCreateDto
             {
                 TenantCode = CurrentTenantCode,
                 CompanyCode = CurrentCompanyCode,
@@ -874,7 +874,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                 ecCode,
                 CurrentTenantCode,
                 CurrentCompanyCode,
-                companyDefaultCulture ?? string.Empty).Adapt<List<TaktEcAttachmentUpdateDto>>(),
+                companyDefaultCulture ?? string.Empty).Adapt<List<TaktEcAttachmentCreateDto>>(),
         };
     }
 
@@ -972,7 +972,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && codeList.Contains(x.DeptCode));
-        var nameByCode = depts.ToDictionary(x => x.DeptCode, x => x.DeptName, StringComparer.Ordinal);
+        var nameByCode = depts.ToDictionary(x => x.DeptCode, x => x.DeptName1, StringComparer.Ordinal);
         var names = new List<string>(deptCodes.Count);
         foreach (var code in deptCodes)
         {

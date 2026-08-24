@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialDocumentService.cs
-// 创建时间：2026-08-10
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料凭证应用服务实现
 // 
@@ -383,6 +383,12 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
             {
                 var childDto = itemsForSave[i];
                 childDto.MaterialDocumentId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.MaterialDocumentCode = entity.MaterialDocumentCode;
+                childDto.PostedBy = entity.PostedBy;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -475,7 +481,9 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.MaterialDocumentCode != null && x.MaterialDocumentCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.MaterialDocumentCode != null && x.MaterialDocumentCode.Contains(keywords))
                 || (x.MaterialDocumentYear != null && x.MaterialDocumentYear.Contains(keywords))
                 || (x.TransactionEventType != null && x.TransactionEventType.Contains(keywords))
                 || (x.DocumentType != null && x.DocumentType.Contains(keywords))
@@ -486,10 +494,21 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
                 || (x.DeliveryCode != null && x.DeliveryCode.Contains(keywords))
                 || (x.TransactionCode != null && x.TransactionCode.Contains(keywords))
                 || (x.PostedBy != null && x.PostedBy.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDocumentCode))
@@ -572,50 +591,39 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
 
         if (queryDto?.DocumentDateStart.HasValue == true)
         {
-            var documentDateStart = queryDto.DocumentDateStart;
+            var documentDateStart = queryDto.DocumentDateStart.Value;
             exp = exp.And(x => x.DocumentDate >= documentDateStart);
         }
 
         if (queryDto?.DocumentDateEnd.HasValue == true)
         {
-            var documentDateEnd = queryDto.DocumentDateEnd;
+            var documentDateEnd = queryDto.DocumentDateEnd.Value;
             exp = exp.And(x => x.DocumentDate <= documentDateEnd);
         }
 
         if (queryDto?.PostingDateStart.HasValue == true)
         {
-            var postingDateStart = queryDto.PostingDateStart;
+            var postingDateStart = queryDto.PostingDateStart.Value;
             exp = exp.And(x => x.PostingDate >= postingDateStart);
         }
 
         if (queryDto?.PostingDateEnd.HasValue == true)
         {
-            var postingDateEnd = queryDto.PostingDateEnd;
+            var postingDateEnd = queryDto.PostingDateEnd.Value;
             exp = exp.And(x => x.PostingDate <= postingDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -632,6 +640,14 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }

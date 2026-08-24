@@ -39,7 +39,7 @@ export interface LoginRequest {
   /**
    * 用户名（8位）
    */
-  username: string;
+  userName: string;
 
   /**
    * 密码（RSA PKCS#1 密文 Base64；signin 有 LoginTicket 时可省略）
@@ -93,7 +93,7 @@ export interface SessionVerifyPasswordRequest {
   /**
    * 用户名
    */
-  username: string;
+  userName: string;
 
   /**
    * 密码（RSA PKCS#1 密文 Base64）
@@ -176,12 +176,12 @@ export interface LoginResponse {
   /**
    * 用户名
    */
-  username: string;
+  userName: string;
 
   /**
    * 昵称
    */
-  nickname?: string;
+  nickName?: string;
 
   /**
    * 租户编码
@@ -255,12 +255,12 @@ export interface UserInfoResponse {
   /**
    * 用户名
    */
-  username: string;
+  userName: string;
 
   /**
    * 昵称
    */
-  nickname?: string;
+  nickName?: string;
 
   /**
    * 用户类型

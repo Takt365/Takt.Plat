@@ -71,7 +71,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public string? TaxCode { get; set; }
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "gr_based_invoice_inspection", ColumnDescription = "基于收货的发票检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int GrBasedInvoiceInspection { get; set; } = 0;

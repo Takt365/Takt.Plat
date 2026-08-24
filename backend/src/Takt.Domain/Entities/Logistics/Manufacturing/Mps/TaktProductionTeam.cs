@@ -57,7 +57,7 @@ public class TaktProductionTeam : TaktCompanyEntityBase
     public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// 启用状态（字典 sys_normal_disable；0=禁用，1=启用）
     /// </summary>
     [SugarColumn(ColumnName = "team_status", ColumnDescription = "启用状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int TeamStatus { get; set; } = 1;

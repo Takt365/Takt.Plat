@@ -64,12 +64,12 @@ export interface SopRevision extends CompanyDtoBase {
   ecnName?: string;
 
   /**
-   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+   * 是否锁定（字典 sys_yes_no；0=否，1=是）
    */
   isLocked: number;
 
   /**
-   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
    */
   forceLeaderAck: number;
 
@@ -149,12 +149,12 @@ export interface SopRevisionQuery extends TaktPagedQuery {
   ecnId?: string;
 
   /**
-   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+   * 是否锁定（字典 sys_yes_no；0=否，1=是）
    */
   isLocked?: number;
 
   /**
-   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
    */
   forceLeaderAck?: number;
 
@@ -243,12 +243,12 @@ export interface SopRevisionCreate {
   ecnId?: string;
 
   /**
-   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+   * 是否锁定（字典 sys_yes_no；0=否，1=是）
    */
   isLocked: number;
 
   /**
-   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
    */
   forceLeaderAck: number;
 
@@ -371,12 +371,12 @@ export interface SopRevisionTemplate {
   ecnId?: string;
 
   /**
-   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+   * 是否锁定（字典 sys_yes_no；0=否，1=是）
    */
   isLocked?: number;
 
   /**
-   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
    */
   forceLeaderAck?: number;
 
@@ -460,12 +460,12 @@ export interface SopRevisionImport {
   ecnId?: string;
 
   /**
-   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+   * 是否锁定（字典 sys_yes_no；0=否，1=是）
    */
   isLocked?: number;
 
   /**
-   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
    */
   forceLeaderAck?: number;
 
@@ -544,12 +544,12 @@ export interface SopRevisionExport {
   ecnId?: string;
 
   /**
-   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
+   * 是否锁定（字典 sys_yes_no；0=否，1=是）
    */
   isLocked: number;
 
   /**
-   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no；0=否，1=是）
    */
   forceLeaderAck: number;
 

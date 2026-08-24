@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：TaktDeptService.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：部门应用服务实现
 // 
@@ -122,7 +122,47 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
                 return new TaktTreeSelectOption
                 {
                     DictValue = item.Id.ToString(),
-                    DictLabel = item.DeptName,
+                    DictLabel = item.DeptName1,
+                    SortOrder = item.SortOrder,
+                    IsLeaf = isLeaf,
+                    Children = null,
+                };
+            })
+            .ToList();
+    }
+
+    /// <summary>
+    /// 获取部门 ISO 编码树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue=IsoCode）
+    /// </summary>
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    public async Task<List<TaktTreeSelectOption>> GetDeptIsoTreeOptionsAsync(long parentId = 0)
+    {
+        EnsureThreeLayerContext();
+        var list = await _deptRepository.GetListAsync(x =>
+            x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.ParentId == parentId
+            && x.DeptStatus == 1);
+        return list
+            .OrderBy(x => x.SortOrder)
+            .Select(item =>
+            {
+                var iso = (item.IsoCode ?? string.Empty).Trim();
+                if (string.IsNullOrEmpty(iso))
+                {
+                    iso = (item.DeptShortName ?? string.Empty).Trim();
+                }
+                var label = string.IsNullOrEmpty(iso)
+                    ? item.DeptName1
+                    : $"{iso} - {item.DeptName1}";
+                var isLeaf = TaktLazyTreeHelper.ToAntIsLeaf(item.IsLeaf);
+                return new TaktTreeSelectOption
+                {
+                    DictValue = iso,
+                    DictLabel = label,
+                    ExtLabel = item.DeptName1,
+                    ExtValue = item.DeptCode,
                     SortOrder = item.SortOrder,
                     IsLeaf = isLeaf,
                     Children = null,
@@ -149,7 +189,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
             .Select(item =>
             {
                 var treeDto = item.Adapt<TaktDeptTreeDto>();
-                treeDto.Children = new List<TaktDeptTreeDto>();
+                treeDto.Children = null;
                 return treeDto;
             })
             .ToList();
@@ -162,6 +202,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     /// <returns>DTO</returns>
     public async Task<TaktDeptDto> CreateDeptAsync(TaktDeptCreateDto dto)
     {
+        SyncDeptShortNameAndIsoCode(dto);
         var entity = dto.Adapt<TaktDept>();
         entity.IsBuiltIn = 0;
         var isUnique_ix_dept_code_unique = await _uniqueValidator.IsUniqueAsync(
@@ -221,6 +262,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         {
             throw new TaktBusinessException("部门不存在");
         }
+        SyncDeptShortNameAndIsoCode(dto);
         var originalIsBuiltIn = entity.IsBuiltIn;
         dto.Adapt(entity);
         entity.IsBuiltIn = originalIsBuiltIn;
@@ -352,6 +394,31 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     }
 
     /// <summary>
+    /// 更新部门内置
+    /// </summary>
+    /// <param name="dto">内置 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktDeptDto> UpdateDeptBuiltInAsync(TaktDeptBuiltInDto dto)
+    {
+        var entity = await _deptRepository.GetByIdAsync(dto.DeptId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("部门不存在");
+        }
+        if (dto.IsBuiltIn is not 0 and not 1)
+        {
+            throw new TaktBusinessException("内置必须为字典 sys_yes_no 合法值（0=否，1=是）");
+        }
+        if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
+        {
+            throw new TaktBusinessException("不允许取消内置部门标识");
+        }
+        entity.IsBuiltIn = dto.IsBuiltIn;
+        await _deptRepository.UpdateAsync(entity);
+        return await GetDeptByIdAsync(dto.DeptId) ?? throw new TaktBusinessException("部门不存在");
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -386,6 +453,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         {
             try
             {
+                SyncDeptShortNameAndIsoCode(rows[i]);
                 var entity = rows[i].Adapt<TaktDept>();
                 entity.IsBuiltIn = 0;
                 var importKey = $"{entity.DeptCode}";
@@ -473,7 +541,8 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.DeptCode != null && x.DeptCode.Contains(keywords))
                 || (x.DeptShortName != null && x.DeptShortName.Contains(keywords))
-                || (x.DeptName != null && x.DeptName.Contains(keywords))
+                || (x.DeptName1 != null && x.DeptName1.Contains(keywords))
+                || (x.DeptName2 != null && x.DeptName2.Contains(keywords))
                 || (x.DeptPath != null && x.DeptPath.Contains(keywords))
                 || (x.IsoCode != null && x.IsoCode.Contains(keywords))
                 || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
@@ -511,21 +580,26 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
             exp = exp.And(x => x.DeptShortName != null && x.DeptShortName.Contains(deptShortName));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName1))
         {
-            var deptName = queryDto.DeptName;
-            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptName));
+            var deptName1 = queryDto.DeptName1;
+            exp = exp.And(x => x.DeptName1 != null && x.DeptName1.Contains(deptName1));
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName2))
+        {
+            var deptName2 = queryDto.DeptName2;
+            exp = exp.And(x => x.DeptName2 != null && x.DeptName2.Contains(deptName2));
         }
 
         if (queryDto?.ParentId.HasValue == true)
         {
-            var parentId = queryDto.ParentId;
+            var parentId = queryDto.ParentId.Value;
             exp = exp.And(x => x.ParentId == parentId);
         }
 
         if (queryDto?.Level.HasValue == true)
         {
-            var level = queryDto.Level;
+            var level = queryDto.Level.Value;
             exp = exp.And(x => x.Level == level);
         }
 
@@ -537,7 +611,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
 
         if (queryDto?.IsLeaf.HasValue == true)
         {
-            var isLeaf = queryDto.IsLeaf;
+            var isLeaf = queryDto.IsLeaf.Value;
             exp = exp.And(x => x.IsLeaf == isLeaf);
         }
 
@@ -555,13 +629,13 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
 
         if (queryDto?.CostCategory.HasValue == true)
         {
-            var costCategory = queryDto.CostCategory;
+            var costCategory = queryDto.CostCategory.Value;
             exp = exp.And(x => x.CostCategory == costCategory);
         }
 
         if (queryDto?.HeadUserId.HasValue == true)
         {
-            var headUserId = queryDto.HeadUserId;
+            var headUserId = queryDto.HeadUserId.Value;
             exp = exp.And(x => x.HeadUserId == headUserId);
         }
 
@@ -591,7 +665,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            var isBuiltIn = queryDto.IsBuiltIn;
+            var isBuiltIn = queryDto.IsBuiltIn.Value;
             exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
@@ -603,13 +677,13 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.DeptStatus.HasValue == true)
         {
-            var deptStatus = queryDto.DeptStatus;
+            var deptStatus = queryDto.DeptStatus.Value;
             exp = exp.And(x => x.DeptStatus == deptStatus);
         }
 
@@ -627,13 +701,13 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
@@ -671,7 +745,11 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName2))
         {
             return true;
         }
@@ -752,5 +830,38 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// 部门简称与 ISO 编码保持一致（实体约定二者同值）。
+    /// </summary>
+    /// <param name="dto">创建 DTO</param>
+    private static void SyncDeptShortNameAndIsoCode(TaktDeptCreateDto dto)
+    {
+        var value = !string.IsNullOrWhiteSpace(dto.DeptShortName) ? dto.DeptShortName.Trim() : (dto.IsoCode ?? string.Empty).Trim();
+        dto.DeptShortName = value;
+        dto.IsoCode = value;
+    }
+
+    /// <summary>
+    /// 部门简称与 ISO 编码保持一致（实体约定二者同值）。
+    /// </summary>
+    /// <param name="dto">更新 DTO</param>
+    private static void SyncDeptShortNameAndIsoCode(TaktDeptUpdateDto dto)
+    {
+        var value = !string.IsNullOrWhiteSpace(dto.DeptShortName) ? dto.DeptShortName.Trim() : (dto.IsoCode ?? string.Empty).Trim();
+        dto.DeptShortName = value;
+        dto.IsoCode = value;
+    }
+
+    /// <summary>
+    /// 部门简称与 ISO 编码保持一致（实体约定二者同值）。
+    /// </summary>
+    /// <param name="dto">导入 DTO</param>
+    private static void SyncDeptShortNameAndIsoCode(TaktDeptImportDto dto)
+    {
+        var value = !string.IsNullOrWhiteSpace(dto.DeptShortName) ? dto.DeptShortName.Trim() : (dto.IsoCode ?? string.Empty).Trim();
+        dto.DeptShortName = value;
+        dto.IsoCode = value;
     }
 }

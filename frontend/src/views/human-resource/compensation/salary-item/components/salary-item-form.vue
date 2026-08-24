@@ -185,7 +185,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isDeduction"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') })"
                 />
               </a-form-item>
@@ -197,7 +197,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isTaxable"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') })"
                 />
               </a-form-item>
@@ -209,7 +209,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.includeSocialSecurityBase"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') })"
                 />
               </a-form-item>
@@ -221,7 +221,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.includeHousingFundBase"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') })"
                 />
               </a-form-item>
@@ -233,7 +233,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.itemStatus"
-                  dict-type="sys_normal_disable_status"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') })"
                 />
               </a-form-item>
@@ -248,7 +248,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.relatedplant') })"
                   show-count
                   :maxlength="4"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -421,7 +421,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.salaryItemId
     if (isCreate) {

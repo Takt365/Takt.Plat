@@ -96,10 +96,9 @@
                 :label="t('entity.conferenceagenda.content')"
                 name="content"
               >
-                <a-textarea
+                <takt-rich-editor
                   v-model:value="formState.content"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.conferenceagenda.content') })"
-                  :rows="2"
                 />
               </a-form-item>
             </a-col>

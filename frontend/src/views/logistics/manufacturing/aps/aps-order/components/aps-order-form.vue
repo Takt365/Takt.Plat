@@ -38,8 +38,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
                   show-count
                   :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.apsOrderId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -464,7 +463,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     const isCreate = !props.formData?.apsOrderId
     if (isCreate) {

@@ -239,7 +239,7 @@
       <a-form-item :label="t('entity.trainingcourse.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.trainingCourseStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.trainingcourse.status') })"
           allow-clear
         />

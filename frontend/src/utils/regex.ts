@@ -70,10 +70,10 @@ export const RegexPatterns = {
   IPV6: /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/,
   
   /** 用户名（小写字母开头，允许小写字母和数字，不允许特殊符号，4-20位） */
-  USERNAME: /^[a-z][a-z0-9]{3,19}$/,
+  userName: /^[a-z][a-z0-9]{3,19}$/,
 
   /** 登录账号（小写字母开头，字母与数字，5-20 位，与登录/注册页 maxlength 一致） */
-  LOGIN_USERNAME: /^[a-z][a-z0-9]{4,19}$/,
+  LOGIN_USER_NAME: /^[a-z][a-z0-9]{4,19}$/,
 
   /** 租户编码（3 位数字，与 Database:TenantCodes 一致） */
   TENANT_CODE: /^\d{3}$/,
@@ -263,10 +263,10 @@ export const RegexPatterns = {
 } as const
 
 /** 登录页用户名最小长度 */
-export const LOGIN_USERNAME_MIN_LENGTH = 5;
+export const LOGIN_USER_NAME_MIN_LENGTH = 5;
 
-/** 登录页用户名最大长度（与 TaktUser.username varchar(20) 一致） */
-export const LOGIN_USERNAME_MAX_LENGTH = 20;
+/** 登录页用户名最大长度（与 TaktUser.UserName varchar(20) 一致） */
+export const LOGIN_USER_NAME_MAX_LENGTH = 20;
 
 /** 登录页密码最小长度（与 PasswordPolicy:MinLength 一致） */
 export const LOGIN_PASSWORD_MIN_LENGTH = 8;
@@ -281,10 +281,10 @@ export const EMAIL_MIN_LENGTH = 6;
 export const EMAIL_MAX_LENGTH = 100;
 
 /** 用户昵称最小长度 */
-export const USER_NICKNAME_MIN_LENGTH = 2;
+export const USER_NICK_NAME_MIN_LENGTH = 2;
 
-/** 用户昵称最大长度（与 TaktUser.nickname nvarchar(40) 一致） */
-export const USER_NICKNAME_MAX_LENGTH = 40;
+/** 用户昵称最大长度（与 TaktUser.NickName nvarchar(40) 一致） */
+export const USER_NICK_NAME_MAX_LENGTH = 40;
 
 /** 中国大陆手机号位数 */
 export const PHONE_CN_LENGTH = 11;
@@ -665,20 +665,20 @@ export class RegexHelper {
 
   /**
    * 验证用户名
-   * @param username 用户名
+   * @param userName 用户名
    * @returns 是否有效
    */
-  static isValidUsername(username: string): boolean {
-    return this.test('USERNAME', username)
+  static isValidUserName(userName: string): boolean {
+    return this.test('userName', userName)
   }
 
   /**
    * 验证登录账号（5-20 位小写字母开头）
-   * @param username 登录账号
+   * @param userName 登录账号
    * @returns 是否有效
    */
-  static isValidLoginUsername(username: string): boolean {
-    return this.test('LOGIN_USERNAME', username)
+  static isValidLoginUserName(userName: string): boolean {
+    return this.test('LOGIN_USER_NAME', userName)
   }
 
   /**
@@ -808,7 +808,7 @@ export class RegexHelper {
   }
 
   /**
-   * 用户表昵称（与后端 `TaktRegexHelper.NickName` 一致）：可为空；非空时仅校验 `NICK_NAME` 模式，不要求帕斯卡。
+   * 用户表昵称（与后端 `TaktRegexHelper.nickName` 一致）：可为空；非空时仅校验 `NICK_NAME` 模式，不要求帕斯卡。
    */
   static isValidUserNickName(nickName: string): boolean {
     const v = (nickName ?? '').trim()
@@ -1277,8 +1277,8 @@ export const isValidIdCardUs = RegexHelper.isValidIdCardUs.bind(RegexHelper)
 export const isValidIdCardJp = RegexHelper.isValidIdCardJp.bind(RegexHelper)
 export const isValidUrl = RegexHelper.isValidUrl.bind(RegexHelper)
 export const isValidIp = RegexHelper.isValidIp.bind(RegexHelper)
-export const isValidUsername = RegexHelper.isValidUsername.bind(RegexHelper)
-export const isValidLoginUsername = RegexHelper.isValidLoginUsername.bind(RegexHelper)
+export const isValidUserName = RegexHelper.isValidUserName.bind(RegexHelper)
+export const isValidLoginUserName = RegexHelper.isValidLoginUserName.bind(RegexHelper)
 export const isValidTenantCode = RegexHelper.isValidTenantCode.bind(RegexHelper)
 export const isValidRealName = RegexHelper.isValidRealName.bind(RegexHelper)
 export const isValidFullName = RegexHelper.isValidFullName.bind(RegexHelper)

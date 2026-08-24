@@ -87,7 +87,7 @@
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getQualityGroupDictValue(record, 'isBuiltIn')"
-            dict-type="sys_yes_no_type"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -219,7 +219,7 @@
       <a-form-item :label="pi.queryLabel('isBuiltIn')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBuiltIn', 'select')"
           allow-clear
         />
@@ -229,7 +229,7 @@
       <a-form-item :label="pi.queryLabel('groupStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.groupStatus"
-          dict-type="sys_normal_disable_status"
+          dict-type="sys_normal_disable"
           :placeholder="pi.queryPh('groupStatus', 'select')"
           allow-clear
         />

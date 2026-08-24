@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractI18nSeedData.cs
-// 创建时间：2026-08-21
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -188,6 +188,15 @@ public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-CN", "合同状态", "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
             // entity.employeecontract.contractstatus
             new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-HK", "合同状态_hk", "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
+
+            // entity.employeecontract.employee
+            new TranslationSeedItem("entity.employeecontract.employee", "en-US", "员工主档_us", "员工主档（多对一）"),
+            // entity.employeecontract.employee
+            new TranslationSeedItem("entity.employeecontract.employee", "ja-JP", "员工主档_jp", "员工主档（多对一）"),
+            // entity.employeecontract.employee
+            new TranslationSeedItem("entity.employeecontract.employee", "zh-CN", "员工主档", "员工主档（多对一）"),
+            // entity.employeecontract.employee
+            new TranslationSeedItem("entity.employeecontract.employee", "zh-HK", "员工主档_hk", "员工主档（多对一）"),
         };
     }
 

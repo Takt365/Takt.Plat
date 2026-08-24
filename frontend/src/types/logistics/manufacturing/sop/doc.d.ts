@@ -74,7 +74,7 @@ export interface SopDoc extends ApprovalDtoBase {
   currentRevisionName?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   sopStatus: number;
 
@@ -154,7 +154,7 @@ export interface SopDocQuery extends TaktPagedQuery {
   currentRevisionId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   sopStatus?: number;
 
@@ -278,7 +278,7 @@ export interface SopDocCreate {
   currentRevisionId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   sopStatus: number;
 
@@ -332,7 +332,7 @@ export interface SopDocStatus {
   sopDocId: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   sopStatus: number;
 
@@ -396,7 +396,7 @@ export interface SopDocTemplate {
   currentRevisionId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   sopStatus?: number;
 
@@ -475,7 +475,7 @@ export interface SopDocImport {
   currentRevisionId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   sopStatus?: number;
 
@@ -549,7 +549,7 @@ export interface SopDocExport {
   currentRevisionId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   * 状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
    */
   sopStatus: number;
 

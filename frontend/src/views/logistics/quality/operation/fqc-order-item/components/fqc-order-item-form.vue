@@ -167,7 +167,7 @@
       <template #cell-isObsolete="{ record }">
         <TaktSelect
           v-model:value="record.isObsolete"
-          dict-type="sys_yes_no_type"
+          dict-type="sys_yes_no"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="fqcDefectHandlingPi.ph('isObsolete')"

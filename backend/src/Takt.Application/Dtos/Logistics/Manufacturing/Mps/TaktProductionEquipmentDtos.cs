@@ -362,7 +362,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -749,7 +749,7 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -1217,7 +1217,7 @@ public class TaktProductionEquipmentSortDto
     public long ProductionEquipmentId { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
@@ -2313,7 +2313,7 @@ public class TaktProductionEquipmentExportDto
     public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

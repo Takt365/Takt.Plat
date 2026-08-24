@@ -29,7 +29,7 @@
 
       :show-import="true"
       :show-export="true"
-      :show-advanced-query="true"
+      :show-advanced-query="false"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -38,7 +38,6 @@
       :export-loading="loading"
       @import="handleImport"
       @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -109,273 +108,11 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterMaterialRequirementsPlanningId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
 
-    <TaktQueryDrawer
-      v-model:open="advancedQueryVisible"
-      v-model:visible-field-keys="visibleQueryFieldKeys"
-      :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-manufacturing-mrp-material-requirements-planning-material-requirements-planning-item"
-      :form-model="advancedQueryForm"
-      @submit="handleAdvancedQuerySubmit"
-      @reset="handleAdvancedQueryReset"
-    >
-      <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('materialRequirementsPlanningCode')">
-      <a-form-item :label="pi.queryLabel('materialRequirementsPlanningCode')">
-        <a-input
-          v-model:value="advancedQueryForm.materialRequirementsPlanningCode"
-          :placeholder="pi.queryPh('materialRequirementsPlanningCode', 'required')"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="pi.queryLabel('materialCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterialPlants/options"
-          :placeholder="pi.queryPh('materialCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialDescription')">
-      <a-form-item :label="pi.queryLabel('materialDescription')">
-        <a-input
-          v-model:value="advancedQueryForm.materialDescription"
-          :placeholder="pi.queryPh('materialDescription', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialSpecification')">
-      <a-form-item :label="pi.queryLabel('materialSpecification')">
-        <a-input
-          v-model:value="advancedQueryForm.materialSpecification"
-          :placeholder="pi.queryPh('materialSpecification', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('modelCode')">
-      <a-form-item :label="pi.queryLabel('modelCode')">
-        <a-input
-          v-model:value="advancedQueryForm.modelCode"
-          :placeholder="pi.queryPh('modelCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('modelName')">
-      <a-form-item :label="pi.queryLabel('modelName')">
-        <a-input
-          v-model:value="advancedQueryForm.modelName"
-          :placeholder="pi.queryPh('modelName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('parentMaterialCode')">
-      <a-form-item :label="pi.queryLabel('parentMaterialCode')">
-        <a-input
-          v-model:value="advancedQueryForm.parentMaterialCode"
-          :placeholder="pi.queryPh('parentMaterialCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('bomLevel')">
-      <a-form-item :label="pi.queryLabel('bomLevel')">
-        <a-input-number
-          v-model:value="advancedQueryForm.bomLevel"
-          :placeholder="pi.queryPh('bomLevel', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('requirementDateStart')">
-      <a-form-item :label="pi.queryLabel('requirementDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.requirementDateStart"
-          :placeholder="pi.queryPh('requirementDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('requirementDateEnd')">
-      <a-form-item :label="pi.queryLabel('requirementDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.requirementDateEnd"
-          :placeholder="pi.queryPh('requirementDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planUnit')">
-      <a-form-item :label="pi.queryLabel('planUnit')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.planUnit"
-          dict-type="logistics_unit_of_measure_code"
-          :placeholder="pi.queryPh('planUnit', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('grossRequirement')">
-      <a-form-item :label="pi.queryLabel('grossRequirement')">
-        <a-input-number
-          v-model:value="advancedQueryForm.grossRequirement"
-          :placeholder="pi.queryPh('grossRequirement', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduledReceipts')">
-      <a-form-item :label="pi.queryLabel('scheduledReceipts')">
-        <a-input-number
-          v-model:value="advancedQueryForm.scheduledReceipts"
-          :placeholder="pi.queryPh('scheduledReceipts', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('onHandQuantity')">
-      <a-form-item :label="pi.queryLabel('onHandQuantity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.onHandQuantity"
-          :placeholder="pi.queryPh('onHandQuantity', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('projectedOnHand')">
-      <a-form-item :label="pi.queryLabel('projectedOnHand')">
-        <a-input-number
-          v-model:value="advancedQueryForm.projectedOnHand"
-          :placeholder="pi.queryPh('projectedOnHand', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('netRequirement')">
-      <a-form-item :label="pi.queryLabel('netRequirement')">
-        <a-input-number
-          v-model:value="advancedQueryForm.netRequirement"
-          :placeholder="pi.queryPh('netRequirement', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('procurementType')">
-      <a-form-item :label="pi.queryLabel('procurementType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.procurementType"
-          dict-type="logistics_procurement_type"
-          :placeholder="pi.queryPh('procurementType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isObsolete')">
-      <a-form-item :label="pi.queryLabel('isObsolete')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.isObsolete"
-          dict-type="sys_yes_no_type"
-          :placeholder="pi.queryPh('isObsolete', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      </template>
-    </TaktQueryDrawer>
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
@@ -435,7 +172,7 @@ import {
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import MaterialRequirementsPlanningItemForm from './material-requirements-planning-item-form.vue'
 import { useMaterialRequirementsPlanningMasterContext } from '../composables/use-material-requirements-planning-master-context'
 import {
@@ -523,50 +260,6 @@ const formData = ref<Partial<MaterialRequirementsPlanningItem>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
-const advancedQueryVisible = ref(false)
-/**
- * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
- */
-function createEmptyAdvancedQueryForm() {
-  const form = Object.fromEntries(MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
-    (typeof MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS)[number],
-    string
-  >
-  return {
-    ...form,
-    lineNumber: undefined as number | undefined,
-    bomLevel: undefined as number | undefined,
-    grossRequirement: undefined as number | undefined,
-    scheduledReceipts: undefined as number | undefined,
-    onHandQuantity: undefined as number | undefined,
-    projectedOnHand: undefined as number | undefined,
-    netRequirement: undefined as number | undefined,
-    procurementType: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
-}
-const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
-const visibleQueryFieldKeys = ref<string[]>([])
-
-/** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() =>
-  MATERIALREQUIREMENTSPLANNINGITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
-)
-
-function handleAdvancedQuery() {
-  advancedQueryVisible.value = true
-}
-
-function handleAdvancedQuerySubmit() {
-  advancedQueryVisible.value = false
-  currentPage.value = getTaktDefaultPageIndex()
-  void loadData()
-}
-
-function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
-}
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([...MATERIALREQUIREMENTSPLANNINGITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
@@ -612,16 +305,6 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: MaterialRequirementsPlanningItem }) =>
       String(getMaterialRequirementsPlanningItemField(record, 'materialRequirementsPlanningItemId') ?? ''),
-  },
-  {
-    title: pi.label('materialRequirementsPlanningId'),
-    dataIndex: 'materialRequirementsPlanningId',
-    key: 'materialRequirementsPlanningId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: MaterialRequirementsPlanningItem }) =>
-      String(getMaterialRequirementsPlanningItemField(record, 'materialRequirementsPlanningId') ?? ''),
   },
   {
     title: pi.label('materialRequirementsPlanningCode'),
@@ -803,6 +486,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: MaterialRequirementsPlanningItem }) =>
       String(getMaterialRequirementsPlanningItemField(record, 'isObsolete') ?? ''),
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: MaterialRequirementsPlanningItem }) =>
+      String(getMaterialRequirementsPlanningItemField(record, 'remark') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -820,8 +513,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:mrp:material:requirements:planning:delete',
         onClick: (record: MaterialRequirementsPlanningItem) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -930,7 +625,7 @@ function onClickRow(record: MaterialRequirementsPlanningItem) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {MaterialRequirementsPlanningItemQuery} 查询 DTO
  */
@@ -954,33 +649,6 @@ function buildListQuery(overrides?: Partial<MaterialRequirementsPlanningItemQuer
   }
   for (const key of MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
-  }
-  if (form.bomLevel !== undefined && form.bomLevel !== null) {
-    query.bomLevel = form.bomLevel
-  }
-  if (form.grossRequirement !== undefined && form.grossRequirement !== null) {
-    query.grossRequirement = form.grossRequirement
-  }
-  if (form.scheduledReceipts !== undefined && form.scheduledReceipts !== null) {
-    query.scheduledReceipts = form.scheduledReceipts
-  }
-  if (form.onHandQuantity !== undefined && form.onHandQuantity !== null) {
-    query.onHandQuantity = form.onHandQuantity
-  }
-  if (form.projectedOnHand !== undefined && form.projectedOnHand !== null) {
-    query.projectedOnHand = form.projectedOnHand
-  }
-  if (form.netRequirement !== undefined && form.netRequirement !== null) {
-    query.netRequirement = form.netRequirement
-  }
-  if (form.procurementType !== undefined && form.procurementType !== null) {
-    query.procurementType = form.procurementType
-  }
-  if (form.isObsolete !== undefined && form.isObsolete !== null) {
-    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -1212,6 +880,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportMaterialRequirementsPlanningItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

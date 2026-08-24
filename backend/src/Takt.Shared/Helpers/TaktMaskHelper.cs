@@ -71,16 +71,16 @@ public static class TaktMaskHelper
             return emailStr;
         }
 
-        var username = emailStr[..atIndex];
+        var UserName = emailStr[..atIndex];
         var domain = emailStr[atIndex..];
 
-        if (username.Length <= 1)
+        if (UserName.Length <= 1)
         {
-            return username + new string(maskChar, 3) + domain;
+            return UserName + new string(maskChar, 3) + domain;
         }
 
-        var visibleStart = username[..1];
-        var mask = new string(maskChar, Math.Max(3, username.Length - 1));
+        var visibleStart = UserName[..1];
+        var mask = new string(maskChar, Math.Max(3, UserName.Length - 1));
         return visibleStart + mask + domain;
     }
 
@@ -400,7 +400,7 @@ public static class TaktMaskHelper
         {
             return MaskBankCard(value, 4, 4, maskChar);
         }
-        if (lowerKey.Contains("name", StringComparison.Ordinal) && !lowerKey.Contains("username", StringComparison.Ordinal))
+        if (lowerKey.Contains("name", StringComparison.Ordinal) && !lowerKey.Contains("user_name", StringComparison.Ordinal))
         {
             return MaskName(value, maskChar);
         }

@@ -38,8 +38,17 @@ public interface ITaktNumberingService
     /// <summary>
     /// 获取编码规则选项列表
     /// </summary>
+    /// <param name="documentType">单据类型（TaktMenu.MenuName）；有值时仅返回该类型下启用规则</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetNumberingOptionsAsync();
+    Task<List<TaktSelectOption>> GetNumberingOptionsAsync(string? documentType = null);
+
+    /// <summary>
+    /// 预览下一个业务编码（不占用流水号、不写库）
+    /// </summary>
+    /// <param name="ruleCode">规则编码</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>预览结果</returns>
+    Task<TaktNumberingPreviewDto> PreviewNumberingNextAsync(string ruleCode, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 创建编码规则

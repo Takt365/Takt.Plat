@@ -188,7 +188,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isEnabled"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isEnabled')"
                 />
               </a-form-item>
@@ -226,7 +226,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isObsolete"
-                  dict-type="sys_yes_no_type"
+                  dict-type="sys_yes_no"
                   :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>

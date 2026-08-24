@@ -31,7 +31,7 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployee : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工编码（租户+公司内唯一）
+    /// 员工编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 员工编码规则生成并展示，非手输；单据类型菜单：员工档案）
     /// </summary>
     [SugarColumn(ColumnName = "employee_code", ColumnDescription = "员工编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string EmployeeCode { get; set; } = string.Empty;
@@ -91,7 +91,7 @@ public class TaktEmployee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_status", ColumnDescription = "员工状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EmployeeStatus { get; set; } = 1;
     /// <summary>
-    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
+    /// 内置（字典 sys_yes_no；0=否 1=是；种子员工不可删）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
@@ -182,5 +182,11 @@ public class TaktEmployee : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktEmployeeAttachment.EmployeeId))]
     public List<TaktEmployeeAttachment>? EmployeeAttachments { get; set; }
+
+    /// <summary>
+    /// 员工代理（被代理人视角；外键 OriginalEmployeeId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktEmployeeDelegation.OriginalEmployeeId))]
+    public List<TaktEmployeeDelegation>? EmployeeDelegations { get; set; }
 
 }

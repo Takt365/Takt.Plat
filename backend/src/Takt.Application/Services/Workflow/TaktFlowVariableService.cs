@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Workflow
 // 文件名称：TaktFlowVariableService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程变量应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Workflow;
 
@@ -52,12 +51,20 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
     }
 
     /// <summary>
-    /// 获取流程变量列表（分页）
+    /// 获取流程变量列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktFlowVariableDto>> GetFlowVariableListAsync(TaktFlowVariableQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktFlowVariableDto>.Create(
+                new List<TaktFlowVariableDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _flowVariableRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -98,8 +105,8 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.VariableName ?? e.Id.ToString(),
+            DictValue = e.VariableName,
+            DictLabel = e.VariableName,
         }).ToList();
     }
 
@@ -252,7 +259,15 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportFlowVariableAsync(TaktFlowVariableQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktFlowVariableQueryDto());
+        var queryDto = query ?? new TaktFlowVariableQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktFlowVariableExportDto>(),
+                sheetName ?? "流程变量数据",
+                fileName ?? "流程变量导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _flowVariableRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -281,85 +296,153 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
     {
         var exp = Expressionable.Create<TaktFlowVariable>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.InstanceId).Contains(keywords)
-                || SqlFunc.ToString(x.TaskId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.VariableName != null && x.VariableName.Contains(keywords))
-                || SqlFunc.ToString(x.VariableType).Contains(keywords)
                 || (x.TextValue != null && x.TextValue.Contains(keywords))
-                || SqlFunc.ToString(x.LongValue).Contains(keywords)
-                || SqlFunc.ToString(x.DoubleValue).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.InstanceId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.InstanceId == queryDto.InstanceId);
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (queryDto?.TaskId.HasValue == true)
-        {
-            exp = exp.And(x => x.TaskId == queryDto.TaskId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.VariableName))
-        {
-            exp = exp.And(x => x.VariableName != null && x.VariableName.Contains(queryDto.VariableName));
-        }
-
-        if (queryDto?.VariableType.HasValue == true)
-        {
-            exp = exp.And(x => x.VariableType == queryDto.VariableType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TextValue))
-        {
-            exp = exp.And(x => x.TextValue != null && x.TextValue.Contains(queryDto.TextValue));
-        }
-
-        if (queryDto?.LongValue.HasValue == true)
-        {
-            exp = exp.And(x => x.LongValue == queryDto.LongValue);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (queryDto?.InstanceId.HasValue == true)
+        {
+            var instanceId = queryDto.InstanceId.Value;
+            exp = exp.And(x => x.InstanceId == instanceId);
+        }
+
+        if (queryDto?.TaskId.HasValue == true)
+        {
+            var taskId = queryDto.TaskId.Value;
+            exp = exp.And(x => x.TaskId == taskId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.VariableName))
+        {
+            var variableName = queryDto.VariableName;
+            exp = exp.And(x => x.VariableName != null && x.VariableName.Contains(variableName));
+        }
+
+        if (queryDto?.VariableType.HasValue == true)
+        {
+            var variableType = queryDto.VariableType.Value;
+            exp = exp.And(x => x.VariableType == (int)variableType);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TextValue))
+        {
+            var textValue = queryDto.TextValue;
+            exp = exp.And(x => x.TextValue != null && x.TextValue.Contains(textValue));
+        }
+
+        if (queryDto?.LongValue.HasValue == true)
+        {
+            var longValue = queryDto.LongValue.Value;
+            exp = exp.And(x => x.LongValue == longValue);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktFlowVariableQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.InstanceId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TaskId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.VariableName))
+        {
+            return true;
+        }
+        if (queryDto.VariableType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TextValue))
+        {
+            return true;
+        }
+        if (queryDto.LongValue.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

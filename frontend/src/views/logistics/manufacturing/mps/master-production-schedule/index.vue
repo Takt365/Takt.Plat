@@ -124,260 +124,7 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('mpsCode')">
-      <a-form-item :label="pi.queryLabel('mpsCode')">
-        <a-input
-          v-model:value="advancedQueryForm.mpsCode"
-          :placeholder="pi.queryPh('mpsCode', 'required')"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('masterDemandScheduleId')">
-      <a-form-item :label="pi.queryLabel('masterDemandScheduleId')">
-        <a-input
-          v-model:value="advancedQueryForm.masterDemandScheduleId"
-          :placeholder="pi.queryPh('masterDemandScheduleId', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('mdsCode')">
-      <a-form-item :label="pi.queryLabel('mdsCode')">
-        <a-input
-          v-model:value="advancedQueryForm.mdsCode"
-          :placeholder="pi.queryPh('mdsCode', 'required')"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planPeriodStartStart')">
-      <a-form-item :label="pi.queryLabel('planPeriodStartStart')">
-        <a-input
-          v-model:value="advancedQueryForm.planPeriodStartStart"
-          :placeholder="pi.queryPh('planPeriodStartStart', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planPeriodStartEnd')">
-      <a-form-item :label="pi.queryLabel('planPeriodStartEnd')">
-        <a-input
-          v-model:value="advancedQueryForm.planPeriodStartEnd"
-          :placeholder="pi.queryPh('planPeriodStartEnd', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planPeriodEndStart')">
-      <a-form-item :label="pi.queryLabel('planPeriodEndStart')">
-        <a-input
-          v-model:value="advancedQueryForm.planPeriodEndStart"
-          :placeholder="pi.queryPh('planPeriodEndStart', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planPeriodEndEnd')">
-      <a-form-item :label="pi.queryLabel('planPeriodEndEnd')">
-        <a-input
-          v-model:value="advancedQueryForm.planPeriodEndEnd"
-          :placeholder="pi.queryPh('planPeriodEndEnd', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('bucketType')">
-      <a-form-item :label="pi.queryLabel('bucketType')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.bucketType"
-          dict-type="mps_time_bucket_type"
-          :placeholder="pi.queryPh('bucketType', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('scheduleStatus')">
-      <a-form-item :label="pi.queryLabel('scheduleStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.scheduleStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="pi.queryPh('scheduleStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="pi.queryLabel('approvalStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.approvalStatus"
-          dict-type="sys_approval_status"
-          :placeholder="pi.queryPh('approvalStatus', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="pi.queryLabel('initiatorId')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="pi.queryPh('initiatorId', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="pi.queryLabel('approvedBy')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="pi.queryPh('approvedBy', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="pi.queryLabel('approvedAtStart')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="pi.queryPh('approvedAtStart', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="pi.queryLabel('flowInstanceId')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="pi.queryPh('flowInstanceId', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="pi.queryLabel('createdAtStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="pi.queryPh('createdAtStart', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="pi.queryLabel('createdAtEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="pi.queryPh('createdAtEnd', 'select')"
-          value-format="YYYY-MM-DD HH:mm:ss"
-            show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extField')">
-      <a-form-item
-        name="extField"
-        class="takt-form-item-ext-field"
-        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
-        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
-      >
-        <template #label>
-          <span class="takt-form-ext-field-label">
-            <a-tooltip
-              :title="t('common.page.entity.extfieldhint')"
-              placement="top"
-            >
-              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-            </a-tooltip>
-            <span>{{ pi.queryLabel('extField') }}</span>
-          </span>
-        </template>
-        <a-textarea
-          v-model:value="advancedQueryForm.extField"
-          :placeholder="t('common.page.form.placeholder.extfield')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="pi.queryLabel('remark')">
-        <a-textarea
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="pi.queryPh('remark', 'optional')"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-        />
-      </a-form-item>
-      </div>
+
       </template>
     </TaktQueryDrawer>
 
@@ -438,7 +185,7 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 import {
   useMasterProductionScheduleI18n,
@@ -493,7 +240,26 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of MASTERPRODUCTIONSCHEDULE_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -503,9 +269,6 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    bucketType: undefined as number | undefined,
-    scheduleStatus: undefined as number | undefined,
-    approvalStatus: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -536,7 +299,7 @@ const { selectedMasterRow } = provideMasterProductionScheduleMasterContext()
 const masterProductionScheduleLinePanelRef = ref<InstanceType<typeof MasterProductionScheduleLinePanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {MasterProductionScheduleQuery} 查询 DTO
  */
@@ -560,23 +323,15 @@ function buildListQuery(overrides?: Partial<MasterProductionScheduleQuery>): Mas
   for (const key of MASTERPRODUCTIONSCHEDULE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.bucketType !== undefined && form.bucketType !== null) {
-    query.bucketType = form.bucketType
-  }
-  if (form.scheduleStatus !== undefined && form.scheduleStatus !== null) {
-    query.scheduleStatus = form.scheduleStatus
-  }
-  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
-    query.approvalStatus = form.approvalStatus
-  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -641,15 +396,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMasterProductionScheduleField(record, 'masterProductionScheduleId') ?? ''
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMasterProductionScheduleField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('mpsCode'),
     dataIndex: 'mpsCode',
     key: 'mpsCode',
@@ -710,6 +456,15 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
   },
+  {
+    title: pi.label('remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMasterProductionScheduleField(record, 'remark') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -765,6 +520,8 @@ const toMasterProductionScheduleNumber = (value: string | number | undefined | n
   return Number.isFinite(num) ? num : 0
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -797,6 +554,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getMasterProductionScheduleList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -823,28 +585,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  plantCode: '',
-  mpsCode: '',
-  masterDemandScheduleId: '',
-  mdsCode: '',
-  planPeriodStartStart: '',
-  planPeriodStartEnd: '',
-  planPeriodEndStart: '',
-  planPeriodEndEnd: '',
-  bucketType: undefined as number | undefined,
-  scheduleStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
@@ -953,6 +694,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportMasterProductionSchedule(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1063,28 +807,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  plantCode: '',
-  mpsCode: '',
-  masterDemandScheduleId: '',
-  mdsCode: '',
-  planPeriodStartStart: '',
-  planPeriodStartEnd: '',
-  planPeriodEndStart: '',
-  planPeriodEndEnd: '',
-  bucketType: undefined as number | undefined,
-  scheduleStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
+
   }
 }
 

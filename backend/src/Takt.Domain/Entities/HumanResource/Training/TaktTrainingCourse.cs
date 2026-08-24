@@ -79,12 +79,12 @@ public class TaktTrainingCourse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "passing_score", ColumnDescription = "及格分数线", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal PassingScore { get; set; } = 0m;
     /// <summary>
-    /// 排序号
+    /// 排序号（回填）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 课程状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// 课程状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "training_course_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int TrainingCourseStatus { get; set; } = 1;

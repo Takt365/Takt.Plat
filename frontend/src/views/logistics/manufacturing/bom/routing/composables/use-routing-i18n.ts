@@ -20,7 +20,6 @@ export const ROUTING_SELF_I18N_KEY = buildEntitySelfI18nKey(ROUTING_ENTITY_SLUG)
 
 /** 列表业务列（不含主键） */
 export const ROUTING_LIST_FIELDS = [
-  'plantCode',
   'workCenter',
   'routingCode',
   'routingName',
@@ -38,7 +37,7 @@ export const ROUTING_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'select',
+  plantCode: 'optional',
   workCenter: 'select',
   routingCode: 'required',
   routingName: 'required',

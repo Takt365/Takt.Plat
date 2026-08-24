@@ -20,7 +20,6 @@ export const APSSCHEDULEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(APSSCHEDULEI
 
 /** 列表业务列（不含主键） */
 export const APSSCHEDULEITEM_LIST_FIELDS = [
-  'apsScheduleId',
   'apsScheduleCode',
   'apsOrderId',
   'apsOperationId',
@@ -45,11 +44,11 @@ export const APSSCHEDULEITEM_LIST_FIELDS = [
   'processStatus',
   'priority',
   'isObsolete',
+  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const APSSCHEDULEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'apsScheduleId',
   'apsScheduleCode',
   'apsOrderId',
   'apsOperationId',
@@ -91,33 +90,7 @@ export const APSSCHEDULEITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const APSSCHEDULEITEM_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  apsOrderId: 'optional',
-  apsOperationId: 'optional',
-  routingItemId: 'optional',
-  lineNumber: 'select',
-  workOrderCode: 'select',
-  productCode: 'select',
-  productName: 'required',
-  workCenterCode: 'optional',
-  workCenterDescription: 'optional',
-  processCode: 'required',
-  processName: 'required',
-  processSequence: 'select',
-  processStandardST: 'select',
-  processStandardSTUnit: 'select',
-  extraMinutes: 'select',
-  planQuantity: 'select',
-  planStartTime: 'select',
-  planEndTime: 'select',
-  actualStartTime: 'optional',
-  actualEndTime: 'optional',
-  processStatus: 'select',
-  priority: 'select',
-  isObsolete: 'select',
-  plantCode: 'select',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -125,48 +98,13 @@ export type ApsScheduleItemField = keyof typeof APSSCHEDULEITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const APSSCHEDULEITEM_QUERY_STRING_FIELDS = [
-  'apsScheduleCode',
-  'apsOrderId',
-  'apsOperationId',
-  'routingItemId',
-  'workOrderCode',
-  'productCode',
-  'productName',
-  'workCenterCode',
-  'workCenterDescription',
-  'processCode',
-  'processName',
-  'planStartTimeStart',
-  'planStartTimeEnd',
-  'planEndTimeStart',
-  'planEndTimeEnd',
-  'actualStartTimeStart',
-  'actualStartTimeEnd',
-  'actualEndTimeStart',
-  'actualEndTimeEnd',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof ApsScheduleItemQuery)[]
 
-export type ApsScheduleItemQueryField =
-  | (typeof APSSCHEDULEITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'processSequence' | 'processStandardST' | 'processStandardSTUnit' | 'extraMinutes' | 'planQuantity' | 'processStatus' | 'priority' | 'isObsolete'
+export type ApsScheduleItemQueryField = (typeof APSSCHEDULEITEM_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const APSSCHEDULEITEM_QUERY_FIELDS: readonly ApsScheduleItemQueryField[] = [
-  ...APSSCHEDULEITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'processSequence',
-  'processStandardST',
-  'processStandardSTUnit',
-  'extraMinutes',
-  'planQuantity',
-  'processStatus',
-  'priority',
-  'isObsolete',
-]
+export const APSSCHEDULEITEM_QUERY_FIELDS: readonly ApsScheduleItemQueryField[] = [...APSSCHEDULEITEM_QUERY_STRING_FIELDS]
 
 /**
  * ApsScheduleItem字段 i18n：index / schedule-item-form 统一入口

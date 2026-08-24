@@ -16,6 +16,7 @@
 @import './dict-tag-base.css';
 @import './menu-base.css';
 @import './table-ellipsis-base.css';
+@import './table-loading-base.css';
 @import './select-base.css';
 @import './utilities.css';
 @import 'tailwindcss';
@@ -385,4 +386,25 @@ a:active {
   align-items: flex-start;
   white-space: normal;
   line-height: 1.6;
+}
+
+.takt-rich-editor {
+  width: 100%;
+  min-height: 18rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ant-color-border);
+  border-radius: 6px;
+  background: var(--ant-color-bg-container);
+}
+
+.takt-rich-editor-disabled {
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.takt-rich-editor > * {
+  flex: 1 1 auto;
+  min-height: 16rem;
+  height: 100%;
 }

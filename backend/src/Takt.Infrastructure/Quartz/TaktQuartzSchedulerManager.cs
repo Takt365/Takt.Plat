@@ -60,12 +60,12 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
     /// 调度定时任务（新增或覆盖）
     /// </summary>
     /// <param name="task">定时任务实体</param>
-    /// <param name="userName">触发/创建用户（写入 JobDataMap）</param>
+    /// <param name="UserName">触发/创建用户（写入 JobDataMap）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
     public async Task ScheduleQuartzTaskAsync(
         TaktQuartzTask task,
-        string? userName = null,
+        string? UserName = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(task);
@@ -73,7 +73,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
         var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
         var jobKey = BuildJobKey(task);
         var triggerKey = BuildTriggerKey(task);
-        var jobDetail = BuildJobDetail(task, userName);
+        var jobDetail = BuildJobDetail(task, UserName);
         var trigger = BuildTrigger(task, triggerKey);
         if (await scheduler.CheckExists(jobKey, cancellationToken))
         {
@@ -151,13 +151,13 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
     /// 立即执行一次定时任务
     /// </summary>
     /// <param name="task">定时任务实体</param>
-    /// <param name="userName">触发用户</param>
+    /// <param name="UserName">触发用户</param>
     /// <param name="executeParams">本次触发执行参数（非空则覆盖任务配置 ExecuteParams）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
     public async Task RunQuartzTaskNowAsync(
         TaktQuartzTask task,
-        string? userName = null,
+        string? UserName = null,
         string? executeParams = null,
         CancellationToken cancellationToken = default)
     {
@@ -174,11 +174,11 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
             : (task.ExecuteParams ?? string.Empty);
         var data = new JobDataMap
         {
-            { TaktQuartzJobDataKeys.UserName, userName ?? string.Empty },
+            { TaktQuartzJobDataKeys.UserName, UserName ?? string.Empty },
             { TaktQuartzJobDataKeys.ManualTrigger, 1 },
             { TaktQuartzJobDataKeys.ExecuteParams, effectiveParams },
         };
-        TaktQuartzJobExecutionLogger.LogManualTrigger(task, userName, jobKey.ToString());
+        TaktQuartzJobExecutionLogger.LogManualTrigger(task, UserName, jobKey.ToString());
         await scheduler.TriggerJob(jobKey, data, cancellationToken);
     }
 
@@ -250,7 +250,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
     /// </summary>
     /// <param name="task">定时任务</param>
     /// <returns>JobDetail</returns>
-    private static IJobDetail BuildJobDetail(TaktQuartzTask task, string? userName = null)
+    private static IJobDetail BuildJobDetail(TaktQuartzTask task, string? UserName = null)
     {
         var jobType = task.Concurrent == 1 ? typeof(TaktQuartzConcurrentJob) : typeof(TaktQuartzSequentialJob);
         return JobBuilder.Create(jobType)
@@ -258,7 +258,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
             .UsingJobData(TaktQuartzJobDataKeys.TenantCode, task.TenantCode ?? string.Empty)
             .UsingJobData(TaktQuartzJobDataKeys.CompanyCode, task.CompanyCode ?? string.Empty)
             .UsingJobData(TaktQuartzJobDataKeys.QuartzTaskId, task.Id)
-            .UsingJobData(TaktQuartzJobDataKeys.UserName, userName ?? string.Empty)
+            .UsingJobData(TaktQuartzJobDataKeys.UserName, UserName ?? string.Empty)
             .UsingJobData(TaktQuartzJobDataKeys.ExecuteParams, task.ExecuteParams ?? string.Empty)
             .Build();
     }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktSupplierDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Supplier 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSupplier 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
-
 
     /// <summary>
     /// 供货商编码（唯一索引）
@@ -162,7 +161,7 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有客户的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int ClearingWithCustomer { get; set; } = 0;
 
@@ -192,7 +191,7 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     public string AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票验证（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -207,7 +206,7 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     public string Incoterms2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+    /// 自动产生的采购订单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int AutomaticPurchaseOrder { get; set; } = 0;
 
@@ -227,7 +226,7 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
-    /// 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+    /// 评估收据结算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EvaluatedReceiptSettlement { get; set; } = 0;
 
@@ -247,12 +246,12 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 供货商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int SupplierStatus { get; set; } = 0;
 
@@ -274,7 +273,7 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -414,7 +413,7 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有客户的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? ClearingWithCustomer { get; set; }
 
@@ -444,7 +443,7 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public string? AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票验证（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -459,7 +458,7 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public string? Incoterms2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+    /// 自动产生的采购订单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? AutomaticPurchaseOrder { get; set; }
 
@@ -479,7 +478,7 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
-    /// 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+    /// 评估收据结算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EvaluatedReceiptSettlement { get; set; }
 
@@ -499,12 +498,12 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public decimal? EvaluationScore { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 供货商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? SupplierStatus { get; set; }
 
@@ -554,9 +553,8 @@ public class TaktSupplierCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -692,7 +690,7 @@ public class TaktSupplierCreateDto
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有客户的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int ClearingWithCustomer { get; set; } = 0;
 
@@ -726,7 +724,7 @@ public class TaktSupplierCreateDto
     public string AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票验证（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -743,7 +741,7 @@ public class TaktSupplierCreateDto
     public string Incoterms2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+    /// 自动产生的采购订单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int AutomaticPurchaseOrder { get; set; } = 0;
 
@@ -764,7 +762,7 @@ public class TaktSupplierCreateDto
     public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
-    /// 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+    /// 评估收据结算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EvaluatedReceiptSettlement { get; set; } = 0;
 
@@ -785,7 +783,7 @@ public class TaktSupplierCreateDto
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 供货商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int SupplierStatus { get; set; } = 0;
 
@@ -839,9 +837,9 @@ public class TaktSupplierStatusDto
     public long SupplierId { get; set; }
 
     /// <summary>
-    /// 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 供货商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "供货商状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
     public int SupplierStatus { get; set; } = 0;
 }
 
@@ -863,9 +861,9 @@ public class TaktSupplierSortDto
     public long SupplierId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前）不能为空")]
+    [Required(ErrorMessage = "排序号（回填）（越小越靠前）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -894,7 +892,7 @@ public class TaktSupplierTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -1024,7 +1022,7 @@ public class TaktSupplierTemplateDto
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有客户的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? ClearingWithCustomer { get; set; }
 
@@ -1054,7 +1052,7 @@ public class TaktSupplierTemplateDto
     public string? AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票验证（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -1069,7 +1067,7 @@ public class TaktSupplierTemplateDto
     public string? Incoterms2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+    /// 自动产生的采购订单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? AutomaticPurchaseOrder { get; set; }
 
@@ -1089,7 +1087,7 @@ public class TaktSupplierTemplateDto
     public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
-    /// 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+    /// 评估收据结算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EvaluatedReceiptSettlement { get; set; }
 
@@ -1109,7 +1107,7 @@ public class TaktSupplierTemplateDto
     public decimal? EvaluationScore { get; set; }
 
     /// <summary>
-    /// 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 供货商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? SupplierStatus { get; set; }
 
@@ -1146,7 +1144,7 @@ public class TaktSupplierImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -1276,7 +1274,7 @@ public class TaktSupplierImportDto
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有客户的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? ClearingWithCustomer { get; set; }
 
@@ -1306,7 +1304,7 @@ public class TaktSupplierImportDto
     public string? AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票验证（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -1321,7 +1319,7 @@ public class TaktSupplierImportDto
     public string? Incoterms2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+    /// 自动产生的采购订单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? AutomaticPurchaseOrder { get; set; }
 
@@ -1341,7 +1339,7 @@ public class TaktSupplierImportDto
     public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
-    /// 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+    /// 评估收据结算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EvaluatedReceiptSettlement { get; set; }
 
@@ -1361,7 +1359,7 @@ public class TaktSupplierImportDto
     public decimal? EvaluationScore { get; set; }
 
     /// <summary>
-    /// 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 供货商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? SupplierStatus { get; set; }
 
@@ -1402,6 +1400,11 @@ public class TaktSupplierExportDto
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 供货商编码（唯一索引）
@@ -1529,7 +1532,7 @@ public class TaktSupplierExportDto
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+    /// 具有客户的清算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int ClearingWithCustomer { get; set; } = 0;
 
@@ -1559,7 +1562,7 @@ public class TaktSupplierExportDto
     public string AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+    /// 基于收货的发票验证（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -1574,7 +1577,7 @@ public class TaktSupplierExportDto
     public string Incoterms2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+    /// 自动产生的采购订单（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int AutomaticPurchaseOrder { get; set; } = 0;
 
@@ -1594,7 +1597,7 @@ public class TaktSupplierExportDto
     public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
-    /// 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+    /// 评估收据结算（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EvaluatedReceiptSettlement { get; set; } = 0;
 
@@ -1614,12 +1617,12 @@ public class TaktSupplierExportDto
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 排序号（回填）（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 供货商状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int SupplierStatus { get; set; } = 0;
 

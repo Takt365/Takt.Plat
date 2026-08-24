@@ -69,7 +69,7 @@ export interface SopArgument extends CompanyDtoBase {
   actualValue: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
+   * 是否超差（字典 sys_yes_no；0=否，1=是）
    */
   isOutOfRange: number;
 
@@ -139,7 +139,7 @@ export interface SopArgumentQuery extends TaktPagedQuery {
   actualValue?: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
+   * 是否超差（字典 sys_yes_no；0=否，1=是）
    */
   isOutOfRange?: number;
 
@@ -228,7 +228,7 @@ export interface SopArgumentCreate {
   actualValue: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
+   * 是否超差（字典 sys_yes_no；0=否，1=是）
    */
   isOutOfRange: number;
 
@@ -317,7 +317,7 @@ export interface SopArgumentTemplate {
   actualValue?: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
+   * 是否超差（字典 sys_yes_no；0=否，1=是）
    */
   isOutOfRange?: number;
 
@@ -391,7 +391,7 @@ export interface SopArgumentImport {
   actualValue?: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
+   * 是否超差（字典 sys_yes_no；0=否，1=是）
    */
   isOutOfRange?: number;
 
@@ -460,7 +460,7 @@ export interface SopArgumentExport {
   actualValue: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
+   * 是否超差（字典 sys_yes_no；0=否，1=是）
    */
   isOutOfRange: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/news-center
 // 文件名称：news-favorite.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-08-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/news-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   NewsFavorite,
   NewsFavoriteCreate,
+  NewsFavoriteObsolete,
   NewsFavoriteUpdate
 } from '@/types/routine/news-center/news-favorite';
 
@@ -105,6 +106,19 @@ export function deleteNewsFavoriteBatch(ids: string[]): Promise<void> {
     url: `${NEWS_FAVORITE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新新闻中心收藏记录作废状态
+ * @param {NewsFavoriteObsolete} dto 作废 DTO
+ * @returns {Promise<NewsFavorite>} 新闻中心收藏记录DTO
+ */
+export function updateNewsFavoriteObsolete(dto: NewsFavoriteObsolete): Promise<NewsFavorite> {
+  return request<NewsFavorite>({
+    url: `${NEWS_FAVORITE_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

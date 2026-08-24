@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceOrderService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务订单应用服务实现
 // 
@@ -372,6 +372,38 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
             throw new TaktBusinessException("服务合同不存在");
         }
         entity.ServiceContractId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.ClientCode))
+        {
+            entity.ClientCode = master.ClientCode;
+        }
+        if (string.IsNullOrEmpty(entity.ClientName1))
+        {
+            entity.ClientName1 = master.ClientName1;
+        }
+        if (string.IsNullOrEmpty(entity.ServiceContractCode))
+        {
+            entity.ServiceContractCode = master.ServiceContractCode;
+        }
+        if (string.IsNullOrEmpty(entity.CurrencyCode))
+        {
+            entity.CurrencyCode = master.CurrencyCode;
+        }
     }
 
     /// <summary>
@@ -392,6 +424,38 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
             throw new TaktBusinessException("服务请求不存在");
         }
         entity.ServiceRequestId = master.Id;
+        if (string.IsNullOrEmpty(entity.TenantCode))
+        {
+            entity.TenantCode = master.TenantCode;
+        }
+        if (string.IsNullOrEmpty(entity.CompanyCode))
+        {
+            entity.CompanyCode = master.CompanyCode;
+        }
+        if (string.IsNullOrEmpty(entity.CultureCode))
+        {
+            entity.CultureCode = master.CultureCode;
+        }
+        if (string.IsNullOrEmpty(entity.PlantCode))
+        {
+            entity.PlantCode = master.PlantCode;
+        }
+        if (string.IsNullOrEmpty(entity.ClientCode))
+        {
+            entity.ClientCode = master.ClientCode;
+        }
+        if (string.IsNullOrEmpty(entity.ClientName1))
+        {
+            entity.ClientName1 = master.ClientName1;
+        }
+        if (string.IsNullOrEmpty(entity.ServiceContractCode))
+        {
+            entity.ServiceContractCode = master.ServiceContractCode;
+        }
+        if (string.IsNullOrEmpty(entity.ServiceRequestCode))
+        {
+            entity.ServiceRequestCode = master.ServiceRequestCode;
+        }
     }
     // ========================================
     // 查询表达式
@@ -444,7 +508,7 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
 
         if (queryDto?.ClientId.HasValue == true)
         {
-            var clientId = queryDto.ClientId;
+            var clientId = queryDto.ClientId.Value;
             exp = exp.And(x => x.ClientId == clientId);
         }
 
@@ -462,7 +526,7 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
 
         if (queryDto?.ServiceContractId.HasValue == true)
         {
-            var serviceContractId = queryDto.ServiceContractId;
+            var serviceContractId = queryDto.ServiceContractId.Value;
             exp = exp.And(x => x.ServiceContractId == serviceContractId);
         }
 
@@ -474,7 +538,7 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
 
         if (queryDto?.ServiceRequestId.HasValue == true)
         {
-            var serviceRequestId = queryDto.ServiceRequestId;
+            var serviceRequestId = queryDto.ServiceRequestId.Value;
             exp = exp.And(x => x.ServiceRequestId == serviceRequestId);
         }
 
@@ -486,37 +550,37 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
 
         if (queryDto?.OrderType.HasValue == true)
         {
-            var orderType = queryDto.OrderType;
+            var orderType = queryDto.OrderType.Value;
             exp = exp.And(x => x.OrderType == orderType);
         }
 
         if (queryDto?.OrderStatus.HasValue == true)
         {
-            var orderStatus = queryDto.OrderStatus;
+            var orderStatus = queryDto.OrderStatus.Value;
             exp = exp.And(x => x.OrderStatus == orderStatus);
         }
 
         if (queryDto?.TotalAmount.HasValue == true)
         {
-            var totalAmount = queryDto.TotalAmount;
+            var totalAmount = queryDto.TotalAmount.Value;
             exp = exp.And(x => x.TotalAmount == totalAmount);
         }
 
         if (queryDto?.DiscountAmount.HasValue == true)
         {
-            var discountAmount = queryDto.DiscountAmount;
+            var discountAmount = queryDto.DiscountAmount.Value;
             exp = exp.And(x => x.DiscountAmount == discountAmount);
         }
 
         if (queryDto?.TaxAmount.HasValue == true)
         {
-            var taxAmount = queryDto.TaxAmount;
+            var taxAmount = queryDto.TaxAmount.Value;
             exp = exp.And(x => x.TaxAmount == taxAmount);
         }
 
         if (queryDto?.ActualAmount.HasValue == true)
         {
-            var actualAmount = queryDto.ActualAmount;
+            var actualAmount = queryDto.ActualAmount.Value;
             exp = exp.And(x => x.ActualAmount == actualAmount);
         }
 
@@ -534,7 +598,7 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            var sortOrder = queryDto.SortOrder;
+            var sortOrder = queryDto.SortOrder.Value;
             exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
@@ -552,73 +616,73 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
 
         if (queryDto?.OrderDateStart.HasValue == true)
         {
-            var orderDateStart = queryDto.OrderDateStart;
+            var orderDateStart = queryDto.OrderDateStart.Value;
             exp = exp.And(x => x.OrderDate >= orderDateStart);
         }
 
         if (queryDto?.OrderDateEnd.HasValue == true)
         {
-            var orderDateEnd = queryDto.OrderDateEnd;
+            var orderDateEnd = queryDto.OrderDateEnd.Value;
             exp = exp.And(x => x.OrderDate <= orderDateEnd);
         }
 
         if (queryDto?.PlannedStartDateStart.HasValue == true)
         {
-            var plannedStartDateStart = queryDto.PlannedStartDateStart;
+            var plannedStartDateStart = queryDto.PlannedStartDateStart.Value;
             exp = exp.And(x => x.PlannedStartDate >= plannedStartDateStart);
         }
 
         if (queryDto?.PlannedStartDateEnd.HasValue == true)
         {
-            var plannedStartDateEnd = queryDto.PlannedStartDateEnd;
+            var plannedStartDateEnd = queryDto.PlannedStartDateEnd.Value;
             exp = exp.And(x => x.PlannedStartDate <= plannedStartDateEnd);
         }
 
         if (queryDto?.PlannedEndDateStart.HasValue == true)
         {
-            var plannedEndDateStart = queryDto.PlannedEndDateStart;
+            var plannedEndDateStart = queryDto.PlannedEndDateStart.Value;
             exp = exp.And(x => x.PlannedEndDate >= plannedEndDateStart);
         }
 
         if (queryDto?.PlannedEndDateEnd.HasValue == true)
         {
-            var plannedEndDateEnd = queryDto.PlannedEndDateEnd;
+            var plannedEndDateEnd = queryDto.PlannedEndDateEnd.Value;
             exp = exp.And(x => x.PlannedEndDate <= plannedEndDateEnd);
         }
 
         if (queryDto?.ActualStartDateStart.HasValue == true)
         {
-            var actualStartDateStart = queryDto.ActualStartDateStart;
+            var actualStartDateStart = queryDto.ActualStartDateStart.Value;
             exp = exp.And(x => x.ActualStartDate >= actualStartDateStart);
         }
 
         if (queryDto?.ActualStartDateEnd.HasValue == true)
         {
-            var actualStartDateEnd = queryDto.ActualStartDateEnd;
+            var actualStartDateEnd = queryDto.ActualStartDateEnd.Value;
             exp = exp.And(x => x.ActualStartDate <= actualStartDateEnd);
         }
 
         if (queryDto?.ActualEndDateStart.HasValue == true)
         {
-            var actualEndDateStart = queryDto.ActualEndDateStart;
+            var actualEndDateStart = queryDto.ActualEndDateStart.Value;
             exp = exp.And(x => x.ActualEndDate >= actualEndDateStart);
         }
 
         if (queryDto?.ActualEndDateEnd.HasValue == true)
         {
-            var actualEndDateEnd = queryDto.ActualEndDateEnd;
+            var actualEndDateEnd = queryDto.ActualEndDateEnd.Value;
             exp = exp.And(x => x.ActualEndDate <= actualEndDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 

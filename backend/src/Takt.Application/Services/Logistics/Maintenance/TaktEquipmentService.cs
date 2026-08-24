@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktEquipmentService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂设备应用服务实现
 // 
@@ -63,12 +63,20 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     }
 
     /// <summary>
-    /// 获取工厂设备列表（分页）
+    /// 获取工厂设备列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEquipmentDto>> GetEquipmentListAsync(TaktEquipmentQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEquipmentDto>.Create(
+                new List<TaktEquipmentDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _equipmentRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,8 +118,8 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EquipmentName ?? e.Id.ToString(),
+            DictValue = e.EquipCode,
+            DictLabel = e.EquipmentName ?? e.EquipCode,
         }).ToList();
     }
 
@@ -291,7 +299,15 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEquipmentAsync(TaktEquipmentQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEquipmentQueryDto());
+        var queryDto = query ?? new TaktEquipmentQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEquipmentExportDto>(),
+                sheetName ?? "工厂设备数据",
+                fileName ?? "工厂设备导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _equipmentRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -305,6 +321,36 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             exportData,
             sheetName ?? "工厂设备数据",
             fileName ?? "工厂设备导出.xlsx");
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取设备统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>设备统计</returns>
+    public async Task<TaktEquipmentStatDto> GetEquipmentStatAsync(TaktEquipmentStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.CreatedAtStart,
+            queryDto.CreatedAtEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktEquipment, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end;
+        var monthEquipmentCount = await _equipmentRepository.CountAsync(predicate);
+        return new TaktEquipmentStatDto
+        {
+            StatMonth = statMonth,
+            MonthEquipmentCount = monthEquipmentCount,
+        };
     }
 
     // ========================================
@@ -335,7 +381,7 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     }
 
     /// <summary>
-    /// 保存工厂设备子表级联（维护通知单、维护工单、设备维护履历；Create/Update 后按主表 Id 先删后插）
+    /// 保存工厂设备子表级联（维护通知单、维护工单、设备维护履历；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -343,140 +389,206 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     private async Task SaveEquipmentChildrenAsync(TaktEquipment entity, TaktEquipmentCreateDto dto)
     {
         // 维护通知单（MaintenanceNotifications）
-        if (dto.MaintenanceNotifications is not { Count: > 0 })
+        List<TaktMaintenanceNotificationUpdateDto>? maintenanceNotificationsForSave;
+        if (dto is TaktEquipmentUpdateDto updateDtoForMaintenanceNotifications && updateDtoForMaintenanceNotifications.MaintenanceNotifications != null)
+        {
+            maintenanceNotificationsForSave = updateDtoForMaintenanceNotifications.MaintenanceNotifications;
+        }
+        else if (dto.MaintenanceNotifications != null)
+        {
+            maintenanceNotificationsForSave = dto.MaintenanceNotifications.Adapt<List<TaktMaintenanceNotificationUpdateDto>>();
+        }
+        else
+        {
+            maintenanceNotificationsForSave = null;
+        }
+        if (maintenanceNotificationsForSave is not { Count: > 0 })
         {
             await _maintenanceNotificationRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
         }
         else
         {
-            var maintenancenotifications = dto.MaintenanceNotifications.Adapt<List<TaktMaintenanceNotification>>();
-            foreach (var child in maintenancenotifications)
+            var existingList = await _maintenanceNotificationRepository.GetListAsync(x => x.EquipmentId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktMaintenanceNotification>();
+            for (var i = 0; i < maintenanceNotificationsForSave.Count; i++)
             {
-                child.EquipmentId = entity.Id;
+                var childDto = maintenanceNotificationsForSave[i];
+                childDto.EquipmentId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EquipCode = entity.EquipCode;
+                childDto.EquipmentName = entity.EquipmentName;
+                if (childDto.MaintenanceNotificationId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.MaintenanceNotificationId, out var target))
+                    {
+                        throw new TaktBusinessException("维护通知单不存在（MaintenanceNotificationId={childDto.MaintenanceNotificationId}）");
+                    }
+                    if (target.EquipmentId != entity.Id)
+                    {
+                        throw new TaktBusinessException("维护通知单不属于当前主表（MaintenanceNotificationId={childDto.MaintenanceNotificationId}）");
+                    }
+                    submittedIds.Add(childDto.MaintenanceNotificationId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.MaintenanceNotificationId;
+                    target.EquipmentId = entity.Id;
+                    await _maintenanceNotificationRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktMaintenanceNotification>();
+                    child.Id = 0;
+                    child.EquipmentId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < maintenancenotifications.Count; i++)
-                        {
-                            var key = $"{maintenancenotifications[i].CompanyCode}|{maintenancenotifications[i].PlantCode}|{maintenancenotifications[i].NotificationCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"维护通知单第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、NotificationCode）");
-                            }
-                        }
-            await _maintenanceNotificationRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
-            foreach (var child in maintenancenotifications)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_takt_logistics_maintenance_notification_code_unique = await _uniqueValidator.IsUniqueAsync(
-                _maintenanceNotificationRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.PlantCode == child.PlantCode
-                    && x.NotificationCode == child.NotificationCode);
-            if (!isUnique_ix_takt_logistics_maintenance_notification_code_unique)
+                await _maintenanceNotificationRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("维护通知单的CompanyCode、PlantCode、NotificationCode已存在");
+                await _maintenanceNotificationRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _maintenanceNotificationRepository.CreateRangeAsync(maintenancenotifications);
         }
         // 维护工单（MaintenanceWorkOrders）
-        if (dto.MaintenanceWorkOrders is not { Count: > 0 })
+        List<TaktMaintenanceWorkOrderUpdateDto>? maintenanceWorkOrdersForSave;
+        if (dto is TaktEquipmentUpdateDto updateDtoForMaintenanceWorkOrders && updateDtoForMaintenanceWorkOrders.MaintenanceWorkOrders != null)
+        {
+            maintenanceWorkOrdersForSave = updateDtoForMaintenanceWorkOrders.MaintenanceWorkOrders;
+        }
+        else if (dto.MaintenanceWorkOrders != null)
+        {
+            maintenanceWorkOrdersForSave = dto.MaintenanceWorkOrders.Adapt<List<TaktMaintenanceWorkOrderUpdateDto>>();
+        }
+        else
+        {
+            maintenanceWorkOrdersForSave = null;
+        }
+        if (maintenanceWorkOrdersForSave is not { Count: > 0 })
         {
             await _maintenanceWorkOrderRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
         }
         else
         {
-            var maintenanceworkorders = dto.MaintenanceWorkOrders.Adapt<List<TaktMaintenanceWorkOrder>>();
-            foreach (var child in maintenanceworkorders)
+            var existingList = await _maintenanceWorkOrderRepository.GetListAsync(x => x.EquipmentId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktMaintenanceWorkOrder>();
+            for (var i = 0; i < maintenanceWorkOrdersForSave.Count; i++)
             {
-                child.EquipmentId = entity.Id;
+                var childDto = maintenanceWorkOrdersForSave[i];
+                childDto.EquipmentId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EquipCode = entity.EquipCode;
+                childDto.EquipmentName = entity.EquipmentName;
+                if (childDto.MaintenanceWorkOrderId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.MaintenanceWorkOrderId, out var target))
+                    {
+                        throw new TaktBusinessException("维护工单不存在（MaintenanceWorkOrderId={childDto.MaintenanceWorkOrderId}）");
+                    }
+                    if (target.EquipmentId != entity.Id)
+                    {
+                        throw new TaktBusinessException("维护工单不属于当前主表（MaintenanceWorkOrderId={childDto.MaintenanceWorkOrderId}）");
+                    }
+                    submittedIds.Add(childDto.MaintenanceWorkOrderId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.MaintenanceWorkOrderId;
+                    target.EquipmentId = entity.Id;
+                    await _maintenanceWorkOrderRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktMaintenanceWorkOrder>();
+                    child.Id = 0;
+                    child.EquipmentId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < maintenanceworkorders.Count; i++)
-                        {
-                            var key = $"{maintenanceworkorders[i].CompanyCode}|{maintenanceworkorders[i].PlantCode}|{maintenanceworkorders[i].WorkOrderCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"维护工单第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、WorkOrderCode）");
-                            }
-                        }
-            await _maintenanceWorkOrderRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
-            foreach (var child in maintenanceworkorders)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_takt_logistics_maintenance_work_order_code_unique = await _uniqueValidator.IsUniqueAsync(
-                _maintenanceWorkOrderRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.PlantCode == child.PlantCode
-                    && x.WorkOrderCode == child.WorkOrderCode);
-            if (!isUnique_ix_takt_logistics_maintenance_work_order_code_unique)
+                await _maintenanceWorkOrderRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("维护工单的CompanyCode、PlantCode、WorkOrderCode已存在");
+                await _maintenanceWorkOrderRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _maintenanceWorkOrderRepository.CreateRangeAsync(maintenanceworkorders);
         }
         // 设备维护履历（MaintenanceHistories）
-        if (dto.MaintenanceHistories is not { Count: > 0 })
+        List<TaktMaintenanceHistoryUpdateDto>? maintenanceHistoriesForSave;
+        if (dto is TaktEquipmentUpdateDto updateDtoForMaintenanceHistories && updateDtoForMaintenanceHistories.MaintenanceHistories != null)
+        {
+            maintenanceHistoriesForSave = updateDtoForMaintenanceHistories.MaintenanceHistories;
+        }
+        else if (dto.MaintenanceHistories != null)
+        {
+            maintenanceHistoriesForSave = dto.MaintenanceHistories.Adapt<List<TaktMaintenanceHistoryUpdateDto>>();
+        }
+        else
+        {
+            maintenanceHistoriesForSave = null;
+        }
+        if (maintenanceHistoriesForSave is not { Count: > 0 })
         {
             await _maintenanceHistoryRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
         }
         else
         {
-            var maintenancehistories = dto.MaintenanceHistories.Adapt<List<TaktMaintenanceHistory>>();
-            foreach (var child in maintenancehistories)
+            var existingList = await _maintenanceHistoryRepository.GetListAsync(x => x.EquipmentId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktMaintenanceHistory>();
+            for (var i = 0; i < maintenanceHistoriesForSave.Count; i++)
             {
-                child.EquipmentId = entity.Id;
+                var childDto = maintenanceHistoriesForSave[i];
+                childDto.EquipmentId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.EquipCode = entity.EquipCode;
+                if (childDto.MaintenanceHistoryId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.MaintenanceHistoryId, out var target))
+                    {
+                        throw new TaktBusinessException("设备维护履历不存在（MaintenanceHistoryId={childDto.MaintenanceHistoryId}）");
+                    }
+                    if (target.EquipmentId != entity.Id)
+                    {
+                        throw new TaktBusinessException("设备维护履历不属于当前主表（MaintenanceHistoryId={childDto.MaintenanceHistoryId}）");
+                    }
+                    submittedIds.Add(childDto.MaintenanceHistoryId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.MaintenanceHistoryId;
+                    target.EquipmentId = entity.Id;
+                    await _maintenanceHistoryRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktMaintenanceHistory>();
+                    child.Id = 0;
+                    child.EquipmentId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < maintenancehistories.Count; i++)
-                        {
-                            var key = $"{maintenancehistories[i].CompanyCode}|{maintenancehistories[i].MaintenanceWorkOrderId}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"设备维护履历第{i + 1}项与本次提交的其他项重复（CompanyCode、MaintenanceWorkOrderId）");
-                            }
-                        }
-            await _maintenanceHistoryRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
-            foreach (var child in maintenancehistories)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_takt_logistics_maintenance_history_work_order_unique = await _uniqueValidator.IsUniqueAsync(
-                _maintenanceHistoryRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.MaintenanceWorkOrderId == child.MaintenanceWorkOrderId);
-            if (!isUnique_ix_takt_logistics_maintenance_history_work_order_unique)
+                await _maintenanceHistoryRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("设备维护履历的CompanyCode、MaintenanceWorkOrderId已存在");
+                await _maintenanceHistoryRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _maintenanceHistoryRepository.CreateRangeAsync(maintenancehistories);
         }
     }
-
-    /// <summary>
-    /// 获取设备统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>设备统计</returns>
-    public async Task<TaktEquipmentStatDto> GetEquipmentStatAsync(TaktEquipmentStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.CreatedAtStart,
-            queryDto.CreatedAtEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktEquipment, bool>> predicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.CreatedAt >= start
-            && x.CreatedAt <= end;
-        var monthEquipmentCount = await _equipmentRepository.CountAsync(predicate);
-        return new TaktEquipmentStatDto
-        {
-            StatMonth = statMonth,
-            MonthEquipmentCount = monthEquipmentCount,
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -490,14 +602,14 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     {
         var exp = Expressionable.Create<TaktEquipment>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EquipCode != null && x.EquipCode.Contains(keywords))
                 || (x.EquipmentName != null && x.EquipmentName.Contains(keywords))
-                || SqlFunc.ToString(x.EquipmentType).Contains(keywords)
                 || (x.EquipmentModel != null && x.EquipmentModel.Contains(keywords))
                 || (x.EquipSpecification != null && x.EquipSpecification.Contains(keywords))
                 || (x.EquipBrand != null && x.EquipBrand.Contains(keywords))
@@ -511,220 +623,398 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
                 || (x.EquipmentLocation != null && x.EquipmentLocation.Contains(keywords))
                 || (x.ResponsibleUserBy != null && x.ResponsibleUserBy.Contains(keywords))
                 || (x.OperatorBy != null && x.OperatorBy.Contains(keywords))
-                || SqlFunc.ToString(x.EquipmentOriginalValue).Contains(keywords)
                 || (x.TechnicalParameters != null && x.TechnicalParameters.Contains(keywords))
                 || (x.EquipmentImages != null && x.EquipmentImages.Contains(keywords))
                 || (x.EquipmentDocuments != null && x.EquipmentDocuments.Contains(keywords))
-                || SqlFunc.ToString(x.IsCritical).Contains(keywords)
-                || SqlFunc.ToString(x.WarrantyStatus).Contains(keywords)
-                || SqlFunc.ToString(x.EquipmentStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
-                || SqlFunc.ToString(x.InstallationDate).Contains(keywords)
-                || SqlFunc.ToString(x.StartDate).Contains(keywords)
-                || SqlFunc.ToString(x.WarrantyStartDate).Contains(keywords)
-                || SqlFunc.ToString(x.WarrantyEndDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(queryDto.EquipCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipCode))
         {
-            exp = exp.And(x => x.EquipmentName != null && x.EquipmentName.Contains(queryDto.EquipmentName));
+            var equipCode = queryDto.EquipCode;
+            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(equipCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentName))
+        {
+            var equipmentName = queryDto.EquipmentName;
+            exp = exp.And(x => x.EquipmentName != null && x.EquipmentName.Contains(equipmentName));
         }
 
         if (queryDto?.EquipmentType.HasValue == true)
         {
-            exp = exp.And(x => x.EquipmentType == queryDto.EquipmentType);
+            var equipmentType = queryDto.EquipmentType.Value;
+            exp = exp.And(x => x.EquipmentType == equipmentType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentModel))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentModel))
         {
-            exp = exp.And(x => x.EquipmentModel != null && x.EquipmentModel.Contains(queryDto.EquipmentModel));
+            var equipmentModel = queryDto.EquipmentModel;
+            exp = exp.And(x => x.EquipmentModel != null && x.EquipmentModel.Contains(equipmentModel));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipSpecification))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipSpecification))
         {
-            exp = exp.And(x => x.EquipSpecification != null && x.EquipSpecification.Contains(queryDto.EquipSpecification));
+            var equipSpecification = queryDto.EquipSpecification;
+            exp = exp.And(x => x.EquipSpecification != null && x.EquipSpecification.Contains(equipSpecification));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipBrand))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipBrand))
         {
-            exp = exp.And(x => x.EquipBrand != null && x.EquipBrand.Contains(queryDto.EquipBrand));
+            var equipBrand = queryDto.EquipBrand;
+            exp = exp.And(x => x.EquipBrand != null && x.EquipBrand.Contains(equipBrand));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Manufacturer))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Manufacturer))
         {
-            exp = exp.And(x => x.Manufacturer != null && x.Manufacturer.Contains(queryDto.Manufacturer));
+            var manufacturer = queryDto.Manufacturer;
+            exp = exp.And(x => x.Manufacturer != null && x.Manufacturer.Contains(manufacturer));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DealerBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DealerBy))
         {
-            exp = exp.And(x => x.DealerBy != null && x.DealerBy.Contains(queryDto.DealerBy));
+            var dealerBy = queryDto.DealerBy;
+            exp = exp.And(x => x.DealerBy != null && x.DealerBy.Contains(dealerBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SerialNumber))
         {
-            exp = exp.And(x => x.SerialNumber != null && x.SerialNumber.Contains(queryDto.SerialNumber));
+            var serialNumber = queryDto.SerialNumber;
+            exp = exp.And(x => x.SerialNumber != null && x.SerialNumber.Contains(serialNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkshopBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkshopBy))
         {
-            exp = exp.And(x => x.WorkshopBy != null && x.WorkshopBy.Contains(queryDto.WorkshopBy));
+            var workshopBy = queryDto.WorkshopBy;
+            exp = exp.And(x => x.WorkshopBy != null && x.WorkshopBy.Contains(workshopBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionLineBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductionLineBy))
         {
-            exp = exp.And(x => x.ProductionLineBy != null && x.ProductionLineBy.Contains(queryDto.ProductionLineBy));
+            var productionLineBy = queryDto.ProductionLineBy;
+            exp = exp.And(x => x.ProductionLineBy != null && x.ProductionLineBy.Contains(productionLineBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkstationBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkstationBy))
         {
-            exp = exp.And(x => x.WorkstationBy != null && x.WorkstationBy.Contains(queryDto.WorkstationBy));
+            var workstationBy = queryDto.WorkstationBy;
+            exp = exp.And(x => x.WorkstationBy != null && x.WorkstationBy.Contains(workstationBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeptBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptBy))
         {
-            exp = exp.And(x => x.DeptBy != null && x.DeptBy.Contains(queryDto.DeptBy));
+            var deptBy = queryDto.DeptBy;
+            exp = exp.And(x => x.DeptBy != null && x.DeptBy.Contains(deptBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentLocation))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentLocation))
         {
-            exp = exp.And(x => x.EquipmentLocation != null && x.EquipmentLocation.Contains(queryDto.EquipmentLocation));
+            var equipmentLocation = queryDto.EquipmentLocation;
+            exp = exp.And(x => x.EquipmentLocation != null && x.EquipmentLocation.Contains(equipmentLocation));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ResponsibleUserBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleUserBy))
         {
-            exp = exp.And(x => x.ResponsibleUserBy != null && x.ResponsibleUserBy.Contains(queryDto.ResponsibleUserBy));
+            var responsibleUserBy = queryDto.ResponsibleUserBy;
+            exp = exp.And(x => x.ResponsibleUserBy != null && x.ResponsibleUserBy.Contains(responsibleUserBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OperatorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.OperatorBy))
         {
-            exp = exp.And(x => x.OperatorBy != null && x.OperatorBy.Contains(queryDto.OperatorBy));
+            var operatorBy = queryDto.OperatorBy;
+            exp = exp.And(x => x.OperatorBy != null && x.OperatorBy.Contains(operatorBy));
         }
 
         if (queryDto?.EquipmentOriginalValue.HasValue == true)
         {
-            exp = exp.And(x => x.EquipmentOriginalValue == queryDto.EquipmentOriginalValue);
+            var equipmentOriginalValue = queryDto.EquipmentOriginalValue.Value;
+            exp = exp.And(x => x.EquipmentOriginalValue == equipmentOriginalValue);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TechnicalParameters))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TechnicalParameters))
         {
-            exp = exp.And(x => x.TechnicalParameters != null && x.TechnicalParameters.Contains(queryDto.TechnicalParameters));
+            var technicalParameters = queryDto.TechnicalParameters;
+            exp = exp.And(x => x.TechnicalParameters != null && x.TechnicalParameters.Contains(technicalParameters));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentImages))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentImages))
         {
-            exp = exp.And(x => x.EquipmentImages != null && x.EquipmentImages.Contains(queryDto.EquipmentImages));
+            var equipmentImages = queryDto.EquipmentImages;
+            exp = exp.And(x => x.EquipmentImages != null && x.EquipmentImages.Contains(equipmentImages));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentDocuments))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentDocuments))
         {
-            exp = exp.And(x => x.EquipmentDocuments != null && x.EquipmentDocuments.Contains(queryDto.EquipmentDocuments));
+            var equipmentDocuments = queryDto.EquipmentDocuments;
+            exp = exp.And(x => x.EquipmentDocuments != null && x.EquipmentDocuments.Contains(equipmentDocuments));
         }
 
         if (queryDto?.IsCritical.HasValue == true)
         {
-            exp = exp.And(x => x.IsCritical == queryDto.IsCritical);
+            var isCritical = queryDto.IsCritical.Value;
+            exp = exp.And(x => x.IsCritical == isCritical);
         }
 
         if (queryDto?.WarrantyStatus.HasValue == true)
         {
-            exp = exp.And(x => x.WarrantyStatus == queryDto.WarrantyStatus);
+            var warrantyStatus = queryDto.WarrantyStatus.Value;
+            exp = exp.And(x => x.WarrantyStatus == warrantyStatus);
         }
 
         if (queryDto?.EquipmentStatus.HasValue == true)
         {
-            exp = exp.And(x => x.EquipmentStatus == queryDto.EquipmentStatus);
+            var equipmentStatus = queryDto.EquipmentStatus.Value;
+            exp = exp.And(x => x.EquipmentStatus == equipmentStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.PurchaseDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseDate >= queryDto.PurchaseDateStart);
+            var purchaseDateStart = queryDto.PurchaseDateStart.Value;
+            exp = exp.And(x => x.PurchaseDate >= purchaseDateStart);
         }
 
         if (queryDto?.PurchaseDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseDate <= queryDto.PurchaseDateEnd);
+            var purchaseDateEnd = queryDto.PurchaseDateEnd.Value;
+            exp = exp.And(x => x.PurchaseDate <= purchaseDateEnd);
         }
 
         if (queryDto?.InstallationDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.InstallationDate >= queryDto.InstallationDateStart);
+            var installationDateStart = queryDto.InstallationDateStart.Value;
+            exp = exp.And(x => x.InstallationDate >= installationDateStart);
         }
 
         if (queryDto?.InstallationDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.InstallationDate <= queryDto.InstallationDateEnd);
+            var installationDateEnd = queryDto.InstallationDateEnd.Value;
+            exp = exp.And(x => x.InstallationDate <= installationDateEnd);
         }
 
         if (queryDto?.StartDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.StartDate >= queryDto.StartDateStart);
+            var startDateStart = queryDto.StartDateStart.Value;
+            exp = exp.And(x => x.StartDate >= startDateStart);
         }
 
         if (queryDto?.StartDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.StartDate <= queryDto.StartDateEnd);
+            var startDateEnd = queryDto.StartDateEnd.Value;
+            exp = exp.And(x => x.StartDate <= startDateEnd);
         }
 
         if (queryDto?.WarrantyStartDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.WarrantyStartDate >= queryDto.WarrantyStartDateStart);
+            var warrantyStartDateStart = queryDto.WarrantyStartDateStart.Value;
+            exp = exp.And(x => x.WarrantyStartDate >= warrantyStartDateStart);
         }
 
         if (queryDto?.WarrantyStartDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.WarrantyStartDate <= queryDto.WarrantyStartDateEnd);
+            var warrantyStartDateEnd = queryDto.WarrantyStartDateEnd.Value;
+            exp = exp.And(x => x.WarrantyStartDate <= warrantyStartDateEnd);
         }
 
         if (queryDto?.WarrantyEndDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.WarrantyEndDate >= queryDto.WarrantyEndDateStart);
+            var warrantyEndDateStart = queryDto.WarrantyEndDateStart.Value;
+            exp = exp.And(x => x.WarrantyEndDate >= warrantyEndDateStart);
         }
 
         if (queryDto?.WarrantyEndDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.WarrantyEndDate <= queryDto.WarrantyEndDateEnd);
+            var warrantyEndDateEnd = queryDto.WarrantyEndDateEnd.Value;
+            exp = exp.And(x => x.WarrantyEndDate <= warrantyEndDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEquipmentQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipmentName))
+        {
+            return true;
+        }
+        if (queryDto.EquipmentType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipmentModel))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipSpecification))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipBrand))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Manufacturer))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DealerBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SerialNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkshopBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductionLineBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkstationBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipmentLocation))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleUserBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OperatorBy))
+        {
+            return true;
+        }
+        if (queryDto.EquipmentOriginalValue.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TechnicalParameters))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipmentImages))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EquipmentDocuments))
+        {
+            return true;
+        }
+        if (queryDto.IsCritical.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WarrantyStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EquipmentStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.PurchaseDateStart.HasValue || queryDto.PurchaseDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.InstallationDateStart.HasValue || queryDto.InstallationDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StartDateStart.HasValue || queryDto.StartDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WarrantyStartDateStart.HasValue || queryDto.WarrantyStartDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WarrantyEndDateStart.HasValue || queryDto.WarrantyEndDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceService.cs
-// 创建时间：2026-08-10
+// 创建时间：2026-08-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购发票应用服务实现
 // 
@@ -383,6 +383,13 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
             {
                 var childDto = itemsForSave[i];
                 childDto.PurchaseInvoiceId = entity.Id;
+                childDto.TenantCode = entity.TenantCode;
+                childDto.CompanyCode = entity.CompanyCode;
+                childDto.CultureCode = entity.CultureCode;
+                childDto.PlantCode = entity.PlantCode;
+                childDto.PurchaseInvoiceCode = entity.PurchaseInvoiceCode;
+                childDto.TaxCode = entity.TaxCode;
+                childDto.ReferenceCode = entity.ReferenceCode;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -475,7 +482,9 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
         {
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(keywords))
                 || (x.FiscalYear != null && x.FiscalYear.Contains(keywords))
                 || (x.DocumentType != null && x.DocumentType.Contains(keywords))
                 || (x.TransactionEventType != null && x.TransactionEventType.Contains(keywords))
@@ -492,10 +501,21 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
                 || (x.EnteredBy != null && x.EnteredBy.Contains(keywords))
                 || (x.TransactionCode != null && x.TransactionCode.Contains(keywords))
                 || (x.PostedBy != null && x.PostedBy.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseInvoiceCode))
@@ -542,19 +562,19 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
 
         if (queryDto?.ExchangeRate.HasValue == true)
         {
-            var exchangeRate = queryDto.ExchangeRate;
+            var exchangeRate = queryDto.ExchangeRate.Value;
             exp = exp.And(x => x.ExchangeRate == exchangeRate);
         }
 
         if (queryDto?.GrossAmount.HasValue == true)
         {
-            var grossAmount = queryDto.GrossAmount;
+            var grossAmount = queryDto.GrossAmount.Value;
             exp = exp.And(x => x.GrossAmount == grossAmount);
         }
 
         if (queryDto?.VatAmount.HasValue == true)
         {
-            var vatAmount = queryDto.VatAmount;
+            var vatAmount = queryDto.VatAmount.Value;
             exp = exp.And(x => x.VatAmount == vatAmount);
         }
 
@@ -566,7 +586,7 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
 
         if (queryDto?.CashDiscountDays1.HasValue == true)
         {
-            var cashDiscountDays1 = queryDto.CashDiscountDays1;
+            var cashDiscountDays1 = queryDto.CashDiscountDays1.Value;
             exp = exp.And(x => x.CashDiscountDays1 == cashDiscountDays1);
         }
 
@@ -608,7 +628,7 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
 
         if (queryDto?.TaxExchangeRate.HasValue == true)
         {
-            var taxExchangeRate = queryDto.TaxExchangeRate;
+            var taxExchangeRate = queryDto.TaxExchangeRate.Value;
             exp = exp.And(x => x.TaxExchangeRate == taxExchangeRate);
         }
 
@@ -644,74 +664,63 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
 
         if (queryDto?.DocumentDateStart.HasValue == true)
         {
-            var documentDateStart = queryDto.DocumentDateStart;
+            var documentDateStart = queryDto.DocumentDateStart.Value;
             exp = exp.And(x => x.DocumentDate >= documentDateStart);
         }
 
         if (queryDto?.DocumentDateEnd.HasValue == true)
         {
-            var documentDateEnd = queryDto.DocumentDateEnd;
+            var documentDateEnd = queryDto.DocumentDateEnd.Value;
             exp = exp.And(x => x.DocumentDate <= documentDateEnd);
         }
 
         if (queryDto?.PostingDateStart.HasValue == true)
         {
-            var postingDateStart = queryDto.PostingDateStart;
+            var postingDateStart = queryDto.PostingDateStart.Value;
             exp = exp.And(x => x.PostingDate >= postingDateStart);
         }
 
         if (queryDto?.PostingDateEnd.HasValue == true)
         {
-            var postingDateEnd = queryDto.PostingDateEnd;
+            var postingDateEnd = queryDto.PostingDateEnd.Value;
             exp = exp.And(x => x.PostingDate <= postingDateEnd);
         }
 
         if (queryDto?.BaselineDateStart.HasValue == true)
         {
-            var baselineDateStart = queryDto.BaselineDateStart;
+            var baselineDateStart = queryDto.BaselineDateStart.Value;
             exp = exp.And(x => x.BaselineDate >= baselineDateStart);
         }
 
         if (queryDto?.BaselineDateEnd.HasValue == true)
         {
-            var baselineDateEnd = queryDto.BaselineDateEnd;
+            var baselineDateEnd = queryDto.BaselineDateEnd.Value;
             exp = exp.And(x => x.BaselineDate <= baselineDateEnd);
         }
 
         if (queryDto?.ExchangeRateDateStart.HasValue == true)
         {
-            var exchangeRateDateStart = queryDto.ExchangeRateDateStart;
+            var exchangeRateDateStart = queryDto.ExchangeRateDateStart.Value;
             exp = exp.And(x => x.ExchangeRateDate >= exchangeRateDateStart);
         }
 
         if (queryDto?.ExchangeRateDateEnd.HasValue == true)
         {
-            var exchangeRateDateEnd = queryDto.ExchangeRateDateEnd;
+            var exchangeRateDateEnd = queryDto.ExchangeRateDateEnd.Value;
             exp = exp.And(x => x.ExchangeRateDate <= exchangeRateDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            var createdAtStart = queryDto.CreatedAtStart;
+            var createdAtStart = queryDto.CreatedAtStart.Value;
             exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            var createdAtEnd = queryDto.CreatedAtEnd;
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -728,6 +737,14 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
             return false;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }

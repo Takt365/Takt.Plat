@@ -72,4 +72,14 @@ public class TaktEmployeeExperience : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "witness_phone", ColumnDescription = "证明人电话", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? WitnessPhone { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

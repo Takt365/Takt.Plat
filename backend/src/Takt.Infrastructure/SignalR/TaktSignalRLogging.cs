@@ -27,14 +27,14 @@ internal static class TaktSignalRLogging
     /// </summary>
     /// <param name="hubName">Hub 名称</param>
     /// <param name="connectionId">连接 ID</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="userId">用户 ID</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="tenantCode">租户编码</param>
     public static void LogHubConnected(
         string hubName,
         string? connectionId,
-        string userName,
+        string UserName,
         long? userId,
         string companyCode,
         string? tenantCode = null,
@@ -45,7 +45,7 @@ internal static class TaktSignalRLogging
             "connect",
             hubName,
             connectionId,
-            userName,
+            UserName,
             userId,
             companyCode,
             tenantCode,
@@ -56,7 +56,7 @@ internal static class TaktSignalRLogging
             "SignalR Hub 已连接: {HubName}, ConnectionId={ConnectionId}, User={UserName}",
             hubName,
             connectionId,
-            userName);
+            UserName);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ internal static class TaktSignalRLogging
     /// </summary>
     /// <param name="hubName">Hub 名称</param>
     /// <param name="connectionId">连接 ID</param>
-    /// <param name="userName">用户名</param>
+    /// <param name="UserName">用户名</param>
     /// <param name="userId">用户 ID</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="tenantCode">租户编码</param>
@@ -72,7 +72,7 @@ internal static class TaktSignalRLogging
     public static void LogHubDisconnected(
         string hubName,
         string? connectionId,
-        string userName,
+        string UserName,
         long? userId,
         string companyCode,
         string? tenantCode = null,
@@ -84,7 +84,7 @@ internal static class TaktSignalRLogging
             "disconnect",
             hubName,
             connectionId,
-            userName,
+            UserName,
             userId,
             companyCode,
             tenantCode,
@@ -98,7 +98,7 @@ internal static class TaktSignalRLogging
                 "SignalR Hub 异常断开: {HubName}, ConnectionId={ConnectionId}, User={UserName}",
                 hubName,
                 connectionId,
-                userName);
+                UserName);
             return;
         }
 
@@ -107,22 +107,22 @@ internal static class TaktSignalRLogging
             "SignalR Hub 已断开: {HubName}, ConnectionId={ConnectionId}, User={UserName}",
             hubName,
             connectionId,
-            userName);
+            UserName);
     }
 
     /// <summary>
     /// 记录统计推送
     /// </summary>
     /// <param name="statisticsType">统计类型（online / message）</param>
-    /// <param name="userName">目标用户名</param>
+    /// <param name="UserName">目标用户名</param>
     /// <param name="companyCode">公司编码</param>
-    public static void LogStatisticsPushed(string statisticsType, string userName, string companyCode)
+    public static void LogStatisticsPushed(string statisticsType, string UserName, string companyCode)
     {
         var context = new TaktLogContext
         {
             Module = ModuleName,
             Action = "statistics-push",
-            Username = userName,
+            UserName = UserName,
             CompanyCode = companyCode,
             Extra = new Dictionary<string, object?> { ["StatisticsType"] = statisticsType },
         };
@@ -130,7 +130,7 @@ internal static class TaktSignalRLogging
             context,
             "SignalR 统计已推送: Type={StatisticsType}, User={UserName}, Company={CompanyCode}",
             statisticsType,
-            userName,
+            UserName,
             companyCode);
     }
 
@@ -153,7 +153,7 @@ internal static class TaktSignalRLogging
         {
             Module = ModuleName,
             Action = "private-message-push",
-            Username = toUserName,
+            UserName = toUserName,
             CompanyCode = companyCode,
             Extra = new Dictionary<string, object?>
             {
@@ -177,14 +177,14 @@ internal static class TaktSignalRLogging
     /// <param name="eventType">事件类型</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="detail">详情</param>
-    /// <param name="userName">目标用户名</param>
-    public static void LogWorkflowPushed(string eventType, string companyCode, string detail, string? userName = null)
+    /// <param name="UserName">目标用户名</param>
+    public static void LogWorkflowPushed(string eventType, string companyCode, string detail, string? UserName = null)
     {
         var context = new TaktLogContext
         {
             Module = ModuleName,
             Action = "workflow-push",
-            Username = userName,
+            UserName = UserName,
             CompanyCode = companyCode,
             Extra = new Dictionary<string, object?>
             {
@@ -198,7 +198,7 @@ internal static class TaktSignalRLogging
             eventType,
             companyCode,
             detail,
-            userName ?? "(company)");
+            UserName ?? "(company)");
     }
 
     /// <summary>
@@ -283,7 +283,7 @@ internal static class TaktSignalRLogging
         string action,
         string hubName,
         string? connectionId,
-        string userName,
+        string UserName,
         long? userId,
         string companyCode,
         string? tenantCode,
@@ -295,7 +295,7 @@ internal static class TaktSignalRLogging
             Module = ModuleName,
             Action = action,
             Route = hubName,
-            Username = userName,
+            UserName = UserName,
             UserId = userId?.ToString(),
             CompanyCode = companyCode,
             TenantCode = tenantCode,

@@ -133,9 +133,9 @@ import {
 } from '@remixicon/vue'
 import {
   exportBomMaterialCostItemTransposed,
-  getBomMaterialCostAnalysisPlantOptions,
   getBomMaterialCostItemTransposedList,
 } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
+import { getBomCostOptionPlantOptions } from '@/api/logistics/manufacturing/bom/cost-option'
 import type { BomMaterialCostItemTransposed } from '@/types/logistics/manufacturing/bom/material-cost-analysis'
 import {
   ensureTaktPaginationConfigAsync,
@@ -476,7 +476,7 @@ async function applyDefaultPlantFromCompany(): Promise<void> {
   let matched: string | undefined
   if (related) {
     try {
-      const plants = await getBomMaterialCostAnalysisPlantOptions()
+      const plants = await getBomCostOptionPlantOptions()
       const hit = (plants ?? []).find(
         (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
       )

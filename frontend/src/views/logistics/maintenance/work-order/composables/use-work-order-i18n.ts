@@ -20,7 +20,6 @@ export const MAINTENANCEWORKORDER_SELF_I18N_KEY = buildEntitySelfI18nKey(MAINTEN
 
 /** 列表业务列（不含主键） */
 export const MAINTENANCEWORKORDER_LIST_FIELDS = [
-  'plantCode',
   'workOrderCode',
   'maintenanceNotificationId',
   'notificationCode',
@@ -61,56 +60,12 @@ export const MAINTENANCEWORKORDER_LIST_FIELDS = [
   'maintenanceDocuments',
   'acceptedSummary',
   'isHistoryArchived',
+  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const MAINTENANCEWORKORDER_PLACEHOLDER = {
-  tenantCode: 'optional',
-  companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'required',
-  workOrderCode: 'required',
-  maintenanceNotificationId: 'optional',
-  notificationCode: 'optional',
-  equipmentId: 'required',
-  EquipCode: 'required',
-  equipmentName: 'required',
-  maintenanceCategory: 'select',
-  maintenanceType: 'select',
-  workOrderStatus: 'select',
-  priority: 'select',
-  workCenter: 'optional',
-  assignedTechnician: 'optional',
-  maintenanceCompany: 'optional',
-  plannedStartTime: 'optional',
-  plannedEndTime: 'optional',
-  actualStartTime: 'optional',
-  actualEndTime: 'optional',
-  faultDescription: 'optional',
-  maintenanceContent: 'optional',
-  solution: 'optional',
-  costCenterId: 'optional',
-  costCenterCode: 'optional',
-  costElementId: 'optional',
-  costElementCode: 'optional',
-  totalMaterialCost: 'select',
-  totalLaborCost: 'select',
-  totalOtherCost: 'select',
-  totalCost: 'select',
-  settlementStatus: 'select',
-  settlementTime: 'optional',
-  completedAt: 'optional',
-  acceptedBy: 'optional',
-  acceptedAt: 'optional',
-  maintenanceResult: 'select',
-  nextMaintenanceDate: 'optional',
-  maintenanceCycleDays: 'select',
-  maintenanceImages: 'optional',
-  maintenanceDocuments: 'optional',
-  acceptedSummary: 'optional',
-  isHistoryArchived: 'select',
-  extField: 'optional',
-  remark: 'optional',
+
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -118,77 +73,13 @@ export type MaintenanceWorkOrderField = keyof typeof MAINTENANCEWORKORDER_PLACEH
 
 /** 高级查询可 trim 的字符串字段 */
 export const MAINTENANCEWORKORDER_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'workOrderCode',
-  'maintenanceNotificationId',
-  'notificationCode',
-  'equipmentId',
-  'EquipCode',
-  'equipmentName',
-  'workCenter',
-  'assignedTechnician',
-  'maintenanceCompany',
-  'plannedStartTimeStart',
-  'plannedStartTimeEnd',
-  'plannedEndTimeStart',
-  'plannedEndTimeEnd',
-  'actualStartTimeStart',
-  'actualStartTimeEnd',
-  'actualEndTimeStart',
-  'actualEndTimeEnd',
-  'faultDescription',
-  'maintenanceContent',
-  'solution',
-  'costCenterId',
-  'costCenterCode',
-  'costElementId',
-  'costElementCode',
-  'settlementTimeStart',
-  'settlementTimeEnd',
-  'completedAtStart',
-  'completedAtEnd',
-  'acceptedBy',
-  'acceptedAtStart',
-  'acceptedAtEnd',
-  'nextMaintenanceDateStart',
-  'nextMaintenanceDateEnd',
-  'maintenanceImages',
-  'maintenanceDocuments',
-  'acceptedSummary',
-  'initiatorId',
-  'initiatedAtStart',
-  'initiatedAtEnd',
-  'approvedBy',
-  'approvedAtStart',
-  'approvedAtEnd',
-  'flowInstanceId',
-  'createdAtStart',
-  'createdAtEnd',
-  'extField',
-  'remark',
+
 ] as const satisfies readonly (keyof MaintenanceWorkOrderQuery)[]
 
-export type MaintenanceWorkOrderQueryField =
-  | (typeof MAINTENANCEWORKORDER_QUERY_STRING_FIELDS)[number]
-  | 'maintenanceCategory' | 'maintenanceType' | 'workOrderStatus' | 'priority' | 'totalMaterialCost' | 'totalLaborCost' | 'totalOtherCost' | 'totalCost' | 'settlementStatus' | 'maintenanceResult' | 'maintenanceCycleDays' | 'isHistoryArchived' | 'approvalStatus'
+export type MaintenanceWorkOrderQueryField = (typeof MAINTENANCEWORKORDER_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const MAINTENANCEWORKORDER_QUERY_FIELDS: readonly MaintenanceWorkOrderQueryField[] = [
-  ...MAINTENANCEWORKORDER_QUERY_STRING_FIELDS,
-  'maintenanceCategory',
-  'maintenanceType',
-  'workOrderStatus',
-  'priority',
-  'totalMaterialCost',
-  'totalLaborCost',
-  'totalOtherCost',
-  'totalCost',
-  'settlementStatus',
-  'maintenanceResult',
-  'maintenanceCycleDays',
-  'isHistoryArchived',
-  'approvalStatus',
-]
+export const MAINTENANCEWORKORDER_QUERY_FIELDS: readonly MaintenanceWorkOrderQueryField[] = [...MAINTENANCEWORKORDER_QUERY_STRING_FIELDS]
 
 /**
  * 维护工单实体字段 i18n：index / work-order-form 统一入口
