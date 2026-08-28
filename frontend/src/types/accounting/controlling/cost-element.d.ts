@@ -39,7 +39,7 @@ export interface CostElement extends CompanyDtoBase {
   costElementName: string;
 
   /**
-   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
    */
   costElementType: number;
 
@@ -134,7 +134,7 @@ export interface CostElementQuery extends TaktPagedQuery {
   costElementName?: string;
 
   /**
-   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
    */
   costElementType?: number;
 
@@ -243,7 +243,7 @@ export interface CostElementCreate {
   costElementName: string;
 
   /**
-   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
    */
   costElementType: number;
 
@@ -380,7 +380,7 @@ export interface CostElementTemplate {
   costElementName?: string;
 
   /**
-   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
    */
   costElementType?: number;
 
@@ -464,7 +464,7 @@ export interface CostElementImport {
   costElementName?: string;
 
   /**
-   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
    */
   costElementType?: number;
 
@@ -548,7 +548,7 @@ export interface CostElementExport {
   costElementName: string;
 
   /**
-   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+   * 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
    */
   costElementType: number;
 

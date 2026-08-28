@@ -52,9 +52,9 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public int CostCenterType { get; set; }
+    public string CostCenterType { get; set; } = "F";
 
     /// <summary>
     /// 负责人用户 ID
@@ -162,9 +162,9 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public int? CostCenterType { get; set; }
+    public string? CostCenterType { get; set; }
 
     /// <summary>
     /// 负责人用户 ID
@@ -293,9 +293,9 @@ public class TaktCostCenterCreateDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public int CostCenterType { get; set; } = 0;
+    public string CostCenterType { get; set; } = "F";
 
     /// <summary>
     /// 负责人用户 ID
@@ -464,9 +464,9 @@ public class TaktCostCenterTemplateDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public int? CostCenterType { get; set; }
+    public string? CostCenterType { get; set; }
 
     /// <summary>
     /// 负责人用户 ID
@@ -563,9 +563,9 @@ public class TaktCostCenterImportDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public int? CostCenterType { get; set; }
+    public string? CostCenterType { get; set; }
 
     /// <summary>
     /// 负责人用户 ID
@@ -662,9 +662,9 @@ public class TaktCostCenterExportDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public int CostCenterType { get; set; } = 0;
+    public string CostCenterType { get; set; } = "F";
 
     /// <summary>
     /// 负责人用户 ID

@@ -533,7 +533,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    costCenterType: undefined as number | undefined,
+    costCenterType: undefined as string | undefined,
     costCenterLevel: undefined as number | undefined,
     costCenterStatus: undefined as number | undefined,  }
 }

@@ -52,7 +52,7 @@ public class TaktDictData : TaktTenantCultureEntityBase
     [SugarColumn(ColumnName = "dict_value", ColumnDescription = "字典项值", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DictValue { get; set; } = string.Empty;
     /// <summary>
-    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f；varchar Length=140）
     /// </summary>
     [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "国际化键", ColumnDataType = "varchar", Length = 140, IsNullable = false, DefaultValue = "")]
     public string I18nKey { get; set; } = string.Empty;

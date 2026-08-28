@@ -40,10 +40,10 @@ public class TaktCostCenter : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "parent_id", ColumnDescription = "父级ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     public long ParentId { get; set; }
     /// <summary>
-    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_center_type", ColumnDescription = "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int CostCenterType { get; set; } = 0;
+    [SugarColumn(ColumnName = "cost_center_type", ColumnDescription = "成本中心类型", ColumnDataType = "varchar", Length = 1, IsNullable = false, DefaultValue = "F")]
+    public string CostCenterType { get; set; } = "F";
     /// <summary>
     /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>

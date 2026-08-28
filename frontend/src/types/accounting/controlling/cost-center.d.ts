@@ -40,9 +40,9 @@ export interface CostCenter extends CompanyDtoBase {
    */
   parentId: string;
   /**
-   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
    */
-  costCenterType: number;
+  costCenterType: string;
   /**
    * 负责人用户 ID
    */
@@ -130,9 +130,9 @@ export interface CostCenterQuery extends TaktPagedQuery {
   parentId?: string;
 
   /**
-   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
    */
-  costCenterType?: number;
+  costCenterType?: string;
 
   /**
    * 负责人用户 ID
@@ -257,9 +257,9 @@ export interface CostCenterCreate {
   parentId: string;
 
   /**
-   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
    */
-  costCenterType: number;
+  costCenterType: string;
 
   /**
    * 负责人用户 ID
@@ -404,9 +404,9 @@ export interface CostCenterTemplate {
   parentId?: string;
 
   /**
-   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
    */
-  costCenterType?: number;
+  costCenterType?: string;
 
   /**
    * 负责人用户 ID
@@ -506,9 +506,9 @@ export interface CostCenterImport {
   parentId?: string;
 
   /**
-   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
    */
-  costCenterType?: number;
+  costCenterType?: string;
 
   /**
    * 负责人用户 ID
@@ -600,9 +600,9 @@ export interface CostCenterExport {
   parentId: string;
 
   /**
-   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
    */
-  costCenterType: number;
+  costCenterType: string;
 
   /**
    * 负责人用户 ID

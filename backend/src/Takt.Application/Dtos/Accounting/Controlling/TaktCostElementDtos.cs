@@ -46,7 +46,7 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
     /// </summary>
     public int CostElementType { get; set; } = 0;
 
@@ -145,7 +145,7 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     public string? CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
     /// </summary>
     public int? CostElementType { get; set; }
 
@@ -258,7 +258,7 @@ public class TaktCostElementCreateDto
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
     /// </summary>
     public int CostElementType { get; set; } = 0;
 
@@ -413,7 +413,7 @@ public class TaktCostElementTemplateDto
     public string? CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
     /// </summary>
     public int? CostElementType { get; set; }
 
@@ -496,7 +496,7 @@ public class TaktCostElementImportDto
     public string? CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
     /// </summary>
     public int? CostElementType { get; set; }
 
@@ -585,7 +585,7 @@ public class TaktCostElementExportDto
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
     /// </summary>
     public int CostElementType { get; set; } = 0;
 

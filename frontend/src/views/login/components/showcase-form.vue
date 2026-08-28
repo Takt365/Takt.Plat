@@ -15,12 +15,12 @@
         type="image/svg+xml"
         :aria-label="ariaLabel"
         :data="objectData"
-        class="block h-full max-h-full w-full max-w-full object-contain"
+        class="block h-full max-h-full w-full max-w-full bg-transparent object-contain"
       >
         <img
           :alt="ariaLabel"
           :src="objectData"
-          class="h-full max-h-full w-full max-w-full object-contain"
+          class="h-full max-h-full w-full max-w-full bg-transparent object-contain"
         >
       </object>
     </div>
@@ -67,17 +67,17 @@ const objectData = ref(props.src);
 let blobUrlToRevoke: string | null = null;
 
 /**
- * 拉取 SVG 并将已知浅色背景替换为透明后生成 blob URL
+ * 拉取 SVG 并将根节点背景色改为透明后生成 blob URL
  * @param url 可 fetch 的 SVG 地址
  * @returns {Promise<string>} blob object URL
  */
 async function loadSvgWithTransparentBackgroundAsync(url: string): Promise<string> {
   const res = await fetch(url);
   const text = await res.text();
-  const transparent = text.replace(
-    /style="background-color:#edf2ff"/i,
-    'style="background-color:transparent"',
-  );
+  const transparent = text
+    .replace(/style="background-color:\s*#[0-9a-fA-F]{3,8}"/gi, 'style="background-color:transparent"')
+    .replace(/style='background-color:\s*#[0-9a-fA-F]{3,8}'/gi, "style='background-color:transparent'")
+    .replace(/background-color:\s*#[0-9a-fA-F]{3,8}/gi, 'background-color:transparent');
   const blob = new Blob([transparent], { type: 'image/svg+xml' });
   const blobUrl = URL.createObjectURL(blob);
   blobUrlToRevoke = blobUrl;
@@ -89,15 +89,24 @@ async function loadSvgWithTransparentBackgroundAsync(url: string): Promise<strin
  */
 function ensureObjectData(): void {
   const url = props.src ?? taktSmartSvg;
-  if (url === taktSmartSvg) {
-    void loadSvgWithTransparentBackgroundAsync(url).then((blobUrl) => {
-      objectData.value = blobUrl;
-    });
-    return;
-  }
+  const isBundledSmart =
+    typeof url === 'string' &&
+    (url === taktSmartSvg || /takt-smart(\.|-)/i.test(url) || url.includes('takt-smart'));
+
   if (blobUrlToRevoke) {
     URL.revokeObjectURL(blobUrlToRevoke);
     blobUrlToRevoke = null;
+  }
+
+  if (isBundledSmart) {
+    void loadSvgWithTransparentBackgroundAsync(url)
+      .then((blobUrl) => {
+        objectData.value = blobUrl;
+      })
+      .catch(() => {
+        objectData.value = url;
+      });
+    return;
   }
   objectData.value = url;
 }

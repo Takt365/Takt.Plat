@@ -35,7 +35,7 @@ public class TaktCostElement : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "cost_element_name", ColumnDescription = "成本要素名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string CostElementName { get; set; } = string.Empty;
     /// <summary>
-    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级）
     /// </summary>
     [SugarColumn(ColumnName = "cost_element_type", ColumnDescription = "成本要素类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CostElementType { get; set; }

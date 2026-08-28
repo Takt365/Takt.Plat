@@ -154,7 +154,7 @@ export interface DictDataExport {
   dictValue: string;
 
   /**
-   * 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
+   * 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f）
    */
   i18nKey: string;
 

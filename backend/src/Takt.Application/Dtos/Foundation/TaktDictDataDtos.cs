@@ -62,7 +62,7 @@ public class TaktDictDataDto : TaktTenantCultureDtoBase
     public string DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 
@@ -146,7 +146,7 @@ public class TaktDictDataQueryDto : TaktPagedQuery
     public string? DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -244,7 +244,7 @@ public class TaktDictDataCreateDto
     public string DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f）
     /// </summary>
     [Required(ErrorMessage = "国际化键不能为空")]
     public string I18nKey { get; set; } = string.Empty;
@@ -371,7 +371,7 @@ public class TaktDictDataTemplateDto
     public string? DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -449,7 +449,7 @@ public class TaktDictDataImportDto
     public string? DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -533,7 +533,7 @@ public class TaktDictDataExportDto
     public string DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 

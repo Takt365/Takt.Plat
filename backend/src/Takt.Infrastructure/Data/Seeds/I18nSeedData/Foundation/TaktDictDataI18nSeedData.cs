@@ -127,13 +127,13 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dictdata.dictvalue", "zh-HK", "字典项值_hk", "字典项值（实际存储值，如：0, 1, 2；varchar Length=40）"),
 
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "en-US", "国际化键_us", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "en-US", "国际化键_us", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f；varchar Length=140）"),
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "ja-JP", "国际化键_jp", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "ja-JP", "国际化键_jp", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f；varchar Length=140）"),
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-CN", "国际化键", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-CN", "国际化键", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f；varchar Length=140）"),
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-HK", "国际化键_hk", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-HK", "国际化键_hk", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.f；varchar Length=140）"),
 
             // entity.dictdata.extlabel
             new TranslationSeedItem("entity.dictdata.extlabel", "en-US", "扩展标签_us", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等；nvarchar Length=140）"),

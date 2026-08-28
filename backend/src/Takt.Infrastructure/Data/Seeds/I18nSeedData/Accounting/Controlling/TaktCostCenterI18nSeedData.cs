@@ -118,13 +118,13 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costcenter.parentid", "zh-HK", "父级ID_hk", "父级 ID（0 表示根节点）"),
 
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "en-US", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）_us", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）"),
+            new TranslationSeedItem("entity.costcenter.type", "en-US", "Cost Center Type", "成本中心类型"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "ja-JP", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）_jp", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）"),
+            new TranslationSeedItem("entity.costcenter.type", "ja-JP", "コストセンタタイプ", "成本中心类型"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "zh-CN", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）"),
+            new TranslationSeedItem("entity.costcenter.type", "zh-CN", "成本中心类型", "成本中心类型"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "zh-HK", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）_hk", "成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）"),
+            new TranslationSeedItem("entity.costcenter.type", "zh-HK", "成本中心類型", "成本中心类型"),
 
             // entity.costcenter.managerid
             new TranslationSeedItem("entity.costcenter.managerid", "en-US", "负责人ID_us", "负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),

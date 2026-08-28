@@ -6356,32 +6356,50 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.controlling.cost.center.category.ems
             ("dict.accounting.controlling.cost.center.category.ems", "zh-HK", "EMS_hk", "成本中心类别.ems"),
 
-            // dict.accounting.controlling.cost.center.type.0
-            ("dict.accounting.controlling.cost.center.type.0", "en-US", "成本中心_us", "成本中心类型.成本中心"),
-            // dict.accounting.controlling.cost.center.type.0
-            ("dict.accounting.controlling.cost.center.type.0", "ja-JP", "成本中心_jp", "成本中心类型.成本中心"),
-            // dict.accounting.controlling.cost.center.type.0
-            ("dict.accounting.controlling.cost.center.type.0", "zh-CN", "成本中心", "成本中心类型.成本中心"),
-            // dict.accounting.controlling.cost.center.type.0
-            ("dict.accounting.controlling.cost.center.type.0", "zh-HK", "成本中心_hk", "成本中心类型.成本中心"),
+            // dict.accounting.controlling.cost.center.type.f
+            ("dict.accounting.controlling.cost.center.type.f", "en-US", "Production", "成本中心类型.生产"),
+            // dict.accounting.controlling.cost.center.type.f
+            ("dict.accounting.controlling.cost.center.type.f", "ja-JP", "生産", "成本中心类型.生产"),
+            // dict.accounting.controlling.cost.center.type.f
+            ("dict.accounting.controlling.cost.center.type.f", "zh-CN", "生产", "成本中心类型.生产"),
+            // dict.accounting.controlling.cost.center.type.f
+            ("dict.accounting.controlling.cost.center.type.f", "zh-HK", "生產", "成本中心类型.生产"),
 
-            // dict.accounting.controlling.cost.center.type.1
-            ("dict.accounting.controlling.cost.center.type.1", "en-US", "利润中心_us", "成本中心类型.利润中心"),
-            // dict.accounting.controlling.cost.center.type.1
-            ("dict.accounting.controlling.cost.center.type.1", "ja-JP", "利润中心_jp", "成本中心类型.利润中心"),
-            // dict.accounting.controlling.cost.center.type.1
-            ("dict.accounting.controlling.cost.center.type.1", "zh-CN", "利润中心", "成本中心类型.利润中心"),
-            // dict.accounting.controlling.cost.center.type.1
-            ("dict.accounting.controlling.cost.center.type.1", "zh-HK", "利润中心_hk", "成本中心类型.利润中心"),
+            // dict.accounting.controlling.cost.center.type.g
+            ("dict.accounting.controlling.cost.center.type.g", "en-US", "Administration", "成本中心类型.管理"),
+            // dict.accounting.controlling.cost.center.type.g
+            ("dict.accounting.controlling.cost.center.type.g", "ja-JP", "管理", "成本中心类型.管理"),
+            // dict.accounting.controlling.cost.center.type.g
+            ("dict.accounting.controlling.cost.center.type.g", "zh-CN", "管理", "成本中心类型.管理"),
+            // dict.accounting.controlling.cost.center.type.g
+            ("dict.accounting.controlling.cost.center.type.g", "zh-HK", "管理", "成本中心类型.管理"),
 
-            // dict.accounting.controlling.cost.center.type.2
-            ("dict.accounting.controlling.cost.center.type.2", "en-US", "投资中心_us", "成本中心类型.投资中心"),
-            // dict.accounting.controlling.cost.center.type.2
-            ("dict.accounting.controlling.cost.center.type.2", "ja-JP", "投资中心_jp", "成本中心类型.投资中心"),
-            // dict.accounting.controlling.cost.center.type.2
-            ("dict.accounting.controlling.cost.center.type.2", "zh-CN", "投资中心", "成本中心类型.投资中心"),
-            // dict.accounting.controlling.cost.center.type.2
-            ("dict.accounting.controlling.cost.center.type.2", "zh-HK", "投资中心_hk", "成本中心类型.投资中心"),
+            // dict.accounting.controlling.cost.center.type.h
+            ("dict.accounting.controlling.cost.center.type.h", "en-US", "Sales", "成本中心类型.销售"),
+            // dict.accounting.controlling.cost.center.type.h
+            ("dict.accounting.controlling.cost.center.type.h", "ja-JP", "販売", "成本中心类型.销售"),
+            // dict.accounting.controlling.cost.center.type.h
+            ("dict.accounting.controlling.cost.center.type.h", "zh-CN", "销售", "成本中心类型.销售"),
+            // dict.accounting.controlling.cost.center.type.h
+            ("dict.accounting.controlling.cost.center.type.h", "zh-HK", "銷售", "成本中心类型.销售"),
+
+            // dict.accounting.controlling.cost.center.type.l
+            ("dict.accounting.controlling.cost.center.type.l", "en-US", "Logistics", "成本中心类型.后勤"),
+            // dict.accounting.controlling.cost.center.type.l
+            ("dict.accounting.controlling.cost.center.type.l", "ja-JP", "ロジスティクス", "成本中心类型.后勤"),
+            // dict.accounting.controlling.cost.center.type.l
+            ("dict.accounting.controlling.cost.center.type.l", "zh-CN", "后勤", "成本中心类型.后勤"),
+            // dict.accounting.controlling.cost.center.type.l
+            ("dict.accounting.controlling.cost.center.type.l", "zh-HK", "後勤", "成本中心类型.后勤"),
+
+            // dict.accounting.controlling.cost.center.type.s
+            ("dict.accounting.controlling.cost.center.type.s", "en-US", "Miscellaneous", "成本中心类型.杂项"),
+            // dict.accounting.controlling.cost.center.type.s
+            ("dict.accounting.controlling.cost.center.type.s", "ja-JP", "雑費", "成本中心类型.杂项"),
+            // dict.accounting.controlling.cost.center.type.s
+            ("dict.accounting.controlling.cost.center.type.s", "zh-CN", "杂项", "成本中心类型.杂项"),
+            // dict.accounting.controlling.cost.center.type.s
+            ("dict.accounting.controlling.cost.center.type.s", "zh-HK", "雜項", "成本中心类型.杂项"),
 
             // dict.accounting.controlling.cost.element.category.1
             ("dict.accounting.controlling.cost.element.category.1", "en-US", "01 初级成本/成本抵减收入_us", "成本要素类别.KATYP01"),
@@ -6537,22 +6555,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.accounting.controlling.cost.element.category.66", "zh-HK", "66 报表成本要素（CO-PA）_hk", "成本要素类别.KATYP66"),
 
             // dict.accounting.controlling.cost.element.type.0
-            ("dict.accounting.controlling.cost.element.type.0", "en-US", "初级成本要素_us", "成本要素类型.初级"),
+            ("dict.accounting.controlling.cost.element.type.0", "en-US", "Primary", "成本要素类型.初级"),
             // dict.accounting.controlling.cost.element.type.0
-            ("dict.accounting.controlling.cost.element.type.0", "ja-JP", "初级成本要素_jp", "成本要素类型.初级"),
+            ("dict.accounting.controlling.cost.element.type.0", "ja-JP", "一次", "成本要素类型.初级"),
             // dict.accounting.controlling.cost.element.type.0
-            ("dict.accounting.controlling.cost.element.type.0", "zh-CN", "初级成本要素", "成本要素类型.初级"),
+            ("dict.accounting.controlling.cost.element.type.0", "zh-CN", "初级", "成本要素类型.初级"),
             // dict.accounting.controlling.cost.element.type.0
-            ("dict.accounting.controlling.cost.element.type.0", "zh-HK", "初级成本要素_hk", "成本要素类型.初级"),
+            ("dict.accounting.controlling.cost.element.type.0", "zh-HK", "初級", "成本要素类型.初级"),
 
             // dict.accounting.controlling.cost.element.type.1
-            ("dict.accounting.controlling.cost.element.type.1", "en-US", "次级成本要素_us", "成本要素类型.次级"),
+            ("dict.accounting.controlling.cost.element.type.1", "en-US", "Secondary", "成本要素类型.次级"),
             // dict.accounting.controlling.cost.element.type.1
-            ("dict.accounting.controlling.cost.element.type.1", "ja-JP", "次级成本要素_jp", "成本要素类型.次级"),
+            ("dict.accounting.controlling.cost.element.type.1", "ja-JP", "二次", "成本要素类型.次级"),
             // dict.accounting.controlling.cost.element.type.1
-            ("dict.accounting.controlling.cost.element.type.1", "zh-CN", "次级成本要素", "成本要素类型.次级"),
+            ("dict.accounting.controlling.cost.element.type.1", "zh-CN", "次级", "成本要素类型.次级"),
             // dict.accounting.controlling.cost.element.type.1
-            ("dict.accounting.controlling.cost.element.type.1", "zh-HK", "次级成本要素_hk", "成本要素类型.次级"),
+            ("dict.accounting.controlling.cost.element.type.1", "zh-HK", "次級", "成本要素类型.次级"),
 
             // dict.accounting.financial.currency.code.cny
             ("dict.accounting.financial.currency.code.cny", "en-US", "人民币_us", "币种.人民币"),

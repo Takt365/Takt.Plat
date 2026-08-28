@@ -455,10 +455,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       if (value === undefined || value === null || value === '') {
         return Promise.reject(pi.ph('costCenterType'))
       }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('costCenterType'))
-      }
       return Promise.resolve()
     },
     trigger: 'change'
@@ -521,9 +517,8 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('costCenterType' in payload) {
-    const rawcostCenterType = payload.costCenterType
-    payload.costCenterType = typeof rawcostCenterType === 'number' ? rawcostCenterType : Number(rawcostCenterType)
+  if ('costCenterType' in payload && payload.costCenterType != null) {
+    payload.costCenterType = String(payload.costCenterType)
   }
   if ('costCenterLevel' in payload) {
     const rawcostCenterLevel = payload.costCenterLevel

@@ -435,7 +435,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             exp = exp.And(x => x.ParentId == queryDto.ParentId);
         }
 
-        if (queryDto?.CostCenterType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.CostCenterType))
         {
             exp = exp.And(x => x.CostCenterType == queryDto.CostCenterType);
         }
